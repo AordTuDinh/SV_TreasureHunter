@@ -1,0 +1,49 @@
+  1 #!/bin/bash
+  2
+  3 day=$(date +%Y%m%d -d "yesterday")
+  4 echo $day
+  5 list=$(find . -name "$day")
+  6 query=" insert into gameserver.activity (*) values"
+  7 #query= "insert into gameserver.activity (*) values ";
+  8 for file in $list; do
+  9         lst2=$(find $file -type f -name "*.log")
+ 10         for log in $lst2;
+ 11         do
+ 12                 while read p;do
+ 13                 IFS=' ' read -r -a arr <<< "$p"
+ 14                         read -a hsvid <<< "${arr[1]}"
+ 15                         timestamp="${arr[0]} ${hsvid[0]}"
+ 16                         IFS='u' read -r -a svid <<< ${hsvid[1]}
+ 17                         server=${svid[0]}
+ 18                         userId=${svid[1]}
+ 19                         action=${arr[2]}
+ 20                         detail=${arr[3]}
+ 21                         data=${arr[4]}
+ 22                         sql="('$timestamp',$server,$userId,'$action','$detail','$data','game-1'),"
+ 23                         query="$query $sql"
+ 24                         done < $log
+ 25         done
+ 26 done
+ 27 query=${query:0:$(expr $length -1)}
+ 28
+ 29 #save to db
+ 30 output="$(pwd)/output.tsv"
+ 31 host='localhost'
+ 32 db='gameserver'
+ 33
+ 34 clickhouse-client -h $host --database=$db \
+ 35         --query="$query" > "$output";
+ 36
+ 37 if [ -e "$output" ]
+ 38 then
+ 39         echo "file completed"
+ 40 else
+ 41         exit
+ 42 fi
+ 43
+ 44 if [ -s "$output" ]
+ 45 then
+ 46         echo "file is not empty"
+ 47 else
+ 48         exit
+ 49 fi

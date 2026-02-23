@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+
+    <Properties>
+        <Property name="LOG_PATTERN">%d{yyyy-MM-dd HH:mm:ss} %m%n</Property>
+        <property name="LOGS" value="logs"/>
+    </Properties>
+
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+
+        <!-- root log for all -->
+        <RollingFile name="debugLog" fileName="${LOGS}/debug.log"
+                     filePattern="${LOGS}/debug.log.%d{yyyy-MM-dd}">
+            <LevelRangeFilter minLevel="DEBUG" maxLevel="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <RollingFile name="errorLog" fileName="${LOGS}/error.log"
+                     filePattern="${LOGS}/error.log.%d{yyyy-MM-dd}">
+            <LevelRangeFilter minLevel="ERROR" maxLevel="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <RollingFile name="infoLog" fileName="${LOGS}/info.log"
+                     filePattern="${LOGS}/info.log.%d{yyyy-MM-dd}">
+            <LevelRangeFilter minLevel="INFO" maxLevel="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <RollingFile name="warnLog" fileName="${LOGS}/warn.log"
+                     filePattern="${LOGS}/warn.log.%d{yyyy-MM-dd}">
+            <LevelRangeFilter minLevel="WARN" maxLevel="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <!-- calling api other service -->
+        <RollingFile name="apiError" fileName="${LOGS}/apiError.log"
+                     filePattern="${LOGS}/apiError.log.%d{yyyy-MM-dd}">
+            <LevelRangeFilter minLevel="ERROR" maxLevel="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <RollingFile name="apiInfo" fileName="${LOGS}/api.log"
+                     filePattern="${LOGS}/api.log.%d{yyyy-MM-dd}">
+            <LevelRangeFilter minLevel="INFO" maxLevel="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <!-- user activity -->
+        <RollingFile name="userAct" fileName="${LOGS}/act.log"
+                     filePattern="${LOGS}/act.log.%d{yyyy-MM-dd}">
+            <LevelRangeFilter minLevel="INFO" maxLevel="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <!-- redis -->
+        <RollingFile name="redisError" fileName="${LOGS}/redisError.log"
+                     filePattern="${LOGS}/redisError.log.%d{yyyy-MM-dd}">
+            <LevelRangeFilter minLevel="ERROR" maxLevel="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <RollingFile name="redisInfo" fileName="${LOGS}/redis.log"
+                     filePattern="${LOGS}/redis.log.%d{yyyy-MM-dd}">
+            <LevelRangeFilter minLevel="INFO" maxLevel="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <!-- api access -->
+        <RollingFile name="accessInfo" fileName="${LOGS}/access.log"
+                     filePattern="${LOGS}/access.log.%d{yyyy-MM-dd}">
+            <LevelRangeFilter minLevel="INFO" maxLevel="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <!-- event -->
+        <RollingFile name="eventInfo" fileName="${LOGS}/event.log"
+                     filePattern="${LOGS}/event.log.%d{yyyy-MM-dd}">
+            <LevelRangeFilter minLevel="INFO" maxLevel="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <!-- event -->
+        <RollingFile name="slowInfo" fileName="${LOGS}/slow.log"
+                     filePattern="${LOGS}/slow.log.%d{yyyy-MM-dd}">
+            <LevelRangeFilter minLevel="INFO" maxLevel="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <!-- mail -->
+        <RollingFile name="mailInfo" fileName="${LOGS}/mail.log"
+                     filePattern="${LOGS}/mail.log.%d{yyyy-MM-dd}">
+            <LevelRangeFilter minLevel="INFO" maxLevel="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+        <RollingFile name="mailError" fileName="${LOGS}/mailErr.log"
+                     filePattern="${LOGS}/mailErr.log.%d{yyyy-MM-dd}">
+            <LevelRangeFilter minLevel="INFO" maxLevel="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <!-- DB Fail -->
+        <RollingFile name="dbInfo" fileName="${LOGS}/dbfail.log"
+                     filePattern="${LOGS}/dbfail.log.%d{yyyy-MM-dd}">
+            <LevelRangeFilter minLevel="INFO" maxLevel="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+    </Appenders>
+
+
+    <Loggers>
+        <!-- LOG everything at INFO level  -->
+        <Root level="info">
+            <AppenderRef ref="console"/>
+        </Root>
+
+        <Logger name="DSON" level="all">
+            <AppenderRef ref="infoLog"/>
+            <AppenderRef ref="errorLog"/>
+            <AppenderRef ref="debugLog"/>
+            <AppenderRef ref="warnLog"/>
+        </Logger>
+
+        <Logger name="API" level="all">
+            <AppenderRef ref="apiInfo"/>
+            <AppenderRef ref="apiError"/>
+        </Logger>
+
+        <Logger name="ACT" level="all">
+            <AppenderRef ref="userAct"/>
+        </Logger>
+
+        <Logger name="REDISLOG" level="all">
+            <AppenderRef ref="redisInfo"/>
+            <AppenderRef ref="redisError"/>
+        </Logger>
+
+        <Logger name="ACCESS" level="all">
+            <AppenderRef ref="accessInfo"/>
+        </Logger>
+
+        <Logger name="EVENT" level="all">
+            <AppenderRef ref="eventInfo"/>
+        </Logger>
+
+        <Logger name="SLOW" level="all">
+            <AppenderRef ref="slowInfo"/>
+        </Logger>
+
+        <Logger name="MAIL" level="all">
+            <AppenderRef ref="mailInfo"/>
+            <AppenderRef ref="mailError"/>
+        </Logger>
+
+        <Logger name="DBFAIL" level="all">
+            <AppenderRef ref="dbInfo"/>
+        </Logger>
+    </Loggers>
+
+</Configuration>

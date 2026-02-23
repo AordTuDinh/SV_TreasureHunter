@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <server>
+        <!-- Server settings -->
+        <id>1</id>
+        <port>6996</port>
+        <welcome>IdleNinja Server version 1.0</welcome>
+        <type>test</type>
+        <!-- second -->
+        <idle>300</idle>
+        <test>true</test>
+        <!-- milisecond -->
+        <remoteConnectTimeout>700</remoteConnectTimeout>
+        <remoteTimeout>12000</remoteTimeout>
+        <remoteTimeoutShort>3000</remoteTimeoutShort>
+        <user>ozudo</user>
+        <pass>makomat</pass>
+        <db>idle</db>
+    </server>
+    <!--
+        Client
+    -->
+    <client>
+        <maxClients>100000</maxClients>
+        <timeout>20</timeout>
+        <!-- delimiter can be: unix, win, mac, nul -->
+        <lineDelimiter>win</lineDelimiter>
+    </client>
+    <cache>
+        <redis>localhost</redis>
+        <!-- num of cache items -->
+        <maxcache>10000</maxcache>
+        <!-- second: 1/2 day-->
+        <time>43200</time>
+    </cache>
+    <monitor>
+        <koin>true</koin>
+        <useronline>true</useronline>
+    </monitor>
+</config>

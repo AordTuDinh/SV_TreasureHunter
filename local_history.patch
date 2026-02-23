@@ -1,0 +1,17 @@
+Index: src/main/java/game/battle/model/Enemy.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/src/main/java/game/battle/model/Enemy.java b/src/main/java/game/battle/model/Enemy.java
+--- a/src/main/java/game/battle/model/Enemy.java	
++++ b/src/main/java/game/battle/model/Enemy.java	(date 1697792344025)
+@@ -277,7 +277,7 @@
+                     targetAttack = target;
+                 }
+             }
+-            isBeAttack = targetAttack != null;
++            //isBeAttack = targetAttack != null;
+         }
+         if (isBeAttack) {
+             if (targetAttack != null && targetAttack.canBeAttack(getTeamId()) && isReady()) {

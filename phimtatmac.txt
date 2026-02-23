@@ -1,0 +1,3 @@
+win + alt + L : format code
+win + o : tìm class
+win + L : tìm đến dòng

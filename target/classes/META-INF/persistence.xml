@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
+
+    <persistence-unit name="idle1">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+            <property name="hibernate.connection.url"
+                      value="jdbc:mysql://localhost:3306/dson?useUnicode=true&amp;characterEncoding=utf-8&amp;autoReconnect=true&amp;useSSL=false&amp;requireSSL=false&amp;sslMode=DISABLED"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="hibernate.connection.username" value="ozudo"/>
+            <property name="hibernate.connection.password" value="Makomat@1"/>
+<!--            <property name="hibernate.show_sql" value="true"/>-->
+
+            <!-- Custom properties -->
+            <!--            <property name="hibernate.ejb.naming_strategy" value="org.hibernate.cfg.ImprovedNamingStrategy"/>-->
+            <!--            <property name="hibernate.ejb.naming_strategy" value="jpa"/>-->
+            <!--<property name="hibernate.show_sql" value="true"/>-->
+            <!--            <property name="hibernate.jdbc.batch_size" value="50"/>-->
+            <!--            <property name="hibernate.order_updates" value="true"/>-->
+            <!--            <property name="hibernate.batch_versioned_data" value="true"/>-->
+
+            <property name="hibernate.physical_naming_strategy" value="ozudo.base.helper.CustomNamingStrategy"/>
+
+            <!-- Use the C3P0 connection pool provider -->
+            <property name="hibernate.connection.provider_class"
+                      value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider"/>
+
+            <property name="hibernate.hikari.minimumIdle" value="1"/>
+            <property name="hibernate.hikari.maximumPoolSize" value="20"/>
+            <property name="hibernate.hikari.idleTimeout" value="18000000"/> <!-- 5 hour -->
+            <!--            <property name="hibernate.hikari.leakDetectionThreshold" value="10000" />-->
+        </properties>
+    </persistence-unit>
+    <persistence-unit name="resource">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
+            <property name="hibernate.connection.url"
+                      value="jdbc:mysql://localhost:3306/dson?useUnicode=true&amp;characterEncoding=utf-8&amp;autoReconnect=true&amp;useSSL=false&amp;requireSSL=false&amp;sslMode=DISABLED"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.cj.jdbc.Driver"/>
+            <property name="hibernate.connection.username" value="ozudo"/>
+            <property name="hibernate.connection.password" value="Makomat@1"/>
+
+            <!-- Custom properties -->
+            <!--            <property name="hibernate.ejb.naming_strategy" value="org.hibernate.cfg.ImprovedNamingStrategy"/>-->
+            <!--            <property name="hibernate.ejb.naming_strategy" value="jpa"/>-->
+            <!--<property name="hibernate.show_sql" value="true"/>-->
+            <!--            <property name="hibernate.jdbc.batch_size" value="50"/>-->
+            <!--            <property name="hibernate.order_updates" value="true"/>-->
+            <!--            <property name="hibernate.batch_versioned_data" value="true"/>-->
+
+            <property name="hibernate.physical_naming_strategy" value="ozudo.base.helper.CustomNamingStrategy"/>
+
+            <!-- Use the C3P0 connection pool provider -->
+            <property name="hibernate.connection.provider_class"
+                      value="org.hibernate.hikaricp.internal.HikariCPConnectionProvider"/>
+
+            <property name="hibernate.hikari.minimumIdle" value="1"/>
+            <property name="hibernate.hikari.maximumPoolSize" value="20"/>
+            <property name="hibernate.hikari.idleTimeout" value="18000000"/> <!-- 5 hour -->
+        </properties>
+    </persistence-unit>
+</persistence>
+

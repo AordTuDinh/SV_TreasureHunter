@@ -1,0 +1,28 @@
+package game.object;
+
+import game.config.CfgBattle;
+import game.dragonhero.table.BaseBattleRoom;
+import lombok.NoArgsConstructor;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+
+@NoArgsConstructor
+public class SimulateJob implements Job {
+    @Override
+    public void execute(JobExecutionContext context) throws JobExecutionException {
+        AbstractRoom room = (AbstractRoom) context.getJobDetail().getJobDataMap().get("room");
+        int intervals = context.getJobDetail().getJobDataMap().getInt("intervals");
+        if (intervals == CfgBattle.periodUpdate) {
+<<<<<<< HEAD
+            room.uUpdate();
+=======
+            room.sUpdate();
+>>>>>>> branch-3
+        } else if (intervals == CfgBattle.periodFixedUpdate) {
+            room.FixedUpdate();
+        } else if (intervals == CfgBattle.periodUpdateLow) {
+            room.LastUpdate();
+        }
+    }
+}

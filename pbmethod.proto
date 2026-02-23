@@ -1,0 +1,754 @@
+package pbdson;
+
+option java_package = "protocol";
+
+message RequestData {
+  optional string session = 1;
+  repeated PbAction actions = 2;
+}
+
+message ResponseData {
+  repeated PbAction aAction = 2;
+}
+
+message PbRegister{
+  optional string username = 1;
+  optional  string password = 2;
+  optional string phone = 3;
+  optional  string salt = 4;
+  optional  string checksum = 5;
+  optional string udid = 6;
+  optional string os = 7;
+  optional string device = 8;
+  optional string version = 9 ;
+  optional string operatorName = 10;
+  optional string cp = 11;
+}
+
+message PbLoginGame{
+  optional string session = 1;
+  optional PbUser user = 2;
+  optional  int32 season = 3;
+}
+
+message PbClan {
+  optional int32 id = 1;
+  optional string name = 2;
+  optional int32 server = 3;
+  optional int32 masterId = 4;
+  optional string masterName = 5;
+  optional int32 numberMember = 6;
+  optional int32 maxMember = 7;
+  optional int32 joinRule = 8;
+  repeated ClanMember member = 9;
+  optional string intro = 10;
+  repeated string activityLog = 11;
+  optional int32 level = 12;
+  optional int64 exp = 13;
+  optional int64 maxExp = 14;
+  optional int32 avatar = 15;
+  optional int32 rank = 16;
+  optional int64 power = 17;
+  optional int32 joinTrophy = 18;
+  optional int32 star = 19;
+  optional int64 pointRank = 20;
+}
+
+
+message PbListUser{
+  repeated PbUser aUser = 1;
+  optional PbUser myInfo = 2;
+}
+
+message ClanMember {
+  optional int32 id = 1;
+  optional string name = 2;
+  optional int32 trophy = 3;
+  optional int32 warPoint = 4;
+  optional int32 level = 5;
+  optional int32 receiveTroop = 6;
+  optional int32 sendTroop = 7;
+  optional bool isNew = 8;
+  optional int32 position = 9;
+  optional int32 clanDonated = 23;
+  optional string kungfuClan = 24;
+  optional int64 lastAction = 25;
+  optional int32 vip = 10;
+  optional int32 rankTrophy = 11;
+  repeated int32 avatar = 12;
+  optional int32 curDonated = 13;
+  optional  bool  online = 14;
+}
+
+
+message PbListClan {
+  repeated PbClan clan = 1;
+  optional PbClan myClan = 2;
+}
+
+message  PbListHistory{
+  repeated PbHistory history = 1;
+}
+
+message  PbHistory{
+  optional bool isAttack = 1;
+  optional int32  targetId = 2;
+  optional int32  status = 3;
+  optional int32  timeAttack = 4;
+  optional int32  point1 = 5;
+  optional int32  point2 = 6;
+  optional int64  time = 7;
+  optional PbUser user = 8;
+  optional int32 myPoint = 9;
+}
+
+message PbArena{
+  optional int64 timeRemain = 1;
+  optional int32 myRank = 2;
+  optional int32 myPoint = 3;
+  repeated PbUser opponents = 4;
+  optional int32 feeTicket = 5;
+  optional int32 curBuyTicket = 6;
+  optional int32 maxBuyTicket = 7;
+  optional bool hasDefense = 8;
+  repeated int32 defenseTeam = 9;
+}
+
+message PbUser {
+  optional int32 id = 1;
+  optional string username = 2;
+  optional string name = 3;
+  optional int64 gold = 4;
+  optional int64 gem = 5;
+  optional int64 exp = 6;
+  optional int32 level = 7;
+  repeated int32 avatar = 8;
+  repeated int32 vip = 9;
+  optional CommonVector clanInfo = 10;
+  optional CommonVector info = 11;
+  repeated int32 petId = 12;
+  optional string facebook = 13;
+  optional CommonVector userInfo = 14;
+  repeated PbUserWeapon weapons = 15;
+  optional  int32  rank = 16;
+  optional  string desc = 17;
+  repeated int32 weaponEquip = 18;
+  repeated int64 point = 19;
+  optional  int64  timeLastAction = 20;
+  optional  int32  honor = 21;
+  optional  int64 power = 22;
+  repeated  int32 itemEquip = 23;
+  repeated  int32 channel = 24;
+  optional int64 pointRank = 25;
+  optional  int32  arenaRank = 26;
+  optional  int64  ruby = 27;
+  repeated  int32 pet = 28;
+}
+
+message PbArenaTeamInfo{
+  optional  int32 team = 1;
+  repeated PbArenaHeroInfo heroes = 2;
+  repeated PbArenaPetInfo pets = 3;
+}
+
+message  PbArenaHeroInfo{
+  optional int32 avatar = 1;
+  repeated PbArenaWeapon weapons = 2;
+}
+
+message  PbArenaPetInfo{
+  optional int32 avatar = 1;
+  optional int32  star = 2;
+}
+
+message PbArenaWeapon{
+  optional  int32 id = 1;
+  optional int32  slot = 2 ;
+  optional int32 level = 3;
+}
+
+message  PbUserData{
+  optional  int32  lvGachaWeapon = 1;
+  optional int32  lvGachaPet = 2;
+  optional int32 lvTraining = 4;
+  optional int32 maxlvTraining = 5;
+  optional int32 numPointLevel = 6;
+  optional  int32 stone = 7;
+  optional  int32 stoneVip = 8;
+  optional PbListItem items = 9;
+  optional PbListItemEquipment itemEquipments = 10;
+  repeated PbItemEquipment aItemEquip = 11;
+  repeated PbItemPoint aItemPoint = 12;
+  repeated PbItemFarm aItemFarm = 13;
+  repeated PbPiece aItemPiece = 14;
+  repeated PbPet aPet = 15;
+  repeated PbHero aHero = 16;
+  optional  int32 tutorial = 17;
+  repeated  int32 dameSkins = 18;
+  optional  int32 dameSkinEquip = 19;
+  repeated  int32  bossGod = 20;
+  repeated  int32 chatFrames = 21;
+  optional  int32 chatFrameEquip = 22;
+  repeated  int32 trials = 23;
+  optional  int32 trialEquip = 24;
+}
+
+message PbListItem{
+  repeated  PbItem item = 1;
+}
+
+message PbListPet{
+  repeated PbPet pets = 1;
+}
+
+message PbPet{
+  optional int32 id = 1;
+  optional int32 type = 2;
+  optional int32 star = 3;
+  optional int32 hp = 4;
+  optional int32 maxHp = 5;
+  optional int64 power = 6;
+  repeated int32  bonusStar = 7;
+}
+
+message PbListItemFarm{
+  repeated  PbItemFarm itemFarms = 1;
+}
+
+message PbListItemPoint{
+  repeated  PbItemPoint itemPoints = 1;
+}
+
+message PbListItemEquipment{
+  repeated  PbItemEquipment itemEquip = 1;
+}
+
+message PbListChat {
+  repeated PbChat aChat = 1;
+}
+
+message PbListHero {
+  repeated PbHero aHero = 1;
+}
+
+message  PbListLand{
+  repeated PbLand aLand = 1;
+  repeated int64 aBonus = 2;
+  repeated int64 treeStatus = 3;
+  repeated int32 deco = 4;
+  optional int32 bonusTime = 5;
+  optional int32 bonusItem = 6;
+  optional int32 bonusExp = 7;
+}
+
+message PbLand{
+  optional  int32 landId = 1;
+  optional  int32 treeId = 2;
+  optional int64 timePlant = 3;
+  optional int64 timeHarvest = 4;
+  optional  int32 hasWater = 5;
+  optional int32 fertilize = 6;
+  optional int32 ferTime = 7;
+  repeated int64 bonus = 8;
+}
+
+message PbHero{
+  optional  int32 heroId = 1;
+  repeated int32 skins = 2;
+  repeated int32 itemEquipId = 3;
+}
+
+message PbChat {
+  optional int64 reqTime = 1;
+  optional string message = 2;
+  optional int32 type = 3;
+  optional PbUser user = 4;
+  optional CommonVector info = 5;
+  repeated int64 point = 6;
+}
+message  PbListChatFriend{
+  repeated PbChatFriend chats = 1;
+}
+message PbChatFriend {
+  optional  int32 userId = 1;
+  optional string message = 2;
+  repeated int32 avatar = 3;
+  optional string name = 4;
+  optional int64 time = 5;
+  optional int32 level = 6;
+}
+
+message PbShop{
+  repeated PbItemShop tabSet = 1;
+  repeated PbItemShop tabDeal = 2;
+  repeated PbItemShop tabMisc = 3;
+}
+
+message PbItemShop{
+  optional  int32 id = 1;
+  optional  int32 tab = 2;
+  optional string name = 3;
+  optional string desc = 4;
+  repeated int64 item = 5;
+  repeated int64 price = 6;
+  optional  string image = 7;
+  optional int32 status = 8;
+  optional  string descStatus = 9;
+  optional  int64  timeRemain = 10;
+}
+
+message  PbItem{
+  optional  int32 id = 1;
+  optional  int32 type = 2;
+  optional  int32  number = 3;
+  optional string data = 4;
+}
+
+message  PbItemFarm{
+  optional  int32 type = 1;
+  optional  int32 id = 2;
+  optional  int32  number = 3;
+}
+
+message  PbPiece{
+  optional  int32 type = 1;
+  optional  int32 id = 2;
+  optional  int32  number = 3;
+}
+
+message  PbItemPoint{
+  optional int32  itemKey = 1;
+  optional int64 number = 2;
+}
+
+message PbItemEquipment{
+  optional  int64  id = 1;
+  optional  int32 itemKey = 2;
+  optional  int32 level = 3;
+  optional  bool lock = 4;
+  repeated int32 point = 5;
+  optional int64 expire = 6;
+  optional  bool lockDestroy = 7;
+  optional  int32 bless = 8;
+}
+
+message  PbListStat{
+  repeated PbStat aStat = 1;
+}
+message  PbStat{
+  optional  int32 id = 1;
+  optional  int32 status = 2;
+  optional  int32 level = 3;
+  repeated  int32 condition = 4;
+  optional int32 maxLevel = 5;
+  optional int64 pointPer = 6;
+  repeated  float formula = 7;
+}
+
+message  PbListUserWeapon{
+  repeated PbUserWeapon weapons = 1;
+}
+
+message PbUserWeapon{
+  optional int32 id = 1;
+  optional int32 level = 2;
+  optional int32 number = 3;
+  optional int32 isEquid = 4;
+  optional float timeCd = 5;
+  optional int32 bless = 6;
+}
+
+message ListAction {
+  repeated PbAction aAction = 1;
+}
+
+message PbAction {
+  optional int32 actionId = 1;
+  optional bytes data = 2;
+}
+
+message CommonVector {
+  repeated int64 aLong = 1;
+  repeated string aString = 2;
+}
+
+message ListCommonVector {
+  repeated CommonVector aVector = 1;
+}
+
+message  PbCharacterInfo{
+  optional  int32 id = 1;
+  optional string name = 2;
+  optional int32 team = 3;
+  repeated int32 avatar = 4;
+  repeated int32 aItem = 5;
+  repeated int64 point = 6;
+}
+
+message PbListMail {
+  repeated PbMail aMail = 1;
+}
+
+message PbMail {
+  optional int32 id = 1;
+  optional string title = 2;
+  optional string message = 3;
+  repeated int32 bonus = 4;
+  optional int32 receive = 5;
+  optional int64 time = 6;
+  optional int32 senderId = 7;
+  optional string senderName = 8;
+}
+
+message PbEndGame{
+  optional int32  popupId = 1;
+  optional string battleKey = 2;
+  optional bool  isWin = 3;
+  optional  string message = 4;
+  repeated  int64 bonus = 5;
+  optional  int32 time = 6;
+  optional  int32 perDame = 7;
+  optional  int32 star = 8;
+  optional CommonVector info = 9;
+}
+
+
+
+
+message PbRoomInfo{
+  optional int32 roomType = 1;
+  optional int32  service = 2;
+  optional CommonVector cmm = 3;
+  optional ListCommonVector lstCm = 4;
+}
+
+message  PbListMiniLotte {
+  repeated int64 allBonus = 1;
+  repeated int32 luckyNum = 2;
+  repeated  PbMiniLotte aLotte = 3;
+}
+
+message PbMiniLotte{
+  repeated int32 numChoose = 1;
+  optional  int32 prizeIndex = 2;
+  repeated int32  bonus = 3;
+}
+
+message  PbListLotteryHistory{
+  repeated PbLotteryHistory aLottery = 1;
+}
+
+message  PbLotteryHistory {
+  optional int32 eventId = 1;
+  optional int32 type = 2;
+  optional int32 luckyNum = 3;
+  repeated  int32 number = 4;
+  optional  int64 time = 5;
+  repeated  int64 bonus = 6;
+  optional  int32 status = 7;
+  repeated  int64 listBonus = 8;
+  repeated  int32 listResult = 9;
+}
+
+//region ------------------------------------------------------ battle
+message PbPos {
+  optional float x = 1;
+  optional float y = 2;
+}
+
+message  PbUnitUpdate{
+  optional int32  type = 1;
+  repeated bytes data = 2;
+}
+
+
+message PbUnitPos {
+  optional int32 id = 1;
+  optional  int32 speed = 2;
+  optional PbPos pos = 3;
+  optional PbPos direction = 4;
+  optional int64 lastInputSeq = 5;
+}
+
+message PbUnitAdd{
+  optional int32 type = 1;
+  optional  int64 id = 2;
+  optional  bool isAdd = 3;
+  optional  int32 teamId = 4;
+  repeated int32  avatar = 5;
+  optional int32  ownerId = 6;
+  optional PbPos pos = 7;
+  optional PbPos direction = 8;
+  optional int32 speed = 9;
+  repeated int32 info = 10;
+  optional  int32 faction = 11;
+  optional PbCharInfo characterInfo = 12;
+  optional PbPos botLeft = 13;
+  optional PbPos topRight = 14;
+  optional  float rangeAttack = 15;
+}
+
+message  PbCharInfo{
+  optional  string name = 1;
+  optional  int32 level = 2;
+  optional  bool  alive = 3;
+  optional int64 lastInputSeq = 4;
+  repeated int64 point = 5;
+  repeated int32 info = 6;
+}
+
+message PbInitRoom{
+  optional string mapId = 1;
+  optional int64 battleId = 2;
+  repeated PbUnitAdd aPlayer = 3;
+  repeated PbUnitAdd aMonster = 4;
+  repeated PbUnitAdd aPet = 5;
+}
+
+message PbState{
+  optional float serverTime = 1;
+  repeated PbUnitPos unitPos = 2;
+  repeated PbUnitAdd unitAdd = 3;
+  repeated PbUnitUpdate aUnitUpdate = 4;
+}
+
+message PbListUnitState {
+  repeated PbUnitState aUnitState = 1;
+}
+
+message  PbUnitState{
+  optional  int32 id = 1;
+  repeated int32 status = 2; // type - length
+  repeated int64 point = 3; // data
+}
+
+message PbListBullet {
+  repeated PbBullet bullets = 1;
+}
+
+message  PbBullet{
+  optional  int32 id = 1;
+  optional  PbPos pos = 2;
+  repeated  int32  info = 3;
+}
+
+//region event
+message  PbListTab{
+  repeated PbTab tabs = 1;
+}
+
+message PbTab{
+  optional int32 tabId = 1;
+  optional int32 eventTemplate = 2;
+  optional string image = 3;
+  optional string name = 4;
+  optional bool notify = 5;
+}
+
+message PbEventBuyMonth {
+  optional string eventName = 1;
+  optional string imageBanner = 2;
+  optional string textBanner = 3;
+  optional int32 level = 4;
+  optional int32 curPoint = 5;
+  optional int32 maxPoint = 6;
+  optional int32  buttonAddGoto = 7;
+  optional string keyHelp = 8;
+  optional int64 timeCD = 9;
+  optional int32 statusBuy = 10;
+  repeated int64  price = 11;
+  optional string normalName = 12;
+  optional string vipName = 13;
+  repeated PbCellPanelEventMonth cells = 14;
+}
+
+message  PbEventTimer{
+  optional int32  id = 1;
+  optional int32  status = 2;
+  optional int64  timeRemain = 3;
+  repeated int64  bonus = 4;
+  repeated int64  price = 5;
+  repeated int64  oldPrice = 6;
+  optional string name = 7;
+  optional string desc = 8;
+  optional string sale = 9;
+  optional string bgrPath = 10;
+  optional CommonVector info = 11;
+}
+
+message  PbCellPanelEventMonth{
+  optional int32 level = 1;
+  optional int32 exp = 2;
+  optional int32 status = 3;
+  optional int32 statusVip = 4;
+  repeated int64  bonus = 5;
+  repeated int64  bonusVip = 6;
+}
+
+message PbPanelEventTabCell{
+  optional string eventName = 1;
+  optional string imageBanner = 2;
+  optional string textBanner = 3;
+  optional int64 timeCD = 9;
+  repeated PbCellPanelEventTabCell cells = 14;
+}
+
+message  PbCellPanelEventTabCell{
+  optional int32 id = 1;
+  optional string cellName = 2;
+  repeated int64  bonus = 3;
+  optional string  per = 4;
+  optional int32  buttonStatus = 5;
+}
+
+message PbWelfare{
+  optional  int32 eventId = 1;
+  optional  bool notify = 2;
+  optional PbBannerEvent banner = 3;
+  repeated PbTabWelfare tabEvent = 4;
+  optional string keyHelp = 5;
+  optional  int64 countdown = 6;
+}
+
+message PbTabWelfare{
+  optional int32 tabId = 1;
+  optional string tabName = 2;
+  repeated PbCellEvent cells = 3;
+  optional bool notify = 4;
+}
+
+message PbBannerEvent{
+  optional string pathBanner = 1;
+  optional string text = 2;
+  optional string bonusImage = 3;
+  optional int32  boxStatus = 4;
+  repeated int32 bonusBox = 5;
+  optional string desc = 6;
+  optional string pathTitle = 7;
+  optional ListCommonVector info = 8;
+}
+
+message PbCellEvent{
+  optional  int32 id = 1;
+  optional string image = 2;
+  repeated int32 bonus = 3;
+  optional string nameCell = 4;
+  optional string textCell = 5;
+  optional string textDesc = 6;
+  optional  int32 numBuy = 7;
+  optional int32 limit = 8;
+  repeated int64 price = 9;
+  optional int32 buttonStatus = 10;
+  repeated int32 bonusDay = 11;
+  optional int64 timeRemain = 12;//seconds
+  optional int64 timeExpire = 13; //seconds
+}
+
+message PbEvent7Day{
+  repeated PbPanelEvent7Day days = 1; // danh sách panel 7 ngày
+  optional int64  timeRemain = 2; // thời gian còn lại
+  optional  int32 curValue = 3 ; // value point per
+  optional int32 maxValue = 4; // value point per
+  repeated PbPosReward  posReward = 5; // các  mốc nhận quà
+
+}
+
+message PbPosReward{
+  optional int32 id = 1;
+  optional string  name = 2;
+  optional  int32 point = 3;
+  repeated int64  bonus = 4;
+  optional int32  status = 5;
+}
+
+message  PbTabEvent7Day{
+  optional int32 id = 1;
+  optional string name = 2;
+  repeated PbCellEvent7Day cells = 3;
+}
+
+message PbPanelEvent7Day{
+  optional PbTabEvent7Day tab1 = 1;
+  optional PbTabEvent7Day tab2 = 2;
+  optional PbTabEvent7Day tab3 = 3;
+  optional PbTabEvent7Day tab4 = 4;
+  optional bool isLock = 5;
+}
+
+
+message PbCellEvent7Day {
+  optional  int32 id = 1;
+  optional string name = 2;
+  optional string desc = 3;
+  optional int32 curValue = 4;
+  optional  int32 maxValue = 5;
+  repeated int64 bonus = 6;
+  optional  int32 buttonStatus = 7;
+  optional int32 buttonGoto = 8;
+  repeated int64  oldPrice = 9;
+  repeated int64 newPrice = 10;
+  optional  int32 xu = 11;
+}
+
+message PbListIAP{
+  repeated PpIAP iap = 1;
+}
+
+message PpIAP{
+  optional  int32 id = 1;
+  optional string productIdAndroid = 2;
+  optional string productIdIos = 3;
+  optional string name = 4;
+  optional string price = 5;
+  repeated int64 bonus = 6;
+  repeated int64 addBonus = 7;
+  optional string addTitle = 8;
+  optional  int32 vipExp = 9;
+  optional string priceQr = 10;
+}
+// endregion
+
+// arena
+
+message  PbBattleArena{
+  repeated int32 mapInfo = 1;
+  optional PbBattleArenaUserInfo myInfo = 2;
+  optional PbBattleArenaUserInfo oppInfo = 3;
+  optional PbBattleListArenaHero myTeam = 4;
+  optional PbBattleListArenaHero oppTeam = 5;
+  optional int32 time = 6;
+}
+
+message  PbBattleListArenaHero{
+  repeated PbBattleArenaHero team = 1;
+}
+
+message PbBattleArenaUserInfo{
+  repeated int32 avatar = 1;
+  optional int32 level = 2;
+  optional int32 vip = 3;
+  optional  string  name = 4;
+  optional int32  rankPoint = 5;
+}
+
+
+message PbBattleArenaHero{
+  optional int32 id = 1;
+  optional int32 avatar = 2;
+  optional int32 heroType = 3;
+  optional  int32  slot = 4;
+  optional int32 level = 5;
+  repeated int64  point = 6;
+  repeated float pos = 7;
+  repeated float direction = 8;
+  optional CommonVector info = 9;
+  repeated PbBattleArenaWeapon weapons = 10;
+}
+
+message  PbBattleArenaWeapon{
+  optional  int32 id = 1;
+  optional int32 slot = 2;
+  optional int32 level = 3;
+  repeated int32  shots = 4;
+}
+

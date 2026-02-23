@@ -1,0 +1,5 @@
+open sftp://root@ninjalegends.duckdns.org:22 -privatekey=C:\Users\tuozu\.ssh\id_rsa_2048.ppk
+synchronize remote target /root/idleNinja/game/target
+
+put   pom.xml /root/idleNinja/game/
+exit

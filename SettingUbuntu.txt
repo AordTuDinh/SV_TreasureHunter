@@ -1,0 +1,166 @@
+1------------------- alias -----------------
+https://viblo.asia/p/su-dung-alias-trong-linux-qm6RWq4xGeJE
+vim .bashrc
+alias ll='ls -l'
+alias sau='sudo apt-get -y update'
+alias saug='sudo apt-get -y upgrade'
+alias s='sudo'
+alias si='sudo apt-get -y install'
+alias h='history'
+alias srm='sudo apt-get -y remove'
+alias spg='sudo apt-get -y purge'
+alias sar='sudo apt-get -y autoremove'
+alias sy='sudo systemctl'
+source ~/.bashrc
+
+2------------------- mysql -----------------
+sudo apt update
+sudo apt install mysql-server -y
+Chạy tập lệnh bảo mật:
+sudo mysql_secure_installation
+sudo mysql
+SELECT user,authentication_string,plugin,host FROM mysql.user;
+- Từ đó, tạo một người dùng mới và cung cấp cho nó một mật khẩu mạnh:
+CREATE USER 'ozudo'@'localhost' IDENTIFIED BY 'Makomat@1';
+- Cấp quyền cho người dùng
+GRANT ALL PRIVILEGES ON *.* TO 'ozudo'@'localhost' WITH GRANT OPTION;
+FLUSH PRIVILEGES;  -> yêu cầu máy chủ tải lại các bảng tài trợ
+exit
+-- Kiểm tra lại mysql active chưa :
+systemctl status mysql.service
+3------------------- redis -----------------
+sudo apt update
+sudo apt install redis-server -y
+sudo systemctl status redis
+redis-cli
+ping
+
+
+
+5------------------- nginx -----------------
+sudo ufw status
+sudo apt install nginx -y
+sudo apt install ufw -y
+sudo ufw enable
+sudo ufw allow OpenSSH
+sudo ufw allow 'Nginx HTTP'
+sudo ufw app list
+
+sudo vim /etc/nginx/nginx.conf
+---> server_names_hash_bucket_size 64;
+
+----<>remove
+sudo apt-get purge nginx nginx-common
+sudo apt autoremove
+sudo apt update
+sudo apt install nginx
+
+6------------------- java - hotswap -----------------
+--- sed -i -e 's/\r$//' hotswap.sh
+#!/bin/bash
+cd `dirname $0`
+
+wget -q https://d2xrhe97vsfxuc.cloudfront.net/jbr-17.0.4-linux-x64-b469.46.tar.gz
+wget -q https://github.com/HotswapProjects/HotswapAgent/releases/download/1.4.2-SNAPSHOT/hotswap-agent-1.4.2-SNAPSHOT.jar
+
+mv hotswap-agent-1.4.2-SNAPSHOT.jar hotswap-agent.jar
+
+tar vzxf jbr-17.0.4-linux-x64-b469.46.tar.gz
+
+# 🧩 tự tìm thư mục vừa giải nén
+folder=$(tar -tzf jbr-17.0.4-linux-x64-b469.46.tar.gz | head -1 | cut -f1 -d"/")
+
+mv "$folder" jbr
+mkdir -p ./jbr/lib/hotswap
+
+path=$(pwd)
+ln -s $path/hotswap-agent.jar $path/jbr/lib/hotswap/
+
+echo "export JAVA_HOME=$path/jbr" | sudo tee -a /etc/profile
+echo "export PATH=\$PATH:\$JAVA_HOME/bin" | sudo tee -a /etc/profile
+
+
+-> sau đó : source /etc/profile
+java --version
+
+# 6. Kiểm tra
+java --version
+echo 'JAVA_HOME=' $JAVA_HOME
+--------------------------JAVA --------------------- bat
+wget https://download.oracle.com/java/17/archive/jdk-17.0.4_linux-x64_bin.tar.gz
+tar -xvf jdk-17.0.4_linux-x64_bin.tar.gz
+
+sudo mkdir -p /usr/local/java/jdk-17
+sudo mv jdk-17* /usr/local/java/jdk-17
+
+echo "export JAVA_HOME=/usr/local/java/jdk-17" >> ~/.bashrc
+echo "export PATH=\$JAVA_HOME/bin:\$PATH" >> ~/.bashrc
+source ~/.bashrc
+echo $JAVA_HOME
+
+7------------------- maven -----------------setup-maven.sh  -> k can cai nua
+#!/bin/bash
+# === CÀI MAVEN TRÊN UBUNTU 16 ===
+
+echo "🔧 Cập nhật gói..."
+sudo apt update -y
+
+echo "📦 Cài Maven..."
+sudo apt install maven -y
+
+# Maven cài mặc định ở /usr/share/maven
+MAVEN_PATH="/usr/share/maven"
+
+echo "⚙️ Thiết lập biến môi trường..."
+# Ghi vào /etc/profile để áp dụng toàn hệ thống
+sudo bash -c "echo 'export MAVEN_HOME=$MAVEN_PATH' >> /etc/profile"
+sudo bash -c "echo 'export PATH=\$PATH:\$MAVEN_HOME/bin' >> /etc/profile"
+
+# Nạp lại cấu hình
+source /etc/profile
+
+echo "✅ Maven đã được cài đặt và cấu hình!"
+echo "➡ Kiểm tra bằng lệnh: mvn -version"
+
+--------
+vim /etc/hosts -> 127.0.0.1 redis
+
+8------------------- screen -----------------
+sudo apt-get install screen
+
+
+9------------------- backup db -----------------
+mysqldump -u username -p dbname > namesqlbackup.sql
+
+
+10------------------- set time ubuntu -----------------
+timedatectl set-ntp 1
+sudo apt install tzdata
+sudo dpkg-reconfigure tzdata
+
+
+date +%x
+date +"%X %x"
+
+echo myfilename-"`date +"%d-%m-%Y"`"
+mkdir myfile_`date +%d%b%Y`
+now=$(date +'%Y-%m-%d')
+geany "OptionalName-${now}.txt"
+
+
+==============> Quy trình thêm pack db client
+---------- Server
+- htop : dùng để check CPU
+- Lệnh find trong thư mục sau đó for grep trong file : for i in $(find . -name "*KEY_INPUT*" -type f);do grep  -i "KEY_GREP" "$i"; done
+==========
+sudo apt-get remove package-name
+sudo apt-get purge package-name
+
+-------------------------------------------
+nâng auto lên 1 số nào đó
+ALTER TABLE dson.user AUTO_INCREMENT = 230625;
+
+
+----
+chmod -R 755 /opt/maven
+chmod +x /opt/jbr/bin/java

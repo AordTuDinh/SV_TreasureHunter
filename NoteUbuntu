@@ -1,0 +1,3 @@
+kill screen
+screen -XS [ID] quit
+Aspecj

@@ -1,0 +1,23 @@
+{
+  "name": "ServerTest",
+  "keyConfig": "",
+  "db": {
+    "mysqlUsername": "ozudo",
+    "entity1": "idle1",
+    "entity2": "idle1",
+    "entityResource": "resource"
+  },
+  "telegram": {
+    "prefix": "",
+    "redisChannel": "telegram",
+    "botId": "",
+    "chatId": ""
+  },
+  "redis": {
+    "pubSubHost": "localhost",
+    "gameHost": "localhost"
+  },
+  "mysqlUsername": "ozudo",
+  "mongodb": "localhost:27017",
+  "backdoor": 8080
+}

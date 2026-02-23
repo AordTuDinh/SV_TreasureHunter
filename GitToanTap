@@ -1,0 +1,84 @@
+ https://github.com/ozudomakomat/GitTutorial.git
+ 1. git --version  : check version
+ 2. Setup
+  - C:/Program Data/git/config : config global
+  - local/user/git/config : lưu cho user
+  - .git/config : cho reponsitories  : lưu cho dự án
+ 3. cấu hình thông tin
+  - git config --global user.name "username"
+  - git config --global user.email mailname@mail.com
+ 4. set editor
+ - git config --global core.editor "'E:\Program Files (x86)\Notepad++\Notepad++.exe' -multiInst -noession"
+ 5. check config seting
+ - git config --list
+ 6. check help
+ - git clone --help
+ - git config --help
+ 7. Init reponsitory
+ - git init
+ - git add *   : add all
+ - git add filename
+ - git status
+ - git commit -m "desc"
+ - git log
+ - md folderName : tạo mới thư mục
+ 8. Clone reponsitory
+  - git clone url
+ 9. The lifecycle file
+  - Unstacked : File mới thêm vào responsitory và chưa được git quản lí
+  - Stage : đã được add vào git, chuẩn bị để được commit -> nếu commit thì thành unmodified
+  - Unmodified : đã đc add vào nhưng k đc sửa đồi gì.
+  - Modified : file đã đc chỉnh sửa nhưng chưa commit -> nếu add lại thì nó vào lại staged
+ 10. Checking status file
+  - git status
+  - git status -s  : check status ngắn
+ 11. Git Ignore : Chứa các rule đẻ ignore
+  - npm install touch-cli -g
+  - touch .gitignore
+  - có nhiều luật ignore, ví dụ như vẫn track tập tin trong những thằng bị ignore
+  - git rm filename
+  - git rm --cached filename : xóa khỏi git giữ trên ổ đĩa
+  - git rm \*.log
+  - git diff --staged
+  - git mv file1 file2 : rename file
+ 12. Log
+ - git log : tất cả các log
+ - git log -p -2 : lấy 2 log gần nhất
+ - git log -p : xem theo từng log 1
+ - git log --stat
+ - git log --pretty=online : hiển thị ngắn
+ 13. Edit
+ - git commit --amend : commit đè lên commit cũ, để thành 1 commit tránh trường hợp nhiều commit
+ 14. Reset : bỏ khỏi commit
+ - git reset HEAD filename : bỏ filename ra khỏi commit
+ 15. Discard
+ - git checkout --filename  : xóa sự thay đổi
+ 16. Remote Add
+ - git remote add <origin> urlGit  : không điền name mặc định là origin
+ - git remote
+ - git remote -v
+ - git fetch : cập nhập thông tin
+ - git pull : update responsitory
+ - git push <origin> master : đẩy lên remote
+ - git remote show <origin>
+ - git remote rename <oldname> <newname>
+ 17. Tagging : Đặt tag quan trọng để dễ nhớ commit hơn.
+ - git tag  : xem tag
+ - git tag -a nameTag -m "message"
+
+
+
+============================================
+git push --set-upstream origin master : sét branch nào là branch chính luôn
+------------------ sửa conflig
+>git merge master --allow-unrelated-histories
+
+
+
+
+
+
+
+
+
+
