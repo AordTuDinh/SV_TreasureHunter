@@ -65,7 +65,7 @@ public class AbstractHandler extends ChannelDuplexHandler {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         super.channelActive(ctx);
-        //System.out.println("channel Active");
+        System.out.println("[SV] Client connected: " + ctx.channel().remoteAddress());
     }
 
     @Override
@@ -78,8 +78,8 @@ public class AbstractHandler extends ChannelDuplexHandler {
     @Override
     public void close(ChannelHandlerContext ctx, ChannelPromise promise) throws Exception {
         super.close(ctx, promise);
+        System.out.println("[SV] Client disconnected: " + ctx.channel().remoteAddress());
         Online.logoutChannel(ctx.channel());
-        //getLogger().info("channelClose  ");
     }
 
     @Override

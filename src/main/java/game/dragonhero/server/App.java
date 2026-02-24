@@ -114,9 +114,10 @@ public class App {
 
     static void init() throws Exception {
         AppInit.initAll();
-        initConfig();
-        JCache.getInstance();
-        JCachePubSub.getInstance().subscriberGameServer();
+        // tạm comment khi chạy không DB/Redis
+        // initConfig();
+        // JCache.getInstance();
+        // JCachePubSub.getInstance().subscriberGameServer();
 //        Telegram.sendNotify(String.format("------------- Server: [%s] start ------------", AppConfig.cfg.name));
 
     }

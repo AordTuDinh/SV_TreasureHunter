@@ -5,6 +5,7 @@ import game.dragonhero.controller.*;
 import game.dragonhero.server.Constans;
 import game.dragonhero.server.IAction;
 import game.dragonhero.table.BaseRoom;
+import game.dragonhero.table.StandaloneMoveRoom;
 import game.protocol.CommonProto;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -60,9 +61,20 @@ public class ResponseMessage {
 
     public ResponseMessage(RequestMessage request, Channel channel) {
         this.request = request;
-        BaseRoom room = (BaseRoom) ChUtil.get(channel, ChUtil.KEY_ROOM);
+        Object roomObj = ChUtil.get(channel, ChUtil.KEY_ROOM);
         if (request.getMagic().equals(Constans.MAGIC_IN_PUT)) {
-            if (room != null) room.doSyncAction(channel, IAction.CLIENT_INPUT, request.getBody());
+            if (roomObj instanceof BaseRoom) {
+                ((BaseRoom) roomObj).doSyncAction(channel, IAction.CLIENT_INPUT, request.getBody());
+            } else if (roomObj instanceof StandaloneMoveRoom) {
+                ((StandaloneMoveRoom) roomObj).doSyncAction(channel, IAction.CLIENT_INPUT, request.getBody());
+            } else {
+                // channel chưa có room (vd. chạy không DB/Redis) → dùng StandaloneMoveRoom
+                StandaloneMoveRoom moveRoom = StandaloneMoveRoom.getInstance();
+                moveRoom.registerChannel(channel);
+                ChUtil.set(channel, ChUtil.KEY_ROOM, moveRoom);
+                System.out.println("[SV] Client joined move room: " + channel.remoteAddress());
+                moveRoom.doSyncAction(channel, IAction.CLIENT_INPUT, request.getBody());
+            }
         } else if (request.getMagic().equals(Constans.MAGIC_OUT_GAME)) {
             Pbmethod.RequestData requestData = CommonProto.parseRequest(request.getBody());
             if (requestData != null) {

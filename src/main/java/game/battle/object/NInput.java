@@ -59,12 +59,21 @@ public class NInput {
         if (obj.typeId == INPUT_PLAYER_MOVE) {
             obj.seq = buffer.readInt();
             obj.clientTime = buffer.readInt();
-            float x1 = buffer.readShort() / 1000f;
-            float y1 = buffer.readShort() / 1000f;
-            float x2 = buffer.readShort() / 1000f;
-            float y2 = buffer.readShort() / 1000f;
-            obj.playerPos = new Pos(x1, y1).round();
-            obj.playerDirection = new Pos(x2, y2).round();
+            int left = buffer.readableBytes();
+            // 17-byte legacy: seq+clientTime(8) + pos(4) + dir(4) = 16 bytes after typeId. Server ignores pos.
+            if (left >= 16) {
+                buffer.readShort();
+                buffer.readShort();
+                float dx = buffer.readShort() / 1000f;
+                float dy = buffer.readShort() / 1000f;
+                obj.playerDirection = new Pos(dx, dy).normalized();
+            }
+            // 13-byte (direction only): seq+clientTime(8) + dir(4) = 12 bytes. Server simulates position.
+            else if (left >= 4) {
+                float dx = buffer.readShort() / 1000f;
+                float dy = buffer.readShort() / 1000f;
+                obj.playerDirection = new Pos(dx, dy).normalized();
+            }
         } else if (obj.typeId == PET_MOVE) {
             float x1 = buffer.readShort() / 1000f;
             float y1 = buffer.readShort() / 1000f;

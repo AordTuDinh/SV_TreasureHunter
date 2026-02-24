@@ -8,6 +8,7 @@ import game.config.CfgClan;
 import game.dragonhero.mapping.UserArenaEntity;
 import game.dragonhero.mapping.UserEntity;
 import game.dragonhero.table.BaseRoom;
+import game.dragonhero.table.StandaloneMoveRoom;
 import game.object.MyUser;
 import io.netty.channel.Channel;
 import ozudo.base.database.DBJPA;
@@ -165,7 +166,10 @@ public class Online {
             }
             if(mUser!=null) Online.removeChannel(mUser.getUser().getServer(), mUser.getUser().getId());
 
-
+            Object roomObj = ChUtil.get(channel, ChUtil.KEY_ROOM);
+            if (roomObj instanceof StandaloneMoveRoom) {
+                ((StandaloneMoveRoom) roomObj).removeChannel(channel);
+            }
             ChUtil.remove(channel, ChUtil.KEY_ROOM);
             ChUtil.remove(channel, ChUtil.KEY_M_USER);
         } catch (Exception ex) {

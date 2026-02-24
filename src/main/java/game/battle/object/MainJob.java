@@ -15,18 +15,19 @@ import java.util.Map;
 public class MainJob implements Job {
     @Override
     public void execute(JobExecutionContext jobExecutionContext) {
-        List<Integer> serverNum = new ArrayList<>();
-        for (Map.Entry<Integer, List<Channel>> data : Online.userServer.entrySet()) {
-            serverNum.add(data.getKey());
-            int count = 0;
-            List<Channel> lst  = data.getValue();
-            for (int i = 0; i < lst.size(); i++) {
-                if(lst.get(i).isActive()) count++;
-            }
-            serverNum.add(count);
-        }
-        if (!serverNum.isEmpty()) {
-            JCache.getInstance().setValue(CfgServer.getKeyCCU(), StringHelper.toDBString(serverNum));
-        }
+        // tạm comment khi chạy không Redis
+        // List<Integer> serverNum = new ArrayList<>();
+        // for (Map.Entry<Integer, List<Channel>> data : Online.userServer.entrySet()) {
+        //     serverNum.add(data.getKey());
+        //     int count = 0;
+        //     List<Channel> lst  = data.getValue();
+        //     for (int i = 0; i < lst.size(); i++) {
+        //         if(lst.get(i).isActive()) count++;
+        //     }
+        //     serverNum.add(count);
+        // }
+        // if (!serverNum.isEmpty()) {
+        //     JCache.getInstance().setValue(CfgServer.getKeyCCU(), StringHelper.toDBString(serverNum));
+        // }
     }
 }
