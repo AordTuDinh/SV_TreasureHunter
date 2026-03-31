@@ -57,8 +57,6 @@ public class TopUserEntity implements Serializable {
         else if (topType == TopType.TOWER_LEVEL) pb.setPointRank(number);
         else if (topType == TopType.ARENA) {
             pb.setPointRank(number);
-            UserArenaEntity uArena = Online.getDbUserArena(id);
-            if (uArena != null) uArena.setRank(rank);
         } else {
             pb.setPointRank(number);
         }

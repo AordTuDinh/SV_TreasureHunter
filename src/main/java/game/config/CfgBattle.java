@@ -66,20 +66,6 @@ public class CfgBattle {
     public static String getKeyRoom(MyUser mUser, int roomType, int subId, int... channel) {
         UserEntity u = mUser.getUser();
         int num = (channel.length > 0 ? channel[0] : 0);
-
-        // Chuẩn hóa lại giá trị roomType trước khi tạo key
-        switch (RoomType.get(roomType)) {
-            case CLAN:           // phòng clan -> theo clanId
-                if (u.getClan() != 0) {
-                    subId = 0;
-                    num = u.getClan();
-                }
-                break;
-            case FARM:           // phòng farm → theo userId
-                num = u.getId();
-                break;
-        }
-
         // key logic để lấy lock (nhóm phòng)
         String lockKey = buildLockKey(roomType, subId, num);
 

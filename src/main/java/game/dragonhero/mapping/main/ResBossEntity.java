@@ -2,7 +2,6 @@ package game.dragonhero.mapping.main;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import game.battle.effect.SkillEffect;
 import game.battle.object.BossSkill;
 import game.battle.object.Point;
 import game.battle.object.Pos;
@@ -93,15 +92,6 @@ public class ResBossEntity extends BaseEntity {
 
     public Pos getInstancePos() {
         return instancePos.clone();
-    }
-
-    public List<BossSkill> getSkills() {
-        List<BossSkill> skills = new ArrayList<>();
-        for (int i = 0; i < bossSkillConfig.skills.size(); i++) {
-            ResSkillEntity skill = ResSkill.getSkills(bossSkillConfig.skills.get(i));
-            skills.add(new BossSkill(skill.getId(), new SkillEffect(skill)));
-        }
-        return skills;
     }
 
     public List<ResBossEntity> getSupport() {

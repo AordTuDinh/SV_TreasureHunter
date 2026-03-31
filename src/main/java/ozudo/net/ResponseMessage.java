@@ -30,9 +30,7 @@ public class ResponseMessage {
         mHandler = new HashMap<>();
         LoginHandler.getInstance().initAction(mHandler);
         BattleHandler.getInstance().initAction(mHandler);
-        ArenaHandler.getInstance().initAction(mHandler);
         StatHandler.getInstance().initAction(mHandler);
-        TowerHandler.getInstance().initAction(mHandler);
         UserHandler.getInstance().initAction(mHandler);
         PetHandler.getInstance().initAction(mHandler);
         ItemHandler.getInstance().initAction(mHandler);
@@ -43,7 +41,6 @@ public class ResponseMessage {
         EventHandler.getInstance().initAction(mHandler);
         EventLuaHandler.getInstance().initAction(mHandler);
         PartyHandler.getInstance().initAction(mHandler);
-        WorldBossHandler.getInstance().initAction(mHandler);
         LotteryHandler.getInstance().initAction(mHandler);
         LuckySpineHandler.getInstance().initAction(mHandler);
         HeroHandler.getInstance().initAction(mHandler);

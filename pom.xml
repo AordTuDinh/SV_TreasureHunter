@@ -42,6 +42,8 @@
 
             </plugin>
 
+
+
             <!-- JRebel -->
             <plugin>
                 <groupId>org.zeroturnaround</groupId>
@@ -57,6 +59,14 @@
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
             <version>3.10.0</version>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.17.2</version>
         </dependency>
 
         <!-- JPA API -->

@@ -4,11 +4,8 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import game.cache.JCache;
-import game.config.CfgClan;
-import game.dragonhero.mapping.UserArenaEntity;
 import game.dragonhero.mapping.UserEntity;
 import game.dragonhero.table.BaseRoom;
-import game.dragonhero.table.StandaloneMoveRoom;
 import game.object.MyUser;
 import io.netty.channel.Channel;
 import ozudo.base.database.DBJPA;
@@ -31,12 +28,6 @@ public class Online {
         }
     });
 
-    static LoadingCache<Integer, UserArenaEntity> cacheDbUserArena = CacheBuilder.newBuilder().maximumSize(1000).expireAfterAccess(10, TimeUnit.MINUTES).build(new CacheLoader<Integer, UserArenaEntity>() {
-        @Override
-        public UserArenaEntity load(Integer id) {
-            return (UserArenaEntity) DBJPA.getUnique("user_arena", UserArenaEntity.class, "user_id", id);
-        }
-    });
 
     public static int getCCU() {
         return mChannel.size();
@@ -61,19 +52,6 @@ public class Online {
         }
         return null;
     }
-
-    public static UserArenaEntity getDbUserArena(int userId) {
-        try {
-            return cacheDbUserArena.get(userId);
-        } catch (Exception ex) {
-        }
-        return null;
-    }
-
-    public static void cacheUserArena(UserArenaEntity user) {
-        cacheDbUserArena.put(user.getUserId(), user);
-    }
-
 
     public static List<Channel> getAllChanel() {
         return new ArrayList<>(mChannel.values());
@@ -165,11 +143,6 @@ public class Online {
                 mUser.userLogout();
             }
             if(mUser!=null) Online.removeChannel(mUser.getUser().getServer(), mUser.getUser().getId());
-
-            Object roomObj = ChUtil.get(channel, ChUtil.KEY_ROOM);
-            if (roomObj instanceof StandaloneMoveRoom) {
-                ((StandaloneMoveRoom) roomObj).removeChannel(channel);
-            }
             ChUtil.remove(channel, ChUtil.KEY_ROOM);
             ChUtil.remove(channel, ChUtil.KEY_M_USER);
         } catch (Exception ex) {

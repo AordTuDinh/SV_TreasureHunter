@@ -1,7 +1,6 @@
 package game.config;
 
 import com.google.gson.Gson;
-import game.dragonhero.mapping.UserAfkEntity;
 import game.dragonhero.service.Services;
 import game.object.MyUser;
 import ozudo.base.helper.DateTime;
@@ -23,13 +22,6 @@ public class CfgAfk {
         for (int i = 1; i < config.bonus5s.size(); i++) {
             rateAfk.add(rateAfk.get(i - 1) + config.bonus5s.get(i).rate);
         }
-    }
-
-    public static boolean isFullAfkBonus(MyUser mUser) {
-        UserAfkEntity uAfk = Services.userDAO.getUserAfk(mUser);
-        if (uAfk == null) return false;
-        long secondsMax = uAfk.getTimeFullBonus() * DateTime.HOUR_MILLI_SECOND;
-        return Calendar.getInstance().getTimeInMillis() - uAfk.getTimeGetBonus() >= secondsMax;
     }
 
     public static List<Long> getBonusAfk() {

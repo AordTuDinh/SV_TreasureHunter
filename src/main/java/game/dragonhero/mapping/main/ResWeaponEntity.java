@@ -1,12 +1,6 @@
 package game.dragonhero.mapping.main;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import game.battle.effect.SkillEffect;
-import game.battle.effect.SkillObject;
 import game.config.aEnum.FactionType;
-import game.config.aEnum.RankType;
-import game.monitor.Telegram;
 import game.object.PassiveWeapon;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,9 +38,6 @@ public class ResWeaponEntity extends BaseEntity {
     List<PassiveWeapon> passives;
     @Getter
     @Transient
-    SkillObject skill;
-    @Getter
-    @Transient
     List<Integer> atkDame;
     @Getter
     @Transient
@@ -61,10 +52,6 @@ public class ResWeaponEntity extends BaseEntity {
         checkJson(id, passive);
         atkDame = GsonUtil.strToListInt(attackDamage);
         factionType = FactionType.get(faction);
-        if (data != null && !data.isEmpty()) {
-            skill = new Gson().fromJson(data, new TypeToken<SkillObject>() {
-            }.getType());
-        }
         range = GsonUtil.strToListFloat(rangeFly);
         upSkill = GsonUtil.strToListInt(upLevel);
         passives = new ArrayList<>();
@@ -73,23 +60,9 @@ public class ResWeaponEntity extends BaseEntity {
             PassiveWeapon ps = new PassiveWeapon(lst.get(i), lst.get(i + 1), lst.get(i + 2));
             passives.add(ps);
         }
-//        if (faction == 0) Telegram.sendNotify("ERR res_weapon thiếu faction id " + id);
     }
 
     public List<Integer> getShots() {
         return GsonUtil.strToListInt(baseShot);
-    }
-
-    public RankType getRankType() {
-        return RankType.get(rank);
-    }
-
-    //Fixme DATE: 8/18/2022 LƯU Ý ---> Dùng cho monster thôi
-    public float getRangeFly() {
-        return range.get(0);
-    }
-
-    public SkillEffect getSkillEffect(int level) {
-        return new SkillEffect(this, level);
     }
 }

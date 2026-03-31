@@ -1,8 +1,5 @@
 package game.battle.model;
 
-import game.battle.calculate.MathLab;
-import game.battle.effect.EffectRoom;
-import game.battle.effect.SkillEffect;
 import game.battle.object.*;
 import game.battle.type.AttackType;
 import game.battle.type.CharacterType;
@@ -15,7 +12,6 @@ import game.config.aEnum.RoomType;
 import game.dragonhero.BattleConfig;
 import game.dragonhero.mapping.main.ResEnemyEntity;
 import game.dragonhero.server.Constans;
-import game.dragonhero.service.battle.AnimationType;
 import game.dragonhero.service.resource.ResSkill;
 import game.dragonhero.service.user.Bonus;
 import game.dragonhero.table.BaseBattleRoom;
@@ -63,10 +59,6 @@ public class Enemy extends Character implements Serializable {
         this.listBonus = enemy.getABonus();
         this.panelMap = new PanelMap(room.getMapInfo().getMapData());
         this.type = CharacterType.MONSTER;
-        if (attackType == AttackType.LONG_RANGE) {
-            this.weaponEquip = new ArrayList<>();
-            weaponEquip.add(new Shuriken(enemy.getWeapon(), 0));
-        }
         this.pos = startPos;
         this.isBoss = enemy.getBossType() == 1;
         this.instancePos = pos.clone();
@@ -77,8 +69,6 @@ public class Enemy extends Character implements Serializable {
         this.room = room;
         this.hasBonusKillMe = true;
         this.isMove = false;
-//        this.f0Toxic = new ArrayList<>();
-        this.effectsBody = new ArrayList<>();
         this.attackerInfo = new HashMap<>();
         this.damage = getPoint().getAttackDamage() + getPoint().getMagicDamage();
         this.setTimeRandomMove();
@@ -116,19 +106,8 @@ public class Enemy extends Character implements Serializable {
             Player player = ((Player) killer);
             BonusKillEnemy bonus = getBonusWithPer(listBonus, player.getBuffs());
             bonus.addBonus(CfgEventDrop.bonusDrop(CfgEventDrop.config.getRateDropCampaign(), 1));
-            int oldLevel = player.getMUser().getUser().getLevel();
-            // add buff exp, gold, itemDrop
             player.sendForceBonus(bonus, DetailActionType.BONUS_KILL_ENEMY.getKey(), pos);
-            int newLevel = player.getMUser().getUser().getLevel();
-            if (newLevel > oldLevel) {
-                EffectRoom eff = new EffectRoom(killer, killer.getPos(), new SkillEffect(ResSkill.getSkills(0)));
-                getBattleRoom().addEffectRoom(eff);
-            }
             player.addNumKillMonster(this);
-            if (room.getRoomType() == RoomType.CAMPAIGN.value) {
-                player.getMUser().getUData().addCampaignNormal(room.getSubId(), 1);
-            }
-
         }
     }
 
@@ -177,7 +156,7 @@ public class Enemy extends Character implements Serializable {
     }
 
     public boolean hasAttackLongRange() {
-        return inRankAttack(AttackType.LONG_RANGE) && hasActionAttack()&& !isMove() && alive && targetAttack != null && targetAttack.isAlive() && hasActiveSkillNormal();
+        return inRankAttack(AttackType.LONG_RANGE) && hasActionAttack() && !isMove() && alive && targetAttack != null && targetAttack.isAlive();
     }
 
     public boolean hasAttackMelee() {
@@ -189,16 +168,9 @@ public class Enemy extends Character implements Serializable {
     }
 
 
-    boolean hasActiveSkillNormal() { // check CD
-        return weaponEquip.get(0).hasActiveSkill();
-    }
-
     @Override
     public void activeSkill(int skillId) {
         setTimeAttack();
-        Shuriken shu = weaponEquip.get(skillId);
-        weaponEquip.get(skillId).setActiveSkill();
-        protoStatus(StateType.USE_SKILL, (long) (skillId), shu.getTimeActiveSkill(), shu.getNumberAttack(), (long) (getDirection().x * 1000L), (long) (getDirection().y * 1000L), 0L);
     }
 
 
@@ -260,7 +232,7 @@ public class Enemy extends Character implements Serializable {
         if (isBeAttack) {
             if (moveToTargetDone() && hasAttackMelee()) {
                 setTimeAttack();
-                protoStatus(StateType.PLAY_ANIMATION, AnimationType.ATTACK.id);
+
                 room.addCoroutine(new Coroutine(delayAnimAttack, () -> {
                     if (targetAttack != null) targetAttack.beAttackMelee(this);
                 }));
@@ -297,10 +269,10 @@ public class Enemy extends Character implements Serializable {
         if (isBeAttack) {
             boolean isMove = moveToTargetDone();
             if (isMove && hasAttackLongRange()) {
-                setDirection(getFutureDirection(10,20));
+                setDirection(getFutureDirection(10, 20));
                 activeSkill(skillNormal);
                 room.addCoroutine(new Coroutine(delayAnimAttack, () -> {
-                    getBattleRoom().addBullet(this, skillNormal, enemyAttackLongRange());
+                    //   getBattleRoom().addBullet(this, skillNormal, enemyAttackLongRange());
                 }));
             }
             if (!inRankAttack(attackType) && isAttackDone()) {
@@ -334,12 +306,6 @@ public class Enemy extends Character implements Serializable {
 
     }
 
-    public List<Bullet> enemyAttackLongRange() {
-        List<Bullet> bullets = new ArrayList<>();
-        bullets.addAll(skillActive(getShurikenSlot(skillNormal), direction, pos, getShurikenSlot(skillNormal).getDegree()));
-        return bullets;
-    }
-
     @Override
     public boolean beBlock() {
         return super.beBlock() || System.currentTimeMillis() < timeActive;
@@ -364,7 +330,7 @@ public class Enemy extends Character implements Serializable {
             if (targetAttack != null && targetAttack.canBeAttack(getTeamId())) {
                 activeSkill(skillNormal);
                 if (hasAttackLongRange()) {
-                    getBattleRoom().addBullet(this, skillNormal, enemyAttackLongRange());
+                    //getBattleRoom().addBullet(this, skillNormal, enemyAttackLongRange());
                 }
                 if (canMove && !inRankAttack(attackType)) {
                     enemyMove();

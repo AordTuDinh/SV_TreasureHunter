@@ -159,9 +159,6 @@ public class IAction {
     // quest C
     public static final int QUEST_B_STATUS = 205;
     public static final int QUEST_B_RECEIVE_QUEST = 207;
-    //afk nhận quà
-    public static final int AFK_STATUS = 208;
-    public static final int AFK_GET_BONUS = 209;
 
     // clan
     public static final int CLAN_CREATE = 300; // tạo bang

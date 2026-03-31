@@ -2,7 +2,6 @@ package game.dragonhero.mapping.main;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import game.battle.effect.SkillObject;
 import game.config.aEnum.FactionType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,14 +24,7 @@ public class ResPetEntity implements Serializable {
     int rank, faction, showSummon; // showSummon: có thể summon ra
     float timeActive;
     @Transient
-    SkillObject petSkill;
-    @Transient
     FactionType factionType;
-
-
-    public SkillObject getPetSkill() {
-        return petSkill.clone();
-    }
 
     public List<List<Long>> getData() {
         return GsonUtil.strTo2ListLong(data);
@@ -44,8 +36,6 @@ public class ResPetEntity implements Serializable {
     }
 
     public void init() {
-        petSkill = new Gson().fromJson(skill, new TypeToken<SkillObject>() {
-        }.getType());
         factionType = FactionType.get(faction);
     }
 }

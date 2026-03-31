@@ -13,17 +13,4 @@ public class Cron implements Job {
         }
         cron.cronCount++;
     }
-
-    //public  void Cron2(int userId, String nameCron, long miliS) throws SchedulerException {
-    //    final JobKey jobKey = new JobKey(userId + "_" + nameCron, "sv" + CfgServer.serverId);
-    //    final JobDetail job = JobBuilder.newJob(Cron.class).withIdentity(jobKey).build();
-    //    //final Trigger trigger = TriggerBuilder.newTrigger().withIdentity(userId + "_" + nameCron, "sv" + CfgServer.serverId).
-    //    //        withSchedule(CronScheduleBuilder.cronSchedule("0/5 * * * * ?")).build();
-    //    System.out.println("Time start---------- " + System.currentTimeMillis() / 1000);
-    //    final Trigger trigger = TriggerBuilder.newTrigger().withIdentity(userId + "_" + nameCron, "sv" + CfgServer.serverId).
-    //            startAt(Calendar.getInstance().getTime()).withSchedule(simpleSchedule().withIntervalInMilliseconds(miliS).withRepeatCount(1)).build();
-    //    final Scheduler scheduler = new StdSchedulerFactory().getScheduler();
-    //    scheduler.start();
-    //    scheduler.scheduleJob(job, trigger);
-    //}
 }

@@ -1,7 +1,5 @@
 package game.dragonhero.controller;
 
-import game.battle.model.BossClan;
-import game.battle.model.BossGod;
 import game.battle.model.Character;
 import game.battle.model.Player;
 import game.battle.object.Pos;
@@ -78,10 +76,6 @@ public class BattleHandler extends AHandler implements Serializable {
                     int type = (int) pbUB.getALong(0);
                     int id = (int) pbUB.getALong(1);
                     Pos pInit = Pos.zero();
-                    if (RoomType.get(type) == RoomType.CAMPAIGN) {
-                        ResTeleportEntity resTeleport = ResTeleport.getTeleport(12);
-                        pInit = resTeleport.getPlayerPosInit();
-                    }
                     initMapByTypeId(RoomType.get(type), id, pInit);
                 }
                 case INIT_BOSS -> initBoss();
@@ -138,10 +132,6 @@ public class BattleHandler extends AHandler implements Serializable {
         }
         int chanelId = mUser.getRoomChanelId();
         BaseRoom curRoom = (BaseRoom) ChUtil.get(channel, ChUtil.KEY_ROOM);
-        if (roomType == RoomType.CAMPAIGN) {
-            if (mapId == 1) chanelId = user.getId();
-            else chanelId = NumberUtil.getRandom(1, CfgServer.maxChannelOpen);
-        }
         String keyRoom = CfgBattle.getKeyRoom(mUser, roomType.value, mapId, chanelId);
 
         if (curRoom != null && (curRoom.getKeyRoom().equals(keyRoom) || !curRoom.allowChangeChanel())) {
@@ -175,74 +165,12 @@ public class BattleHandler extends AHandler implements Serializable {
             List<Character> players = new ArrayList<>();
             players.add(player);
             switch (roomType) {
-                case CAMPAIGN:
-                    isBattle = true;
-                    room = mapId > 0 ? new CampaignRoom(map, players, keyRoom) : new DefaultRoom(map, players, keyRoom);
-                    break;
-                case FARM:
-                    // UI Room nên không create room
-                    break;
-                case CLAN_BOSS:
-                    isBattle = true;
-                    if (user.getClan() == 0) {
-                        addErrResponse(getLang(Lang.err_no_clan));
-                        return;
-                    }
-                    ClanEntity clan = ClanManager.getInstance(user.getClan()).getClan();
-                    if (clan == null) {
-                        addErrSystem();
-                        return;
-                    }
-                    room = clan.getCurBossRoom();
-                    if (room == null) {
-                        player.clearDataNoCachePos(new Pos(0, -3));
-                        room = new BossClanRoom(map, players, keyRoom, clan) {
-                            @Override
-                            protected BossGod bossData() {
-                                ResBossEntity bossData = ResEnemy.getBossClan();
-                                return new BossClan(bossData, bossData.getInstancePos(), team, this, clan.getBossLevel());
-                            }
-                        };
-                    } else {
-                        // check đã đánh boss chưa
-                        boolean hasAttack =((BossClanRoom) room).getBoss()!=null && ((BossClanRoom) room).getBoss().getBeDameInfo(user.getId()) > 0;
-                        if (hasAttack) {
-                            addErrResponse(getLang(Lang.err_already_hit_this_boss));
-                            return;
-                        }
-                        player.clearDataNoCachePos(new Pos(0, -3));
-                        ((BossClanRoom) room).addPlayer(player);
-                    }
-                    break;
                 default:
                     room = new DefaultRoom(map, players, keyRoom);
                     break;
             }
             TaskMonitor.getInstance().addRoom(room);
         } else { // join vào room có sẵn
-            switch (roomType) {
-                case CLAN_BOSS:
-                    isBattle = true;
-                    if (user.getClan() == 0) {
-                        addErrResponse(getLang(Lang.err_no_clan));
-                        return;
-                    }
-                    ClanEntity clan = ClanManager.getInstance(user.getClan()).getClan();
-                    if (clan == null) {
-                        addErrSystem();
-                        return;
-                    }
-                    room = clan.getCurBossRoom();
-                    // check đã đánh boss chưa
-                    BossClanRoom bossClanRoom = (BossClanRoom) room;
-                    boolean hasAttack =bossClanRoom.getBoss()!=null && bossClanRoom.getBoss().getBeDameInfo(user.getId()) > 0;
-                    if (hasAttack) {
-                        addErrResponse(getLang(Lang.err_already_hit_this_boss));
-                        return;
-                    }
-                    player.clearDataNoCachePos(new Pos(0, -3));
-                    break;
-            }
             room.addPlayer(player);
         }
         mUser.setRoomChanelId(chanelId);
@@ -330,24 +258,7 @@ public class BattleHandler extends AHandler implements Serializable {
             player.clearDataNoCachePos(new Pos(0, -3));
         else player.clearDataForChangeRoom(new Pos(0, -3));
         players.add(player);
-        switch (bossType) {
-            case KIM_THAN -> {
-                room = new KimThanRoom(baseMap, players, keyRoom, mode);
-                mUser.getUData().checkQuestTutorial(mUser, QuestTutType.ATTACK_BOSS_GOD, 1, 1);
-            }
-            case THUY_THAN -> {
-                room = new ThuyThanRoom(baseMap, players, keyRoom, mode);
-                mUser.getUData().checkQuestTutorial(mUser, QuestTutType.ATTACK_BOSS_GOD, 2, 1);
-            }
-            case HOA_THAN -> {
-                room = new HoaThanRoom(baseMap, players, keyRoom, mode);
-                mUser.getUData().checkQuestTutorial(mUser, QuestTutType.ATTACK_BOSS_GOD, 3, 1);
-            }
-            case THO_THAN -> {
-                room = new ThoThanRoom(baseMap, players, keyRoom, mode);
-                mUser.getUData().checkQuestTutorial(mUser, QuestTutType.ATTACK_BOSS_GOD, 4, 1);
-            }
-        }
+
         TaskMonitor.getInstance().addRoom(room);
         ChUtil.set(channel, ChUtil.KEY_ROOM, room);
         // tra ve id teleport next
@@ -395,13 +306,6 @@ public class BattleHandler extends AHandler implements Serializable {
         }
         bonus.addAll(CfgEventDrop.bonusDrop(CfgEventDrop.config.getRateDropBossGod(), number));
         addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.SMART_BOSS.getKey(number), Bonus.merge(bonus))));
-        switch (bossType) {
-            case KIM_THAN -> CfgQuest.addNumQuest(mUser, DataQuest.KILL_KIM_THAN, number);
-            case THUY_THAN -> CfgQuest.addNumQuest(mUser, DataQuest.KILL_THUY_THAN, number);
-            case HOA_THAN -> CfgQuest.addNumQuest(mUser, DataQuest.KILL_HOA_THAN, number);
-            case THO_THAN -> CfgQuest.addNumQuest(mUser, DataQuest.KILL_THO_THAN, number);
-        }
-
     }
 
     private void bossGodData() {
@@ -651,14 +555,6 @@ public class BattleHandler extends AHandler implements Serializable {
             List<Character> players = new ArrayList<>();
             players.add(player);
             switch (RoomType.get(curRoom.getRoomType())) {
-                case CAMPAIGN:
-                    if (curRoom.getSubId() > 0) {
-                        room = new CampaignRoom(curRoom.getMapInfo(), players, keyRoom);
-                        break;
-                    } else {
-                        room = new DefaultRoom(curRoom.getMapInfo(), players, keyRoom);
-                        break;
-                    }
                 default:
                     room = new DefaultRoom(curRoom.getMapInfo(), players, keyRoom);
                     break;

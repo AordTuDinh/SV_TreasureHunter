@@ -70,10 +70,6 @@ public class Player extends Character implements Serializable {
         this.idTrial = mUser.getUData().getTrialEquip();
         this.autoMode = AutoMode.get(mUser.getUSetting().getAutoMode());
         List<UserWeaponEntity> wes = mUser.getResources().getWeaponEquip();
-        for (int i = 0; i < wes.size(); i++) {
-            Shuriken shu = new Shuriken(point, wes.get(i), i);
-            weaponEquip.add(shu);
-        }
         itemsBuf = mUser.getUSetting().getItemSlot(mUser);
         this.pet = mUser.getPet(this);
     }
@@ -93,9 +89,7 @@ public class Player extends Character implements Serializable {
         this.direction = Pos.right();
         this.isMove = false;
         this.attackerInfo = new HashMap<>();
-        this.effectsBody = new ArrayList<>();
         this.skillSlotNext = 0;
-        weaponEquip = new ArrayList<>();
         timeBuff = new ArrayList<>();
     }
 
@@ -160,10 +154,8 @@ public class Player extends Character implements Serializable {
         timeBeHit = 0;
         beDameInfo = new HashMap<>();
         targetMove = Pos.zero();
-        effectsBody = new ArrayList<>();
         timePush = new HashMap<>();
         attackerInfo = new HashMap<>();
-//        f0Toxic = new ArrayList<>();
         if (pet != null) {
             pet.setPos(Pos.randomPos(this.pos, 1f, 1f));
         }
@@ -188,9 +180,7 @@ public class Player extends Character implements Serializable {
         }
     }
 
-    public void updateWeapon(Point point, int slot, UserWeaponEntity uWea) {
-        weaponEquip.set(slot, new Shuriken(point, uWea, slot));
-    }
+
 
     // set time join, va clear data old map
     public void setJoinMap(BaseRoom room) {
@@ -203,28 +193,10 @@ public class Player extends Character implements Serializable {
         directionMoveAttack = Pos.zero();
         this.room = room;
         this.panelMap = new PanelMap(room.getMapInfo().getMapData());
-        for (int i = 0; i < weaponEquip.size(); i++) {
-            weaponEquip.get(i).resetJoinMap();
-        }
         updateBuff();
     }
 
 
-    public void disableStateRuna() {
-        weaponEquip.forEach(shuriken -> {
-            shuriken.setRunaState(false);
-        });
-    }
-
-    public int getNextSkillId() {
-        for (int i = 0; i < weaponEquip.size(); i++) {
-            if (weaponEquip.get(i).hasActiveSkill()) {
-                nextSkillSlot();
-                return skillSlotNext;
-            }
-        }
-        return -1;
-    }
 
     void nextSkillSlot() {
         skillSlotNext++;
@@ -286,9 +258,7 @@ public class Player extends Character implements Serializable {
     @Override
     public void activeSkill(int skillIndex) {
         setTimeAttack();
-        Shuriken shu = weaponEquip.get(skillIndex);
-        shu.setActiveSkill();
-        protoStatus(StateType.USE_SKILL, (long) (skillIndex), shu.getTimeActiveSkill() - System.currentTimeMillis(), shu.getNumberAttack(), (long) (getDirection().x * 1000L), (long) (getDirection().y * 1000L), isPowerSkill ? 1L : 0L);
+        //protoStatus(StateType.USE_SKILL, (long) (skillIndex), shu.getTimeActiveSkill() - System.currentTimeMillis(), shu.getNumberAttack(), (long) (getDirection().x * 1000L), (long) (getDirection().y * 1000L), isPowerSkill ? 1L : 0L);
     }
 
     // todo : edit to use item in slot
@@ -364,13 +334,6 @@ public class Player extends Character implements Serializable {
         this.isAttackRun2 = true;
     }
 
-    public boolean hasSkillKey(int keyInput) { // check CD
-        return NInput.lstSkillKey.contains(keyInput) && weaponEquip.get(keyInput - NInput.offsetSkill).hasActiveSkill();
-    }
-
-    public boolean hasSkillIndex(int skillIndex) { // check CD
-        return NInput.lstSkillIndex.contains(skillIndex) && weaponEquip.get(skillIndex).hasActiveSkill();
-    }
 
     public boolean hasUseItemIndex(int slot) { // check dung skill
         return BattleConfig.itemUseSlot.contains(slot);
@@ -540,13 +503,6 @@ public class Player extends Character implements Serializable {
         pbUser.setLastInputSeq(indexLastInputSeq);
         pbUser.addAllPoint(point.toProto());
         return pbUser.build();
-    }
-
-    public void removeBuff() {
-        this.rangeAttack = cacheRangeAttack;
-        for (int i = 0; i < weaponEquip.size(); i++) {
-            weaponEquip.get(i).removeBuff();
-        }
     }
 
     public void toPbEndGame() {

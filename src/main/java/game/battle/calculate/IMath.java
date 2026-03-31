@@ -1,9 +1,7 @@
 package game.battle.calculate;
 
-import game.battle.object.Bullet;
 import game.battle.object.Point;
 import game.battle.object.Pos;
-import game.battle.effect.SkillEffect;
 import game.battle.model.Character;
 import game.battle.type.InitEnemyPosType;
 import game.config.CfgClan;
@@ -375,18 +373,6 @@ public class IMath {
         return new Pos(to.x - from.x, to.y - from.y).normalized();
     }
 
-
-    public static long[] calculateDamage(Bullet bullet, Character target, List<Long> effDamage) {
-        // dame thuần túy
-        SkillEffect skill = bullet.getEffectSkill();
-        long attackDamage = (long) (bullet.getOwner().getPoint().getAttackDamage() * skill.getDameBuff() / 100f);
-        long magicDamage = 0L;
-        for (int i = 0; i < effDamage.size(); i++) {
-            magicDamage += effDamage.get(i);
-        }
-
-        return calculateDamage(bullet.getOwner(), target, bullet.getFaction(), attackDamage, magicDamage);
-    }
 
     public static long[] calculateDamage(Character attacker, Character target, FactionType factionAttack) {// crit,atk,matk
         return calculateDamage(attacker, target, factionAttack, attacker.getPoint().getAttackDamage(), attacker.getPoint().getMagicDamage());

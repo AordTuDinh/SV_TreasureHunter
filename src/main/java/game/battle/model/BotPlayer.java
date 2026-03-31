@@ -59,10 +59,6 @@ public class BotPlayer extends Character implements Serializable {
         this.autoMode = AutoMode.MOVE_ATTACK;
         this.type = CharacterType.BOT_PLAYER;
         List<UserWeaponEntity> wes = mUser.getResources().getWeaponEquip();
-        for (int i = 0; i < wes.size(); i++) {
-            Shuriken shu = new Shuriken(point, wes.get(i), i);
-            weaponEquip.add(shu);
-        }
         this.leader = mUser.getPlayer();
         clearDataForChangeRoom(posInit);
     }
@@ -83,9 +79,7 @@ public class BotPlayer extends Character implements Serializable {
         this.direction = Pos.right();
         this.isMove = false;
         this.attackerInfo = new HashMap<>();
-        this.effectsBody = new ArrayList<>();
         this.skillSlotNext = 0;
-        weaponEquip = new ArrayList<>();
         timeBuff = new ArrayList<>();
     }
 
@@ -103,7 +97,6 @@ public class BotPlayer extends Character implements Serializable {
         timeBeHit = 0;
         beDameInfo = new HashMap<>();
         targetMove = Pos.zero();
-        effectsBody = new ArrayList<>();
         timePush = new HashMap<>();
         attackerInfo = new HashMap<>();
     }
@@ -119,38 +112,13 @@ public class BotPlayer extends Character implements Serializable {
         directionMoveAttack = Pos.zero();
         this.room = room;
         this.panelMap = new PanelMap(room.getMapInfo().getMapData());
-        for (int i = 0; i < weaponEquip.size(); i++) {
-            weaponEquip.get(i).resetJoinMap();
-        }
     }
 
 
-    public void disableStateRuna() {
-        weaponEquip.forEach(shuriken -> {
-            shuriken.setRunaState(false);
-        });
-    }
-
-    public int getNextSkillId() {
-        for (int i = 0; i < weaponEquip.size(); i++) {
-            if (weaponEquip.get(i).hasActiveSkill()) {
-                nextSkillSlot();
-                return skillSlotNext;
-            }
-        }
-        return -1;
-    }
 
     void nextSkillSlot() {
         skillSlotNext++;
         if (skillSlotNext > 4) skillSlotNext = 0;
-    }
-
-    public void activeSkill2(int skillIndex,Pos direction) {
-        setTimeAttack();
-        Shuriken shu = weaponEquip.get(skillIndex);
-        shu.setActiveSkill();
-        protoStatus(StateType.USE_SKILL, (long) (skillIndex), shu.getTimeActiveSkill() - System.currentTimeMillis(), shu.getNumberAttack(), (long) (direction.x * 1000L), (long) (direction.y * 1000L), isPowerSkill ? 1L : 0L);
     }
 
 
@@ -220,11 +188,10 @@ public class BotPlayer extends Character implements Serializable {
         if (!target.equals(Pos.zero())) {
             if (targetInSizeAttack() ) {
                 if(!isAttackRunDone()) return;
-                int skillIndex = getNextSkillId();
-                if (skillIndex != -1 && hasActiveSkill() && !isMove()) {
+                if ( hasActiveSkill() && !isMove()) {
                     targetDirection = getFutureDirection(targetAttack);
-                    activeSkill2(skillIndex,targetDirection);
-                    getBattleRoom().addBullet(this, skillIndex, activeSkillByDirection(skillIndex, targetDirection.normalized()));
+//                    activeSkill2(skillIndex,targetDirection);
+//                    getBattleRoom().addBullet(this, skillIndex, activeSkillByDirection(skillIndex, targetDirection.normalized()));
                 }
             } else {
                 if (!isAttackRunDone()) { // chua move xong thi move tiep

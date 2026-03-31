@@ -12,7 +12,6 @@ import game.dragonhero.controller.AHandler;
 import game.dragonhero.mapping.main.BaseMap;
 import game.dragonhero.server.Constans;
 import game.dragonhero.server.IAction;
-import game.dragonhero.service.battle.ClientSendType;
 import game.object.MyUser;
 import game.protocol.ProtoState;
 import io.netty.channel.Channel;
@@ -242,14 +241,6 @@ public abstract class BaseRoom extends MonoRoom {
             player.getPet().setPosAndDirection(input.petPos, input.petDirection);
         } else if (input.typeId == NInput.INPUT_SLOT) {
             if (player.beBlock()) return;
-            if (player.hasSkillIndex(input.skillIndex) && player.hasActiveSkill()) {
-                Pos direction = input.targetDirection.normalized();
-                if (!player.isLikeFace(direction) || player.getDirection().equals(Pos.zero())) {
-                    player.setDirection(direction.clone());
-                }
-                addBullet(player, input.skillIndex, player.activeSkillByDirection(input.skillIndex, input.targetDirection.normalized()));
-                player.activeSkill(input.skillIndex);
-            }
             int[] slots = input.slotActive;
             for (int i = 0; i < slots.length; i++) {
                 if (!player.isAlive()) return;
@@ -261,24 +252,8 @@ public abstract class BaseRoom extends MonoRoom {
         } else if (input.typeId == NInput.PING_GAME) {
             Util.sendProtoData(player.getMUser().getChannel(), null, IAction.PING_GAME);
         } else if (input.typeId == NInput.CLIENT_STATE) {
-            clientSendState(input.clientState);
-        }
-    }
-
-    public synchronized void addBullet(Character attacker, int skillId, List<Bullet> lstB) {
-    }
-
-    private void clientSendState(Pbmethod.PbUnitState.Builder pb) {
-        ClientSendType clientType = ClientSendType.get(pb.getId());
-        if (clientType == null) return;
-        switch (clientType) {
-            case EFFECT -> processClientEffect(pb.getStatusList(), pb.getPointList());
 
         }
-    }
-
-    protected void processClientEffect(List<Integer> types, List<Long> data) {
-
     }
 
 

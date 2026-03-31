@@ -31,6 +31,58 @@ message PbLoginGame{
   optional  int32 season = 3;
 }
 
+// --------------------  region battle new --------------------
+message PbPos {
+  optional float x = 1;
+  optional float y = 2;
+}
+
+
+message PbCell {
+  optional int32 cellId = 1;
+  optional sint32 x = 2;
+  optional sint32 y = 3;
+  optional int32 type = 4;       // 1..N do game quy định
+  optional uint32 state = 5 [default = 0]; // runtime state nếu cần
+}
+
+message PbChunk {
+  optional PbPos chunk = 1;
+  repeated PbCell cells = 2;
+}
+
+message PbInitMap {
+  optional int32 mapId = 1;
+  optional int32 chunkSize = 2;      // 10
+  optional int32 viewRadius = 3;     // 1
+  optional int32 mapChunkWidth = 4; // 10
+  optional int32 mapChunkHeight = 5;// 7
+  optional PbPos centerChunk = 6;
+  optional uint64 seq = 7;
+  repeated PbChunk chunks = 8;  // AOI ban đầu (tối đa 9 chunk)
+}
+
+message AddChunk {
+  repeated PbChunk chunk_snapshot = 1;
+}
+
+message RemoveChunk {
+  optional PbChunk chunk = 1;
+}
+
+message AddCell {
+  optional PbChunk chunk = 1;
+  optional PbCell cell = 2;
+}
+
+message RemoveCell {
+  optional int32 cell_id = 1;
+}
+
+// -----------------------------
+
+
+
 message PbClan {
   optional int32 id = 1;
   optional string name = 2;
@@ -451,10 +503,6 @@ message  PbLotteryHistory {
 }
 
 //region ------------------------------------------------------ battle
-message PbPos {
-  optional float x = 1;
-  optional float y = 2;
-}
 
 message  PbUnitUpdate{
   optional int32  type = 1;

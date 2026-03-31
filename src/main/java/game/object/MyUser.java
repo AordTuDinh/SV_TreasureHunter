@@ -4,7 +4,6 @@ import com.google.protobuf.AbstractMessage;
 import game.battle.model.Pet;
 import game.battle.model.Player;
 import game.battle.object.Pos;
-import game.battle.object.TeamObject;
 import game.battle.type.StateType;
 import game.config.*;
 import game.config.aEnum.*;
@@ -45,7 +44,6 @@ public class MyUser implements Serializable {
     UserQuestEntity uQuest; // lưu data daily
     UserEventEntity uEvent; // lưu data event
     String session;
-    TeamObject team;
     UserResources resources;
     String version, udid;
     int counterMemcached;
@@ -61,8 +59,8 @@ public class MyUser implements Serializable {
     int roomChanelId = 1; // 1-1000
     Map<Integer, List<FriendChatObject>> aChatFriends = new HashMap<>();
     List<Integer> comboWeapon = NumberUtil.genListInt(6, 0);
-    List<Integer> cacheSendParty =new  ArrayList<>(); // [userId,timeSend, number]
-    List<Integer> perReceiveBoss = List.of(0,0);  // per tăng đá - per tăng drop
+    List<Integer> cacheSendParty = new ArrayList<>(); // [userId,timeSend, number]
+    List<Integer> perReceiveBoss = List.of(0, 0);  // per tăng đá - per tăng drop
 
     public MyUser(UserEntity user) {
         this.user = user;
@@ -81,10 +79,6 @@ public class MyUser implements Serializable {
         // điểm danh
         if (uData.getStatusCheckIn() == 0) {
             ret.add((long) NotifyType.CHECK_IN.value);
-        }
-        // afk
-        if (CfgAfk.isFullAfkBonus(this)) {
-            ret.add((long) NotifyType.AFK_BONUS.value);
         }
         // điểm danh bang
         UserClanEntity userClan = Services.userDAO.getUserClan(this);
@@ -183,9 +177,9 @@ public class MyUser implements Serializable {
         List<Integer> lstIds = uHero.getListIdEquipmentEquip();
         for (int i = 0; i < lstIds.size(); i++) {
             UserItemEquipmentEntity uItem = resources.getItemEquipment(lstIds.get(i));
-            if(uItem!=null) {
+            if (uItem != null) {
                 lst.add(uItem.getRes().getId());
-            }else {
+            } else {
                 lst.add(0);
             }
         }
@@ -289,8 +283,6 @@ public class MyUser implements Serializable {
 
     public void userLogout() {
         long curTime = System.currentTimeMillis();
-        UserPartyEntity userParty = user.getParty();
-        if(userParty != null) userParty.offlineParty(this);
         getUser().update(Arrays.asList("logout", Calendar.getInstance().getTime()));
         UserAchievementEntity uAchie = Services.userDAO.getUserAchievement(this);
         if (uAchie != null && uAchie.isCanUpdate()) uAchie.updateAll();
@@ -301,11 +293,6 @@ public class MyUser implements Serializable {
             int timeAdd = (int) ((Calendar.getInstance().getTime().getTime() - getUser().getLastLogin().getTime()) / 1000);
             session.createNativeQuery("update user_daily set login_time =" + timeAdd + "+login_time, data_int= '" + StringHelper.toDBString(getUserDaily().getUDaily().aInt) + "' where user_id = " + user.getId()).executeUpdate();
             session.createNativeQuery("update user_data set campaign ='" + StringHelper.toDBString(getUData().getCampaign()) + "'where user_id = " + user.getId()).executeUpdate();
-            // check hero point
-            UserArenaEntity uArena = Services.userDAO.getUserArena(this);
-            if (uArena != null && uArena.isActive()) {
-                session.createNativeQuery("update user_arena set defense_team ='" + StringHelper.toDBString(uArena.getDefTeam()) + "'where user_id = " + user.getId()).executeUpdate();
-            }
             session.getTransaction().commit();
         } catch (Exception ex) {
             getLogger().error(GUtil.exToString(ex));

@@ -1,7 +1,6 @@
 package game.dragonhero.mapping;
 
 import game.battle.calculate.IMath;
-import game.battle.object.HeroBattle;
 import game.battle.object.Point;
 import game.config.CfgPet;
 import game.config.aEnum.PetType;
@@ -82,10 +81,6 @@ public class UserPetEntity implements Serializable {
         int hp = getHp();
         if (hp == CfgPet.getMaxHpByStar(star)) return 0;
         return (CfgPet.getMaxHpByStar(star) - hp) / CfgPet.HP_1_DAY + 1;
-    }
-
-    public HeroBattle toHeroBattle(int team, int id) {
-        return new HeroBattle(this, team, id, point == null ? new Point() : point);
     }
 
     public protocol.Pbmethod.PbPet.Builder toProto() {

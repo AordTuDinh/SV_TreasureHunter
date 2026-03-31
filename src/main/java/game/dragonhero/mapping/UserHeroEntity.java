@@ -1,11 +1,7 @@
 package game.dragonhero.mapping;
 
 import game.battle.calculate.IMath;
-import game.battle.object.HeroBattle;
 import game.battle.object.Point;
-import game.battle.object.Shuriken;
-import game.battle.object.WeaponBattle;
-import game.config.aEnum.EquipSlotType;
 import game.dragonhero.mapping.main.ResHeroEntity;
 import game.dragonhero.service.resource.ResHero;
 import game.dragonhero.service.resource.ResItem;
@@ -104,11 +100,6 @@ public class UserHeroEntity implements Serializable {
         return pb.build();
     }
 
-    public HeroBattle toHeroBattle(int team, int id, int slot, WeaponBattle[] weaponBattles, UserPetEntity monster) {
-        Point point = getPoint();
-        if (point==null) point = new Point();
-        return new HeroBattle(team, id, heroId, getPoint().cloneInstance(), slot, weaponBattles, monster);
-    }
 
     public boolean updateItemEquip(List<Integer> items) {
         if (update(Arrays.asList("item_equipment", StringHelper.toDBString(items)))) {

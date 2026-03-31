@@ -96,10 +96,6 @@ public class UserService {
             uTop.setPoint(point.intValue());
             uTop.update();
         }
-        // check defteam
-        CfgArena.reCalDefTeamArena(mUser, true);
-
-
     }
 
     void checkBuyQrError(MyUser mUser) {

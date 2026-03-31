@@ -1,6 +1,5 @@
 package game.battle.model;
 
-import game.battle.effect.SkillEffect;
 import game.battle.object.Coroutine;
 import game.battle.object.PanelMap;
 import game.battle.object.Point;
@@ -20,7 +19,6 @@ import java.util.List;
 
 public class Pet extends Character implements Serializable {
     Player owner;
-    SkillEffect petSkills;
     float timePetActive;
 
     public Pet(UserPetEntity uPet, Player owner) {
@@ -34,7 +32,6 @@ public class Pet extends Character implements Serializable {
         this.owner = owner;
         ResPetEntity res = uPet.getResPet();
         this.faction = FactionType.get(res.getFaction());
-        this.petSkills = new SkillEffect(res.getPetSkill(), uPet.getStar());
         this.timePetActive = res.getTimeActive();
     }
 
@@ -69,77 +66,7 @@ public class Pet extends Character implements Serializable {
     }
 
     public void processSkill() {
-        SkillEffect eff = petSkills;
-        if (eff != null && DateTime.isAfterTime(getTimeActionAttack(), eff.getTime())) {
-            activeSkill(0);
-            owner.getRoom().addCoroutine(new Coroutine(eff.getTimeDelayDame(), () -> {
-                switch (eff.getEffectType()) {
-                    case PET_RE_HP -> { // create
-                        long reHp1 = (long) (eff.getFirstPer() * owner.getPoint().getMaxHp());
-                        long reMaxHp = (long) (BattleConfig.S_maxReHp75 / 100f * owner.getPoint().getMaxHp());
-                        reHp1 = reHp1 > reMaxHp ? reMaxHp : reHp1;
-                        owner.reHp(reHp1);
-//                        owner.protoStatus(StateType.RE_HP, reHp1);
-                    }
-                    case PET_BUFF_SHELL -> {//
-                        long shell = (long) (eff.getFirstPer() * owner.getPoint().getMaxHp());
-                        long maxShell = (long) (BattleConfig.S_maxReHp75 / 100f * owner.getPoint().getMaxHp());
-                        shell = shell > maxShell ? maxShell : shell;
-                        owner.buffShell(shell);
-                        owner.getRoom().addCoroutine(new Coroutine(timePetActive, () -> {
-                            long curShell = owner.getPoint().getCurShell();
-                            if (curShell > 0) owner.protoBuffPoint(Point.SHELL, -curShell);
-                        }));
-                    }
-                    case PET_BUFF_ATK -> buffPointPet(owner, Point.CHANGE_ATTACK, eff, BattleConfig.S_maxReduce90);
-                    case PET_BUFF_MATK ->
-                            buffPointPet(owner, Point.CHANGE_MAGIC_ATTACK, eff, BattleConfig.S_maxReduce90);
-                    case PET_BUFF_DEF -> buffPointPet(owner, Point.CHANGE_DEFENSE, eff, BattleConfig.S_maxReduce90);
-                    case PET_BUFF_MAGIC_RESIST ->
-                            buffPointPet(owner, Point.CHANGE_MAGIC_RESIST, eff, BattleConfig.S_maxReduce90);
-                    case PET_BUFF_CRIT -> buffPointPet(owner, Point.CHANGE_CRIT, eff, BattleConfig.S_maxReduce90);
-                    case PET_BUFF_CRIT_DAME ->
-                            buffPointPet(owner, Point.CHANGE_CRIT_DAMAGE, eff, BattleConfig.S_maxReduce90);
-                    case PET_BUFF_DEC_DAME -> buffPointPet(owner, Point.CHANGE_DAME, eff, BattleConfig.S_maxReduce90);
-                    case PET_BUFF_TRUE_DAME -> {
-                        owner.getPoint().setTrueDame(true);
-                        owner.getRoom().addCoroutine(new Coroutine(timePetActive, () -> owner.getPoint().setTrueDame(false)));
-                    }
-                    case PET_BUFF_DODGE -> {
-                        owner.protoBuffPoint(Point.DOGE, (long) eff.getFirstValues());
-                        owner.getRoom().addCoroutine(new Coroutine(timePetActive, () -> {
-                            owner.protoBuffPoint(Point.DOGE, -(long) eff.getFirstValues());
-                        }));
-                    }
-                    case PET_BUFF_SPD ->
-                            buffPointPet(owner, Point.CHANGE_ATTACK_SPEED, eff, BattleConfig.S_maxReduce90);
-                    case PET_BUFF_DAMAGE -> {//
-                        long realBuff1 = owner.getPoint().buffChange(Point.CHANGE_ATTACK, (long) eff.getFirstValues(), BattleConfig.S_maxReduce90);
-                        long realBuff2 = owner.getPoint().buffChange(Point.CHANGE_MAGIC_ATTACK, (long) eff.getValueIndex(1), BattleConfig.S_maxReduce90);
 
-                        owner.getRoom().addCoroutine(new Coroutine(timePetActive, () -> {
-                            owner.getPoint().buffChange(Point.CHANGE_ATTACK, -realBuff1, BattleConfig.S_maxReduce90);
-                            owner.getPoint().buffChange(Point.CHANGE_MAGIC_ATTACK, -realBuff2, BattleConfig.S_maxReduce90);
-                        }));
-                    }
-                    case PET_DEF_REST -> {//
-                        long realBuff1 = owner.getPoint().buffChange(Point.CHANGE_DEFENSE, (long) eff.getFirstValues(), BattleConfig.S_maxReduce90);
-                        long realBuff2 = owner.getPoint().buffChange(Point.CHANGE_MAGIC_RESIST, (long) eff.getValueIndex(1), BattleConfig.S_maxReduce90);
-                        owner.getRoom().addCoroutine(new Coroutine(timePetActive, () -> {
-                            owner.getPoint().buffChange(Point.CHANGE_DEFENSE, -realBuff1, BattleConfig.S_maxReduce90);
-                            owner.getPoint().buffChange(Point.CHANGE_MAGIC_RESIST, -realBuff2, BattleConfig.S_maxReduce90);
-                        }));
-                    }
-                }
-            }));
-        }
-    }
-
-    private void buffPointPet(Character heroBuff, int pointId, SkillEffect eff, int reMax) {
-        long realBuff = heroBuff.getPoint().buffChange(pointId, (long) eff.getFirstValues(), reMax);
-        owner.getRoom().addCoroutine(new Coroutine(timePetActive, () -> {
-            heroBuff.getPoint().buffChange(pointId, -realBuff, reMax);
-        }));
     }
 
     public Pbmethod.PbUnitAdd.Builder toProtoRemove() {

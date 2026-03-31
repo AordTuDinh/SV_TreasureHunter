@@ -23,9 +23,6 @@ public class ResMap {
             return mMap.get(teleport.getMap().value);
         } else {
             switch (teleport.getMap()) {
-                case CAMPAIGN -> {
-                    return mCampaign.get(teleport.getMapId());
-                }
                 default -> {
                     return mMap.get(teleport.getMap().value);
                 }
@@ -45,12 +42,6 @@ public class ResMap {
     public static BaseMap getMap(int mapType, int subId) {
         RoomType roomType = RoomType.get(mapType);
         switch (roomType) {
-            case CAMPAIGN -> {
-                return mCampaign.get(subId);
-            }
-            case CLAN_BOSS -> {
-                return mMapBoss.get(mapType);
-            }
             default -> {
                 return mMap.get(mapType);
             }

@@ -17,7 +17,6 @@ import game.dragonhero.service.Services;
 import game.dragonhero.service.resource.ResClan;
 import game.dragonhero.service.user.Actions;
 import game.dragonhero.service.user.Bonus;
-import game.dragonhero.table.BossClanRoom;
 import game.monitor.ChatMonitor;
 import game.monitor.ClanManager;
 import game.monitor.Online;
@@ -57,8 +56,6 @@ public class ClanEntity {
     ChatMonitor chatMan;
     @Transient
     List<CellDynamic> dynamics;
-    @Transient
-    BossClanRoom curBossRoom;
 
     public ClanEntity(UserEntity master, String intro, int avatar, String name, int joinRule, int level) {
         this.server = master.getServer();
@@ -102,14 +99,6 @@ public class ClanEntity {
         return ids;
     }
 
-    public void attackBoss(BossClanRoom curBossRoom) {
-        this.curBossRoom = curBossRoom;
-        List<Integer> info = getInfoAttackBoss();
-        info.set(1, info.get(1) + 1);
-        this.infoAttackBoss = info.toString();
-        update(List.of("info_attack_boss", StringHelper.toDBString(info)));
-    }
-
     public List<Integer> getInfoAttackBoss() {
         List<Integer> info = GsonUtil.strToListInt(infoAttackBoss);
         while (info.size() < 2) info.add(0);
@@ -120,26 +109,7 @@ public class ClanEntity {
         return info;
     }
 
-    public void checkEndBoss() {
-        if(curBossRoom==null) return;
-        List<Map.Entry<Integer, Long>> sortedList = new ArrayList<>(curBossRoom.getBoss().getBeDameInfo().entrySet());
-        sortedList.sort((a, b) -> Long.compare(b.getValue(), a.getValue()));
-        for (int i = 0; i < sortedList.size(); i++) {
-            if (sortedList.get(i).getValue() < 0) continue;
-            int coin = CfgClan.config.coinTopDameBoss.get(Math.min(i, CfgClan.config.coinTopDameBoss.size() - 1)) + bossLevel * 2;
-            int gem = CfgClan.config.gemTopDameBoss.get(Math.min(i, CfgClan.config.gemTopDameBoss.size() - 1)) + bossLevel * 2;
-            List<Long> bonus = Bonus.viewGem(gem);
-            bonus.addAll(Bonus.viewItem(ItemKey.HUY_HIEU_BANG, coin));
-            int userId = sortedList.get(i).getKey();
-            MyUser user = Online.getMUser(userId);
-            String sql = DBHelper.sqlMail(userId, String.format(Lang.getTitle(user, Lang.mail_clan_boss_top), (i + 1)), StringHelper.toDBString(bonus));
-            DBJPA.rawSQL(sql);
-            if (user != null && user.getChannel() != null && user.getChannel().isActive())
-                user.addNotify(NotifyType.MAIL);
-        }
 
-        setCurBossRoom(null);
-    }
 
     public void upLevelBoss(){
         this.bossLevel++;
@@ -147,12 +117,6 @@ public class ClanEntity {
         update(List.of("boss_level",bossLevel,"time_open_boss",timeOpenBoss));
     }
 
-    public synchronized boolean openBoss() {
-        if(curBossRoom!=null && !DateTime.isAfterTime(curBossRoom.getTimeCreateRoom(), BossClanRoom.getTimeOut()) ) return false;
-        honor -= CfgClan.config.feeOpenBoss;
-        this.timeOpenBoss =System.currentTimeMillis();
-        return update(Arrays.asList( "honor", honor,"time_open_boss",timeOpenBoss));
-    }
 
     public List<ChatObject> getAChat() {
         return chatMan.getAChat();

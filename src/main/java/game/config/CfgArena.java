@@ -2,13 +2,10 @@ package game.config;
 
 import com.google.gson.Gson;
 import game.battle.calculate.IMath;
-import game.battle.object.BattleTeam;
-import game.battle.object.HeroBattle;
 import game.battle.object.Point;
 import game.config.aEnum.ItemFarmType;
 import game.config.aEnum.ItemKey;
 import game.config.aEnum.PetType;
-import game.dragonhero.mapping.UserArenaEntity;
 import game.dragonhero.mapping.UserPetEntity;
 import game.dragonhero.service.Services;
 import game.dragonhero.service.resource.ResFarm;
@@ -113,40 +110,6 @@ public class CfgArena {
         return 1;
     }
 
-    public static BattleTeam reCalDefTeamArena(MyUser mUser, boolean canUpdate) {
-        //canUpdate : có đc phép  lưu vào DB hay k
-        // update cùng lúc với last session nên trả về string để update cùng cho đỡ tài nguyên
-        UserArenaEntity uArena = Services.userDAO.getUserArena(mUser);
-        BattleTeam team = uArena.getDefTeam();
-        boolean changeData = false;
-        Point basePoint = IMath.calculatePoint(mUser, false);
-        if (uArena.isActive() && team != null) {
-            HeroBattle hPet = team.getBattleHeroes()[CfgArena.SLOT_T1_PET];
-            //pet
-            UserPetEntity pet = null;
-            if (hPet != null) pet = mUser.getResources().getPet(PetType.ANIMAL, hPet.getId());
-            if (pet != null) team.getBattleHeroes()[CfgArena.SLOT_T1_PET] = pet.toHeroBattle(2, CfgArena.SLOT_T1_PET);
-            //monster
-            UserPetEntity monster = null;
-            HeroBattle hMonster = team.getBattleHeroes()[CfgArena.SLOT_T1_MONSTER];
-            if (hMonster != null) monster = mUser.getResources().getPet(PetType.MONSTER, hMonster.getId());
-            if (monster != null)
-                team.getBattleHeroes()[CfgArena.SLOT_T1_MONSTER] = monster.toHeroBattle(2, CfgArena.SLOT_T1_MONSTER);
-            for (int i = 0; i < CfgArena.SLOT_T1_PET; i++) {
-                HeroBattle hero = team.getBattleHeroes()[i];
-                if (changeData == false && hero != null)
-                    changeData = hero.calPoint(mUser, basePoint.cloneInstance(), monster);
-            }
-        }
-        if (changeData) { // có thay đổi dữ liệu
-            if (canUpdate) uArena.updateDefTeam(team);
-            else {
-                uArena.setDefTeam(team);
-                uArena.setDefenseTeam(team.toString());
-            }
-            return team;
-        } else return null;
-    }
 
     private static int getK(int rating) {
         if (rating < 1150) {

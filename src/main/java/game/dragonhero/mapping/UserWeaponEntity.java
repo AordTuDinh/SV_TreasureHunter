@@ -1,8 +1,6 @@
 package game.dragonhero.mapping;
 
 import game.battle.object.Point;
-import game.battle.effect.SkillEffect;
-import game.battle.object.WeaponBattle;
 import game.dragonhero.mapping.main.ResWeaponEntity;
 import game.dragonhero.service.resource.ResWeapon;
 import game.object.PassiveWeapon;
@@ -62,10 +60,6 @@ public class UserWeaponEntity implements Serializable {
         return res.getAtkDame().isEmpty() ? 0L : (res.getAtkDame().get(0) + res.getAtkDame().get(1) * (level)) / 100f;
     }
 
-    public SkillEffect getSkillEffect() {
-        return new SkillEffect(getRes(), level);
-    }
-
     public List<Integer> getInfoAttack() {
         ResWeaponEntity res = getRes();
         List<Integer> info = new ArrayList<>(res.getShots()); // số tia - số đạn mỗi tia - số lần xuyên
@@ -83,9 +77,6 @@ public class UserWeaponEntity implements Serializable {
         return info;
     }
 
-    public WeaponBattle toWeaponBattle(Point point, int slot) {
-        return new WeaponBattle(point, this, slot);
-    }
 
     public boolean updateUpLevel() {
         if (update(List.of("level", level + 1, "bless", 0))) {

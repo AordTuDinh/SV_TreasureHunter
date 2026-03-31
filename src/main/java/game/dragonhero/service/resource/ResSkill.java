@@ -2,7 +2,6 @@ package game.dragonhero.service.resource;
 
 import game.config.CfgServer;
 import game.dragonhero.mapping.main.ResSkillEntity;
-import game.dragonhero.service.battle.EffectType;
 import ozudo.base.database.DBResource;
 
 import java.util.ArrayList;

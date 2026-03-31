@@ -1,8 +1,5 @@
 package game.dragonhero.mapping.main;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import game.battle.effect.SkillObject;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ozudo.base.helper.GsonUtil;
@@ -21,9 +18,6 @@ public class ResSkillEntity extends BaseEntity {
     String attackDamage, magicDamage, data, desc;
     @Getter
     @Transient
-    SkillObject skill;
-    @Getter
-    @Transient
     List<Integer> atkDame, magDame;
 
     public void initData() {
@@ -32,9 +26,5 @@ public class ResSkillEntity extends BaseEntity {
         checkJson(id, attackDamage);
         checkJson(id, magicDamage);
         checkJson(id, data);
-        if (!data.isEmpty()) {
-            skill = new Gson().fromJson(data, new TypeToken<SkillObject>() {
-            }.getType());
-        }
     }
 }

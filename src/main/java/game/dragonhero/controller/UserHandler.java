@@ -16,7 +16,6 @@ import game.dragonhero.service.resource.*;
 import game.dragonhero.service.user.Actions;
 import game.dragonhero.service.user.Bonus;
 import game.dragonhero.table.BaseRoom;
-import game.dragonhero.table.CampaignRoom;
 import game.dragonhero.table.DefaultRoom;
 import game.dragonhero.task.dbcache.MailCreatorCache;
 import game.monitor.Online;
@@ -42,7 +41,7 @@ import static game.config.lang.Lang.*;
 public class UserHandler extends AHandler {
     @Override
     public void initAction(Map<Integer, AHandler> mHandler) {
-        List<Integer> actions = Arrays.asList(CREATE_NAME, USER_INFO, DAME_SKIN_EQUIP, CHANGE_LANG, CHAT_FRAME_EQUIP, USE_GIFT_CODE, TRIAL_EQUIP, BUFF_INFO, RANKING_STATUS, TUTORIAL_STATUS, TUTORIAL_QUEST_RECEIVE, TUTORIAL_GO_TO, TUTORIAL_QUEST_STATUS, RANKING_INFO, SEND_MAIL, CHANGE_INTRO, HELP_VALUE, CHANGE_NAME, PIECE_GRAFT, AVATAR_LIST, AVATAR_CHOOSE, USER_DATA_INFO, BAG_STATUS, BAG_BUY_SLOT, UPDATE_NEXT_DAY, AFK_STATUS, AFK_GET_BONUS);
+        List<Integer> actions = Arrays.asList(CREATE_NAME, USER_INFO, DAME_SKIN_EQUIP, CHANGE_LANG, CHAT_FRAME_EQUIP, USE_GIFT_CODE, TRIAL_EQUIP, BUFF_INFO, RANKING_STATUS, TUTORIAL_STATUS, TUTORIAL_QUEST_RECEIVE, TUTORIAL_GO_TO, TUTORIAL_QUEST_STATUS, RANKING_INFO, SEND_MAIL, CHANGE_INTRO, HELP_VALUE, CHANGE_NAME, PIECE_GRAFT, AVATAR_LIST, AVATAR_CHOOSE, USER_DATA_INFO, BAG_STATUS, BAG_BUY_SLOT, UPDATE_NEXT_DAY);
         actions.forEach(action -> mHandler.put(action, this));
     }
 
@@ -82,8 +81,6 @@ public class UserHandler extends AHandler {
                 case SEND_MAIL -> sendMail();
                 case USER_INFO -> userInfo();
                 case UPDATE_NEXT_DAY -> updateNextDay();
-                case AFK_STATUS -> afkStatus();
-                case AFK_GET_BONUS -> afkGetBonus();
                 case PIECE_GRAFT -> pieceGraft();
                 case TUTORIAL_STATUS -> tutorial();
                 case TUTORIAL_QUEST_STATUS -> tutorialQuestStatus(mUser, this);
@@ -440,90 +437,6 @@ public class UserHandler extends AHandler {
         addResponse(pb.build());
     }
 
-    void afkStatus() {
-        try {
-            UserAfkEntity uAfk = Services.userDAO.getUserAfk(mUser);
-            Pbmethod.ListCommonVector.Builder pb = Pbmethod.ListCommonVector.newBuilder();
-            Pbmethod.CommonVector.Builder cmm = Pbmethod.CommonVector.newBuilder();
-            cmm.addALong(uAfk.getTimeGetBonus());
-            cmm.addALong(uAfk.getTimeFullBonus());
-            long timeCurCheck = Calendar.getInstance().getTimeInMillis();
-            long secondsMax = uAfk.getTimeFullBonus() * DateTime.HOUR_MILLI_SECOND;
-            long timeRemain = secondsMax - (timeCurCheck - uAfk.getTimeGetBonus()) / 1000;
-            long timeOffset = timeCurCheck - uAfk.getTimeCheckBonus();
-            timeOffset = timeOffset > timeRemain ? timeRemain / 1000 : timeOffset / 1000;
-            List<Long> bonus = uAfk.getBonus();
-            // bonus moi 5s
-            int number = (int) (timeOffset / CfgAfk.config.secondUpdate);
-            for (int i = 0; i < number; i++) {
-                bonus.addAll(CfgAfk.getBonusAfk());
-            }
-            // ti re roi quai
-            int numRatePice = number / 10;
-            int numPieceReceive = 0;
-            for (int i = 0; i < numRatePice; i++) {
-                if (NumberUtil.rand100((int) (CfgAfk.config.ratePiece * 10))) numPieceReceive++;
-            }
-            // check id toi da nhan dc roi random trong khoang do
-            int curMap = mUser.getUData().getCampaign().get(0);
-            curMap = Math.min(curMap, ResMap.maxMapCampaign);
-            int maxId = ResMap.getMapCampaign(curMap).getListEnemyIds().get(0);
-            List<Long> bonusPiece = new ArrayList<>();
-            for (int i = 0; i < numPieceReceive; i++) {
-                bonusPiece.addAll(Bonus.viewPiece(PieceType.MONSTER, NumberUtil.getRandom(maxId) + 1, 1L));
-            }
-            if (!bonusPiece.isEmpty()) {
-                bonus.addAll(bonusPiece);
-            }
-            long addExp = (long) (CfgUser.getExpByLevel(user.getLevel()) * CfgAfk.perExpAFK * number);
-            if (addExp > 0) bonus.addAll(Bonus.viewExp(addExp));
-            bonus = Bonus.merge(bonus);
-            if (number > 0 && uAfk.update(Arrays.asList("time_check_bonus", timeCurCheck, "bonus", StringHelper.toDBString(bonus)))) { // có thay đổi, cần check set lại db
-                uAfk.setTimeCheckBonus(timeCurCheck);
-                uAfk.setBonus(bonus.toString());
-            }
-            cmm.addAllALong(bonus);
-            pb.addAVector(cmm);
-            pb.addAVector(getCommonVector(ResEvent.getResPack(PackType.AFK_ADD_TIME).getPrice()));
-            addResponse(IAction.AFK_STATUS, cmm.build());
-        } catch (Exception e) {
-            addErrResponse();
-        }
-    }
-
-    void afkGetBonus() {
-        UserAfkEntity uAfk = Services.userDAO.getUserAfk(mUser);
-        List<Long> bonus = Bonus.xPerBonus(uAfk.getBonus(), uAfk.getPerBonus());
-        if (bonus.isEmpty()) {
-            addErrResponse(getLang(err_no_bonus));
-            uAfk.resetBonus();
-            afkStatus();
-            return;
-        }
-        if (uAfk.resetBonus()) {
-            //bo bonus manh quai vat
-            List<List<Long>> aBonus = Bonus.parse(bonus);
-            List<Long> bonusNoReview = new ArrayList<>();
-            Iterator<List<Long>> it = aBonus.iterator();
-            while (it.hasNext()) {
-                List<Long> item = it.next();
-                if (item == null || item.isEmpty()) continue; // an toàn
-                // nếu Bonus.BONUS_PIECE là primitive long:
-                if (item.get(0) != null && item.get(0) == Bonus.BONUS_PIECE) {
-                    bonusNoReview.addAll(item);
-                    it.remove(); // an toàn khi lặp bằng iterator
-                }
-            }
-
-            List<Long> flatList = aBonus.stream().flatMap(List::stream).toList();
-            addBonusToast(Bonus.receiveListItem(mUser, DetailActionType.GET_BONUS_AFK.getKey(), flatList));
-            addBonusPrivate(Bonus.receiveListItem(mUser, DetailActionType.GET_BONUS_AFK.getKey(), bonusNoReview));
-            afkStatus();
-            CfgQuest.addNumQuest(mUser, DataQuest.GET_BONUS_AFK, 1);
-        } else addErrSystem();
-
-        CfgEvent.processTriggerEventTimer(mUser, mUser.getUser().getLevel(), TriggerEventTimer.TIME);
-    }
 
     private void pieceGraft() {
         List<Long> inputs = getInputALong();
@@ -616,7 +529,7 @@ public class UserHandler extends AHandler {
             addResponse(LOGIN_REQUIRE, null);
             return;
         }
-        int chanelId = roomType == RoomType.CAMPAIGN && mapId == 1 ? user.getId() : mUser.getRoomChanelId();
+        int chanelId =  mUser.getRoomChanelId();
         String keyRoom = CfgBattle.getKeyRoom(mUser, roomType.value, mapId, chanelId);
         BaseRoom curRoom = (BaseRoom) ChUtil.get(channel, ChUtil.KEY_ROOM);
         if (curRoom != null && (curRoom.getKeyRoom().equals(keyRoom) || !curRoom.allowChangeChanel())) {
@@ -641,12 +554,6 @@ public class UserHandler extends AHandler {
             List<Character> players = new ArrayList<>();
             players.add(player);
             switch (roomType) {
-                case CAMPAIGN:
-                    room = mapId > 0 ? new CampaignRoom(map, players, keyRoom) : new DefaultRoom(map, players, keyRoom);
-                    break;
-                case FARM:
-                    // UI Room nên không create room
-                    break;
                 default:
                     room = new DefaultRoom(map, players, keyRoom);
                     break;

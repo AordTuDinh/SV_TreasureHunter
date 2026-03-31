@@ -508,16 +508,16 @@ public class EventHandler extends AHandler {
 
         if (curPack.buyPack(mUser, curPack.getNumber() + 1)) {
             switch (PackType.get(id)) {
-                case AFK_ADD_TIME, THE_THANG -> {
-                    UserAfkEntity uAfk = Services.userDAO.getUserAfk(mUser);
-                    List<Integer> data = GsonUtil.strToListInt(rPack.getStringData());
-                    uAfk.updateTimeFullBonus(data.get(0));
-                }
-                case THE_VINH_VIEN, THE_TUAN -> {
-                    UserAfkEntity uAfk = Services.userDAO.getUserAfk(mUser);
-                    List<Integer> data = GsonUtil.strToListInt(rPack.getStringData());
-                    uAfk.updatePerBonus(data.get(0));
-                }
+//                case AFK_ADD_TIME, THE_THANG -> {
+//                    UserAfkEntity uAfk = Services.userDAO.getUserAfk(mUser);
+//                    List<Integer> data = GsonUtil.strToListInt(rPack.getStringData());
+//                    uAfk.updateTimeFullBonus(data.get(0));
+//                }
+//                case THE_VINH_VIEN, THE_TUAN -> {
+//                    UserAfkEntity uAfk = Services.userDAO.getUserAfk(mUser);
+//                    List<Integer> data = GsonUtil.strToListInt(rPack.getStringData());
+//                    uAfk.updatePerBonus(data.get(0));
+//                }
                 case SIEU_CAP -> {
                     UserEventEntity uEvent = mUser.getUEvent();
                     List<Integer> uuDai = mUser.getUserDaily().getUuDaiHangNgay();

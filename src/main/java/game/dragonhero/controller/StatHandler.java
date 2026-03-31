@@ -247,7 +247,6 @@ public class StatHandler extends AHandler {
         }
 
         if (user.updateWeaponSlot(slot, id, uWea.getLevel())) {
-            player.updateWeapon(player.getPoint(), slot - 1, uWea);
             Pbmethod.ListCommonVector.Builder lstCmm = Pbmethod.ListCommonVector.newBuilder();
             Pbmethod.CommonVector.Builder cmm = Pbmethod.CommonVector.newBuilder();
             cmm.addAllALong(GsonUtil.strToListLong(user.getWeapon()));

@@ -5,7 +5,6 @@ import game.config.aEnum.PieceType;
 import game.dragonhero.mapping.main.ResComboWeaponEntity;
 import game.dragonhero.mapping.main.ResPieceEntity;
 import game.dragonhero.mapping.main.ResWeaponEntity;
-import game.dragonhero.mapping.main.ResWeaponMapStoneEntity;
 import ozudo.base.database.DBResource;
 import ozudo.base.helper.NumberUtil;
 
@@ -65,10 +64,6 @@ public class ResWeapon {
         aPieceWeapon.forEach(piece -> {
             if (piece.getType() == PieceType.WEAPON.value) mPieceWeapon.put(piece.getId(), piece);
         });
-        // weapon map stone
-        List<ResWeaponMapStoneEntity> aWeaponMapStone = DBResource.getInstance().getList(CfgServer.DB_MAIN + "res_weapon_map_stone", ResWeaponMapStoneEntity.class);
-        mWeaponMapStone.clear();
-        aWeaponMapStone.forEach(item -> mWeaponMapStone.put(item.getWeaponId(), item.getStoneId()));
     }
 
     public static int randomItemByRank(int rank) {

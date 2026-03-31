@@ -159,8 +159,7 @@ public class UserEntity implements Serializable {
         // tính lại point thì set lại def team arena, nhưng sau 3p ms set db
         if (DateTime.isAfterTime(lastUpdateDefTeam, DateTime.MIN_SECOND * 3)) {
             lastUpdateDefTeam = Calendar.getInstance().getTime().getTime();
-            CfgArena.reCalDefTeamArena(mUser, true);
-        } else CfgArena.reCalDefTeamArena(mUser, false);
+        }
         return calculatePoint(mUser);
     }
 

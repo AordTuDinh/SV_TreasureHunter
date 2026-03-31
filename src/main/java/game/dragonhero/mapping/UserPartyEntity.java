@@ -3,8 +3,6 @@ package game.dragonhero.mapping;
 
 import game.battle.object.BonusKillEnemy;
 import game.battle.type.StateType;
-import game.config.aEnum.DetailActionType;
-import game.dragonhero.controller.WorldBossHandler;
 import game.dragonhero.service.resource.ResParty;
 import game.dragonhero.service.user.Bonus;
 import game.monitor.Online;
@@ -167,8 +165,4 @@ public class UserPartyEntity {
         return false;
     }
 
-    public void offlineParty(MyUser mUser) {
-        // ngừoi dùng logout
-        WorldBossHandler.sendInfoToAllUser(this);
-    }
 }

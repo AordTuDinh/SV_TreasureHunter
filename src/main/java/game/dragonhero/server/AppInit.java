@@ -1,28 +1,34 @@
 package game.dragonhero.server;
 
+import game.battle.core.WorldStaticStore;
 import game.cache.JCache;
 import game.config.CfgServer;
 import org.apache.logging.log4j.core.config.ConfigurationSource;
 import org.apache.logging.log4j.core.config.Configurator;
-import ozudo.base.database.DBJPA;
-import ozudo.base.database.DBJPA2;
-import ozudo.base.database.DBResource;
-import ozudo.base.helper.GsonUtil;
-import ozudo.base.helper.StringHelper;
 import ozudo.base.log.Config;
 
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
 public class AppInit {
 
-
     public static void initAll() throws Exception {
         initLogs();
         initConfig();
         initDb();
+        initMap();
+    }
+
+    private static void initMap() throws IOException {
+        Path mapPath = Path.of("src/main/java/game/source/map.json");
+        WorldStaticStore store = WorldStaticStore.load(mapPath);
+
+        var cells = store.getCellsInChunk(0, 0);
+        System.out.println("Chunk(0,0) cell count = " + cells.size());
     }
 
     private static void initLogs() {

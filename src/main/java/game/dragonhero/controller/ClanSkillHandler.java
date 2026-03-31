@@ -212,12 +212,12 @@ public class ClanSkillHandler extends AHandler {
             return;
         }
 
-        if (clan.openBoss()) {
-            addResponse(getCommonVector(clan.getHonor(),CfgClan.getTimeRemainBoss(clan.getTimeOpenBoss())));
-            BaseRoom curRoom = (BaseRoom) ChUtil.get(channel, ChUtil.KEY_ROOM);
-            List<Channel> lstChannel = curRoom.getListChannel();
-            clan.addClanLog(Lang.clan_message_16, user.getName(),CfgClan.config.feeOpenBoss+"");
-            Util.sendProtoDataToListChanel(lstChannel, Pbmethod.CommonVector.newBuilder().addALong(5L).addALong(13).addAString(getLang(Lang.countdown_teleport_boss)).build(), IAction.COUNTDOWN_MSG);
-        }else  addErrResponse(getLang(Lang.err_clan_boss_open));
+//        if (clan.openBoss()) {
+//            addResponse(getCommonVector(clan.getHonor(),CfgClan.getTimeRemainBoss(clan.getTimeOpenBoss())));
+//            BaseRoom curRoom = (BaseRoom) ChUtil.get(channel, ChUtil.KEY_ROOM);
+//            List<Channel> lstChannel = curRoom.getListChannel();
+//            clan.addClanLog(Lang.clan_message_16, user.getName(),CfgClan.config.feeOpenBoss+"");
+//            Util.sendProtoDataToListChanel(lstChannel, Pbmethod.CommonVector.newBuilder().addALong(5L).addALong(13).addAString(getLang(Lang.countdown_teleport_boss)).build(), IAction.COUNTDOWN_MSG);
+//        }else  addErrResponse(getLang(Lang.err_clan_boss_open));
     }
 }

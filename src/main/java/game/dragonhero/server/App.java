@@ -33,9 +33,6 @@ import static org.quartz.SimpleScheduleBuilder.simpleSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
 
 public class App {
-    public static List<Integer> aCounter = Arrays.asList(30, 15, 5, 3, 1);
-    //    public static Map<Integer, TurnCounter> mCounter = new HashMap<Integer, TurnCounter>();
-    static JobKey oneMinute; // 1phut
 
     public static void main(String[] args) throws Exception {
         TimeZone.setDefault(TimeZone.getTimeZone("GMT+07:00"));
@@ -48,17 +45,10 @@ public class App {
         JobDetail job = newJob(MainJob.class).withIdentity("server_job_" + CfgServer.serverId, "all").build();
         SimpleTrigger trigger = newTrigger().withIdentity("sv_trigger_" + CfgServer.serverId, "all").
                 startAt(Calendar.getInstance().getTime()).withSchedule(simpleSchedule().withIntervalInSeconds(3).repeatForever()).build();
-        // Arena Job
-//        JobDetail arenaJob = newJob(ArenaJob.class).withIdentity("arena_job_" + CfgServer.serverId, "all").build();
-//        SimpleTrigger triggerArena = newTrigger().withIdentity("arena_trigger_" + CfgServer.serverId, "all").
-//                startAt(Calendar.getInstance().getTime()).withSchedule(simpleSchedule().withIntervalInSeconds(3).repeatForever()).build();
-
-
-        try {
+          try {
             Scheduler scheduler = new StdSchedulerFactory().getScheduler();
             scheduler.start();
             scheduler.scheduleJob(job, trigger);
-           // scheduler.scheduleJob(arenaJob, triggerArena);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -114,6 +104,8 @@ public class App {
 
     static void init() throws Exception {
         AppInit.initAll();
+
+
         // tạm comment khi chạy không DB/Redis
         // initConfig();
         // JCache.getInstance();
@@ -126,7 +118,7 @@ public class App {
         List<ConfigEntity> listConfig = DBJPA.getList(CfgServer.getCfgTable(), ConfigEntity.class);
         String keyCell = CfgServer.isRealServer() ? "test:server_list" : "aord:server_list";
         ConfigEntity configServerList = (ConfigEntity) DBJPA.getUnique(CfgServer.DB_MAIN + "config_api", ConfigEntity.class, "k", keyCell);
-        CfgServer.setServerList(configServerList.getV());
+       // CfgServer.setServerList(configServerList.getV());
         listConfig.forEach(localConfig -> setConfig(localConfig.getK(), localConfig.getV()));
         loadResource();
     }

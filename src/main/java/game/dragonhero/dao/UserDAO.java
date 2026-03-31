@@ -158,39 +158,8 @@ public class UserDAO {
         return null;
     }
 
-    public UserArenaEntity getUserArena(MyUser mUser) {
-        UserArenaEntity uArena = (UserArenaEntity) mUser.getCache().get("user_arena");
-        if (uArena == null) {
-            uArena = dbGetUserArena(mUser.getUser());
-            if (uArena != null) {
-                Online.cacheUserArena(uArena);
-                mUser.getCache().set("user_arena", uArena);
-            }
-        }
-        return uArena;
-    }
 
-    private UserArenaEntity dbGetUserArena(UserEntity user) {
-        EntityManager session = null;
-        try {
-            session = DBJPA.getEntityManager();
-            List<UserArenaEntity> uArenas = session.createNativeQuery("select * from user_arena where user_id=" + user.getId(), UserArenaEntity.class).getResultList();
-            if (uArenas.isEmpty()) {
-                session = DBJPA.getEntityManager();
-                UserArenaEntity uArena = new UserArenaEntity(user);
-                session.getTransaction().begin();
-                session.persist(uArena);
-                session.getTransaction().commit();
-                return uArena;
-            }
-            return uArenas.get(0);
-        } catch (Exception ex) {
-            Logs.error(ex);
-        } finally {
-            closeSession(session);
-        }
-        return null;
-    }
+
 
 
     public UserEventTopEntity getUserEventTop(MyUser mUser,int eventType) {
@@ -226,37 +195,6 @@ public class UserDAO {
         return null;
     }
 
-    public UserAfkEntity getUserAfk(MyUser mUser) {
-        UserAfkEntity uAfk = (UserAfkEntity) mUser.getCache().get("user_afk");
-        if (uAfk == null) {
-            uAfk = dbGetUserAfk(mUser.getUser().getId());
-            if (uAfk != null) {
-                mUser.getCache().set("user_afk", uAfk);
-            }
-        }
-        return uAfk;
-    }
-
-    private UserAfkEntity dbGetUserAfk(int userId) {
-        EntityManager session = null;
-        try {
-            session = DBJPA.getEntityManager();
-            List<UserAfkEntity> aUserAfk = session.createNativeQuery("select * from user_afk where user_id=" + userId, UserAfkEntity.class).getResultList();
-            if (aUserAfk.isEmpty()) {
-                UserAfkEntity uAfk = new UserAfkEntity(userId);
-                session.getTransaction().begin();
-                session.persist(uAfk);
-                session.getTransaction().commit();
-                return uAfk;
-            }
-            return aUserAfk.get(0);
-        } catch (Exception ex) {
-            Logs.error(ex);
-        } finally {
-            closeSession(session);
-        }
-        return null;
-    }
 
     public UserEventSevenDayEntity getUserSevenDay(MyUser mUser) {
         UserEventSevenDayEntity uEvent = (UserEventSevenDayEntity) mUser.getCache().get("user_event_seven_day");
