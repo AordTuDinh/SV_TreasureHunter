@@ -30,11 +30,11 @@ public class ResponseMessage {
         mHandler = new HashMap<>();
         LoginHandler.getInstance().initAction(mHandler);
         BattleHandler.getInstance().initAction(mHandler);
-        StatHandler.getInstance().initAction(mHandler);
+//        StatHandler.getInstance().initAction(mHandler);
         UserHandler.getInstance().initAction(mHandler);
         PetHandler.getInstance().initAction(mHandler);
         ItemHandler.getInstance().initAction(mHandler);
-        SmithyHandler.getInstance().initAction(mHandler);
+//        SmithyHandler.getInstance().initAction(mHandler);
         AchievementHandler.getInstance().initAction(mHandler);
         QuestHandler.getInstance().initAction(mHandler);
         MiniEventHandler.getInstance().initAction(mHandler);
@@ -43,17 +43,17 @@ public class ResponseMessage {
         PartyHandler.getInstance().initAction(mHandler);
         LotteryHandler.getInstance().initAction(mHandler);
         LuckySpineHandler.getInstance().initAction(mHandler);
-        HeroHandler.getInstance().initAction(mHandler);
+//        HeroHandler.getInstance().initAction(mHandler);
         IAPHandler.getInstance().initAction(mHandler);
         WelfareHandler.getInstance().initAction(mHandler);
-        ClanSkillHandler.getInstance().initAction(mHandler);
+//        ClanSkillHandler.getInstance().initAction(mHandler);
         ClanHandler.getInstance().initAction(mHandler);
         ChatHandler.getInstance().initAction(mHandler);
-        SummonHandler.getInstance().initAction(mHandler);
+//        SummonHandler.getInstance().initAction(mHandler);
         MailHandler.getInstance().initAction(mHandler);
         FriendHandler.getInstance().initAction(mHandler);
         MarketHandler.getInstance().initAction(mHandler);
-        FarmHandler.getInstance().initAction(mHandler);
+//        FarmHandler.getInstance().initAction(mHandler);
     }
 
     public ResponseMessage(RequestMessage request, Channel channel) {

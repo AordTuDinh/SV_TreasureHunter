@@ -29,7 +29,6 @@ public class CfgServer {
     static List<SystemMailEntity> cacheSystemMail;
     static String KEY_CACHE_SYSTEM_MAIL = "KEY_CACHE_SYSTEM_MAIL";
     public static final String SVID = "SVID";
-    public static final boolean BAOTRI = false;
     public static boolean isRealServer() {
         return serverType.equals(REAL);
     }

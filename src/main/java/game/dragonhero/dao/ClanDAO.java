@@ -85,10 +85,10 @@ public class ClanDAO extends AbstractDAO {
         return false;
     }
 
-    public List<ClanEntity> topClan(int server) {
-        return DBJPA.getEntityManager().createQuery("select c from ClanEntity c where c.server=:server order by rank desc limit 0,100", ClanEntity.class).
-                setParameter("server", server).getResultList();
-    }
+//    public List<ClanEntity> topClan(int server) {
+//        return DBJPA.getEntityManager().createQuery("select c from ClanEntity c where c.server=:server order by rank desc limit 0,100", ClanEntity.class).
+//                setParameter("server", server).getResultList();
+//    }
 
     public List<ClanReqEntity> getClanReq(int clanId) {
         return DBJPA.getEntityManager().createQuery("select c from ClanReqEntity c where c.clanId=:clanId", ClanReqEntity.class)

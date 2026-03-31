@@ -1,8 +1,4 @@
 package game.dragonhero.mapping.main;
-
-import game.dragonhero.mapping.UserHeroEntity;
-import game.dragonhero.service.user.Bonus;
-import game.object.MyUser;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -52,18 +48,6 @@ public class ResMarketDetailEntity extends BaseEntity implements Serializable {
         return show == 1;
     }
 
-
-    // check hero đã sở hữu
-    public boolean isHasHero(MyUser mUser) {
-        List<List<Long>> bms = Bonus.parse(items);
-        for (int i = 0; i < bms.size(); i++) {
-            List<Long> bonus = bms.get(i);
-            if (bonus.get(0) == Bonus.BONUS_HERO) {
-                return mUser.getResources().hasHero(Math.toIntExact(bonus.get(1)));
-            }
-        }
-        return false;
-    }
 
     public boolean hasBuy() {
         int day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);

@@ -1,7 +1,6 @@
 package game.dragonhero.service.resource;
 
 import game.config.CfgServer;
-import game.dragonhero.mapping.main.CacheUserBuyRubyEntity;
 import game.dragonhero.mapping.main.ResIAPEntity;
 import ozudo.base.database.DBResource;
 
@@ -13,7 +12,6 @@ import java.util.Map;
 public class ResIAP {
     public static List<ResIAPEntity> aIAP = new ArrayList<>();
     static Map<Integer, ResIAPEntity> mIAP = new HashMap<>();
-    static Map<Integer, CacheUserBuyRubyEntity> mCacheBuyIAPOld = new HashMap<>(); // cache bon nap r
     static Map<String, ResIAPEntity> mIAPProductAndroid = new HashMap<>();
     static Map<String, ResIAPEntity> mIAPProductIos = new HashMap<>();
     public static final int IAP_ID_FIRST_PURCHASE = 1;
@@ -28,9 +26,6 @@ public class ResIAP {
         return mIAPProductIos.get(productId);
     }
 
-    public static CacheUserBuyRubyEntity getCacheUserBuyRubyEntity(int userId) {
-        return mCacheBuyIAPOld.get(userId);
-    }
 
     public static void init() {
         // purchase list
@@ -44,8 +39,5 @@ public class ResIAP {
             mIAPProductAndroid.put(item.getProductIdAndroid(), item);
             mIAPProductIos.put(item.getProductIdIos(), item);
         });
-
-        List<CacheUserBuyRubyEntity> aUCahe = DBResource.getInstance().getList(CfgServer.DB_MAIN + "cache_user_buy_ruby", CacheUserBuyRubyEntity.class);
-        aUCahe.forEach(aCache -> mCacheBuyIAPOld.put(aCache.getUserId(), aCache));
     }
 }

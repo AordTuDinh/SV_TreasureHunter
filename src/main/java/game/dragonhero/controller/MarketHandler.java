@@ -113,12 +113,7 @@ public class MarketHandler extends AHandler {
                 cmm.addALong(aItem.get(i).getId());
                 if (resMarket.getMarketType() == MarketType.TYPE_REFRESH) { // refresh không giới hạn lượt mua
                     cmm.addALong(-1);
-                } else {
-                    // chặn hero đang sở hữu
-                    if (aItem.get(i).isHasHero(mUser)) {
-                        cmm.addALong(0);
-                    } else cmm.addALong(aItem.get(i).getStock());
-                }
+                } else cmm.addALong(aItem.get(i).getStock());
             }
             builder.addAVector(cmm);
             addResponse(MARKET_STATUS, builder.build());

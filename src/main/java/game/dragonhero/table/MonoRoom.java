@@ -30,6 +30,9 @@ public abstract class MonoRoom extends Mono {
     protected long id; // id room khác với id init
     List<Coroutine> coroutines;
     RoomType roomType;
+
+
+
     // region proto
     @Getter
     protocol.Pbmethod.PbInitRoom.Builder pbInit;
@@ -44,6 +47,8 @@ public abstract class MonoRoom extends Mono {
     @Setter
     @Getter
     String[] keys; // room_mapId_subId_chanelId
+
+
 
 
     public MonoRoom(String keyRoom) {

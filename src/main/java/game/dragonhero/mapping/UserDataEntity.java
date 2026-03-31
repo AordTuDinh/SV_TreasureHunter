@@ -40,18 +40,14 @@ public class UserDataEntity implements Serializable {
     @Id
     int userId;
     int levelGachaWeapon, levelGachaPet, levelTraining, numPointLevel, numStone, numStoneVip, friendNotify, tutorial, questTutorial, questTutorialNumber;
-    String goldStat, levelStat, numSlot, dataInt, checkIn;
+    String numSlot, dataInt, checkIn;
     String bossGod; // level 5 con boss mình đánh đc
     String campaign;//[id - number]
     String campaignReward;//[0-1] theo id
     String buff; // [time25,time50,timex2 ...] x9
-    String farmTree, farmDeco, farmPoint, dameSkin, chatFrame, listTrial;
+    String farmPoint, dameSkin, chatFrame, listTrial;
     int dameSkinEquip, chatFrameEquip, trialEquip,effInit;
 
-    @Transient
-    Map<Integer, StatEntity> aGoldStat = new HashMap<>();
-    @Transient
-    Map<Integer, StatEntity> aLevelStat = new HashMap<>();
     @Transient
     int maxLvTraining = 60;
     @Transient
@@ -71,8 +67,6 @@ public class UserDataEntity implements Serializable {
         this.effInit  = 0;
         this.levelGachaWeapon = 1;
         this.numSlot = CfgBag.genBaseSlot(); // item - item Equipment - artifact
-        this.goldStat = "[]";
-        this.levelStat = "[]";
         this.campaign = "[1,0]";
         this.campaignReward = "[]";
         this.dameSkin = "[0]";
@@ -81,8 +75,6 @@ public class UserDataEntity implements Serializable {
         this.bossGod = NumberUtil.genListInt(5, 0).toString();
         this.checkIn = "[]";
         this.farmPoint = NumberUtil.genListStringInt(3, 0);// time - per - exp
-        this.farmTree = NumberUtil.genListStringInt(ResFarm.farmTree.size(), 0);
-        this.farmDeco = NumberUtil.genListStringInt(ResFarm.getMaxSizeDeco(), 0);
         this.tutorial = 0;
         this.questTutorialNumber = 0;
         this.questTutorial = 1;
@@ -90,13 +82,6 @@ public class UserDataEntity implements Serializable {
         this.dameSkinEquip = 0;
         this.trialEquip = 0;
         this.buff = NumberUtil.genListStringInt(9, 0);
-    }
-
-    public String getGoldStat() {
-        if (goldStat.isEmpty()) {
-            goldStat = "[]";
-        }
-        return goldStat;
     }
 
     public void checkQuestTutorial(MyUser mUser, QuestTutType type, int idInfo, int number) {
@@ -196,34 +181,14 @@ public class UserDataEntity implements Serializable {
         return ret;
     }
 
-    public List<Long> getDataTree() {
-        List<Long> data = GsonUtil.strToListLong(farmTree);
-        while (data.size() < ResFarm.farmTree.size()) {
-            data.add(0L);
-        }
-        return data;
-    }
 
-    public List<Integer> getDataDeco() {
-        List<Integer> data = GsonUtil.strToListInt(farmDeco);
-        while (data.size() < ResFarm.getMaxSizeDeco()) {
-            data.add(0);
-        }
-        return data;
-    }
+
 
     public UserInt getUInt() {
         if (uInt == null) {
             uInt = new UserInt(dataInt, userId);
         }
         return uInt;
-    }
-
-    public String getLevelStat() {
-        if (levelStat.isEmpty()) {
-            levelStat = "[]";
-        }
-        return levelStat;
     }
 
     public List<Integer> getCampaign() {
@@ -260,12 +225,6 @@ public class UserDataEntity implements Serializable {
             data.set(0, mapId);
             data.set(1, data.get(1) + numAdd);
         }
-    }
-
-    public void initData(UserEntity user) {
-        // check data or end level
-        getGoldStatus(user);
-        getLevelStatus(user);
     }
 
     public int getNumSlotItem() {
@@ -320,292 +279,6 @@ public class UserDataEntity implements Serializable {
         return getSlot().get(2);
     }
 
-    public List<StatEntity> getGoldStatus(UserEntity user) {
-        List<StatEntity> stats = new ArrayList<>();
-        // id - level
-        boolean hasUpdate = false;
-        List<Integer> dataGoldStat = GsonUtil.strToListInt(getGoldStat());
-        if (dataGoldStat.size() != ResStat.countGoldStat()) {
-            if (dataGoldStat.size() == 0) { // tao moi
-                // gen new data
-                stats = genNewGoldStat();
-                hasUpdate = true;
-            } else { // check lai data - status
-                stats = parseGoldStat(getGoldStat(), user);
-
-                // check so luong co thay doi hay khong
-                for (int i = 0; i < ResStat.countGoldStat(); i++) {
-                    ResGoldStatEntity resGoldStat = ResStat.aGoldStat.get(i);
-                    if (aGoldStat.get(resGoldStat.getId()) == null) { // chua co trong data
-                        // tao moi va add vao
-                        StatusType type = StatusType.LOCK;
-                        if (resGoldStat.hasCondition()) {
-                            if (resGoldStat.getConditionKey() == ConditionType.MAX_POINT.value) {
-                                StatEntity stat = aGoldStat.get(resGoldStat.getConditionLevel());
-                                if (stat != null) {
-                                    // check thoa man dieu kien level cua chi so nao do lon hon dieu kien
-                                    int levelNow = stat.level;
-                                    if (levelNow < resGoldStat.getConditionLevel()) {
-                                        type = StatusType.PROCESSING;
-                                    }
-                                }
-                            } else {
-                                type = StatusType.PROCESSING;
-                            }
-                        } else type = StatusType.PROCESSING;
-
-                        StatEntity stt = new StatEntity(resGoldStat.getId(), type);
-                        stats.add(stt);
-                        dataGoldStat.add(resGoldStat.getId());
-                        dataGoldStat.add(1);
-                        aGoldStat.put(stt.id, stt);
-                        hasUpdate = true;
-                    }
-                }
-            }
-        }
-        if (hasUpdate) {
-            if (!DBJPA.update("user_data", Arrays.asList("gold_stat", StringHelper.toDBString(dataGoldStat)), Arrays.asList("user_id", userId))) {
-            }
-        }
-        return stats;
-    }
-
-    public List<StatEntity> getLevelStatus(UserEntity user) {
-        List<StatEntity> status = new ArrayList<>();
-        // id - level
-        boolean hasUpdate = false;
-        List<Integer> dataLevelStat = GsonUtil.strToListInt(getLevelStat());
-        if (dataLevelStat.size() != ResStat.countLevelStat()) {
-            if (dataLevelStat.size() == 0) { // tao moi
-                // gen new data
-                status = genNewLevelStat();
-                hasUpdate = true;
-            } else { // check lai data
-                status = parseLevelStat(getLevelStat(), user);
-                // check so luong co thay doi hay khong
-                for (int i = 0; i < ResStat.countLevelStat(); i++) {
-                    ResLevelStatEntity retst = ResStat.aLevelStat.get(i);
-                    if (aLevelStat.get(retst.getId()) == null) { // chua co trong data
-                        // tao moi va add vao
-                        StatusType type = StatusType.LOCK;
-                        if (retst.hasCondition()) {
-                            if (aLevelStat.get(retst.getConditionKey()) != null) {
-                                // check thoa man dieu kien level cua chi so nao do lon hon dieu kien
-                                int levelNow = aLevelStat.get(retst.getConditionKey()).level;
-                                if (levelNow > retst.getConditionLevel()) {
-                                    type = StatusType.PROCESSING;
-                                }
-                            }
-                        }
-                        StatEntity stt = new StatEntity(retst.getId(), type);
-                        status.add(stt);
-                        dataLevelStat.add(retst.getId());
-                        dataLevelStat.add(1);
-                        aLevelStat.put(stt.id, stt);
-                        hasUpdate = true;
-                    }
-                }
-            }
-        }
-        if (hasUpdate) {
-            DBJPA.update("user_data", Arrays.asList("level_stat", StringHelper.toDBString(dataLevelStat)), Arrays.asList("user_id", userId));
-        }
-        return status;
-    }
-
-    public int getlvGoldStat(int id) {
-        return aGoldStat.get(id).level;
-    }
-
-    public int getlvLevelStat(int id) {
-        return aLevelStat.get(id).level;
-    }
-
-    public void upGoldStat(int id, int level) {
-        aGoldStat.get(id).level += level;
-    }
-
-    public void upLevelStat(int id, int level) {
-        aLevelStat.get(id).level += level;
-    }
-
-
-    List<StatEntity> parseGoldStat(String value, UserEntity user) {
-        aGoldStat.clear();
-        List<StatEntity> stats = new ArrayList<>();
-        List<Integer> goldStatStatus = GsonUtil.strToListInt(value);
-        for (int i = 0; i < goldStatStatus.size(); i += 2) {
-            StatusType type = StatusType.PROCESSING;
-            int id = goldStatStatus.get(i);
-            int levelNow = goldStatStatus.get(i + 1);
-            if (levelNow >= ResStat.getGoldItem(id).getLevelMax()) {
-                type = StatusType.DONE;
-            }
-            StatEntity stat = new StatEntity(id, type, goldStatStatus.get(i + 1));
-            aGoldStat.put(stat.id, stat);
-            stats.add(stat);
-        }
-        // check lai status cua item
-        for (int i = 0; i < stats.size(); i++) {
-            ResGoldStatEntity res = ResStat.getGoldItem(stats.get(i).id);
-            if (res.hasCondition()) {
-                // check condition theo tung condition type
-                int key = res.getConditionKey();
-                if (key == ConditionType.MAX_POINT.value) {
-                    int pointId = res.getConditionLevel();
-                    ResGoldStatEntity resGold = ResStat.getGoldItem(pointId);
-                    int levelNow = aGoldStat.get(pointId).level;
-                    if (levelNow < resGold.getLevelMax()) {
-                        stats.get(i).status = StatusType.LOCK;
-                        aGoldStat.put(stats.get(i).id, stats.get(i));
-                    }
-                } else if (key == ConditionType.TUTORIAL_LEVEL.value) {
-                    if (levelTraining < res.getConditionLevel()) {
-                        stats.get(i).status = StatusType.LOCK;
-                        aGoldStat.put(stats.get(i).id, stats.get(i));
-                    }
-                } else if (key == ConditionType.HAS_LEVEL.value) {
-                    if (user.getLevel() < res.getConditionLevel()) {
-                        stats.get(i).status = StatusType.LOCK;
-                        aGoldStat.put(stats.get(i).id, stats.get(i));
-                    }
-                }
-            }
-        }
-        return stats;
-    }
-
-    List<StatEntity> parseLevelStat(String value, UserEntity user) {
-        aLevelStat.clear();
-        List<StatEntity> stats = new ArrayList<>();
-        List<Integer> levelStatStatus = GsonUtil.strToListInt(value);
-        for (int i = 0; i < levelStatStatus.size(); i += 2) {
-            StatusType type = StatusType.PROCESSING;
-            int id = levelStatStatus.get(i);
-            int levelNow = levelStatStatus.get(i + 1);
-            ResLevelStatEntity resLevel = ResStat.getLevelItem(id);
-            if (levelNow >= resLevel.getLevelMax()) {
-                type = StatusType.DONE;
-            }
-
-            StatEntity stat = new StatEntity(id, type, levelStatStatus.get(i + 1));
-            aLevelStat.put(stat.id, stat);
-            stats.add(stat);
-        }
-        // check lai status cua item
-        for (int i = 0; i < stats.size(); i++) {
-            ResLevelStatEntity res = ResStat.getLevelItem(stats.get(i).id);
-            if (res.hasCondition()) {
-                // check condition theo tung condition type
-                int key = res.getConditionKey();
-                if (key == ConditionType.MAX_POINT.value) {
-                    int pointId = res.getConditionLevel();
-                    ResLevelStatEntity resLevel = ResStat.getLevelItem(pointId);
-                    int levelNow = aLevelStat.get(pointId).level;
-                    if (levelNow < resLevel.getLevelMax()) {
-                        stats.get(i).status = StatusType.LOCK;
-                        aLevelStat.put(stats.get(i).id, stats.get(i));
-                    }
-                } else if (key == ConditionType.TUTORIAL_LEVEL.value) {
-                    if (levelTraining < res.getConditionLevel()) {
-                        stats.get(i).status = StatusType.LOCK;
-                        aLevelStat.put(stats.get(i).id, stats.get(i));
-                    }
-                } else if (key == ConditionType.HAS_LEVEL.value) {
-                    if (user.getLevel() < res.getConditionLevel()) {
-                        stats.get(i).status = StatusType.LOCK;
-                        aLevelStat.put(stats.get(i).id, stats.get(i));
-                    }
-                }
-            }
-        }
-        return stats;
-    }
-
-    // 0 = gold   ,   1  =level
-    public List<Integer> converListStat(int type) {
-        List<Integer> lst = new ArrayList<>();
-        if (type == 0) {
-            aGoldStat.forEach((k, v) -> {
-                lst.add(v.id);
-                lst.add(v.level);
-            });
-        } else {
-            aLevelStat.forEach((k, v) -> {
-                lst.add(v.id);
-                lst.add(v.level);
-            });
-        }
-        return lst;
-    }
-
-    List<StatEntity> genNewGoldStat() {
-        aGoldStat.clear();
-        List<StatEntity> lst = new ArrayList<>();
-        for (int i = 0; i < ResStat.countGoldStat(); i++) {
-            ResGoldStatEntity res = ResStat.aGoldStat.get(i);
-            StatEntity stt = new StatEntity(res.getId(), res.hasCondition() ? StatusType.LOCK : StatusType.PROCESSING);
-            lst.add(stt);
-            aGoldStat.put(stt.id, stt);
-            List<Integer> dataGoldStat = GsonUtil.strToListInt(goldStat);
-            dataGoldStat.add(res.getId());
-            dataGoldStat.add(0);
-            goldStat = dataGoldStat.toString();
-        }
-        return lst;
-    }
-
-    List<StatEntity> genNewLevelStat() {
-        aLevelStat.clear();
-        List<StatEntity> lst = new ArrayList<>();
-        for (int i = 0; i < ResStat.countLevelStat(); i++) {
-            ResLevelStatEntity res = ResStat.aLevelStat.get(i);
-            StatEntity stt = new StatEntity(res.getId(), res.hasCondition() ? StatusType.LOCK : StatusType.PROCESSING);
-            lst.add(stt);
-            aLevelStat.put(stt.id, stt);
-            List<Integer> dataLevelStat = GsonUtil.strToListInt(levelStat);
-            dataLevelStat.add(res.getId());
-            dataLevelStat.add(0);
-            levelStat = dataLevelStat.toString();
-        }
-        return lst;
-    }
-
-    public Pbmethod.PbListStat.Builder pbGoldStat() {
-        Pbmethod.PbListStat.Builder pb = Pbmethod.PbListStat.newBuilder();
-        aGoldStat.forEach((k, v) -> {
-            Pbmethod.PbStat.Builder stat = Pbmethod.PbStat.newBuilder();
-            int idStat = v.id;
-            stat.setId(v.id);
-            stat.setStatus(v.status.value);
-            stat.setLevel(v.level);
-            ResGoldStatEntity res = ResStat.getGoldItem(idStat);
-            stat.addAllCondition(res.getListConditions());
-            stat.addAllFormula(res.getAFormular());
-            stat.setMaxLevel(res.getLevelMax());
-            stat.setPointPer((long) (res.getPointPerLevel() * 100));
-            pb.addAStat(stat);
-        });
-        return pb;
-    }
-
-    public Pbmethod.PbListStat.Builder pbLevelStat() {
-        Pbmethod.PbListStat.Builder pb = Pbmethod.PbListStat.newBuilder();
-        aLevelStat.forEach((k, v) -> {
-            Pbmethod.PbStat.Builder stat = Pbmethod.PbStat.newBuilder();
-            int idStat = v.id;
-            stat.setId(idStat);
-            stat.setStatus(v.status.value);
-            stat.setLevel(v.level);
-            ResLevelStatEntity res = ResStat.getLevelItem(idStat);
-            stat.addAllCondition(res.getListConditions());
-            stat.setMaxLevel(res.getLevelMax());
-            stat.setPointPer((long) (res.getPointPerLevel() * 100));
-            pb.addAStat(stat);
-        });
-        return pb;
-    }
 
     public Pbmethod.PbUserData toProto(MyUser mUser) {
         Pbmethod.PbUserData.Builder pb = Pbmethod.PbUserData.newBuilder();
@@ -633,20 +306,6 @@ public class UserDataEntity implements Serializable {
             }
         }
         pb.setItems(lstItem);
-        Point basePoint = IMath.calculatePoint(mUser, false);
-        // list hero
-        for (Map.Entry<Integer, UserHeroEntity> heroes : mUser.getResources().getMHero().entrySet()) {
-            // cal point hero
-            heroes.getValue().calPointHero(mUser, basePoint.cloneInstance());
-            List<Integer> items = heroes.getValue().getListIdEquipmentEquip();
-            for (int i = 0; i < items.size(); i++) {
-                UserItemEquipmentEntity uItem = mUser.getResources().getItemEquipment(items.get(i));
-                if (uItem != null) uItem.setHeroIdEquip(heroes.getValue().heroId);
-            }
-
-            pb.addAHero(heroes.getValue().toProto());
-        }
-
         // item equipment
         Pbmethod.PbListItemEquipment.Builder lstItemE = Pbmethod.PbListItemEquipment.newBuilder();
         for (Map.Entry<Long, UserItemEquipmentEntity> itemEq : mUser.getResources().getMItemEquipment().entrySet()) {
@@ -656,45 +315,6 @@ public class UserDataEntity implements Serializable {
             }
         }
         pb.setItemEquipments(lstItemE);
-
-        // item seed
-        for (Map.Entry<Integer, UserItemFarmEntity> itemFarm : mUser.getResources().getMItemFarmSeed().entrySet()) {
-            if (itemFarm.getValue().getNumber() > 0) pb.addAItemFarm(itemFarm.getValue().toProto());
-        }
-
-        // item farm food
-        for (Map.Entry<Integer, UserItemFarmEntity> itemFarm : mUser.getResources().getMItemFarmFood().entrySet()) {
-            if (itemFarm.getValue().getNumber() > 0) pb.addAItemFarm(itemFarm.getValue().toProto());
-        }
-
-        // item agri
-        for (Map.Entry<Integer, UserItemFarmEntity> itemFarm : mUser.getResources().getMItemFarmAgri().entrySet()) {
-            if (itemFarm.getValue().getNumber() > 0) pb.addAItemFarm(itemFarm.getValue().toProto());
-        }
-
-        // item farm tool
-        for (Map.Entry<Integer, UserItemFarmEntity> itemFarm : mUser.getResources().getMItemFarmTool().entrySet()) {
-            if (itemFarm.getValue().getNumber() > 0) pb.addAItemFarm(itemFarm.getValue().toProto());
-        }
-
-        // item piece weapon
-        for (Map.Entry<Integer, UserPieceEntity> piece : mUser.getResources().getMPieceWeapon().entrySet()) {
-            if (piece.getValue().getNumber() > 0) pb.addAItemPiece(piece.getValue().toProto());
-        }
-        // item piece animal
-        for (Map.Entry<Integer, UserPieceEntity> piece : mUser.getResources().getMPiecePet().entrySet()) {
-            if (piece.getValue().getNumber() > 0) pb.addAItemPiece(piece.getValue().toProto());
-        }
-        // item piece monster
-        for (Map.Entry<Integer, UserPieceEntity> piece : mUser.getResources().getMPieceMonster().entrySet()) {
-            if (piece.getValue().getNumber() > 0) pb.addAItemPiece(piece.getValue().toProto());
-        }
-
-        // pet monster
-        for (Map.Entry<Integer, UserPetEntity> pets : mUser.getResources().getMPetMonster().entrySet()) {
-            pb.addAPet(pets.getValue().toProto());
-        }
-
         // pet animal
         for (Map.Entry<Integer, UserPetEntity> pets : mUser.getResources().getMPetAnimal().entrySet()) {
             pb.addAPet(pets.getValue().toProto());
@@ -712,29 +332,6 @@ public class UserDataEntity implements Serializable {
         }
 
         return pb.build();
-    }
-
-
-    //region db
-    public boolean updateGoldStat(int id, int levelNext) {
-        upGoldStat(id, levelNext);
-        String data = StringHelper.toDBString(converListStat(0));
-        if (DBJPA.update("user_data", Arrays.asList("gold_stat", data), Arrays.asList("user_id", userId))) {
-            this.goldStat = data;
-            return true;
-        }
-        return false;
-    }
-
-    public boolean updateLevelStat(int id, int levelNext) {
-        upLevelStat(id, levelNext);
-        String data = StringHelper.toDBString(converListStat(1));
-        if (DBJPA.update("user_data", Arrays.asList("level_stat", data, "num_point_level", numPointLevel - levelNext), Arrays.asList("user_id", userId))) {
-            this.levelStat = data;
-            this.numPointLevel -= levelNext;
-            return true;
-        }
-        return false;
     }
 
     public boolean updateSlot(int type, int number) {
@@ -757,51 +354,6 @@ public class UserDataEntity implements Serializable {
 
     public boolean update(List<Object> updateData) {
         return DBJPA.update("user_data", updateData, Arrays.asList("user_id", userId));
-    }
-
-    public boolean updateTreeData(List<Long> dataTree) {
-        if (update(List.of("farm_tree", StringHelper.toDBString(dataTree)))) {
-            this.farmTree = dataTree.toString();
-            return true;
-        }
-        return false;
-    }
-
-    public boolean updateFarmDeco(List<Integer> dataDeco, List<Integer> farmPoint) {
-        if (update(List.of("farm_deco", StringHelper.toDBString(dataDeco), "farm_point", StringHelper.toDBString(farmPoint)))) {
-            this.farmDeco = dataDeco.toString();
-            this.farmPoint = farmPoint.toString();
-            return true;
-        }
-        return false;
-    }
-
-    public boolean resetLevelStat(MyUser mUser) {
-        int point = CfgUser.pointPerLevel * (mUser.getUser().getLevel() - 1);
-        if (update(List.of("level_stat", "[]", "num_point_level", point))) {
-            this.levelStat = "[]";
-            this.numPointLevel = point;
-            getLevelStatus(mUser.getUser());
-            mUser.reCalculatePoint();
-            mUser.getPlayer().protoStatus(StateType.UPDATE_NUM_POINT_LEVEL_STAT, (long) point);
-            return true;
-        }
-        return false;
-    }
-
-    public List<Long> resetGoldStat(MyUser mUser) {
-        if (update(List.of("gold_stat", "[]"))) {
-            long energy = 0;
-            // reset item
-            for (var entry : aGoldStat.entrySet()) {
-                energy += ResStat.countEnergyUpgrade(entry.getKey(), entry.getValue().level);
-            }
-            this.goldStat = "[]";
-            getGoldStatus(mUser.getUser());
-            mUser.reCalculatePoint();
-            return Bonus.viewItem(ItemKey.NANG_LUONG, energy);
-        }
-        return null;
     }
 
     public boolean updateComboWeapon(String lvComboWeapon) {

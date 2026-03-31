@@ -41,7 +41,11 @@ import static game.config.lang.Lang.*;
 public class UserHandler extends AHandler {
     @Override
     public void initAction(Map<Integer, AHandler> mHandler) {
-        List<Integer> actions = Arrays.asList(CREATE_NAME, USER_INFO, DAME_SKIN_EQUIP, CHANGE_LANG, CHAT_FRAME_EQUIP, USE_GIFT_CODE, TRIAL_EQUIP, BUFF_INFO, RANKING_STATUS, TUTORIAL_STATUS, TUTORIAL_QUEST_RECEIVE, TUTORIAL_GO_TO, TUTORIAL_QUEST_STATUS, RANKING_INFO, SEND_MAIL, CHANGE_INTRO, HELP_VALUE, CHANGE_NAME, PIECE_GRAFT, AVATAR_LIST, AVATAR_CHOOSE, USER_DATA_INFO, BAG_STATUS, BAG_BUY_SLOT, UPDATE_NEXT_DAY);
+        List<Integer> actions = Arrays.asList(CREATE_NAME, USER_INFO, DAME_SKIN_EQUIP, CHANGE_LANG,
+                CHAT_FRAME_EQUIP, USE_GIFT_CODE, TRIAL_EQUIP, BUFF_INFO, RANKING_STATUS, TUTORIAL_STATUS,
+                TUTORIAL_QUEST_RECEIVE, TUTORIAL_GO_TO, TUTORIAL_QUEST_STATUS, RANKING_INFO, SEND_MAIL,
+                CHANGE_INTRO, HELP_VALUE, CHANGE_NAME,  AVATAR_LIST, AVATAR_CHOOSE, USER_DATA_INFO, BAG_STATUS,
+                BAG_BUY_SLOT, UPDATE_NEXT_DAY);
         actions.forEach(action -> mHandler.put(action, this));
     }
 
@@ -81,7 +85,6 @@ public class UserHandler extends AHandler {
                 case SEND_MAIL -> sendMail();
                 case USER_INFO -> userInfo();
                 case UPDATE_NEXT_DAY -> updateNextDay();
-                case PIECE_GRAFT -> pieceGraft();
                 case TUTORIAL_STATUS -> tutorial();
                 case TUTORIAL_QUEST_STATUS -> tutorialQuestStatus(mUser, this);
                 case TUTORIAL_QUEST_RECEIVE -> tutorialQuestReceive();
@@ -146,28 +149,28 @@ public class UserHandler extends AHandler {
             return;
         }
         //them vao nhan vat, free con dau
-        UserHeroEntity uHero = new UserHeroEntity(user.getId(), characterId);
-        if (!DBJPA.saveOrUpdate(uHero)) {
-            addErrResponse();
-            return;
-        }
-        mUser.getResources().addHero(uHero);
+//        UserHeroEntity uHero = new UserHeroEntity(user.getId(), characterId);
+//        if (!DBJPA.saveOrUpdate(uHero)) {
+//            addErrResponse();
+//            return;
+//        }
+//        mUser.getResources().addHero(uHero);
         // tang them cho 5 cai phi tieu
-        UserWeaponEntity w1 = new UserWeaponEntity(user.getId(), 1);
-        DBJPA.saveOrUpdate(w1);
-        mUser.getResources().addWeapon(w1);
-        w1 = new UserWeaponEntity(user.getId(), 2);
-        DBJPA.saveOrUpdate(w1);
-        mUser.getResources().addWeapon(w1);
-        w1 = new UserWeaponEntity(user.getId(), 3);
-        DBJPA.saveOrUpdate(w1);
-        mUser.getResources().addWeapon(w1);
-        w1 = new UserWeaponEntity(user.getId(), 4);
-        DBJPA.saveOrUpdate(w1);
-        mUser.getResources().addWeapon(w1);
-        w1 = new UserWeaponEntity(user.getId(), 5);
-        DBJPA.saveOrUpdate(w1);
-        mUser.getResources().addWeapon(w1);
+//        UserWeaponEntity w1 = new UserWeaponEntity(user.getId(), 1);
+//        DBJPA.saveOrUpdate(w1);
+//        mUser.getResources().addWeapon(w1);
+//        w1 = new UserWeaponEntity(user.getId(), 2);
+//        DBJPA.saveOrUpdate(w1);
+//        mUser.getResources().addWeapon(w1);
+//        w1 = new UserWeaponEntity(user.getId(), 3);
+//        DBJPA.saveOrUpdate(w1);
+//        mUser.getResources().addWeapon(w1);
+//        w1 = new UserWeaponEntity(user.getId(), 4);
+//        DBJPA.saveOrUpdate(w1);
+//        mUser.getResources().addWeapon(w1);
+//        w1 = new UserWeaponEntity(user.getId(), 5);
+//        DBJPA.saveOrUpdate(w1);
+//        mUser.getResources().addWeapon(w1);
 
         if (mUser.getUser().updateCreateUser(userName, characterId)) {
             Pbmethod.PbLoginGame.Builder builder = Pbmethod.PbLoginGame.newBuilder();
@@ -437,42 +440,6 @@ public class UserHandler extends AHandler {
         addResponse(pb.build());
     }
 
-
-    private void pieceGraft() {
-        List<Long> inputs = getInputALong();
-        int type = inputs.get(0).intValue();
-        int id = inputs.get(1).intValue();
-        int number = 1; // dùng cho các loại mảnh khác
-        if (type == PieceType.MONSTER.value) {
-            int petType = type - 1;
-            ResEnemyEntity enemy = ResEnemy.getEnemy(id);
-            if (enemy == null || enemy.getDataPet().isEmpty()) {
-                addErrParam();
-                return;
-            }
-
-            if (mUser.getResources().hasPet(petType, id)) {
-                addErrResponse(getLang(err_has_monster));
-                return;
-            }
-            List<Long> aBonus = Bonus.viewPiece(type, id, -CfgPet.PIECE_TO_ITEM);
-            String err = Bonus.checkMoney(mUser, aBonus);
-            if (err != null) {
-                addErrResponse(err);
-                return;
-            }
-            aBonus.addAll(Bonus.viewPet(petType, id));
-
-            addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.PIECE_GRAFT.getKey(type), aBonus)));
-            // check event 7 day
-            UserEventSevenDayEntity uEvent = Services.userDAO.getUserSevenDay(mUser);
-            if (uEvent.hasEvent() && uEvent.hasActive(6) && uEvent.update(List.of("monster", uEvent.getMonster() + 1))) {
-                uEvent.setMonster(uEvent.getMonster() + 1);
-            }
-            Actions.save(user, "piece", "graft", "type", type, "id", id, "number", number);
-        } else addErrResponse();
-    }
-
     private void tutorial() {
         int curTut = getInputInt();
         if (curTut == mUser.getUData().getTutorial() || mUser.getUData().update(List.of("tutorial", curTut))) {
@@ -568,7 +535,7 @@ public class UserHandler extends AHandler {
         }
         ChUtil.set(channel, ChUtil.KEY_ROOM, room);
         // tra ve id teleport next
-        addResponse(INIT_MAP, CfgBattle.genInitMap(roomType.value, mapId, mUser.getRoomChanelId(), map.getMapData().getPlayerCollider(), mapId > 0, PopupType.NULL));
+        addResponse(INIT_MAP, CfgBattle.genInitMap(roomType.value, mapId, mUser.getRoomChanelId(),  PopupType.NULL));
     }
 
     private void dameSkinEquip() {
@@ -664,16 +631,16 @@ public class UserHandler extends AHandler {
         for (int i = 0; i < heroAvatar.size(); i++) {
             uAvatarHero.add(heroAvatar.get(i).getAvatarId());
         }
-        List<Integer> dbAvatarIds = mUser.getResources().getHeroes().stream().map(hero -> hero.getHeroId()).distinct().collect(Collectors.toList());
-        dbAvatarIds.removeAll(uAvatarHero);
-        for (int i = 0; i < dbAvatarIds.size(); i++) {
-            if (!avatars.contains(dbAvatarIds.get(i))) { // có trong db nhưng chưa có trong túi, và đã sở hữu tướng.
-                UserAvatarEntity tmp = new UserAvatarEntity(user.getId(), dbAvatarIds.get(i), AVATAR_HERO);
-                if (DBJPA.saveOrUpdate(tmp)) {
-                    uAvatar.add(tmp);
-                }
-            }
-        }
+//        List<Integer> dbAvatarIds = mUser.getResources().getHeroes().stream().map(hero -> hero.getHeroId()).distinct().collect(Collectors.toList());
+//        dbAvatarIds.removeAll(uAvatarHero);
+//        for (int i = 0; i < dbAvatarIds.size(); i++) {
+//            if (!avatars.contains(dbAvatarIds.get(i))) { // có trong db nhưng chưa có trong túi, và đã sở hữu tướng.
+//                UserAvatarEntity tmp = new UserAvatarEntity(user.getId(), dbAvatarIds.get(i), AVATAR_HERO);
+//                if (DBJPA.saveOrUpdate(tmp)) {
+//                    uAvatar.add(tmp);
+//                }
+//            }
+//        }
         Pbmethod.ListCommonVector.Builder builder = Pbmethod.ListCommonVector.newBuilder();
         { // hero
             Pbmethod.CommonVector.Builder cmm = Pbmethod.CommonVector.newBuilder();

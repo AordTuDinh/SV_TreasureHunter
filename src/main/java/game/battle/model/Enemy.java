@@ -8,11 +8,8 @@ import game.battle.type.StateType;
 import game.config.CfgEventDrop;
 import game.config.aEnum.DetailActionType;
 import game.config.aEnum.FactionType;
-import game.config.aEnum.RoomType;
 import game.dragonhero.BattleConfig;
-import game.dragonhero.mapping.main.ResEnemyEntity;
 import game.dragonhero.server.Constans;
-import game.dragonhero.service.resource.ResSkill;
 import game.dragonhero.service.user.Bonus;
 import game.dragonhero.table.BaseBattleRoom;
 import game.object.BonusConfig;
@@ -39,40 +36,7 @@ public class Enemy extends Character implements Serializable {
     long timeActive;
     float rangeView;
 
-    public Enemy(ResEnemyEntity enemy, Pos startPos, Pos direction, int teamId, BaseBattleRoom room) {
-        this.name = enemy.getName();
-        this.model = enemy.getModel();
-        this.faction = enemy.getFaction();
-        this.autoAttack = enemy.getAutoAttack() == 1;
-        this.radius = enemy.getRadius();
-        this.point = enemy.toPoint();
-        this.rangeView = enemy.getRangeView();
-        canMove = point.getMoveSpeed() > 0;
-        this.hasDamage = (point.getMagicDamage() > 0 || point.getAttackDamage() > 0);
-        this.enemyKey = enemy.getId();
-        this.timeCreate = System.currentTimeMillis();
-        this.timeActive = System.currentTimeMillis() + 1000;
-        this.attackType = enemy.getAttackType();
-        this.delayAnimAttack = enemy.getDelayAnimAttack();
-        this.rangeAttack = enemy.getRangeAttack();
-        this.forcePush = enemy.getForcePush();
-        this.listBonus = enemy.getABonus();
-        this.panelMap = new PanelMap(room.getMapInfo().getMapData());
-        this.type = CharacterType.MONSTER;
-        this.pos = startPos;
-        this.isBoss = enemy.getBossType() == 1;
-        this.instancePos = pos.clone();
-        this.direction = direction;
-        this.id = room.getIdNext();
-        this.teamId = teamId;
-        this.alive = true;
-        this.room = room;
-        this.hasBonusKillMe = true;
-        this.isMove = false;
-        this.attackerInfo = new HashMap<>();
-        this.damage = getPoint().getAttackDamage() + getPoint().getMagicDamage();
-        this.setTimeRandomMove();
-    }
+
 
     @Override
     public void revive() {

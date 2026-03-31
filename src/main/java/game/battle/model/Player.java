@@ -69,7 +69,6 @@ public class Player extends Character implements Serializable {
         this.idChatFrame = mUser.getUData().getChatFrameEquip();
         this.idTrial = mUser.getUData().getTrialEquip();
         this.autoMode = AutoMode.get(mUser.getUSetting().getAutoMode());
-        List<UserWeaponEntity> wes = mUser.getResources().getWeaponEquip();
         itemsBuf = mUser.getUSetting().getItemSlot(mUser);
         this.pet = mUser.getPet(this);
     }
@@ -489,8 +488,6 @@ public class Player extends Character implements Serializable {
         lst.add(idChatFrame);
         lst.add(idTrial);
         lst.add(mUser.getUData().getEffInit());
-        UserHeroEntity uHero = mUser.getResources().getHero(mUser.getUser().getHeroMain());
-        lst.addAll(mUser.toListIdDBItemEquip(uHero));
         return lst;
     }
 

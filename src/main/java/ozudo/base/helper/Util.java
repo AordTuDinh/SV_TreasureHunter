@@ -198,7 +198,7 @@ public class Util {
 
     public static void debugService(int service) {
         if (CfgServer.isTestServer() && !IAction.notDebug.contains(service)) {
-           // debug("send proto data service id : " + service);
+            debug("send proto data service id : " + service);
         }
     }
 

@@ -5,6 +5,9 @@ import game.cache.JCache;
 import game.config.CfgServer;
 import org.apache.logging.log4j.core.config.ConfigurationSource;
 import org.apache.logging.log4j.core.config.Configurator;
+import ozudo.base.database.DBJPA;
+import ozudo.base.database.DBJPA2;
+import ozudo.base.database.DBResource;
 import ozudo.base.log.Config;
 
 import java.io.FileInputStream;
@@ -24,11 +27,15 @@ public class AppInit {
     }
 
     private static void initMap() throws IOException {
-        Path mapPath = Path.of("src/main/java/game/source/map.json");
-        WorldStaticStore store = WorldStaticStore.load(mapPath);
-
-        var cells = store.getCellsInChunk(0, 0);
-        System.out.println("Chunk(0,0) cell count = " + cells.size());
+        try (InputStream is = AppInit.class.getClassLoader()
+                .getResourceAsStream("source/Map.json")) {
+            if (is == null) {
+                throw new IllegalStateException("Cannot find resource: source/Map.json");
+            }
+            WorldStaticStore store = WorldStaticStore.load(is);
+            var cells = store.getCellsInChunk(0, 0);
+            System.out.println("Chunk(0,0) cell count = " + cells.size());
+        }
     }
 
     private static void initLogs() {
@@ -62,9 +69,9 @@ public class AppInit {
 
     private static void initDb() {
         // tạm comment khi chạy không DB
-        // DBJPA.init(AppConfig.cfg.db.entity1);
-        // DBJPA2.init(AppConfig.cfg.db.entity2);
-        // DBResource.getInstance().init(AppConfig.cfg.db.entityResource);
-        // AppConfig.setDbConfig();
+         DBJPA.init(AppConfig.cfg.db.entity1);
+         DBJPA2.init(AppConfig.cfg.db.entity2);
+         DBResource.getInstance().init(AppConfig.cfg.db.entityResource);
+         AppConfig.setDbConfig();
     }
 }

@@ -132,8 +132,6 @@ public class IAction {
     public static final int MARKET_STATUS = 128;
     public static final int MARKET_BUY = 129;
     public static final int MARKET_REFRESH = 130;
-    // piece
-    public static final int PIECE_GRAFT = 131;
     // collection monster
     public static final int MONSTER_COLLECTION_STATUS = 132;
     public static final int MONSTER_COLLECTION_REWARD = 133;

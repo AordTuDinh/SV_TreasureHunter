@@ -44,18 +44,8 @@ public class ResTutorialQuestEntity extends BaseEntity {
         QuestTutType questTut = QuestTutType.get(quest.get(0));
         String title = Lang.getTitle(mUser, questTut.keyLang);
         switch (questTut) {
-            case KILL_ENEMY, HAS_MONSTER -> {
-                return String.format(title, ResEnemy.getEnemy(quest.get(1)).getName());
-            }
-            case PLAN_FARM, HARVEST -> {
-                return String.format(title, Lang.getTitle(mUser,ResFarm.getItemFarm(quest.get(1)).getName()));
-            }
-            case HAS_COMBO_WEAPON -> {
-                ResComboWeaponEntity rCombo = ResWeapon.mComboWeapon.get(quest.get(1) + 1);
-                return String.format(title, Lang.getTitle(mUser,rCombo.getName()));
-            }
-            case HAS_WEAPON_ID -> {
-                return String.format(title,Lang.getTitle(mUser, ResWeapon.getWeapon(quest.get(1)).getName()));
+            case KILL_ENEMY -> {
+                //return String.format(title, ResEnemy.getEnemy(quest.get(1)).getName());
             }
             case ATTACK_BOSS_GOD -> {
                 int type = quest.get(1);

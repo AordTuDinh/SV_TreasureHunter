@@ -428,7 +428,7 @@ public abstract class Lang implements Serializable {
     }
 
     public static Lang instance(String locale) {
-        locale = locale == null ? "en" : locale;
+        locale = locale == null ? "vi" : locale;
         locale = getValidLang(locale.toLowerCase());
         Lang lang = mlang.get(locale);
         return lang == null ? instance(CfgServer.config.mainLanguage) : lang;

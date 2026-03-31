@@ -2,7 +2,6 @@ package game.dragonhero.service.resource;
 
 import game.config.aEnum.EquipSlotType;
 import game.config.CfgServer;
-import game.config.CfgSmithy;
 import game.dragonhero.mapping.main.ResItemEquipmentEntity;
 import game.dragonhero.mapping.main.ResPointEquipmentEntity;
 import ozudo.base.database.DBResource;
@@ -47,8 +46,6 @@ public class ResPointEquipment {
                 data.add(acc.get(i + 1));
             }
             return data;
-        } else if (slotType == EquipSlotType.TREASURE) {
-            return CfgSmithy.randomTreasure();
         } else {  // gen data main
             List<ResPointEquipmentEntity> genMain = mainPoint.get(slotType.value);
             int rand = NumberUtil.getRandom(100);
@@ -69,28 +66,28 @@ public class ResPointEquipment {
                 }
             }
             // gen data sub
-            float perUpgrade = CfgSmithy.getPerGen();
-            for (int i = 1; i < res.getRank(); i++) {
-                List<ResPointEquipmentEntity> subs = subPoint.get(i);
-                int levelUp = levelByRank.get(i);
-                rand = NumberUtil.getRandom(100);
-                per = 0;
-                for (int j = 0; j < subs.size(); j++) {
-                    per += subs.get(j).getPer();
-                    if (rand <= per) {
-                        ResPointEquipmentEntity item = subs.get(j);
-                        data.add((long) item.getId());
-                        data.add((long) item.getPoint());
-                        long randIndex = 0;
-                        for (int k = 0; k < levelUp; k++) {
-                            long add = (long) (100 * perUpgrade * NumberUtil.getRandom(item.getPerMin(), item.getPerMax()));
-                            randIndex += add;
-                        }
-                        data.add(randIndex);
-                        break;
-                    }
-                }
-            }
+//            float perUpgrade = CfgSmithy.getPerGen();
+//            for (int i = 1; i < res.getRank(); i++) {
+//                List<ResPointEquipmentEntity> subs = subPoint.get(i);
+//                int levelUp = levelByRank.get(i);
+//                rand = NumberUtil.getRandom(100);
+//                per = 0;
+//                for (int j = 0; j < subs.size(); j++) {
+//                    per += subs.get(j).getPer();
+//                    if (rand <= per) {
+//                        ResPointEquipmentEntity item = subs.get(j);
+//                        data.add((long) item.getId());
+//                        data.add((long) item.getPoint());
+//                        long randIndex = 0;
+//                        for (int k = 0; k < levelUp; k++) {
+//                            long add = (long) (100 * perUpgrade * NumberUtil.getRandom(item.getPerMin(), item.getPerMax()));
+//                            randIndex += add;
+//                        }
+//                        data.add(randIndex);
+//                        break;
+//                    }
+//                }
+//            }
 
         }
         return data;

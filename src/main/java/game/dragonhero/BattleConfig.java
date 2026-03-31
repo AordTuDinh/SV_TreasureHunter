@@ -1,7 +1,6 @@
 package game.dragonhero;
 
 import game.battle.object.Pos;
-import game.config.CfgAfk;
 import ozudo.base.helper.NumberUtil;
 
 import java.util.Arrays;
@@ -35,7 +34,6 @@ public class BattleConfig {
     public static final float P_TimeDelayMoveDone = 0.35f; // Move xong r mới cho action khac
     public static final float M_timeBeHitClient = M_timeBeHit - 0.05f; // Cái này cho client chặn di chuyển
     public static final float m_LerpSpeedBar = 0.05f; // tốc độ giảm hp, càng tăng thì tốc độ giảm càng nhanh theo hàm lerp
-    public static final int timeSendBonusAfk = CfgAfk.config.secondUpdate;
     public static final int maxNumberOpenItem = 100;
     public static float P_timeNoMove = 0.02f; // sau khoảng time này thì từ move -> k move - dùng để check nhân vật có đang move hay k
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------

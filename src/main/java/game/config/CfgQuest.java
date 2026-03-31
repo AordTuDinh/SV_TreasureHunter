@@ -126,22 +126,6 @@ public class CfgQuest {
         ResTutorialQuestEntity res = ResQuest.mTutQuest.get(uData.getQuestTutorial());
         if (res == null) return StatusType.PROCESSING.value;
         switch (res.getType()) {
-            case BUY_LAND -> {
-                List<UserLandEntity> uLand = new ArrayList<>(mUser.getResources().getMLand().values());
-                UserLandEntity curLand = uLand.stream().max(Comparator.comparing(UserLandEntity::getId)).orElse(null);
-                if (curLand != null && curLand.getId() == CfgFarm.config.maxLand) {
-                    mUser.getUData().setQuestTutorialNumber(res.getNum());
-                    return StatusType.RECEIVE.value;
-                }
-            }
-            case HAS_LEVEL_TOWER -> {
-                UserTowerEntity uTower = Services.userDAO.getUserTower(mUser);
-                if (uTower == null) return StatusType.PROCESSING.value;
-                mUser.getUData().setQuestTutorialNumber(uTower.getLevel() - 1);
-                if (uTower.getLevel() > res.getNum()) {
-                    return StatusType.RECEIVE.value;
-                }
-            }
             case HAS_LEVEL -> {
                 mUser.getUData().setQuestTutorialNumber(mUser.getUser().getLevel());
                 if (mUser.getUser().getLevel() >= res.getNum()) {
@@ -171,43 +155,8 @@ public class CfgQuest {
                 mUser.getUData().setQuestTutorialNumber(num);
                 //System.out.println("num = " + num);
             }
-            case HAS_LAND -> {
-                int landSize = mUser.getResources().getMLand().values().size();
-                mUser.getUData().setQuestTutorialNumber(landSize);
-                if (landSize >= res.getNum()) {
-                    return StatusType.RECEIVE.value;
-                }
-            }
             case JOIN_CLAN -> {
                 if (mUser.getUser().getClan() > 0) {
-                    mUser.getUData().setQuestTutorialNumber(1);
-                    return StatusType.RECEIVE.value;
-                }
-            }
-            case HAS_COMBO_WEAPON -> {
-                if (mUser.getComboWeapon().get(res.getIdInfo()) == 1) { // active combo
-                    mUser.getUData().setQuestTutorialNumber(1);
-                    return StatusType.RECEIVE.value;
-                }
-            }
-            case HAS_WEAPON_ID -> {
-                UserWeaponEntity uWea = mUser.getResources().getWeapon(res.getIdInfo());
-                if (uWea != null) {
-                    mUser.getUData().setQuestTutorialNumber(1);
-                    return StatusType.RECEIVE.value;
-                }
-            }
-            case HAS_TREE -> {
-                List<Long> tree = mUser.getUData().getDataTree();
-                int numTree = (int) tree.stream().filter(item -> item > 0).count();
-                if (numTree >= res.getIdInfo()) {
-                    mUser.getUData().setQuestTutorialNumber(numTree);
-                    return StatusType.RECEIVE.value;
-                }
-            }
-            case HAS_MONSTER -> {
-                UserPetEntity userPet = mUser.getResources().getPet(PetType.MONSTER, res.getIdInfo());
-                if (userPet != null) {
                     mUser.getUData().setQuestTutorialNumber(1);
                     return StatusType.RECEIVE.value;
                 }
@@ -237,7 +186,7 @@ public class CfgQuest {
                 mUser.getUData().setQuestTutorialNumber(mUser.getResources().getNumWeaponByRank(res.getIdInfo()));
             }
             case HAS_PET -> {
-                UserPetEntity userPet = mUser.getResources().getPet(PetType.ANIMAL, res.getIdInfo());
+                UserPetEntity userPet = mUser.getResources().getPet(res.getIdInfo());
                 if (userPet != null) {
                     mUser.getUData().setQuestTutorialNumber(1);
                     return StatusType.RECEIVE.value;

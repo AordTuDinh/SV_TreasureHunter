@@ -106,8 +106,6 @@ public class UserEntity implements Serializable {
         if (update) updateItemEquip(items);
         // point
         builder.addAllPoint(StringHelper.isEmpty(name) ? new Point().toProto() : mUser.getPlayer().getPoint().toProto());
-        // list weapon
-        mUser.getResources().getMWeapon().forEach((k, v) -> builder.addWeapons(v.toProto(this, mUser.getPlayer().getPoint())));
         // weapon equip
         builder.addAllWeaponEquip(GsonUtil.strToListInt(weapon));
         builder.addAllItemEquip(getAllInfoItemEquip());
@@ -200,7 +198,7 @@ public class UserEntity implements Serializable {
         if (pet == null || pet.isEmpty()) pet = "[0,0]";
         List<Integer> ret = GsonUtil.strToListInt(pet);
         if (ret.get(0) != 0) {
-            UserPetEntity uPet = mUser.getResources().getPet(PetType.ANIMAL, ret.get(0));
+            UserPetEntity uPet = mUser.getResources().getPet(ret.get(0));
             if (uPet != null && uPet.getHp() > 0) return ret;
             else return NumberUtil.genListInt(2, 0);
         } else return ret;

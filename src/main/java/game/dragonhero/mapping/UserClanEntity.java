@@ -2,8 +2,6 @@ package game.dragonhero.mapping;
 
 import game.config.CfgClan;
 import game.config.aEnum.StatusType;
-import game.dragonhero.mapping.main.ResClanSkillEntity;
-import game.dragonhero.service.resource.ResClan;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ozudo.base.database.DBJPA;
@@ -76,64 +74,15 @@ public class UserClanEntity {
     }
 
 
-    public List<Integer> getDynamicDetail() {
-        if (dynamicDetail == null) dynamicDetail = "[]";
-        List<Integer> data = GsonUtil.strToListInt(dynamicDetail);
-        while (data.size() < ResClan.aDynamicType.size()) {
-            data.add(StatusType.PROCESSING.value);
-        }
-        return data;
-    }
 
-    public List<Integer> getSkills() {
-        List<Integer> allSkill = GsonUtil.strToListInt(skills);
-        boolean hasUpdate = false;
-        // veryfy trước số lượng skill- sau này có thêm skill cũng k bị lỗi.
-        while (allSkill.size() < ResClan.maxClanSkill) {
-            allSkill.add(-1);
-            hasUpdate = true;
-        }
-        for (int i = 0; i < allSkill.size(); i++) {
-            if (allSkill.get(i) == -1) { //check unlock
-                ResClanSkillEntity skill = ResClan.getClanSkill(i + 1);
-                if (skill.getParentId() == 0) { // main
-                    allSkill.set(i, 0);
-                    hasUpdate = true;
-                } else {
-                    int fatherLevel = Math.toIntExact(allSkill.get(skill.getParentId() - 1));
-                    if (fatherLevel >= skill.getLevelUnlocked()) {
-                        allSkill.set(i, 0);
-                        hasUpdate = true;
-                    }
-                }
-            }
-        }
-        // update db
-        if (hasUpdate) updateSkill(allSkill);
-        return allSkill;
-    }
+
 
     public List<Integer> getSkillsCount() {
         return GsonUtil.strToListInt(skillsCount);
     }
 
-    public boolean updateSkill(List<Integer> skills) {
-        if (update(Arrays.asList("skills", skills.toString()))) {
-            this.skills = skills.toString();
-            return true;
-        } else return false;
-    }
 
-    public boolean upgradeSkill(List<Integer> skills, int indexClass) {
-        List<Integer> counts = getSkillsCount();
-        int cur = counts.get(indexClass) + 1;
-        counts.set(indexClass, cur);
-        if (update(Arrays.asList("skills", skills.toString(), "skills_count", StringHelper.toDBString(counts)))) {
-            this.skills = skills.toString();
-            this.skillsCount = counts.toString();
-            return true;
-        } else return false;
-    }
+
 
     public boolean updateQuest(List<List<Long>> dataQuest) {
         if (update(List.of("quest", StringHelper.toDBString(dataQuest)))) {
@@ -157,14 +106,4 @@ public class UserClanEntity {
         honor += numHonor;
         return update(List.of("honor", honor));
     }
-
-    public boolean resetSkill() {
-        this.skills = NumberUtil.genListStringInt(ResClan.maxClanSkill, -1);
-        this.skillsCount = NumberUtil.genListStringInt(3, 0);
-        if (update(Arrays.asList("skills", skills, "skills_count", skillsCount, "first_reset", 1))) {
-            return true;
-        } else return false;
-    }
-
-
 }

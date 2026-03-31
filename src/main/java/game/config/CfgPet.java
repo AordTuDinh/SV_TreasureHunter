@@ -2,8 +2,6 @@ package game.config;
 
 import com.google.gson.Gson;
 import game.config.aEnum.ItemKey;
-import game.config.aEnum.PetType;
-import game.config.aEnum.PieceType;
 import game.dragonhero.mapping.UserPetEntity;
 import game.dragonhero.mapping.main.ResPetEntity;
 import game.dragonhero.service.resource.ResPet;
@@ -30,7 +28,7 @@ public class CfgPet {
     public static List<Long> summonPet(MyUser mUser, int number, boolean isVip, int petId) {
         List<Long> bonus = new ArrayList<>();
         ResPetEntity rPet = ResPet.getPet(petId);
-        boolean hasPet = mUser.getResources().getPet(PetType.ANIMAL, petId) != null;
+        boolean hasPet = mUser.getResources().getPet(petId) != null;
         if (petId == 0 || hasPet || rPet.getShowSummon() == 0) {  // bắt hụt
             bonus.addAll(getBonusStone(number));
         } else {
@@ -41,7 +39,7 @@ public class CfgPet {
                     int rand = NumberUtil.getRandom(1000);
                     int rate = isVip ? config.ratePetVip.get(rPet.getRank() - 1) : config.ratePet.get(rPet.getRank() - 1);
                     if (rand <= rate) {
-                        bonus.addAll(Bonus.viewPet(PetType.ANIMAL, petId));
+                        bonus.addAll(Bonus.viewPet( petId));
                         hasPet = true;
                     } else {
                         bonus.addAll(getBonusStone(1));
@@ -75,21 +73,20 @@ public class CfgPet {
         return new ArrayList<>(BONUS_PET_POINT);
     }
 
-    public static List<Long> getFeeUpStarMonster(UserPetEntity uPet) {
-        FeeUpStar fee = feeStarMonster.get(uPet.getResMonster().getRank()).get(uPet.getStar());
-        List<Long> bonus = new ArrayList<>();
-        bonus.addAll(Bonus.viewPiece(PieceType.MONSTER, uPet.getPetId(), -fee.piece));
-        bonus.addAll(Bonus.viewGold(-fee.gold));
-        return bonus;
-    }
-
-    public static List<Long> getFeeUpStarPet(UserPetEntity uPet) {
-        FeeUpStar fee = feeStarPet.get(uPet.getResMonster().getRank()).get(uPet.getStar());
-        List<Long> bonus = new ArrayList<>();
-        bonus.addAll(Bonus.viewItem(getItemUpPetByRank(uPet.getStar()), -fee.piece));
-        bonus.addAll(Bonus.viewGold(-fee.gold));
-        return bonus;
-    }
+//    public static List<Long> getFeeUpStarMonster(UserPetEntity uPet) {
+//        FeeUpStar fee = feeStarMonster.get(uPet.getResMonster().getRank()).get(uPet.getStar());
+//        List<Long> bonus = new ArrayList<>();
+//        bonus.addAll(Bonus.viewGold(-fee.gold));
+//        return bonus;
+//    }
+//
+//    public static List<Long> getFeeUpStarPet(UserPetEntity uPet) {
+//        FeeUpStar fee = feeStarPet.get(uPet.getResMonster().getRank()).get(uPet.getStar());
+//        List<Long> bonus = new ArrayList<>();
+//        bonus.addAll(Bonus.viewItem(getItemUpPetByRank(uPet.getStar()), -fee.piece));
+//        bonus.addAll(Bonus.viewGold(-fee.gold));
+//        return bonus;
+//    }
 
     public static ItemKey getItemUpPetByRank(int star) {
         switch (star) {

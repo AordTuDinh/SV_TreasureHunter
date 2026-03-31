@@ -2,14 +2,10 @@ package game.dragonhero.mapping.main;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import game.battle.object.BossSkill;
 import game.battle.object.Point;
 import game.battle.object.Pos;
 import game.battle.type.CharacterType;
 import game.config.aEnum.FactionType;
-import game.dragonhero.service.resource.ResEnemy;
-import game.dragonhero.service.resource.ResSkill;
-import game.dragonhero.service.user.Bonus;
 import game.object.BonusConfig;
 import game.object.BossSkillConfig;
 import lombok.Data;
@@ -97,10 +93,7 @@ public class ResBossEntity extends BaseEntity {
     public List<ResBossEntity> getSupport() {
         List<ResBossEntity> supports = new ArrayList<>();
         if (bossSkillConfig.support == null) return new ArrayList<>();
-        for (int i = 0; i < bossSkillConfig.support.size(); i++) {
-            ResBossEntity sp = ResEnemy.getBoss(bossSkillConfig.support.get(i));
-            supports.add(sp);
-        }
+
         return supports;
     }
 

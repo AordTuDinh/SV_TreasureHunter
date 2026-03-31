@@ -6,23 +6,17 @@ import game.battle.object.Pos;
 import game.battle.type.AutoMode;
 import game.config.CfgBattle;
 import game.config.CfgEventDrop;
-import game.config.CfgQuest;
 import game.config.CfgServer;
 import game.config.aEnum.*;
 import game.config.lang.Lang;
-import game.dragonhero.mapping.ClanEntity;
 import game.dragonhero.mapping.UserItemEntity;
 import game.dragonhero.mapping.UserSettingsEntity;
 import game.dragonhero.mapping.main.*;
-import game.dragonhero.server.IAction;
-import game.dragonhero.service.resource.ResEnemy;
 import game.dragonhero.service.resource.ResMap;
 import game.dragonhero.service.resource.ResTeleport;
 import game.dragonhero.service.user.Bonus;
 import game.dragonhero.table.*;
-import game.monitor.ClanManager;
 import game.object.BonusConfig;
-import game.object.DataQuest;
 import game.object.MyUser;
 import game.object.TaskMonitor;
 import game.protocol.CommonProto;
@@ -78,10 +72,10 @@ public class BattleHandler extends AHandler implements Serializable {
                     Pos pInit = Pos.zero();
                     initMapByTypeId(RoomType.get(type), id, pInit);
                 }
-                case INIT_BOSS -> initBoss();
-                case CAMPAIGN_REWARD -> campaignReward();
-                case CAMPAIGN_DATA -> campaignData();
-                case CAMPAIGN_SMART -> campaignSmart();
+//                case INIT_BOSS -> initBoss();
+//                case CAMPAIGN_REWARD -> campaignReward();
+//                case CAMPAIGN_DATA -> campaignData();
+//                case CAMPAIGN_SMART -> campaignSmart();
                 case INIT_BACK_HOME -> initBackHome(mUser, PopupType.get(getInputInt()));
                 case JOIN_MAP -> joinMap();
                 case REVIVE_PLAYER -> revivePlayer();
@@ -89,7 +83,7 @@ public class BattleHandler extends AHandler implements Serializable {
                 case CHANGE_ITEM_SLOT -> changeItemSlot();
                 case CHANGE_AUTO_SLOT -> changeAutoSlot();
                 case CHANGE_CHANEL -> changeChanel();
-                case SMART_BOSS -> smartBoss();
+//                case SMART_BOSS -> smartBoss();
                 case BOSS_GOD_DATA -> bossGodData();
 
             }
@@ -160,7 +154,6 @@ public class BattleHandler extends AHandler implements Serializable {
         // check có room hay chưa, có rồi thì join
         player.clearDataForChangeRoom(posInit);
         player.resetData();
-        boolean isBattle = false;
         if (room == null) {  // tao room moi
             List<Character> players = new ArrayList<>();
             players.add(player);
@@ -176,7 +169,7 @@ public class BattleHandler extends AHandler implements Serializable {
         mUser.setRoomChanelId(chanelId);
         ChUtil.set(channel, ChUtil.KEY_ROOM, room);
         // tra ve id teleport next
-        addResponse(INIT_MAP, CfgBattle.genInitMap(roomType.value, mapId, mUser.getRoomChanelId(), map.getMapData().getPlayerCollider(), isBattle, PopupType.NULL));
+        addResponse(INIT_MAP, CfgBattle.genInitMap(roomType.value, mapId, mUser.getRoomChanelId(), PopupType.NULL));
     }
 
     public static void initBackHome(MyUser mUser, PopupType popupType) {
@@ -194,16 +187,16 @@ public class BattleHandler extends AHandler implements Serializable {
         int channelId = 1;
         BaseRoom room = null;
         while (!ok) {
-            String keyRoom = CfgBattle.getKeyRoom(mUser, RoomType.HOME.value, 0, channelId);
+            String keyRoom = CfgBattle.getKeyRoom(mUser, RoomType.HOME.value, 0, 1);
             room = (BaseRoom) TaskMonitor.getInstance().getRoom(keyRoom);
-            if (room == null) {
+            if (room == null) { // chưa có room
                 List<Character> players = new ArrayList<>();
                 players.add(player);
                 room = new DefaultRoom(map, players, keyRoom);
                 TaskMonitor.getInstance().addRoom(room);
                 ok = true;
-            } else {
-                if (room.getAPlayer().size() > RoomType.HOME.maxPlayer) {
+            } else { // tạo room mới
+                if (room.getAPlayer().size() > room.getRoomType().maxPlayer) {
                     channelId++;
                 } else {
                     ok = true;
@@ -211,180 +204,181 @@ public class BattleHandler extends AHandler implements Serializable {
                 }
             }
         }
+
         ChUtil.set(mUser.getChannel(), ChUtil.KEY_ROOM, room);
         mUser.setRoomChanelId(channelId);
         // tra ve id teleport next
-        Util.sendProtoData(mUser.getChannel(), CfgBattle.genInitMap(RoomType.HOME.value, 0, channelId, map.getMapData().getPlayerCollider(), false, popupType), INIT_MAP);
+        Util.sendProtoData(mUser.getChannel(), CfgBattle.genInitMap(RoomType.HOME.value, 0, channelId, popupType), INIT_MAP);
         mUser.sendNotify();
     }
 
-    public void initBoss() {
-        List<Long> inputs = getInputALong();
-        int type = Math.toIntExact(inputs.get(0));
-        int mode = Math.toIntExact(inputs.get(1));
-        // check fee
-        List<Long> fee = Bonus.viewItem(ItemKey.BOSS_TICKET, -1);
-        String err = Bonus.checkMoney(mUser, fee);
-        if (err != null) {
-            addErrResponse(err);
-            return;
-        }
+   // public void initBoss() {
+//        List<Long> inputs = getInputALong();
+//        int type = Math.toIntExact(inputs.get(0));
+//        int mode = Math.toIntExact(inputs.get(1));
+//        // check fee
+//        List<Long> fee = Bonus.viewItem(ItemKey.BOSS_TICKET, -1);
+//        String err = Bonus.checkMoney(mUser, fee);
+//        if (err != null) {
+//            addErrResponse(err);
+//            return;
+//        }
+//
+//        RoomType bossType = RoomType.get(type);
+//        if (bossType == null) {
+//            addErrParam();
+//            return;
+//        }
+//        LevelType level = LevelType.get(mode);
+//        if (level == null || level.value > LevelType.NIGHTMARE.value) {
+//            addErrParam();
+//            return;
+//        }
+//
+//        String keyRoom = CfgBattle.getKeyRoom(mUser, type, mode, user.getId());
+//        BaseRoom curRoom = (BaseRoom) ChUtil.get(channel, ChUtil.KEY_ROOM);
+//        boolean isReAttack = false;
+//        // xóa khỏi room cũ
+//        Player player = mUser.getPlayer();
+//        if (curRoom != null && curRoom.hasPlayer(player.getId())) {
+//            curRoom.removePlayer(player.getId());
+//            isReAttack = curRoom.getRoomTypeId() == bossType.value;
+//        }
+//        // check có room hay chưa, có rồi thì join
+//        BaseRoom room = null;
+//        BaseMap baseMap = ResMap.getBossMap(bossType);
+//        List<Character> players = new ArrayList<>();
+//        if (isReAttack)
+//            player.clearDataNoCachePos(new Pos(0, -3));
+//        else player.clearDataForChangeRoom(new Pos(0, -3));
+//        players.add(player);
+//
+//        TaskMonitor.getInstance().addRoom(room);
+//        ChUtil.set(channel, ChUtil.KEY_ROOM, room);
+//        // tra ve id teleport next
+//        addResponse(CfgBattle.genInitMap(bossType.value, 0, mode, PopupType.NULL));
+   // }
 
-        RoomType bossType = RoomType.get(type);
-        if (bossType == null) {
-            addErrParam();
-            return;
-        }
-        LevelType level = LevelType.get(mode);
-        if (level == null || level.value > LevelType.NIGHTMARE.value) {
-            addErrParam();
-            return;
-        }
-
-        String keyRoom = CfgBattle.getKeyRoom(mUser, type, mode, user.getId());
-        BaseRoom curRoom = (BaseRoom) ChUtil.get(channel, ChUtil.KEY_ROOM);
-        boolean isReAttack = false;
-        // xóa khỏi room cũ
-        Player player = mUser.getPlayer();
-        if (curRoom != null && curRoom.hasPlayer(player.getId())) {
-            curRoom.removePlayer(player.getId());
-            isReAttack = curRoom.getRoomType() == bossType.value;
-        }
-        // check có room hay chưa, có rồi thì join
-        BaseRoom room = null;
-        BaseMap baseMap = ResMap.getBossMap(bossType);
-        List<Character> players = new ArrayList<>();
-        if (isReAttack)
-            player.clearDataNoCachePos(new Pos(0, -3));
-        else player.clearDataForChangeRoom(new Pos(0, -3));
-        players.add(player);
-
-        TaskMonitor.getInstance().addRoom(room);
-        ChUtil.set(channel, ChUtil.KEY_ROOM, room);
-        // tra ve id teleport next
-        addResponse(CfgBattle.genInitMap(bossType.value, 0, mode, baseMap.getMapData().getPlayerCollider(), true, PopupType.NULL));
-    }
-
-    public void smartBoss() {
-        // todo check open
-        int vip = mUser.getUser().getVip();
-        if (vip < 2) {
-            addErrResponse(String.format(getLang(Lang.err_vip_to_use), 2));
-            return;
-        }
-        List<Long> inputs = getInputALong();
-        int type = inputs.get(0).intValue();
-        int mode = inputs.get(1).intValue();
-        int number = inputs.get(2).intValue();
-        // check fee
-        List<Long> bonus = Bonus.viewItem(ItemKey.BOSS_TICKET, -number);
-        String err = Bonus.checkMoney(mUser, bonus);
-        if (err != null) {
-            addErrResponse(err);
-            return;
-        }
-        RoomType bossType = RoomType.get(type);
-        if (bossType == null) {
-            addErrParam();
-            return;
-        }
-        LevelType level = LevelType.get(mode);
-        if (level == null || level.value > LevelType.NIGHTMARE.value) {
-            addErrParam();
-            return;
-        }
-        BaseMap baseMap = ResMap.getBossMap(bossType);
-        ResMapBossEntity mapBoss = (ResMapBossEntity) baseMap;
-        int bossId = mapBoss.getListEnemy().get(mode - 1);
-        ResBossEntity boss = ResEnemy.getBoss(bossId);
-        if (boss == null) {
-            addErrParam();
-            return;
-        }
-        for (int i = 0; i < number; i++) {
-            bonus.addAll(boss.getBonusKillBoss(mUser.getPerReceiveBoss()));
-        }
-        bonus.addAll(CfgEventDrop.bonusDrop(CfgEventDrop.config.getRateDropBossGod(), number));
-        addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.SMART_BOSS.getKey(number), Bonus.merge(bonus))));
-    }
+//    public void smartBoss() {
+//        // todo check open
+//        int vip = mUser.getUser().getVip();
+//        if (vip < 2) {
+//            addErrResponse(String.format(getLang(Lang.err_vip_to_use), 2));
+//            return;
+//        }
+//        List<Long> inputs = getInputALong();
+//        int type = inputs.get(0).intValue();
+//        int mode = inputs.get(1).intValue();
+//        int number = inputs.get(2).intValue();
+//        // check fee
+//        List<Long> bonus = Bonus.viewItem(ItemKey.BOSS_TICKET, -number);
+//        String err = Bonus.checkMoney(mUser, bonus);
+//        if (err != null) {
+//            addErrResponse(err);
+//            return;
+//        }
+//        RoomType bossType = RoomType.get(type);
+//        if (bossType == null) {
+//            addErrParam();
+//            return;
+//        }
+//        LevelType level = LevelType.get(mode);
+//        if (level == null || level.value > LevelType.NIGHTMARE.value) {
+//            addErrParam();
+//            return;
+//        }
+//        BaseMap baseMap = ResMap.getBossMap(bossType);
+//        ResMapBossEntity mapBoss = (ResMapBossEntity) baseMap;
+//        int bossId = mapBoss.getListEnemy().get(mode - 1);
+//        ResBossEntity boss = ResEnemy.getBoss(bossId);
+//        if (boss == null) {
+//            addErrParam();
+//            return;
+//        }
+//        for (int i = 0; i < number; i++) {
+//            bonus.addAll(boss.getBonusKillBoss(mUser.getPerReceiveBoss()));
+//        }
+//        bonus.addAll(CfgEventDrop.bonusDrop(CfgEventDrop.config.getRateDropBossGod(), number));
+//        addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.SMART_BOSS.getKey(number), Bonus.merge(bonus))));
+//    }
 
     private void bossGodData() {
         addResponse(getCommonVector(mUser.getUData().getBossGod()));
     }
 
-    void campaignData() {
-        List<Integer> rewards = mUser.getUData().getCampaignReward();
-        List<Integer> dataCampaign = mUser.getUData().getCampaign(); // id - num
-        // check next stage
-        ResCampaignEntity map = ResMap.getMapCampaign(dataCampaign.get(0));
-        if (map != null && dataCampaign.get(1) >= map.getConquer()) {
-            dataCampaign.set(0, dataCampaign.get(0) + 1);
-            dataCampaign.set(1, 0);
-            if (mUser.getUData().update(List.of("campaign", StringHelper.toDBString(dataCampaign)))) {
-                mUser.getUData().setCampaign(dataCampaign.toString());
-            }
-        }
+//    void campaignData() {
+//        List<Integer> rewards = mUser.getUData().getCampaignReward();
+//        List<Integer> dataCampaign = mUser.getUData().getCampaign(); // id - num
+//        // check next stage
+//        ResCampaignEntity map = ResMap.getMapCampaign(dataCampaign.get(0));
+//        if (map != null && dataCampaign.get(1) >= map.getConquer()) {
+//            dataCampaign.set(0, dataCampaign.get(0) + 1);
+//            dataCampaign.set(1, 0);
+//            if (mUser.getUData().update(List.of("campaign", StringHelper.toDBString(dataCampaign)))) {
+//                mUser.getUData().setCampaign(dataCampaign.toString());
+//            }
+//        }
+//
+//        Pbmethod.ListCommonVector.Builder pb = Pbmethod.ListCommonVector.newBuilder();
+//        pb.addAVector(getCommonIntVector(rewards));
+//        pb.addAVector(getCommonIntVector(dataCampaign));
+//        addResponse(IAction.CAMPAIGN_DATA, pb.build());
+//    }
 
-        Pbmethod.ListCommonVector.Builder pb = Pbmethod.ListCommonVector.newBuilder();
-        pb.addAVector(getCommonIntVector(rewards));
-        pb.addAVector(getCommonIntVector(dataCampaign));
-        addResponse(IAction.CAMPAIGN_DATA, pb.build());
-    }
+//    void campaignReward() {
+//        int mapId = getInputInt();
+//        List<Integer> rewards = mUser.getUData().getCampaignReward();
+//        List<Integer> dataCampaign = mUser.getUData().getCampaign();
+//        ResCampaignEntity map = ResMap.getMapCampaign(mapId);
+//        if (mapId > rewards.size() || map == null) {
+//            addErrParam();
+//            return;
+//        }
+//        // check đủ đk nhận chưa
+//        boolean hasBonus = rewards.get(mapId - 1) == 0 && (dataCampaign.get(0) > mapId || dataCampaign.get(0) == mapId && dataCampaign.get(1) >= map.getConquer());
+//        if (!hasBonus) {
+//            addErrParam();
+//            return;
+//        }
+//        rewards.set(mapId - 1, 1);
+//        if (mUser.getUData().update(List.of("campaign_reward", StringHelper.toDBString(rewards)))) {
+//            mUser.getUData().setCampaignReward(rewards.toString());
+//            addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.CAMPAIGN_CONQUER.getKey(mapId), map.getABonus())));
+//        }
+//        campaignData();
+//    }
 
-    void campaignReward() {
-        int mapId = getInputInt();
-        List<Integer> rewards = mUser.getUData().getCampaignReward();
-        List<Integer> dataCampaign = mUser.getUData().getCampaign();
-        ResCampaignEntity map = ResMap.getMapCampaign(mapId);
-        if (mapId > rewards.size() || map == null) {
-            addErrParam();
-            return;
-        }
-        // check đủ đk nhận chưa
-        boolean hasBonus = rewards.get(mapId - 1) == 0 && (dataCampaign.get(0) > mapId || dataCampaign.get(0) == mapId && dataCampaign.get(1) >= map.getConquer());
-        if (!hasBonus) {
-            addErrParam();
-            return;
-        }
-        rewards.set(mapId - 1, 1);
-        if (mUser.getUData().update(List.of("campaign_reward", StringHelper.toDBString(rewards)))) {
-            mUser.getUData().setCampaignReward(rewards.toString());
-            addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.CAMPAIGN_CONQUER.getKey(mapId), map.getABonus())));
-        }
-        campaignData();
-    }
-
-    void campaignSmart() {
-        List<Long> inputs = getInputALong();
-        int mapId = inputs.get(0).intValue();
-        int number = inputs.get(1).intValue();
-        List<Integer> dataCampaign = mUser.getUData().getCampaign(); // id - num
-        if (number <= 0 || mapId > dataCampaign.get(0)) {
-            addErrParam();
-            return;
-        }
-        List<Long> fee = Bonus.viewItem(ItemKey.THE_CAN_QUET, -number);
-        String err = Bonus.checkMoney(mUser, fee);
-        if (err != null) {
-            addErrResponse(err);
-            return;
-        }
-        // hard code number x
-        int smartNumber = 20;
-        int maxKillSmart = 100;
-        ResCampaignEntity rCam = ResMap.getMapCampaign(mapId);
-        List<Integer> lstEnemy = rCam.getListEnemy();
-        List<Long> bonus = new ArrayList<>();
-        for (int i = 0; i < smartNumber; i++) {
-            int id = lstEnemy.get(NumberUtil.getRandom(lstEnemy.size() / 2) * 2);
-            ResEnemyEntity res = ResEnemy.getEnemy(id);
-            bonus.addAll(BonusConfig.getRandomBonusMulti(res.getABonus()));
-        }
-        bonus = Bonus.xBonus(bonus, (maxKillSmart / smartNumber) * number);
-        bonus.addAll(fee);
-        addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.CAMPAIGN_SMART.getKey(mapId + "_" + number), bonus)));
-        mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.USE_ITEM_CAMPAIGN_SMART, number);
-    }
+//    void campaignSmart() {
+//        List<Long> inputs = getInputALong();
+//        int mapId = inputs.get(0).intValue();
+//        int number = inputs.get(1).intValue();
+//        List<Integer> dataCampaign = mUser.getUData().getCampaign(); // id - num
+//        if (number <= 0 || mapId > dataCampaign.get(0)) {
+//            addErrParam();
+//            return;
+//        }
+//        List<Long> fee = Bonus.viewItem(ItemKey.THE_CAN_QUET, -number);
+//        String err = Bonus.checkMoney(mUser, fee);
+//        if (err != null) {
+//            addErrResponse(err);
+//            return;
+//        }
+//        // hard code number x
+//        int smartNumber = 20;
+//        int maxKillSmart = 100;
+//        ResCampaignEntity rCam = ResMap.getMapCampaign(mapId);
+//        List<Integer> lstEnemy = rCam.getListEnemy();
+//        List<Long> bonus = new ArrayList<>();
+//        for (int i = 0; i < smartNumber; i++) {
+//            int id = lstEnemy.get(NumberUtil.getRandom(lstEnemy.size() / 2) * 2);
+//            ResEnemyEntity res = ResEnemy.getEnemy(id);
+//            bonus.addAll(BonusConfig.getRandomBonusMulti(res.getABonus()));
+//        }
+//        bonus = Bonus.xBonus(bonus, (maxKillSmart / smartNumber) * number);
+//        bonus.addAll(fee);
+//        addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.CAMPAIGN_SMART.getKey(mapId + "_" + number), bonus)));
+//        mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.USE_ITEM_CAMPAIGN_SMART, number);
+//    }
 
     void joinMap() {
         BaseRoom curRoom = (BaseRoom) ChUtil.get(channel, ChUtil.KEY_ROOM);
@@ -488,7 +482,6 @@ public class BattleHandler extends AHandler implements Serializable {
             Player player = ((MyUser) ChUtil.get(channel, ChUtil.KEY_M_USER)).getPlayer();
             player.setItemsBuf(uSetting.getItemSlot(mUser));
             addResponse(getCommonIntVector(itemSlot));
-            mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.USE_ITEM_AUTO, 1);
         } else addErrResponse();
     }
 
@@ -530,12 +523,12 @@ public class BattleHandler extends AHandler implements Serializable {
             return;
         }
 
-        RoomType roomType = RoomType.get(room.getRoomType());
+        RoomType roomType = RoomType.get(room.getRoomTypeId());
         if (!roomType.allowChangeChanel) {
             addErrResponse(getLang(Lang.err_change_chanel));
             return;
         }
-        String keyRoom = CfgBattle.getKeyRoom(mUser, room.getRoomType(), room.getSubId(), inputChanel);
+        String keyRoom = CfgBattle.getKeyRoom(mUser, room.getRoomTypeId(), room.getSubId(), inputChanel);
         BaseRoom curRoom = (BaseRoom) ChUtil.get(mUser.getChannel(), ChUtil.KEY_ROOM);
         if (curRoom != null && curRoom.getKeyRoom().equals(keyRoom)) {
             return;
@@ -554,7 +547,7 @@ public class BattleHandler extends AHandler implements Serializable {
         if (room == null) {  // tao room moi
             List<Character> players = new ArrayList<>();
             players.add(player);
-            switch (RoomType.get(curRoom.getRoomType())) {
+            switch (RoomType.get(curRoom.getRoomTypeId())) {
                 default:
                     room = new DefaultRoom(curRoom.getMapInfo(), players, keyRoom);
                     break;
@@ -574,7 +567,7 @@ public class BattleHandler extends AHandler implements Serializable {
         mUser.setRoomChanelId(inputChanel);
         if (roomType == RoomType.HOME) mUser.sendNotify();
         // tra ve id teleport next
-        addResponse(INIT_MAP, CfgBattle.genInitMap(room.getRoomType(), room.getSubId(), inputChanel, room.getMapInfo().getMapData().getPlayerCollider(), room.getSubId() > 0, PopupType.NULL));
+        addResponse(INIT_MAP, CfgBattle.genInitMap(room.getRoomTypeId(), room.getSubId(), inputChanel, PopupType.NULL));
     }
 
 }

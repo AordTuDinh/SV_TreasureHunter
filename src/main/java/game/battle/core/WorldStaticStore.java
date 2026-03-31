@@ -7,6 +7,7 @@ import game.battle.model.Chunk;
 import game.battle.model.StaticCell;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.*;
 
@@ -19,6 +20,7 @@ public class WorldStaticStore {
     public final Map<Chunk, List<Integer>> cellsByChunk = new HashMap<>();
 
 
+    // --------------------------- load static data
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     private static class MapFileDto {
@@ -31,10 +33,10 @@ public class WorldStaticStore {
         public int type;
     }
 
-    public static WorldStaticStore load(Path jsonPath) throws IOException {
+    public static WorldStaticStore load(InputStream is) throws IOException {
         ObjectMapper mapper = new ObjectMapper()
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        MapFileDto dto = mapper.readValue(jsonPath.toFile(), MapFileDto.class);
+        MapFileDto dto = mapper.readValue(is, MapFileDto.class);
         WorldStaticStore store = new WorldStaticStore();
         int nextId = 1;
         for (CellDto c : dto.cells) {

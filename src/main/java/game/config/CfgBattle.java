@@ -43,23 +43,19 @@ public class CfgBattle {
         return null;
     }
 
-    public static Pbmethod.CommonVector genInitMap(int roomType, int subId, int channelId, int playerCollider, boolean isBattle, PopupType popupType) {
-        return CommonProto.getCommonIntVector(genInitMapInt(roomType, subId, channelId, playerCollider, isBattle, popupType));
+    public static Pbmethod.CommonVector genInitMap(int roomType, int subId, int channelId, PopupType popupType) {
+        return CommonProto.getCommonIntVector(List.of(roomType, subId, channelId, popupType.value)) ;
     }
 
-    public static List<Integer> genInitMapInt(int roomType, int subId, int channelId, int playerCollider, boolean isBattle, PopupType popupType) {
-        return List.of(roomType, subId, channelId, playerCollider, isBattle ? 1 : 0, popupType.value);
-    }
-
-    public static void removeUserToRoom(Channel channel, String keyRoom, int userId) {
-        BaseRoom curRoom = (BaseRoom) ChUtil.get(channel, ChUtil.KEY_ROOM);
-        if (channel != null && curRoom.getKeyRoom().equals(keyRoom)) {
-            return;
-        }
-        if (curRoom != null && curRoom.hasPlayer(userId)) {
-            curRoom.removePlayer(userId);
-        }
-    }
+//    public static void removeUserToRoom(Channel channel, String keyRoom, int userId) {
+//        BaseRoom curRoom = (BaseRoom) ChUtil.get(channel, ChUtil.KEY_ROOM);
+//        if (channel != null && curRoom.getKeyRoom().equals(keyRoom)) {
+//            return;
+//        }
+//        if (curRoom != null && curRoom.hasPlayer(userId)) {
+//            curRoom.removePlayer(userId);
+//        }
+//    }
 
     private static final ConcurrentHashMap<String, Lock> keyLocks = new ConcurrentHashMap<>();
 

@@ -393,38 +393,6 @@ public class UserDAO {
         return null;
     }
 
-    public UserTowerEntity getUserTower(MyUser mUser) {
-        UserTowerEntity userTower = (UserTowerEntity) mUser.getCache().get("user_tower");
-        if (userTower == null) {
-            userTower = getUserTower(mUser.getUser());
-            if (userTower != null) mUser.getCache().set("user_tower", userTower);
-        }
-        return userTower;
-    }
-
-    private UserTowerEntity getUserTower(UserEntity user) {
-        EntityManager session = null;
-        try {
-            session = DBJPA.getEntityManager();
-            Query query = session.createNativeQuery("select * from user_tower where user_id =:user_id", UserTowerEntity.class);
-            query.setParameter("user_id", user.getId());
-            List<UserTowerEntity> aUser = query.getResultList();
-            if (aUser.isEmpty()) {
-                UserTowerEntity userS = new UserTowerEntity(user);
-                session.getTransaction().begin();
-                session.persist(userS);
-                session.getTransaction().commit();
-                return userS;
-            }
-            return aUser.get(0);
-        } catch (Exception ex) {
-            Logs.error(GUtil.exToString(ex));
-        } finally {
-            closeSession(session);
-        }
-        return null;
-    }
-
     public UserDailyEntity getUserDaily(MyUser mUser) {
         UserDailyEntity userDaily = (UserDailyEntity) mUser.getCache().get("user_daily");
         if (userDaily == null) {

@@ -3,10 +3,7 @@ package game.dragonhero.mapping;
 import game.battle.calculate.IMath;
 import game.battle.object.Point;
 import game.config.CfgPet;
-import game.config.aEnum.PetType;
-import game.dragonhero.mapping.main.ResEnemyEntity;
 import game.dragonhero.mapping.main.ResPetEntity;
-import game.dragonhero.service.resource.ResEnemy;
 import game.dragonhero.service.resource.ResPet;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,7 +27,7 @@ import java.util.List;
 @Table(name = "user_pet")
 public class UserPetEntity implements Serializable {
     @Id
-    int userId, petId, type;
+    int userId, petId;
     int star;
     int server;
     String bonusStar;
@@ -38,19 +35,15 @@ public class UserPetEntity implements Serializable {
     @Transient
     Point point;
 
-    public UserPetEntity(UserEntity user , int type, int petId) {
+    public UserPetEntity(UserEntity user , int petId) {
         this.userId = user.getId();
         this.server = user.getServer();
-        this.type = type;
         this.petId = petId;
         this.star = 0;
         this.timeCare = Calendar.getInstance().getTime();
         this.bonusStar = "[]";
     }
 
-    public PetType getType() {
-        return PetType.get(type);
-    }
 
     public List<Integer> getBonusStar() {
         return GsonUtil.strToListInt(bonusStar);
@@ -60,9 +53,6 @@ public class UserPetEntity implements Serializable {
         return ResPet.getPet(petId);
     }
 
-    public ResEnemyEntity getResMonster() {
-        return ResEnemy.getEnemy(petId);
-    }
 
     public int getHp() {
         int day = (int) ((Calendar.getInstance().getTime().getTime() - timeCare.getTime()) / DateTime.DAY_MILLI_SECOND);
@@ -86,7 +76,6 @@ public class UserPetEntity implements Serializable {
     public protocol.Pbmethod.PbPet.Builder toProto() {
         protocol.Pbmethod.PbPet.Builder pb = protocol.Pbmethod.PbPet.newBuilder();
         pb.setId(petId);
-        pb.setType(type);
         pb.setStar(star);
         pb.setHp(getHp());
         pb.setMaxHp(CfgPet.getMaxHpByStar(star));
@@ -112,6 +101,6 @@ public class UserPetEntity implements Serializable {
     }
 
     public boolean update(List<Object> lst) {
-        return DBJPA.update("user_pet", lst, List.of("user_id", userId, "type", type, "pet_id", petId));
+        return DBJPA.update("user_pet", lst, List.of("user_id", userId, "pet_id", petId));
     }
 }

@@ -214,12 +214,6 @@ public class LoginHandler extends AHandler {
                     addAString(getLang(Lang.msg_server_not_open)).build());
             return;
         }
-        if(CfgServer.BAOTRI  && !osType.equals("UNITY")){
-            addResponse(POPUP_INFO, Pbmethod.CommonVector.newBuilder().addALong(1).
-                    addAString(getLang(Lang.msg_server_maintenance)).build());
-            return;
-        }
-
 
         if (user.getBlockType() == BlockType.BLOCK_LOGIN) {
             addResponse(LOGIN_GAME_BLOCK, CommonProto.getErrorMsg(getLang(Lang.err_user_block)));
@@ -259,9 +253,9 @@ public class LoginHandler extends AHandler {
             addResponse(CLAN_INFO, myClan.toProto());
         }
         // game config
-        loadGameConfig(mUser);
+        //loadGameConfig(mUser);
         // battleConfig
-        loadBattleConfig();
+        //loadBattleConfig();
         // user info
         builder.setUser(user.toProto(mUser));
         this.user = user;
@@ -345,7 +339,6 @@ public class LoginHandler extends AHandler {
         cm0.addALong(CfgBag.maxSlotItem());
         cm0.addALong(CfgBag.maxSlotEquipment());
         cm0.addALong(CfgBag.maxSlotPiece());
-        cm0.addALong(CfgArena.pointPerBonusStar);
         cm0.addAllALong(NumberUtil.converListIntToLong(CfgBag.config.priceSlot));
         //public key
         cm0.addAString(CfgServer.config.publicKey);
@@ -391,7 +384,6 @@ public class LoginHandler extends AHandler {
         cmm.addALong((long) (BattleConfig.P_TimeDelayMoveDone * 100));
         cmm.addALong((long) (BattleConfig.M_timeBeHitClient * 100));
         cmm.addALong((long) (BattleConfig.m_LerpSpeedBar * 100));
-        cmm.addALong(BattleConfig.timeSendBonusAfk * 100);
         cmm.addALong(BattleConfig.maxNumberOpenItem * 100);
         cmm.addALong((long) (BattleConfig.P_timeNoMove * 100));
 
@@ -474,23 +466,14 @@ public class LoginHandler extends AHandler {
                 mUser.getResources().setItems(itemSave);
             }
 
-            List<UserWeaponEntity> weapons = session.createNativeQuery("select * from user_weapon where user_id = " + userId, UserWeaponEntity.class).getResultList();
-            mUser.getResources().setWeapons(weapons);
+
             List<UserItemEquipmentEntity> itemEquips = session.createNativeQuery("select * from user_item_equipment where user_id = " + userId, UserItemEquipmentEntity.class).getResultList();
             mUser.getResources().setItemEquipments(itemEquips);
             List<UserPetEntity> pets = session.createNativeQuery("select * from user_pet where user_id = " + userId, UserPetEntity.class).getResultList();
             mUser.getResources().setPets(pets);
-            List<UserItemFarmEntity> farms = session.createNativeQuery("select * from user_item_farm where user_id = " + userId, UserItemFarmEntity.class).getResultList();
-            mUser.getResources().setFarms(farms);
-            List<UserHeroEntity> heroes = session.createNativeQuery("select * from user_hero where user_id = " + userId, UserHeroEntity.class).getResultList();
-            mUser.getResources().setHeroes(heroes);
-            List<UserPieceEntity> pieces = session.createNativeQuery("select * from user_piece where user_id = " + userId, UserPieceEntity.class).getResultList();
-            mUser.getResources().setPieces(pieces);
+
             List<UserPackEntity> packs = session.createNativeQuery("select * from user_pack where user_id = " + userId, UserPackEntity.class).getResultList();
             mUser.getResources().setPacks(packs);
-            List<UserLandEntity> lands = session.createNativeQuery("select * from user_land where user_id = " + userId, UserLandEntity.class).getResultList();
-            mUser.getResources().setLands(lands);
-
             mUser.setInitUData(uData, mUser.getUser());
             mUser.setUSetting(uSetting);
             mUser.setUEvent(uEvent);

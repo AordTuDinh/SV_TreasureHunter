@@ -45,7 +45,7 @@ public class App {
         JobDetail job = newJob(MainJob.class).withIdentity("server_job_" + CfgServer.serverId, "all").build();
         SimpleTrigger trigger = newTrigger().withIdentity("sv_trigger_" + CfgServer.serverId, "all").
                 startAt(Calendar.getInstance().getTime()).withSchedule(simpleSchedule().withIntervalInSeconds(3).repeatForever()).build();
-          try {
+        try {
             Scheduler scheduler = new StdSchedulerFactory().getScheduler();
             scheduler.start();
             scheduler.scheduleJob(job, trigger);
@@ -107,9 +107,9 @@ public class App {
 
 
         // tạm comment khi chạy không DB/Redis
-        // initConfig();
-        // JCache.getInstance();
-        // JCachePubSub.getInstance().subscriberGameServer();
+        initConfig();
+        JCache.getInstance();
+        JCachePubSub.getInstance().subscriberGameServer();
 //        Telegram.sendNotify(String.format("------------- Server: [%s] start ------------", AppConfig.cfg.name));
 
     }

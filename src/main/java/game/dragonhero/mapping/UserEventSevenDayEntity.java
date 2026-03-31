@@ -159,14 +159,14 @@ public class UserEventSevenDayEntity implements Serializable {
                     return mUser.getUQuest().getDataQuest(QuestType.QUEST_MONTH).getValue(DataQuest.KILL_MONSTER);
                 }
             }
-            case 1 -> {
-                if (panel == 1) { // Leo tháp
-                    UserTowerEntity tower = Services.userDAO.getUserTower(mUser);
-                    return tower.getLevel() - 1;
-                } else if (panel == 2) { // Đánh boss hầm ngục
-                    return attackBoss;
-                }
-            }
+//            case 1 -> {
+//                if (panel == 1) { // Leo tháp
+//                    UserTowerEntity tower = Services.userDAO.getUserTower(mUser);
+//                    return tower.getLevel() - 1;
+//                } else if (panel == 2) { // Đánh boss hầm ngục
+//                    return attackBoss;
+//                }
+//            }
             case 2 -> {
                 if (panel == 1) { // summon stone
                     return summonStone;

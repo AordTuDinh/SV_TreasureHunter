@@ -13,9 +13,6 @@ public class ResMap {
     // big map
     static Map<Integer, ResMapEntity> mMap = new HashMap<>();
     // boss map
-    static Map<Integer, ResMapBossEntity> mMapBoss = new HashMap<>();
-    // campaign normal
-    static Map<Integer, ResCampaignEntity> mCampaign = new HashMap<>();
     public static int maxMapCampaign;
 
     public static BaseMap getMap(ResTeleportEntity teleport) {
@@ -29,11 +26,6 @@ public class ResMap {
             }
         }
     }
-
-    public static BaseMap getBossMap(RoomType type) {
-        return mMapBoss.get(type.value); // bắt đầu từ 8
-    }
-
 
     public static BaseMap getMap(RoomType roomType, int subId) {
         return getMap(roomType.value, subId);
@@ -49,10 +41,6 @@ public class ResMap {
     }
 
 
-    public static ResCampaignEntity getMapCampaign(int mapId) {
-        return mCampaign.get(mapId);
-    }
-
 
     public static void init() {
         // map
@@ -61,22 +49,6 @@ public class ResMap {
         aMap.forEach(item -> {
             item.init();
             mMap.put(item.getId(), item);
-        });
-
-        // map boss
-        List<ResMapBossEntity> aMapBoss = DBResource.getInstance().getList(CfgServer.DB_MAIN + "res_map_boss", ResMapBossEntity.class);
-        mMapBoss.clear();
-        aMapBoss.forEach(item -> {
-            item.init();
-            mMapBoss.put(item.getId(), item);
-        });
-        // campaign normal
-        List<ResCampaignEntity> aCamNormal = DBResource.getInstance().getList(CfgServer.DB_MAIN + "res_campaign", ResCampaignEntity.class);
-        mCampaign.clear();
-        aCamNormal.forEach(item -> {
-            item.init();
-            if (item.getId() > maxMapCampaign) maxMapCampaign = item.getId();
-            mCampaign.put(item.getId(), item);
         });
     }
 }

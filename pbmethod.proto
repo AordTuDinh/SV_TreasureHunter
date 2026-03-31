@@ -62,6 +62,8 @@ message PbInitMap {
   repeated PbChunk chunks = 8;  // AOI ban đầu (tối đa 9 chunk)
 }
 
+
+
 message AddChunk {
   repeated PbChunk chunk_snapshot = 1;
 }
@@ -81,6 +83,31 @@ message RemoveCell {
 
 // -----------------------------
 
+
+message PbInitRoom{
+  optional string mapId = 1;
+  optional int64 battleId = 2;
+  repeated PbUnitAdd aPlayer = 3;
+  repeated PbUnitAdd aMonster = 4;
+  repeated PbUnitAdd aPet = 5;
+}
+
+message PbState{
+  optional float serverTime = 1;
+  repeated PbUnitPos unitPos = 2;
+  repeated PbUnitAdd unitAdd = 3;
+  repeated PbUnitUpdate aUnitUpdate = 4;
+}
+
+message PbListUnitState {
+  repeated PbUnitState aUnitState = 1;
+}
+
+message  PbUnitState{
+  optional  int32 id = 1;
+  repeated int32 status = 2; // type - length
+  repeated int64 point = 3; // data
+}
 
 
 message PbClan {
@@ -255,8 +282,7 @@ message PbListPet{
 
 message PbPet{
   optional int32 id = 1;
-  optional int32 type = 2;
-  optional int32 star = 3;
+  optional int32 star = 2;
   optional int32 hp = 4;
   optional int32 maxHp = 5;
   optional int64 power = 6;
@@ -545,30 +571,6 @@ message  PbCharInfo{
   repeated int32 info = 6;
 }
 
-message PbInitRoom{
-  optional string mapId = 1;
-  optional int64 battleId = 2;
-  repeated PbUnitAdd aPlayer = 3;
-  repeated PbUnitAdd aMonster = 4;
-  repeated PbUnitAdd aPet = 5;
-}
-
-message PbState{
-  optional float serverTime = 1;
-  repeated PbUnitPos unitPos = 2;
-  repeated PbUnitAdd unitAdd = 3;
-  repeated PbUnitUpdate aUnitUpdate = 4;
-}
-
-message PbListUnitState {
-  repeated PbUnitState aUnitState = 1;
-}
-
-message  PbUnitState{
-  optional  int32 id = 1;
-  repeated int32 status = 2; // type - length
-  repeated int64 point = 3; // data
-}
 
 message PbListBullet {
   repeated PbBullet bullets = 1;

@@ -6,15 +6,10 @@ import com.google.gson.reflect.TypeToken;
 import game.cache.JCache;
 import game.config.CfgClan;
 import game.config.aEnum.ClanPosition;
-import game.config.aEnum.ItemKey;
-import game.config.aEnum.NotifyType;
 import game.config.aEnum.TopType;
 import game.config.lang.Lang;
 import game.dragonhero.controller.AHandler;
-import game.dragonhero.mapping.main.ResContributeEntity;
-import game.dragonhero.mapping.main.ResDynamicTypeEntity;
 import game.dragonhero.service.Services;
-import game.dragonhero.service.resource.ResClan;
 import game.dragonhero.service.user.Actions;
 import game.dragonhero.service.user.Bonus;
 import game.monitor.ChatMonitor;
@@ -130,22 +125,22 @@ public class ClanEntity {
     }
 
 
-    public void checkDynamic(MyUser mUser, int type, int curValue) {
-        // todo check quest attack boss
-        if (type == CfgClan.DYNAMIC_QUEST_D_100) {
-            DataDaily dataDaily = mUser.getUserDaily().getUDaily();
-            ResDynamicTypeEntity rType = ResClan.aDynamicType.get(2);
-            if (curValue >= rType.getNumber() && dataDaily.getValue(DataDaily.SEND_100_NANG_DONG) == 0) {
-                dataDaily.setValue(DataDaily.SEND_100_NANG_DONG, 1);
-                if (dataDaily.update()) {
-                    addDynamic(type, mUser.getUser().getName());
-                }
-            }
-        } else {
-            addDynamic(type, mUser.getUser().getName());
-        }
-
-    }
+//    public void checkDynamic(MyUser mUser, int type, int curValue) {
+//        // todo check quest attack boss
+//        if (type == CfgClan.DYNAMIC_QUEST_D_100) {
+//            DataDaily dataDaily = mUser.getUserDaily().getUDaily();
+//            ResDynamicTypeEntity rType = ResClan.aDynamicType.get(2);
+//            if (curValue >= rType.getNumber() && dataDaily.getValue(DataDaily.SEND_100_NANG_DONG) == 0) {
+//                dataDaily.setValue(DataDaily.SEND_100_NANG_DONG, 1);
+//                if (dataDaily.update()) {
+//                    addDynamic(type, mUser.getUser().getName());
+//                }
+//            }
+//        } else {
+//            addDynamic(type, mUser.getUser().getName());
+//        }
+//
+//    }
 
     public synchronized void addDynamic(int type, String name) {
         List<CellDynamic> lstDy = getDynamics();
@@ -194,16 +189,16 @@ public class ClanEntity {
         return update(Arrays.asList("honor", honor));
     }
 
-    public synchronized void addContribute(int addContribute) {
-        if (levelQuest >= ResClan.maxLevelContribute) return;
-        ResContributeEntity res = ResClan.getClanContribute(levelQuest);
-        contribute += addContribute;
-        while (levelQuest < ResClan.maxLevelContribute && contribute >= res.getGold()) {
-            contribute -= res.getGold();
-            levelQuest++;
-        }
-        update(List.of("level_quest", levelQuest, "contribute", contribute));
-    }
+//    public synchronized void addContribute(int addContribute) {
+//        if (levelQuest >= ResClan.maxLevelContribute) return;
+//        ResContributeEntity res = ResClan.getClanContribute(levelQuest);
+//        contribute += addContribute;
+//        while (levelQuest < ResClan.maxLevelContribute && contribute >= res.getGold()) {
+//            contribute -= res.getGold();
+//            levelQuest++;
+//        }
+//        update(List.of("level_quest", levelQuest, "contribute", contribute));
+//    }
 
     public Pbmethod.PbClan toProto(int... rank) {
         Pbmethod.PbClan.Builder pbClan = Pbmethod.PbClan.newBuilder();

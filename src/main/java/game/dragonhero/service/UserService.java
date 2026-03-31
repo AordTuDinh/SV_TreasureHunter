@@ -1,12 +1,10 @@
 package game.dragonhero.service;
 
-import game.config.CfgArena;
 import game.config.CfgServer;
 import game.config.aEnum.*;
 import game.config.lang.Lang;
 import game.dragonhero.controller.UserEventTopEntity;
 import game.dragonhero.mapping.*;
-import game.dragonhero.mapping.main.CacheUserBuyRubyEntity;
 import game.dragonhero.mapping.main.ResIAPEntity;
 import game.dragonhero.service.resource.ResIAP;
 import game.dragonhero.service.user.Bonus;
@@ -59,32 +57,21 @@ public class UserService {
         // check event 7 day
         UserEventSevenDayEntity uEvent = Services.userDAO.getUserSevenDay(mUser);
         if (uEvent.hasEvent() && uEvent.hasActive(6)) {
-            int curNumMonster = mUser.getResources().getMPetMonster().size();
-            if (curNumMonster != uEvent.getMonster()) {
-                uEvent.update(List.of("monster", curNumMonster));
-                uEvent.setMonster(curNumMonster);
-            }
-        }
-        if (uEvent.hasEvent() && uEvent.hasActive(5)) {
-            int curNumMonster = mUser.getResources().getMLand().size();
-            if (curNumMonster != uEvent.getMonster()) {
-                uEvent.update(List.of("buy_land", curNumMonster));
-                uEvent.setBuyLand(curNumMonster);
-            }
+
         }
         // check den bu qua vip
-        if (mUser.getUser().getLevel() > 5 && mUser.getUser().getServer()==1) {
-            CacheUserBuyRubyEntity cUser = ResIAP.getCacheUserBuyRubyEntity(mUser.getUser().getMainId());
-            if (cUser != null && cUser.getReceive() == 0 && cUser.getBonus()) {
-                List<Long> bonus = Bonus.viewVipExp(cUser.getVipExp());
-                bonus.addAll(Bonus.viewRuby(cUser.getRuby()));
-                if (!DBJPA.rawSQL(DBHelper.sqlMail(mUser.getUser().getId(), Lang.getTitle(mUser,Lang.mail_refund_close_beta), StringHelper.toDBString(bonus)))) {
-                    cUser.setReceive(0);
-                    cUser.setDateGet(null);
-                    DBJPA.update(cUser);
-                }
-            }
-        }
+//        if (mUser.getUser().getLevel() > 5 && mUser.getUser().getServer()==1) {
+//            CacheUserBuyRubyEntity cUser = ResIAP.getCacheUserBuyRubyEntity(mUser.getUser().getMainId());
+//            if (cUser != null && cUser.getReceive() == 0 && cUser.getBonus()) {
+//                List<Long> bonus = Bonus.viewVipExp(cUser.getVipExp());
+//                bonus.addAll(Bonus.viewRuby(cUser.getRuby()));
+//                if (!DBJPA.rawSQL(DBHelper.sqlMail(mUser.getUser().getId(), Lang.getTitle(mUser,Lang.mail_refund_close_beta), StringHelper.toDBString(bonus)))) {
+//                    cUser.setReceive(0);
+//                    cUser.setDateGet(null);
+//                    DBJPA.update(cUser);
+//                }
+//            }
+//        }
         // check top pet
         AtomicInteger point = new AtomicInteger();
         Map<Integer, UserPetEntity> upets = mUser.getResources().getMPetAnimal();

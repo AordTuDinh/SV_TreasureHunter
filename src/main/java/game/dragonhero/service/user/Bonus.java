@@ -4,7 +4,6 @@ import com.google.gson.JsonArray;
 import game.config.CfgAchievement;
 import game.config.CfgLottery;
 import game.config.CfgServer;
-import game.config.aEnum.PetType;
 import game.config.aEnum.*;
 import game.config.lang.Lang;
 import game.dragonhero.mapping.*;
@@ -23,16 +22,12 @@ public class Bonus {
     public static final int BONUS_GEM = 2;
     public static final int BONUS_ITEM_EQUIPMENT = 3;
     public static final int BONUS_EXP = 4;
-    public static final int BONUS_HERO = 5; // hero id
     public static final int BONUS_ITEM = 6;
     public static final int BONUS_WEAPON = 7;
     public static final int BONUS_AVATAR = 8;
     public static final int BONUS_VIP_EXP = 9;
     public static final int BONUS_PET = 10; // type - id
     public static final int BONUS_SKIN = 11; //type -id
-    public static final int BONUS_ITEM_FARM = 12;
-    //    public static final int BONUS_ITEM_POINT = 13;
-    public static final int BONUS_PIECE = 14;
     public static final int BONUS_RUBY = 15;
 
     public static final Map<Integer, Integer> mTypeLength = new HashMap<>() {{
@@ -40,20 +35,16 @@ public class Bonus {
         put(BONUS_GEM, 1);
         put(BONUS_ITEM_EQUIPMENT, 3);
         put(BONUS_EXP, 1);
-        put(BONUS_HERO, 1);
         put(BONUS_ITEM, 2);
         put(BONUS_WEAPON, 1);
         put(BONUS_AVATAR, 2);
         put(BONUS_VIP_EXP, 1);
-        put(BONUS_PET, 2);
+        put(BONUS_PET, 1);
         put(BONUS_SKIN, 2);
-        put(BONUS_ITEM_FARM, 3);
-//        put(BONUS_ITEM_POINT, 2);
-        put(BONUS_PIECE, 3);
         put(BONUS_RUBY, 1);
     }};
 
-    public static List<Integer> bonusSinger = Arrays.asList(BONUS_ITEM_EQUIPMENT, BONUS_HERO, BONUS_AVATAR, BONUS_WEAPON, BONUS_PET, BONUS_SKIN);
+    public static List<Integer> bonusSinger = Arrays.asList(BONUS_ITEM_EQUIPMENT, BONUS_AVATAR, BONUS_WEAPON, BONUS_PET, BONUS_SKIN);
 
 
     public static boolean isBonusSinger(int type) {
@@ -80,45 +71,14 @@ public class Bonus {
         return view(BONUS_ITEM, itemKey.id, number);
     }
 
-    public static List<Long> viewWeapon(long id) {
-        return view(BONUS_WEAPON, id);
-    }
 
-    public static List<Long> viewItemFarm(int itemFarmType, int itemId, long number) {
-        return view(BONUS_ITEM_FARM, itemFarmType, itemId, number);
-    }
-
-    public static List<Long> viewItemFarm(ItemFarmType farmType, int itemId, long number) {
-        return viewItemFarm(farmType.value, itemId, number);
-    }
-
-    public static List<Long> viewItemFarm(UserItemFarmEntity iFarm, long number) {
-        return viewItemFarm(iFarm.getType(), iFarm.getId(), number);
-    }
-
-    public static List<Long> viewPiece(int pieceType, int itemId, long number) {
-        return view(BONUS_PIECE, pieceType, itemId, number);
-    }
-
-    public static List<Long> viewPiece(PieceType type, int itemId, long number) {
-        return view(BONUS_PIECE, type.value, itemId, number);
-    }
-
-    public static List<Long> viewPet(PetType petType, int itemId) {
-        return viewPet(petType.value, itemId);
-    }
-
-    public static List<Long> viewPet(int petType, int itemId) {
-        return view(BONUS_PET, petType, itemId);
+    public static List<Long> viewPet( int itemId) {
+        return view(BONUS_PET,  itemId);
     }
 
     public static List<Long> viewDameSkin(int skinId) {
         return view(BONUS_SKIN, SkinType.DAMAGE_SKIN.value, skinId);
     }
-
-//    public static List<Long> viewItemPoint(int itemId, long number) {
-//        return view(BONUS_ITEM_POINT, itemId, number);
-//    }
 
 
     public static List<Long> viewItemEquipment(int itemId, int lock, long time) {
@@ -150,15 +110,12 @@ public class Bonus {
             case BONUS_GOLD:
             case BONUS_GEM:
             case BONUS_ITEM_EQUIPMENT:
-            case BONUS_HERO:
             case BONUS_EXP:
             case BONUS_ITEM:
             case BONUS_WEAPON:
             case BONUS_VIP_EXP:
             case BONUS_PET:
             case BONUS_SKIN:
-            case BONUS_ITEM_FARM:
-            case BONUS_PIECE:
             case BONUS_RUBY:
                 for (int i = 0; i < values.length; i++) aLong.add((long) values[i]);
                 break;
@@ -173,10 +130,10 @@ public class Bonus {
     public static int getIdItem(List<Long> bonus) {
         int type = Math.toIntExact(bonus.get(0));
         switch (type) {
-            case BONUS_ITEM, BONUS_ITEM_EQUIPMENT, BONUS_HERO, BONUS_WEAPON, BONUS_PET -> {
+            case BONUS_ITEM, BONUS_ITEM_EQUIPMENT, BONUS_WEAPON, BONUS_PET -> {
                 return Math.toIntExact(bonus.get(1));
             }
-            case BONUS_AVATAR, BONUS_SKIN, BONUS_ITEM_FARM, BONUS_PIECE -> {
+            case BONUS_AVATAR, BONUS_SKIN -> {
                 return Math.toIntExact(bonus.get(2));
             }
         }
@@ -216,9 +173,6 @@ public class Bonus {
                 case BONUS_ITEM_EQUIPMENT:
                     aLong.addAll(addItemEquipment(mUser, aBonus, index, detailAction));
                     break;
-                case BONUS_HERO:
-                    aLong.addAll(addHero(mUser, aBonus, index, detailAction));
-                    break;
                 case BONUS_EXP:
                     aLong.addAll(addUserExp(mUser, aBonus, index, detailAction));
                     break;
@@ -228,9 +182,6 @@ public class Bonus {
                 case BONUS_ITEM:
                     aLong.addAll(addItem(mUser, aBonus, index, detailAction));
                     break;
-                case BONUS_WEAPON:
-                    aLong.addAll(addWeapon(mUser, aBonus, index, detailAction));
-                    break;
                 case BONUS_AVATAR:
                     aLong.addAll(addAvatar(mUser, aBonus, index, detailAction));
                     break;
@@ -239,15 +190,6 @@ public class Bonus {
                     break;
                 case BONUS_SKIN:
                     aLong.addAll(addSkin(mUser, aBonus, index, detailAction));
-                    break;
-                case BONUS_ITEM_FARM:
-                    aLong.addAll(addItemFarm(mUser, aBonus, index, detailAction));
-                    break;
-//                case BONUS_ITEM_POINT:
-//                    aLong.addAll(addItemPoint(mUser, aBonus, index, detailAction));
-//                    break;
-                case BONUS_PIECE:
-                    aLong.addAll(addPiece(mUser, aBonus, index, detailAction));
                     break;
                 case BONUS_RUBY:
                     aLong.addAll(addRuby(mUser, aBonus, index, detailAction));
@@ -316,9 +258,9 @@ public class Bonus {
     static List<Long> addItem(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
         int itemId = aBonus.get(index++).getAsInt();
         int number = aBonus.get(index++).getAsInt();
-        UserItemEntity uItem =null;
-        if(itemId==ItemKey.TICKER_NORMAL.id) uItem =  checkGenItemData(mUser, number);
-        else  {
+        UserItemEntity uItem = null;
+        if (itemId == ItemKey.TICKER_NORMAL.id) uItem = checkGenItemData(mUser, number);
+        else {
             uItem = mUser.getResources().getItem(itemId);
             if (uItem == null) uItem = new UserItemEntity(mUser.getUser().getId(), itemId, number);
             else uItem.add(number);
@@ -334,88 +276,34 @@ public class Bonus {
         }
         return new ArrayList<>();
     }
+
     static UserItemEntity checkGenItemData(MyUser mUser, int numItem) {
-                UserItemEntity uItem = mUser.getResources().getItem(ItemKey.TICKER_NORMAL.id);
-                long eventDay = CfgLottery.getEventIdBuy();
-                List<Long> nums = new ArrayList<>();
-                for (int i = 0; i < numItem; i++) {
-                    nums.add(NumberUtil.getRandomLong(100000, 999999));
-                }
-                if (uItem == null) {
-                    uItem = new UserItemEntity(mUser.getUser().getId(), ItemKey.TICKER_NORMAL, numItem);
-                    nums.add(0, eventDay);
-                    uItem.setData(StringHelper.toDBString(nums));
-                } else {
-                    // check vé cũ cần xóa dữ liệu đi
-                    String data = uItem.getData();
-                    List<Long> dataSticker = GsonUtil.strToListLong(data == null ? "[]" : data);
-                    if (dataSticker.isEmpty() || dataSticker.get(0) != eventDay) {
-                        dataSticker = new ArrayList<>();
-                        dataSticker.add(eventDay);
-                        uItem.setNumber(0);
-                    }
-                    uItem.add(numItem);
-                    dataSticker.addAll(nums);
-                    uItem.setData(StringHelper.toDBString(dataSticker));
-                }
+        UserItemEntity uItem = mUser.getResources().getItem(ItemKey.TICKER_NORMAL.id);
+        long eventDay = CfgLottery.getEventIdBuy();
+        List<Long> nums = new ArrayList<>();
+        for (int i = 0; i < numItem; i++) {
+            nums.add(NumberUtil.getRandomLong(100000, 999999));
+        }
+        if (uItem == null) {
+            uItem = new UserItemEntity(mUser.getUser().getId(), ItemKey.TICKER_NORMAL, numItem);
+            nums.add(0, eventDay);
+            uItem.setData(StringHelper.toDBString(nums));
+        } else {
+            // check vé cũ cần xóa dữ liệu đi
+            String data = uItem.getData();
+            List<Long> dataSticker = GsonUtil.strToListLong(data == null ? "[]" : data);
+            if (dataSticker.isEmpty() || dataSticker.get(0) != eventDay) {
+                dataSticker = new ArrayList<>();
+                dataSticker.add(eventDay);
+                uItem.setNumber(0);
+            }
+            uItem.add(numItem);
+            dataSticker.addAll(nums);
+            uItem.setData(StringHelper.toDBString(dataSticker));
+        }
         return uItem;
     }
 
-
-    static List<Long> addItemFarm(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-        int type = aBonus.get(index++).getAsInt();
-        int itemId = aBonus.get(index++).getAsInt();
-        int number = aBonus.get(index++).getAsInt();
-        UserItemFarmEntity uItem = mUser.getResources().getItemFarm(type, itemId);
-        if (uItem == null) uItem = new UserItemFarmEntity(mUser.getUser().getId(), type, itemId, number);
-        else uItem.add(number);
-        if (uItem.getNumber() < 0) return new ArrayList<>();
-        boolean isOk = (mUser.getResources().hasItemFarm(type, uItem.getId()) && DBJPA.update(uItem)) || (!mUser.getResources().hasItemFarm(type, uItem.getId()) && DBJPA.save(uItem));
-        if (isOk) {
-            if (!mUser.getResources().hasItemFarm(type, uItem.getId())) mUser.getResources().addItemFarm(type, uItem);
-            if (CfgServer.isRealServer())
-                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "item_farm", "id", uItem.getId(), "itemId", itemId, "value", uItem.getNumber(), "addValue", number);
-            return Arrays.asList((long) BONUS_ITEM_FARM, (long) uItem.getType(), (long) uItem.getId(), (long) uItem.getNumber(), (long) number);
-        }
-        return new ArrayList<>();
-    }
-
-    static List<Long> addPiece(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-        int type = aBonus.get(index++).getAsInt();
-        int pieceId = aBonus.get(index++).getAsInt();
-        int number = aBonus.get(index++).getAsInt();
-        UserPieceEntity uPiece = mUser.getResources().getPiece(type, pieceId);
-        if (uPiece == null) uPiece = new UserPieceEntity(mUser.getUser().getId(), type, pieceId, number);
-        else uPiece.add(number);
-        if (uPiece.getNumber() < 0) return new ArrayList<>();
-
-        boolean isOk = (mUser.getResources().hasPiece(type, uPiece.getId()) && DBJPA.update(uPiece)) || (!mUser.getResources().hasPiece(type, uPiece.getId()) && DBJPA.save(uPiece));
-
-        if (isOk) {
-            if (!mUser.getResources().hasPiece(type, uPiece.getId())) mUser.getResources().addPiece(type, uPiece);
-            if (CfgServer.isRealServer())
-                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "piece", "id", uPiece.getId(), "pieceId", pieceId, "value", uPiece.getNumber(), "addValue", number);
-            return Arrays.asList((long) BONUS_PIECE, (long) uPiece.getType(), (long) uPiece.getId(), (long) uPiece.getNumber(), (long) number);
-        }
-        return new ArrayList<>();
-    }
-
-//    static List<Long> addItemPoint(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-//        int itemId = aBonus.get(index++).getAsInt();
-//        int number = aBonus.get(index++).getAsInt();
-//        UserItemPointEntity uItem = mUser.getResources().getMItemPoint().get(itemId);
-//        if (uItem == null) uItem = new UserItemPointEntity(mUser.getUser().getId(), itemId, number);
-//        else uItem.add(number);
-//        if (uItem.getNumber() < 0) return new ArrayList<>();
-//        boolean isOk = DBJPA.saveOrUpdate(uItem);
-//        if (isOk) {
-//            if (!mUser.getResources().hasItemPoint(uItem.getPointId())) mUser.getResources().addItemPoint(uItem);
-//            if (CfgServer.isRealServer())
-//                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "item_point", "point_id", uItem.getPointId(), "itemId", itemId, "value", uItem.getNumber(), "addValue", number);
-//            return Arrays.asList((long) BONUS_ITEM_POINT, (long) uItem.getPointId(), uItem.getNumber(), (long) number);
-//        }
-//        return new ArrayList<>();
-//    }
 
     static List<Long> addItemEquipment(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
         int itemId = aBonus.get(index++).getAsInt();
@@ -432,43 +320,15 @@ public class Bonus {
     }
 
 
-    static List<Long> addWeapon(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-        int itemId = aBonus.get(index++).getAsInt();
-        boolean hasWeapon = mUser.getResources().hasWeapon(itemId);
-        if (!hasWeapon) {
-            UserWeaponEntity uWeapon = new UserWeaponEntity(mUser.getUser().getId(), itemId);
-            if (DBJPA.save(uWeapon)) {
-                mUser.getResources().addWeapon(uWeapon);
-                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "weapon", "id", itemId);
-                return Arrays.asList((long) BONUS_WEAPON, (long) itemId);
-            }
-        }
-        return new ArrayList<>();
-    }
-
     static List<Long> addPet(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-        int type = aBonus.get(index++).getAsInt();
         int id = aBonus.get(index++).getAsInt();
-        UserPetEntity uPet = mUser.getResources().getPet(type, id);
-        if (uPet == null) uPet = new UserPetEntity(mUser.getUser(), type, id);
+        UserPetEntity uPet = mUser.getResources().getPet(id);
+        if (uPet == null) uPet = new UserPetEntity(mUser.getUser(),  id);
         else return new ArrayList<>();
         if (DBJPA.save(uPet)) {
             mUser.getResources().addPet(uPet);
-            Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "pet", "type", type, "id", id);
-            return Arrays.asList((long) BONUS_PET, (long) type, (long) id);
-        }
-        return new ArrayList<>();
-    }
-
-    static List<Long> addHero(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-        int heroKey = aBonus.get(index++).getAsInt();
-        if (mUser.getResources().getHero(heroKey) != null) return new ArrayList<>();
-        UserHeroEntity uHero = new UserHeroEntity(mUser.getUser().getId(), heroKey);
-        if (DBJPA.save(uHero)) {
-            mUser.getResources().addHero(uHero);
-            if (CfgServer.isRealServer())
-                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "hero", "id", heroKey);
-            return Arrays.asList((long) BONUS_HERO, (long) heroKey);
+            Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "pet", "id", id);
+            return Arrays.asList((long) BONUS_PET,  (long) id);
         }
         return new ArrayList<>();
     }
@@ -597,35 +457,6 @@ public class Bonus {
                         return String.format(Lang.instance(mUser).get(Lang.err_not_enough_item), resItem.getName());
                     if (uItem.getNumber() + aBonus.get(index++) < 0)
                         return String.format(Lang.instance(mUser).get(Lang.err_not_enough_item), resItem.getName());
-                    break;
-                case BONUS_ITEM_FARM:
-                    int farmType = aBonus.get(index++).intValue();
-                    int id = aBonus.get(index++).intValue();
-                    int farmNum = aBonus.get(index++).intValue();
-                    UserItemFarmEntity uItemFarm = mUser.getResources().getItemFarm(farmType, id);
-                    if (uItemFarm == null || uItemFarm.getNumber() + farmNum < 0) {
-                        if (farmType == ItemFarmType.AGRI.value || farmType == ItemFarmType.SEED.value)
-                            return Lang.instance(mUser).get(Lang.err_not_enough_item_farm);
-                        if (farmType == ItemFarmType.TOOL.value)
-                            return Lang.instance(mUser).get(Lang.err_not_enough_item_tool);
-                        if (farmType == ItemFarmType.FOOD.value)
-                            return Lang.instance(mUser).get(Lang.err_not_enough_item_food);
-                    }
-                    break;
-//                case BONUS_ITEM_POINT:
-//                    int pointId = aBonus.get(index++).intValue();
-//                    int pointNum = aBonus.get(index++).intValue();
-//                    UserItemPointEntity uItemPoint = mUser.getResources().getItemPoint(pointId);
-//                    if (uItemPoint == null || uItemPoint.getNumber() + pointNum < 0)
-//                        return mUser.getLang().get(Lang.err_not_enough_point);
-//                    break;
-                case BONUS_PIECE:
-                    int pieceType = aBonus.get(index++).intValue();
-                    int pieceId = aBonus.get(index++).intValue();
-                    int pieceNum = aBonus.get(index++).intValue();
-                    UserPieceEntity uPiece = mUser.getResources().getPiece(pieceType, pieceId);
-                    if (uPiece == null || uPiece.getNumber() + pieceNum < 0)
-                        return Lang.instance(mUser).get(Lang.err_not_enough_piece);
                     break;
             }
         }

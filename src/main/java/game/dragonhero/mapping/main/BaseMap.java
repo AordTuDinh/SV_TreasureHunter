@@ -19,7 +19,7 @@ public class BaseMap extends BaseEntity implements Serializable {
     @Id
     @Getter
     int id;
-    String name, map;
+    String  map;
     @Transient
     @Getter
     List<Long> aMap, aBonus; // sub map

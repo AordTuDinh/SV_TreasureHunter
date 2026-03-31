@@ -159,9 +159,9 @@ public class QuestHandler extends AHandler {
                     // todo update other
                     if (type == QuestType.QUEST_D) {
                         ClanEntity clan = Services.clanDAO.getClan(mUser.getUser().getClan());
-                        if (clan != null) {
-                            clan.checkDynamic(mUser, CfgClan.DYNAMIC_QUEST_D_100, dataQuest.getValue(DataQuest.CUR_POINT_D));
-                        }
+//                        if (clan != null) {
+//                            clan.checkDynamic(mUser, CfgClan.DYNAMIC_QUEST_D_100, dataQuest.getValue(DataQuest.CUR_POINT_D));
+//                        }
                     }
                     ResTutorialQuestEntity res = ResQuest.mTutQuest.get(mUser.getUData().getQuestTutorial());
                     if (res != null && res.getType() == QuestTutType.HAS_POINT_D) {

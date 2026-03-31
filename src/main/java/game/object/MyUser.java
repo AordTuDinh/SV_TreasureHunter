@@ -9,12 +9,10 @@ import game.config.*;
 import game.config.aEnum.*;
 import game.dragonhero.controller.UserHandler;
 import game.dragonhero.mapping.*;
-import game.dragonhero.mapping.main.ResComboWeaponEntity;
 import game.dragonhero.mapping.main.ResTeleportEntity;
 import game.dragonhero.server.IAction;
 import game.dragonhero.service.Services;
 import game.dragonhero.service.resource.ResItem;
-import game.dragonhero.service.resource.ResWeapon;
 import game.dragonhero.service.user.Bonus;
 import game.monitor.ClanManager;
 import game.protocol.CommonProto;
@@ -46,14 +44,12 @@ public class MyUser implements Serializable {
     String session;
     UserResources resources;
     String version, udid;
-    int counterMemcached;
     UserCache cache = new UserCache();
     List<Pbmethod.PbAction> msgNotify = new ArrayList<>();
     List<Long> aBonus = new ArrayList<>();
     Player player;
     Pet pet;
     Channel channel;
-    boolean init = true;
     ResTeleportEntity curTeleport;
     Pos cachePos;
     int roomChanelId = 1; // 1-1000
@@ -67,7 +63,6 @@ public class MyUser implements Serializable {
     }
 
     public void setInitUData(UserDataEntity uData, UserEntity user) {
-        uData.initData(user);
         this.uData = uData;
     }
 
@@ -172,31 +167,7 @@ public class MyUser implements Serializable {
         return uDaily;
     }
 
-    public List<Integer> toListIdDBItemEquip(UserHeroEntity uHero) {
-        List<Integer> lst = new ArrayList<>();
-        List<Integer> lstIds = uHero.getListIdEquipmentEquip();
-        for (int i = 0; i < lstIds.size(); i++) {
-            UserItemEquipmentEntity uItem = resources.getItemEquipment(lstIds.get(i));
-            if (uItem != null) {
-                lst.add(uItem.getRes().getId());
-            } else {
-                lst.add(0);
-            }
-        }
-        return lst;
-    }
 
-    public void calComboWeapon() {
-        for (int i = 0; i < comboWeapon.size(); i++) {
-            int curNum = 0;
-            List<UserWeaponEntity> weapons = resources.getWeaponsByRank(i + 1);
-            ResComboWeaponEntity rCombo = ResWeapon.mComboWeapon.get(i + 1);
-            for (int j = 0; j < weapons.size(); j++) {
-                curNum += weapons.get(j).getLevel();
-            }
-            if (curNum >= rCombo.getMaxLevel()) comboWeapon.set(i, 1);
-        }
-    }
 
     public UserQuestEntity getUQuest() {
         if (uQuest == null) {
@@ -228,7 +199,7 @@ public class MyUser implements Serializable {
     public Pet getPet(Player player) {
         List<Integer> pets = user.getPet(this);
         if (pets.get(0) != 0 && pet == null) {
-            pet = new Pet(resources.getPet(PetType.ANIMAL, pets.get(0)), player);
+            pet = new Pet(resources.getPet( pets.get(0)), player);
         }
         return pet;
     }

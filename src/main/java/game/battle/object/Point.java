@@ -3,7 +3,6 @@ package game.battle.object;
 import com.google.gson.Gson;
 import game.battle.calculate.IMath;
 import game.battle.model.Character;
-import game.dragonhero.mapping.UserWeaponEntity;
 import game.object.PointBuff;
 import game.protocol.CommonProto;
 import lombok.Getter;

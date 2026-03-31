@@ -1,6 +1,5 @@
 package game.dragonhero.mapping.main;
 
-import game.config.CfgFarmQuest;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import ozudo.base.helper.GsonUtil;
@@ -30,7 +29,4 @@ public class ResVipEntity extends BaseEntity implements Serializable {
         checkJson(vip, bonus);
     }
 
-    public int getFarmQuest(int curLevel) {
-        return farmQuest + CfgFarmQuest.getQuestFree(curLevel);
-    }
 }

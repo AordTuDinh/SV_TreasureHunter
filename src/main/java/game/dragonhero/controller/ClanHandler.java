@@ -6,11 +6,8 @@ import game.config.aEnum.*;
 import game.config.lang.Lang;
 import game.dragonhero.dao.ClanDAO;
 import game.dragonhero.mapping.*;
-import game.dragonhero.mapping.main.ResContributeEntity;
-import game.dragonhero.mapping.main.ResDynamicTypeEntity;
 import game.dragonhero.server.IAction;
 import game.dragonhero.service.Services;
-import game.dragonhero.service.resource.ResClan;
 import game.dragonhero.service.user.Actions;
 import game.dragonhero.service.user.Bonus;
 import game.dragonhero.task.dbcache.MailCreatorCache;
@@ -28,8 +25,6 @@ import protocol.Pbmethod;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static game.dragonhero.service.resource.ResClan.*;
-
 public class ClanHandler extends AHandler {
     @Override
     public void initAction(Map<Integer, AHandler> mHandler) {
@@ -41,6 +36,12 @@ public class ClanHandler extends AHandler {
                 CLAN_HONOR_GET_BONUS);
         actions.forEach(action -> mHandler.put(action, this));
     }
+
+    public static final int INDEX_STAR = 0;
+    public static final int INDEX_TIME_DONE = 1;
+    public static final int INDEX_TIME = 2;
+    public static final int INDEX_STATUS = 3;
+    public static final int INDEX_BONUS = 4;
 
     static ClanHandler instance;
     public static String KEY_CLAN_LEAVE = "clanleave:";
@@ -98,14 +99,6 @@ public class ClanHandler extends AHandler {
                         case IAction.CLAN_RECEIVE_QUEST -> questReceive();
                         case IAction.CLAN_UPGRADE_QUEST -> questUpgrade();
                         case IAction.CLAN_START_QUEST -> questStart();
-                        case IAction.CLAN_CONTRIBUTE_INFO -> contributeInfo();
-                        case IAction.CLAN_CONTRIBUTE -> contribute();
-                        case IAction.CLAN_CONTRIBUTE_TOP -> contributeTop();
-                        // clan dynamic
-                        case IAction.CLAN_DYNAMIC_STATUS -> dynamicStatus();
-                        case IAction.CLAN_DYNAMIC_DETAIL -> dynamicDetail();
-                        case IAction.CLAN_DYNAMIC_REWARD -> dynamicReward();
-                        case IAction.CLAN_DYNAMIC_REWARD_BOX -> dynamicBox();
                         // upgrade level
                         case IAction.CLAN_UP_LEVEL -> upLevel();
                         case IAction.CLAN_HONOR_STATUS -> honorStatus();
@@ -659,7 +652,6 @@ public class ClanHandler extends AHandler {
             addResponse(protocol.Pbmethod.CommonVector.newBuilder().addALong(clan.getLevel()).
                     addALong(clan.getExp()).addALong(clanHonor).addALong(DateTime.secondsUntilEndDay()).addALong(clan.getHonor()).addAllALong(aBonus).build());
             CfgQuest.addNumQuest(mUser, DataQuest.CHECK_IN_CLAN, 1);
-            clan.checkDynamic(mUser, CfgClan.CHECK_IN_CLAN, 1);
         } else addErrSystem();
     }
 
@@ -766,7 +758,7 @@ public class ClanHandler extends AHandler {
         int size = quest.size();
         for (int i = 0; i < size; i++) {
             List<Long> data = quest.get(index);
-            long timeRemain = data.get(INDEX_TIME_DONE) - System.currentTimeMillis() / 1000;
+                long timeRemain = data.get(INDEX_TIME_DONE) - System.currentTimeMillis() / 1000;
             timeRemain = timeRemain < 0 ? 0 : timeRemain;
             if (timeRemain <= 0) { // done quest thì trả về status
                 update = true;
@@ -789,33 +781,7 @@ public class ClanHandler extends AHandler {
                 index++;
             }
         }
-        // check số quest có nhỏ hơn số quest hiện tại không , nhỏ hơn thì thêm mới quest
-        ResContributeEntity con = ResClan.getClanContribute(clan.getLevelQuest());
-        List<Integer> dataNum = con.getData();
-        int numQuest = dataNum.get(0);
-        while (listQuestActive < numQuest) {
-            update = true;
-            List<Long> bonus = Bonus.xPerBonus(con.getBonus(), dataNum.get(1));
-            List<Long> data = new ArrayList<>();
-            long star = 1L;
-            data.add(star);// star
-            long timeRemain = System.currentTimeMillis() / 1000 + DateTime.HOUR_SECOND * CfgClan.config.timeQuest;
-            data.add(timeRemain); // time done quest
-            data.add((long) CfgClan.config.timeQuest); // time
-            data.add((long) StatusType.LOCK.value); // status
-            data.addAll(bonus); // all bonus
-            quest.add(data);
-            listQuestActive++;
-            // result client
-            List<Long> result = new ArrayList<>();
-            result.add(star); // star
-            result.add(timeRemain); // time remain
-            result.add((long) CfgClan.config.timeQuest); // time
-            result.add((long) StatusType.LOCK.value); // status
-            result.add((long) CfgClan.config.upgradeQuest.get(0));
-            result.addAll(bonus); // bonus
-            pb.addAVector(getCommonVector(result));
-        }
+
         if (update) if (userClan.updateQuest(quest)) {
             if (!bonusDone.isEmpty())
                 addBonusToastPlus(Bonus.receiveListItem(mUser, DetailActionType.BONUS_CLAN_QUEST.getKey(numDone), bonusDone));
@@ -842,18 +808,6 @@ public class ClanHandler extends AHandler {
         if (clan == null) {
             addErrSystem();
             return;
-        }
-        ResContributeEntity con = ResClan.getClanContribute(clan.getLevelQuest());
-        List<Integer> dataNum = con.getData();
-        for (int i = 0; i < dataNum.get(0); i++) {
-            List<Long> bonus = Bonus.xPerBonus(con.getBonus(), dataNum.get(1));
-            List<Long> data = new ArrayList<>();
-            data.add(1L);// star
-            data.add(System.currentTimeMillis() / 1000 + DateTime.HOUR_SECOND * CfgClan.config.timeQuest); // time done quest
-            data.add((long) CfgClan.config.timeQuest); // time
-            data.add((long) StatusType.LOCK.value); // status
-            data.addAll(bonus); // all bonus
-            quest.add(data);
         }
         if (userClan.updateQuest(quest)) {
             addResponseSuccess();
@@ -969,226 +923,6 @@ public class ClanHandler extends AHandler {
             questList();
         } else addErrSystem();
     }
-
-    //end region
-
-    //region contribute
-    private void contributeInfo() {
-        List<Long> data = new ArrayList<>();
-        ClanEntity clan = ClanManager.getInstance(user.getClan()).getClan();
-        if (clan == null) {
-            addErrSystem();
-            return;
-        }
-        int levelQuest = clan.getLevelQuest();
-        ResContributeEntity curRes = ResClan.getClanContribute(levelQuest);
-        data.add((long) levelQuest); //curLevel
-        int nextLevel = levelQuest >= ResClan.maxLevelContribute ? 0 : levelQuest + 1;
-        data.add((long) nextLevel); // nextLevel
-        ResContributeEntity nextRes = ResClan.getClanContribute(nextLevel);
-        data.add(clan.getContribute());// cur cống hiến
-        data.add((long) curRes.getGold());// max cống hiến
-        data.addAll(GsonUtil.toListLong(curRes.getData())); // cur turn - cur buff
-        data.addAll(nextRes == null ? Arrays.asList(0L, 0L) : GsonUtil.toListLong(nextRes.getData())); // next turn - next buff
-        data.add((long) CfgClan.config.contributeX1);
-        data.add((long) CfgClan.config.contributeX10);
-        addResponse(CLAN_CONTRIBUTE_INFO, getCommonVector(data));
-    }
-
-    private void contribute() {
-        UserClanEntity userClan = Services.userDAO.getUserClan(mUser);
-        if (userClan == null) {
-            addErrParam();
-            return;
-        }
-        ClanEntity clan = ClanManager.getInstance(user.getClan()).getClan();
-        if (clan == null) {
-            addErrSystem();
-            return;
-        }
-        int input = getInputInt();
-        if (input != 1 && input != 10) {
-            addErrParam();
-            return;
-        }
-        int numBuff = input == 1 ? CfgClan.config.contributeX1 : CfgClan.config.contributeX10;
-        List<Long> fee = Bonus.viewGold(-numBuff);
-        String err = Bonus.checkMoney(mUser, fee);
-        if (err != null) {
-            addErrResponse(err);
-            return;
-        }
-        clan.addContribute(numBuff);
-        userClan.addContribute(numBuff);
-        addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.BONUS_CLAN_CONTRIBUTE.getKey(input), fee)));
-        contributeInfo();
-        clan.addClanLog(Lang.clan_message_15, user.getName(),input+"");
-    }
-
-    private void contributeTop() {
-        TopType topType = TopType.CLAN_CONTRIBUTE;
-        Pbmethod.PbListUser pbListUser = (Pbmethod.PbListUser) TopMonitor.getInstance().get(topType, String.valueOf(user.getServer()), String.valueOf(user.getClan()));
-        addResponse(pbListUser.toBuilder().build());
-    }
-
-    //end region
-
-
-    //region dynamic
-
-    private void dynamicStatus() {
-        ClanEntity clan = ClanManager.getInstance(user.getClan()).getClan();
-        if (clan == null) {
-            addErrSystem();
-            return;
-        }
-        UserClanEntity userClan = Services.userDAO.getUserClan(mUser);
-        if (userClan == null) {
-            addErrParam();
-            return;
-        }
-        Pbmethod.ListCommonVector.Builder pb = Pbmethod.ListCommonVector.newBuilder();
-        List<Long> info = new ArrayList<>();
-        int box = clan.getPointDynamic() / CfgClan.config.maxPointDynamic - userClan.getBoxDynamic().get(1);
-        int curValue = clan.getPointDynamic() % CfgClan.config.maxPointDynamic;
-        info.add(box > 0 ? box : 0L);// box có thể nhận
-        info.add((long) curValue); // cur value
-        info.add((long) CfgClan.config.maxPointDynamic); // max value
-        pb.addAVector(getCommonVector(info));
-        // list cell
-        List<Integer> dynamicReceive = userClan.getDynamicReceive();
-        List<CellDynamic> cells = clan.getDynamics();
-        for (int i = 0; i < cells.size(); i++) {
-            CellDynamic cell = cells.get(i);
-            if (!dynamicReceive.contains(cell.id)) { // chưa nhận
-                Pbmethod.CommonVector.Builder cmm = Pbmethod.CommonVector.newBuilder();
-                cmm.addALong(cell.id);//id
-                cmm.addAllALong(CfgClan.getBonusDynamic()); // bonus
-                ResDynamicTypeEntity res = mDynamicType.get(cell.type);
-                cmm.addAString(cell.name); // name user
-                cmm.addAString(res.getName()); // desc
-                cmm.addAString(res.getTitle()); // title
-                pb.addAVector(cmm);
-            }
-        }
-        addResponse(CLAN_DYNAMIC_STATUS, pb.build());
-    }
-
-    private void dynamicDetail() {
-        UserClanEntity userClan = Services.userDAO.getUserClan(mUser);
-        if (userClan == null) {
-            addErrParam();
-            return;
-        }
-        List<Integer> status = userClan.getDynamicDetail();
-        List<ResDynamicTypeEntity> res = aDynamicType;
-        Pbmethod.ListCommonVector.Builder pb = Pbmethod.ListCommonVector.newBuilder();
-        for (int i = 0; i < res.size(); i++) {
-            ResDynamicTypeEntity db = res.get(i);
-            Pbmethod.CommonVector.Builder cm = Pbmethod.CommonVector.newBuilder();
-            int curValue = 0; // todo check current
-            switch (db.getType()) {
-                case 1 -> { // điểm danh bang hội 1 lần
-                    DataQuest dayData = mUser.getUQuest().getDataQuest(QuestType.QUEST_D);
-                    curValue = dayData.getValue(DataQuest.CHECK_IN_CLAN);
-                }
-                case 2 -> { // attack boss clan
-                    DataDaily dataDaily = mUser.getUserDaily().getUDaily();
-                    curValue = dataDaily.getValue(DataDaily.ATTACK_BOS_CLAN);
-                }
-                case 3 -> {
-                    DataQuest dayData = mUser.getUQuest().getDataQuest(QuestType.QUEST_D);
-                    curValue = dayData.getValue(DataQuest.CUR_POINT_D);
-                }
-            }
-            cm.addALong(curValue); // cur value
-            cm.addALong(db.getNumber()); // max value
-            cm.addALong(status.get(i) != StatusType.DONE.value && curValue >= db.getNumber() ? StatusType.DONE.value : status.get(i)); // status
-            cm.addALong(db.getGo()); // goto id
-            cm.addAString(db.getName());// name cell
-            pb.addAVector(cm);
-        }
-        addResponse(CLAN_DYNAMIC_DETAIL, pb.build());
-    }
-
-
-    private void dynamicReward() {
-        ClanEntity clan = ClanManager.getInstance(user.getClan()).getClan();
-        if (clan == null) {
-            addErrSystem();
-            return;
-        }
-        UserClanEntity userClan = Services.userDAO.getUserClan(mUser);
-        if (userClan == null) {
-            addErrParam();
-            return;
-        }
-        // list cell
-        List<Integer> dynamicReceive = userClan.getDynamicReceive();
-        List<CellDynamic> cells = clan.getDynamics();
-        int inputType = getInputInt();
-        if (inputType == -1) {
-            int numBonus = 0;
-            for (int i = 0; i < cells.size(); i++) {
-                if (!dynamicReceive.contains(cells.get(i).id)) {
-                    dynamicReceive.add(cells.get(i).id);
-                    numBonus++;
-                }
-            }
-            if (numBonus == 0) {
-                addErrResponse(getLang(Lang.err_no_bonus));
-                return;
-            }
-            if (userClan.update(List.of("dynamic_receive", StringHelper.toDBString(dynamicReceive)))) {
-                userClan.setDynamicReceive(dynamicReceive.toString());
-                addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.BONUS_CLAN_DYNAMIC_ALL.getKey(), Bonus.xBonus(CfgClan.getBonusDynamic(), numBonus))));
-                dynamicStatus();
-            } else addErrSystem();
-        } else {
-            CellDynamic target = cells.stream().filter(c -> c.id == inputType).findFirst().orElse(null);
-            if (target == null) {
-                addErrResponse(getLang(Lang.err_no_bonus));
-                return;
-            }
-            if (dynamicReceive.contains(target.id)) {
-                addErrResponse(getLang(Lang.err_received_bonus));
-                return;
-            }
-            dynamicReceive.add(target.id);
-            if (userClan.update(List.of("dynamic_receive", StringHelper.toDBString(dynamicReceive)))) {
-                userClan.setDynamicReceive(dynamicReceive.toString());
-                addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.BONUS_CLAN_DYNAMIC.getKey(inputType), CfgClan.getBonusDynamic())));
-                dynamicStatus();
-            } else addErrSystem();
-        }
-    }
-
-    private void dynamicBox() {
-        ClanEntity clan = ClanManager.getInstance(user.getClan()).getClan();
-        if (clan == null) {
-            addErrSystem();
-            return;
-        }
-        UserClanEntity userClan = Services.userDAO.getUserClan(mUser);
-        if (userClan == null) {
-            addErrParam();
-            return;
-        }
-        List<Integer> boxs = userClan.getBoxDynamic();
-        int box = clan.getPointDynamic() / CfgClan.config.maxPointDynamic - boxs.get(1);
-        if (box <= 0) {
-            addErrResponse(getLang(Lang.err_no_bonus));
-            return;
-        }
-        boxs.set(1, boxs.get(1) + box);
-        if (userClan.update(List.of("box_dynamic", StringHelper.toDBString(boxs)))) {
-            userClan.setBoxDynamic(boxs.toString());
-            addBonusToastPlus(Bonus.receiveListItem(mUser, DetailActionType.BONUS_CLAN_DYNAMIC_BOX.getKey(box), CfgClan.getBonusBoxDynamic(box)));
-            addResponse(getCommonVector(0L));
-        } else addErrSystem();
-    }
-
-    //end region
 
     private protocol.Pbmethod.PbListChat protoListChat(List<ChatObject> aChat) {
         protocol.Pbmethod.PbListChat.Builder builder = protocol.Pbmethod.PbListChat.newBuilder();

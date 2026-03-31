@@ -447,58 +447,14 @@ public class IMath {
 
 
     public static Point calculatePoint(MyUser mUser, boolean hasItemEquip) {
-        Point pt = PlayerBasePoint.getBase(mUser.getUser().getHeroMain());
-        Map<Integer, StatEntity> aGoldStat = mUser.getUData().getAGoldStat();
-        Map<Integer, StatEntity> aLevelStat = mUser.getUData().getALevelStat();
-        // Gold stat
-//        System.out.println("----------------------------------------");
-//        System.out.println("point 1 = " + pt.toMiniString());
-        List<ResGoldStatEntity> lstGold = ResStat.aGoldStat;
-        for (int i = 0; i < lstGold.size(); i++) {
-            ResGoldStatEntity stat = lstGold.get(i);
-            float addValue = (aGoldStat.get(stat.getId()).level) * stat.getPointPerLevel();
-            addPointData(pt, stat.getPointId(), addValue);
-        }
-//        System.out.println("point 2 = " + pt.toMiniString());
-        // Level stat
-        List<ResLevelStatEntity> lstData = ResStat.aLevelStat;
-        for (int i = 0; i < lstData.size(); i++) {
-            ResLevelStatEntity level = lstData.get(i);
-            float addValue = ((aLevelStat.get(level.getId()).level) * level.getPointPerLevel());
-            addPointData(pt, level.getPointId(), addValue);
-        }
-//        System.out.println("point 3 = " + pt.toMiniString());
-        // Shuriken
-        for (Map.Entry<Integer, UserWeaponEntity> weapons : mUser.getResources().getMWeapon().entrySet()) {
-            ResWeaponEntity resWe = weapons.getValue().getRes();
-            List<PassiveWeapon> passives = resWe.getPassives();
-            for (int j = 0; j < passives.size(); j++) {
-                PassiveWeapon ps = passives.get(j);
-                float addValue = ps.getValue(weapons.getValue().getLevel());
-                addPointData(pt, ps.id, addValue);
-            }
-        }
-//        System.out.println("point 4 = " + pt.toMiniString());
-        // combo weapon
-        for (int i = 0; i < mUser.getComboWeapon().size(); i++) {
-            if (mUser.getComboWeapon().get(i) == 1) { // active combo
-                ResComboWeaponEntity rCombo = ResWeapon.mComboWeapon.get(i + 1);
-                for (int j = 0; j < rCombo.getPointCombo().size(); j += 2) {
-                    addPointData(pt, rCombo.getPointCombo().get(j), rCombo.getPointCombo().get(j + 1));
-                }
-            }
-        }
-//        System.out.println("point 5 = " + pt.toMiniString());
-
+        Point pt = PlayerBasePoint.getBase();
         // Item Equipment
         if (hasItemEquip) {
             List<Integer> itemIds = mUser.getUser().getListIdEquipmentEquip();
             calPointItemEquip(mUser, itemIds, pt);
         }
-//        System.out.println("point 6 = " + pt.toMiniString());
         // Pet
         int petId = mUser.getUser().getPet(mUser).get(0);
-        ResHeroEntity rHeroMain = ResHero.getHero(mUser.getUser().getHeroMain());
         for (Map.Entry<Integer, UserPetEntity> pets : mUser.getResources().getMPetAnimal().entrySet()) {
             UserPetEntity pet = pets.getValue();
             // hết máu thì k buff
@@ -509,28 +465,13 @@ public class IMath {
                 addPointData(pt, Math.toIntExact(pointAdd.get(j)), pointAdd.get(j + 1) / 100f);
             }
             // Bonus Faction Pet
-            if (petId == rPet.getId() && rPet.getFactionType() == rHeroMain.getFaction()) {
+            if (petId == rPet.getId() ) {
                 List<Long> bonusFaction = rPet.getBonusFaction();
                 for (int i = 0; i < bonusFaction.size(); i += 2) {
                     addPointData(pt, Math.toIntExact(bonusFaction.get(i)), bonusFaction.get(i + 1) / 100f);
                 }
             }
 
-        }
-//        System.out.println("point 7 = " + pt.toMiniString());
-
-
-//        System.out.println("point 7 = " + pt.toMiniString());
-        // Monster
-        for (Map.Entry<Integer, UserPetEntity> monsters : mUser.getResources().getMPetMonster().entrySet()) {
-            UserPetEntity monster = monsters.getValue();
-            if (monster.getHp() <= 0) continue;
-            // hết máu thì k buff
-            ResEnemyEntity res = monster.getResMonster();
-            List<Long> pointAdd = ResPet.getDataEquipByLevel(res.getDataPet(), monster.getStar());
-            for (int j = 0; j < pointAdd.size(); j += 2) {
-                addPointData(pt, Math.toIntExact(pointAdd.get(j)), pointAdd.get(j + 1) / 100f);
-            }
         }
 //        System.out.println("point 8 = " + pt.toMiniString());
         // phúc lợi bang hội
@@ -543,33 +484,16 @@ public class IMath {
                     if (welfare.point > 0) addPointData(pt, welfare.point, welfare.num / 100f);
                 }
             }
-//            System.out.println("point 9 = " + pt.toMiniString());
-            // kĩ năng bang
-            UserClanEntity userClan = Services.userDAO.getUserClan(mUser);
-            List<Integer> allSkill = userClan.getSkills();
-            for (int i = 0; i < allSkill.size(); i++) {
-                if (allSkill.get(i) <= 0) continue;
-                ResClanSkillEntity rSkill = ResClan.getClanSkill(i + 1);
-                addPointEffect(pt, rSkill.getAEffect().get(allSkill.get(i) - 1));
-            }
         }
 //        System.out.println("point 10 = " + pt.toMiniString());
         // cal power from shuriken equipment
         float perPowerWeaponEquip = 1;
-        for (int i = 0; i < mUser.getResources().getWeaponEquip().size(); i++) {
-            if (mUser.getResources().getWeaponEquip().get(i) != null)
-                perPowerWeaponEquip += mUser.getResources().getWeaponEquip().get(i).getPerPower();
-        }
+
         // power tinh cuoi cung
         pt.calculatorPower(mUser.getUser().getLevel(), perPowerWeaponEquip);
 //        System.out.println("point end = " + pt.toMiniString());
 //        System.out.println("----------------------------------------");
         return pt;
-    }
-
-    public static int getRoundUpNumber(int a, int b) {
-        boolean du = a % b > 0;
-        return du ? (a / b) + 1 : a / b;
     }
 
     public static void calPointItemEquip(MyUser mUser, List<Integer> itemIds, Point pt) {

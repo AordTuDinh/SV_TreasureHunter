@@ -2,7 +2,6 @@ package game.config;
 
 import com.google.gson.Gson;
 import game.config.aEnum.ItemKey;
-import game.config.aEnum.PieceType;
 import game.dragonhero.service.user.Bonus;
 import net.sf.json.JSONObject;
 import ozudo.base.helper.NumberUtil;
@@ -52,10 +51,6 @@ public class CfgGacha {
     public static List<Long> bonusStone(int rank) {
         int ranStone = stoneByRank.get(rank).get(NumberUtil.getRandom(5));
         return Bonus.viewItem(ranStone, 1);
-    }
-
-    public static List<Long> bonusPiece(int id) {// id phải bằng rank
-        return Bonus.viewPiece(PieceType.WEAPON, id, 1);
     }
 
     public static List<Long> getFeeSummonStone(int type, int number) {
