@@ -2,7 +2,9 @@ package game.battle.object;
 
 import game.battle.calculate.MathLab;
 import game.dragonhero.BattleConfig;
+import game.dragonhero.mapping.main.ResMapEntity;
 import game.object.MapData;
+import ozudo.base.helper.GsonUtil;
 import ozudo.base.helper.NumberUtil;
 import protocol.Pbmethod;
 
@@ -33,6 +35,12 @@ public class Pos {
     public Pos(float x, float y) {
         this.x = x;
         this.y = y;
+    }
+
+    public Pos(String arr) {
+        List<Float> aPos = GsonUtil.strToListFloat(arr);
+        this.x = aPos.get(0);
+        this.y = aPos.get(1);
     }
 
     public static Pos zero() {
@@ -146,16 +154,16 @@ public class Pos {
         return randomPos(pos.get(0).x, pos.get(1).x, pos.get(0).y, pos.get(1).y);
     }
 
-    public static Pos randomInPanel(MapData map,float ofsetX, float ofsetY) {
-        return randomPos(map.getBotLeft().x-ofsetX, map.getTopRight().x-ofsetX,
-                map.getBotLeft().y-ofsetY, map.getTopRight().y-ofsetY);
-    }
+//    public static Pos randomInPanel(MapData map,float ofsetX, float ofsetY) {
+//        return randomPos(map.getBotLeft().x-ofsetX, map.getTopRight().x-ofsetX,
+//                map.getBotLeft().y-ofsetY, map.getTopRight().y-ofsetY);
+//    }
 
     public static Pos randomPos(Pos target, float rangeX, float rangeY) {
         return new Pos(NumberUtil.getRandom(target.x - rangeX, target.x + rangeX), NumberUtil.getRandom(target.y - rangeY, target.y + rangeY));
     }
 
-    public static Pos v_add(PanelMap map, Pos a, Pos b) {
+    public static Pos v_add(ResMapEntity map, Pos a, Pos b) {
         // cai này có vẻ chuẩn rồi, phải làm tròn để trùng với client
         float tmpX = a.x + b.x;
         float tmpY = a.y + b.y;
@@ -170,7 +178,7 @@ public class Pos {
         return lstPos;
     }
 
-    public void v_add(PanelMap map, Pos newPos) {
+    public void v_add(ResMapEntity map, Pos newPos) {
         Pos check = GameCore.checkWall2(map, newPos, this).round();
         this.x = check.x;
         this.y = check.y;
@@ -181,7 +189,7 @@ public class Pos {
         this.y += pos.y;
     }
 
-    public void v_addBullet(PanelMap map, Pos newPos) {
+    public void v_addBullet(ResMapEntity map, Pos newPos) {
         this.x += newPos.x;
         this.y += newPos.y;
     }

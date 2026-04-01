@@ -55,7 +55,7 @@ public class EventHandler extends AHandler {
         }
         try {
             switch (actionId) {
-                case IAction.EVENT_ACTIVE -> active();
+               // case IAction.EVENT_ACTIVE -> active();
                 case IAction.EVENT_14D_STATUS -> e14DayStatus();
                 case IAction.EVENT_14D_REWARD -> e14DayReward();
                 case IAction.EVENT_14D_RE_TICK -> e14DayReTick();

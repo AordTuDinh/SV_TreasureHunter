@@ -472,8 +472,8 @@ public class Enemy extends Character implements Serializable {
         pbAdd.setRangeAttack(rangeAttack);
         pbAdd.setIsAdd(true);
         pbAdd.setPos(pos.toProto());
-        pbAdd.setBotLeft(panelMap.getBotLeft().toProto());
-        pbAdd.setTopRight(panelMap.getTopRight().toProto());
+        pbAdd.setBotLeft(panelMap.getBotLeftP().toProto());
+        pbAdd.setTopRight(panelMap.getTopRightP().toProto());
         pbAdd.setDirection(direction.toProto());
         pbAdd.setSpeed((int) point.getMoveSpeed());
         pbAdd.addInfo(type.value);// info[0]= type

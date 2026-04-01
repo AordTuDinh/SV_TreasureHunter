@@ -47,8 +47,10 @@ message PbCell {
 }
 
 message PbChunk {
-  optional PbPos chunk = 1;
-  repeated PbCell cells = 2;
+  optional int32 chunkId = 1;
+  optional PbPos chunk = 2;
+  repeated PbCell cells = 3;
+
 }
 
 message PbInitMap {

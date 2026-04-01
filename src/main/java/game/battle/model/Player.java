@@ -8,10 +8,9 @@ import game.config.aEnum.*;
 import game.dragonhero.BattleConfig;
 import game.dragonhero.controller.UserHandler;
 import game.dragonhero.mapping.*;
-import game.dragonhero.mapping.main.BaseMap;
+import game.dragonhero.mapping.main.ResMapEntity;
 import game.dragonhero.server.Constans;
 import game.dragonhero.server.IAction;
-import game.dragonhero.service.Services;
 import game.dragonhero.service.resource.ResMap;
 import game.dragonhero.service.user.Bonus;
 import game.dragonhero.table.BaseRoom;
@@ -20,16 +19,11 @@ import game.object.DataQuest;
 import game.object.MyUser;
 import game.protocol.CommonProto;
 import lombok.Data;
-import ozudo.base.database.DBJPA;
 import ozudo.base.helper.*;
 import protocol.Pbmethod;
 
-import javax.persistence.EntityManager;
 import java.io.Serializable;
 import java.util.*;
-
-import static game.dragonhero.dao.UserDAO.getLogger;
-import static ozudo.base.database.DBJPA.slowLog;
 
 @Data
 public class Player extends Character implements Serializable {
@@ -180,7 +174,6 @@ public class Player extends Character implements Serializable {
     }
 
 
-
     // set time join, va clear data old map
     public void setJoinMap(BaseRoom room) {
         timeJoinRoom = System.currentTimeMillis();
@@ -191,10 +184,9 @@ public class Player extends Character implements Serializable {
         this.ready = true;
         directionMoveAttack = Pos.zero();
         this.room = room;
-        this.panelMap = new PanelMap(room.getMapInfo().getMapData());
+        this.panelMap = room.getMapInfo();
         updateBuff();
     }
-
 
 
     void nextSkillSlot() {
@@ -465,12 +457,9 @@ public class Player extends Character implements Serializable {
         pbAdd.setId(id);
         pbAdd.setIsAdd(true);
         pbAdd.setPos(pos.toProto());
-        if (panelMap == null) {
-            BaseMap map = ResMap.getMap(RoomType.HOME.value, 0);
-            panelMap = new PanelMap(map.getMapData());
-        }
-        pbAdd.setBotLeft(panelMap.botLeft.toProto());
-        pbAdd.setTopRight(panelMap.topRight.toProto());
+        if (panelMap == null) panelMap = ResMap.getMap(MapType.HOME);
+        pbAdd.setBotLeft(panelMap.getBotLeftP().toProto());
+        pbAdd.setTopRight(panelMap.getTopRightP().toProto());
         pbAdd.setDirection(direction.toProto());
         pbAdd.setTeamId(teamId);
         pbAdd.setRangeAttack(rangeAttack);
@@ -503,7 +492,7 @@ public class Player extends Character implements Serializable {
     }
 
     public void toPbEndGame() {
-        toPbEndGame(false, 0, null, 0, PopupType.POPUP_DEAD,List.of(0,0));
+        toPbEndGame(false, 0, null, 0, PopupType.POPUP_DEAD, List.of(0, 0));
     }
 
     public void toPbEndGame(boolean isWin, int per, List<Long> bonus, int timeAttack, PopupType popup, List<Integer> info) {

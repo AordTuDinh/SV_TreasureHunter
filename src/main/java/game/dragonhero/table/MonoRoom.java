@@ -1,11 +1,10 @@
 package game.dragonhero.table;
 
-import com.google.gson.Gson;
 import game.battle.object.Coroutine;
 import game.battle.object.Mono;
 import game.battle.type.RoomState;
 import game.battle.type.StateType;
-import game.config.aEnum.RoomType;
+import game.config.aEnum.MapType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,7 +28,7 @@ public abstract class MonoRoom extends Mono {
     @Getter
     protected long id; // id room khác với id init
     List<Coroutine> coroutines;
-    RoomType roomType;
+    MapType mapType;
 
 
 
@@ -56,7 +55,7 @@ public abstract class MonoRoom extends Mono {
         this.timeCreateRoom = System.currentTimeMillis();
         this.keyRoom = keyRoom;
         this.keys = keyRoom.split("_");
-        this.roomType = RoomType.get(Integer.parseInt(keys[1]));
+        this.mapType = MapType.get(Integer.parseInt(keys[1]));
         this.coroutines = new ArrayList<>();
         this.id = getCounterId();
         this.aProtoAdd = new ArrayList<>();
@@ -71,8 +70,8 @@ public abstract class MonoRoom extends Mono {
 
 
 
-    public boolean isRoomType(RoomType roomType) {
-        return roomType == this.roomType;
+    public boolean isRoomType(MapType mapType) {
+        return mapType == this.mapType;
     }
 
     //region state

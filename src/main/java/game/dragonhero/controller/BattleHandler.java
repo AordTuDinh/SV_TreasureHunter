@@ -5,7 +5,6 @@ import game.battle.model.Player;
 import game.battle.object.Pos;
 import game.battle.type.AutoMode;
 import game.config.CfgBattle;
-import game.config.CfgEventDrop;
 import game.config.CfgServer;
 import game.config.aEnum.*;
 import game.config.lang.Lang;
@@ -16,14 +15,12 @@ import game.dragonhero.service.resource.ResMap;
 import game.dragonhero.service.resource.ResTeleport;
 import game.dragonhero.service.user.Bonus;
 import game.dragonhero.table.*;
-import game.object.BonusConfig;
 import game.object.MyUser;
 import game.object.TaskMonitor;
 import game.protocol.CommonProto;
 import io.netty.channel.Channel;
 import ozudo.base.helper.*;
 import ozudo.base.log.Logs;
-import protocol.Pbmethod;
 import protocol.Pbmethod.CommonVector;
 
 import java.io.Serializable;
@@ -68,9 +65,8 @@ public class BattleHandler extends AHandler implements Serializable {
                 case INIT_MAP_BY_TYPE_ID -> {
                     CommonVector pbUB = CommonProto.parseCommonVector(requestData);
                     int type = (int) pbUB.getALong(0);
-                    int id = (int) pbUB.getALong(1);
                     Pos pInit = Pos.zero();
-                    initMapByTypeId(RoomType.get(type), id, pInit);
+                    initMapByTypeId(MapType.get(type), pInit);
                 }
 //                case INIT_BOSS -> initBoss();
 //                case CAMPAIGN_REWARD -> campaignReward();
@@ -113,20 +109,20 @@ public class BattleHandler extends AHandler implements Serializable {
         if (nextPort == null) {
             initBackHome(mUser, PopupType.NULL);
         } else {
-            initMapByTypeId(nextPort.getMap(), nextPort.getMapId(), nextPort.getPlayerPosInit());
+            initMapByTypeId(nextPort.getMap(), nextPort.getPlayerPosInit());
             mUser.setCurTeleport(nextPort);
         }
     }
 
-    public void initMapByTypeId(RoomType roomType, int mapId, Pos posInit) {
-        BaseMap map = ResMap.getMap(roomType, mapId);
+    public void initMapByTypeId(MapType mapType, Pos posInit) {
+        ResMapEntity map = ResMap.getMap(mapType);
         if (map == null) {
             addErrParam();
             return;
         }
         int chanelId = mUser.getRoomChanelId();
         BaseRoom curRoom = (BaseRoom) ChUtil.get(channel, ChUtil.KEY_ROOM);
-        String keyRoom = CfgBattle.getKeyRoom(mUser, roomType.value, mapId, chanelId);
+        String keyRoom = CfgBattle.getKeyRoom(mUser, mapType.value, chanelId);
 
         if (curRoom != null && (curRoom.getKeyRoom().equals(keyRoom) || !curRoom.allowChangeChanel())) {
             if (curRoom.getKeyRoom().equals(keyRoom)) {
@@ -145,9 +141,9 @@ public class BattleHandler extends AHandler implements Serializable {
         }
         // tìm room thỏa mãn điều kiện max player room
         BaseRoom room = (BaseRoom) TaskMonitor.getInstance().getRoom(keyRoom);
-        while (room != null && room.getAPlayer().size() > roomType.maxPlayer) {
+        while (room != null && room.getAPlayer().size() > mapType.maxPlayer) {
             chanelId = NumberUtil.getRandom(1, CfgServer.maxChannelOpen);
-            keyRoom = CfgBattle.getKeyRoom(mUser, roomType.value, mapId, chanelId);
+            keyRoom = CfgBattle.getKeyRoom(mUser, mapType.value, chanelId);
             if (curRoom.getKeyRoom().equals(keyRoom)) continue;
             room = (BaseRoom) TaskMonitor.getInstance().getRoom(keyRoom);
         }
@@ -157,7 +153,7 @@ public class BattleHandler extends AHandler implements Serializable {
         if (room == null) {  // tao room moi
             List<Character> players = new ArrayList<>();
             players.add(player);
-            switch (roomType) {
+            switch (mapType) {
                 default:
                     room = new DefaultRoom(map, players, keyRoom);
                     break;
@@ -169,11 +165,11 @@ public class BattleHandler extends AHandler implements Serializable {
         mUser.setRoomChanelId(chanelId);
         ChUtil.set(channel, ChUtil.KEY_ROOM, room);
         // tra ve id teleport next
-        addResponse(INIT_MAP, CfgBattle.genInitMap(roomType.value, mapId, mUser.getRoomChanelId(), PopupType.NULL));
+        addResponse(INIT_MAP, CfgBattle.genInitMap(mapType.value, mUser.getRoomChanelId(), PopupType.NULL));
     }
 
     public static void initBackHome(MyUser mUser, PopupType popupType) {
-        BaseMap map = ResMap.getMap(RoomType.HOME.value, 0);
+        ResMapEntity map = ResMap.getMap(MapType.HOME);
         BaseRoom curRoom = (BaseRoom) ChUtil.get(mUser.getChannel(), ChUtil.KEY_ROOM);
         // xóa khỏi room cũ
         Player player = mUser.getPlayer();
@@ -187,7 +183,7 @@ public class BattleHandler extends AHandler implements Serializable {
         int channelId = 1;
         BaseRoom room = null;
         while (!ok) {
-            String keyRoom = CfgBattle.getKeyRoom(mUser, RoomType.HOME.value, 0, 1);
+            String keyRoom = CfgBattle.getKeyRoom(mUser, MapType.HOME.value, 0, 1);
             room = (BaseRoom) TaskMonitor.getInstance().getRoom(keyRoom);
             if (room == null) { // chưa có room
                 List<Character> players = new ArrayList<>();
@@ -208,11 +204,11 @@ public class BattleHandler extends AHandler implements Serializable {
         ChUtil.set(mUser.getChannel(), ChUtil.KEY_ROOM, room);
         mUser.setRoomChanelId(channelId);
         // tra ve id teleport next
-        Util.sendProtoData(mUser.getChannel(), CfgBattle.genInitMap(RoomType.HOME.value, 0, channelId, popupType), INIT_MAP);
+        Util.sendProtoData(mUser.getChannel(), CfgBattle.genInitMap(MapType.HOME.value, channelId, popupType), INIT_MAP);
         mUser.sendNotify();
     }
 
-   // public void initBoss() {
+    // public void initBoss() {
 //        List<Long> inputs = getInputALong();
 //        int type = Math.toIntExact(inputs.get(0));
 //        int mode = Math.toIntExact(inputs.get(1));
@@ -257,7 +253,7 @@ public class BattleHandler extends AHandler implements Serializable {
 //        ChUtil.set(channel, ChUtil.KEY_ROOM, room);
 //        // tra ve id teleport next
 //        addResponse(CfgBattle.genInitMap(bossType.value, 0, mode, PopupType.NULL));
-   // }
+    // }
 
 //    public void smartBoss() {
 //        // todo check open
@@ -523,12 +519,12 @@ public class BattleHandler extends AHandler implements Serializable {
             return;
         }
 
-        RoomType roomType = RoomType.get(room.getRoomTypeId());
-        if (!roomType.allowChangeChanel) {
+        MapType mapType = MapType.get(room.getRoomTypeId());
+        if (!mapType.allowChangeChanel) {
             addErrResponse(getLang(Lang.err_change_chanel));
             return;
         }
-        String keyRoom = CfgBattle.getKeyRoom(mUser, room.getRoomTypeId(), room.getSubId(), inputChanel);
+        String keyRoom = CfgBattle.getKeyRoom(mUser, room.getRoomTypeId(), inputChanel);
         BaseRoom curRoom = (BaseRoom) ChUtil.get(mUser.getChannel(), ChUtil.KEY_ROOM);
         if (curRoom != null && curRoom.getKeyRoom().equals(keyRoom)) {
             return;
@@ -547,7 +543,7 @@ public class BattleHandler extends AHandler implements Serializable {
         if (room == null) {  // tao room moi
             List<Character> players = new ArrayList<>();
             players.add(player);
-            switch (RoomType.get(curRoom.getRoomTypeId())) {
+            switch (MapType.get(curRoom.getRoomTypeId())) {
                 default:
                     room = new DefaultRoom(curRoom.getMapInfo(), players, keyRoom);
                     break;
@@ -555,7 +551,7 @@ public class BattleHandler extends AHandler implements Serializable {
             TaskMonitor.getInstance().addRoom(room);
         } else {
             // check số lượng người trong room
-            if (room.getAPlayer().size() > roomType.maxPlayer) {
+            if (room.getAPlayer().size() > mapType.maxPlayer) {
                 addErrResponse(getLang(Lang.err_full_player));
                 return;
             }
@@ -565,9 +561,9 @@ public class BattleHandler extends AHandler implements Serializable {
         ChUtil.set(mUser.getChannel(), ChUtil.KEY_ROOM, room);
         addResponse(null);
         mUser.setRoomChanelId(inputChanel);
-        if (roomType == RoomType.HOME) mUser.sendNotify();
+        if (mapType == MapType.HOME) mUser.sendNotify();
         // tra ve id teleport next
-        addResponse(INIT_MAP, CfgBattle.genInitMap(room.getRoomTypeId(), room.getSubId(), inputChanel, PopupType.NULL));
+        addResponse(INIT_MAP, CfgBattle.genInitMap(room.getRoomTypeId(), inputChanel, PopupType.NULL));
     }
 
 }

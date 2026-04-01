@@ -196,21 +196,21 @@ public class UserDataEntity implements Serializable {
         return dataCampaign == null ? List.of(1, 0) : dataCampaign;
     }
 
-    public List<Integer> getCampaignReward() {
-        List<Integer> data = GsonUtil.strToListInt(campaignReward);
-        boolean update = false;
-        while (data.size() < ResMap.maxMapCampaign) {
-            data.add(0);
-            update = true;
-        }
-        if (update) {
-            if (update(List.of("campaign_reward", StringHelper.toDBString(data)))) {
-                campaignReward = data.toString();
-            }
-        }
-
-        return data;
-    }
+//    public List<Integer> getCampaignReward() {
+//        List<Integer> data = GsonUtil.strToListInt(campaignReward);
+//        boolean update = false;
+//        while (data.size() < ResMap.maxMapCampaign) {
+//            data.add(0);
+//            update = true;
+//        }
+//        if (update) {
+//            if (update(List.of("campaign_reward", StringHelper.toDBString(data)))) {
+//                campaignReward = data.toString();
+//            }
+//        }
+//
+//        return data;
+//    }
 
     public void addCampaignNormal(int mapId, int numAdd) {
         List<Integer> data = getCampaign();

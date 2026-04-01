@@ -32,9 +32,7 @@ public class AppInit {
             if (is == null) {
                 throw new IllegalStateException("Cannot find resource: source/Map.json");
             }
-            WorldStaticStore store = WorldStaticStore.load(is);
-            var cells = store.getCellsInChunk(0, 0);
-            System.out.println("Chunk(0,0) cell count = " + cells.size());
+           WorldStaticStore.load(is);
         }
     }
 

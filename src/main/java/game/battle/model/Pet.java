@@ -1,7 +1,5 @@
 package game.battle.model;
 
-import game.battle.object.Coroutine;
-import game.battle.object.PanelMap;
 import game.battle.object.Point;
 import game.battle.object.Pos;
 import game.battle.type.CharacterType;
@@ -43,8 +41,8 @@ public class Pet extends Character implements Serializable {
         pb.setIsAdd(true);
         pb.setPos(pos.toProto());
         pb.setDirection(direction.toProto());
-        pb.setBotLeft(owner.panelMap.botLeft.toProto());
-        pb.setTopRight(owner.panelMap.topRight.toProto());
+        pb.setBotLeft(owner.panelMap.getBotLeftP().toProto());
+        pb.setTopRight(owner.panelMap.getTopRightP().toProto());
         pb.setTeamId(teamId);
         pb.addAvatar(model);
         pb.setOwnerId(owner.id);

@@ -1,40 +1,15 @@
 package game.object;
 
-import game.battle.object.Pos;
-
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapData implements Serializable {
-    List<Float> map;
-    List<Integer> teleports;
+    public List<CellDto> cells = new ArrayList<>();
 
-    public Pos getBotLeft() {
-        return new Pos(map.get(0), map.get(1));
-    }
-
-    public Pos getBotRight() {
-        return new Pos(map.get(2), map.get(1));
-    }
-
-    public Pos getTopLeft() {
-        return new Pos(map.get(0), map.get(3));
-    }
-
-    public Pos getTopCenter() {
-        return new Pos(0, map.get(3));
-    }
-
-    public Pos getBotCenter() {
-        return new Pos(0, map.get(1));
-    }
-
-
-    public Pos getTopRight() {
-        return new Pos(map.get(2), map.get(3));
-    }
-
-    public static void main(String[] args) {
-        System.out.println(System.currentTimeMillis());
+    public static class CellDto {
+        public int x;
+        public int y;
+        public int type;
     }
 }

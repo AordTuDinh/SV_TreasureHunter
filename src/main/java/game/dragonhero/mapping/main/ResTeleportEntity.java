@@ -1,7 +1,7 @@
 package game.dragonhero.mapping.main;
 
 import game.battle.object.Pos;
-import game.config.aEnum.RoomType;
+import game.config.aEnum.MapType;
 import game.dragonhero.service.resource.ResTeleport;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,8 +18,6 @@ public class ResTeleportEntity extends BaseEntity { // Đi từ map->nextId(id c
     @Id
     int id;
     int nextId, map; // map : curMap, next : đi đến map nào
-    @Getter
-    int mapId;
     String playerPos, pos;
     @Getter
     int enable;
@@ -36,12 +34,12 @@ public class ResTeleportEntity extends BaseEntity { // Đi từ map->nextId(id c
         }
     }
 
-    public RoomType getNextMap() {
-        return RoomType.get(getNext().map);
+    public MapType getNextMap() {
+        return MapType.get(getNext().map);
     }
 
-    public RoomType getMap() {
-        return RoomType.get(map);
+    public MapType getMap() {
+        return MapType.get(map);
     }
 
     public ResTeleportEntity getNext() {

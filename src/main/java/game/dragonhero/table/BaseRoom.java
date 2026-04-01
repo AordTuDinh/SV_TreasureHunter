@@ -1,6 +1,5 @@
 package game.dragonhero.table;
 
-import com.google.gson.Gson;
 import com.google.protobuf.AbstractMessage;
 import game.battle.model.Character;
 import game.battle.model.Pet;
@@ -9,9 +8,9 @@ import game.battle.object.*;
 import game.battle.type.RoomState;
 import game.config.CfgServer;
 import game.battle.type.StateType;
-import game.config.aEnum.RoomType;
+import game.config.aEnum.MapType;
 import game.dragonhero.controller.AHandler;
-import game.dragonhero.mapping.main.BaseMap;
+import game.dragonhero.mapping.main.ResMapEntity;
 import game.dragonhero.server.Constans;
 import game.dragonhero.server.IAction;
 import game.object.MyUser;
@@ -41,14 +40,14 @@ public abstract class BaseRoom extends MonoRoom {
     List<Character> aEnemy = new ArrayList<>();
     @Getter
     @Setter
-    BaseMap mapInfo;
+    ResMapEntity mapInfo;
     int idNext = 0;
     @Getter
     boolean allowReviveEnemy;
     @Getter
     boolean isBattleRoom;
 
-    public BaseRoom(BaseMap mapInfo, List<Character> aPlayer, String keyRoom, boolean allowReviveEnemy) {
+    public BaseRoom(ResMapEntity mapInfo, List<Character> aPlayer, String keyRoom, boolean allowReviveEnemy) {
         super(keyRoom);
         this.idNext = 0;
         this.mapInfo = mapInfo;
@@ -64,7 +63,6 @@ public abstract class BaseRoom extends MonoRoom {
         }
         startInit();
         this.allowReviveEnemy = allowReviveEnemy;
-        this.isBattleRoom = getSubId() > 0;
     }
 
     protected void startInit() {
@@ -102,7 +100,7 @@ public abstract class BaseRoom extends MonoRoom {
     }
 
     public boolean isMaxPlayer() {
-        return aPlayer.size() >= roomType.maxPlayer;
+        return aPlayer.size() >= mapType.maxPlayer;
     }
 
     protected byte[] genTableState() {
@@ -196,7 +194,7 @@ public abstract class BaseRoom extends MonoRoom {
 
 
     public boolean allowChangeChanel() {
-        return roomType.allowChangeChanel;
+        return mapType.allowChangeChanel;
     }
 
     public void handleClientInput(Player player, NInput input) {
@@ -318,8 +316,7 @@ public abstract class BaseRoom extends MonoRoom {
         if (roomState != RoomState.ACTIVE && roomState != RoomState.PAUSE) return;
         aPlayer.add(player);
         player.setRoom(this);
-        PanelMap panel = new PanelMap(mapInfo.getMapData());
-        player.setPanelMap(panel);
+        player.setPanelMap(mapInfo);
         aProtoAdd.add(player.toProtoAdd());
         Pet pet = player.getPet();
         if (pet != null) {
@@ -370,16 +367,12 @@ public abstract class BaseRoom extends MonoRoom {
         return Integer.parseInt(keys[1]);
     }
 
-    public RoomType getRoomType() { // = id map
-        return RoomType.get(Integer.parseInt(keys[1]));
-    }
-
-    public int getSubId() {
-        return Integer.parseInt(keys[2]);
+    public MapType getRoomType() { // = id map
+        return MapType.get(Integer.parseInt(keys[1]));
     }
 
     public int getChannelId() {
-        return Integer.parseInt(keys[3]);
+        return Integer.parseInt(keys[2]);
     }
 
     public void protoRoomState(StateType status, int size, List<Long> aInfo) {

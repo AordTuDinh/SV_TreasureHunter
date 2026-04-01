@@ -6,6 +6,7 @@ import game.battle.model.Player;
 import game.battle.type.GeometryType;
 import game.battle.type.RoomState;
 import game.dragonhero.BattleConfig;
+import game.dragonhero.mapping.main.ResMapEntity;
 import game.dragonhero.table.BaseBattleRoom;
 import game.object.Geometry;
 import lombok.NoArgsConstructor;
@@ -37,24 +38,24 @@ public class GameCore {
     }
 
 
-    public static Pos checkWall(PanelMap map, Pos move) {
-        if (move.x > map.getTopRight().x - BattleConfig.P_Width / 2)
-            move.x = map.getTopRight().x - BattleConfig.P_Width / 2;
-        if (move.x < map.getBotLeft().x + BattleConfig.P_Width / 2)
-            move.x = map.getBotLeft().x + BattleConfig.P_Width / 2;
-        if (move.y > map.getTopRight().y - BattleConfig.P_Height) move.y = map.getTopRight().y - BattleConfig.P_Height;
-        if (move.y < map.getBotLeft().y) move.y = map.getBotLeft().y;
+    public static Pos checkWall(ResMapEntity map, Pos move) {
+        if (move.x > map.getTopRightP().x - BattleConfig.P_Width / 2)
+            move.x = map.getTopRightP().x - BattleConfig.P_Width / 2;
+        if (move.x < map.getBotLeftP().x + BattleConfig.P_Width / 2)
+            move.x = map.getBotLeftP().x + BattleConfig.P_Width / 2;
+        if (move.y > map.getTopRightP().y - BattleConfig.P_Height) move.y = map.getTopRightP().y - BattleConfig.P_Height;
+        if (move.y < map.getBotLeftP().y) move.y = map.getBotLeftP().y;
         return move;
     }
 
-    public static Pos checkWall2(PanelMap map, Pos addPos, Pos curPos) {
+    public static Pos checkWall2(ResMapEntity map, Pos addPos, Pos curPos) {
         Pos move = new Pos(curPos.x + addPos.x, curPos.y + addPos.y);
-        if (move.x > map.getTopRight().x - BattleConfig.P_Width / 2)
-            move.x = map.getTopRight().x - BattleConfig.P_Width / 2;
-        if (move.x < map.getBotLeft().x + BattleConfig.P_Width / 2)
-            move.x = map.getBotLeft().x + BattleConfig.P_Width / 2;
-        if (move.y > map.getTopRight().y - BattleConfig.P_Height) move.y = map.getTopRight().y - BattleConfig.P_Height;
-        if (move.y < map.getBotLeft().y) move.y = map.getBotLeft().y;
+        if (move.x > map.getTopRightP().x - BattleConfig.P_Width / 2)
+            move.x = map.getTopRightP().x - BattleConfig.P_Width / 2;
+        if (move.x < map.getBotLeftP().x + BattleConfig.P_Width / 2)
+            move.x = map.getBotLeftP().x + BattleConfig.P_Width / 2;
+        if (move.y > map.getTopRightP().y - BattleConfig.P_Height) move.y = map.getTopRightP().y - BattleConfig.P_Height;
+        if (move.y < map.getBotLeftP().y) move.y = map.getBotLeftP().y;
         return move;
     }
 

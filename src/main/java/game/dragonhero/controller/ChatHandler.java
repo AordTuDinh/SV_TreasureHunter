@@ -69,7 +69,7 @@ public class ChatHandler extends AHandler {
                 case IAction.CHAT_BLOCK -> chatBlock();
                 case IAction.CHAT_UN_BLOCK -> chatUnBlock();
                 case IAction.CHAT_SETTING -> chatSetting();
-                case IAction.CHAT_FRIEND_NOTIFY -> chatNotifyList();
+               // case IAction.CHAT_FRIEND_NOTIFY -> chatNotifyList();
             }
         } catch (Exception ex) {
             Logs.error(ex);

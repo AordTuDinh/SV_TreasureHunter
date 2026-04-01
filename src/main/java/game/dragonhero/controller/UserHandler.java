@@ -11,16 +11,15 @@ import game.config.lang.Lang;
 import game.dragonhero.mapping.*;
 import game.dragonhero.mapping.main.*;
 import game.dragonhero.server.IAction;
-import game.dragonhero.service.Services;
 import game.dragonhero.service.resource.*;
 import game.dragonhero.service.user.Actions;
 import game.dragonhero.service.user.Bonus;
+import game.dragonhero.table.BaseBattleRoom;
 import game.dragonhero.table.BaseRoom;
 import game.dragonhero.table.DefaultRoom;
 import game.dragonhero.task.dbcache.MailCreatorCache;
 import game.monitor.Online;
 import game.monitor.TopMonitor;
-import game.object.DataQuest;
 import game.object.MyUser;
 import game.object.TaskMonitor;
 import game.protocol.CommonProto;
@@ -44,7 +43,7 @@ public class UserHandler extends AHandler {
         List<Integer> actions = Arrays.asList(CREATE_NAME, USER_INFO, DAME_SKIN_EQUIP, CHANGE_LANG,
                 CHAT_FRAME_EQUIP, USE_GIFT_CODE, TRIAL_EQUIP, BUFF_INFO, RANKING_STATUS, TUTORIAL_STATUS,
                 TUTORIAL_QUEST_RECEIVE, TUTORIAL_GO_TO, TUTORIAL_QUEST_STATUS, RANKING_INFO, SEND_MAIL,
-                CHANGE_INTRO, HELP_VALUE, CHANGE_NAME,  AVATAR_LIST, AVATAR_CHOOSE, USER_DATA_INFO, BAG_STATUS,
+                CHANGE_INTRO, HELP_VALUE, CHANGE_NAME, AVATAR_LIST, AVATAR_CHOOSE, USER_DATA_INFO, BAG_STATUS,
                 BAG_BUY_SLOT, UPDATE_NEXT_DAY);
         actions.forEach(action -> mHandler.put(action, this));
     }
@@ -102,7 +101,7 @@ public class UserHandler extends AHandler {
     }
 
     private void changeLang(String inputString) {
-        String lang =inputString.toLowerCase() ;
+        String lang = inputString.toLowerCase();
         System.out.println("lang ========== " + lang);
         if (lang.equals(user.getLang())) {
             addResponseError();
@@ -273,13 +272,13 @@ public class UserHandler extends AHandler {
             addResponse(CommonProto.getCommonVectorProto(null, Arrays.asList(help.getK(), help.getEn())));
         } else if (Lang.instance(mUser).getLocale().equalsIgnoreCase(LOCALE_VI)) {
             addResponse(CommonProto.getCommonVectorProto(null, Arrays.asList(help.getK(), help.getVi())));
-        }  else if (Lang.instance(mUser).getLocale().equalsIgnoreCase(LOCALE_RU)) {
+        } else if (Lang.instance(mUser).getLocale().equalsIgnoreCase(LOCALE_RU)) {
             addResponse(CommonProto.getCommonVectorProto(null, Arrays.asList(help.getK(), help.getRu())));
         } else if (Lang.instance(mUser).getLocale().equalsIgnoreCase(LOCALE_KM)) {
             addResponse(CommonProto.getCommonVectorProto(null, Arrays.asList(help.getK(), help.getKm())));
-        }else if (Lang.instance(mUser).getLocale().equalsIgnoreCase(LOCALE_ZH)) {
+        } else if (Lang.instance(mUser).getLocale().equalsIgnoreCase(LOCALE_ZH)) {
             addResponse(CommonProto.getCommonVectorProto(null, Arrays.asList(help.getK(), help.getZh())));
-        }else if (Lang.instance(mUser).getLocale().equalsIgnoreCase(LOCALE_JP)) {
+        } else if (Lang.instance(mUser).getLocale().equalsIgnoreCase(LOCALE_JP)) {
             addResponse(CommonProto.getCommonVectorProto(null, Arrays.asList(help.getK(), help.getJp())));
         } else {
             addResponse(CommonProto.getCommonVectorProto(null, Arrays.asList(k, "")));
@@ -484,9 +483,8 @@ public class UserHandler extends AHandler {
 
     private void tutorialGoTo() {
         List<Long> inputs = getInputALong();
-        RoomType roomType = RoomType.get(inputs.get(0).intValue());
-        int mapId = inputs.get(1).intValue();
-        BaseMap map = ResMap.getMap(roomType, mapId);
+        MapType mapType = MapType.get(inputs.get(0).intValue());
+        ResMapEntity map = ResMap.getMap(mapType);
         Pos posInit = new Pos(inputs.get(2) / 1000, inputs.get(3) / 1000);
         if (map == null) {
             addErrParam();
@@ -496,8 +494,8 @@ public class UserHandler extends AHandler {
             addResponse(LOGIN_REQUIRE, null);
             return;
         }
-        int chanelId =  mUser.getRoomChanelId();
-        String keyRoom = CfgBattle.getKeyRoom(mUser, roomType.value, mapId, chanelId);
+        int chanelId = mUser.getRoomChanelId();
+        String keyRoom = CfgBattle.getKeyRoom(mUser, mapType.value, chanelId);
         BaseRoom curRoom = (BaseRoom) ChUtil.get(channel, ChUtil.KEY_ROOM);
         if (curRoom != null && (curRoom.getKeyRoom().equals(keyRoom) || !curRoom.allowChangeChanel())) {
             if (curRoom.getKeyRoom().equals(keyRoom)) {
@@ -520,14 +518,15 @@ public class UserHandler extends AHandler {
         if (room == null) {  // tao room moi
             List<Character> players = new ArrayList<>();
             players.add(player);
-            switch (roomType) {
+            switch (mapType) {
                 default:
-                    room = new DefaultRoom(map, players, keyRoom);
+                    room = new DefaultRoom(map, players, keyRoom) {
+                    };
                     break;
             }
             TaskMonitor.getInstance().addRoom(room);
         } else { // join vào room có sẵn
-            if (room.getAPlayer().size() > roomType.maxPlayer) {
+            if (room.getAPlayer().size() > mapType.maxPlayer) {
                 addErrResponse(Lang.instance(mUser).get(Lang.err_full_player));
                 return;
             }
@@ -535,7 +534,7 @@ public class UserHandler extends AHandler {
         }
         ChUtil.set(channel, ChUtil.KEY_ROOM, room);
         // tra ve id teleport next
-        addResponse(INIT_MAP, CfgBattle.genInitMap(roomType.value, mapId, mUser.getRoomChanelId(),  PopupType.NULL));
+        addResponse(INIT_MAP, CfgBattle.genInitMap(mapType.value, mUser.getRoomChanelId(), PopupType.NULL));
     }
 
     private void dameSkinEquip() {

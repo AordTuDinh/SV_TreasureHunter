@@ -5,7 +5,7 @@ import game.battle.object.Coroutine;
 import game.battle.object.GameCore;
 import game.battle.type.RoomState;
 import game.config.CfgBattle;
-import game.dragonhero.mapping.main.BaseMap;
+import game.dragonhero.mapping.main.ResMapEntity;
 import game.object.TaskMonitor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,7 +34,7 @@ public abstract class BaseBattleRoom extends BaseRoom {
     GameCore controller;
 
 
-    public BaseBattleRoom(BaseMap mapInfo, List<Character> aPlayer, String keyRoom, boolean allowReviveEnemy) {
+    public BaseBattleRoom(ResMapEntity mapInfo, List<Character> aPlayer, String keyRoom, boolean allowReviveEnemy) {
         super(mapInfo, aPlayer, keyRoom, allowReviveEnemy);
     }
 

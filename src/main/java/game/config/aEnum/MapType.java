@@ -3,7 +3,7 @@ package game.config.aEnum;
 import java.util.HashMap;
 import java.util.Map;
 
-public enum RoomType {
+public enum MapType {
     NULL(-1, false, 0),
     HOME(0, true, 100),
     ;
@@ -12,22 +12,22 @@ public enum RoomType {
     public final boolean allowChangeChanel;// cho phép đổi kênh không
     public final int maxPlayer;
 
-    RoomType(int value, boolean allowChangeChanel, int maxPlayer) {
+    MapType(int value, boolean allowChangeChanel, int maxPlayer) {
         this.value = value;
         this.allowChangeChanel = allowChangeChanel;
         this.maxPlayer = maxPlayer;
     }
 
     // lookup
-    static Map<Integer, RoomType> lookup = new HashMap<>();
+    static Map<Integer, MapType> lookup = new HashMap<>();
 
     static {
-        for (RoomType itemType : values()) {
+        for (MapType itemType : values()) {
             lookup.put(itemType.value, itemType);
         }
     }
 
-    public static RoomType get(int type) {
+    public static MapType get(int type) {
         return lookup.get(type);
     }
 }

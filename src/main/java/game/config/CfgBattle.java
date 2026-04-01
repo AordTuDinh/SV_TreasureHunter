@@ -2,15 +2,11 @@ package game.config;
 
 import com.google.gson.Gson;
 import game.config.aEnum.PopupType;
-import game.config.aEnum.RoomType;
 import game.dragonhero.mapping.UserEntity;
-import game.dragonhero.table.BaseRoom;
 import game.object.MyUser;
 import game.protocol.CommonProto;
-import io.netty.channel.Channel;
 import net.sf.json.JSONObject;
 import ozudo.base.helper.ChUtil;
-import ozudo.base.helper.Util;
 import protocol.Pbmethod;
 
 import java.util.List;
@@ -43,8 +39,8 @@ public class CfgBattle {
         return null;
     }
 
-    public static Pbmethod.CommonVector genInitMap(int roomType, int subId, int channelId, PopupType popupType) {
-        return CommonProto.getCommonIntVector(List.of(roomType, subId, channelId, popupType.value)) ;
+    public static Pbmethod.CommonVector genInitMap(int roomType, int channelId, PopupType popupType) {
+        return CommonProto.getCommonIntVector(List.of(roomType, channelId, popupType.value));
     }
 
 //    public static void removeUserToRoom(Channel channel, String keyRoom, int userId) {
@@ -59,30 +55,30 @@ public class CfgBattle {
 
     private static final ConcurrentHashMap<String, Lock> keyLocks = new ConcurrentHashMap<>();
 
-    public static String getKeyRoom(MyUser mUser, int roomType, int subId, int... channel) {
+    public static String getKeyRoom(MyUser mUser, int roomType, int... channel) {
         UserEntity u = mUser.getUser();
         int num = (channel.length > 0 ? channel[0] : 0);
         // key logic để lấy lock (nhóm phòng)
-        String lockKey = buildLockKey(roomType, subId, num);
+        String lockKey = buildLockKey(roomType, num);
 
         // lấy lock riêng cho nhóm này
         Lock lock = keyLocks.computeIfAbsent(lockKey, k -> new ReentrantLock());
         lock.lock();
         try {
             // tạo key room cuối cùng
-            return buildRoomKey(roomType, subId, num, u.getServer());
+            return buildRoomKey(roomType, num, u.getServer());
         } finally {
             lock.unlock();
         }
     }
 
-    private static String buildLockKey(int roomType, int subId, int num) {
-        return roomType + "_" + subId + "_" + num;
+    private static String buildLockKey(int roomType, int num) {
+        return roomType + "_" + num;
     }
 
-    private static String buildRoomKey(int roomType, int subId, int num, int server) {
+    private static String buildRoomKey(int roomType, int num, int server) {
         // format: room_roomType_subId_num_server
-        return ChUtil.KEY_ROOM + "_" + roomType + "_" + subId + "_" + num + "_" + server;
+        return ChUtil.KEY_ROOM + "_" + roomType + "_" + num + "_" + server;
     }
 
 

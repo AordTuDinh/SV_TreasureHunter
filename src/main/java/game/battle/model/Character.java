@@ -4,24 +4,19 @@ import game.battle.calculate.IMath;
 import game.battle.calculate.MathLab;
 import game.battle.object.*;
 import game.battle.type.*;
-import game.config.CfgBattle;
 import game.config.aEnum.FactionType;
-import game.config.aEnum.RankType;
-import game.config.aEnum.RoomType;
 import game.dragonhero.BattleConfig;
-import game.dragonhero.mapping.main.BaseMap;
+import game.dragonhero.mapping.main.ResMapEntity;
 import game.dragonhero.server.Constans;
 import game.dragonhero.table.BaseBattleRoom;
 import game.dragonhero.table.BaseRoom;
 import game.object.PointBuff;
 import lombok.Data;
 import ozudo.base.helper.DateTime;
-import ozudo.base.helper.GsonUtil;
 import ozudo.base.helper.NumberUtil;
 import protocol.Pbmethod;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Data
 public abstract class Character extends Mono {
@@ -39,7 +34,7 @@ public abstract class Character extends Mono {
     CharacterType type;
     // in battle
     Pos instancePos;  // noi character sinh ra
-    PanelMap panelMap;//bot left + top right
+    ResMapEntity panelMap;//bot left + top right
     long timeDie, timeRevive;
     boolean hasBonusKillMe;
     Character targetAttack;
@@ -182,10 +177,6 @@ public abstract class Character extends Mono {
         }
     }
 
-    public BaseMap getBaseMap() {
-        return room.getMapInfo();
-    }
-
     public Player getPlayer() {
         return (Player) this;
     }
@@ -297,19 +288,19 @@ public abstract class Character extends Mono {
     }
 
     public float distionTop() {
-        return Math.abs(room.getMapInfo().getMapData().getTopRight().y - pos.y);
+        return Math.abs(room.getMapInfo().getTopRightP().y - pos.y);
     }
 
     public float distionBot() {
-        return Math.abs(room.getMapInfo().getMapData().getBotLeft().y - pos.y);
+        return Math.abs(room.getMapInfo().getBotLeftP().y - pos.y);
     }
 
     public float distionLeft() {
-        return Math.abs(room.getMapInfo().getMapData().getBotLeft().x - pos.x);
+        return Math.abs(room.getMapInfo().getBotLeftP().x - pos.x);
     }
 
     public float distionRight() {
-        return Math.abs(room.getMapInfo().getMapData().getTopRight().x - pos.x);
+        return Math.abs(room.getMapInfo().getTopRightP().x - pos.x);
     }
 
     public boolean isLikeFace(Pos newDirection) { // check lật mặt
