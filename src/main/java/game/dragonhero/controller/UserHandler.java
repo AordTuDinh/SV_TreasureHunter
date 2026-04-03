@@ -14,9 +14,8 @@ import game.dragonhero.server.IAction;
 import game.dragonhero.service.resource.*;
 import game.dragonhero.service.user.Actions;
 import game.dragonhero.service.user.Bonus;
-import game.dragonhero.table.BaseBattleRoom;
 import game.dragonhero.table.BaseRoom;
-import game.dragonhero.table.DefaultRoom;
+import game.dragonhero.table.HomeRoom;
 import game.dragonhero.task.dbcache.MailCreatorCache;
 import game.monitor.Online;
 import game.monitor.TopMonitor;
@@ -87,7 +86,7 @@ public class UserHandler extends AHandler {
                 case TUTORIAL_STATUS -> tutorial();
                 case TUTORIAL_QUEST_STATUS -> tutorialQuestStatus(mUser, this);
                 case TUTORIAL_QUEST_RECEIVE -> tutorialQuestReceive();
-                case TUTORIAL_GO_TO -> tutorialGoTo();
+//                case TUTORIAL_GO_TO -> tutorialGoTo();
                 case DAME_SKIN_EQUIP -> dameSkinEquip();
                 case CHAT_FRAME_EQUIP -> chatFrameEquip();
                 case TRIAL_EQUIP -> trialEquip();
@@ -429,7 +428,7 @@ public class UserHandler extends AHandler {
 
     void updateNextDay() {
         Pbmethod.ListCommonVector.Builder pb = Pbmethod.ListCommonVector.newBuilder();
-        pb.addAVector(getCommonVector(CfgServer.getSeason()));
+        pb.addAVector(getCommonVector(1));
         List<UserItemEntity> uItem = mUser.getResources().getMItem().values().stream().filter(item -> item.expired()).collect(Collectors.toList());
         List<Long> bonusExpire = new ArrayList<>();
         for (int i = 0; i < uItem.size(); i++) {
@@ -481,61 +480,63 @@ public class UserHandler extends AHandler {
 
     }
 
-    private void tutorialGoTo() {
-        List<Long> inputs = getInputALong();
-        MapType mapType = MapType.get(inputs.get(0).intValue());
-        ResMapEntity map = ResMap.getMap(mapType);
-        Pos posInit = new Pos(inputs.get(2) / 1000, inputs.get(3) / 1000);
-        if (map == null) {
-            addErrParam();
-            return;
-        }
-        if (mUser == null) {
-            addResponse(LOGIN_REQUIRE, null);
-            return;
-        }
-        int chanelId = mUser.getRoomChanelId();
-        String keyRoom = CfgBattle.getKeyRoom(mUser, mapType.value, chanelId);
-        BaseRoom curRoom = (BaseRoom) ChUtil.get(channel, ChUtil.KEY_ROOM);
-        if (curRoom != null && (curRoom.getKeyRoom().equals(keyRoom) || !curRoom.allowChangeChanel())) {
-            if (curRoom.getKeyRoom().equals(keyRoom)) {
-                addErrResponse(getLang(Lang.err_in_room_already));
-                return;
-            }
-            if (!curRoom.allowChangeChanel()) {
-                addErrResponse(getLang(Lang.err_unauthorized));
-                return;
-            }
-        }
-        // xóa khỏi room cũ
-        Player player = mUser.getPlayer();
-        if (curRoom != null && curRoom.hasPlayer(player.getId())) {
-            curRoom.removePlayer(player.getId());
-        }
-        // check có room hay chưa, có rồi thì join
-        BaseRoom room = (BaseRoom) TaskMonitor.getInstance().getRoom(keyRoom);
-        player.clearDataForChangeRoom(posInit);
-        if (room == null) {  // tao room moi
-            List<Character> players = new ArrayList<>();
-            players.add(player);
-            switch (mapType) {
-                default:
-                    room = new DefaultRoom(map, players, keyRoom) {
-                    };
-                    break;
-            }
-            TaskMonitor.getInstance().addRoom(room);
-        } else { // join vào room có sẵn
-            if (room.getAPlayer().size() > mapType.maxPlayer) {
-                addErrResponse(Lang.instance(mUser).get(Lang.err_full_player));
-                return;
-            }
-            room.addPlayer(player);
-        }
-        ChUtil.set(channel, ChUtil.KEY_ROOM, room);
-        // tra ve id teleport next
-        addResponse(INIT_MAP, CfgBattle.genInitMap(mapType.value, mUser.getRoomChanelId(), PopupType.NULL));
-    }
+//    private void tutorialGoTo() {
+//        List<Long> inputs = getInputALong();
+//        MapType mapType = MapType.get(inputs.get(0).intValue());
+//        ResMapEntity map = ResMap.getMap(mapType);
+//        Pos posInit = new Pos(inputs.get(2) / 1000, inputs.get(3) / 1000);
+//        if (map == null) {
+//            addErrParam();
+//            return;
+//        }
+//        if (mUser == null) {
+//            addResponse(LOGIN_REQUIRE, null);
+//            return;
+//        }
+//        int chanelId = mUser.getRoomChanelId();
+//        String keyRoom = CfgBattle.getKeyRoom(mUser, mapType.value, chanelId);
+//        BaseRoom curRoom = (BaseRoom) ChUtil.get(channel, ChUtil.KEY_ROOM);
+//        if (curRoom != null && (curRoom.getKeyRoom().equals(keyRoom) || !curRoom.allowChangeChanel())) {
+//            if (curRoom.getKeyRoom().equals(keyRoom)) {
+//                addErrResponse(getLang(Lang.err_in_room_already));
+//                return;
+//            }
+//            if (!curRoom.allowChangeChanel()) {
+//                addErrResponse(getLang(Lang.err_unauthorized));
+//                return;
+//            }
+//        }
+//
+//
+//        // xóa khỏi room cũ
+//        Player player = mUser.getPlayer();
+//        if (curRoom != null && curRoom.hasPlayer(player.getId())) {
+//            curRoom.removePlayer(player.getId());
+//        }
+//        // check có room hay chưa, có rồi thì join
+//        BaseRoom room = (BaseRoom) TaskMonitor.getInstance().getRoom(keyRoom);
+//        player.clearDataForChangeRoom(posInit);
+//        if (room == null) {  // tao room moi
+//            List<Character> players = new ArrayList<>();
+//            players.add(player);
+//            switch (mapType) {
+//                default:
+//                    room = new HomeRoom(map, players, keyRoom) {
+//                    };
+//                    break;
+//            }
+//            TaskMonitor.getInstance().addRoom(room);
+//        } else { // join vào room có sẵn
+//            if (room.getAPlayer().size() > mapType.maxPlayer) {
+//                addErrResponse(Lang.instance(mUser).get(Lang.err_full_player));
+//                return;
+//            }
+//            room.addPlayer(player);
+//        }
+//        ChUtil.set(channel, ChUtil.KEY_ROOM, room);
+//        // tra ve id teleport next
+//        addResponse(INIT_MAP, CfgBattle.genInitMap(mapType.value, mUser.getRoomChanelId(), PopupType.NULL));
+//    }
 
     private void dameSkinEquip() {
         int skinId = getInputInt();

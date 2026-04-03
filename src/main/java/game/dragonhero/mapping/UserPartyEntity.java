@@ -47,26 +47,26 @@ public class UserPartyEntity {
         return GsonUtil.strToListInt(members);
     }
 
-    public synchronized void addChannel(MyUser myUser){
-        if(channels==null) channels = new ArrayList<>();
-        if(!channels.contains(myUser)){
+    public synchronized void addChannel(MyUser myUser) {
+        if (channels == null) channels = new ArrayList<>();
+        if (!channels.contains(myUser)) {
             channels.add(myUser);
         }
     }
 
-    public void addChannelAttackBoss(MyUser myUser){
-        if(!channelAttackBoss.contains(myUser)){
+    public void addChannelAttackBoss(MyUser myUser) {
+        if (!channelAttackBoss.contains(myUser)) {
             channelAttackBoss.add(myUser);
         }
     }
 
-    public void leaveChannelAttackBoss(MyUser myUser){
+    public void leaveChannelAttackBoss(MyUser myUser) {
         channelAttackBoss.remove(myUser);
     }
 
-    public List<MyUser> getChannelsAttackBoss(){
-        for (int i = 0; i <channelAttackBoss.size() ; i++) {
-            if(channelAttackBoss.get(i)==null || !channelAttackBoss.get(i).getChannel().isOpen()){
+    public List<MyUser> getChannelsAttackBoss() {
+        for (int i = 0; i < channelAttackBoss.size(); i++) {
+            if (channelAttackBoss.get(i) == null || !channelAttackBoss.get(i).getChannel().isOpen()) {
                 channelAttackBoss.remove(channelAttackBoss.get(i));
             }
         }
@@ -78,11 +78,9 @@ public class UserPartyEntity {
 
         if (userShare == null ||
                 userShare.getPlayer() == null ||
-                userShare.getPlayer().getRoom() == null ||
-                userShare.getPlayer().getRoom().getKeyRoom() == null)
+                userShare.getPlayer().getRoom() == null)
             return;
 
-        String roomKey = userShare.getPlayer().getRoom().getKeyRoom();
 
         List<MyUser> shared = channels.stream()
                 .filter(c ->
@@ -90,8 +88,7 @@ public class UserPartyEntity {
                                 c != null &&
                                 c.getPlayer() != null &&
                                 c.getPlayer().getRoom() != null &&
-                                roomKey.equals(c.getPlayer().getRoom().getKeyRoom())
-                )
+                                userShare.getPlayer().getRoom().getBattleId() == c.getPlayer().getRoom().getBattleId())
                 .toList();
 
         if (shared.isEmpty()) return;

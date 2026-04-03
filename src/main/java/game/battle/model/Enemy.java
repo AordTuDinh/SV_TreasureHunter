@@ -2,16 +2,13 @@ package game.battle.model;
 
 import game.battle.object.*;
 import game.battle.type.AttackType;
-import game.battle.type.CharacterType;
 import game.battle.type.RoomState;
 import game.battle.type.StateType;
 import game.config.CfgEventDrop;
 import game.config.aEnum.DetailActionType;
-import game.config.aEnum.FactionType;
 import game.dragonhero.BattleConfig;
 import game.dragonhero.server.Constans;
 import game.dragonhero.service.user.Bonus;
-import game.dragonhero.table.BaseBattleRoom;
 import game.object.BonusConfig;
 import lombok.Data;
 import ozudo.base.helper.DateTime;
@@ -20,7 +17,6 @@ import protocol.Pbmethod;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Data
@@ -425,16 +421,16 @@ public class Enemy extends Character implements Serializable {
     Character findTargetForEnemy(float rangeView) {// BattleConfig.M_rangeViewTarget
         int index = 0;
         double min = 99999f;
-        for (int i = 0; i < room.getAPlayer().size(); i++) {
-            if (room.getAPlayer().get(i).isAlive()) {
-                double dis = room.getAPlayer().get(i).getPos().distance(getPos());
-                if (dis < min) {
-                    min = dis;
-                    index = i;
-                }
-            }
-        }
-        if (min <= rangeView) return room.getAPlayer().get(index);
+//        for (int i = 0; i < room.getAPlayer().size(); i++) {
+//            if (room.getAPlayer().get(i).isAlive()) {
+//                double dis = room.getAPlayer().get(i).getPos().distance(getPos());
+//                if (dis < min) {
+//                    min = dis;
+//                    index = i;
+//                }
+//            }
+//        }
+//        if (min <= rangeView) return room.getAPlayer().get(index);
         return null;
     }
 
@@ -463,8 +459,8 @@ public class Enemy extends Character implements Serializable {
         return pbUser.build();
     }
 
-    public Pbmethod.PbUnitAdd.Builder toProtoAdd() {
-        Pbmethod.PbUnitAdd.Builder pbAdd = Pbmethod.PbUnitAdd.newBuilder();
+    public Pbmethod.PbUnit.Builder toProtoAdd() {
+        Pbmethod.PbUnit.Builder pbAdd = Pbmethod.PbUnit.newBuilder();
         pbAdd.setType(Constans.TYPE_MONSTER);
         pbAdd.setId(id);
         pbAdd.addAvatar(model);
@@ -472,8 +468,6 @@ public class Enemy extends Character implements Serializable {
         pbAdd.setRangeAttack(rangeAttack);
         pbAdd.setIsAdd(true);
         pbAdd.setPos(pos.toProto());
-        pbAdd.setBotLeft(panelMap.getBotLeftP().toProto());
-        pbAdd.setTopRight(panelMap.getTopRightP().toProto());
         pbAdd.setDirection(direction.toProto());
         pbAdd.setSpeed((int) point.getMoveSpeed());
         pbAdd.addInfo(type.value);// info[0]= type
@@ -482,7 +476,6 @@ public class Enemy extends Character implements Serializable {
         pbAdd.addInfo(idChatFrame);
         pbAdd.addInfo(idTrial);
         pbAdd.setCharacterInfo(toProtoInfo());
-        pbAdd.setFaction(FactionType.NULL.value);
         return pbAdd;
     }
 }

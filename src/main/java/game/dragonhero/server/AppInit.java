@@ -1,6 +1,5 @@
 package game.dragonhero.server;
 
-import game.battle.core.WorldStaticStore;
 import game.cache.JCache;
 import game.config.CfgServer;
 import org.apache.logging.log4j.core.config.ConfigurationSource;
@@ -23,17 +22,6 @@ public class AppInit {
         initLogs();
         initConfig();
         initDb();
-        initMap();
-    }
-
-    private static void initMap() throws IOException {
-        try (InputStream is = AppInit.class.getClassLoader()
-                .getResourceAsStream("source/Map.json")) {
-            if (is == null) {
-                throw new IllegalStateException("Cannot find resource: source/Map.json");
-            }
-           WorldStaticStore.load(is);
-        }
     }
 
     private static void initLogs() {

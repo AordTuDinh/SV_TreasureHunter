@@ -5,6 +5,8 @@ import game.config.aEnum.MapType;
 import game.dragonhero.mapping.main.*;
 import ozudo.base.database.DBResource;
 
+import javax.persistence.Transient;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +24,7 @@ public class ResMap {
         // map
         List<ResMapEntity> aMap = DBResource.getInstance().getList(CfgServer.DB_MAIN + "res_map", ResMapEntity.class);
         mMap.clear();
+
         aMap.forEach(item -> {
             item.init();
             mMap.put(item.getId(), item);

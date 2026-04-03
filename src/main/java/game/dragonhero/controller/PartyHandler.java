@@ -312,7 +312,7 @@ public class PartyHandler extends AHandler {
             pb.setInfo(getCommonVector(0, uParty.isLeader(userId) ? 1 : 0, 0)); //is online - isLeader - cùng map
         } else { // online
             pb = iUser.getUser().toProto().toBuilder();
-            boolean inMap = iUser.getPlayer().getRoom()!=null&& iUser.getPlayer().getRoom().getKeyRoom().equals(mUser.getPlayer().getRoom().getKeyRoom());
+            boolean inMap = iUser.getPlayer().getRoom()!=null&& iUser.getPlayer().getRoom().getBattleId()==(mUser.getPlayer().getRoom().getBattleId());
             pb.setInfo(getCommonVector(1, uParty.isLeader(userId) ? 1 : 0, inMap ? 1 : 0)); //is online - isLeader - cùng map
         }
         return pb;

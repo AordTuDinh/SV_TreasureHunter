@@ -41,12 +41,7 @@ public class IAction {
     public static final int DEBUG_ERROR = 32;
     public static final int BONUS_TOAST = 33;
     public static final int BONUS_TOAST_POSITIVE = 34;
-    public static final int INIT_BOSS = 35;
     public static final int UPDATE_BONUS_PRIVATE = 36;
-    public static final int INIT_BACK_HOME = 37;
-    public static final int ROOM_INFO = 38;
-    public static final int BONUS_LAND = 39;
-
     //region battle
     public static final int START_GAME = 40;
     public static final int END_GAME = 41;
@@ -63,8 +58,7 @@ public class IAction {
     public static final int TRIAL_EQUIP = 53;
     public static final int USE_GIFT_CODE = 54;
 
-    //
-    public static final int INIT_MAP_BY_TYPE_ID = 60;
+
     public static final int CAMPAIGN_DATA = 61;
     public static final int CAMPAIGN_REWARD = 62;
     public static final int CAMPAIGN_SMART = 63;
@@ -84,10 +78,6 @@ public class IAction {
     //  service user
     public static final int POINT_DATA = 99;
     public static final int USER_DATA_INFO = 100;
-    public static final int GOLD_STAT_STATUS = 101;
-    public static final int GOLD_STAT_UPGRADE = 102;
-    public static final int LEVEL_STAT_STATUS = 103;
-    public static final int LEVEL_STAT_UPGRADE = 104;
     public static final int CREATE_NAME = 105;
     public static final int CHANGE_INTRO = 106;
     public static final int UPDATE_NUM_POINT_LEVEL = 121;
@@ -95,29 +85,10 @@ public class IAction {
     public static final int HELP_VALUE = 181;
     public static final int USER_INFO = 182;
     public static final int UPDATE_NEXT_DAY = 183;
-    //tower
-    public static final int TOWER_STATUS = 184;
-    public static final int TOWER_BUY_TURN = 185;
-    public static final int TOWER_ATTACK = 186;
-    public static final int TOWER_SMART = 187;
-
-    // summon normal
-    public static final int SUMMON_STATUS = 107;
-    public static final int SUMMON_STONE = 108;
-    public static final int SUMMON_REWARD_STONE = 109;
-    // summon special
-    public static final int SUMMON_PIECE = 110;
-    public static final int SUMMON_REWARD_PIECE = 111;
-    public static final int SUMMON_STONE_ADS = 138;
-    public static final int SUMMON_PIECE_ADS = 139;
-
     // mail
     public static final int MAIL_LIST = 112;
     public static final int MAIL_RECEIVE = 113;
     public static final int MAIL_DELETE = 114;
-    public static final int EQUIP_WEAPON = 117;
-    public static final int AUTO_PROMOTE = 118;
-    public static final int WEAPON_INFO = 454;
     // bag
     public static final int BAG_STATUS = 119;
     public static final int BAG_BUY_SLOT = 120;
@@ -198,10 +169,6 @@ public class IAction {
     public static final int CLAN_HONOR_STATUS = 352;
     public static final int CLAN_HONOR_GET_BONUS = 353;
     public static final int CLAN_HONOR = 354;
-    // clan skill
-    public static final int CLAN_SKILL_STATUS = 314;
-    public static final int CLAN_SKILL_UPGRADE = 315;
-    public static final int CLAN_SKILL_RESET = 316;
 
     // Friend
     public static final int FRIEND_STATUS = 330;
@@ -228,16 +195,6 @@ public class IAction {
     public static final int ITEM_EQUIPMENT_SELECT_ACCESSORY = 405;
     public static final int ITEM_EQUIPMENT_UPGRADE_ACCESSORY = 406;
     public static final int ITEM_EQUIPMENT_VIEW_INFO = 407;
-    // Smithy : Lò rèn
-    public static final int SMITHY_STATUS = 410;
-    public static final int SMITHY_CREATE = 411;
-    public static final int SMITHY_DECAY = 412;
-    public static final int SMITHY_UPGRADE = 413;
-    // smithy 2 : npc 2
-    public static final int SMITHY_PIECE_STATUS = 415;
-    public static final int SMITHY_MAKE_WEAPON = 422;
-    public static final int SMITHY_UP_LEVEL_WEAPON = 423;
-    public static final int SMITHY_COMBINE = 424;
     // buy gold
     public static final int BUY_GOLD_STATUS = 425;
     public static final int BUY_GOLD_BUY = 426;
@@ -249,49 +206,12 @@ public class IAction {
     // Ranking : Bảng xếp hạng
     public static final int RANKING_INFO = 420;
     public static final int RANKING_STATUS = 421;
-    // Farm : Nông trại
-    public static final int FARM_STATUS = 427;
-    public static final int FARM_BUY_LAND = 428;
-    public static final int FARM_CARE = 429;
-    public static final int FARM_SELL_ITEM = 430;
-    public static final int FARM_SELL_SINGLE = 431;
-    public static final int FARM_CREATE_FOOD = 432;
-    public static final int FARM_QUICK_CARE = 433;
-    public static final int FARM_BUY_ITEM = 434;
-    public static final int FARM_HARVEST_TREE = 435;
-    public static final int FARM_PING = 436;
-    public static final int FARM_TREE_STATUS = 437;
-
-    // Tavern
-    public static final int FARM_QUEST_STATUS = 460;
-    public static final int FARM_QUEST_USE_ITEM = 461;
-    public static final int FARM_QUEST_REFRESH = 462;
-    public static final int FARM_QUEST_SPEED_UP = 463;
-    public static final int FARM_QUEST_LOCK_UNLOCK = 464;
-    public static final int FARM_QUEST_START = 465;
-    public static final int FARM_QUEST_RECEIVE = 466;
-    public static final int FARM_QUEST_CANCEL = 467;
-
-    // Arena Don Dau
-    public static final int ARENA_STATUS = 468;
-    public static final int ARENA_ATTACK = 445;
-    public static final int ARENA_HISTORY = 446;
-    public static final int ARENA_REFRESH = 447;
-    public static final int ARENA_BUY_TICKET = 448;
-    public static final int ARENA_SET_DEF = 449;
-    public static final int ARENA_VIEW_OPP = 450;
-    public static final int ARENA_QUIT = 455;
-    public static final int ARENA_START_BATTLE = 456;
 
     // Item
     public static final int ITEM_REMOVE = 451;
     public static final int ITEM_USED = 452;
     public static final int ITEM_INFO = 453;
     public static final int ITEM_USE_FOR_ITEM = 457;
-
-    // Hero
-    public static final int HERO_LIST = 500;
-    public static final int CHANGE_HERO = 501;
 
     // Event
     public static final int RPS_SEND_RQ = 600;
@@ -373,16 +293,6 @@ public class IAction {
     public static final int PARTY_ACCEPT = 757;
     public static final int PARTY_UPDATE_INFO = 758;
     public static final int PARTY_UPDATE_AUTO= 759;
-    // world boss
-    public static final int WORLD_BOSS_STATUS = 770;
-    public static final int WORLD_BOSS_JOIN = 771;
-    public static final int WORLD_BOSS_INVITE = 772;
-    public static final int WORLD_BOSS_ATTACK = 773;
-    public static final int WORLD_BOSS_LEAVE = 774;
-    public static final int WORLD_BOSS_INFO = 775;
-    public static final int WORLD_BOSS_NEW_INVITE = 776;
-    public static final int WORLD_BOSS_SOLO_ATTACK = 777;
-    public static final int WORLD_BOSS_SOLO_INFO = 778;
 
 
     public static final int PING_IDLE = 10003;

@@ -24,8 +24,7 @@ public class CfgServer {
     public static String DB_DSON = "dson.";
     public static int runningPort = 0, serverId;
     public static String serverType;
-    public static int maxChannelOpen = 20;
-    public static int maxChannelHome = 20;
+    public static int maxChannelOpen = 1;
     static List<SystemMailEntity> cacheSystemMail;
     static String KEY_CACHE_SYSTEM_MAIL = "KEY_CACHE_SYSTEM_MAIL";
     public static final String SVID = "SVID";
@@ -66,12 +65,6 @@ public class CfgServer {
     public static long getSlowSQLTime() {
         if (config == null || config.slowSQL < 100) return 1000;
         return config.slowSQL;
-    }
-
-    public static int getSeason() {
-        int week = Calendar.getInstance().get(Calendar.WEEK_OF_MONTH);
-        return week > 4 ? 4 : week;
-
     }
 
     private static  List<SystemMailEntity> getSystemMail(){

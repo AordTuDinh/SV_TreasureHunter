@@ -8,7 +8,6 @@ import game.config.aEnum.*;
 import game.dragonhero.BattleConfig;
 import game.dragonhero.controller.UserHandler;
 import game.dragonhero.mapping.*;
-import game.dragonhero.mapping.main.ResMapEntity;
 import game.dragonhero.server.Constans;
 import game.dragonhero.server.IAction;
 import game.dragonhero.service.resource.ResMap;
@@ -52,11 +51,11 @@ public class Player extends Character implements Serializable {
     float cacheRangeAttack;
     // analysis
     int countUpdate;
-    Pet pet;
+    Pet petUse;
 
     public Player(MyUser mUser, int teamId) {
         initDefault(mUser.getUser().getId(), teamId, mUser.getUser().getInitPoint(mUser));
-        this.type = CharacterType.PLAYER;
+        this.type = UnitType.PLAYER;
         this.name = mUser.getUser().getName();
         this.mUser = mUser;
         this.idDameSkin = mUser.getUData().getDameSkinEquip();
@@ -64,7 +63,7 @@ public class Player extends Character implements Serializable {
         this.idTrial = mUser.getUData().getTrialEquip();
         this.autoMode = AutoMode.get(mUser.getUSetting().getAutoMode());
         itemsBuf = mUser.getUSetting().getItemSlot(mUser);
-        this.pet = mUser.getPet(this);
+        this.petUse = mUser.getPet(this);
     }
 
     private void initDefault(int id, int teamId, Point point) {
@@ -126,7 +125,7 @@ public class Player extends Character implements Serializable {
         }
     }
 
-    public Player(int id, int teamId, Point point, CharacterType type) {
+    public Player(int id, int teamId, Point point, UnitType type) {
         initDefault(id, teamId, point);
         this.type = type;
     }
@@ -149,8 +148,8 @@ public class Player extends Character implements Serializable {
         targetMove = Pos.zero();
         timePush = new HashMap<>();
         attackerInfo = new HashMap<>();
-        if (pet != null) {
-            pet.setPos(Pos.randomPos(this.pos, 1f, 1f));
+        if (petUse != null) {
+            petUse.setPos(Pos.randomPos(this.pos, 1f, 1f));
         }
     }
 
@@ -316,6 +315,11 @@ public class Player extends Character implements Serializable {
         return DateTime.isAfterTime(timeRevive, BattleConfig.P_timeImmortal);
     }
 
+    @Override
+    public void Update() {
+
+    }
+
     // code đảo chiều dựa theo 2 điều kiện - dùng trong vòng lặp thời gian set liên tục
     public void setTimeAttackRun2(Pos target) {
         if (isAttackRun2Done()) isAttackRun2 = false;
@@ -323,11 +327,6 @@ public class Player extends Character implements Serializable {
         this.timeAttackRun2 = System.currentTimeMillis();
         this.targetDirectionAttackRun2 = getPos().getRandDiectionTo(target, 10f);
         this.isAttackRun2 = true;
-    }
-
-
-    public boolean hasUseItemIndex(int slot) { // check dung skill
-        return BattleConfig.itemUseSlot.contains(slot);
     }
 
     public boolean isAttackRun2Done() {
@@ -451,22 +450,19 @@ public class Player extends Character implements Serializable {
         sendDie = true;
     }
 
-    public Pbmethod.PbUnitAdd.Builder toProtoAdd() {
-        Pbmethod.PbUnitAdd.Builder pbAdd = Pbmethod.PbUnitAdd.newBuilder();
+    public Pbmethod.PbUnit.Builder toProtoAdd() {
+        Pbmethod.PbUnit.Builder pbAdd = Pbmethod.PbUnit.newBuilder();
         pbAdd.setType(Constans.TYPE_PLAYER);
         pbAdd.setId(id);
         pbAdd.setIsAdd(true);
         pbAdd.setPos(pos.toProto());
         if (panelMap == null) panelMap = ResMap.getMap(MapType.HOME);
-        pbAdd.setBotLeft(panelMap.getBotLeftP().toProto());
-        pbAdd.setTopRight(panelMap.getTopRightP().toProto());
         pbAdd.setDirection(direction.toProto());
         pbAdd.setTeamId(teamId);
         pbAdd.setRangeAttack(rangeAttack);
         pbAdd.addAllAvatar(mUser.getUser().getAvatar());
         pbAdd.setSpeed((int) point.getMoveSpeed());
         pbAdd.setCharacterInfo(toCharacterInfo());
-        pbAdd.setFaction(FactionType.NULL.value);
         pbAdd.addAllInfo(getListInfo());
         return pbAdd;
     }
@@ -497,7 +493,7 @@ public class Player extends Character implements Serializable {
 
     public void toPbEndGame(boolean isWin, int per, List<Long> bonus, int timeAttack, PopupType popup, List<Integer> info) {
         protocol.Pbmethod.PbEndGame.Builder pb = protocol.Pbmethod.PbEndGame.newBuilder();
-        pb.setBattleKey(getRoom().getKeyRoom());
+        pb.setBattleKey(Constans.mIdToBattleId.get(getRoom().getBattleId()));
         pb.setIsWin(isWin);
         pb.setPopupId(popup.value);
         if (bonus != null) {

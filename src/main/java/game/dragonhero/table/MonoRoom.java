@@ -5,10 +5,11 @@ import game.battle.object.Mono;
 import game.battle.type.RoomState;
 import game.battle.type.StateType;
 import game.config.aEnum.MapType;
+import game.dragonhero.server.Constans;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.quartz.JobKey;
+import protocol.Pbmethod.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,41 +27,30 @@ public abstract class MonoRoom extends Mono {
     float local_time = 0.016f; // The local timer in seconds
     long _dte; // The local timer last frame time
     @Getter
-    protected long id; // id room khác với id init
+    protected long battleId; // id room khác với id init
     List<Coroutine> coroutines;
     MapType mapType;
 
 
-
     // region proto
     @Getter
-    protocol.Pbmethod.PbInitRoom.Builder pbInit;
+    PbInitMap.Builder pbInit;
     @Getter
-    List<protocol.Pbmethod.PbUnitAdd.Builder> aProtoAdd;
+    List<PbUnit.Builder> aProtoAdd;
     @Getter
-    List<protocol.Pbmethod.PbUnitState.Builder> aProtoUnitState;
-    // endregion
-    @Setter
-    @Getter
-    String keyRoom; // room_mapId_subId_chanelId
-    @Setter
-    @Getter
-    String[] keys; // room_mapId_subId_chanelId
-
-
+    List<PbUnitState.Builder> aProtoUnitState;
 
 
     public MonoRoom(String keyRoom) {
         this.roomState = RoomState.INIT;
         this.timeCreateRoom = System.currentTimeMillis();
-        this.keyRoom = keyRoom;
-        this.keys = keyRoom.split("_");
-        this.mapType = MapType.get(Integer.parseInt(keys[1]));
         this.coroutines = new ArrayList<>();
-        this.id = getCounterId();
+        this.battleId = Constans.getCounterId();
+        this.mapType = MapType.get(Integer.parseInt(Constans.getKeyRoomById(this.battleId)[1]));
         this.aProtoAdd = new ArrayList<>();
         this.aProtoUnitState = new ArrayList<>();
-        this.pbInit = protocol.Pbmethod.PbInitRoom.newBuilder();
+        this.pbInit = protocol.Pbmethod.PbInitMap.newBuilder();
+        Constans.mIdToBattleId.put(this.battleId, keyRoom);
     }
 
 
@@ -69,15 +59,10 @@ public abstract class MonoRoom extends Mono {
     }
 
 
-
     public boolean isRoomType(MapType mapType) {
         return mapType == this.mapType;
     }
 
-    //region state
-    public static synchronized long getCounterId() {
-        return ++counterId;
-    }
 
     protocol.Pbmethod.PbUnitState.Builder protoState(int id, List<StateType> aStatus, List<Long> aInfo) {
         protocol.Pbmethod.PbUnitState.Builder builder = protocol.Pbmethod.PbUnitState.newBuilder();

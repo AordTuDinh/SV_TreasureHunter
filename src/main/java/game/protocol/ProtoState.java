@@ -28,7 +28,7 @@ public class ProtoState {
         return builder.build().toByteString();
     }
 
-    public static byte[] convertProtoBuffToState(protocol.Pbmethod.PbState proto) {
+    public static byte[] convertProtoBuffToState(PbState proto) {
         ByteBuf buffer = Unpooled.buffer();
         buffer.writeFloat(proto.getServerTime());
         // region add
@@ -41,13 +41,13 @@ public class ProtoState {
         return bytes;
     }
 
-    public static void parsePbUnitAdd(ByteBuf buffer, List<PbUnitAdd> aUnitAdd) {
+    public static void parsePbUnitAdd(ByteBuf buffer, List<PbUnit> aUnitAdd) {
         try {
             if (aUnitAdd.size() > 0) {
                 buffer.writeByte(Constans.TYPE_ADD_OR_REMOVE);
                 buffer.writeByte(aUnitAdd.size());
                 for (int i = 0; i < aUnitAdd.size(); i++) {
-                    PbUnitAdd tmp = aUnitAdd.get(i);
+                    PbUnit tmp = aUnitAdd.get(i);
                     buffer.writeByte(tmp.getType());
                     buffer.writeLong(tmp.getId());
                     buffer.writeBoolean(tmp.getIsAdd());
@@ -64,7 +64,6 @@ public class ProtoState {
                         buffer.writeFloat(tmp.getDirection().getX());
                         buffer.writeFloat(tmp.getDirection().getY());
                         buffer.writeInt(tmp.getSpeed());
-                        buffer.writeInt(tmp.getFaction());
                         buffer.writeByte(tmp.getInfoCount());
                         for (int j = 0; j < tmp.getInfoCount(); j++) {
                             buffer.writeInt(tmp.getInfo(j));
@@ -94,10 +93,6 @@ public class ProtoState {
                                 buffer.writeBytes(data);
                             }
                         }
-                        buffer.writeFloat(tmp.getBotLeft().getX());
-                        buffer.writeFloat(tmp.getBotLeft().getY());
-                        buffer.writeFloat(tmp.getTopRight().getX());
-                        buffer.writeFloat(tmp.getTopRight().getY());
                     }
                 }
             }
@@ -127,7 +122,7 @@ public class ProtoState {
         }
     }
 
-    public static void parsePbUnitUpdate(ByteBuf buffer, protocol.Pbmethod.PbState proto) {
+    public static void parsePbUnitUpdate(ByteBuf buffer, PbState proto) {
         try {
             int size = proto.getAUnitUpdateCount();
             for (int i = 0; i < size; i++) {

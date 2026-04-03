@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import game.battle.object.Point;
 import game.battle.object.Pos;
-import game.battle.type.CharacterType;
+import game.battle.type.UnitType;
 import game.config.aEnum.FactionType;
 import game.object.BonusConfig;
 import game.object.BossSkillConfig;
@@ -36,7 +36,7 @@ public class ResBossEntity extends BaseEntity {
     @Transient
     List<BonusConfig> aReward;
     @Transient
-    CharacterType characterType;
+    UnitType unitType;
     @Transient
     Pos instancePos;
     @Transient
@@ -54,7 +54,7 @@ public class ResBossEntity extends BaseEntity {
         checkJson(id, reward);
         aReward = new Gson().fromJson(reward, new TypeToken<List<BonusConfig>>() {
         }.getType());
-        characterType = CharacterType.get(type);
+        unitType = UnitType.get(type);
         instancePos = new Pos(GsonUtil.strToListFloat(pos));
         // point
         point = new Point();

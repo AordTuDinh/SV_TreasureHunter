@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum MapType {
-    NULL(-1, false, 0),
+    LOGIN(-1, false, 0),
     HOME(0, true, 100),
     ;
 

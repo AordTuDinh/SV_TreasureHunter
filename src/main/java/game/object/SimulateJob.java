@@ -17,12 +17,7 @@ public class SimulateJob implements Job {
         int intervals = context.getJobDetail().getJobDataMap().getInt("intervals");
         if (intervals == CfgBattle.periodUpdate) {
             room.Update();
-            for (int i = 0; i < room.getAPlayer().size(); i++) {
-                room.getAPlayer().get(i).Update();
-            }
-            for (int i = 0; i < room.getAEnemy().size(); i++) {
-                room.getAEnemy().get(i).Update();
-            }
+
         } else if (intervals == CfgBattle.periodFixedUpdate) {
             room.FixedUpdate();
         } else if (intervals == CfgBattle.periodUpdateLow) {
@@ -31,12 +26,6 @@ public class SimulateJob implements Job {
             room.EffectUpdate();
         } else if (intervals == CfgBattle.periodUpdate1s) {
             room.Update1s();
-            for (int i = 0; i < room.getAPlayer().size(); i++) {
-                room.getAPlayer().get(i).Update1s();
-            }
-            for (int i = 0; i < room.getAEnemy().size(); i++) {
-                room.getAEnemy().get(i).Update1s();
-            }
         }
     }
 }

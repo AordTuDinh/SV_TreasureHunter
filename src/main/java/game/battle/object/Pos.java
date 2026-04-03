@@ -4,6 +4,7 @@ import game.battle.calculate.MathLab;
 import game.dragonhero.BattleConfig;
 import game.dragonhero.mapping.main.ResMapEntity;
 import game.object.MapData;
+import lombok.Getter;
 import ozudo.base.helper.GsonUtil;
 import ozudo.base.helper.NumberUtil;
 import protocol.Pbmethod;
@@ -16,6 +17,7 @@ import java.util.Random;
  * Created by vieth_000 on 7/14/2016.
  */
 public class Pos {
+    @Getter
     public float x, y;
 
     // khoảng cách thực tế đến đoạn 0 , 0
@@ -98,16 +100,9 @@ public class Pos {
     }
 
 
-    public float getX() {
-        return x;
-    }
 
     public void setX(float x) {
         this.x = x;
-    }
-
-    public float getY() {
-        return y;
     }
 
     public void setY(float y) {

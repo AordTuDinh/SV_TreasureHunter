@@ -7,7 +7,6 @@ import game.battle.type.*;
 import game.config.aEnum.FactionType;
 import game.dragonhero.BattleConfig;
 import game.dragonhero.mapping.main.ResMapEntity;
-import game.dragonhero.server.Constans;
 import game.dragonhero.table.BaseBattleRoom;
 import game.dragonhero.table.BaseRoom;
 import game.object.PointBuff;
@@ -19,19 +18,27 @@ import protocol.Pbmethod;
 import java.util.*;
 
 @Data
-public abstract class Character extends Mono {
+public abstract class Character {
+    // new
+    int chunkId;
+    long idInMap; // tất cả các sinh vật đều sẽ có id này riêng lẻ, vào map sẽ gen id này
+
     // info
     int id; // id in room
     int teamId;
     float radius, rangeAttack;
+    int idDameSkin = 0;
+    int idChatFrame = 0;
+    int idTrial = 0;
     Pos pos = Pos.zero(), direction = Pos.right();
     Point point;
     String name;
+
     AttackType attackType;
     boolean alive, beDot;
     BaseRoom room;
     int model;
-    CharacterType type;
+    UnitType type;
     // in battle
     Pos instancePos;  // noi character sinh ra
     ResMapEntity panelMap;//bot left + top right
@@ -41,11 +48,11 @@ public abstract class Character extends Mono {
     public FactionType faction = FactionType.NULL;
     long timeBeHit = 0;
     int killById;
-    int idDameSkin = 0;
-    int idChatFrame = 0;
-    int idTrial = 0;
+
+
     boolean isPowerSkill;
     public Map<Integer, Long> beDameInfo = new HashMap<>();
+
     // todo test move
     boolean isMove = false; // dang di chuyen
     long timeActionMove;  // thời gian thay đổi action move
@@ -74,14 +81,13 @@ public abstract class Character extends Mono {
     boolean sendDie = true;
 
 
-
     public boolean isPlayer() {
-        return type == CharacterType.PLAYER;
+        return type == UnitType.PLAYER;
     }
 
 
     public boolean isEnemy() {
-        return type == CharacterType.MONSTER || type == CharacterType.BOSS_GOD || type == CharacterType.TOTEM;
+        return type == UnitType.ENEMY || type == UnitType.BOSS;
     }
 
     private void checkBeAttackByEffect(Character attacker) {
@@ -140,8 +146,8 @@ public abstract class Character extends Mono {
     }
 
 
-    public long getBeDameInfo(int userId){
-        if(beDameInfo.containsKey(userId)){
+    public long getBeDameInfo(int userId) {
+        if (beDameInfo.containsKey(userId)) {
             return beDameInfo.get(userId);
         }
         return 0;
@@ -151,7 +157,7 @@ public abstract class Character extends Mono {
         if (targetAttack == null) return Pos.zero();
         if (targetAttack.isMove()) {
             int rand = NumberUtil.getRandom(min, max);
-            float distance = (float) pos.distance(targetAttack.getPos())/rand;
+            float distance = (float) pos.distance(targetAttack.getPos()) / rand;
             Pos posNext = targetAttack.getPos().clone();
             Pos dirClone = targetAttack.direction.clone();
             dirClone.multiple(targetAttack.getCurSpeed() * distance);
@@ -181,7 +187,7 @@ public abstract class Character extends Mono {
         return (Player) this;
     }
 
-    public Pet getPet() {
+    public Pet getPetUse() {
         return (Pet) this;
     }
 
@@ -229,15 +235,19 @@ public abstract class Character extends Mono {
     }
 
 
-    @Override
-    public void Update1s() { //1s update 1 lần
-        if (room == null || room.getRoomState() != RoomState.ACTIVE) return;
-        if (alive) {
-            long reHp = point.getHpRegen();
-            if (reHp > 0 && point.getCurHP() < point.getMaxHp()) reHpNoEff(reHp);
-            long reMp = point.getMpRegen();
-            if (reMp > 0 && point.getCurMP() < point.getMaxMp()) updateMp(reMp);
-        }
+//    @Override
+//    public void Update1s() { //1s update 1 lần
+//        if (room == null || room.getRoomState() != RoomState.ACTIVE) return;
+//        if (alive) {
+//            long reHp = point.getHpRegen();
+//            if (reHp > 0 && point.getCurHP() < point.getMaxHp()) reHpNoEff(reHp);
+//            long reMp = point.getMpRegen();
+//            if (reMp > 0 && point.getCurMP() < point.getMaxMp()) updateMp(reMp);
+//        }
+//    }
+
+
+    public void Update() {
     }
 
     public boolean sameTeam(Character other) {
@@ -251,7 +261,6 @@ public abstract class Character extends Mono {
             return 0;
         }
     }
-
 
 
     public void stun(float time) {
@@ -331,7 +340,7 @@ public abstract class Character extends Mono {
         return pbUser.build();
     }
 
-    public abstract Pbmethod.PbUnitAdd.Builder toProtoAdd();
+    public abstract Pbmethod.PbUnit.Builder toProtoAdd();
 
     public void revive() {
     }
@@ -348,11 +357,10 @@ public abstract class Character extends Mono {
         timeActiveSlot[slot] = System.currentTimeMillis();
     }
 
-    public Pbmethod.PbUnitAdd.Builder toProtoRemove() {
-        Pbmethod.PbUnitAdd.Builder builder = Pbmethod.PbUnitAdd.newBuilder();
-        if (isPlayer()) builder.setType(Constans.TYPE_PLAYER);
-        else builder.setType(Constans.TYPE_MONSTER);
-        builder.setId(id);
+    public Pbmethod.PbUnit.Builder toProtoRemove() {
+        Pbmethod.PbUnit.Builder builder = Pbmethod.PbUnit.newBuilder();
+        builder.setType(type.value);
+        builder.setId(idInMap);
         builder.setIsAdd(false);
         return builder;
     }
@@ -413,8 +421,8 @@ public abstract class Character extends Mono {
         protoStatus(StateType.UPDATE_MULTI_POINT, points.size(), points);
     }
 
-    public void protoUpdatePoint(int pointId,long value) {  //[pointId - curValue] :  chỉ trả về, thường dùng cho add change
-        protoStatus(StateType.UPDATE_MULTI_POINT, 2,Arrays.asList( (long) pointId,value));
+    public void protoUpdatePoint(int pointId, long value) {  //[pointId - curValue] :  chỉ trả về, thường dùng cho add change
+        protoStatus(StateType.UPDATE_MULTI_POINT, 2, Arrays.asList((long) pointId, value));
     }
 
     // buff point and send
@@ -519,7 +527,7 @@ public abstract class Character extends Mono {
 
     // region proto
     public void protoBeDame(Character attacker, List<Long> aInfo) {
-        if (type == CharacterType.BOSS_GOD) {
+        if (type == UnitType.BOSS) {
             if (!beDameInfo.containsKey(attacker.getId())) beDameInfo.put(attacker.getId(), 0L);
             beDameInfo.put(attacker.getId(), beDameInfo.get(attacker.getId()) + aInfo.get(2) + aInfo.get(3));
         }
@@ -548,7 +556,7 @@ public abstract class Character extends Mono {
 
 
     public void protoRangeDame(Character attacker, List<Long> aInfo) {
-        if (type == CharacterType.BOSS_GOD) {
+        if (type == UnitType.BOSS) {
             if (!beDameInfo.containsKey(attacker.getId())) beDameInfo.put(attacker.getId(), 0L);
             beDameInfo.put(attacker.getId(), beDameInfo.get(attacker.getId()) + aInfo.get(2) + aInfo.get(3));
         }

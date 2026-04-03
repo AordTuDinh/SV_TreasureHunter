@@ -2,7 +2,7 @@ package game.battle.model;
 
 import game.battle.object.Point;
 import game.battle.object.Pos;
-import game.battle.type.CharacterType;
+import game.battle.type.UnitType;
 import game.battle.type.StateType;
 import game.config.aEnum.FactionType;
 import game.dragonhero.BattleConfig;
@@ -20,7 +20,7 @@ public class Pet extends Character implements Serializable {
     float timePetActive;
 
     public Pet(UserPetEntity uPet, Player owner) {
-        this.type = CharacterType.PET;
+        this.type = UnitType.PET;
         this.model = uPet.getPetId();
         this.direction = Pos.RandomDirection();
         this.teamId = 0;
@@ -34,20 +34,22 @@ public class Pet extends Character implements Serializable {
     }
 
     @Override
-    public Pbmethod.PbUnitAdd.Builder toProtoAdd() {
-        Pbmethod.PbUnitAdd.Builder pb = Pbmethod.PbUnitAdd.newBuilder();
+    public void Update() {
+
+    }
+
+    @Override
+    public Pbmethod.PbUnit.Builder toProtoAdd() {
+        Pbmethod.PbUnit.Builder pb = Pbmethod.PbUnit.newBuilder();
         pb.setType(Constans.TYPE_PET);
         pb.setId(id);
         pb.setIsAdd(true);
         pb.setPos(pos.toProto());
         pb.setDirection(direction.toProto());
-        pb.setBotLeft(owner.panelMap.getBotLeftP().toProto());
-        pb.setTopRight(owner.panelMap.getTopRightP().toProto());
         pb.setTeamId(teamId);
         pb.addAvatar(model);
         pb.setOwnerId(owner.id);
         pb.setSpeed((int) point.getMoveSpeed());
-        pb.setFaction(FactionType.NULL.value);
         return pb;
     }
 
@@ -67,8 +69,8 @@ public class Pet extends Character implements Serializable {
 
     }
 
-    public Pbmethod.PbUnitAdd.Builder toProtoRemove() {
-        Pbmethod.PbUnitAdd.Builder builder = Pbmethod.PbUnitAdd.newBuilder();
+    public Pbmethod.PbUnit.Builder toProtoRemove() {
+        Pbmethod.PbUnit.Builder builder = Pbmethod.PbUnit.newBuilder();
         builder.setType(Constans.TYPE_PET);
         builder.setId(id);
         builder.setIsAdd(false);

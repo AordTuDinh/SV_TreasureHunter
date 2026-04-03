@@ -1,8 +1,6 @@
 package game.object;
 
 import game.config.CfgServer;
-import game.dragonhero.server.App;
-import game.dragonhero.table.BaseRoom;
 import game.dragonhero.table.MonoRoom;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
@@ -24,14 +22,14 @@ public class TaskMonitor {
         return instance;
     }
 
-    public Map<String, MonoRoom> mRoom = new HashMap<>();
+    public Map<Long, MonoRoom> mRoom = new HashMap<>();
     int threadCount = 0;
 
     public void addRoom(MonoRoom room) {
-        if (room != null) mRoom.put(room.getKeyRoom(), room);
+        if (room != null) mRoom.put(room.getBattleId(), room);
     }
 
-    public void removeRoom(String id) {
+    public void removeRoom(long id) {
         mRoom.remove(id);
     }
 
@@ -51,8 +49,8 @@ public class TaskMonitor {
     }
 
     public JobKey submit(MonoRoom room, int intervals) {
-        JobDetail job = newJob(SimulateJob.class).withIdentity("job_" + room.getId() + "_" + intervals, "sv" + CfgServer.serverId).storeDurably(false).build();
-        SimpleTrigger trigger = newTrigger().withIdentity("trigger_" + room.getId() + "_" + intervals, "sv" + CfgServer.serverId).
+        JobDetail job = newJob(SimulateJob.class).withIdentity("job_" + room.getBattleId() + "_" + intervals, "sv" + CfgServer.serverId).storeDurably(false).build();
+        SimpleTrigger trigger = newTrigger().withIdentity("trigger_" + room.getBattleId() + "_" + intervals, "sv" + CfgServer.serverId).
                 startAt(Calendar.getInstance().getTime()).withSchedule(simpleSchedule().withIntervalInMilliseconds(intervals).repeatForever()).build();
         job.getJobDataMap().put("room", room);
         job.getJobDataMap().put("intervals", intervals);

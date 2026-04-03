@@ -76,36 +76,36 @@ public class PetHandler extends AHandler {
     }
 
     private void petSelect() {
-        int petId = getInputInt();
-        UserPetEntity uPet = mUser.getResources().getPet(petId);
-        if (uPet != null && uPet.getHp() <= 0) {
-            addErrResponse(getLang(Lang.err_pet_can_care));
-            return;
-        }
-        // check  có th tháo pet
-        if (user.updatePet(petId, uPet != null ? uPet.getStar() : 0)) {
-            // check instance pet
-            Player player = mUser.getPlayer();
-            Pet pet = player.getPet();
-            if (pet == null) {// chưa có pet trong room
-                pet = mUser.getPet(player);
-                if (pet != null) player.getRoom().addPet(pet);
-                player.setPet(pet);
-            } else { // đã có pet
-                if (petId == 0) { // xóa pet
-                    player.getRoom().removePet(pet);
-                    player.setPet(null);
-                } else {// đổi pet khác
-                    Pet newPet = new Pet(uPet, player);
-                    player.getRoom().changePet(pet, newPet);
-                    player.setPet(newPet);
-                    player.protoStatus(StateType.CHANGE_PET, (long) petId);
-                }
-            }
-            addResponse(getCommonVector(petId));
-            mUser.reCalculatePoint();
-            // change pet battle
-        } else addErrSystem();
+//        int petId = getInputInt();
+//        UserPetEntity uPet = mUser.getResources().getPet(petId);
+//        if (uPet != null && uPet.getHp() <= 0) {
+//            addErrResponse(getLang(Lang.err_pet_can_care));
+//            return;
+//        }
+//        // check  có th tháo pet
+//        if (user.updatePet(petId, uPet != null ? uPet.getStar() : 0)) {
+//            // check instance pet
+//            Player player = mUser.getPlayer();
+//            Pet pet = player.getPet();
+//            if (pet == null) {// chưa có pet trong room
+//                pet = mUser.getPet(player);
+//                if (pet != null) player.getRoom().addPet(pet);
+//                player.setPet(pet);
+//            } else { // đã có pet
+//                if (petId == 0) { // xóa pet
+//                    player.getRoom().removePet(pet);
+//                    player.setPet(null);
+//                } else {// đổi pet khác
+//                    Pet newPet = new Pet(uPet, player);
+//                    player.getRoom().changePet(pet, newPet);
+//                    player.setPet(newPet);
+//                    player.protoStatus(StateType.CHANGE_PET, (long) petId);
+//                }
+//            }
+//            addResponse(getCommonVector(petId));
+//            mUser.reCalculatePoint();
+//            // change pet battle
+//        } else addErrSystem();
     }
 
     private void petInfo() {

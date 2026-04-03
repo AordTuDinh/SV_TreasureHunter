@@ -1,13 +1,11 @@
 package game.dragonhero.table;
 
 import com.google.protobuf.AbstractMessage;
+import game.battle.model.*;
 import game.battle.model.Character;
-import game.battle.model.Pet;
-import game.battle.model.Player;
 import game.battle.object.*;
 import game.battle.type.RoomState;
 import game.config.CfgServer;
-import game.battle.type.StateType;
 import game.config.aEnum.MapType;
 import game.dragonhero.controller.AHandler;
 import game.dragonhero.mapping.main.ResMapEntity;
@@ -20,49 +18,42 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ozudo.base.helper.ChUtil;
-import ozudo.base.helper.GsonUtil;
 import ozudo.base.helper.Util;
 import ozudo.base.log.Logs;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @NoArgsConstructor
 public abstract class BaseRoom extends MonoRoom {
-    @Getter
-    List<Character> aPlayer;
-    @Getter
-    List<Character> aPet;
-    float server_time;
+    // static data
+    Map<Integer, ChunkObject> mChunk = new HashMap<>();
+    Map<Integer, List<Integer>> visibleByChunkId = new HashMap<>();  // chunk id -> list visible chunk by id chunk
+    // runtime
+    Map<Long, Character> mCharacter = new HashMap<>();
+    List<Long> aPlayerIds = new ArrayList<>();
+    Map<Integer, Set<Long>> chunkCharacter = new HashMap<>();
 
-    @Getter
-    List<Character> aEnemy = new ArrayList<>();
+    float serverTime;
     @Getter
     @Setter
     ResMapEntity mapInfo;
-    int idNext = 0;
-    @Getter
-    boolean allowReviveEnemy;
-    @Getter
-    boolean isBattleRoom;
+    int idNext;
 
-    public BaseRoom(ResMapEntity mapInfo, List<Character> aPlayer, String keyRoom, boolean allowReviveEnemy) {
+    public BaseRoom(ResMapEntity mapInfo, Map<Integer, ChunkObject> mChunk, String keyRoom) {
         super(keyRoom);
-        this.idNext = 0;
         this.mapInfo = mapInfo;
-        this.aPlayer = aPlayer;
-        this.aPet = new ArrayList<>();
-        for (int i = 0; i < aPlayer.size(); i++) {
-            if (!aPlayer.get(i).isPlayer()) continue;
-            Pet pet = aPlayer.get(i).getPlayer().getPet();
-            if (pet != null) {
-                pet.setId(getIdNext());
-                aPet.add(pet);
+        this.mChunk = mChunk;
+        // gen chunk default
+        for (Integer key : mChunk.keySet()) {
+            chunkCharacter.put(key, new HashSet<>());
+        }
+        for (int y = mapInfo.getMinChunkY(); y <= mapInfo.getMaxChunkY(); y++) {
+            for (int x = mapInfo.getMinChunkX(); x <= mapInfo.getMaxChunkX(); x++) {
+                int centerId = mapInfo.chunkPosToId(x, y);
+                visibleByChunkId.put(centerId, GameCore.getVisibleChunkIds(mapInfo, x, y));
             }
         }
         startInit();
-        this.allowReviveEnemy = allowReviveEnemy;
     }
 
     protected void startInit() {
@@ -74,18 +65,18 @@ public abstract class BaseRoom extends MonoRoom {
         byte[] data = genTableState();
         if (data == null) return;
         //System.out.println("send table state -------------------");
-        for (int i = 0; i < aPlayer.size(); i++) {
-            if (aPlayer.get(i) != null && aPlayer.get(i).isPlayer() && aPlayer.get(i).getPlayer().getMUser().getChannel() != null) {
-                Util.sendGameData(aPlayer.get(i).getPlayer().getMUser().getChannel(), data, Constans.MAGIC_IN_PUT);
+        for (int i = 0; i < aPlayerIds.size(); i++) {
+            Character player = mCharacter.get(aPlayerIds.get(i));
+            if (player != null && player.isPlayer() && player.getPlayer().getMUser().getChannel() != null) {
+                Util.sendGameData(player.getPlayer().getMUser().getChannel(), data, Constans.MAGIC_IN_PUT);
             }
         }
     }
 
     public List<Channel> getListChannel() {
         List<Channel> lst = new ArrayList<>();
-        for (int i = 0; i < aPlayer.size(); i++) {
-            if (!aPlayer.get(i).isPlayer()) continue;
-            Player p = aPlayer.get(i).getPlayer();
+        for (int i = 0; i < aPlayerIds.size(); i++) {
+            Player p = mCharacter.get(aPlayerIds.get(i)).getPlayer();
             if (p != null && p.getMUser().getChannel() != null && p.getMUser().getChannel().isActive()) {
                 lst.add(p.getMUser().getChannel());
             }
@@ -93,42 +84,27 @@ public abstract class BaseRoom extends MonoRoom {
         return lst;
     }
 
-    public synchronized int getIdNext() { // dùng để gen id cho character
-        idNext++;
-        if (idNext > 201190) idNext = 0;
-        return idNext;
+    public synchronized long getIdNext() {
+        return idNext++;
     }
 
     public boolean isMaxPlayer() {
-        return aPlayer.size() >= mapType.maxPlayer;
+        return aPlayerIds.size() >= mapType.maxPlayer;
     }
+
 
     protected byte[] genTableState() {
         int action = IAction.TABLE_STATE;// K dùng nhưng viết ở đây để referent
         protocol.Pbmethod.PbState.Builder builder = protocol.Pbmethod.PbState.newBuilder();
-        builder.setServerTime(server_time);
+        builder.setServerTime(serverTime);
 
         String debug = "";
         boolean send = false;
-        for (int i = 0; i < aPlayer.size(); i++) {
-            if (aPlayer.get(i) != null && aPlayer.get(i).isAlive()) {
-                builder.addUnitPos(aPlayer.get(i).toProtoPos());
-                send = true;
-            }
-        }
-        for (int i = 0; i < aPet.size(); i++) {
-            if (aPet.get(i) != null) {
-//                System.out.println("join room pet id aPet.get(i).getId() = " + aPet.get(i).getId());
-                builder.addUnitPos(aPet.get(i).toProtoPos());
-                send = true;
-            }
-        }
 
-        for (int i = 0; i < aEnemy.size(); i++) {
-            if (aEnemy.get(i) != null && aEnemy.get(i).isAlive() && aEnemy.get(i).isMove()) {
+        for (Character character : mCharacter.values()) {
+            if ( character != null && character.isAlive()) {
+                builder.addUnitPos(character.toProtoPos());
                 send = true;
-                builder.addUnitPos(aEnemy.get(i).toProtoPos());
-//                System.out.println("aEnemy.get(i).toProtoPos() = " + aEnemy.get(i).getPos().toString());
             }
         }
 
@@ -154,11 +130,8 @@ public abstract class BaseRoom extends MonoRoom {
         }
     }
 
-    public Character getPlayerId(int id) {
-        for (int i = 0; i < aPlayer.size(); i++) {
-            if (aPlayer.get(i).getId() == id) return aPlayer.get(i);
-        }
-        return null;
+    public Character getPlayerId(long id) {
+        return mCharacter.getOrDefault(id, null);
     }
 
 
@@ -167,15 +140,22 @@ public abstract class BaseRoom extends MonoRoom {
         long _dt = System.currentTimeMillis() - _dte;
         _dte = System.currentTimeMillis();
         local_time += _dt / 1000.0;
-        server_time = local_time;
+        serverTime = local_time;
         // send data
-        try {
-            if (aPlayer.size() > 0) {
-                sendTableState();
-            } else cancelTask();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+//        try {
+//            if (aPlayer.size() > 0) {
+//                sendTableState();
+//            } else cancelTask();
+//        } catch (Exception e) {
+//            System.out.println(e.getMessage());
+//        }
+//
+//        for (int i = 0; i < getAPlayer().size(); i++) {
+//            getAPlayer().get(i).Update();
+//        }
+//        for (int i = 0; i < getAEnemy().size(); i++) {
+//            getAEnemy().get(i).Update();
+//        }
     }
 
     public synchronized void doSyncAction(Channel channel, int actionId, byte[] srcRequest) {
@@ -236,14 +216,14 @@ public abstract class BaseRoom extends MonoRoom {
 //            player.getInputs().add(input);
 
 
-        } else if (input.typeId == NInput.PET_MOVE && player.getPet() != null) {
-            player.getPet().setPosAndDirection(input.petPos, input.petDirection);
+        } else if (input.typeId == NInput.PET_MOVE && player.getPetUse() != null) {
+            player.getPetUse().setPosAndDirection(input.petPos, input.petDirection);
         } else if (input.typeId == NInput.INPUT_SLOT) {
             if (player.beBlock()) return;
             int[] slots = input.slotActive;
             for (int i = 0; i < slots.length; i++) {
                 if (!player.isAlive()) return;
-                if (slots[i] > -1 && player.hasUseItemIndex(i) && player.hasUseItem(i)) {
+                if (slots[i] > -1 && player.hasUseItem(i)) {
                     player.setTimeUseItem(i);
                     player.useItem(i);
                 }
@@ -256,27 +236,28 @@ public abstract class BaseRoom extends MonoRoom {
     }
 
 
-    public void joinMap(AHandler handler) {
+    public void joinMap(AHandler handler, Player player) {
         if (roomState != RoomState.ACTIVE) return;
-        pbInit.clearAMonster();
-        pbInit.clearAPlayer();
-        pbInit.clearAPet();
-        for (int i = 0; i < aPlayer.size(); i++) {
-            pbInit.addAPlayer(aPlayer.get(i).toProtoAdd());
-        }
-        for (int i = 0; i < aPet.size(); i++) {
-            pbInit.addAPet(aPet.get(i).toProtoAdd());
-        }
-        for (int i = 0; i < aEnemy.size(); i++) {
-            pbInit.addAMonster(aEnemy.get(i).toProtoAdd());
+        addCharacter(player);
+
+        // trả về 9 chunk xung quanh player
+        int curChunk = player.getChunkId();
+        List<Integer> chunkVisible = visibleByChunkId.get(curChunk);
+
+        pbInit.clearUnits();
+        for (int i = 0; i < chunkVisible.size() ; i++) {
+            Set<Long> aCharInChunk = chunkCharacter.get(chunkVisible.get(i));
+            for (Long charId : aCharInChunk) {
+                Character unit = mCharacter.get(charId);
+                pbInit.addUnits(unit.toProtoAdd());
+            }
         }
         handler.addResponse(IAction.JOIN_MAP, pbInit.build());
     }
 
     public void sendDataAllUser(int service, AbstractMessage data) {
-        for (int i = 0; i < aPlayer.size(); i++) {
-            if (!aPlayer.get(i).isPlayer()) continue;
-            Player p = aPlayer.get(i).getPlayer();
+        for (int i = 0; i < aPlayerIds.size(); i++) {
+            Player p = mCharacter.get(aPlayerIds.get(i)).getPlayer();
             if (p != null) {
                 Util.sendProtoData(p.getMUser().getChannel(), data, service);
             }
@@ -287,76 +268,81 @@ public abstract class BaseRoom extends MonoRoom {
     public void characterDie(Character character) {
     }
 
-    public boolean hasPlayer(int userId) {
-        for (int i = 0; i < aPlayer.size(); i++) {
-            if (aPlayer.get(i).getId() == userId) return true;
-        }
-        return false;
-    }
-
-    public void addPet(Pet pet) { // add and send
-        aProtoAdd.add(pet.toProtoAdd());
-        aPet.add(pet);
-    }
-
-    public void changePet(Pet oldPet, Pet newPet) {
-        aPet.remove(oldPet);
-        newPet.setId(oldPet.getId());
-        aPet.add(newPet);
-    }
-
-    public void removePet(Pet pet) { // remove and send
-        aProtoAdd.add(pet.toProtoRemove());
-        aPet.remove(pet);
+    public boolean hasPlayer(long userId) {
+        return mCharacter.containsKey(userId);
     }
 
 
-    public void addPlayer(Player player) {
-        //debug("---------------------- >add player " + player.getName() + " to room " + getKeyRoom() + "  --- pos: " + player.getPos());
-        if (roomState != RoomState.ACTIVE && roomState != RoomState.PAUSE) return;
-        aPlayer.add(player);
-        player.setRoom(this);
-        player.setPanelMap(mapInfo);
-        aProtoAdd.add(player.toProtoAdd());
-        Pet pet = player.getPet();
-        if (pet != null) {
-            pet.setId(getIdNext());
-            pet.setRoom(this);
-            aPet.add(pet);
-            aProtoAdd.add(pet.toProtoAdd());
-        }
-    }
-
-//    public void removeCharacter(Character character) {
-//        debug("Remove character ---------------------- " + character.getName() + " for room : " + cacheBattle.getId());
-//        // bao nhung thang khac cua room xoa no di
-//        protocol.Pbmethod.CommonVector.Builder pbLeave = protocol.Pbmethod.CommonVector.newBuilder();
-//        pbLeave.addALong(cacheBattle.getId());
-//        pbLeave.addALong(character.getId());
-//        pbLeave.addALong(cacheBattle.getMapInfo().getId());
+//    public void changePet(Pet oldPet, Pet newPet) {
+//        aPet.remove(oldPet);
+//        newPet.setId(oldPet.getId());
+//        aPet.add(newPet);
+//    }
 //
-//        if (character.isPlayer()) {
-//            character.setReady(false);
-//            aPlayer.remove(character);
-//        } else aMonster.remove(character);
-//        aProtoAdd.add(character.protoRemove());
+//    public void removePet(Pet pet) { // remove and send
+//        aProtoAdd.add(pet.toProtoRemove());
+//        aPet.remove(pet);
 //    }
 
-    public void removePlayer(int userId) {
+
+    public int worldPosToChunkId(Pos pos) {
+        return mapInfo.worldPosToChunkId(pos);
+    }
+
+
+    // trả cho các thằng player khác để add vào
+    public void addCharacter(Character character) {
+        if (roomState != RoomState.ACTIVE && roomState != RoomState.PAUSE) return;
+        long idMap = getIdNext();
+        character.setIdInMap(idMap);
+        // tính chunk hiện tại nó đang ở
+        int chunkId = worldPosToChunkId(character.getPos());
+        character.setChunkId(chunkId);
+
+        mCharacter.put(idMap,character);
+        chunkCharacter.get(chunkId).add(idMap);
+
+        aProtoAdd.add(character.toProtoAdd());
+
+        if (character.isPlayer()) {
+            Pet pet = character.getPlayer().getPetUse();
+            if (pet != null) addCharacter(pet);
+        }
+    }
+
+    public void removeCharacter(Character character) {
+        debug("Remove character ---------------------- " + character.getName() + " for room : " + getBattleId());
+        // bao nhung thang khac cua room xoa no di
+        protocol.Pbmethod.CommonVector.Builder pbLeave = protocol.Pbmethod.CommonVector.newBuilder();
+        pbLeave.addALong(battleId);
+        pbLeave.addALong(character.getIdInMap());
+        pbLeave.addALong(getMapInfo().getId());
+
+        if (character.isPlayer()) {
+            character.setReady(false);
+            aPlayerIds.remove(character.getIdInMap());
+        }
+
+
+        aProtoAdd.add(character.toProtoRemove());
+    }
+
+    public void removePlayer(long idInMap) {
         // debug("Remove character ---------------------- " + userId + " for room : " + keyRoom);
         // bao nhung thang khac cua room xoa no di
         protocol.Pbmethod.CommonVector.Builder pbLeave = protocol.Pbmethod.CommonVector.newBuilder();
         pbLeave.addALong(getRoomTypeId());
-        pbLeave.addALong(userId);
+        pbLeave.addALong(idInMap);
         pbLeave.addALong(mapInfo != null ? mapInfo.getId() : 0);
-        Character playerRemove = aPlayer.stream().filter(player -> player.getId() == userId).findAny().orElse(null);
-        if (playerRemove != null) {
-            aPlayer.remove(playerRemove);
-            aPet.remove(playerRemove.getPet());
-            aProtoAdd.add(playerRemove.toProtoRemove());
-            if (playerRemove.getPet() != null) aProtoAdd.add(playerRemove.getPet().toProtoRemove());
-        }
-        if (aPlayer.isEmpty()) cancelTask();
+
+//        Character playerRemove = aPlayer.stream().filter(player -> player.getId() == userId).findAny().orElse(null);
+//        if (playerRemove != null) {
+//            aPlayer.remove(playerRemove);
+//            aPet.remove(playerRemove.getPet());
+//            aProtoAdd.add(playerRemove.toProtoRemove());
+//            if (playerRemove.getPet() != null) aProtoAdd.add(playerRemove.getPet().toProtoRemove());
+//        }
+//        if (aPlayer.isEmpty()) cancelTask();
     }
 
 
@@ -364,50 +350,45 @@ public abstract class BaseRoom extends MonoRoom {
     }
 
     public int getRoomTypeId() { // = id map
-        return Integer.parseInt(keys[1]);
+        return Integer.parseInt(Constans.getKeyRoomById(battleId) [1]);
     }
 
     public MapType getRoomType() { // = id map
-        return MapType.get(Integer.parseInt(keys[1]));
+        return MapType.get(Integer.parseInt(Constans.getKeyRoomById(battleId)[1]));
     }
 
     public int getChannelId() {
-        return Integer.parseInt(keys[2]);
+        return Integer.parseInt(Constans.getKeyRoomById(battleId)[2]);
     }
 
-    public void protoRoomState(StateType status, int size, List<Long> aInfo) {
-        for (int i = 0; i < aPlayer.size(); i++) {
-            aProtoUnitState.add(protoState(aPlayer.get(i).getId(), List.of(status), List.of(size), aInfo));
-        }
-    }
-
-    public void protoRoomState(StateType status, List<Long> aInfo) {
-        for (int i = 0; i < aPlayer.size(); i++) {
-            aProtoUnitState.add(protoState(aPlayer.get(i).getId(), List.of(status), List.of(aInfo.size()), aInfo));
-        }
-    }
-
-    public void protoRoomState(StateType status, Integer... data) {
-        for (int i = 0; i < aPlayer.size(); i++) {
-            aProtoUnitState.add(protoState(aPlayer.get(i).getId(), List.of(status), GsonUtil.toListLong(Arrays.asList(data))));
-        }
-    }
-
-//    public void protoOneRoomState(StateType status, Long... info) {
+//    public void protoRoomState(StateType status, int size, List<Long> aInfo) {
 //        for (int i = 0; i < aPlayer.size(); i++) {
-//            aProtoUnitState.add(protoState(aPlayer.get(i).getId(), List.of(status), List.of(status.length), Arrays.asList(info)));
+//            aProtoUnitState.add(protoState(aPlayer.get(i).getId(), List.of(status), List.of(size), aInfo));
+//        }
+//    }
+//
+//    public void protoRoomState(StateType status, List<Long> aInfo) {
+//        for (int i = 0; i < aPlayer.size(); i++) {
+//            aProtoUnitState.add(protoState(aPlayer.get(i).getId(), List.of(status), List.of(aInfo.size()), aInfo));
+//        }
+//    }
+//
+//    public void protoRoomState(StateType status, Integer... data) {
+//        for (int i = 0; i < aPlayer.size(); i++) {
+//            aProtoUnitState.add(protoState(aPlayer.get(i).getId(), List.of(status), GsonUtil.toListLong(Arrays.asList(data))));
 //        }
 //    }
 
-    public void protoRoomState(List<StateType> aStatus, List<List<Long>> aInfo) {
-        List<Integer> aSize = new ArrayList<>();
-        List<Long> data = new ArrayList<>();
-        for (int j = 0; j < aInfo.size(); j++) {
-            aSize.add(aInfo.get(j).size());
-            data.addAll(aInfo.get(j));
-        }
-        for (int i = 0; i < aPlayer.size(); i++) {
-            aProtoUnitState.add(protoState(aPlayer.get(i).getId(), aStatus, aSize, data));
-        }
-    }
+
+//    public void protoRoomState(List<StateType> aStatus, List<List<Long>> aInfo) {
+//        List<Integer> aSize = new ArrayList<>();
+//        List<Long> data = new ArrayList<>();
+//        for (int j = 0; j < aInfo.size(); j++) {
+//            aSize.add(aInfo.get(j).size());
+//            data.addAll(aInfo.get(j));
+//        }
+//        for (int i = 0; i < aPlayer.size(); i++) {
+//            aProtoUnitState.add(protoState(aPlayer.get(i).getId(), aStatus, aSize, data));
+//        }
+//    }
 }

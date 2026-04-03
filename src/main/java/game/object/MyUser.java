@@ -189,6 +189,10 @@ public class MyUser implements Serializable {
         Util.sendProtoData(channel, CommonProto.getCommonVector(notifyType.value), IAction.ADD_NOTIFY);
     }
 
+    public Pos getCachePos(){
+        return cachePos==null? Pos.zero():cachePos;
+    }
+
     public Player getPlayer() {
         if (player == null) {
             player = new Player(this, 1);

@@ -1,14 +1,14 @@
 package game.dragonhero.table;
 
-import game.battle.model.Character;
+import game.battle.model.ChunkObject;
 import game.battle.type.RoomState;
 import game.dragonhero.mapping.main.ResMapEntity;
 
-import java.util.List;
+import java.util.Map;
 
-public class DefaultRoom extends BaseBattleRoom {
-    public DefaultRoom(ResMapEntity mapInfo, List<Character> aPlayer, String keyRoom) {
-        super(mapInfo, aPlayer, keyRoom, false);
+public class HomeRoom extends BaseBattleRoom {
+    public HomeRoom(ResMapEntity mapInfo, Map<Integer, ChunkObject> mChunk, String keyRoom) {
+        super(mapInfo, mChunk, keyRoom);
     }
 
     @Override

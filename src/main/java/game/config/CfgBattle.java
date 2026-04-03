@@ -59,28 +59,16 @@ public class CfgBattle {
         UserEntity u = mUser.getUser();
         int num = (channel.length > 0 ? channel[0] : 0);
         // key logic để lấy lock (nhóm phòng)
-        String lockKey = buildLockKey(roomType, num);
-
+        String lockKey = roomType + "_" + num;
         // lấy lock riêng cho nhóm này
         Lock lock = keyLocks.computeIfAbsent(lockKey, k -> new ReentrantLock());
         lock.lock();
         try {
-            // tạo key room cuối cùng
-            return buildRoomKey(roomType, num, u.getServer());
+            return ChUtil.KEY_ROOM + "_" + roomType + "_" + num + "_" + u.getServer();
         } finally {
             lock.unlock();
         }
     }
-
-    private static String buildLockKey(int roomType, int num) {
-        return roomType + "_" + num;
-    }
-
-    private static String buildRoomKey(int roomType, int num, int server) {
-        // format: room_roomType_subId_num_server
-        return ChUtil.KEY_ROOM + "_" + roomType + "_" + num + "_" + server;
-    }
-
 
     public static void loadConfig(String strJson) {
         config = new Gson().fromJson(strJson, DataConfig.class);

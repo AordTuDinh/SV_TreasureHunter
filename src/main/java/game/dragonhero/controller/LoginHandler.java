@@ -225,8 +225,8 @@ public class LoginHandler extends AHandler {
         if (oldChanel != null && oldChanel.id() != channel.id()) {
             BaseRoom oldRoom = (BaseRoom) ChUtil.get(oldChanel, ChUtil.KEY_ROOM);
             MyUser oldUser = (MyUser) ChUtil.get(oldChanel, ChUtil.KEY_M_USER);
-            if (oldRoom != null && oldUser != null && oldRoom.hasPlayer(user.getId())) {
-                oldRoom.removePlayer(user.getId());
+            if (oldRoom != null && oldUser != null && oldRoom.hasPlayer(oldUser.getPlayer().getIdInMap())) {
+                oldRoom.removePlayer(oldUser.getPlayer().getIdInMap());
                 oldUser.userLogout();
             }
             Util.sendProtoData(oldChanel, PopupType.FORCE_LOGOUT.toProto(mUser), IAction.POPUP_INFO);
@@ -245,8 +245,6 @@ public class LoginHandler extends AHandler {
         Online.addChannel(mUser.getUser(), channel);
         Pbmethod.PbLoginGame.Builder builder = Pbmethod.PbLoginGame.newBuilder();
         builder.setSession(session);
-        // season
-        builder.setSeason(CfgServer.getSeason());
         // get clan
         if (user.getClan() != 0) {
             ClanEntity myClan = ClanManager.getInstance(user.getClan()).getClan();
