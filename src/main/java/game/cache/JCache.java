@@ -1,6 +1,6 @@
 package game.cache;
 
-import game.dragonhero.server.AppConfig;
+import game.treasure.server.AppConfig;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 

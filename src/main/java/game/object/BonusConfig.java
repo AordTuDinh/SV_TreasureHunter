@@ -1,8 +1,7 @@
 package game.object;
 
-import game.dragonhero.service.user.Bonus;
+import game.treasure.service.user.Bonus;
 import lombok.Getter;
-import ozudo.base.helper.GsonUtil;
 import ozudo.base.helper.NumberUtil;
 
 import java.io.Serializable;

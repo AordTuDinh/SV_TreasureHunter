@@ -1,9 +1,7 @@
 package game.object;
 
-import game.battle.model.Character;
-import game.battle.object.Mono;
 import game.config.CfgBattle;
-import game.dragonhero.table.BaseRoom;
+import game.treasure.table.BaseRoom;
 import lombok.NoArgsConstructor;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;

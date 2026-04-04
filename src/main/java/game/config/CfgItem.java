@@ -1,8 +1,8 @@
 package game.config;
 
 import game.config.lang.Lang;
-import game.dragonhero.mapping.UserPetEntity;
-import game.dragonhero.service.user.Bonus;
+import game.treasure.mapping.UserPetEntity;
+import game.treasure.service.user.Bonus;
 import game.object.MyUser;
 
 import java.util.List;

@@ -2,10 +2,9 @@ package game.config;
 
 import com.google.gson.Gson;
 import game.config.aEnum.ItemKey;
-import game.dragonhero.mapping.UserPetEntity;
-import game.dragonhero.mapping.main.ResPetEntity;
-import game.dragonhero.service.resource.ResPet;
-import game.dragonhero.service.user.Bonus;
+import game.treasure.mapping.main.ResPetEntity;
+import game.treasure.service.resource.ResPet;
+import game.treasure.service.user.Bonus;
 import game.object.MyUser;
 import ozudo.base.helper.NumberUtil;
 

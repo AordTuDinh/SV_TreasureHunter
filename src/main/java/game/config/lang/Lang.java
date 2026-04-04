@@ -2,10 +2,9 @@ package game.config.lang;
 
 import com.google.gson.JsonArray;
 import game.config.CfgServer;
-import game.dragonhero.mapping.UserEntity;
-import game.dragonhero.mapping.main.ConfigLanguage;
-import game.dragonhero.mapping.main.ConfigResLanguage;
-import game.dragonhero.mapping.main.ResTitleEntity;
+import game.treasure.mapping.main.ConfigLanguage;
+import game.treasure.mapping.main.ConfigResLanguage;
+import game.treasure.mapping.main.ResTitleEntity;
 import game.object.MyUser;
 import ozudo.base.database.DBResource;
 import ozudo.base.helper.GsonUtil;

@@ -1,6 +1,6 @@
 package game.monitor;
 
-import game.dragonhero.mapping.ClanEntity;
+import game.treasure.mapping.ClanEntity;
 import lombok.Data;
 import lombok.NonNull;
 import ozudo.base.database.DBJPA;

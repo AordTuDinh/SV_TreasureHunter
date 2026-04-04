@@ -2,8 +2,7 @@ package game.config;
 
 import com.google.gson.Gson;
 import game.config.aEnum.ClanPosition;
-import game.dragonhero.service.user.Bonus;
-import game.monitor.Online;
+import game.treasure.service.user.Bonus;
 import game.object.BonusConfig;
 import ozudo.base.helper.DateTime;
 

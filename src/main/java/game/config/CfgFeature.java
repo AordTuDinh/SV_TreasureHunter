@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import game.config.aEnum.FeatureBlockType;
 import game.config.aEnum.FeatureType;
 import game.config.lang.Lang;
-import game.dragonhero.controller.AHandler;
+import game.treasure.controller.AHandler;
 import game.object.MyUser;
 
 import java.util.HashMap;

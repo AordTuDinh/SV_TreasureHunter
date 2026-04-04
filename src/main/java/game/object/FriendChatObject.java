@@ -1,12 +1,10 @@
 package game.object;
 
 
-import game.dragonhero.mapping.UserEntity;
+import game.treasure.mapping.UserEntity;
 import lombok.Data;
-import ozudo.base.helper.DateTime;
 
 import java.io.Serializable;
-import java.util.Date;
 
 @Data
 public class FriendChatObject implements Serializable {

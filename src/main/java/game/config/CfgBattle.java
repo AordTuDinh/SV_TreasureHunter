@@ -2,7 +2,7 @@ package game.config;
 
 import com.google.gson.Gson;
 import game.config.aEnum.PopupType;
-import game.dragonhero.mapping.UserEntity;
+import game.treasure.mapping.UserEntity;
 import game.object.MyUser;
 import game.protocol.CommonProto;
 import net.sf.json.JSONObject;

@@ -3,7 +3,7 @@ package ozudo.net.tcp;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import game.dragonhero.server.Constans;
+import game.treasure.server.Constans;
 import ozudo.net.RequestMessage;
 
 import java.net.InetSocketAddress;

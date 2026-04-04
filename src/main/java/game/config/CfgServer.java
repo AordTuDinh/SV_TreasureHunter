@@ -1,18 +1,16 @@
 package game.config;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import game.cache.JCache;
-import game.dragonhero.mapping.UserEntity;
-import game.dragonhero.mapping.main.SystemMailEntity;
-import game.dragonhero.task.dbcache.MailCreatorCache;
+import game.treasure.mapping.UserEntity;
+import game.treasure.mapping.main.SystemMailEntity;
+import game.treasure.task.dbcache.MailCreatorCache;
 import ozudo.base.database.DBResource;
 import ozudo.base.log.Logs;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 public class CfgServer {
     public static final String REAL = "real";

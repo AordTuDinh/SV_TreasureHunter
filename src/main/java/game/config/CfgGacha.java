@@ -2,7 +2,7 @@ package game.config;
 
 import com.google.gson.Gson;
 import game.config.aEnum.ItemKey;
-import game.dragonhero.service.user.Bonus;
+import game.treasure.service.user.Bonus;
 import net.sf.json.JSONObject;
 import ozudo.base.helper.NumberUtil;
 

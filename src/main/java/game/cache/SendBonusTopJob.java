@@ -2,9 +2,8 @@ package game.cache;
 
 import game.config.CfgServer;
 import game.config.lang.Lang;
-import game.dragonhero.server.App;
-import game.dragonhero.server.AppInit;
-import ozudo.base.database.DBJPA2;
+import game.treasure.server.App;
+import game.treasure.server.AppInit;
 import ozudo.base.database.DBResource;
 import ozudo.base.helper.DBHelper;
 import ozudo.base.helper.GUtil;
@@ -12,7 +11,6 @@ import ozudo.base.helper.GsonUtil;
 import ozudo.base.helper.StringHelper;
 import ozudo.base.log.Logs;
 
-import javax.persistence.EntityManager;
 import java.util.*;
 
 public class SendBonusTopJob {

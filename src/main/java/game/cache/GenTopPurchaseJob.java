@@ -1,16 +1,13 @@
 package game.cache;
 
-import game.dragonhero.server.App;
-import game.dragonhero.server.AppInit;
+import game.treasure.server.App;
+import game.treasure.server.AppInit;
 import ozudo.base.database.DBJPA2;
 import ozudo.base.database.DBResource;
 import ozudo.base.helper.GUtil;
 import ozudo.base.log.Logs;
 
 import javax.persistence.EntityManager;
-import java.security.SecureRandom;
-import java.util.ArrayList;
-import java.util.List;
 
 public class GenTopPurchaseJob {
 

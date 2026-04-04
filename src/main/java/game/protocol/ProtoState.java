@@ -1,7 +1,7 @@
 package game.protocol;
 
 import com.google.protobuf.ByteString;
-import game.dragonhero.server.Constans;
+import game.treasure.server.Constans;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import protocol.Pbmethod.*;

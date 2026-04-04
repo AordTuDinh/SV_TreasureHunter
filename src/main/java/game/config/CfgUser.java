@@ -1,8 +1,6 @@
 package game.config;
 
 import com.google.gson.Gson;
-import game.dragonhero.mapping.main.ResVipEntity;
-import game.dragonhero.service.resource.ResEvent;
 
 import java.util.List;
 

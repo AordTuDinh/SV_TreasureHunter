@@ -3,10 +3,9 @@ package game.config;
 import com.google.gson.Gson;
 import game.config.aEnum.StatusType;
 import game.config.lang.Lang;
-import game.dragonhero.mapping.UserEventSevenDayEntity;
+import game.treasure.mapping.UserEventSevenDayEntity;
 import game.object.MyUser;
 import ozudo.base.helper.DateTime;
-import ozudo.base.helper.GsonUtil;
 import protocol.Pbmethod;
 
 import java.util.ArrayList;

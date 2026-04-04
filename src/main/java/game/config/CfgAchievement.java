@@ -1,9 +1,8 @@
 package game.config;
 
 import com.google.gson.Gson;
-import game.dragonhero.mapping.UserAchievementEntity;
-import game.dragonhero.service.Services;
-import game.dragonhero.service.user.Bonus;
+import game.treasure.mapping.UserAchievementEntity;
+import game.treasure.service.Services;
 import game.object.BonusConfig;
 import game.object.MyUser;
 

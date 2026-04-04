@@ -1,10 +1,10 @@
 package ozudo.net;
 
 import game.config.lang.Lang;
-import game.dragonhero.controller.*;
-import game.dragonhero.server.Constans;
-import game.dragonhero.server.IAction;
-import game.dragonhero.table.BaseRoom;
+import game.treasure.controller.*;
+import game.treasure.server.Constans;
+import game.treasure.server.IAction;
+import game.treasure.table.BaseRoom;
 import game.protocol.CommonProto;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -22,7 +22,7 @@ public class ResponseMessage {
     private RequestMessage request;
     @Getter
     private int service = 0;
-    static Map<Integer, game.dragonhero.controller.AHandler> mHandler;
+    static Map<Integer, game.treasure.controller.AHandler> mHandler;
     Pbmethod.ResponseData.Builder responseData = Pbmethod.ResponseData.newBuilder();
 
     static {

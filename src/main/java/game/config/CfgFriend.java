@@ -1,12 +1,11 @@
 package game.config;
 
 import com.google.gson.Gson;
-import game.dragonhero.mapping.UserEntity;
+import game.treasure.mapping.UserEntity;
 import net.sf.json.JSONObject;
 import ozudo.base.database.DBJPA;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 

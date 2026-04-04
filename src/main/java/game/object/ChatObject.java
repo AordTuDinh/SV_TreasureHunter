@@ -1,7 +1,7 @@
 package game.object;
 
 import game.config.aEnum.ChatType;
-import game.dragonhero.mapping.UserEntity;
+import game.treasure.mapping.UserEntity;
 import game.monitor.Online;
 import lombok.Data;
 import ozudo.base.helper.GsonUtil;

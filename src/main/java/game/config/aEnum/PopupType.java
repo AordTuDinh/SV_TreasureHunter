@@ -1,7 +1,7 @@
 package game.config.aEnum;
 
 import game.config.lang.Lang;
-import game.dragonhero.controller.AHandler;
+import game.treasure.controller.AHandler;
 import game.object.MyUser;
 import protocol.Pbmethod;
 

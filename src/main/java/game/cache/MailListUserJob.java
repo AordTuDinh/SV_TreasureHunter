@@ -1,24 +1,15 @@
 package game.cache;
 
-import game.config.CfgLottery;
 import game.config.CfgServer;
 import game.config.lang.Lang;
-import game.config.aEnum.ItemKey;
-import game.config.aEnum.StatusType;
-import game.dragonhero.mapping.UserItemEntity;
-import game.dragonhero.server.App;
-import game.dragonhero.server.AppInit;
-import game.dragonhero.service.user.Bonus;
-import game.dragonhero.task.MailCreator;
-import game.monitor.Telegram;
+import game.treasure.server.App;
+import game.treasure.server.AppInit;
 import ozudo.base.database.DBJPA2;
 import ozudo.base.database.DBResource;
 import ozudo.base.helper.*;
 import ozudo.base.log.Logs;
 
 import javax.persistence.EntityManager;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class MailListUserJob {

@@ -1,6 +1,6 @@
 package game.cache;
 
-import game.dragonhero.server.service.aop.LogExecutionTime;
+import game.treasure.server.service.aop.LogExecutionTime;
 import ozudo.base.helper.GUtil;
 import ozudo.base.helper.Util;
 import ozudo.base.log.Logs;

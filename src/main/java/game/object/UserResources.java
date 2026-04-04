@@ -1,10 +1,9 @@
 package game.object;
 
-import game.battle.calculate.IMath;
 import game.config.CfgAchievement;
 import game.config.aEnum.*;
-import game.dragonhero.mapping.*;
-import game.dragonhero.service.resource.ResEventTop;
+import game.treasure.mapping.*;
+import game.treasure.service.resource.ResEventTop;
 import lombok.Getter;
 import lombok.Setter;
 import ozudo.base.database.DBJPA;

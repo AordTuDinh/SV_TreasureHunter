@@ -5,9 +5,9 @@ import game.battle.model.Character;
 import game.battle.model.Player;
 import game.battle.type.GeometryType;
 import game.battle.type.RoomState;
-import game.dragonhero.BattleConfig;
-import game.dragonhero.mapping.main.ResMapEntity;
-import game.dragonhero.table.BaseBattleRoom;
+import game.treasure.BattleConfig;
+import game.treasure.mapping.main.ResMapEntity;
+import game.treasure.table.BaseBattleRoom;
 import game.object.Geometry;
 import lombok.NoArgsConstructor;
 

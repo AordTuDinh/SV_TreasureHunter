@@ -1,7 +1,7 @@
 package game.config;
 
 import com.google.gson.Gson;
-import game.dragonhero.service.user.Bonus;
+import game.treasure.service.user.Bonus;
 import ozudo.base.helper.NumberUtil;
 
 import java.util.ArrayList;

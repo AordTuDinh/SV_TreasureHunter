@@ -1,7 +1,7 @@
 #!/bin/bash
 cd `dirname $0`
 
-proc_name="gameserver1"
+proc_name="gameserver"
 pkill -f "$proc_name"
 
 export MAVEN_OPTS=${MAVEN_OPTS}" -Duser.timezone=Asia/Ho_Chi_Minh"
@@ -13,16 +13,16 @@ if [[ "$jrebel" = true ]] ; then
     export MAVEN_OPTS=${MAVEN_OPTS}" -Drebel.spring_data_plugin=true"
 fi
 
-hotswap=true
+hotswap=false
 if [[ "$hotswap" = true ]] ; then
     HOTSWAP_JAR="/opt/java/jbr/lib/hotswap-agent.jar"
     export MAVEN_OPTS=${MAVEN_OPTS}" -XX:+AllowEnhancedClassRedefinition"
     export MAVEN_OPTS=${MAVEN_OPTS}" -XX:HotswapAgent=fatjar"
 fi
 
-/usr/bin/mvn exec:java -Dexec.mainClass="game.dragonhero.server.App" -Dexec.args="$proc_name"
+/usr/bin/mvn exec:java -Dexec.mainClass="game.treasure.server.App" -Dexec.args="$proc_name"
 
-#screen -fn -dm -U -S ${proc_name} /opt/maven/bin/mvn exec:java -Dexec.mainClass="game.dragonhero.server.App" -Dexec.args="$proc_name"
+#screen -fn -dm -U -S ${proc_name} /opt/maven/bin/mvn exec:java -Dexec.mainClass="game.treasure.server.App" -Dexec.args="$proc_name"
 #screen -ls
 #screen -r ${proc_name}
 #sed -i -e 's/\r$//' run.sh

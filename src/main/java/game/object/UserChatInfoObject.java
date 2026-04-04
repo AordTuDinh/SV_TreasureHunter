@@ -1,6 +1,6 @@
 package game.object;
 
-import game.dragonhero.mapping.UserEntity;
+import game.treasure.mapping.UserEntity;
 import lombok.Data;
 
 import java.io.Serializable;

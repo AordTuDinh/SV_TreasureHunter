@@ -1,6 +1,6 @@
 package ozudo.base.helper;
 
-import game.dragonhero.table.BaseRoom;
+import game.treasure.table.BaseRoom;
 import game.object.MyUser;
 import io.netty.channel.Channel;
 import io.netty.util.AttributeKey;

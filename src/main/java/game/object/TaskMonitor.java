@@ -1,7 +1,7 @@
 package game.object;
 
 import game.config.CfgServer;
-import game.dragonhero.table.MonoRoom;
+import game.treasure.table.MonoRoom;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import ozudo.base.log.Logs;

@@ -2,7 +2,7 @@ package ozudo.net;
 
 import game.config.CfgServer;
 import game.config.lang.Lang;
-import game.dragonhero.server.IAction;
+import game.treasure.server.IAction;
 import game.monitor.Online;
 import game.protocol.CommonProto;
 import io.netty.channel.*;
@@ -10,7 +10,6 @@ import io.netty.handler.timeout.IdleState;
 import io.netty.handler.timeout.IdleStateEvent;
 import ozudo.base.helper.ChUtil;
 import ozudo.base.helper.Util;
-import ozudo.base.log.Logs;
 
 import java.net.SocketException;
 

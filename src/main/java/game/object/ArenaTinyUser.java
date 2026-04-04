@@ -2,12 +2,12 @@ package game.object;
 
 
 import game.battle.object.Point;
-import game.dragonhero.mapping.UserEntity;
+import game.treasure.mapping.UserEntity;
 import game.monitor.Online;
 import lombok.Data;
 import ozudo.base.helper.GsonUtil;
 import ozudo.base.helper.StringHelper;
-import protocol.Pbmethod;
+
 import java.io.Serializable;
 import java.util.List;
 

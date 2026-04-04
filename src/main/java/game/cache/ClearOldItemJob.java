@@ -1,7 +1,6 @@
 package game.cache;
 
-import game.dragonhero.server.AppConfig;
-import game.monitor.Telegram;
+import game.treasure.server.AppConfig;
 import ozudo.base.database.DBResource;
 import ozudo.base.helper.GUtil;
 import ozudo.base.log.Config;

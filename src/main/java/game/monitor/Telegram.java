@@ -1,7 +1,7 @@
 package game.monitor;
 
 import game.cache.JCachePubSub;
-import game.dragonhero.server.AppConfig;
+import game.treasure.server.AppConfig;
 import game.pubsub.PubSubService;
 
 public class Telegram {

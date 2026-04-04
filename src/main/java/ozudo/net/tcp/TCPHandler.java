@@ -2,7 +2,7 @@ package ozudo.net.tcp;
 
 import io.netty.channel.ChannelHandlerContext;
 import ozudo.net.AbstractHandler;
-import game.dragonhero.server.Constans;
+import game.treasure.server.Constans;
 import ozudo.base.helper.ChUtil;
 
 public class TCPHandler extends AbstractHandler {

@@ -1,9 +1,8 @@
 package game.battle.object;
 
 import game.battle.calculate.MathLab;
-import game.dragonhero.BattleConfig;
-import game.dragonhero.mapping.main.ResMapEntity;
-import game.object.MapData;
+import game.treasure.BattleConfig;
+import game.treasure.mapping.main.ResMapEntity;
 import lombok.Getter;
 import ozudo.base.helper.GsonUtil;
 import ozudo.base.helper.NumberUtil;

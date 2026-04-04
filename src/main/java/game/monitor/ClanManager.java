@@ -1,12 +1,12 @@
 package game.monitor;
 
 import game.cache.CacheStoreBeans;
-import game.dragonhero.dao.ClanDAO;
-import game.dragonhero.dao.UserDAO;
-import game.dragonhero.mapping.ClanEntity;
-import game.dragonhero.mapping.UserEntity;
-import game.dragonhero.service.Services;
-import game.dragonhero.service.user.Actions;
+import game.treasure.dao.ClanDAO;
+import game.treasure.dao.UserDAO;
+import game.treasure.mapping.ClanEntity;
+import game.treasure.mapping.UserEntity;
+import game.treasure.service.Services;
+import game.treasure.service.user.Actions;
 import ozudo.base.database.DBJPA;
 import ozudo.base.log.Logs;
 
