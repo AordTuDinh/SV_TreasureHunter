@@ -357,10 +357,11 @@ public abstract class Unit {
         timeActiveSlot[slot] = System.currentTimeMillis();
     }
 
-    public Pbmethod.PbUnit toProtoRemove() {
+    public Pbmethod.PbUnit toProtoRemove(int chunkId) {
         Pbmethod.PbUnit.Builder builder = Pbmethod.PbUnit.newBuilder();
         builder.setType(type.value);
         builder.setId(idInMap);
+        builder.setChunkId(chunkId);
         builder.setIsAdd(false);
         return builder.build();
     }

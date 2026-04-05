@@ -32,9 +32,10 @@ public abstract class MonoRoom extends Mono {
     MapType mapType;
 
 
-    // region proto -> sửa thành chunk id
+    // data thay đổi trong chunk
     @Getter
-     List<PbUnit> aProtoAdd;
+    List<PbUnit> aProtoChange;
+    // data mini state
     @Getter
     List<PbUnitState> aProtoUnitState;
 
@@ -45,7 +46,7 @@ public abstract class MonoRoom extends Mono {
         this.coroutines = new ArrayList<>();
         this.battleId = Constans.getCounterId();
         this.mapType = MapType.get(Integer.parseInt(Constans.getKeyRoomById(this.battleId)[1]));
-        this.aProtoAdd = new ArrayList<>();
+        this.aProtoChange = new ArrayList<>();
         this.aProtoUnitState = new ArrayList<>();
         Constans.mIdToBattleId.put(this.battleId, keyRoom);
     }

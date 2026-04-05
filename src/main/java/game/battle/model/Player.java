@@ -153,11 +153,17 @@ public class Player extends Unit implements Serializable {
     }
 
     public void setPosAndDirection(Pos newPos, Pos newDirection) {
-        // todo check chunk current
-
         this.pos = newPos.round();
         this.direction = newDirection.normalized();
         this.setMove(true);
+        // todo check chunk current
+        int curChunk = this.chunkId;
+        int newChunk = room.worldPosToChunkId(newPos);
+        if(curChunk != newChunk){
+            this.chunkId = newChunk;
+            room.joinChunk(this,newChunk, curChunk);
+
+        }
     }
 
     public void addNumKillMonster(Unit beKill) {
@@ -451,10 +457,11 @@ public class Player extends Unit implements Serializable {
         sendDie = true;
     }
 
-    public Pbmethod.PbUnit toProtoAdd() {
+    public Pbmethod.PbUnit toProtoAdd(int chunkId) {
         Pbmethod.PbUnit.Builder pbAdd = Pbmethod.PbUnit.newBuilder();
         pbAdd.setType(Constans.TYPE_PLAYER);
         pbAdd.setId(id);
+        pbAdd.setChunkId(chunkId);
         pbAdd.setIsAdd(true);
         pbAdd.setPos(pos.toProto());
         if (panelMap == null) panelMap = ResMap.getMap(MapType.HOME);

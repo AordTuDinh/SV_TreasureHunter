@@ -52,18 +52,19 @@ message  PbCharInfo{
 }
 
 message PbUnit{
-  optional int32 type = 1;
-  optional  int64 id = 2;
-  optional  bool isAdd = 3;
-  optional  int32 teamId = 4;
-  repeated int32  avatar = 5;
-  optional int32  ownerId = 6;
-  optional PbPos pos = 7;
-  optional PbPos direction = 8;
-  optional int32 speed = 9;
-  repeated int32 info = 10;
-  optional PbCharInfo characterInfo = 11;
-  optional  float rangeAttack = 12;
+  optional int32 chunkId = 1;
+  optional int32 type = 2;
+  optional  int64 id = 3;
+  optional  bool isAdd = 4;
+  optional  int32 teamId = 5;
+  repeated int32  avatar = 6;
+  optional int32  ownerId = 7;
+  optional PbPos pos = 8;
+  optional PbPos direction = 9;
+  optional int32 speed = 10;
+  repeated int32 info = 11;
+  optional PbCharInfo characterInfo = 12;
+  optional  float rangeAttack = 13;
 }
 
 message PbCell {

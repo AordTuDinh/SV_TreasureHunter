@@ -28,14 +28,14 @@ import java.util.*;
 public abstract class BaseRoom extends MonoRoom {
     // static data
     Map<Integer, ChunkObject> mChunk = new HashMap<>();
-
-
-    Map<Integer, List<Integer>> visibleByChunkId = new HashMap<>();  // chunk id -> list visible chunk by id chunk
+    // chunk id -> list visible chunk by id chunk
+    Map<Integer, List<Integer>> visibleByChunkId = new HashMap<>();
     // id in map --> Unit
     Map<Long, Unit> mUnit = new HashMap<>();
     // list player id in map
     List<Long> aPlayerIds = new ArrayList<>();
-    // id chunk -> list unit id ở trong chunk
+
+    // id chunk -> list unit id ở trong chunk = thay đổi giữa các chunk chỉ cần set  lại ở đây
     Map<Integer, Set<Long>> chunkCharacter = new HashMap<>();
 
     float serverTime;
@@ -69,7 +69,6 @@ public abstract class BaseRoom extends MonoRoom {
     protected void sendTableState() {
         Map<Integer, byte[]> data = buildChunkViewData();
         if (data == null) return;
-        //System.out.println("send table state -------------------");
         for (int i = 0; i < aPlayerIds.size(); i++) {
             Unit player = mUnit.get(aPlayerIds.get(i));
             if (player != null && player.isPlayer() && player.getPlayer().getMUser().getChannel() != null) {
@@ -122,8 +121,8 @@ public abstract class BaseRoom extends MonoRoom {
         }
 
         // copy event
-        List<Pbmethod.PbUnit> protoAddCopy = new ArrayList<>(aProtoAdd);
-        aProtoAdd.clear();
+        List<Pbmethod.PbUnit> protoChange = new ArrayList<>(aProtoChange);
+        aProtoChange.clear();
 
         List<Pbmethod.PbUnitState> protoUnitStateCopy = new ArrayList<>(aProtoUnitState);
         aProtoUnitState.clear();
@@ -147,7 +146,11 @@ public abstract class BaseRoom extends MonoRoom {
                 }
             }
 
-            builder.addAllUnitAdd(protoAddCopy);
+            for (Pbmethod.PbUnit u : protoChange) {
+                if (visibleChunks.contains(u.getChunkId())) {
+                    builder.addUnitAdd(u);
+                }
+            }
 
             if (!protoUnitStateCopy.isEmpty()) {
                 builder.addAUnitUpdate(
@@ -310,6 +313,17 @@ public abstract class BaseRoom extends MonoRoom {
     }
 
 
+    public void joinChunk(Player player, int newChunk, int oldChunk) {
+        Set<Long> oldSet = chunkCharacter.get(oldChunk);
+        if (oldSet != null) oldSet.remove(player.getIdInMap());
+
+        chunkCharacter.computeIfAbsent(newChunk, k -> new HashSet<>())
+                .add(player.getIdInMap());
+
+        aProtoChange.add(player.toProtoRemove(oldChunk));
+        aProtoChange.add(player.toProtoAdd(newChunk));
+    }
+
     public void joinMap(AHandler handler, Player player) {
         if (roomState != RoomState.ACTIVE) return;
         addCharacter(player);
@@ -349,19 +363,6 @@ public abstract class BaseRoom extends MonoRoom {
         return mUnit.containsKey(userId);
     }
 
-
-//    public void changePet(Pet oldPet, Pet newPet) {
-//        aPet.remove(oldPet);
-//        newPet.setId(oldPet.getId());
-//        aPet.add(newPet);
-//    }
-//
-//    public void removePet(Pet pet) { // remove and send
-//        aProtoAdd.add(pet.toProtoRemove());
-//        aPet.remove(pet);
-//    }
-
-
     public int worldPosToChunkId(Pos pos) {
         return mapInfo.worldPosToChunkId(pos);
     }
@@ -372,7 +373,7 @@ public abstract class BaseRoom extends MonoRoom {
 
     }
 
-    // trả cho các thằng player khác để add vào
+    // add mới từ khi instance ra 1 unit thì chạy qua đây
     public void addCharacter(Unit unit) {
         if (roomState != RoomState.ACTIVE && roomState != RoomState.PAUSE) return;
         long idInMap = getIdNext();
@@ -381,11 +382,8 @@ public abstract class BaseRoom extends MonoRoom {
         int chunkId = worldPosToChunkId(unit.getPos());
         unit.setChunkId(chunkId);
         mUnit.put(idInMap, unit);
-
         chunkCharacter.get(chunkId).add(idInMap);
-
-
-        aProtoAdd.add(unit.toProtoAdd());
+        aProtoChange.add(unit.toProtoAdd());
 
         if (unit.isPlayer()) {
             Pet pet = unit.getPlayer().getPetUse();
@@ -407,7 +405,7 @@ public abstract class BaseRoom extends MonoRoom {
         }
 
 
-        aProtoAdd.add(unit.toProtoRemove());
+        aProtoChange.add(unit.toProtoRemove(unit.getChunkId()));
     }
 
     public void removePlayer(long idInMap) {
@@ -443,6 +441,8 @@ public abstract class BaseRoom extends MonoRoom {
     public int getChannelId() {
         return Integer.parseInt(Constans.getKeyRoomById(battleId)[2]);
     }
+
+
 
 //    public void protoRoomState(StateType status, int size, List<Long> aInfo) {
 //        for (int i = 0; i < aPlayer.size(); i++) {
