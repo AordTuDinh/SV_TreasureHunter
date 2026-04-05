@@ -13,3 +13,4 @@ public class MapData implements Serializable {
         public int type;
     }
 }
+

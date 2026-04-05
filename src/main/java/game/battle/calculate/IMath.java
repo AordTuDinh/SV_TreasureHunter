@@ -2,7 +2,7 @@ package game.battle.calculate;
 
 import game.battle.object.Point;
 import game.battle.object.Pos;
-import game.battle.model.Character;
+import game.battle.model.Unit;
 import game.config.CfgClan;
 import game.config.aEnum.FactionType;
 import game.treasure.mapping.*;
@@ -372,11 +372,11 @@ public class IMath {
     }
 
 
-    public static long[] calculateDamage(Character attacker, Character target, FactionType factionAttack) {// crit,atk,matk
+    public static long[] calculateDamage(Unit attacker, Unit target, FactionType factionAttack) {// crit,atk,matk
         return calculateDamage(attacker, target, factionAttack, attacker.getPoint().getAttackDamage(), attacker.getPoint().getMagicDamage());
     }
 
-    public static long[] calculateDamage(Character attacker, Character target, FactionType factionAttack, long atkDame, long mAtkDame) {
+    public static long[] calculateDamage(Unit attacker, Unit target, FactionType factionAttack, long atkDame, long mAtkDame) {
         long status = 0L;
         float critPer = 1f;
         if (isCrit(attacker.getPoint().getCrit())) {
@@ -396,7 +396,7 @@ public class IMath {
     }
 
     // Hàm gốc - tất cả đều tính qua hàm này
-    public static long[] calculateDamageBase(long atkDame, long magicDame, FactionType factionAttack, Character beAttacker, float critPer, PointBuff buff, Character attacker) {
+    public static long[] calculateDamageBase(long atkDame, long magicDame, FactionType factionAttack, Unit beAttacker, float critPer, PointBuff buff, Unit attacker) {
         long atk = 0, mag = 0, def = 0, magicResist = 0;
         long doge = beAttacker.getPoint().getDoge();//miss
         if (beAttacker.isBoss()) {

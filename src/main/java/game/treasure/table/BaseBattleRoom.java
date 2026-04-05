@@ -1,6 +1,6 @@
 package game.treasure.table;
 
-import game.battle.model.Character;
+import game.battle.model.Unit;
 import game.battle.model.ChunkObject;
 import game.battle.object.Coroutine;
 import game.battle.object.GameCore;
@@ -34,8 +34,6 @@ public abstract class BaseBattleRoom extends BaseRoom {
         this.controller = new GameCore();
         coroutines = new ArrayList<>();
         // proto
-        pbInit.setMapId(Constans.mIdToBattleId.get(battleId));
-        pbInit.setBattleId(battleId);
         key1 = TaskMonitor.getInstance().submit(this, CfgBattle.periodUpdate);
         key2 = TaskMonitor.getInstance().submit(this, CfgBattle.periodFixedUpdate);
         key3 = TaskMonitor.getInstance().submit(this, CfgBattle.periodUpdateLow);
@@ -96,7 +94,7 @@ public abstract class BaseBattleRoom extends BaseRoom {
         coroutines.remove(coroutine);
     }
 
-    public void ChangeCharacterHp(Character attacker, Character beDamage, long atk, long mAtk) {
+    public void ChangeCharacterHp(Unit attacker, Unit beDamage, long atk, long mAtk) {
 
     }
 }

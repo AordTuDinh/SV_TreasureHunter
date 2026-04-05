@@ -25,7 +25,7 @@ import java.io.Serializable;
 import java.util.*;
 
 @Data
-public class Player extends Character implements Serializable {
+public class Player extends Unit implements Serializable {
     MyUser mUser;
     List<NInput> inputs = new ArrayList<>();
     List<NInput> inputsNew = new ArrayList<>();
@@ -38,7 +38,6 @@ public class Player extends Character implements Serializable {
     long timeRunHit, timeAttackRun2;
     Pos targetDirectionAttackRun2;
     boolean isAttackRun2;
-    int curSkill = NInput.Skill1;
     Pos directionHitRun = Pos.zero();
     List<Integer> itemsBuf; // trigger - itemId
     List<Long> timeBuff; // list time buff theo slot
@@ -154,12 +153,14 @@ public class Player extends Character implements Serializable {
     }
 
     public void setPosAndDirection(Pos newPos, Pos newDirection) {
+        // todo check chunk current
+
         this.pos = newPos.round();
         this.direction = newDirection.normalized();
         this.setMove(true);
     }
 
-    public void addNumKillMonster(Character beKill) {
+    public void addNumKillMonster(Unit beKill) {
         this.countUpdate++;
         CfgQuest.addNumQuest(mUser, DataQuest.KILL_MONSTER, 1);
 
@@ -356,7 +357,7 @@ public class Player extends Character implements Serializable {
 //        return true;
 //    }
 
-    public void setTargetAttack(Character attacker) {
+    public void setTargetAttack(Unit attacker) {
         this.targetAttack = attacker;
         if (attacker != null) {
             protoOneStatus(StateType.SWITCH_TARGET, (long) attacker.id);
@@ -396,12 +397,12 @@ public class Player extends Character implements Serializable {
 //    }
 
 
-    public Pos findEnemyNearest(List<Character> lstEnemy) {
+    public Pos findEnemyNearest(List<Unit> lstEnemy) {
         if (lstEnemy.size() <= 0) return Pos.zero();
         if (getTargetAttack() != null && getTargetAttack().isAlive()) return getTargetAttack().getPos();
         float min = 999999f;
         Pos ret = Pos.zero();
-        Character target = null;
+        Unit target = null;
         for (int i = 0; i < lstEnemy.size(); i++) {
             if (lstEnemy.get(i).isAlive() && min > getPos().distance(lstEnemy.get(i).getPos()) && lstEnemy.get(i).isReady()) {
                 min = (float) getPos().distance(lstEnemy.get(i).getPos());
@@ -414,7 +415,7 @@ public class Player extends Character implements Serializable {
     }
 
     @Override
-    public synchronized void protoDie(Character killer) {
+    public synchronized void protoDie(Unit killer) {
         super.protoDie(killer);
         if (sendDie) {
             protoStatus(StateType.DIE, (long) FactionType.NULL.value);
@@ -423,7 +424,7 @@ public class Player extends Character implements Serializable {
     }
 
     @Override
-    public void bonusKillMe(Character killer) {
+    public void bonusKillMe(Unit killer) {
 
     }
 
@@ -450,7 +451,7 @@ public class Player extends Character implements Serializable {
         sendDie = true;
     }
 
-    public Pbmethod.PbUnit.Builder toProtoAdd() {
+    public Pbmethod.PbUnit toProtoAdd() {
         Pbmethod.PbUnit.Builder pbAdd = Pbmethod.PbUnit.newBuilder();
         pbAdd.setType(Constans.TYPE_PLAYER);
         pbAdd.setId(id);
@@ -464,7 +465,7 @@ public class Player extends Character implements Serializable {
         pbAdd.setSpeed((int) point.getMoveSpeed());
         pbAdd.setCharacterInfo(toCharacterInfo());
         pbAdd.addAllInfo(getListInfo());
-        return pbAdd;
+        return pbAdd.build();
     }
 
     public List<Integer> getListInfo() {

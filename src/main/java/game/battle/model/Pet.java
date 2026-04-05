@@ -15,7 +15,7 @@ import protocol.Pbmethod;
 import java.io.Serializable;
 import java.util.List;
 
-public class Pet extends Character implements Serializable {
+public class Pet extends Unit implements Serializable {
     Player owner;
     float timePetActive;
 
@@ -39,7 +39,7 @@ public class Pet extends Character implements Serializable {
     }
 
     @Override
-    public Pbmethod.PbUnit.Builder toProtoAdd() {
+    public Pbmethod.PbUnit toProtoAdd() {
         Pbmethod.PbUnit.Builder pb = Pbmethod.PbUnit.newBuilder();
         pb.setType(Constans.TYPE_PET);
         pb.setId(id);
@@ -50,7 +50,7 @@ public class Pet extends Character implements Serializable {
         pb.addAvatar(model);
         pb.setOwnerId(owner.id);
         pb.setSpeed((int) point.getMoveSpeed());
-        return pb;
+        return pb.build();
     }
 
 
@@ -69,12 +69,12 @@ public class Pet extends Character implements Serializable {
 
     }
 
-    public Pbmethod.PbUnit.Builder toProtoRemove() {
+    public Pbmethod.PbUnit toProtoRemove() {
         Pbmethod.PbUnit.Builder builder = Pbmethod.PbUnit.newBuilder();
         builder.setType(Constans.TYPE_PET);
         builder.setId(id);
         builder.setIsAdd(false);
-        return builder;
+        return builder.build();
     }
 
     @Override

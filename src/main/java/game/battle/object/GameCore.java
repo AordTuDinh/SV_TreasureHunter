@@ -1,7 +1,7 @@
 package game.battle.object;
 
 import game.battle.calculate.MathLab;
-import game.battle.model.Character;
+import game.battle.model.Unit;
 import game.battle.model.Player;
 import game.battle.type.GeometryType;
 import game.battle.type.RoomState;
@@ -16,14 +16,14 @@ import java.util.List;
 
 @NoArgsConstructor
 public class GameCore {
-    public Pos findTargetForPlayer(List<Character> lstEnemy, Player currentPlayer) {
+    public Pos findTargetForPlayer(List<Unit> lstEnemy, Player currentPlayer) {
         if (lstEnemy.size() <= 0) return Pos.zero();
         if (currentPlayer.getTargetAttack() != null && currentPlayer.getTargetAttack().isAlive() && currentPlayer.targetInSizeAttack())
             return currentPlayer.getTargetAttack().getPos();
 
         float min = 10000f; // đặt to vì còn phải check enemy alive
         Pos ret = Pos.zero();
-        Character target = null;
+        Unit target = null;
         for (int i = 0; i < lstEnemy.size(); i++) {
             if (lstEnemy.get(i).isAlive() && min >= currentPlayer.getPos().distance(lstEnemy.get(i).getPos()) && lstEnemy.get(i).isReady()) {
                 min = (float) currentPlayer.getPos().distance(lstEnemy.get(i).getPos());
@@ -94,7 +94,7 @@ public class GameCore {
         return hasMove;
     }
 
-    public void reviveEnemy(List<Character> aEnemy) {
+    public void reviveEnemy(List<Unit> aEnemy) {
         for (int i = 0; i < aEnemy.size(); i++) {
             aEnemy.get(i).revive();
         }

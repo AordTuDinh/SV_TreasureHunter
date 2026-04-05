@@ -18,7 +18,7 @@ import protocol.Pbmethod;
 import java.util.*;
 
 @Data
-public abstract class Character {
+public abstract class Unit {
     // new
     int chunkId;
     long idInMap; // tất cả các sinh vật đều sẽ có id này riêng lẻ, vào map sẽ gen id này
@@ -44,7 +44,7 @@ public abstract class Character {
     ResMapEntity panelMap;//bot left + top right
     long timeDie, timeRevive;
     boolean hasBonusKillMe;
-    Character targetAttack;
+    Unit targetAttack;
     public FactionType faction = FactionType.NULL;
     long timeBeHit = 0;
     int killById;
@@ -76,7 +76,7 @@ public abstract class Character {
     // skill eff
 //    public List<Integer> f0Toxic = new ArrayList<>();
     // các thằng đang target đánh mình
-    public Map<Integer, Character> targetSelf = new HashMap<>();
+    public Map<Integer, Unit> targetSelf = new HashMap<>();
     boolean hasDamage = true;
     boolean sendDie = true;
 
@@ -90,7 +90,7 @@ public abstract class Character {
         return type == UnitType.ENEMY || type == UnitType.BOSS;
     }
 
-    private void checkBeAttackByEffect(Character attacker) {
+    private void checkBeAttackByEffect(Unit attacker) {
         if (room.getRoomState() != RoomState.ACTIVE) return;
         if (point.getCurHP() > 0 && (targetAttack == null || !targetAttack.alive)) {
             isBeAttack = true;
@@ -110,13 +110,13 @@ public abstract class Character {
         targetSelf.clear();
     }
 
-    public void addTargetSelf(Character attacker) {
+    public void addTargetSelf(Unit attacker) {
         if (!targetSelf.containsKey(attacker.getId())) {
             this.targetSelf.put(attacker.getId(), attacker);
         }
     }
 
-    public void removeTargetSelf(Character attacker) {
+    public void removeTargetSelf(Unit attacker) {
         for (int i = 0; i < targetSelf.size(); i++) {
             if (targetSelf.get(i) != null && attacker.getId() == targetSelf.get(i).getId()) {
                 targetSelf.remove(i);
@@ -126,7 +126,7 @@ public abstract class Character {
     }
 
 
-    public void beAttackMelee(Character attacker) {
+    public void beAttackMelee(Unit attacker) {
         if (!attacker.hasDamage) return;
         long[] damage = IMath.calculateDamage(attacker, this, attacker.getFaction());
         beAttackDamage(attacker, damage[1], damage[2]);
@@ -134,7 +134,7 @@ public abstract class Character {
         protoBeDame(attacker, Arrays.asList((long) attacker.getId(), damage[0], -damage[1], -damage[2]));
     }
 
-    public void beAttackCollider(Character attacker) {
+    public void beAttackCollider(Unit attacker) {
         if (!attacker.hasDamage) return;
         addAtkInfoMelee(attacker);
         long[] damage = IMath.calculateDamage(attacker, this, attacker.getFaction());
@@ -167,7 +167,7 @@ public abstract class Character {
     }
 
     // gửi riêng
-    public void beAttackDamage(Character ownerDamage, long atkDame, long mAtkDame) {
+    public void beAttackDamage(Unit ownerDamage, long atkDame, long mAtkDame) {
         updateHp(ownerDamage, -atkDame, -mAtkDame);
         if (!alive) {
             timeDie = System.currentTimeMillis();
@@ -200,7 +200,7 @@ public abstract class Character {
     }
 
 
-    void addAtkInfoMelee(Character enemy) {
+    void addAtkInfoMelee(Unit enemy) {
         if (attackerInfo.containsKey(enemy.getId())) {
             attackerInfo.get(enemy.getId()).set(TIME_ATTACK, System.currentTimeMillis());
             attackerInfo.get(enemy.getId()).set(SLOT_MELEE, attackerInfo.get(enemy.getId()).get(SLOT_MELEE) + 1);
@@ -210,11 +210,11 @@ public abstract class Character {
     }
 
     // tránh trường hợp ăn đòn liên hoàn, sau 1 khoảng time mới ăn đòn từ thằng đó tiếp
-    public boolean hasReciveMelee(Character attacker) {
+    public boolean hasReciveMelee(Unit attacker) {
         return canBeAttack(attacker.teamId) && DateTime.isAfterTime(getTimeAttack(attacker.getId()), BattleConfig.C_haSReciveDamage);
     }
 
-    public boolean hasReceiveEffMelee(Character attacker) {
+    public boolean hasReceiveEffMelee(Unit attacker) {
         return canBeMelee() && hasReciveMelee(attacker);
     }
 
@@ -250,7 +250,7 @@ public abstract class Character {
     public void Update() {
     }
 
-    public boolean sameTeam(Character other) {
+    public boolean sameTeam(Unit other) {
         return other.getTeamId() == this.teamId;
     }
 
@@ -291,7 +291,7 @@ public abstract class Character {
         return MathLab.pointInCircle(this.pos, r, posTarget);
     }
 
-    public boolean isHitMelee(Character target) {
+    public boolean isHitMelee(Unit target) {
         if (!isAlive()) return false;
         return MathLab.pointInCircle(this.pos, target.getRadius() + radius, target.pos);
     }
@@ -340,7 +340,7 @@ public abstract class Character {
         return pbUser.build();
     }
 
-    public abstract Pbmethod.PbUnit.Builder toProtoAdd();
+    public abstract Pbmethod.PbUnit toProtoAdd();
 
     public void revive() {
     }
@@ -357,21 +357,21 @@ public abstract class Character {
         timeActiveSlot[slot] = System.currentTimeMillis();
     }
 
-    public Pbmethod.PbUnit.Builder toProtoRemove() {
+    public Pbmethod.PbUnit toProtoRemove() {
         Pbmethod.PbUnit.Builder builder = Pbmethod.PbUnit.newBuilder();
         builder.setType(type.value);
         builder.setId(idInMap);
         builder.setIsAdd(false);
-        return builder;
+        return builder.build();
     }
 
-    public synchronized void protoDie(Character killer) {
+    public synchronized void protoDie(Unit killer) {
         unTargetAll();
         this.killById = killer.getId();
         room.characterDie(this);
     }
 
-    public void updateHp(Character attacker, long atkDame, long magDame) {
+    public void updateHp(Unit attacker, long atkDame, long magDame) {
         List<PointBuff> buffs = new ArrayList<>();
         buffs.add(new PointBuff(Point.CUR_HP, atkDame + magDame));
         protoBuffPoint(buffs);
@@ -477,7 +477,7 @@ public abstract class Character {
     }
 
 
-    public void bonusKillMe(Character killer) {
+    public void bonusKillMe(Unit killer) {
 
     }
 
@@ -526,7 +526,7 @@ public abstract class Character {
     }
 
     // region proto
-    public void protoBeDame(Character attacker, List<Long> aInfo) {
+    public void protoBeDame(Unit attacker, List<Long> aInfo) {
         if (type == UnitType.BOSS) {
             if (!beDameInfo.containsKey(attacker.getId())) beDameInfo.put(attacker.getId(), 0L);
             beDameInfo.put(attacker.getId(), beDameInfo.get(attacker.getId()) + aInfo.get(2) + aInfo.get(3));
@@ -555,7 +555,7 @@ public abstract class Character {
     }
 
 
-    public void protoRangeDame(Character attacker, List<Long> aInfo) {
+    public void protoRangeDame(Unit attacker, List<Long> aInfo) {
         if (type == UnitType.BOSS) {
             if (!beDameInfo.containsKey(attacker.getId())) beDameInfo.put(attacker.getId(), 0L);
             beDameInfo.put(attacker.getId(), beDameInfo.get(attacker.getId()) + aInfo.get(2) + aInfo.get(3));
@@ -577,7 +577,7 @@ public abstract class Character {
         if (room != null) room.getAProtoUnitState().add(protoState(List.of(status), List.of(size), aInfo));
     }
 
-    Pbmethod.PbUnitState.Builder protoState(List<StateType> aStatus, List<Long> aInfo) {
+    Pbmethod.PbUnitState protoState(List<StateType> aStatus, List<Long> aInfo) {
         Pbmethod.PbUnitState.Builder builder = Pbmethod.PbUnitState.newBuilder();
         builder.setId(id);
         for (int i = 0; i < aStatus.size(); i++) {
@@ -586,10 +586,10 @@ public abstract class Character {
         }
         if (aInfo == null) aInfo = new ArrayList<>();
         builder.addAllPoint(aInfo);
-        return builder;
+        return builder.build();
     }
 
-    Pbmethod.PbUnitState.Builder protoState(List<StateType> aStatus, List<Integer> size, List<Long> aInfo) {
+    Pbmethod.PbUnitState protoState(List<StateType> aStatus, List<Integer> size, List<Long> aInfo) {
         Pbmethod.PbUnitState.Builder builder = Pbmethod.PbUnitState.newBuilder();
         builder.setId(id);
         for (int i = 0; i < aStatus.size(); i++) {
@@ -598,7 +598,7 @@ public abstract class Character {
         }
         if (aInfo == null) aInfo = new ArrayList<>();
         builder.addAllPoint(aInfo);
-        return builder;
+        return builder.build();
     }
     // endregion
 }

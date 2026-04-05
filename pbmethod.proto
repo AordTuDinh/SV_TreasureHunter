@@ -66,13 +66,15 @@ message PbUnit{
   optional  float rangeAttack = 12;
 }
 
-
-
 message PbCell {
   optional  int32 type = 1;
-  optional int32 cellId = 2;
+  optional int32 chunkId = 2;
   optional PbPos pos = 3;
   optional CellState state = 4;
+}
+
+message PbListChunk {
+  repeated PbChunk aChunk = 1;
 }
 
 message PbChunk {
@@ -80,8 +82,6 @@ message PbChunk {
   optional PbPos  pos = 2;
   repeated PbCell cells = 3;
 }
-
-
 
 message PbInitMap {
   optional string mapId = 1;
@@ -541,7 +541,7 @@ message  PbUnitUpdate{
 
 
 message PbUnitPos {
-  optional int32 id = 1;
+  optional int64 id = 1;
   optional  int32 speed = 2;
   optional PbPos pos = 3;
   optional PbPos direction = 4;

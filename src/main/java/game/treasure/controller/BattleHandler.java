@@ -185,6 +185,7 @@ public class BattleHandler extends AHandler implements Serializable {
             return;
         }
         mUser.getPlayer().setJoinMap(curRoom);
+
         curRoom.joinMap(this, mUser.getPlayer());
     }
 

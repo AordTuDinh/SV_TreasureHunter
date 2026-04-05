@@ -32,13 +32,11 @@ public abstract class MonoRoom extends Mono {
     MapType mapType;
 
 
-    // region proto
+    // region proto -> sửa thành chunk id
     @Getter
-    PbInitMap.Builder pbInit;
+     List<PbUnit> aProtoAdd;
     @Getter
-    List<PbUnit.Builder> aProtoAdd;
-    @Getter
-    List<PbUnitState.Builder> aProtoUnitState;
+    List<PbUnitState> aProtoUnitState;
 
 
     public MonoRoom(String keyRoom) {
@@ -49,7 +47,6 @@ public abstract class MonoRoom extends Mono {
         this.mapType = MapType.get(Integer.parseInt(Constans.getKeyRoomById(this.battleId)[1]));
         this.aProtoAdd = new ArrayList<>();
         this.aProtoUnitState = new ArrayList<>();
-        this.pbInit = protocol.Pbmethod.PbInitMap.newBuilder();
         Constans.mIdToBattleId.put(this.battleId, keyRoom);
     }
 
@@ -57,6 +54,8 @@ public abstract class MonoRoom extends Mono {
     public void addCoroutine(Coroutine coroutine) {
         coroutines.add(coroutine);
     }
+
+
 
 
     public boolean isRoomType(MapType mapType) {

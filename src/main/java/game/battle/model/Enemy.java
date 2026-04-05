@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class Enemy extends Character implements Serializable {
+public class Enemy extends Unit implements Serializable {
     public List<BonusConfig> listBonus;
     public float delayAnimAttack;
     public int forcePush;
@@ -54,13 +54,13 @@ public class Enemy extends Character implements Serializable {
     }
 
     @Override
-    public void protoDie(Character killer) {
+    public void protoDie(Unit killer) {
         super.protoDie(killer);
         protoStatus(StateType.DIE, (long) faction.value);
     }
 
     @Override
-    public synchronized void bonusKillMe(Character killer) {
+    public synchronized void bonusKillMe(Unit killer) {
         if (killer.isPlayer()) {
             hasBonusKillMe = false;
             Player player = ((Player) killer);
@@ -181,7 +181,7 @@ public class Enemy extends Character implements Serializable {
     public void E_attackMelee() {
         if (autoAttack) {
             if (targetAttack == null && isReady()) {
-                Character target = findTargetForEnemy(10000f);
+                Unit target = findTargetForEnemy(10000f);
                 if (target != null) {
                     target.addTargetSelf(this);
                     targetAttack = target;
@@ -217,7 +217,7 @@ public class Enemy extends Character implements Serializable {
         // bi danh thi danh lai, k du range thi di chuyen den target
         if (autoAttack) {
             if (targetAttack == null && isReady()) {
-                Character target = findTargetForEnemy(rangeView);
+                Unit target = findTargetForEnemy(rangeView);
                 if (target != null) {
                     target.addTargetSelf(this);
                     targetAttack = target;
@@ -277,7 +277,7 @@ public class Enemy extends Character implements Serializable {
         if (point.getMoveSpeed() == 0) return;
         if (autoAttack) {
             if (targetAttack == null && isReady()) {
-                Character target = findTargetForEnemy(1000f);
+                Unit target = findTargetForEnemy(1000f);
                 if (target != null) {
                     target.addTargetSelf(this);
                     targetAttack = target;
@@ -329,7 +329,7 @@ public class Enemy extends Character implements Serializable {
         }
     }
 
-    private Pos getPosTargetMove(Character target) {
+    private Pos getPosTargetMove(Unit target) {
         return new Pos(target.pos.x + NumberUtil.getRandom(-1, 1), target.pos.y + NumberUtil.getRandom(-1, 1));
     }
 
@@ -418,7 +418,7 @@ public class Enemy extends Character implements Serializable {
 //    }
 
 
-    Character findTargetForEnemy(float rangeView) {// BattleConfig.M_rangeViewTarget
+    Unit findTargetForEnemy(float rangeView) {// BattleConfig.M_rangeViewTarget
         int index = 0;
         double min = 99999f;
 //        for (int i = 0; i < room.getAPlayer().size(); i++) {
@@ -459,7 +459,7 @@ public class Enemy extends Character implements Serializable {
         return pbUser.build();
     }
 
-    public Pbmethod.PbUnit.Builder toProtoAdd() {
+    public Pbmethod.PbUnit toProtoAdd() {
         Pbmethod.PbUnit.Builder pbAdd = Pbmethod.PbUnit.newBuilder();
         pbAdd.setType(Constans.TYPE_MONSTER);
         pbAdd.setId(id);
@@ -476,6 +476,6 @@ public class Enemy extends Character implements Serializable {
         pbAdd.addInfo(idChatFrame);
         pbAdd.addInfo(idTrial);
         pbAdd.setCharacterInfo(toProtoInfo());
-        return pbAdd;
+        return pbAdd.build();
     }
 }

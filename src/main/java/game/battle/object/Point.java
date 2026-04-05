@@ -2,7 +2,7 @@ package game.battle.object;
 
 import com.google.gson.Gson;
 import game.battle.calculate.IMath;
-import game.battle.model.Character;
+import game.battle.model.Unit;
 import game.object.PointBuff;
 import game.protocol.CommonProto;
 import lombok.Getter;
@@ -180,11 +180,11 @@ public class Point {
         }
     }
 
-    public synchronized void add(PointBuff buff, Character character) {
-        if(!character.isAlive()) return;
+    public synchronized void add(PointBuff buff, Unit unit) {
+        if(!unit.isAlive()) return;
         switch (buff.getPointId()) {
             case CUR_HP -> {
-                character.setAlive(addCurHp(buff.getValue()));
+                unit.setAlive(addCurHp(buff.getValue()));
             }
             case CUR_MP -> values[CUR_MP] = Math.min(getCurMP() + buff.getValue(), getMaxMp());
 //            case ADD_CUR_HP -> {

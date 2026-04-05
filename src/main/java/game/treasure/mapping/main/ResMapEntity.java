@@ -3,12 +3,13 @@ package game.treasure.mapping.main;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import game.battle.model.CellObject;
 import game.battle.model.ChunkObject;
-import game.battle.model.StaticCell;
 import game.battle.object.Pos;
 import game.treasure.BattleConfig;
 import game.object.MapData;
 import lombok.Getter;
+import protocol.Pbmethod;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -78,15 +79,16 @@ public class ResMapEntity extends BaseEntity implements Serializable {
 
             int chunkX = worldToChunkX(c.x);
             int chunkY = worldToChunkY(c.y);
-
-            StaticCell cell = new StaticCell(c.x, c.y, c.type, chunkX, chunkY);
+            int chunkId = chunkPosToId(chunkX, chunkY);
+            Pos pos = new Pos(c.x, c.y);
+            CellObject cell = new CellObject(pos , c.type, chunkId, Pbmethod.CellState.ACTIVE );
             if (chunkX < minChunkX || chunkX > maxChunkX
                     || chunkY < minChunkY || chunkY > maxChunkY) {
                 System.out.println("[MapLoad] skip out-of-bound cell: x=" + c.x + ", y=" + c.y
                         + ", chunkX=" + chunkX + ", chunkY=" + chunkY);
                 continue;
             }
-            int chunkId = chunkPosToId(chunkX, chunkY);
+
             ChunkObject targetChunk = mChunk.get(chunkId);
             if (targetChunk == null) {
                 System.out.println("[MapLoad] skip missing chunk bucket: chunkId=" + chunkId

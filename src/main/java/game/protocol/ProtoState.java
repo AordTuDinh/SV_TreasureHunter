@@ -16,7 +16,7 @@ public class ProtoState {
         return builder;
     }
 
-    public static ByteString protoListCharacterState(List<PbUnitState.Builder> characterState) {
+    public static ByteString protoListCharacterState(List<PbUnitState> characterState) {
         PbListUnitState.Builder builder = PbListUnitState.newBuilder();
         int size = characterState.size();
         for (int i = 0; i < size; i++) {
