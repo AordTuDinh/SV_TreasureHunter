@@ -3,6 +3,7 @@ package game.battle.calculate;
 import game.battle.object.Point;
 import game.battle.object.Pos;
 import game.battle.model.Unit;
+import game.battle.type.UnitType;
 import game.config.CfgClan;
 import game.config.aEnum.FactionType;
 import game.treasure.mapping.*;
@@ -399,11 +400,11 @@ public class IMath {
     public static long[] calculateDamageBase(long atkDame, long magicDame, FactionType factionAttack, Unit beAttacker, float critPer, PointBuff buff, Unit attacker) {
         long atk = 0, mag = 0, def = 0, magicResist = 0;
         long doge = beAttacker.getPoint().getDoge();//miss
-        if (beAttacker.isBoss()) {
+        if (beAttacker.getType() == UnitType.BOSS) {
             long dameToBoss = attacker.getPoint().getDameToBoss();
             if (dameToBoss > 0) {
-                atkDame += atkDame * (float) dameToBoss / 100f;
-                magicDame += magicDame * (float) dameToBoss / 100f;
+                atkDame += (long) (atkDame * (float) dameToBoss / 100f);
+                magicDame += (long) (magicDame * (float) dameToBoss / 100f);
             }
         }
         if (doge > 0 && NumberUtil.getRandom(100) < doge) { // né

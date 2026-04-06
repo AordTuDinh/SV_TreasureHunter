@@ -58,7 +58,7 @@ public class ProtoState {
                         for (int j = 0; j < tmp.getAvatarCount(); j++) {
                             buffer.writeInt(tmp.getAvatar(j));
                         }
-                        buffer.writeInt(tmp.getOwnerId());
+                        buffer.writeLong(tmp.getOwnerId());
                         buffer.writeFloat(tmp.getPos().getX());
                         buffer.writeFloat(tmp.getPos().getY());
                         buffer.writeFloat(tmp.getDirection().getX());
@@ -103,12 +103,12 @@ public class ProtoState {
 
     public static void parsePbUnitPos(ByteBuf buffer, List<PbUnitPos> aUnitPos) {
         try {
-            if (aUnitPos.size() > 0) {
+            if (!aUnitPos.isEmpty()) {
                 buffer.writeByte(Constans.TYPE_POS);
                 buffer.writeByte(aUnitPos.size());
                 for (int i = 0; i < aUnitPos.size(); i++) {
                     PbUnitPos tmp = aUnitPos.get(i);
-                    buffer.writeInt(tmp.getId());
+                    buffer.writeLong(tmp.getId());
                     buffer.writeInt(tmp.getSpeed());
                     buffer.writeLong(tmp.getLastInputSeq());
                     buffer.writeFloat(tmp.getPos().getX());
@@ -140,12 +140,12 @@ public class ProtoState {
     }
 
     public static void parsePbUpdatePlayer(ByteBuf buffer, List<PbUnitState> aCharacterState) {
-        if (aCharacterState.size() > 0) {
+        if (!aCharacterState.isEmpty()) {
             buffer.writeByte(Constans.TYPE_UPDATE_CHARACTER);
             buffer.writeByte(aCharacterState.size());
             for (int i = 0; i < aCharacterState.size(); i++) {
                 PbUnitState tmp = aCharacterState.get(i);
-                buffer.writeInt(tmp.getId());
+                buffer.writeLong(tmp.getId());
                 buffer.writeByte(tmp.getStatusCount());
                 for (int j = 0; j < tmp.getStatusCount(); j++) {
                     buffer.writeByte(tmp.getStatus(j));

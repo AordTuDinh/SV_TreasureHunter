@@ -195,11 +195,11 @@ public abstract class BaseRoom extends MonoRoom {
 //            send = true;
 //            aProtoUnitState.clear();
 //        }
-////        if (!debug.isEmpty()) System.out.println("debug = " + debug);
+
+    /// /        if (!debug.isEmpty()) System.out.println("debug = " + debug);
 //        if (send) return ProtoState.convertProtoBuffToState(builder.build());
 //        else return null;
 //    }
-
     protected void debug(String msg) {
         if (CfgServer.isRealServer()) {
             System.out.println(msg);
@@ -240,7 +240,6 @@ public abstract class BaseRoom extends MonoRoom {
             MyUser mUser = (MyUser) ChUtil.get(channel, ChUtil.KEY_M_USER);
             switch (actionId) {
                 case IAction.CLIENT_INPUT:
-                    if (roomState != RoomState.ACTIVE) return;
                     handleClientInput(mUser.getPlayer(), NInput.parse(srcRequest));
                     break;
             }
@@ -267,32 +266,10 @@ public abstract class BaseRoom extends MonoRoom {
             if (lastInputSeq <= player.getIndexLastInputSeq()) {
                 return;
             }
-            //System.out.println("player.getTimeLastProcessInput() = " + player.getTimeLastProcessInput());
             float timeTravel = System.currentTimeMillis() - player.getTimeLastProcessInput();
             player.setTimeLastProcessInput(System.currentTimeMillis());
             player.setIndexLastInputSeq(lastInputSeq);
-            //System.out.println("timeTravel = " + timeTravel / 1000);
-            //System.out.println("BattleConfig.CHECK = " + BattleConfig.CHECK);
-            //System.out.println("timeTravel ============= " + timeTravel);
-            // không thể nhận với tốc độ lớn hơn tốc độ update của unity được (dôi ra 5ms lường trước mạng)
-            //if (timeTravel < BattleConfig.CHECK) {
-            //player.getMUser().addResponse(IAction.MSG_TOAST, CommonProto.getCommonVector("HACK SPEED"));
-            // hack
-            //  player.forceDie();
-            // Util.sendProtoData(player.getChannel(), CommonProto.getCommonVectorProto(null, Arrays.asList(player.getUserName() + " sử dụng hack speed")), IAction.MSG_TOAST, System.currentTimeMillis());
-            //Logs.warn("player " + player.getId() + " hack speed");
-            //System.out.println("Hack speed");
-            //} else {
-            // check hack
-//            double distance = input.playerPos.distance(player.getPos());
-//            if (distance > 0.3f) {
-//                //Util.sendProtoData(player.getMUser().getChannel(), CommonProto.getCommonVectorProto(List.of(0L), List.of(" Nghi vấn hack")), IAction.MSG_TOAST);
-//                //Telegram.sendNotify(player.getId() + "  Nghi vấn hack distance == " + distance);
-//            }
             if (player.isAlive()) player.setPosAndDirection(input.playerPos, input.playerDirection);
-//            player.getInputs().add(input);
-
-
         } else if (input.typeId == NInput.PET_MOVE && player.getPetUse() != null) {
             player.getPetUse().setPosAndDirection(input.petPos, input.petDirection);
         } else if (input.typeId == NInput.INPUT_SLOT) {
@@ -312,21 +289,44 @@ public abstract class BaseRoom extends MonoRoom {
         }
     }
 
+    // tất cả unit sẽ gọi qua hàm này
+    public boolean joinChunk(Unit unit, int newChunk) {
+        if (unit == null) return false;
+        int oldChunk = unit.getChunkId();
+        if (oldChunk == newChunk) return true;
 
-    public void joinChunk(Player player, int newChunk, int oldChunk) {
-        Set<Long> oldSet = chunkCharacter.get(oldChunk);
-        if (oldSet != null) oldSet.remove(player.getIdInMap());
 
-        chunkCharacter.computeIfAbsent(newChunk, k -> new HashSet<>())
-                .add(player.getIdInMap());
+        if (!isValidChunkId(newChunk)) {
+            Logs.warn("joinChunk invalid newChunk=" + newChunk + ", unitId=" + unit.getId());
+            return false;
+        }
 
-        aProtoChange.add(player.toProtoRemove(oldChunk));
-        aProtoChange.add(player.toProtoAdd(newChunk));
+        boolean oldValid = isValidChunkId(oldChunk);
+        if (!oldValid) {
+            Logs.warn("joinChunk invalid oldChunk=" + oldChunk + ", unitId=" + unit.getId());
+            // recover: không remove chunk cũ vì oldChunk không hợp lệ
+        } else {
+            Set<Long> oldSet = chunkCharacter.get(oldChunk);
+            if (oldSet != null) oldSet.remove(unit.getId());
+        }
+
+        Set<Long> newSet = chunkCharacter.get(newChunk);
+        if (newSet == null) return false;
+        newSet.add(unit.getId());
+
+        unit.setChunkId(newChunk);
+
+        // chỉ gửi remove nếu oldChunk hợp lệ
+        if (oldValid) {
+            aProtoChange.add(unit.toProtoRemove(oldChunk));
+        }
+        aProtoChange.add(unit.toProtoAdd(newChunk));
+        return true;
     }
 
-    public void joinMap(AHandler handler, Player player) {
+    public void joinRoom(AHandler handler, Player player) {
         if (roomState != RoomState.ACTIVE) return;
-        addCharacter(player);
+        addUnit(player);
 
         // trả về 9 chunk xung quanh player
         int curChunk = player.getChunkId();
@@ -340,7 +340,7 @@ public abstract class BaseRoom extends MonoRoom {
             Set<Long> aCharInChunk = chunkCharacter.get(chunkVisible.get(i));
             for (Long charId : aCharInChunk) {
                 Unit unit = mUnit.get(charId);
-                pbInit.addUnits(unit.toProtoAdd());
+                pbInit.addUnits(unit.toProtoAdd(unit.getChunkId()));
             }
         }
         handler.addResponse(IAction.JOIN_MAP, pbInit.build());
@@ -367,68 +367,63 @@ public abstract class BaseRoom extends MonoRoom {
         return mapInfo.worldPosToChunkId(pos);
     }
 
-
-    //  join chunk -> tất cả object đểu phải qua join chunk
-    protected void addUnitToChunk(Pos newPos) {
-
+    public boolean isValidChunkId(int chunkId) {
+        return chunkCharacter.containsKey(chunkId);
     }
 
+
     // add mới từ khi instance ra 1 unit thì chạy qua đây
-    public void addCharacter(Unit unit) {
+    public void addUnit(Unit unit) {
         if (roomState != RoomState.ACTIVE && roomState != RoomState.PAUSE) return;
         long idInMap = getIdNext();
-        unit.setIdInMap(idInMap);
+        unit.setId(idInMap);
         // tính chunk hiện tại nó đang ở
         int chunkId = worldPosToChunkId(unit.getPos());
         unit.setChunkId(chunkId);
         mUnit.put(idInMap, unit);
         chunkCharacter.get(chunkId).add(idInMap);
-        aProtoChange.add(unit.toProtoAdd());
+        aProtoChange.add(unit.toProtoAdd(chunkId));
 
         if (unit.isPlayer()) {
+            aPlayerIds.add(idInMap);
             Pet pet = unit.getPlayer().getPetUse();
-            if (pet != null) addCharacter(pet);
+            if (pet != null) addUnit(pet);
         }
     }
 
-    public void removeCharacter(Unit unit) {
-        debug("Remove character ---------------------- " + unit.getName() + " for room : " + getBattleId());
-        // bao nhung thang khac cua room xoa no di
-        protocol.Pbmethod.CommonVector.Builder pbLeave = protocol.Pbmethod.CommonVector.newBuilder();
-        pbLeave.addALong(battleId);
-        pbLeave.addALong(unit.getIdInMap());
-        pbLeave.addALong(getMapInfo().getId());
 
+    // tất cả các unit đều sẽ qua hàm này để xóa
+    public void removeUnit(long idInMap) {
+        debug("Remove unit ---------------------- " + idInMap + " for room : " + battleId);
+        Unit unit = mUnit.get(idInMap);
+        if (unit == null) return;
+
+        Set<Long> set = chunkCharacter.get(unit.getChunkId());
+        if (set != null) set.remove(idInMap);
+
+        // remove pet nếu là player
         if (unit.isPlayer()) {
-            unit.setReady(false);
-            aPlayerIds.remove(unit.getIdInMap());
+            aPlayerIds.remove(idInMap);
+            Pet pet = unit.getPlayer().getPetUse();
+            if (pet != null) {
+                long petId = pet.getId();
+                Unit petUnit = mUnit.get(petId);
+                if (petUnit != null) {
+                    Set<Long> petSet = chunkCharacter.get(petUnit.getChunkId());
+                    if (petSet != null) petSet.remove(petId);
+                    mUnit.remove(petId);
+                    aProtoChange.add(petUnit.toProtoRemove(petUnit.getChunkId()));
+                }
+            }
         }
 
-
+        mUnit.remove(idInMap);
         aProtoChange.add(unit.toProtoRemove(unit.getChunkId()));
-    }
-
-    public void removePlayer(long idInMap) {
-        // debug("Remove character ---------------------- " + userId + " for room : " + keyRoom);
-        // bao nhung thang khac cua room xoa no di
-        protocol.Pbmethod.CommonVector.Builder pbLeave = protocol.Pbmethod.CommonVector.newBuilder();
-        pbLeave.addALong(getRoomTypeId());
-        pbLeave.addALong(idInMap);
-        pbLeave.addALong(mapInfo != null ? mapInfo.getId() : 0);
-
-//        Character playerRemove = aPlayer.stream().filter(player -> player.getId() == userId).findAny().orElse(null);
-//        if (playerRemove != null) {
-//            aPlayer.remove(playerRemove);
-//            aPet.remove(playerRemove.getPet());
-//            aProtoAdd.add(playerRemove.toProtoRemove());
-//            if (playerRemove.getPet() != null) aProtoAdd.add(playerRemove.getPet().toProtoRemove());
-//        }
-//        if (aPlayer.isEmpty()) cancelTask();
+        if (aPlayerIds.isEmpty()) cancelTask();
     }
 
 
-    protected void cancelTask() {
-    }
+    protected abstract void cancelTask();
 
     public int getRoomTypeId() { // = id map
         return Integer.parseInt(Constans.getKeyRoomById(battleId)[1]);
@@ -442,6 +437,66 @@ public abstract class BaseRoom extends MonoRoom {
         return Integer.parseInt(Constans.getKeyRoomById(battleId)[2]);
     }
 
+    public void syncViewDeltaForPlayer(Player player, int oldChunk, int newChunk) {
+        if (player == null || player.getMUser() == null || player.getMUser().getChannel() == null) return;
+
+        List<Integer> oldVisible = visibleByChunkId.get(oldChunk);
+        List<Integer> newVisible = visibleByChunkId.get(newChunk);
+        if (oldVisible == null || newVisible == null) return;
+
+        // entered = newVisible - oldVisible
+        Set<Integer> entered = new HashSet<>(newVisible);
+        oldVisible.forEach(entered::remove);
+
+        // exited = oldVisible - newVisible
+        Set<Integer> exited = new HashSet<>(oldVisible);
+        newVisible.forEach(exited::remove);
+
+        protocol.Pbmethod.PbState.Builder builder = protocol.Pbmethod.PbState.newBuilder();
+        builder.setServerTime(serverTime);
+
+        long selfId = player.getId();
+
+        // Add toàn bộ unit trong các chunk mới lọt vào view
+        Set<Long> added = new HashSet<>();
+        for (Integer chunkId : entered) {
+            Set<Long> unitIds = chunkCharacter.get(chunkId);
+            if (unitIds == null) continue;
+
+            for (Long uid : unitIds) {
+                if (uid == selfId) continue; // skip self nếu muốn
+                if (!added.add(uid)) continue;
+
+                Unit u = mUnit.get(uid);
+                if (u == null || !u.isAlive()) continue;
+
+                // chunkId truyền vào proto là chunk historical theo view nhập mới
+                builder.addUnitAdd(u.toProtoAdd(chunkId));
+            }
+        }
+
+        // Remove toàn bộ unit trong các chunk rời khỏi view
+        Set<Long> removed = new HashSet<>();
+        for (Integer chunkId : exited) {
+            Set<Long> unitIds = chunkCharacter.get(chunkId);
+            if (unitIds == null) continue;
+
+            for (Long uid : unitIds) {
+                if (uid == selfId) continue;
+                if (!removed.add(uid)) continue;
+
+                Unit u = mUnit.get(uid);
+                if (u == null) continue;
+
+                // remove theo chunk historical (chunk đang exited), không dùng u.getChunkId() hiện tại
+                builder.addUnitAdd(u.toProtoRemove(chunkId));
+            }
+        }
+
+        byte[] state = ProtoState.convertProtoBuffToState(builder.build());
+        Util.sendGameData(player.getMUser().getChannel(), state, Constans.MAGIC_IN_PUT);
+
+    }
 
 
 //    public void protoRoomState(StateType status, int size, List<Long> aInfo) {

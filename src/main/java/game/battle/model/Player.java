@@ -53,7 +53,7 @@ public class Player extends Unit implements Serializable {
     Pet petUse;
 
     public Player(MyUser mUser, int teamId) {
-        initDefault(mUser.getUser().getId(), teamId, mUser.getUser().getInitPoint(mUser));
+        initDefault( teamId, mUser.getUser().getInitPoint(mUser));
         this.type = UnitType.PLAYER;
         this.name = mUser.getUser().getName();
         this.mUser = mUser;
@@ -65,10 +65,8 @@ public class Player extends Unit implements Serializable {
         this.petUse = mUser.getPet(this);
     }
 
-    private void initDefault(int id, int teamId, Point point) {
-        this.id = id;
+    private void initDefault( int teamId, Point point) {
         this.teamId = teamId;
-        this.radius = BattleConfig.C_Collider;
         this.rangeAttack = BattleConfig.P_RangeAttack;
         this.cacheRangeAttack = BattleConfig.P_RangeAttack;
         this.timeLastAction = 0;
@@ -124,8 +122,8 @@ public class Player extends Unit implements Serializable {
         }
     }
 
-    public Player(int id, int teamId, Point point, UnitType type) {
-        initDefault(id, teamId, point);
+    public Player( int teamId, Point point, UnitType type) {
+        initDefault( teamId, point);
         this.type = type;
     }
 
@@ -145,32 +143,19 @@ public class Player extends Unit implements Serializable {
         timeBeHit = 0;
         beDameInfo = new HashMap<>();
         targetMove = Pos.zero();
-        timePush = new HashMap<>();
         attackerInfo = new HashMap<>();
         if (petUse != null) {
             petUse.setPos(Pos.randomPos(this.pos, 1f, 1f));
         }
     }
 
-    public void setPosAndDirection(Pos newPos, Pos newDirection) {
-        this.pos = newPos.round();
-        this.direction = newDirection.normalized();
-        this.setMove(true);
-        // todo check chunk current
-        int curChunk = this.chunkId;
-        int newChunk = room.worldPosToChunkId(newPos);
-        if(curChunk != newChunk){
-            this.chunkId = newChunk;
-            room.joinChunk(this,newChunk, curChunk);
 
-        }
-    }
 
     public void addNumKillMonster(Unit beKill) {
         this.countUpdate++;
         CfgQuest.addNumQuest(mUser, DataQuest.KILL_MONSTER, 1);
 
-        if (beKill.isBoss) CfgQuest.addNumQuest(mUser, DataQuest.KILL_BOSS_MAP, 1);
+        if (beKill.type ==UnitType.BOSS) CfgQuest.addNumQuest(mUser, DataQuest.KILL_BOSS_MAP, 1);
         CfgAchievement.addAchievement(mUser, 1, beKill.getEnemy().getEnemyKey(), 1);
         mUser.getUData().checkQuestTutorial(mUser, QuestTutType.KILL_ENEMY, beKill.getEnemy().getEnemyKey(), 1);
         if (countUpdate > 100) {
@@ -252,7 +237,6 @@ public class Player extends Unit implements Serializable {
         mUser.getUser().addGold(gold);
     }
 
-    @Override
     public void activeSkill(int skillIndex) {
         setTimeAttack();
         //protoStatus(StateType.USE_SKILL, (long) (skillIndex), shu.getTimeActiveSkill() - System.currentTimeMillis(), shu.getNumberAttack(), (long) (getDirection().x * 1000L), (long) (getDirection().y * 1000L), isPowerSkill ? 1L : 0L);
@@ -265,7 +249,7 @@ public class Player extends Unit implements Serializable {
         if (uItem == null || uItem.getNumber() <= 0) return;
         if (uItem.getType() != ItemType.ITEM_USE) return;
         List<Long> bonus = Bonus.viewItem(itemId, -1);
-        sendBonus(bonus, DetailActionType.SU_DUNG_ITEM.getKey(id));
+        sendBonus(bonus, DetailActionType.SU_DUNG_ITEM.getKey(mUser.getUserId()));
         List<PointBuff> buffs = uItem.getRes().getBuffs();
         mUser.getPlayer().protoBuffPoint(buffs);
         protoStatus(StateType.USE_ITEM_SLOT, (long) slot);
@@ -457,6 +441,7 @@ public class Player extends Unit implements Serializable {
         sendDie = true;
     }
 
+    @Override
     public Pbmethod.PbUnit toProtoAdd(int chunkId) {
         Pbmethod.PbUnit.Builder pbAdd = Pbmethod.PbUnit.newBuilder();
         pbAdd.setType(Constans.TYPE_PLAYER);

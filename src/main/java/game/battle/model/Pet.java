@@ -3,7 +3,6 @@ package game.battle.model;
 import game.battle.object.Point;
 import game.battle.object.Pos;
 import game.battle.type.UnitType;
-import game.battle.type.StateType;
 import game.config.aEnum.FactionType;
 import game.treasure.BattleConfig;
 import game.treasure.mapping.UserPetEntity;
@@ -13,7 +12,6 @@ import ozudo.base.helper.DateTime;
 import protocol.Pbmethod;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class Pet extends Unit implements Serializable {
     Player owner;
@@ -39,10 +37,11 @@ public class Pet extends Unit implements Serializable {
     }
 
     @Override
-    public Pbmethod.PbUnit toProtoAdd() {
+    public Pbmethod.PbUnit toProtoAdd(int chunkId) {
         Pbmethod.PbUnit.Builder pb = Pbmethod.PbUnit.newBuilder();
         pb.setType(Constans.TYPE_PET);
         pb.setId(id);
+        pb.setChunkId(chunkId);
         pb.setIsAdd(true);
         pb.setPos(pos.toProto());
         pb.setDirection(direction.toProto());
@@ -53,33 +52,8 @@ public class Pet extends Unit implements Serializable {
         return pb.build();
     }
 
-
     public boolean isMove() {
         this.isMove = !DateTime.isAfterTime(timeActionMove, BattleConfig.P_timeNoMove);
         return isMove;
-    }
-
-    public void setPosAndDirection(Pos newPos, Pos newDirection) {
-        this.pos = newPos.round();
-        this.direction = newDirection.normalized();
-        this.setMove(true);
-    }
-
-    public void processSkill() {
-
-    }
-
-    public Pbmethod.PbUnit toProtoRemove() {
-        Pbmethod.PbUnit.Builder builder = Pbmethod.PbUnit.newBuilder();
-        builder.setType(Constans.TYPE_PET);
-        builder.setId(id);
-        builder.setIsAdd(false);
-        return builder.build();
-    }
-
-    @Override
-    public void activeSkill(int skillId) {
-        setTimeAttack();
-        protoStatus(StateType.PET_USE_SKILL, List.of((long) teamId));
     }
 }

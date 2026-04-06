@@ -167,7 +167,9 @@ public class MyUser implements Serializable {
         return uDaily;
     }
 
-
+    public  int getUserId(){
+        return user.getId();
+    }
 
     public UserQuestEntity getUQuest() {
         if (uQuest == null) {

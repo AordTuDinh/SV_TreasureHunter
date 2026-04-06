@@ -106,7 +106,7 @@ public class ResMapEntity extends BaseEntity implements Serializable {
 
     // từ tọa độ thế giới đổi sang id chunk
     public  int worldPosToChunkId(Pos pos){
-        return chunkPosToId(worldToChunkX((int) Math.floor(pos.getX())),worldToChunkY((int) Math.floor(pos.getX())));
+        return chunkPosToId(worldToChunkX((int) Math.floor(pos.getX())),worldToChunkY((int) Math.floor(pos.getY())));
     }
 
 

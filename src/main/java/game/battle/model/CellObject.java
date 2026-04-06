@@ -23,7 +23,7 @@ public class CellObject {
     public Pbmethod.PbCell toProto() {
         Pbmethod.PbCell.Builder pb = Pbmethod.PbCell.newBuilder();
         pb.setType(type);
-        pb.setCellId(chunkId);
+        pb.setChunkId(chunkId);
         pb.setPos(pos.toProto());
         pb.setState(state);
         return pb.build();

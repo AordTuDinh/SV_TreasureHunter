@@ -128,7 +128,6 @@ public class Enemy extends Unit implements Serializable {
     }
 
 
-    @Override
     public void activeSkill(int skillId) {
         setTimeAttack();
     }
@@ -459,11 +458,12 @@ public class Enemy extends Unit implements Serializable {
         return pbUser.build();
     }
 
-    public Pbmethod.PbUnit toProtoAdd() {
+    public Pbmethod.PbUnit toProtoAdd(int chunkId) {
         Pbmethod.PbUnit.Builder pbAdd = Pbmethod.PbUnit.newBuilder();
         pbAdd.setType(Constans.TYPE_MONSTER);
         pbAdd.setId(id);
         pbAdd.addAvatar(model);
+        pbAdd.setChunkId(chunkId);
         pbAdd.setTeamId(teamId);
         pbAdd.setRangeAttack(rangeAttack);
         pbAdd.setIsAdd(true);

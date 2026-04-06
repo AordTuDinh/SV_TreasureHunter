@@ -119,7 +119,7 @@ public class LoginHandler extends AHandler {
         String name = mUser.getUser().getUsername().split("_")[1];
         JCache.getInstance().removeValue("s:" + name);
         if (room != null && mUser != null) {
-            room.removePlayer(mUser.getPlayer().getId());
+            room.removeUnit(mUser.getPlayer().getId());
             mUser.userLogout();
         }
         addResponse(getCommonVector(1));
@@ -184,7 +184,7 @@ public class LoginHandler extends AHandler {
         if (loginType == 1) {
             BaseRoom room = (BaseRoom) ChUtil.get(channel, ChUtil.KEY_ROOM);
             if (room != null && mUser != null) {
-                room.removePlayer(mUser.getPlayer().getId());
+                room.removeUnit(mUser.getPlayer().getId());
                 mUser.userLogout();
             }
         }
@@ -225,8 +225,8 @@ public class LoginHandler extends AHandler {
         if (oldChanel != null && oldChanel.id() != channel.id()) {
             BaseRoom oldRoom = (BaseRoom) ChUtil.get(oldChanel, ChUtil.KEY_ROOM);
             MyUser oldUser = (MyUser) ChUtil.get(oldChanel, ChUtil.KEY_M_USER);
-            if (oldRoom != null && oldUser != null && oldRoom.hasPlayer(oldUser.getPlayer().getIdInMap())) {
-                oldRoom.removePlayer(oldUser.getPlayer().getIdInMap());
+            if (oldRoom != null && oldUser != null && oldRoom.hasPlayer(oldUser.getPlayer().getId())) {
+                oldRoom.removeUnit(oldUser.getPlayer().getId());
                 oldUser.userLogout();
             }
             Util.sendProtoData(oldChanel, PopupType.FORCE_LOGOUT.toProto(mUser), IAction.POPUP_INFO);

@@ -58,7 +58,7 @@ message PbUnit{
   optional  bool isAdd = 4;
   optional  int32 teamId = 5;
   repeated int32  avatar = 6;
-  optional int32  ownerId = 7;
+  optional int64  ownerId = 7;
   optional PbPos pos = 8;
   optional PbPos direction = 9;
   optional int32 speed = 10;
@@ -107,7 +107,7 @@ message PbListUnitState {
 }
 
 message  PbUnitState{
-  optional  int32 id = 1;
+  optional  int64 id = 1;
   repeated int32 status = 2; // type - length
   repeated int64 point = 3; // data
 }

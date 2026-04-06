@@ -141,8 +141,8 @@ public class BattleHandler extends AHandler implements Serializable {
         }
         // xóa khỏi room cũ
         Player player = mUser.getPlayer();
-        if (curRoom != null && curRoom.hasPlayer(player.getIdInMap())) {
-            curRoom.removePlayer(player.getId());
+        if (curRoom != null && curRoom.hasPlayer(player.getId())) {
+            curRoom.removeUnit(player.getId());
         }
         // tìm room thỏa mãn điều kiện max player room
         BaseRoom room = (BaseRoom) TaskMonitor.getInstance().getRoom(keyRoom);
@@ -186,7 +186,7 @@ public class BattleHandler extends AHandler implements Serializable {
         }
         mUser.getPlayer().setJoinMap(curRoom);
 
-        curRoom.joinMap(this, mUser.getPlayer());
+        curRoom.joinRoom(this, mUser.getPlayer());
     }
 
     void revivePlayer() {

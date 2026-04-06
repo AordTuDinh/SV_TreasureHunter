@@ -21,12 +21,12 @@ import java.util.*;
 public abstract class Unit {
     // new
     int chunkId;
-    long idInMap; // tất cả các sinh vật đều sẽ có id này riêng lẻ, vào map sẽ gen id này
+    long id; // tất cả các sinh vật đều sẽ có id này riêng lẻ, vào map sẽ gen id này
 
     // info
-    int id; // id in room
+    // int id; // id in room
     int teamId;
-    float radius, rangeAttack;
+    float rangeAttack;
     int idDameSkin = 0;
     int idChatFrame = 0;
     int idTrial = 0;
@@ -47,37 +47,30 @@ public abstract class Unit {
     Unit targetAttack;
     public FactionType faction = FactionType.NULL;
     long timeBeHit = 0;
-    int killById;
+    long killById;
 
-
-    boolean isPowerSkill;
-    public Map<Integer, Long> beDameInfo = new HashMap<>();
+    public Map<Long, Long> beDameInfo = new HashMap<>();
 
     // todo test move
     boolean isMove = false; // dang di chuyen
     long timeActionMove;  // thời gian thay đổi action move
     boolean isBeAttack; // bi danh
     Pos targetMove;
-    Map<Integer, Long> timePush = new HashMap<>();
-    boolean isAtkByHit = true, ready = true;
+    boolean ready = true;
     long timeJoinRoom;
-    long timeActiveRandomMove, timeCreate;
-    boolean isBoss;
+    long timeActiveRandomMove;
     long timeActionAttack;
     long timeCheckDirectionAttack;
     long[] timeActiveSlot = new long[]{0, 0, 0};
     //long timeBeAttack;
     Pos directionMoveAttack = Pos.zero(); // chưa có hướng move attack melee
     // save attacker info
-    Map<Integer, List<Long>> attackerInfo = new HashMap<>(); // playerID   - timeAttack,shurikenIds : dùng để check thẳng đánh mình vừa đánh lúc nào + suriken id nào
+    Map<Long, List<Long>> attackerInfo = new HashMap<>(); // playerID   - timeAttack,shurikenIds : dùng để check thẳng đánh mình vừa đánh lúc nào + suriken id nào
     private static final int TIME_ATTACK = 0;
     private static final int SLOT_MELEE = 1;
     private static final int START_INDEX = 2;
-    // skill eff
-//    public List<Integer> f0Toxic = new ArrayList<>();
-    // các thằng đang target đánh mình
-    public Map<Integer, Unit> targetSelf = new HashMap<>();
-    boolean hasDamage = true;
+
+    public Map<Long, Unit> targetSelf = new HashMap<>();
     boolean sendDie = true;
 
 
@@ -125,9 +118,24 @@ public abstract class Unit {
         }
     }
 
+    public void setPosAndDirection(Pos newPos, Pos newDirection) {
+        this.pos = newPos.round();
+        this.direction = newDirection.normalized();
+        this.setMove(true);
+        updateChunkByPos(newPos);
+    }
+
+    protected void updateChunkByPos(Pos worldPos) {
+        if (room == null || worldPos == null) return;
+        int oldChunk = chunkId;
+        int newChunk = room.worldPosToChunkId(worldPos);
+        if (room.joinChunk(this, newChunk) && type == UnitType.PLAYER) {
+           room.syncViewDeltaForPlayer(this.getPlayer(),newChunk,oldChunk);
+        }
+    }
+
 
     public void beAttackMelee(Unit attacker) {
-        if (!attacker.hasDamage) return;
         long[] damage = IMath.calculateDamage(attacker, this, attacker.getFaction());
         beAttackDamage(attacker, damage[1], damage[2]);
         addAtkInfoMelee(attacker);
@@ -135,7 +143,6 @@ public abstract class Unit {
     }
 
     public void beAttackCollider(Unit attacker) {
-        if (!attacker.hasDamage) return;
         addAtkInfoMelee(attacker);
         long[] damage = IMath.calculateDamage(attacker, this, attacker.getFaction());
         damage[1] = (long) (damage[1] * BattleConfig.M_PerDameCollider);
@@ -254,7 +261,7 @@ public abstract class Unit {
         return other.getTeamId() == this.teamId;
     }
 
-    public long getTimeAttack(int attackerId) {
+    public long getTimeAttack(long attackerId) {
         if (attackerInfo.containsKey(attackerId)) { // chưa có thông tin gì
             return attackerInfo.get(attackerId).get(TIME_ATTACK);
         } else {
@@ -279,6 +286,7 @@ public abstract class Unit {
         if (beBlock()) return;
         pos.v_add(panelMap, newPos);
         setMove(true);
+        updateChunkByPos(pos);
     }
 
     public void setMove(boolean isMove) {
@@ -291,10 +299,10 @@ public abstract class Unit {
         return MathLab.pointInCircle(this.pos, r, posTarget);
     }
 
-    public boolean isHitMelee(Unit target) {
-        if (!isAlive()) return false;
-        return MathLab.pointInCircle(this.pos, target.getRadius() + radius, target.pos);
-    }
+//    public boolean isHitMelee(Unit target) {
+//        if (!isAlive()) return false;
+//        return MathLab.pointInCircle(this.pos, target.getRadius() + radius, target.pos);
+//    }
 
     public float distionTop() {
         return Math.abs(room.getMapInfo().getTopRightP().y - pos.y);
@@ -340,7 +348,7 @@ public abstract class Unit {
         return pbUser.build();
     }
 
-    public abstract Pbmethod.PbUnit toProtoAdd();
+    public abstract Pbmethod.PbUnit toProtoAdd(int chunkId);
 
     public void revive() {
     }
@@ -360,7 +368,7 @@ public abstract class Unit {
     public Pbmethod.PbUnit toProtoRemove(int chunkId) {
         Pbmethod.PbUnit.Builder builder = Pbmethod.PbUnit.newBuilder();
         builder.setType(type.value);
-        builder.setId(idInMap);
+        builder.setId(id);
         builder.setChunkId(chunkId);
         builder.setIsAdd(false);
         return builder.build();
@@ -494,7 +502,7 @@ public abstract class Unit {
         return isHit() || attackBlockMove() || point.beBlock();
     }
 
-    public abstract void activeSkill(int skillId);
+//    public abstract void activeSkill(int skillId);
 
     public boolean attackBlockMove() {
         return !DateTime.isAfterTime(timeActionAttack, BattleConfig.P_attackBlockMove);
