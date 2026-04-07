@@ -54,10 +54,7 @@ public class ProtoState {
 
                     if (tmp.getIsAdd()) {
                         buffer.writeInt(tmp.getTeamId());
-                        buffer.writeByte(tmp.getAvatarCount());
-                        for (int j = 0; j < tmp.getAvatarCount(); j++) {
-                            buffer.writeInt(tmp.getAvatar(j));
-                        }
+                        buffer.writeInt(tmp.getAvatar());
                         buffer.writeLong(tmp.getOwnerId());
                         buffer.writeFloat(tmp.getPos().getX());
                         buffer.writeFloat(tmp.getPos().getY());
@@ -69,30 +66,30 @@ public class ProtoState {
                             buffer.writeInt(tmp.getInfo(j));
                         }
 
-                        if (tmp.getType() == Constans.TYPE_MONSTER || tmp.getType() == Constans.TYPE_PLAYER) {
-                            PbCharInfo infor = tmp.getCharacterInfo();
-                            buffer.writeInt(infor.getLevel());
-                            buffer.writeBoolean(infor.getAlive());
-                            //  buffer.writeLong(infor.getLastInputSeq());  có vẻ không cần đến
-                            buffer.writeByte(infor.getPointCount());
-                            for (int j = 0; j < infor.getPointCount(); j++) {
-                                buffer.writeLong(infor.getPoint(j));
-                            }
-                            buffer.writeByte(infor.getInfoCount());
-                            for (int j = 0; j < infor.getInfoCount(); j++) {
-                                buffer.writeInt(infor.getInfo(j));
-                            }
-                            byte[] data;
-                            try {
-                                data = infor.getName().getBytes("UTF-8");
-                            } catch (Exception ex) {
-                                data = new byte[0];
-                            }
-                            buffer.writeByte(data.length);
-                            if (data.length > 0) {
-                                buffer.writeBytes(data);
-                            }
-                        }
+//                        if (tmp.getType() == Constans.TYPE_MONSTER || tmp.getType() == Constans.TYPE_PLAYER) {
+//                            PbCharInfo infor = tmp.getCharacterInfo();
+//                            buffer.writeInt(infor.getLevel());
+//                            buffer.writeBoolean(infor.getAlive());
+//                            //  buffer.writeLong(infor.getLastInputSeq());  có vẻ không cần đến
+//                            buffer.writeByte(infor.getPointCount());
+//                            for (int j = 0; j < infor.getPointCount(); j++) {
+//                                buffer.writeLong(infor.getPoint(j));
+//                            }
+//                            buffer.writeByte(infor.getInfoCount());
+//                            for (int j = 0; j < infor.getInfoCount(); j++) {
+//                                buffer.writeInt(infor.getInfo(j));
+//                            }
+//                            byte[] data;
+//                            try {
+//                                data = infor.getName().getBytes("UTF-8");
+//                            } catch (Exception ex) {
+//                                data = new byte[0];
+//                            }
+//                            buffer.writeByte(data.length);
+//                            if (data.length > 0) {
+//                                buffer.writeBytes(data);
+//                            }
+//                        }
                     }
                 }
             }

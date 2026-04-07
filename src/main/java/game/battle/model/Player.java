@@ -155,7 +155,7 @@ public class Player extends Unit implements Serializable {
         this.countUpdate++;
         CfgQuest.addNumQuest(mUser, DataQuest.KILL_MONSTER, 1);
 
-        if (beKill.type ==UnitType.BOSS) CfgQuest.addNumQuest(mUser, DataQuest.KILL_BOSS_MAP, 1);
+//        if (beKill.type ==UnitType.BOSS) CfgQuest.addNumQuest(mUser, DataQuest.KILL_BOSS_MAP, 1);
         CfgAchievement.addAchievement(mUser, 1, beKill.getEnemy().getEnemyKey(), 1);
         mUser.getUData().checkQuestTutorial(mUser, QuestTutType.KILL_ENEMY, beKill.getEnemy().getEnemyKey(), 1);
         if (countUpdate > 100) {
@@ -453,9 +453,14 @@ public class Player extends Unit implements Serializable {
         pbAdd.setDirection(direction.toProto());
         pbAdd.setTeamId(teamId);
         pbAdd.setRangeAttack(rangeAttack);
-        pbAdd.addAllAvatar(mUser.getUser().getAvatar());
+        pbAdd.setAvatar(mUser.getUser().getHeroMain());
         pbAdd.setSpeed((int) point.getMoveSpeed());
-        pbAdd.setCharacterInfo(toCharacterInfo());
+        pbAdd.setName(name);
+        pbAdd.setAlive(alive);
+        pbAdd.setLastInputSeq(indexLastInputSeq);
+        pbAdd.addAllPoint(point.toProto());
+
+
         pbAdd.addAllInfo(getListInfo());
         return pbAdd.build();
     }
@@ -467,21 +472,6 @@ public class Player extends Unit implements Serializable {
         lst.add(idTrial);
         lst.add(mUser.getUData().getEffInit());
         return lst;
-    }
-
-
-    private Pbmethod.PbCharInfo toCharacterInfo() {
-        Pbmethod.PbCharInfo.Builder pbUser = Pbmethod.PbCharInfo.newBuilder();
-        pbUser.setName(name);
-        pbUser.setLevel(mUser.getUser().getLevel());
-        pbUser.setAlive(alive);
-        pbUser.setLastInputSeq(indexLastInputSeq);
-        pbUser.addAllPoint(point.toProto());
-        return pbUser.build();
-    }
-
-    public void toPbEndGame() {
-        toPbEndGame(false, 0, null, 0, PopupType.POPUP_DEAD, List.of(0, 0));
     }
 
     public void toPbEndGame(boolean isWin, int per, List<Long> bonus, int timeAttack, PopupType popup, List<Integer> info) {

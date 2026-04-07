@@ -5,8 +5,11 @@ import game.battle.calculate.MathLab;
 import game.battle.object.*;
 import game.battle.type.*;
 import game.config.aEnum.FactionType;
+import game.config.aEnum.MapType;
 import game.treasure.BattleConfig;
 import game.treasure.mapping.main.ResMapEntity;
+import game.treasure.server.Constans;
+import game.treasure.service.resource.ResMap;
 import game.treasure.table.BaseBattleRoom;
 import game.treasure.table.BaseRoom;
 import game.object.PointBuff;
@@ -26,6 +29,7 @@ public abstract class Unit {
     // info
     // int id; // id in room
     int teamId;
+
     float rangeAttack;
     int idDameSkin = 0;
     int idChatFrame = 0;
@@ -80,7 +84,7 @@ public abstract class Unit {
 
 
     public boolean isEnemy() {
-        return type == UnitType.ENEMY || type == UnitType.BOSS;
+        return type == UnitType.ENEMY;
     }
 
     private void checkBeAttackByEffect(Unit attacker) {
@@ -348,7 +352,7 @@ public abstract class Unit {
         return pbUser.build();
     }
 
-    public abstract Pbmethod.PbUnit toProtoAdd(int chunkId);
+    public abstract   Pbmethod.PbUnit toProtoAdd(int chunkId);
 
     public void revive() {
     }
@@ -512,34 +516,16 @@ public abstract class Unit {
         return false;
     }
 
-//    public void protoPush(Bullet bullet) {
-//        if (point.getWeight() == -1) return;
-//        if (!hasPush(bullet.getOwner().getId())) return;
-//        float force = bullet.getForcePush() * 10f;
-//        float a = force / point.getWeight();
-//        float s = (float) (a / 2f * Math.pow(BattleConfig.M_timeBeHit, 2));
-//        if (s > 0) {
-//            if (isLikeFace(bullet.getDirection())) {
-//                setDirection(bullet.getDirection().oppositeDirection().normalized());
-//            }
-//            this.timeBeHit = System.currentTimeMillis();
-//            // tính toán ra pos mới
-
-    /// /            Pos push = IMath.calculatePushPos(bullet.getDirection().normalized(), s);
-    /// /            pos.v_add(getBattleRoom(), push);
-    /// /            protoStatus(StateType.PUSH, (long) (pos.x * 1000), (long) (pos.y * 1000), (long) (getDirection().x * 1000L), (long) (getDirection().y * 1000L));
-//        }
-//    }
     public void setTimeRandomMove() { //  vừa randomm move xong, time này dùng để xác định thời gian cho phép random move tiếp theo
         timeActiveRandomMove = System.currentTimeMillis() + NumberUtil.getRandom((int) (BattleConfig.M_delayMove * 1000));
     }
 
     // region proto
     public void protoBeDame(Unit attacker, List<Long> aInfo) {
-        if (type == UnitType.BOSS) {
-            if (!beDameInfo.containsKey(attacker.getId())) beDameInfo.put(attacker.getId(), 0L);
-            beDameInfo.put(attacker.getId(), beDameInfo.get(attacker.getId()) + aInfo.get(2) + aInfo.get(3));
-        }
+//        if (type == UnitType.BOSS) {
+//            if (!beDameInfo.containsKey(attacker.getId())) beDameInfo.put(attacker.getId(), 0L);
+//            beDameInfo.put(attacker.getId(), beDameInfo.get(attacker.getId()) + aInfo.get(2) + aInfo.get(3));
+//        }
         protoStatus(List.of(StateType.BE_DAMAGE), aInfo);
     }
 
@@ -565,10 +551,10 @@ public abstract class Unit {
 
 
     public void protoRangeDame(Unit attacker, List<Long> aInfo) {
-        if (type == UnitType.BOSS) {
-            if (!beDameInfo.containsKey(attacker.getId())) beDameInfo.put(attacker.getId(), 0L);
-            beDameInfo.put(attacker.getId(), beDameInfo.get(attacker.getId()) + aInfo.get(2) + aInfo.get(3));
-        }
+//        if (type == UnitType.BOSS) {
+//            if (!beDameInfo.containsKey(attacker.getId())) beDameInfo.put(attacker.getId(), 0L);
+//            beDameInfo.put(attacker.getId(), beDameInfo.get(attacker.getId()) + aInfo.get(2) + aInfo.get(3));
+//        }
         protoStatus(List.of(StateType.RANGE_DAMAGE), aInfo);
     }
 

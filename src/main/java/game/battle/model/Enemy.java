@@ -450,19 +450,11 @@ public class Enemy extends Unit implements Serializable {
 
     // region proto
 
-    public Pbmethod.PbCharInfo toProtoInfo() {
-        Pbmethod.PbCharInfo.Builder pbUser = Pbmethod.PbCharInfo.newBuilder();
-        pbUser.setLevel(0);
-        pbUser.setAlive(alive);
-        pbUser.addAllPoint(point.toProto());
-        return pbUser.build();
-    }
-
     public Pbmethod.PbUnit toProtoAdd(int chunkId) {
         Pbmethod.PbUnit.Builder pbAdd = Pbmethod.PbUnit.newBuilder();
         pbAdd.setType(Constans.TYPE_MONSTER);
         pbAdd.setId(id);
-        pbAdd.addAvatar(model);
+        pbAdd.setAvatar(model);
         pbAdd.setChunkId(chunkId);
         pbAdd.setTeamId(teamId);
         pbAdd.setRangeAttack(rangeAttack);
@@ -475,7 +467,8 @@ public class Enemy extends Unit implements Serializable {
         pbAdd.addInfo(idDameSkin);
         pbAdd.addInfo(idChatFrame);
         pbAdd.addInfo(idTrial);
-        pbAdd.setCharacterInfo(toProtoInfo());
+        pbAdd.setAlive(alive);
+        pbAdd.addAllPoint(point.toProto());
         return pbAdd.build();
     }
 }

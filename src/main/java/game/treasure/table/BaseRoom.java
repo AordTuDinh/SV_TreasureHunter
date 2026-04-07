@@ -79,7 +79,7 @@ public abstract class BaseRoom extends MonoRoom {
 
     public Pbmethod.PbInitMap.Builder newPbInitMap() {
         Pbmethod.PbInitMap.Builder pbInitMap = Pbmethod.PbInitMap.newBuilder();
-        pbInitMap.setMapId(Constans.mIdToBattleId.get(battleId));
+        pbInitMap.setMapId(mapType.value);
         pbInitMap.setBattleId(battleId);
         return pbInitMap;
     }

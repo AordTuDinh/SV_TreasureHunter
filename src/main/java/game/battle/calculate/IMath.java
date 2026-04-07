@@ -400,13 +400,13 @@ public class IMath {
     public static long[] calculateDamageBase(long atkDame, long magicDame, FactionType factionAttack, Unit beAttacker, float critPer, PointBuff buff, Unit attacker) {
         long atk = 0, mag = 0, def = 0, magicResist = 0;
         long doge = beAttacker.getPoint().getDoge();//miss
-        if (beAttacker.getType() == UnitType.BOSS) {
-            long dameToBoss = attacker.getPoint().getDameToBoss();
-            if (dameToBoss > 0) {
-                atkDame += (long) (atkDame * (float) dameToBoss / 100f);
-                magicDame += (long) (magicDame * (float) dameToBoss / 100f);
-            }
-        }
+//        if (beAttacker.getType() == UnitType.BOSS) {
+//            long dameToBoss = attacker.getPoint().getDameToBoss();
+//            if (dameToBoss > 0) {
+//                atkDame += (long) (atkDame * (float) dameToBoss / 100f);
+//                magicDame += (long) (magicDame * (float) dameToBoss / 100f);
+//            }
+//        }
         if (doge > 0 && NumberUtil.getRandom(100) < doge) { // né
             return new long[]{atk, mag};
         }

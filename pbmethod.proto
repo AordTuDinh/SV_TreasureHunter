@@ -42,29 +42,25 @@ enum CellState{
   HIDE = 2;
 }
 
-message  PbCharInfo{
-  optional  string name = 1;
-  optional  int32 level = 2;
-  optional  bool  alive = 3;
-  optional int64 lastInputSeq = 4;
-  repeated int64 point = 5;
-  repeated int32 info = 6;
-}
+
 
 message PbUnit{
-  optional int32 chunkId = 1;
-  optional int32 type = 2;
+  optional int32 type = 1;
+  optional int32 chunkId = 2;
   optional  int64 id = 3;
   optional  bool isAdd = 4;
   optional  int32 teamId = 5;
-  repeated int32  avatar = 6;
+  optional int32  avatar = 6;
   optional int64  ownerId = 7;
   optional PbPos pos = 8;
   optional PbPos direction = 9;
   optional int32 speed = 10;
   repeated int32 info = 11;
-  optional PbCharInfo characterInfo = 12;
-  optional  float rangeAttack = 13;
+  optional  float rangeAttack = 12;
+  optional  string name = 13;
+  optional  bool  alive = 14;
+  optional int64 lastInputSeq = 15;
+  repeated int64 point = 16;
 }
 
 message PbCell {
@@ -85,7 +81,7 @@ message PbChunk {
 }
 
 message PbInitMap {
-  optional string mapId = 1;
+  optional int32 mapId = 1;
   optional int64 battleId = 2;
   repeated PbChunk chunks = 3;  // AOI ban đầu (tối đa 9 chunk)
   repeated PbUnit units = 4;

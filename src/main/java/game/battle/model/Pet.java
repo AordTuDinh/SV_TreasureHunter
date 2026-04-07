@@ -46,7 +46,7 @@ public class Pet extends Unit implements Serializable {
         pb.setPos(pos.toProto());
         pb.setDirection(direction.toProto());
         pb.setTeamId(teamId);
-        pb.addAvatar(model);
+        pb.setAvatar(model);
         pb.setOwnerId(owner.id);
         pb.setSpeed((int) point.getMoveSpeed());
         return pb.build();
