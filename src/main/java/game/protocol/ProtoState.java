@@ -1,7 +1,7 @@
 package game.protocol;
 
 import com.google.protobuf.ByteString;
-import game.treasure.server.Constans;
+import game.battle.type.UnitType;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import protocol.Pbmethod.*;
@@ -43,15 +43,16 @@ public class ProtoState {
 
     public static void parsePbUnitAdd(ByteBuf buffer, List<PbUnit> aUnitAdd) {
         try {
-            if (aUnitAdd.size() > 0) {
-                buffer.writeByte(Constans.TYPE_ADD_OR_REMOVE);
+            if (!aUnitAdd.isEmpty()) {
+                buffer.writeByte(StateType.TYPE_ADD_REMOVE_VALUE);
                 buffer.writeByte(aUnitAdd.size());
                 for (int i = 0; i < aUnitAdd.size(); i++) {
                     PbUnit tmp = aUnitAdd.get(i);
                     buffer.writeByte(tmp.getType());
+                    buffer.writeByte(tmp.getChunkId());
                     buffer.writeLong(tmp.getId());
                     buffer.writeBoolean(tmp.getIsAdd());
-
+                    // riêng add
                     if (tmp.getIsAdd()) {
                         buffer.writeInt(tmp.getTeamId());
                         buffer.writeInt(tmp.getAvatar());
@@ -65,31 +66,17 @@ public class ProtoState {
                         for (int j = 0; j < tmp.getInfoCount(); j++) {
                             buffer.writeInt(tmp.getInfo(j));
                         }
+                        buffer.writeFloat(tmp.getRangeAttack());
 
-//                        if (tmp.getType() == Constans.TYPE_MONSTER || tmp.getType() == Constans.TYPE_PLAYER) {
-//                            PbCharInfo infor = tmp.getCharacterInfo();
-//                            buffer.writeInt(infor.getLevel());
-//                            buffer.writeBoolean(infor.getAlive());
-//                            //  buffer.writeLong(infor.getLastInputSeq());  có vẻ không cần đến
-//                            buffer.writeByte(infor.getPointCount());
-//                            for (int j = 0; j < infor.getPointCount(); j++) {
-//                                buffer.writeLong(infor.getPoint(j));
-//                            }
-//                            buffer.writeByte(infor.getInfoCount());
-//                            for (int j = 0; j < infor.getInfoCount(); j++) {
-//                                buffer.writeInt(infor.getInfo(j));
-//                            }
-//                            byte[] data;
-//                            try {
-//                                data = infor.getName().getBytes("UTF-8");
-//                            } catch (Exception ex) {
-//                                data = new byte[0];
-//                            }
-//                            buffer.writeByte(data.length);
-//                            if (data.length > 0) {
-//                                buffer.writeBytes(data);
-//                            }
-//                        }
+                        writeString(buffer, tmp.getName());
+                        buffer.writeBoolean(tmp.getAlive());
+                        buffer.writeLong(tmp.getLastInputSeq());
+                        // point
+                        buffer.writeByte(tmp.getPointCount());
+                        for (int j = 0; j < tmp.getPointCount(); j++) {
+                            buffer.writeInt( tmp.getPoint(j));
+                        }
+                        buffer.writeInt(tmp.getUserId());
                     }
                 }
             }
@@ -98,47 +85,56 @@ public class ProtoState {
         }
     }
 
-    public static void parsePbUnitPos(ByteBuf buffer, List<PbUnitPos> aUnitPos) {
+    public static void writeString(ByteBuf buffer, String str) {
+        byte[] data;
         try {
-            if (!aUnitPos.isEmpty()) {
-                buffer.writeByte(Constans.TYPE_POS);
-                buffer.writeByte(aUnitPos.size());
-                for (int i = 0; i < aUnitPos.size(); i++) {
-                    PbUnitPos tmp = aUnitPos.get(i);
-                    buffer.writeLong(tmp.getId());
-                    buffer.writeInt(tmp.getSpeed());
-                    buffer.writeLong(tmp.getLastInputSeq());
-                    buffer.writeFloat(tmp.getPos().getX());
-                    buffer.writeFloat(tmp.getPos().getY());
-                    buffer.writeFloat(tmp.getDirection().getX());
-                    buffer.writeFloat(tmp.getDirection().getY());
-                }
-            }
+            data = str.getBytes("UTF-8");
         } catch (Exception ex) {
-            System.out.println("parsePbUnitPos---->" + ex.getMessage());
+            data = new byte[0];
+        }
+        buffer.writeByte(data.length);
+        if (data.length > 0) {
+            buffer.writeBytes(data);
+        }
+    }
+
+    public static void parsePbUnitPos(ByteBuf buffer, List<PbUnitPos> aUnitPos) {
+        if (!aUnitPos.isEmpty()) {
+            buffer.writeByte(StateType.TYPE_POS_VALUE);
+            buffer.writeByte(aUnitPos.size());
+            for (int i = 0; i < aUnitPos.size(); i++) {
+                PbUnitPos tmp = aUnitPos.get(i);
+                buffer.writeLong(tmp.getId());
+                buffer.writeInt(tmp.getSpeed());
+                buffer.writeLong(tmp.getLastInputSeq());
+                buffer.writeFloat(tmp.getPos().getX());
+                buffer.writeFloat(tmp.getPos().getY());
+                buffer.writeFloat(tmp.getDirection().getX());
+                buffer.writeFloat(tmp.getDirection().getY());
+            }
         }
     }
 
     public static void parsePbUnitUpdate(ByteBuf buffer, PbState proto) {
-        try {
-            int size = proto.getAUnitUpdateCount();
-            for (int i = 0; i < size; i++) {
+        int size = proto.getAUnitUpdateCount();
+        for (int i = 0; i < size; i++) {
+            try {
                 PbUnitUpdate update = proto.getAUnitUpdate(i);
                 switch (update.getType()) {
-                    case Constans.TYPE_UPDATE_CHARACTER:
+                    case StateType.TYPE_UNIT_STATE_VALUE:
                         PbListUnitState aPlayerState = PbListUnitState.parseFrom(update.getData(0).toByteArray());
                         parsePbUpdatePlayer(buffer, aPlayerState.getAUnitStateList());
                         break;
                 }
+            } catch (Exception ex) {
+                System.err.println("Error at index " + i + ": " + ex);
             }
-        } catch (Exception ex) {
-            System.out.println("parsePbUnitUpdate---->" + ex.getMessage());
         }
     }
 
     public static void parsePbUpdatePlayer(ByteBuf buffer, List<PbUnitState> aCharacterState) {
         if (!aCharacterState.isEmpty()) {
-            buffer.writeByte(Constans.TYPE_UPDATE_CHARACTER);
+            buffer.writeByte(StateType.TYPE_UNIT_STATE_VALUE);
             buffer.writeByte(aCharacterState.size());
             for (int i = 0; i < aCharacterState.size(); i++) {
                 PbUnitState tmp = aCharacterState.get(i);
@@ -147,9 +143,8 @@ public class ProtoState {
                 for (int j = 0; j < tmp.getStatusCount(); j++) {
                     buffer.writeByte(tmp.getStatus(j));
                 }
-                //buffer.writeByte(tmp.getPointCount()); -> k can nua vi co size o tren roi
                 for (int j = 0; j < tmp.getPointCount(); j++) {
-                    buffer.writeLong(tmp.getPoint(j));
+                    buffer.writeInt( tmp.getPoint(j));
                 }
             }
         }

@@ -30,7 +30,7 @@ public class ResBossEntity extends BaseEntity {
     float radius, rangeAttack;
     int weight, moveSpeed, faction, enemy;// trọng lượng enemy (từ 0 ->100) , -1 = never be push
     @Transient
-    long longHp, longHpRegen, longAttack, longMagicAttack;
+    int longHp, longHpRegen, longAttack, longMagicAttack;
     @Transient
     BossSkillConfig bossSkillConfig;
     @Transient
@@ -47,10 +47,10 @@ public class ResBossEntity extends BaseEntity {
             bossSkillConfig = new Gson().fromJson(skill, new TypeToken<BossSkillConfig>() {
             }.getType());
         }
-        longHp = NumberUtil.castStr2Long(hp);
-        longHpRegen = NumberUtil.castStr2Long(hpRegen);
-        longAttack = NumberUtil.castStr2Long(attack);
-        longMagicAttack = NumberUtil.castStr2Long(magicAttack);
+        longHp = NumberUtil.castStr2Int(hp);
+        longHpRegen = NumberUtil.castStr2Int(hpRegen);
+        longAttack = NumberUtil.castStr2Int(attack);
+        longMagicAttack = NumberUtil.castStr2Int(magicAttack);
         checkJson(id, reward);
         aReward = new Gson().fromJson(reward, new TypeToken<List<BonusConfig>>() {
         }.getType());
@@ -65,7 +65,7 @@ public class ResBossEntity extends BaseEntity {
         point.setBaseMagicAttack(longMagicAttack);
         point.setDefense(defense);
         point.setMagicResist(magic_resist);
-        point.setBaseCritChange(crit * 10L);
+        point.setBaseCritChange(crit * 10);
         point.setCritDamage(critDamage);
         point.setAgility(agility);
         point.setImmunity(immunity);

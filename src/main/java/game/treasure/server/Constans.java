@@ -18,20 +18,6 @@ public class Constans implements Serializable {
     public static final String KEY_PROTOCOL = "protocol";
 
 
-    /*
-     * ******** CUSTOM PROTO ***************
-     */
-    public static final int TYPE_ADD_OR_REMOVE = 1;
-    public static final int TYPE_POS = 2;
-    public static final int TYPE_UPDATE_CHARACTER = 3;
-
-    // ******** TYPE_ADD_OR_REMOVE ***************
-    public static final int TYPE_PLAYER = 1;
-    public static final int TYPE_MONSTER = 2;
-    public static final int TYPE_BULLET = 3;
-    public static final int TYPE_PET = 4;
-
-
     // ******** RUNTIME MAP ***************
 
     public static final Map<Long, String> mIdToBattleId = new HashMap<>();

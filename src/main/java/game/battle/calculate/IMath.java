@@ -373,20 +373,20 @@ public class IMath {
     }
 
 
-    public static long[] calculateDamage(Unit attacker, Unit target, FactionType factionAttack) {// crit,atk,matk
+    public static int[] calculateDamage(Unit attacker, Unit target, FactionType factionAttack) {// crit,atk,matk
         return calculateDamage(attacker, target, factionAttack, attacker.getPoint().getAttackDamage(), attacker.getPoint().getMagicDamage());
     }
 
-    public static long[] calculateDamage(Unit attacker, Unit target, FactionType factionAttack, long atkDame, long mAtkDame) {
-        long status = 0L;
+    public static int[] calculateDamage(Unit attacker, Unit target, FactionType factionAttack, int atkDame, int mAtkDame) {
+        int status = 0;
         float critPer = 1f;
         if (isCrit(attacker.getPoint().getCrit())) {
-            status = 1L;
+            status = 1;
             critPer = attacker.getPoint().getCritDamage() - target.getPoint().getCritDamageReduce();
             critPer = critPer / 100f <= 1.5f ? 1.5f : 1 + critPer / 100f;
         }
-        long[] dame = calculateDamageBase(atkDame, mAtkDame, factionAttack, target, critPer, null, attacker);
-        return new long[]{status, dame[0], dame[1]};
+        int[] dame = calculateDamageBase(atkDame, mAtkDame, factionAttack, target, critPer, null, attacker);
+        return new int[]{status, dame[0], dame[1]};
     }
 
     public static float perNguHanh(FactionType factionAttack, FactionType factionBeAttack) {
@@ -397,9 +397,9 @@ public class IMath {
     }
 
     // Hàm gốc - tất cả đều tính qua hàm này
-    public static long[] calculateDamageBase(long atkDame, long magicDame, FactionType factionAttack, Unit beAttacker, float critPer, PointBuff buff, Unit attacker) {
-        long atk = 0, mag = 0, def = 0, magicResist = 0;
-        long doge = beAttacker.getPoint().getDoge();//miss
+    public static int[] calculateDamageBase(int atkDame, int magicDame, FactionType factionAttack, Unit beAttacker, float critPer, PointBuff buff, Unit attacker) {
+        int atk = 0, mag = 0, def = 0, magicResist = 0;
+        int doge = beAttacker.getPoint().getDoge();//miss
 //        if (beAttacker.getType() == UnitType.BOSS) {
 //            long dameToBoss = attacker.getPoint().getDameToBoss();
 //            if (dameToBoss > 0) {
@@ -408,7 +408,7 @@ public class IMath {
 //            }
 //        }
         if (doge > 0 && NumberUtil.getRandom(100) < doge) { // né
-            return new long[]{atk, mag};
+            return new int[]{atk, mag};
         }
         // Lưu ý : Sát thương chuẩn sẽ mạnh hơn giảm dame trực tiếp
         float changeDame = beAttacker.getPoint().getChangeDame();
@@ -430,13 +430,13 @@ public class IMath {
         atkDame += (long) (perNguHanh * atkDame);
         magicDame += (long) (perNguHanh * magicDame);
         // tinh dame
-        atk = (long) (atkDame * 1000 * critPer / (1140f + 3.5 * def));
-        mag = (long) (magicDame * critPer * 1000 / (1140f + 3.5 * magicResist));
+        atk = (int) (atkDame * 1000 * critPer / (1140f + 3.5 * def));
+        mag = (int) (magicDame * critPer * 1000 / (1140f + 3.5 * magicResist));
         // Đoạn này nhân với giảm dame trực tiếp
         atk *= (long) changeDame;
         mag *= (long) (changeDame);
         if (atk == 0 && mag == 0) atk = 1;
-        return new long[]{atk, mag};
+        return new int[]{atk, mag};
     }
 
 
@@ -524,8 +524,8 @@ public class IMath {
     // point cộng thẳng, đã chia 100, với các point khác thì x100 rồi chia trong battle
     public static void addPointData(Point point, int pData, float addValue) {
         if (POINT_X100.contains(pData)) {
-            point.add(pData, (long) (addValue * 100));
-        } else point.add(pData, (long) addValue);
+            point.add(pData, (int) (addValue * 100));
+        } else point.add(pData, (int) addValue);
     }
 
 

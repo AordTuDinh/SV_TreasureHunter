@@ -90,6 +90,97 @@ public final class Pbmethod {
     // @@protoc_insertion_point(enum_scope:pbdson.CellState)
   }
 
+  /**
+   * Protobuf enum {@code pbdson.StateType}
+   */
+  public enum StateType
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>TYPE_ADD_REMOVE = 1;</code>
+     */
+    TYPE_ADD_REMOVE(0, 1),
+    /**
+     * <code>TYPE_POS = 2;</code>
+     */
+    TYPE_POS(1, 2),
+    /**
+     * <code>TYPE_UNIT_STATE = 3;</code>
+     */
+    TYPE_UNIT_STATE(2, 3),
+    ;
+
+    /**
+     * <code>TYPE_ADD_REMOVE = 1;</code>
+     */
+    public static final int TYPE_ADD_REMOVE_VALUE = 1;
+    /**
+     * <code>TYPE_POS = 2;</code>
+     */
+    public static final int TYPE_POS_VALUE = 2;
+    /**
+     * <code>TYPE_UNIT_STATE = 3;</code>
+     */
+    public static final int TYPE_UNIT_STATE_VALUE = 3;
+
+
+    public final int getNumber() { return value; }
+
+    public static StateType valueOf(int value) {
+      switch (value) {
+        case 1: return TYPE_ADD_REMOVE;
+        case 2: return TYPE_POS;
+        case 3: return TYPE_UNIT_STATE;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<StateType>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<StateType>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<StateType>() {
+            public StateType findValueByNumber(int number) {
+              return StateType.valueOf(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return protocol.Pbmethod.getDescriptor().getEnumTypes().get(1);
+    }
+
+    private static final StateType[] VALUES = values();
+
+    public static StateType valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int index;
+    private final int value;
+
+    private StateType(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:pbdson.StateType)
+  }
+
   public interface RequestDataOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
@@ -4782,10 +4873,18 @@ public final class Pbmethod {
     // optional int32 type = 1;
     /**
      * <code>optional int32 type = 1;</code>
+     *
+     * <pre>
+     * chung cả add + remove
+     * </pre>
      */
     boolean hasType();
     /**
      * <code>optional int32 type = 1;</code>
+     *
+     * <pre>
+     * chung cả add + remove
+     * </pre>
      */
     int getType();
 
@@ -4822,10 +4921,18 @@ public final class Pbmethod {
     // optional int32 teamId = 5;
     /**
      * <code>optional int32 teamId = 5;</code>
+     *
+     * <pre>
+     * dành cho add unit
+     * </pre>
      */
     boolean hasTeamId();
     /**
      * <code>optional int32 teamId = 5;</code>
+     *
+     * <pre>
+     * dành cho add unit
+     * </pre>
      */
     int getTeamId();
 
@@ -4946,19 +5053,29 @@ public final class Pbmethod {
      */
     long getLastInputSeq();
 
-    // repeated int64 point = 16;
+    // repeated int32 point = 16;
     /**
-     * <code>repeated int64 point = 16;</code>
+     * <code>repeated int32 point = 16;</code>
      */
-    java.util.List<java.lang.Long> getPointList();
+    java.util.List<java.lang.Integer> getPointList();
     /**
-     * <code>repeated int64 point = 16;</code>
+     * <code>repeated int32 point = 16;</code>
      */
     int getPointCount();
     /**
-     * <code>repeated int64 point = 16;</code>
+     * <code>repeated int32 point = 16;</code>
      */
-    long getPoint(int index);
+    int getPoint(int index);
+
+    // optional int32 userId = 17;
+    /**
+     * <code>optional int32 userId = 17;</code>
+     */
+    boolean hasUserId();
+    /**
+     * <code>optional int32 userId = 17;</code>
+     */
+    int getUserId();
   }
   /**
    * Protobuf type {@code pbdson.PbUnit}
@@ -5120,23 +5237,28 @@ public final class Pbmethod {
             }
             case 128: {
               if (!((mutable_bitField0_ & 0x00008000) == 0x00008000)) {
-                point_ = new java.util.ArrayList<java.lang.Long>();
+                point_ = new java.util.ArrayList<java.lang.Integer>();
                 mutable_bitField0_ |= 0x00008000;
               }
-              point_.add(input.readInt64());
+              point_.add(input.readInt32());
               break;
             }
             case 130: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
               if (!((mutable_bitField0_ & 0x00008000) == 0x00008000) && input.getBytesUntilLimit() > 0) {
-                point_ = new java.util.ArrayList<java.lang.Long>();
+                point_ = new java.util.ArrayList<java.lang.Integer>();
                 mutable_bitField0_ |= 0x00008000;
               }
               while (input.getBytesUntilLimit() > 0) {
-                point_.add(input.readInt64());
+                point_.add(input.readInt32());
               }
               input.popLimit(limit);
+              break;
+            }
+            case 136: {
+              bitField0_ |= 0x00004000;
+              userId_ = input.readInt32();
               break;
             }
           }
@@ -5190,12 +5312,20 @@ public final class Pbmethod {
     private int type_;
     /**
      * <code>optional int32 type = 1;</code>
+     *
+     * <pre>
+     * chung cả add + remove
+     * </pre>
      */
     public boolean hasType() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
      * <code>optional int32 type = 1;</code>
+     *
+     * <pre>
+     * chung cả add + remove
+     * </pre>
      */
     public int getType() {
       return type_;
@@ -5254,12 +5384,20 @@ public final class Pbmethod {
     private int teamId_;
     /**
      * <code>optional int32 teamId = 5;</code>
+     *
+     * <pre>
+     * dành cho add unit
+     * </pre>
      */
     public boolean hasTeamId() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
      * <code>optional int32 teamId = 5;</code>
+     *
+     * <pre>
+     * dành cho add unit
+     * </pre>
      */
     public int getTeamId() {
       return teamId_;
@@ -5471,27 +5609,43 @@ public final class Pbmethod {
       return lastInputSeq_;
     }
 
-    // repeated int64 point = 16;
+    // repeated int32 point = 16;
     public static final int POINT_FIELD_NUMBER = 16;
-    private java.util.List<java.lang.Long> point_;
+    private java.util.List<java.lang.Integer> point_;
     /**
-     * <code>repeated int64 point = 16;</code>
+     * <code>repeated int32 point = 16;</code>
      */
-    public java.util.List<java.lang.Long>
+    public java.util.List<java.lang.Integer>
         getPointList() {
       return point_;
     }
     /**
-     * <code>repeated int64 point = 16;</code>
+     * <code>repeated int32 point = 16;</code>
      */
     public int getPointCount() {
       return point_.size();
     }
     /**
-     * <code>repeated int64 point = 16;</code>
+     * <code>repeated int32 point = 16;</code>
      */
-    public long getPoint(int index) {
+    public int getPoint(int index) {
       return point_.get(index);
+    }
+
+    // optional int32 userId = 17;
+    public static final int USERID_FIELD_NUMBER = 17;
+    private int userId_;
+    /**
+     * <code>optional int32 userId = 17;</code>
+     */
+    public boolean hasUserId() {
+      return ((bitField0_ & 0x00004000) == 0x00004000);
+    }
+    /**
+     * <code>optional int32 userId = 17;</code>
+     */
+    public int getUserId() {
+      return userId_;
     }
 
     private void initFields() {
@@ -5511,6 +5665,7 @@ public final class Pbmethod {
       alive_ = false;
       lastInputSeq_ = 0L;
       point_ = java.util.Collections.emptyList();
+      userId_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -5570,7 +5725,10 @@ public final class Pbmethod {
         output.writeInt64(15, lastInputSeq_);
       }
       for (int i = 0; i < point_.size(); i++) {
-        output.writeInt64(16, point_.get(i));
+        output.writeInt32(16, point_.get(i));
+      }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+        output.writeInt32(17, userId_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -5650,10 +5808,14 @@ public final class Pbmethod {
         int dataSize = 0;
         for (int i = 0; i < point_.size(); i++) {
           dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt64SizeNoTag(point_.get(i));
+            .computeInt32SizeNoTag(point_.get(i));
         }
         size += dataSize;
         size += 2 * getPointList().size();
+      }
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(17, userId_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -5813,6 +5975,8 @@ public final class Pbmethod {
         bitField0_ = (bitField0_ & ~0x00004000);
         point_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00008000);
+        userId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00010000);
         return this;
       }
 
@@ -5915,6 +6079,10 @@ public final class Pbmethod {
           bitField0_ = (bitField0_ & ~0x00008000);
         }
         result.point_ = point_;
+        if (((from_bitField0_ & 0x00010000) == 0x00010000)) {
+          to_bitField0_ |= 0x00004000;
+        }
+        result.userId_ = userId_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -5995,6 +6163,9 @@ public final class Pbmethod {
           }
           onChanged();
         }
+        if (other.hasUserId()) {
+          setUserId(other.getUserId());
+        }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
       }
@@ -6026,18 +6197,30 @@ public final class Pbmethod {
       private int type_ ;
       /**
        * <code>optional int32 type = 1;</code>
+       *
+       * <pre>
+       * chung cả add + remove
+       * </pre>
        */
       public boolean hasType() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
        * <code>optional int32 type = 1;</code>
+       *
+       * <pre>
+       * chung cả add + remove
+       * </pre>
        */
       public int getType() {
         return type_;
       }
       /**
        * <code>optional int32 type = 1;</code>
+       *
+       * <pre>
+       * chung cả add + remove
+       * </pre>
        */
       public Builder setType(int value) {
         bitField0_ |= 0x00000001;
@@ -6047,6 +6230,10 @@ public final class Pbmethod {
       }
       /**
        * <code>optional int32 type = 1;</code>
+       *
+       * <pre>
+       * chung cả add + remove
+       * </pre>
        */
       public Builder clearType() {
         bitField0_ = (bitField0_ & ~0x00000001);
@@ -6158,18 +6345,30 @@ public final class Pbmethod {
       private int teamId_ ;
       /**
        * <code>optional int32 teamId = 5;</code>
+       *
+       * <pre>
+       * dành cho add unit
+       * </pre>
        */
       public boolean hasTeamId() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
        * <code>optional int32 teamId = 5;</code>
+       *
+       * <pre>
+       * dành cho add unit
+       * </pre>
        */
       public int getTeamId() {
         return teamId_;
       }
       /**
        * <code>optional int32 teamId = 5;</code>
+       *
+       * <pre>
+       * dành cho add unit
+       * </pre>
        */
       public Builder setTeamId(int value) {
         bitField0_ |= 0x00000010;
@@ -6179,6 +6378,10 @@ public final class Pbmethod {
       }
       /**
        * <code>optional int32 teamId = 5;</code>
+       *
+       * <pre>
+       * dành cho add unit
+       * </pre>
        */
       public Builder clearTeamId() {
         bitField0_ = (bitField0_ & ~0x00000010);
@@ -6759,68 +6962,101 @@ public final class Pbmethod {
         return this;
       }
 
-      // repeated int64 point = 16;
-      private java.util.List<java.lang.Long> point_ = java.util.Collections.emptyList();
+      // repeated int32 point = 16;
+      private java.util.List<java.lang.Integer> point_ = java.util.Collections.emptyList();
       private void ensurePointIsMutable() {
         if (!((bitField0_ & 0x00008000) == 0x00008000)) {
-          point_ = new java.util.ArrayList<java.lang.Long>(point_);
+          point_ = new java.util.ArrayList<java.lang.Integer>(point_);
           bitField0_ |= 0x00008000;
          }
       }
       /**
-       * <code>repeated int64 point = 16;</code>
+       * <code>repeated int32 point = 16;</code>
        */
-      public java.util.List<java.lang.Long>
+      public java.util.List<java.lang.Integer>
           getPointList() {
         return java.util.Collections.unmodifiableList(point_);
       }
       /**
-       * <code>repeated int64 point = 16;</code>
+       * <code>repeated int32 point = 16;</code>
        */
       public int getPointCount() {
         return point_.size();
       }
       /**
-       * <code>repeated int64 point = 16;</code>
+       * <code>repeated int32 point = 16;</code>
        */
-      public long getPoint(int index) {
+      public int getPoint(int index) {
         return point_.get(index);
       }
       /**
-       * <code>repeated int64 point = 16;</code>
+       * <code>repeated int32 point = 16;</code>
        */
       public Builder setPoint(
-          int index, long value) {
+          int index, int value) {
         ensurePointIsMutable();
         point_.set(index, value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int64 point = 16;</code>
+       * <code>repeated int32 point = 16;</code>
        */
-      public Builder addPoint(long value) {
+      public Builder addPoint(int value) {
         ensurePointIsMutable();
         point_.add(value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int64 point = 16;</code>
+       * <code>repeated int32 point = 16;</code>
        */
       public Builder addAllPoint(
-          java.lang.Iterable<? extends java.lang.Long> values) {
+          java.lang.Iterable<? extends java.lang.Integer> values) {
         ensurePointIsMutable();
         super.addAll(values, point_);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int64 point = 16;</code>
+       * <code>repeated int32 point = 16;</code>
        */
       public Builder clearPoint() {
         point_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00008000);
+        onChanged();
+        return this;
+      }
+
+      // optional int32 userId = 17;
+      private int userId_ ;
+      /**
+       * <code>optional int32 userId = 17;</code>
+       */
+      public boolean hasUserId() {
+        return ((bitField0_ & 0x00010000) == 0x00010000);
+      }
+      /**
+       * <code>optional int32 userId = 17;</code>
+       */
+      public int getUserId() {
+        return userId_;
+      }
+      /**
+       * <code>optional int32 userId = 17;</code>
+       */
+      public Builder setUserId(int value) {
+        bitField0_ |= 0x00010000;
+        userId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 userId = 17;</code>
+       */
+      public Builder clearUserId() {
+        bitField0_ = (bitField0_ & ~0x00010000);
+        userId_ = 0;
         onChanged();
         return this;
       }
@@ -12743,17 +12979,17 @@ public final class Pbmethod {
      */
     int getStatus(int index);
 
-    // repeated int64 point = 3;
+    // repeated int32 point = 3;
     /**
-     * <code>repeated int64 point = 3;</code>
+     * <code>repeated int32 point = 3;</code>
      *
      * <pre>
      * data
      * </pre>
      */
-    java.util.List<java.lang.Long> getPointList();
+    java.util.List<java.lang.Integer> getPointList();
     /**
-     * <code>repeated int64 point = 3;</code>
+     * <code>repeated int32 point = 3;</code>
      *
      * <pre>
      * data
@@ -12761,13 +12997,13 @@ public final class Pbmethod {
      */
     int getPointCount();
     /**
-     * <code>repeated int64 point = 3;</code>
+     * <code>repeated int32 point = 3;</code>
      *
      * <pre>
      * data
      * </pre>
      */
-    long getPoint(int index);
+    int getPoint(int index);
   }
   /**
    * Protobuf type {@code pbdson.PbUnitState}
@@ -12848,21 +13084,21 @@ public final class Pbmethod {
             }
             case 24: {
               if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
-                point_ = new java.util.ArrayList<java.lang.Long>();
+                point_ = new java.util.ArrayList<java.lang.Integer>();
                 mutable_bitField0_ |= 0x00000004;
               }
-              point_.add(input.readInt64());
+              point_.add(input.readInt32());
               break;
             }
             case 26: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
               if (!((mutable_bitField0_ & 0x00000004) == 0x00000004) && input.getBytesUntilLimit() > 0) {
-                point_ = new java.util.ArrayList<java.lang.Long>();
+                point_ = new java.util.ArrayList<java.lang.Integer>();
                 mutable_bitField0_ |= 0x00000004;
               }
               while (input.getBytesUntilLimit() > 0) {
-                point_.add(input.readInt64());
+                point_.add(input.readInt32());
               }
               input.popLimit(limit);
               break;
@@ -12964,22 +13200,22 @@ public final class Pbmethod {
       return status_.get(index);
     }
 
-    // repeated int64 point = 3;
+    // repeated int32 point = 3;
     public static final int POINT_FIELD_NUMBER = 3;
-    private java.util.List<java.lang.Long> point_;
+    private java.util.List<java.lang.Integer> point_;
     /**
-     * <code>repeated int64 point = 3;</code>
+     * <code>repeated int32 point = 3;</code>
      *
      * <pre>
      * data
      * </pre>
      */
-    public java.util.List<java.lang.Long>
+    public java.util.List<java.lang.Integer>
         getPointList() {
       return point_;
     }
     /**
-     * <code>repeated int64 point = 3;</code>
+     * <code>repeated int32 point = 3;</code>
      *
      * <pre>
      * data
@@ -12989,13 +13225,13 @@ public final class Pbmethod {
       return point_.size();
     }
     /**
-     * <code>repeated int64 point = 3;</code>
+     * <code>repeated int32 point = 3;</code>
      *
      * <pre>
      * data
      * </pre>
      */
-    public long getPoint(int index) {
+    public int getPoint(int index) {
       return point_.get(index);
     }
 
@@ -13023,7 +13259,7 @@ public final class Pbmethod {
         output.writeInt32(2, status_.get(i));
       }
       for (int i = 0; i < point_.size(); i++) {
-        output.writeInt64(3, point_.get(i));
+        output.writeInt32(3, point_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -13051,7 +13287,7 @@ public final class Pbmethod {
         int dataSize = 0;
         for (int i = 0; i < point_.size(); i++) {
           dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt64SizeNoTag(point_.get(i));
+            .computeInt32SizeNoTag(point_.get(i));
         }
         size += dataSize;
         size += 1 * getPointList().size();
@@ -13413,27 +13649,27 @@ public final class Pbmethod {
         return this;
       }
 
-      // repeated int64 point = 3;
-      private java.util.List<java.lang.Long> point_ = java.util.Collections.emptyList();
+      // repeated int32 point = 3;
+      private java.util.List<java.lang.Integer> point_ = java.util.Collections.emptyList();
       private void ensurePointIsMutable() {
         if (!((bitField0_ & 0x00000004) == 0x00000004)) {
-          point_ = new java.util.ArrayList<java.lang.Long>(point_);
+          point_ = new java.util.ArrayList<java.lang.Integer>(point_);
           bitField0_ |= 0x00000004;
          }
       }
       /**
-       * <code>repeated int64 point = 3;</code>
+       * <code>repeated int32 point = 3;</code>
        *
        * <pre>
        * data
        * </pre>
        */
-      public java.util.List<java.lang.Long>
+      public java.util.List<java.lang.Integer>
           getPointList() {
         return java.util.Collections.unmodifiableList(point_);
       }
       /**
-       * <code>repeated int64 point = 3;</code>
+       * <code>repeated int32 point = 3;</code>
        *
        * <pre>
        * data
@@ -13443,58 +13679,58 @@ public final class Pbmethod {
         return point_.size();
       }
       /**
-       * <code>repeated int64 point = 3;</code>
+       * <code>repeated int32 point = 3;</code>
        *
        * <pre>
        * data
        * </pre>
        */
-      public long getPoint(int index) {
+      public int getPoint(int index) {
         return point_.get(index);
       }
       /**
-       * <code>repeated int64 point = 3;</code>
+       * <code>repeated int32 point = 3;</code>
        *
        * <pre>
        * data
        * </pre>
        */
       public Builder setPoint(
-          int index, long value) {
+          int index, int value) {
         ensurePointIsMutable();
         point_.set(index, value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int64 point = 3;</code>
+       * <code>repeated int32 point = 3;</code>
        *
        * <pre>
        * data
        * </pre>
        */
-      public Builder addPoint(long value) {
+      public Builder addPoint(int value) {
         ensurePointIsMutable();
         point_.add(value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int64 point = 3;</code>
+       * <code>repeated int32 point = 3;</code>
        *
        * <pre>
        * data
        * </pre>
        */
       public Builder addAllPoint(
-          java.lang.Iterable<? extends java.lang.Long> values) {
+          java.lang.Iterable<? extends java.lang.Integer> values) {
         ensurePointIsMutable();
         super.addAll(values, point_);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int64 point = 3;</code>
+       * <code>repeated int32 point = 3;</code>
        *
        * <pre>
        * data
@@ -23195,19 +23431,19 @@ public final class Pbmethod {
      */
     int getWeaponEquip(int index);
 
-    // repeated int64 point = 19;
+    // repeated int32 point = 19;
     /**
-     * <code>repeated int64 point = 19;</code>
+     * <code>repeated int32 point = 19;</code>
      */
-    java.util.List<java.lang.Long> getPointList();
+    java.util.List<java.lang.Integer> getPointList();
     /**
-     * <code>repeated int64 point = 19;</code>
+     * <code>repeated int32 point = 19;</code>
      */
     int getPointCount();
     /**
-     * <code>repeated int64 point = 19;</code>
+     * <code>repeated int32 point = 19;</code>
      */
-    long getPoint(int index);
+    int getPoint(int index);
 
     // optional int64 timeLastAction = 20;
     /**
@@ -23545,21 +23781,21 @@ public final class Pbmethod {
             }
             case 152: {
               if (!((mutable_bitField0_ & 0x00040000) == 0x00040000)) {
-                point_ = new java.util.ArrayList<java.lang.Long>();
+                point_ = new java.util.ArrayList<java.lang.Integer>();
                 mutable_bitField0_ |= 0x00040000;
               }
-              point_.add(input.readInt64());
+              point_.add(input.readInt32());
               break;
             }
             case 154: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
               if (!((mutable_bitField0_ & 0x00040000) == 0x00040000) && input.getBytesUntilLimit() > 0) {
-                point_ = new java.util.ArrayList<java.lang.Long>();
+                point_ = new java.util.ArrayList<java.lang.Integer>();
                 mutable_bitField0_ |= 0x00040000;
               }
               while (input.getBytesUntilLimit() > 0) {
-                point_.add(input.readInt64());
+                point_.add(input.readInt32());
               }
               input.popLimit(limit);
               break;
@@ -24186,26 +24422,26 @@ public final class Pbmethod {
       return weaponEquip_.get(index);
     }
 
-    // repeated int64 point = 19;
+    // repeated int32 point = 19;
     public static final int POINT_FIELD_NUMBER = 19;
-    private java.util.List<java.lang.Long> point_;
+    private java.util.List<java.lang.Integer> point_;
     /**
-     * <code>repeated int64 point = 19;</code>
+     * <code>repeated int32 point = 19;</code>
      */
-    public java.util.List<java.lang.Long>
+    public java.util.List<java.lang.Integer>
         getPointList() {
       return point_;
     }
     /**
-     * <code>repeated int64 point = 19;</code>
+     * <code>repeated int32 point = 19;</code>
      */
     public int getPointCount() {
       return point_.size();
     }
     /**
-     * <code>repeated int64 point = 19;</code>
+     * <code>repeated int32 point = 19;</code>
      */
-    public long getPoint(int index) {
+    public int getPoint(int index) {
       return point_.get(index);
     }
 
@@ -24471,7 +24707,7 @@ public final class Pbmethod {
         output.writeInt32(18, weaponEquip_.get(i));
       }
       for (int i = 0; i < point_.size(); i++) {
-        output.writeInt64(19, point_.get(i));
+        output.writeInt32(19, point_.get(i));
       }
       if (((bitField0_ & 0x00002000) == 0x00002000)) {
         output.writeInt64(20, timeLastAction_);
@@ -24605,7 +24841,7 @@ public final class Pbmethod {
         int dataSize = 0;
         for (int i = 0; i < point_.size(); i++) {
           dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt64SizeNoTag(point_.get(i));
+            .computeInt32SizeNoTag(point_.get(i));
         }
         size += dataSize;
         size += 2 * getPointList().size();
@@ -26581,64 +26817,64 @@ public final class Pbmethod {
         return this;
       }
 
-      // repeated int64 point = 19;
-      private java.util.List<java.lang.Long> point_ = java.util.Collections.emptyList();
+      // repeated int32 point = 19;
+      private java.util.List<java.lang.Integer> point_ = java.util.Collections.emptyList();
       private void ensurePointIsMutable() {
         if (!((bitField0_ & 0x00040000) == 0x00040000)) {
-          point_ = new java.util.ArrayList<java.lang.Long>(point_);
+          point_ = new java.util.ArrayList<java.lang.Integer>(point_);
           bitField0_ |= 0x00040000;
          }
       }
       /**
-       * <code>repeated int64 point = 19;</code>
+       * <code>repeated int32 point = 19;</code>
        */
-      public java.util.List<java.lang.Long>
+      public java.util.List<java.lang.Integer>
           getPointList() {
         return java.util.Collections.unmodifiableList(point_);
       }
       /**
-       * <code>repeated int64 point = 19;</code>
+       * <code>repeated int32 point = 19;</code>
        */
       public int getPointCount() {
         return point_.size();
       }
       /**
-       * <code>repeated int64 point = 19;</code>
+       * <code>repeated int32 point = 19;</code>
        */
-      public long getPoint(int index) {
+      public int getPoint(int index) {
         return point_.get(index);
       }
       /**
-       * <code>repeated int64 point = 19;</code>
+       * <code>repeated int32 point = 19;</code>
        */
       public Builder setPoint(
-          int index, long value) {
+          int index, int value) {
         ensurePointIsMutable();
         point_.set(index, value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int64 point = 19;</code>
+       * <code>repeated int32 point = 19;</code>
        */
-      public Builder addPoint(long value) {
+      public Builder addPoint(int value) {
         ensurePointIsMutable();
         point_.add(value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int64 point = 19;</code>
+       * <code>repeated int32 point = 19;</code>
        */
       public Builder addAllPoint(
-          java.lang.Iterable<? extends java.lang.Long> values) {
+          java.lang.Iterable<? extends java.lang.Integer> values) {
         ensurePointIsMutable();
         super.addAll(values, point_);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int64 point = 19;</code>
+       * <code>repeated int32 point = 19;</code>
        */
       public Builder clearPoint() {
         point_ = java.util.Collections.emptyList();
@@ -43158,19 +43394,19 @@ public final class Pbmethod {
      */
     protocol.Pbmethod.CommonVectorOrBuilder getInfoOrBuilder();
 
-    // repeated int64 point = 6;
+    // repeated int32 point = 6;
     /**
-     * <code>repeated int64 point = 6;</code>
+     * <code>repeated int32 point = 6;</code>
      */
-    java.util.List<java.lang.Long> getPointList();
+    java.util.List<java.lang.Integer> getPointList();
     /**
-     * <code>repeated int64 point = 6;</code>
+     * <code>repeated int32 point = 6;</code>
      */
     int getPointCount();
     /**
-     * <code>repeated int64 point = 6;</code>
+     * <code>repeated int32 point = 6;</code>
      */
-    long getPoint(int index);
+    int getPoint(int index);
   }
   /**
    * Protobuf type {@code pbdson.PbChat}
@@ -43266,21 +43502,21 @@ public final class Pbmethod {
             }
             case 48: {
               if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
-                point_ = new java.util.ArrayList<java.lang.Long>();
+                point_ = new java.util.ArrayList<java.lang.Integer>();
                 mutable_bitField0_ |= 0x00000020;
               }
-              point_.add(input.readInt64());
+              point_.add(input.readInt32());
               break;
             }
             case 50: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
               if (!((mutable_bitField0_ & 0x00000020) == 0x00000020) && input.getBytesUntilLimit() > 0) {
-                point_ = new java.util.ArrayList<java.lang.Long>();
+                point_ = new java.util.ArrayList<java.lang.Integer>();
                 mutable_bitField0_ |= 0x00000020;
               }
               while (input.getBytesUntilLimit() > 0) {
-                point_.add(input.readInt64());
+                point_.add(input.readInt32());
               }
               input.popLimit(limit);
               break;
@@ -43447,26 +43683,26 @@ public final class Pbmethod {
       return info_;
     }
 
-    // repeated int64 point = 6;
+    // repeated int32 point = 6;
     public static final int POINT_FIELD_NUMBER = 6;
-    private java.util.List<java.lang.Long> point_;
+    private java.util.List<java.lang.Integer> point_;
     /**
-     * <code>repeated int64 point = 6;</code>
+     * <code>repeated int32 point = 6;</code>
      */
-    public java.util.List<java.lang.Long>
+    public java.util.List<java.lang.Integer>
         getPointList() {
       return point_;
     }
     /**
-     * <code>repeated int64 point = 6;</code>
+     * <code>repeated int32 point = 6;</code>
      */
     public int getPointCount() {
       return point_.size();
     }
     /**
-     * <code>repeated int64 point = 6;</code>
+     * <code>repeated int32 point = 6;</code>
      */
-    public long getPoint(int index) {
+    public int getPoint(int index) {
       return point_.get(index);
     }
 
@@ -43506,7 +43742,7 @@ public final class Pbmethod {
         output.writeMessage(5, info_);
       }
       for (int i = 0; i < point_.size(); i++) {
-        output.writeInt64(6, point_.get(i));
+        output.writeInt32(6, point_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -43541,7 +43777,7 @@ public final class Pbmethod {
         int dataSize = 0;
         for (int i = 0; i < point_.size(); i++) {
           dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt64SizeNoTag(point_.get(i));
+            .computeInt32SizeNoTag(point_.get(i));
         }
         size += dataSize;
         size += 1 * getPointList().size();
@@ -44189,64 +44425,64 @@ public final class Pbmethod {
         return infoBuilder_;
       }
 
-      // repeated int64 point = 6;
-      private java.util.List<java.lang.Long> point_ = java.util.Collections.emptyList();
+      // repeated int32 point = 6;
+      private java.util.List<java.lang.Integer> point_ = java.util.Collections.emptyList();
       private void ensurePointIsMutable() {
         if (!((bitField0_ & 0x00000020) == 0x00000020)) {
-          point_ = new java.util.ArrayList<java.lang.Long>(point_);
+          point_ = new java.util.ArrayList<java.lang.Integer>(point_);
           bitField0_ |= 0x00000020;
          }
       }
       /**
-       * <code>repeated int64 point = 6;</code>
+       * <code>repeated int32 point = 6;</code>
        */
-      public java.util.List<java.lang.Long>
+      public java.util.List<java.lang.Integer>
           getPointList() {
         return java.util.Collections.unmodifiableList(point_);
       }
       /**
-       * <code>repeated int64 point = 6;</code>
+       * <code>repeated int32 point = 6;</code>
        */
       public int getPointCount() {
         return point_.size();
       }
       /**
-       * <code>repeated int64 point = 6;</code>
+       * <code>repeated int32 point = 6;</code>
        */
-      public long getPoint(int index) {
+      public int getPoint(int index) {
         return point_.get(index);
       }
       /**
-       * <code>repeated int64 point = 6;</code>
+       * <code>repeated int32 point = 6;</code>
        */
       public Builder setPoint(
-          int index, long value) {
+          int index, int value) {
         ensurePointIsMutable();
         point_.set(index, value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int64 point = 6;</code>
+       * <code>repeated int32 point = 6;</code>
        */
-      public Builder addPoint(long value) {
+      public Builder addPoint(int value) {
         ensurePointIsMutable();
         point_.add(value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int64 point = 6;</code>
+       * <code>repeated int32 point = 6;</code>
        */
       public Builder addAllPoint(
-          java.lang.Iterable<? extends java.lang.Long> values) {
+          java.lang.Iterable<? extends java.lang.Integer> values) {
         ensurePointIsMutable();
         super.addAll(values, point_);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int64 point = 6;</code>
+       * <code>repeated int32 point = 6;</code>
        */
       public Builder clearPoint() {
         point_ = java.util.Collections.emptyList();
@@ -53019,15 +53255,15 @@ public final class Pbmethod {
      */
     int getMaxLevel();
 
-    // optional int64 pointPer = 6;
+    // optional int32 pointPer = 6;
     /**
-     * <code>optional int64 pointPer = 6;</code>
+     * <code>optional int32 pointPer = 6;</code>
      */
     boolean hasPointPer();
     /**
-     * <code>optional int64 pointPer = 6;</code>
+     * <code>optional int32 pointPer = 6;</code>
      */
-    long getPointPer();
+    int getPointPer();
 
     // repeated float formula = 7;
     /**
@@ -53137,7 +53373,7 @@ public final class Pbmethod {
             }
             case 48: {
               bitField0_ |= 0x00000010;
-              pointPer_ = input.readInt64();
+              pointPer_ = input.readInt32();
               break;
             }
             case 61: {
@@ -53294,19 +53530,19 @@ public final class Pbmethod {
       return maxLevel_;
     }
 
-    // optional int64 pointPer = 6;
+    // optional int32 pointPer = 6;
     public static final int POINTPER_FIELD_NUMBER = 6;
-    private long pointPer_;
+    private int pointPer_;
     /**
-     * <code>optional int64 pointPer = 6;</code>
+     * <code>optional int32 pointPer = 6;</code>
      */
     public boolean hasPointPer() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>optional int64 pointPer = 6;</code>
+     * <code>optional int32 pointPer = 6;</code>
      */
-    public long getPointPer() {
+    public int getPointPer() {
       return pointPer_;
     }
 
@@ -53339,7 +53575,7 @@ public final class Pbmethod {
       level_ = 0;
       condition_ = java.util.Collections.emptyList();
       maxLevel_ = 0;
-      pointPer_ = 0L;
+      pointPer_ = 0;
       formula_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
@@ -53370,7 +53606,7 @@ public final class Pbmethod {
         output.writeInt32(5, maxLevel_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeInt64(6, pointPer_);
+        output.writeInt32(6, pointPer_);
       }
       for (int i = 0; i < formula_.size(); i++) {
         output.writeFloat(7, formula_.get(i));
@@ -53411,7 +53647,7 @@ public final class Pbmethod {
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(6, pointPer_);
+          .computeInt32Size(6, pointPer_);
       }
       {
         int dataSize = 0;
@@ -53545,7 +53781,7 @@ public final class Pbmethod {
         bitField0_ = (bitField0_ & ~0x00000008);
         maxLevel_ = 0;
         bitField0_ = (bitField0_ & ~0x00000010);
-        pointPer_ = 0L;
+        pointPer_ = 0;
         bitField0_ = (bitField0_ & ~0x00000020);
         formula_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000040);
@@ -53883,35 +54119,35 @@ public final class Pbmethod {
         return this;
       }
 
-      // optional int64 pointPer = 6;
-      private long pointPer_ ;
+      // optional int32 pointPer = 6;
+      private int pointPer_ ;
       /**
-       * <code>optional int64 pointPer = 6;</code>
+       * <code>optional int32 pointPer = 6;</code>
        */
       public boolean hasPointPer() {
         return ((bitField0_ & 0x00000020) == 0x00000020);
       }
       /**
-       * <code>optional int64 pointPer = 6;</code>
+       * <code>optional int32 pointPer = 6;</code>
        */
-      public long getPointPer() {
+      public int getPointPer() {
         return pointPer_;
       }
       /**
-       * <code>optional int64 pointPer = 6;</code>
+       * <code>optional int32 pointPer = 6;</code>
        */
-      public Builder setPointPer(long value) {
+      public Builder setPointPer(int value) {
         bitField0_ |= 0x00000020;
         pointPer_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int64 pointPer = 6;</code>
+       * <code>optional int32 pointPer = 6;</code>
        */
       public Builder clearPointPer() {
         bitField0_ = (bitField0_ & ~0x00000020);
-        pointPer_ = 0L;
+        pointPer_ = 0;
         onChanged();
         return this;
       }
@@ -58016,19 +58252,19 @@ public final class Pbmethod {
      */
     int getAItem(int index);
 
-    // repeated int64 point = 6;
+    // repeated int32 point = 6;
     /**
-     * <code>repeated int64 point = 6;</code>
+     * <code>repeated int32 point = 6;</code>
      */
-    java.util.List<java.lang.Long> getPointList();
+    java.util.List<java.lang.Integer> getPointList();
     /**
-     * <code>repeated int64 point = 6;</code>
+     * <code>repeated int32 point = 6;</code>
      */
     int getPointCount();
     /**
-     * <code>repeated int64 point = 6;</code>
+     * <code>repeated int32 point = 6;</code>
      */
-    long getPoint(int index);
+    int getPoint(int index);
   }
   /**
    * Protobuf type {@code pbdson.PbCharacterInfo}
@@ -58140,21 +58376,21 @@ public final class Pbmethod {
             }
             case 48: {
               if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
-                point_ = new java.util.ArrayList<java.lang.Long>();
+                point_ = new java.util.ArrayList<java.lang.Integer>();
                 mutable_bitField0_ |= 0x00000020;
               }
-              point_.add(input.readInt64());
+              point_.add(input.readInt32());
               break;
             }
             case 50: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
               if (!((mutable_bitField0_ & 0x00000020) == 0x00000020) && input.getBytesUntilLimit() > 0) {
-                point_ = new java.util.ArrayList<java.lang.Long>();
+                point_ = new java.util.ArrayList<java.lang.Integer>();
                 mutable_bitField0_ |= 0x00000020;
               }
               while (input.getBytesUntilLimit() > 0) {
-                point_.add(input.readInt64());
+                point_.add(input.readInt32());
               }
               input.popLimit(limit);
               break;
@@ -58329,26 +58565,26 @@ public final class Pbmethod {
       return aItem_.get(index);
     }
 
-    // repeated int64 point = 6;
+    // repeated int32 point = 6;
     public static final int POINT_FIELD_NUMBER = 6;
-    private java.util.List<java.lang.Long> point_;
+    private java.util.List<java.lang.Integer> point_;
     /**
-     * <code>repeated int64 point = 6;</code>
+     * <code>repeated int32 point = 6;</code>
      */
-    public java.util.List<java.lang.Long>
+    public java.util.List<java.lang.Integer>
         getPointList() {
       return point_;
     }
     /**
-     * <code>repeated int64 point = 6;</code>
+     * <code>repeated int32 point = 6;</code>
      */
     public int getPointCount() {
       return point_.size();
     }
     /**
-     * <code>repeated int64 point = 6;</code>
+     * <code>repeated int32 point = 6;</code>
      */
-    public long getPoint(int index) {
+    public int getPoint(int index) {
       return point_.get(index);
     }
 
@@ -58388,7 +58624,7 @@ public final class Pbmethod {
         output.writeInt32(5, aItem_.get(i));
       }
       for (int i = 0; i < point_.size(); i++) {
-        output.writeInt64(6, point_.get(i));
+        output.writeInt32(6, point_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -58433,7 +58669,7 @@ public final class Pbmethod {
         int dataSize = 0;
         for (int i = 0; i < point_.size(); i++) {
           dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt64SizeNoTag(point_.get(i));
+            .computeInt32SizeNoTag(point_.get(i));
         }
         size += dataSize;
         size += 1 * getPointList().size();
@@ -58977,64 +59213,64 @@ public final class Pbmethod {
         return this;
       }
 
-      // repeated int64 point = 6;
-      private java.util.List<java.lang.Long> point_ = java.util.Collections.emptyList();
+      // repeated int32 point = 6;
+      private java.util.List<java.lang.Integer> point_ = java.util.Collections.emptyList();
       private void ensurePointIsMutable() {
         if (!((bitField0_ & 0x00000020) == 0x00000020)) {
-          point_ = new java.util.ArrayList<java.lang.Long>(point_);
+          point_ = new java.util.ArrayList<java.lang.Integer>(point_);
           bitField0_ |= 0x00000020;
          }
       }
       /**
-       * <code>repeated int64 point = 6;</code>
+       * <code>repeated int32 point = 6;</code>
        */
-      public java.util.List<java.lang.Long>
+      public java.util.List<java.lang.Integer>
           getPointList() {
         return java.util.Collections.unmodifiableList(point_);
       }
       /**
-       * <code>repeated int64 point = 6;</code>
+       * <code>repeated int32 point = 6;</code>
        */
       public int getPointCount() {
         return point_.size();
       }
       /**
-       * <code>repeated int64 point = 6;</code>
+       * <code>repeated int32 point = 6;</code>
        */
-      public long getPoint(int index) {
+      public int getPoint(int index) {
         return point_.get(index);
       }
       /**
-       * <code>repeated int64 point = 6;</code>
+       * <code>repeated int32 point = 6;</code>
        */
       public Builder setPoint(
-          int index, long value) {
+          int index, int value) {
         ensurePointIsMutable();
         point_.set(index, value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int64 point = 6;</code>
+       * <code>repeated int32 point = 6;</code>
        */
-      public Builder addPoint(long value) {
+      public Builder addPoint(int value) {
         ensurePointIsMutable();
         point_.add(value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int64 point = 6;</code>
+       * <code>repeated int32 point = 6;</code>
        */
       public Builder addAllPoint(
-          java.lang.Iterable<? extends java.lang.Long> values) {
+          java.lang.Iterable<? extends java.lang.Integer> values) {
         ensurePointIsMutable();
         super.addAll(values, point_);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int64 point = 6;</code>
+       * <code>repeated int32 point = 6;</code>
        */
       public Builder clearPoint() {
         point_ = java.util.Collections.emptyList();
@@ -67523,43 +67759,43 @@ public final class Pbmethod {
      */
     int getSpeed();
 
-    // optional .pbdson.PbPos pos = 3;
+    // optional int64 lastInputSeq = 3;
     /**
-     * <code>optional .pbdson.PbPos pos = 3;</code>
-     */
-    boolean hasPos();
-    /**
-     * <code>optional .pbdson.PbPos pos = 3;</code>
-     */
-    protocol.Pbmethod.PbPos getPos();
-    /**
-     * <code>optional .pbdson.PbPos pos = 3;</code>
-     */
-    protocol.Pbmethod.PbPosOrBuilder getPosOrBuilder();
-
-    // optional .pbdson.PbPos direction = 4;
-    /**
-     * <code>optional .pbdson.PbPos direction = 4;</code>
-     */
-    boolean hasDirection();
-    /**
-     * <code>optional .pbdson.PbPos direction = 4;</code>
-     */
-    protocol.Pbmethod.PbPos getDirection();
-    /**
-     * <code>optional .pbdson.PbPos direction = 4;</code>
-     */
-    protocol.Pbmethod.PbPosOrBuilder getDirectionOrBuilder();
-
-    // optional int64 lastInputSeq = 5;
-    /**
-     * <code>optional int64 lastInputSeq = 5;</code>
+     * <code>optional int64 lastInputSeq = 3;</code>
      */
     boolean hasLastInputSeq();
     /**
-     * <code>optional int64 lastInputSeq = 5;</code>
+     * <code>optional int64 lastInputSeq = 3;</code>
      */
     long getLastInputSeq();
+
+    // optional .pbdson.PbPos pos = 4;
+    /**
+     * <code>optional .pbdson.PbPos pos = 4;</code>
+     */
+    boolean hasPos();
+    /**
+     * <code>optional .pbdson.PbPos pos = 4;</code>
+     */
+    protocol.Pbmethod.PbPos getPos();
+    /**
+     * <code>optional .pbdson.PbPos pos = 4;</code>
+     */
+    protocol.Pbmethod.PbPosOrBuilder getPosOrBuilder();
+
+    // optional .pbdson.PbPos direction = 5;
+    /**
+     * <code>optional .pbdson.PbPos direction = 5;</code>
+     */
+    boolean hasDirection();
+    /**
+     * <code>optional .pbdson.PbPos direction = 5;</code>
+     */
+    protocol.Pbmethod.PbPos getDirection();
+    /**
+     * <code>optional .pbdson.PbPos direction = 5;</code>
+     */
+    protocol.Pbmethod.PbPosOrBuilder getDirectionOrBuilder();
   }
   /**
    * Protobuf type {@code pbdson.PbUnitPos}
@@ -67622,9 +67858,14 @@ public final class Pbmethod {
               speed_ = input.readInt32();
               break;
             }
-            case 26: {
+            case 24: {
+              bitField0_ |= 0x00000004;
+              lastInputSeq_ = input.readInt64();
+              break;
+            }
+            case 34: {
               protocol.Pbmethod.PbPos.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000004) == 0x00000004)) {
+              if (((bitField0_ & 0x00000008) == 0x00000008)) {
                 subBuilder = pos_.toBuilder();
               }
               pos_ = input.readMessage(protocol.Pbmethod.PbPos.PARSER, extensionRegistry);
@@ -67632,12 +67873,12 @@ public final class Pbmethod {
                 subBuilder.mergeFrom(pos_);
                 pos_ = subBuilder.buildPartial();
               }
-              bitField0_ |= 0x00000004;
+              bitField0_ |= 0x00000008;
               break;
             }
-            case 34: {
+            case 42: {
               protocol.Pbmethod.PbPos.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000008) == 0x00000008)) {
+              if (((bitField0_ & 0x00000010) == 0x00000010)) {
                 subBuilder = direction_.toBuilder();
               }
               direction_ = input.readMessage(protocol.Pbmethod.PbPos.PARSER, extensionRegistry);
@@ -67645,12 +67886,7 @@ public final class Pbmethod {
                 subBuilder.mergeFrom(direction_);
                 direction_ = subBuilder.buildPartial();
               }
-              bitField0_ |= 0x00000008;
-              break;
-            }
-            case 40: {
               bitField0_ |= 0x00000010;
-              lastInputSeq_ = input.readInt64();
               break;
             }
           }
@@ -67725,72 +67961,72 @@ public final class Pbmethod {
       return speed_;
     }
 
-    // optional .pbdson.PbPos pos = 3;
-    public static final int POS_FIELD_NUMBER = 3;
-    private protocol.Pbmethod.PbPos pos_;
+    // optional int64 lastInputSeq = 3;
+    public static final int LASTINPUTSEQ_FIELD_NUMBER = 3;
+    private long lastInputSeq_;
     /**
-     * <code>optional .pbdson.PbPos pos = 3;</code>
+     * <code>optional int64 lastInputSeq = 3;</code>
      */
-    public boolean hasPos() {
+    public boolean hasLastInputSeq() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>optional .pbdson.PbPos pos = 3;</code>
-     */
-    public protocol.Pbmethod.PbPos getPos() {
-      return pos_;
-    }
-    /**
-     * <code>optional .pbdson.PbPos pos = 3;</code>
-     */
-    public protocol.Pbmethod.PbPosOrBuilder getPosOrBuilder() {
-      return pos_;
-    }
-
-    // optional .pbdson.PbPos direction = 4;
-    public static final int DIRECTION_FIELD_NUMBER = 4;
-    private protocol.Pbmethod.PbPos direction_;
-    /**
-     * <code>optional .pbdson.PbPos direction = 4;</code>
-     */
-    public boolean hasDirection() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>optional .pbdson.PbPos direction = 4;</code>
-     */
-    public protocol.Pbmethod.PbPos getDirection() {
-      return direction_;
-    }
-    /**
-     * <code>optional .pbdson.PbPos direction = 4;</code>
-     */
-    public protocol.Pbmethod.PbPosOrBuilder getDirectionOrBuilder() {
-      return direction_;
-    }
-
-    // optional int64 lastInputSeq = 5;
-    public static final int LASTINPUTSEQ_FIELD_NUMBER = 5;
-    private long lastInputSeq_;
-    /**
-     * <code>optional int64 lastInputSeq = 5;</code>
-     */
-    public boolean hasLastInputSeq() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    /**
-     * <code>optional int64 lastInputSeq = 5;</code>
+     * <code>optional int64 lastInputSeq = 3;</code>
      */
     public long getLastInputSeq() {
       return lastInputSeq_;
     }
 
+    // optional .pbdson.PbPos pos = 4;
+    public static final int POS_FIELD_NUMBER = 4;
+    private protocol.Pbmethod.PbPos pos_;
+    /**
+     * <code>optional .pbdson.PbPos pos = 4;</code>
+     */
+    public boolean hasPos() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional .pbdson.PbPos pos = 4;</code>
+     */
+    public protocol.Pbmethod.PbPos getPos() {
+      return pos_;
+    }
+    /**
+     * <code>optional .pbdson.PbPos pos = 4;</code>
+     */
+    public protocol.Pbmethod.PbPosOrBuilder getPosOrBuilder() {
+      return pos_;
+    }
+
+    // optional .pbdson.PbPos direction = 5;
+    public static final int DIRECTION_FIELD_NUMBER = 5;
+    private protocol.Pbmethod.PbPos direction_;
+    /**
+     * <code>optional .pbdson.PbPos direction = 5;</code>
+     */
+    public boolean hasDirection() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional .pbdson.PbPos direction = 5;</code>
+     */
+    public protocol.Pbmethod.PbPos getDirection() {
+      return direction_;
+    }
+    /**
+     * <code>optional .pbdson.PbPos direction = 5;</code>
+     */
+    public protocol.Pbmethod.PbPosOrBuilder getDirectionOrBuilder() {
+      return direction_;
+    }
+
     private void initFields() {
       id_ = 0L;
       speed_ = 0;
+      lastInputSeq_ = 0L;
       pos_ = protocol.Pbmethod.PbPos.getDefaultInstance();
       direction_ = protocol.Pbmethod.PbPos.getDefaultInstance();
-      lastInputSeq_ = 0L;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -67811,13 +68047,13 @@ public final class Pbmethod {
         output.writeInt32(2, speed_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeMessage(3, pos_);
+        output.writeInt64(3, lastInputSeq_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeMessage(4, direction_);
+        output.writeMessage(4, pos_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeInt64(5, lastInputSeq_);
+        output.writeMessage(5, direction_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -67838,15 +68074,15 @@ public final class Pbmethod {
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, pos_);
+          .computeInt64Size(3, lastInputSeq_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, direction_);
+          .computeMessageSize(4, pos_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(5, lastInputSeq_);
+          .computeMessageSize(5, direction_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -67970,19 +68206,19 @@ public final class Pbmethod {
         bitField0_ = (bitField0_ & ~0x00000001);
         speed_ = 0;
         bitField0_ = (bitField0_ & ~0x00000002);
+        lastInputSeq_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000004);
         if (posBuilder_ == null) {
           pos_ = protocol.Pbmethod.PbPos.getDefaultInstance();
         } else {
           posBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000008);
         if (directionBuilder_ == null) {
           direction_ = protocol.Pbmethod.PbPos.getDefaultInstance();
         } else {
           directionBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000008);
-        lastInputSeq_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
@@ -68023,23 +68259,23 @@ public final class Pbmethod {
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
+        result.lastInputSeq_ = lastInputSeq_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
         if (posBuilder_ == null) {
           result.pos_ = pos_;
         } else {
           result.pos_ = posBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
         }
         if (directionBuilder_ == null) {
           result.direction_ = direction_;
         } else {
           result.direction_ = directionBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        result.lastInputSeq_ = lastInputSeq_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -68062,14 +68298,14 @@ public final class Pbmethod {
         if (other.hasSpeed()) {
           setSpeed(other.getSpeed());
         }
+        if (other.hasLastInputSeq()) {
+          setLastInputSeq(other.getLastInputSeq());
+        }
         if (other.hasPos()) {
           mergePos(other.getPos());
         }
         if (other.hasDirection()) {
           mergeDirection(other.getDirection());
-        }
-        if (other.hasLastInputSeq()) {
-          setLastInputSeq(other.getLastInputSeq());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -68164,18 +68400,51 @@ public final class Pbmethod {
         return this;
       }
 
-      // optional .pbdson.PbPos pos = 3;
+      // optional int64 lastInputSeq = 3;
+      private long lastInputSeq_ ;
+      /**
+       * <code>optional int64 lastInputSeq = 3;</code>
+       */
+      public boolean hasLastInputSeq() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional int64 lastInputSeq = 3;</code>
+       */
+      public long getLastInputSeq() {
+        return lastInputSeq_;
+      }
+      /**
+       * <code>optional int64 lastInputSeq = 3;</code>
+       */
+      public Builder setLastInputSeq(long value) {
+        bitField0_ |= 0x00000004;
+        lastInputSeq_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int64 lastInputSeq = 3;</code>
+       */
+      public Builder clearLastInputSeq() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        lastInputSeq_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      // optional .pbdson.PbPos pos = 4;
       private protocol.Pbmethod.PbPos pos_ = protocol.Pbmethod.PbPos.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           protocol.Pbmethod.PbPos, protocol.Pbmethod.PbPos.Builder, protocol.Pbmethod.PbPosOrBuilder> posBuilder_;
       /**
-       * <code>optional .pbdson.PbPos pos = 3;</code>
+       * <code>optional .pbdson.PbPos pos = 4;</code>
        */
       public boolean hasPos() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>optional .pbdson.PbPos pos = 3;</code>
+       * <code>optional .pbdson.PbPos pos = 4;</code>
        */
       public protocol.Pbmethod.PbPos getPos() {
         if (posBuilder_ == null) {
@@ -68185,7 +68454,7 @@ public final class Pbmethod {
         }
       }
       /**
-       * <code>optional .pbdson.PbPos pos = 3;</code>
+       * <code>optional .pbdson.PbPos pos = 4;</code>
        */
       public Builder setPos(protocol.Pbmethod.PbPos value) {
         if (posBuilder_ == null) {
@@ -68197,11 +68466,11 @@ public final class Pbmethod {
         } else {
           posBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000004;
+        bitField0_ |= 0x00000008;
         return this;
       }
       /**
-       * <code>optional .pbdson.PbPos pos = 3;</code>
+       * <code>optional .pbdson.PbPos pos = 4;</code>
        */
       public Builder setPos(
           protocol.Pbmethod.PbPos.Builder builderForValue) {
@@ -68211,15 +68480,15 @@ public final class Pbmethod {
         } else {
           posBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000004;
+        bitField0_ |= 0x00000008;
         return this;
       }
       /**
-       * <code>optional .pbdson.PbPos pos = 3;</code>
+       * <code>optional .pbdson.PbPos pos = 4;</code>
        */
       public Builder mergePos(protocol.Pbmethod.PbPos value) {
         if (posBuilder_ == null) {
-          if (((bitField0_ & 0x00000004) == 0x00000004) &&
+          if (((bitField0_ & 0x00000008) == 0x00000008) &&
               pos_ != protocol.Pbmethod.PbPos.getDefaultInstance()) {
             pos_ =
               protocol.Pbmethod.PbPos.newBuilder(pos_).mergeFrom(value).buildPartial();
@@ -68230,11 +68499,11 @@ public final class Pbmethod {
         } else {
           posBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00000004;
+        bitField0_ |= 0x00000008;
         return this;
       }
       /**
-       * <code>optional .pbdson.PbPos pos = 3;</code>
+       * <code>optional .pbdson.PbPos pos = 4;</code>
        */
       public Builder clearPos() {
         if (posBuilder_ == null) {
@@ -68243,19 +68512,19 @@ public final class Pbmethod {
         } else {
           posBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
       /**
-       * <code>optional .pbdson.PbPos pos = 3;</code>
+       * <code>optional .pbdson.PbPos pos = 4;</code>
        */
       public protocol.Pbmethod.PbPos.Builder getPosBuilder() {
-        bitField0_ |= 0x00000004;
+        bitField0_ |= 0x00000008;
         onChanged();
         return getPosFieldBuilder().getBuilder();
       }
       /**
-       * <code>optional .pbdson.PbPos pos = 3;</code>
+       * <code>optional .pbdson.PbPos pos = 4;</code>
        */
       public protocol.Pbmethod.PbPosOrBuilder getPosOrBuilder() {
         if (posBuilder_ != null) {
@@ -68265,7 +68534,7 @@ public final class Pbmethod {
         }
       }
       /**
-       * <code>optional .pbdson.PbPos pos = 3;</code>
+       * <code>optional .pbdson.PbPos pos = 4;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
           protocol.Pbmethod.PbPos, protocol.Pbmethod.PbPos.Builder, protocol.Pbmethod.PbPosOrBuilder> 
@@ -68281,18 +68550,18 @@ public final class Pbmethod {
         return posBuilder_;
       }
 
-      // optional .pbdson.PbPos direction = 4;
+      // optional .pbdson.PbPos direction = 5;
       private protocol.Pbmethod.PbPos direction_ = protocol.Pbmethod.PbPos.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           protocol.Pbmethod.PbPos, protocol.Pbmethod.PbPos.Builder, protocol.Pbmethod.PbPosOrBuilder> directionBuilder_;
       /**
-       * <code>optional .pbdson.PbPos direction = 4;</code>
+       * <code>optional .pbdson.PbPos direction = 5;</code>
        */
       public boolean hasDirection() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
+        return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
-       * <code>optional .pbdson.PbPos direction = 4;</code>
+       * <code>optional .pbdson.PbPos direction = 5;</code>
        */
       public protocol.Pbmethod.PbPos getDirection() {
         if (directionBuilder_ == null) {
@@ -68302,7 +68571,7 @@ public final class Pbmethod {
         }
       }
       /**
-       * <code>optional .pbdson.PbPos direction = 4;</code>
+       * <code>optional .pbdson.PbPos direction = 5;</code>
        */
       public Builder setDirection(protocol.Pbmethod.PbPos value) {
         if (directionBuilder_ == null) {
@@ -68314,11 +68583,11 @@ public final class Pbmethod {
         } else {
           directionBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000010;
         return this;
       }
       /**
-       * <code>optional .pbdson.PbPos direction = 4;</code>
+       * <code>optional .pbdson.PbPos direction = 5;</code>
        */
       public Builder setDirection(
           protocol.Pbmethod.PbPos.Builder builderForValue) {
@@ -68328,15 +68597,15 @@ public final class Pbmethod {
         } else {
           directionBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000010;
         return this;
       }
       /**
-       * <code>optional .pbdson.PbPos direction = 4;</code>
+       * <code>optional .pbdson.PbPos direction = 5;</code>
        */
       public Builder mergeDirection(protocol.Pbmethod.PbPos value) {
         if (directionBuilder_ == null) {
-          if (((bitField0_ & 0x00000008) == 0x00000008) &&
+          if (((bitField0_ & 0x00000010) == 0x00000010) &&
               direction_ != protocol.Pbmethod.PbPos.getDefaultInstance()) {
             direction_ =
               protocol.Pbmethod.PbPos.newBuilder(direction_).mergeFrom(value).buildPartial();
@@ -68347,11 +68616,11 @@ public final class Pbmethod {
         } else {
           directionBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000010;
         return this;
       }
       /**
-       * <code>optional .pbdson.PbPos direction = 4;</code>
+       * <code>optional .pbdson.PbPos direction = 5;</code>
        */
       public Builder clearDirection() {
         if (directionBuilder_ == null) {
@@ -68360,19 +68629,19 @@ public final class Pbmethod {
         } else {
           directionBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000008);
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
       /**
-       * <code>optional .pbdson.PbPos direction = 4;</code>
+       * <code>optional .pbdson.PbPos direction = 5;</code>
        */
       public protocol.Pbmethod.PbPos.Builder getDirectionBuilder() {
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000010;
         onChanged();
         return getDirectionFieldBuilder().getBuilder();
       }
       /**
-       * <code>optional .pbdson.PbPos direction = 4;</code>
+       * <code>optional .pbdson.PbPos direction = 5;</code>
        */
       public protocol.Pbmethod.PbPosOrBuilder getDirectionOrBuilder() {
         if (directionBuilder_ != null) {
@@ -68382,7 +68651,7 @@ public final class Pbmethod {
         }
       }
       /**
-       * <code>optional .pbdson.PbPos direction = 4;</code>
+       * <code>optional .pbdson.PbPos direction = 5;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
           protocol.Pbmethod.PbPos, protocol.Pbmethod.PbPos.Builder, protocol.Pbmethod.PbPosOrBuilder> 
@@ -68396,39 +68665,6 @@ public final class Pbmethod {
           direction_ = null;
         }
         return directionBuilder_;
-      }
-
-      // optional int64 lastInputSeq = 5;
-      private long lastInputSeq_ ;
-      /**
-       * <code>optional int64 lastInputSeq = 5;</code>
-       */
-      public boolean hasLastInputSeq() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      /**
-       * <code>optional int64 lastInputSeq = 5;</code>
-       */
-      public long getLastInputSeq() {
-        return lastInputSeq_;
-      }
-      /**
-       * <code>optional int64 lastInputSeq = 5;</code>
-       */
-      public Builder setLastInputSeq(long value) {
-        bitField0_ |= 0x00000010;
-        lastInputSeq_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int64 lastInputSeq = 5;</code>
-       */
-      public Builder clearLastInputSeq() {
-        bitField0_ = (bitField0_ & ~0x00000010);
-        lastInputSeq_ = 0L;
-        onChanged();
-        return this;
       }
 
       // @@protoc_insertion_point(builder_scope:pbdson.PbUnitPos)
@@ -95842,19 +96078,19 @@ public final class Pbmethod {
      */
     int getLevel();
 
-    // repeated int64 point = 6;
+    // repeated int32 point = 6;
     /**
-     * <code>repeated int64 point = 6;</code>
+     * <code>repeated int32 point = 6;</code>
      */
-    java.util.List<java.lang.Long> getPointList();
+    java.util.List<java.lang.Integer> getPointList();
     /**
-     * <code>repeated int64 point = 6;</code>
+     * <code>repeated int32 point = 6;</code>
      */
     int getPointCount();
     /**
-     * <code>repeated int64 point = 6;</code>
+     * <code>repeated int32 point = 6;</code>
      */
-    long getPoint(int index);
+    int getPoint(int index);
 
     // repeated float pos = 7;
     /**
@@ -96001,21 +96237,21 @@ public final class Pbmethod {
             }
             case 48: {
               if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
-                point_ = new java.util.ArrayList<java.lang.Long>();
+                point_ = new java.util.ArrayList<java.lang.Integer>();
                 mutable_bitField0_ |= 0x00000020;
               }
-              point_.add(input.readInt64());
+              point_.add(input.readInt32());
               break;
             }
             case 50: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
               if (!((mutable_bitField0_ & 0x00000020) == 0x00000020) && input.getBytesUntilLimit() > 0) {
-                point_ = new java.util.ArrayList<java.lang.Long>();
+                point_ = new java.util.ArrayList<java.lang.Integer>();
                 mutable_bitField0_ |= 0x00000020;
               }
               while (input.getBytesUntilLimit() > 0) {
-                point_.add(input.readInt64());
+                point_.add(input.readInt32());
               }
               input.popLimit(limit);
               break;
@@ -96215,26 +96451,26 @@ public final class Pbmethod {
       return level_;
     }
 
-    // repeated int64 point = 6;
+    // repeated int32 point = 6;
     public static final int POINT_FIELD_NUMBER = 6;
-    private java.util.List<java.lang.Long> point_;
+    private java.util.List<java.lang.Integer> point_;
     /**
-     * <code>repeated int64 point = 6;</code>
+     * <code>repeated int32 point = 6;</code>
      */
-    public java.util.List<java.lang.Long>
+    public java.util.List<java.lang.Integer>
         getPointList() {
       return point_;
     }
     /**
-     * <code>repeated int64 point = 6;</code>
+     * <code>repeated int32 point = 6;</code>
      */
     public int getPointCount() {
       return point_.size();
     }
     /**
-     * <code>repeated int64 point = 6;</code>
+     * <code>repeated int32 point = 6;</code>
      */
-    public long getPoint(int index) {
+    public int getPoint(int index) {
       return point_.get(index);
     }
 
@@ -96382,7 +96618,7 @@ public final class Pbmethod {
         output.writeInt32(5, level_);
       }
       for (int i = 0; i < point_.size(); i++) {
-        output.writeInt64(6, point_.get(i));
+        output.writeInt32(6, point_.get(i));
       }
       for (int i = 0; i < pos_.size(); i++) {
         output.writeFloat(7, pos_.get(i));
@@ -96429,7 +96665,7 @@ public final class Pbmethod {
         int dataSize = 0;
         for (int i = 0; i < point_.size(); i++) {
           dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt64SizeNoTag(point_.get(i));
+            .computeInt32SizeNoTag(point_.get(i));
         }
         size += dataSize;
         size += 1 * getPointList().size();
@@ -96962,64 +97198,64 @@ public final class Pbmethod {
         return this;
       }
 
-      // repeated int64 point = 6;
-      private java.util.List<java.lang.Long> point_ = java.util.Collections.emptyList();
+      // repeated int32 point = 6;
+      private java.util.List<java.lang.Integer> point_ = java.util.Collections.emptyList();
       private void ensurePointIsMutable() {
         if (!((bitField0_ & 0x00000020) == 0x00000020)) {
-          point_ = new java.util.ArrayList<java.lang.Long>(point_);
+          point_ = new java.util.ArrayList<java.lang.Integer>(point_);
           bitField0_ |= 0x00000020;
          }
       }
       /**
-       * <code>repeated int64 point = 6;</code>
+       * <code>repeated int32 point = 6;</code>
        */
-      public java.util.List<java.lang.Long>
+      public java.util.List<java.lang.Integer>
           getPointList() {
         return java.util.Collections.unmodifiableList(point_);
       }
       /**
-       * <code>repeated int64 point = 6;</code>
+       * <code>repeated int32 point = 6;</code>
        */
       public int getPointCount() {
         return point_.size();
       }
       /**
-       * <code>repeated int64 point = 6;</code>
+       * <code>repeated int32 point = 6;</code>
        */
-      public long getPoint(int index) {
+      public int getPoint(int index) {
         return point_.get(index);
       }
       /**
-       * <code>repeated int64 point = 6;</code>
+       * <code>repeated int32 point = 6;</code>
        */
       public Builder setPoint(
-          int index, long value) {
+          int index, int value) {
         ensurePointIsMutable();
         point_.set(index, value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int64 point = 6;</code>
+       * <code>repeated int32 point = 6;</code>
        */
-      public Builder addPoint(long value) {
+      public Builder addPoint(int value) {
         ensurePointIsMutable();
         point_.add(value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int64 point = 6;</code>
+       * <code>repeated int32 point = 6;</code>
        */
       public Builder addAllPoint(
-          java.lang.Iterable<? extends java.lang.Long> values) {
+          java.lang.Iterable<? extends java.lang.Integer> values) {
         ensurePointIsMutable();
         super.addAll(values, point_);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int64 point = 6;</code>
+       * <code>repeated int32 point = 6;</code>
        */
       public Builder clearPoint() {
         point_ = java.util.Collections.emptyList();
@@ -98717,7 +98953,7 @@ public final class Pbmethod {
       "(\t\022\017\n\007version\030\t \001(\t\022\024\n\014operatorName\030\n \001(" +
       "\t\022\n\n\002cp\030\013 \001(\t\"<\n\013PbLoginGame\022\017\n\007session\030" +
       "\001 \001(\t\022\034\n\004user\030\002 \001(\0132\016.pbdson.PbUser\"\035\n\005P",
-      "bPos\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\"\245\002\n\006PbUnit\022\014\n" +
+      "bPos\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\"\265\002\n\006PbUnit\022\014\n" +
       "\004type\030\001 \001(\005\022\017\n\007chunkId\030\002 \001(\005\022\n\n\002id\030\003 \001(\003" +
       "\022\r\n\005isAdd\030\004 \001(\010\022\016\n\006teamId\030\005 \001(\005\022\016\n\006avata" +
       "r\030\006 \001(\005\022\017\n\007ownerId\030\007 \001(\003\022\032\n\003pos\030\010 \001(\0132\r." +
@@ -98725,265 +98961,267 @@ public final class Pbmethod {
       ".PbPos\022\r\n\005speed\030\n \001(\005\022\014\n\004info\030\013 \003(\005\022\023\n\013r" +
       "angeAttack\030\014 \001(\002\022\014\n\004name\030\r \001(\t\022\r\n\005alive\030" +
       "\016 \001(\010\022\024\n\014lastInputSeq\030\017 \001(\003\022\r\n\005point\030\020 \003" +
-      "(\003\"e\n\006PbCell\022\014\n\004type\030\001 \001(\005\022\017\n\007chunkId\030\002 " +
-      "\001(\005\022\032\n\003pos\030\003 \001(\0132\r.pbdson.PbPos\022 \n\005state",
-      "\030\004 \001(\0162\021.pbdson.CellState\".\n\013PbListChunk" +
-      "\022\037\n\006aChunk\030\001 \003(\0132\017.pbdson.PbChunk\"P\n\007PbC" +
-      "hunk\022\n\n\002id\030\001 \001(\005\022\032\n\003pos\030\002 \001(\0132\r.pbdson.P" +
-      "bPos\022\035\n\005cells\030\003 \003(\0132\016.pbdson.PbCell\"l\n\tP" +
-      "bInitMap\022\r\n\005mapId\030\001 \001(\005\022\020\n\010battleId\030\002 \001(" +
-      "\003\022\037\n\006chunks\030\003 \003(\0132\017.pbdson.PbChunk\022\035\n\005un" +
-      "its\030\004 \003(\0132\016.pbdson.PbUnit\"\215\001\n\007PbState\022\022\n" +
-      "\nserverTime\030\001 \001(\002\022\"\n\007unitPos\030\002 \003(\0132\021.pbd" +
-      "son.PbUnitPos\022\037\n\007unitAdd\030\003 \003(\0132\016.pbdson." +
-      "PbUnit\022)\n\013aUnitUpdate\030\004 \003(\0132\024.pbdson.PbU",
-      "nitUpdate\":\n\017PbListUnitState\022\'\n\naUnitSta" +
-      "te\030\001 \003(\0132\023.pbdson.PbUnitState\"8\n\013PbUnitS" +
-      "tate\022\n\n\002id\030\001 \001(\003\022\016\n\006status\030\002 \003(\005\022\r\n\005poin" +
-      "t\030\003 \003(\003\"\351\002\n\006PbClan\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002" +
-      " \001(\t\022\016\n\006server\030\003 \001(\005\022\020\n\010masterId\030\004 \001(\005\022\022" +
-      "\n\nmasterName\030\005 \001(\t\022\024\n\014numberMember\030\006 \001(\005" +
-      "\022\021\n\tmaxMember\030\007 \001(\005\022\020\n\010joinRule\030\010 \001(\005\022\"\n" +
-      "\006member\030\t \003(\0132\022.pbdson.ClanMember\022\r\n\005int" +
-      "ro\030\n \001(\t\022\023\n\013activityLog\030\013 \003(\t\022\r\n\005level\030\014" +
-      " \001(\005\022\013\n\003exp\030\r \001(\003\022\016\n\006maxExp\030\016 \001(\003\022\016\n\006ava",
-      "tar\030\017 \001(\005\022\014\n\004rank\030\020 \001(\005\022\r\n\005power\030\021 \001(\003\022\022" +
-      "\n\njoinTrophy\030\022 \001(\005\022\014\n\004star\030\023 \001(\005\022\021\n\tpoin" +
-      "tRank\030\024 \001(\003\"K\n\nPbListUser\022\035\n\005aUser\030\001 \003(\013" +
-      "2\016.pbdson.PbUser\022\036\n\006myInfo\030\002 \001(\0132\016.pbdso" +
-      "n.PbUser\"\263\002\n\nClanMember\022\n\n\002id\030\001 \001(\005\022\014\n\004n" +
-      "ame\030\002 \001(\t\022\016\n\006trophy\030\003 \001(\005\022\020\n\010warPoint\030\004 " +
-      "\001(\005\022\r\n\005level\030\005 \001(\005\022\024\n\014receiveTroop\030\006 \001(\005" +
-      "\022\021\n\tsendTroop\030\007 \001(\005\022\r\n\005isNew\030\010 \001(\010\022\020\n\010po" +
-      "sition\030\t \001(\005\022\023\n\013clanDonated\030\027 \001(\005\022\022\n\nkun" +
-      "gfuClan\030\030 \001(\t\022\022\n\nlastAction\030\031 \001(\003\022\013\n\003vip",
-      "\030\n \001(\005\022\022\n\nrankTrophy\030\013 \001(\005\022\016\n\006avatar\030\014 \003" +
-      "(\005\022\022\n\ncurDonated\030\r \001(\005\022\016\n\006online\030\016 \001(\010\"J" +
-      "\n\nPbListClan\022\034\n\004clan\030\001 \003(\0132\016.pbdson.PbCl" +
-      "an\022\036\n\006myClan\030\002 \001(\0132\016.pbdson.PbClan\"3\n\rPb" +
-      "ListHistory\022\"\n\007history\030\001 \003(\0132\021.pbdson.Pb" +
-      "History\"\260\001\n\tPbHistory\022\020\n\010isAttack\030\001 \001(\010\022" +
-      "\020\n\010targetId\030\002 \001(\005\022\016\n\006status\030\003 \001(\005\022\022\n\ntim" +
-      "eAttack\030\004 \001(\005\022\016\n\006point1\030\005 \001(\005\022\016\n\006point2\030" +
-      "\006 \001(\005\022\014\n\004time\030\007 \001(\003\022\034\n\004user\030\010 \001(\0132\016.pbds" +
-      "on.PbUser\022\017\n\007myPoint\030\t \001(\005\"\311\001\n\007PbArena\022\022",
-      "\n\ntimeRemain\030\001 \001(\003\022\016\n\006myRank\030\002 \001(\005\022\017\n\007my" +
-      "Point\030\003 \001(\005\022!\n\topponents\030\004 \003(\0132\016.pbdson." +
-      "PbUser\022\021\n\tfeeTicket\030\005 \001(\005\022\024\n\014curBuyTicke" +
-      "t\030\006 \001(\005\022\024\n\014maxBuyTicket\030\007 \001(\005\022\022\n\nhasDefe" +
-      "nse\030\010 \001(\010\022\023\n\013defenseTeam\030\t \003(\005\"\237\004\n\006PbUse" +
-      "r\022\n\n\002id\030\001 \001(\005\022\020\n\010username\030\002 \001(\t\022\014\n\004name\030" +
-      "\003 \001(\t\022\014\n\004gold\030\004 \001(\003\022\013\n\003gem\030\005 \001(\003\022\013\n\003exp\030" +
-      "\006 \001(\003\022\r\n\005level\030\007 \001(\005\022\016\n\006avatar\030\010 \003(\005\022\013\n\003" +
-      "vip\030\t \003(\005\022&\n\010clanInfo\030\n \001(\0132\024.pbdson.Com" +
-      "monVector\022\"\n\004info\030\013 \001(\0132\024.pbdson.CommonV",
-      "ector\022\r\n\005petId\030\014 \003(\005\022\020\n\010facebook\030\r \001(\t\022&" +
-      "\n\010userInfo\030\016 \001(\0132\024.pbdson.CommonVector\022%" +
-      "\n\007weapons\030\017 \003(\0132\024.pbdson.PbUserWeapon\022\014\n" +
-      "\004rank\030\020 \001(\005\022\014\n\004desc\030\021 \001(\t\022\023\n\013weaponEquip" +
-      "\030\022 \003(\005\022\r\n\005point\030\023 \003(\003\022\026\n\016timeLastAction\030" +
-      "\024 \001(\003\022\r\n\005honor\030\025 \001(\005\022\r\n\005power\030\026 \001(\003\022\021\n\ti" +
-      "temEquip\030\027 \003(\005\022\017\n\007channel\030\030 \003(\005\022\021\n\tpoint" +
-      "Rank\030\031 \001(\003\022\021\n\tarenaRank\030\032 \001(\005\022\014\n\004ruby\030\033 " +
-      "\001(\003\022\013\n\003pet\030\034 \003(\005\"n\n\017PbArenaTeamInfo\022\014\n\004t" +
-      "eam\030\001 \001(\005\022\'\n\006heroes\030\002 \003(\0132\027.pbdson.PbAre",
-      "naHeroInfo\022$\n\004pets\030\003 \003(\0132\026.pbdson.PbAren" +
-      "aPetInfo\"I\n\017PbArenaHeroInfo\022\016\n\006avatar\030\001 " +
-      "\001(\005\022&\n\007weapons\030\002 \003(\0132\025.pbdson.PbArenaWea" +
-      "pon\".\n\016PbArenaPetInfo\022\016\n\006avatar\030\001 \001(\005\022\014\n" +
-      "\004star\030\002 \001(\005\"8\n\rPbArenaWeapon\022\n\n\002id\030\001 \001(\005" +
-      "\022\014\n\004slot\030\002 \001(\005\022\r\n\005level\030\003 \001(\005\"\355\004\n\nPbUser" +
-      "Data\022\025\n\rlvGachaWeapon\030\001 \001(\005\022\022\n\nlvGachaPe" +
-      "t\030\002 \001(\005\022\022\n\nlvTraining\030\004 \001(\005\022\025\n\rmaxlvTrai" +
-      "ning\030\005 \001(\005\022\025\n\rnumPointLevel\030\006 \001(\005\022\r\n\005sto" +
-      "ne\030\007 \001(\005\022\020\n\010stoneVip\030\010 \001(\005\022!\n\005items\030\t \001(",
-      "\0132\022.pbdson.PbListItem\0223\n\016itemEquipments\030" +
-      "\n \001(\0132\033.pbdson.PbListItemEquipment\022+\n\naI" +
-      "temEquip\030\013 \003(\0132\027.pbdson.PbItemEquipment\022" +
-      "\'\n\naItemPoint\030\014 \003(\0132\023.pbdson.PbItemPoint" +
-      "\022%\n\taItemFarm\030\r \003(\0132\022.pbdson.PbItemFarm\022" +
-      "#\n\naItemPiece\030\016 \003(\0132\017.pbdson.PbPiece\022\033\n\004" +
-      "aPet\030\017 \003(\0132\r.pbdson.PbPet\022\035\n\005aHero\030\020 \003(\013" +
-      "2\016.pbdson.PbHero\022\020\n\010tutorial\030\021 \001(\005\022\021\n\tda" +
-      "meSkins\030\022 \003(\005\022\025\n\rdameSkinEquip\030\023 \001(\005\022\017\n\007" +
-      "bossGod\030\024 \003(\005\022\022\n\nchatFrames\030\025 \003(\005\022\026\n\016cha",
-      "tFrameEquip\030\026 \001(\005\022\016\n\006trials\030\027 \003(\005\022\022\n\ntri" +
-      "alEquip\030\030 \001(\005\"*\n\nPbListItem\022\034\n\004item\030\001 \003(" +
-      "\0132\016.pbdson.PbItem\"(\n\tPbListPet\022\033\n\004pets\030\001" +
-      " \003(\0132\r.pbdson.PbPet\"^\n\005PbPet\022\n\n\002id\030\001 \001(\005" +
-      "\022\014\n\004star\030\002 \001(\005\022\n\n\002hp\030\004 \001(\005\022\r\n\005maxHp\030\005 \001(" +
-      "\005\022\r\n\005power\030\006 \001(\003\022\021\n\tbonusStar\030\007 \003(\005\"7\n\016P" +
-      "bListItemFarm\022%\n\titemFarms\030\001 \003(\0132\022.pbdso" +
-      "n.PbItemFarm\":\n\017PbListItemPoint\022\'\n\nitemP" +
-      "oints\030\001 \003(\0132\023.pbdson.PbItemPoint\"A\n\023PbLi" +
-      "stItemEquipment\022*\n\titemEquip\030\001 \003(\0132\027.pbd",
-      "son.PbItemEquipment\"+\n\nPbListChat\022\035\n\005aCh" +
-      "at\030\001 \003(\0132\016.pbdson.PbChat\"+\n\nPbListHero\022\035" +
-      "\n\005aHero\030\001 \003(\0132\016.pbdson.PbHero\"\225\001\n\nPbList" +
-      "Land\022\035\n\005aLand\030\001 \003(\0132\016.pbdson.PbLand\022\016\n\006a" +
-      "Bonus\030\002 \003(\003\022\022\n\ntreeStatus\030\003 \003(\003\022\014\n\004deco\030" +
-      "\004 \003(\005\022\021\n\tbonusTime\030\005 \001(\005\022\021\n\tbonusItem\030\006 " +
-      "\001(\005\022\020\n\010bonusExp\030\007 \001(\005\"\225\001\n\006PbLand\022\016\n\006land" +
-      "Id\030\001 \001(\005\022\016\n\006treeId\030\002 \001(\005\022\021\n\ttimePlant\030\003 " +
-      "\001(\003\022\023\n\013timeHarvest\030\004 \001(\003\022\020\n\010hasWater\030\005 \001" +
-      "(\005\022\021\n\tfertilize\030\006 \001(\005\022\017\n\007ferTime\030\007 \001(\005\022\r",
-      "\n\005bonus\030\010 \003(\003\"<\n\006PbHero\022\016\n\006heroId\030\001 \001(\005\022" +
-      "\r\n\005skins\030\002 \003(\005\022\023\n\013itemEquipId\030\003 \003(\005\"\211\001\n\006" +
-      "PbChat\022\017\n\007reqTime\030\001 \001(\003\022\017\n\007message\030\002 \001(\t" +
-      "\022\014\n\004type\030\003 \001(\005\022\034\n\004user\030\004 \001(\0132\016.pbdson.Pb" +
-      "User\022\"\n\004info\030\005 \001(\0132\024.pbdson.CommonVector" +
-      "\022\r\n\005point\030\006 \003(\003\"7\n\020PbListChatFriend\022#\n\005c" +
-      "hats\030\001 \003(\0132\024.pbdson.PbChatFriend\"j\n\014PbCh" +
-      "atFriend\022\016\n\006userId\030\001 \001(\005\022\017\n\007message\030\002 \001(" +
-      "\t\022\016\n\006avatar\030\003 \003(\005\022\014\n\004name\030\004 \001(\t\022\014\n\004time\030" +
-      "\005 \001(\003\022\r\n\005level\030\006 \001(\005\"v\n\006PbShop\022\"\n\006tabSet",
-      "\030\001 \003(\0132\022.pbdson.PbItemShop\022#\n\007tabDeal\030\002 " +
-      "\003(\0132\022.pbdson.PbItemShop\022#\n\007tabMisc\030\003 \003(\013" +
-      "2\022.pbdson.PbItemShop\"\245\001\n\nPbItemShop\022\n\n\002i" +
-      "d\030\001 \001(\005\022\013\n\003tab\030\002 \001(\005\022\014\n\004name\030\003 \001(\t\022\014\n\004de" +
-      "sc\030\004 \001(\t\022\014\n\004item\030\005 \003(\003\022\r\n\005price\030\006 \003(\003\022\r\n" +
-      "\005image\030\007 \001(\t\022\016\n\006status\030\010 \001(\005\022\022\n\ndescStat" +
-      "us\030\t \001(\t\022\022\n\ntimeRemain\030\n \001(\003\"@\n\006PbItem\022\n" +
-      "\n\002id\030\001 \001(\005\022\014\n\004type\030\002 \001(\005\022\016\n\006number\030\003 \001(\005" +
-      "\022\014\n\004data\030\004 \001(\t\"6\n\nPbItemFarm\022\014\n\004type\030\001 \001" +
-      "(\005\022\n\n\002id\030\002 \001(\005\022\016\n\006number\030\003 \001(\005\"3\n\007PbPiec",
-      "e\022\014\n\004type\030\001 \001(\005\022\n\n\002id\030\002 \001(\005\022\016\n\006number\030\003 " +
-      "\001(\005\".\n\013PbItemPoint\022\017\n\007itemKey\030\001 \001(\005\022\016\n\006n" +
-      "umber\030\002 \001(\003\"\216\001\n\017PbItemEquipment\022\n\n\002id\030\001 " +
-      "\001(\003\022\017\n\007itemKey\030\002 \001(\005\022\r\n\005level\030\003 \001(\005\022\014\n\004l" +
-      "ock\030\004 \001(\010\022\r\n\005point\030\005 \003(\005\022\016\n\006expire\030\006 \001(\003" +
-      "\022\023\n\013lockDestroy\030\007 \001(\010\022\r\n\005bless\030\010 \001(\005\"+\n\n" +
-      "PbListStat\022\035\n\005aStat\030\001 \003(\0132\016.pbdson.PbSta" +
-      "t\"{\n\006PbStat\022\n\n\002id\030\001 \001(\005\022\016\n\006status\030\002 \001(\005\022" +
-      "\r\n\005level\030\003 \001(\005\022\021\n\tcondition\030\004 \003(\005\022\020\n\010max" +
-      "Level\030\005 \001(\005\022\020\n\010pointPer\030\006 \001(\003\022\017\n\007formula",
-      "\030\007 \003(\002\"9\n\020PbListUserWeapon\022%\n\007weapons\030\001 " +
-      "\003(\0132\024.pbdson.PbUserWeapon\"i\n\014PbUserWeapo" +
-      "n\022\n\n\002id\030\001 \001(\005\022\r\n\005level\030\002 \001(\005\022\016\n\006number\030\003" +
-      " \001(\005\022\017\n\007isEquid\030\004 \001(\005\022\016\n\006timeCd\030\005 \001(\002\022\r\n" +
-      "\005bless\030\006 \001(\005\"/\n\nListAction\022!\n\007aAction\030\001 " +
-      "\003(\0132\020.pbdson.PbAction\"*\n\010PbAction\022\020\n\010act" +
-      "ionId\030\001 \001(\005\022\014\n\004data\030\002 \001(\014\".\n\014CommonVecto" +
-      "r\022\r\n\005aLong\030\001 \003(\003\022\017\n\007aString\030\002 \003(\t\"9\n\020Lis" +
-      "tCommonVector\022%\n\007aVector\030\001 \003(\0132\024.pbdson." +
-      "CommonVector\"g\n\017PbCharacterInfo\022\n\n\002id\030\001 ",
-      "\001(\005\022\014\n\004name\030\002 \001(\t\022\014\n\004team\030\003 \001(\005\022\016\n\006avata" +
-      "r\030\004 \003(\005\022\r\n\005aItem\030\005 \003(\005\022\r\n\005point\030\006 \003(\003\"+\n" +
-      "\nPbListMail\022\035\n\005aMail\030\001 \003(\0132\016.pbdson.PbMa" +
-      "il\"\210\001\n\006PbMail\022\n\n\002id\030\001 \001(\005\022\r\n\005title\030\002 \001(\t" +
-      "\022\017\n\007message\030\003 \001(\t\022\r\n\005bonus\030\004 \003(\005\022\017\n\007rece" +
-      "ive\030\005 \001(\005\022\014\n\004time\030\006 \001(\003\022\020\n\010senderId\030\007 \001(" +
-      "\005\022\022\n\nsenderName\030\010 \001(\t\"\257\001\n\tPbEndGame\022\017\n\007p" +
-      "opupId\030\001 \001(\005\022\021\n\tbattleKey\030\002 \001(\t\022\r\n\005isWin" +
-      "\030\003 \001(\010\022\017\n\007message\030\004 \001(\t\022\r\n\005bonus\030\005 \003(\003\022\014" +
-      "\n\004time\030\006 \001(\005\022\017\n\007perDame\030\007 \001(\005\022\014\n\004star\030\010 ",
-      "\001(\005\022\"\n\004info\030\t \001(\0132\024.pbdson.CommonVector\"" +
-      "{\n\nPbRoomInfo\022\020\n\010roomType\030\001 \001(\005\022\017\n\007servi" +
-      "ce\030\002 \001(\005\022!\n\003cmm\030\003 \001(\0132\024.pbdson.CommonVec" +
-      "tor\022\'\n\005lstCm\030\004 \001(\0132\030.pbdson.ListCommonVe" +
-      "ctor\"Z\n\017PbListMiniLotte\022\020\n\010allBonus\030\001 \003(" +
-      "\003\022\020\n\010luckyNum\030\002 \003(\005\022#\n\006aLotte\030\003 \003(\0132\023.pb" +
-      "dson.PbMiniLotte\"C\n\013PbMiniLotte\022\021\n\tnumCh" +
-      "oose\030\001 \003(\005\022\022\n\nprizeIndex\030\002 \001(\005\022\r\n\005bonus\030" +
-      "\003 \003(\005\"B\n\024PbListLotteryHistory\022*\n\010aLotter" +
-      "y\030\001 \003(\0132\030.pbdson.PbLotteryHistory\"\247\001\n\020Pb",
-      "LotteryHistory\022\017\n\007eventId\030\001 \001(\005\022\014\n\004type\030" +
-      "\002 \001(\005\022\020\n\010luckyNum\030\003 \001(\005\022\016\n\006number\030\004 \003(\005\022" +
-      "\014\n\004time\030\005 \001(\003\022\r\n\005bonus\030\006 \003(\003\022\016\n\006status\030\007" +
-      " \001(\005\022\021\n\tlistBonus\030\010 \003(\003\022\022\n\nlistResult\030\t " +
-      "\003(\005\"*\n\014PbUnitUpdate\022\014\n\004type\030\001 \001(\005\022\014\n\004dat" +
-      "a\030\002 \003(\014\"z\n\tPbUnitPos\022\n\n\002id\030\001 \001(\003\022\r\n\005spee" +
-      "d\030\002 \001(\005\022\032\n\003pos\030\003 \001(\0132\r.pbdson.PbPos\022 \n\td" +
-      "irection\030\004 \001(\0132\r.pbdson.PbPos\022\024\n\014lastInp" +
-      "utSeq\030\005 \001(\003\"1\n\014PbListBullet\022!\n\007bullets\030\001" +
-      " \003(\0132\020.pbdson.PbBullet\"@\n\010PbBullet\022\n\n\002id",
-      "\030\001 \001(\005\022\032\n\003pos\030\002 \001(\0132\r.pbdson.PbPos\022\014\n\004in" +
-      "fo\030\003 \003(\005\"(\n\tPbListTab\022\033\n\004tabs\030\001 \003(\0132\r.pb" +
-      "dson.PbTab\"Z\n\005PbTab\022\r\n\005tabId\030\001 \001(\005\022\025\n\rev" +
-      "entTemplate\030\002 \001(\005\022\r\n\005image\030\003 \001(\t\022\014\n\004name" +
-      "\030\004 \001(\t\022\016\n\006notify\030\005 \001(\010\"\255\002\n\017PbEventBuyMon" +
-      "th\022\021\n\teventName\030\001 \001(\t\022\023\n\013imageBanner\030\002 \001" +
-      "(\t\022\022\n\ntextBanner\030\003 \001(\t\022\r\n\005level\030\004 \001(\005\022\020\n" +
-      "\010curPoint\030\005 \001(\005\022\020\n\010maxPoint\030\006 \001(\005\022\025\n\rbut" +
-      "tonAddGoto\030\007 \001(\005\022\017\n\007keyHelp\030\010 \001(\t\022\016\n\006tim" +
-      "eCD\030\t \001(\003\022\021\n\tstatusBuy\030\n \001(\005\022\r\n\005price\030\013 ",
-      "\003(\003\022\022\n\nnormalName\030\014 \001(\t\022\017\n\007vipName\030\r \001(\t" +
-      "\022,\n\005cells\030\016 \003(\0132\035.pbdson.PbCellPanelEven" +
-      "tMonth\"\315\001\n\014PbEventTimer\022\n\n\002id\030\001 \001(\005\022\016\n\006s" +
-      "tatus\030\002 \001(\005\022\022\n\ntimeRemain\030\003 \001(\003\022\r\n\005bonus" +
-      "\030\004 \003(\003\022\r\n\005price\030\005 \003(\003\022\020\n\010oldPrice\030\006 \003(\003\022" +
-      "\014\n\004name\030\007 \001(\t\022\014\n\004desc\030\010 \001(\t\022\014\n\004sale\030\t \001(" +
-      "\t\022\017\n\007bgrPath\030\n \001(\t\022\"\n\004info\030\013 \001(\0132\024.pbdso" +
-      "n.CommonVector\"w\n\025PbCellPanelEventMonth\022" +
-      "\r\n\005level\030\001 \001(\005\022\013\n\003exp\030\002 \001(\005\022\016\n\006status\030\003 " +
-      "\001(\005\022\021\n\tstatusVip\030\004 \001(\005\022\r\n\005bonus\030\005 \003(\003\022\020\n",
-      "\010bonusVip\030\006 \003(\003\"\221\001\n\023PbPanelEventTabCell\022" +
-      "\021\n\teventName\030\001 \001(\t\022\023\n\013imageBanner\030\002 \001(\t\022" +
-      "\022\n\ntextBanner\030\003 \001(\t\022\016\n\006timeCD\030\t \001(\003\022.\n\005c" +
-      "ells\030\016 \003(\0132\037.pbdson.PbCellPanelEventTabC" +
-      "ell\"i\n\027PbCellPanelEventTabCell\022\n\n\002id\030\001 \001" +
-      "(\005\022\020\n\010cellName\030\002 \001(\t\022\r\n\005bonus\030\003 \003(\003\022\013\n\003p" +
-      "er\030\004 \001(\t\022\024\n\014buttonStatus\030\005 \001(\005\"\237\001\n\tPbWel" +
-      "fare\022\017\n\007eventId\030\001 \001(\005\022\016\n\006notify\030\002 \001(\010\022%\n" +
-      "\006banner\030\003 \001(\0132\025.pbdson.PbBannerEvent\022&\n\010" +
-      "tabEvent\030\004 \003(\0132\024.pbdson.PbTabWelfare\022\017\n\007",
-      "keyHelp\030\005 \001(\t\022\021\n\tcountdown\030\006 \001(\003\"b\n\014PbTa" +
-      "bWelfare\022\r\n\005tabId\030\001 \001(\005\022\017\n\007tabName\030\002 \001(\t" +
-      "\022\"\n\005cells\030\003 \003(\0132\023.pbdson.PbCellEvent\022\016\n\006" +
-      "notify\030\004 \001(\010\"\263\001\n\rPbBannerEvent\022\022\n\npathBa" +
-      "nner\030\001 \001(\t\022\014\n\004text\030\002 \001(\t\022\022\n\nbonusImage\030\003" +
-      " \001(\t\022\021\n\tboxStatus\030\004 \001(\005\022\020\n\010bonusBox\030\005 \003(" +
-      "\005\022\014\n\004desc\030\006 \001(\t\022\021\n\tpathTitle\030\007 \001(\t\022&\n\004in" +
-      "fo\030\010 \001(\0132\030.pbdson.ListCommonVector\"\353\001\n\013P" +
-      "bCellEvent\022\n\n\002id\030\001 \001(\005\022\r\n\005image\030\002 \001(\t\022\r\n" +
-      "\005bonus\030\003 \003(\005\022\020\n\010nameCell\030\004 \001(\t\022\020\n\010textCe",
-      "ll\030\005 \001(\t\022\020\n\010textDesc\030\006 \001(\t\022\016\n\006numBuy\030\007 \001" +
-      "(\005\022\r\n\005limit\030\010 \001(\005\022\r\n\005price\030\t \003(\003\022\024\n\014butt" +
-      "onStatus\030\n \001(\005\022\020\n\010bonusDay\030\013 \003(\005\022\022\n\ntime" +
-      "Remain\030\014 \001(\003\022\022\n\ntimeExpire\030\r \001(\003\"\225\001\n\013PbE" +
-      "vent7Day\022&\n\004days\030\001 \003(\0132\030.pbdson.PbPanelE" +
-      "vent7Day\022\022\n\ntimeRemain\030\002 \001(\003\022\020\n\010curValue" +
-      "\030\003 \001(\005\022\020\n\010maxValue\030\004 \001(\005\022&\n\tposReward\030\005 " +
-      "\003(\0132\023.pbdson.PbPosReward\"U\n\013PbPosReward\022" +
-      "\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\r\n\005point\030\003 \001(\005" +
-      "\022\r\n\005bonus\030\004 \003(\003\022\016\n\006status\030\005 \001(\005\"R\n\016PbTab",
-      "Event7Day\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022&\n\005c" +
-      "ells\030\003 \003(\0132\027.pbdson.PbCellEvent7Day\"\272\001\n\020" +
-      "PbPanelEvent7Day\022$\n\004tab1\030\001 \001(\0132\026.pbdson." +
-      "PbTabEvent7Day\022$\n\004tab2\030\002 \001(\0132\026.pbdson.Pb" +
-      "TabEvent7Day\022$\n\004tab3\030\003 \001(\0132\026.pbdson.PbTa" +
-      "bEvent7Day\022$\n\004tab4\030\004 \001(\0132\026.pbdson.PbTabE" +
-      "vent7Day\022\016\n\006isLock\030\005 \001(\010\"\306\001\n\017PbCellEvent" +
-      "7Day\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\014\n\004desc\030\003" +
-      " \001(\t\022\020\n\010curValue\030\004 \001(\005\022\020\n\010maxValue\030\005 \001(\005" +
-      "\022\r\n\005bonus\030\006 \003(\003\022\024\n\014buttonStatus\030\007 \001(\005\022\022\n",
-      "\nbuttonGoto\030\010 \001(\005\022\020\n\010oldPrice\030\t \003(\003\022\020\n\010n" +
-      "ewPrice\030\n \003(\003\022\n\n\002xu\030\013 \001(\005\"\'\n\tPbListIAP\022\032" +
-      "\n\003iap\030\001 \003(\0132\r.pbdson.PpIAP\"\264\001\n\005PpIAP\022\n\n\002" +
-      "id\030\001 \001(\005\022\030\n\020productIdAndroid\030\002 \001(\t\022\024\n\014pr" +
-      "oductIdIos\030\003 \001(\t\022\014\n\004name\030\004 \001(\t\022\r\n\005price\030" +
-      "\005 \001(\t\022\r\n\005bonus\030\006 \003(\003\022\020\n\010addBonus\030\007 \003(\003\022\020" +
-      "\n\010addTitle\030\010 \001(\t\022\016\n\006vipExp\030\t \001(\005\022\017\n\007pric" +
-      "eQr\030\n \001(\t\"\354\001\n\rPbBattleArena\022\017\n\007mapInfo\030\001" +
-      " \003(\005\022-\n\006myInfo\030\002 \001(\0132\035.pbdson.PbBattleAr" +
-      "enaUserInfo\022.\n\007oppInfo\030\003 \001(\0132\035.pbdson.Pb",
-      "BattleArenaUserInfo\022-\n\006myTeam\030\004 \001(\0132\035.pb" +
-      "dson.PbBattleListArenaHero\022.\n\007oppTeam\030\005 " +
-      "\001(\0132\035.pbdson.PbBattleListArenaHero\022\014\n\004ti" +
-      "me\030\006 \001(\005\"@\n\025PbBattleListArenaHero\022\'\n\004tea" +
-      "m\030\001 \003(\0132\031.pbdson.PbBattleArenaHero\"d\n\025Pb" +
-      "BattleArenaUserInfo\022\016\n\006avatar\030\001 \003(\005\022\r\n\005l" +
-      "evel\030\002 \001(\005\022\013\n\003vip\030\003 \001(\005\022\014\n\004name\030\004 \001(\t\022\021\n" +
-      "\trankPoint\030\005 \001(\005\"\337\001\n\021PbBattleArenaHero\022\n" +
-      "\n\002id\030\001 \001(\005\022\016\n\006avatar\030\002 \001(\005\022\020\n\010heroType\030\003" +
-      " \001(\005\022\014\n\004slot\030\004 \001(\005\022\r\n\005level\030\005 \001(\005\022\r\n\005poi",
-      "nt\030\006 \003(\003\022\013\n\003pos\030\007 \003(\002\022\021\n\tdirection\030\010 \003(\002" +
-      "\022\"\n\004info\030\t \001(\0132\024.pbdson.CommonVector\022,\n\007" +
-      "weapons\030\n \003(\0132\033.pbdson.PbBattleArenaWeap" +
-      "on\"M\n\023PbBattleArenaWeapon\022\n\n\002id\030\001 \001(\005\022\014\n" +
-      "\004slot\030\002 \001(\005\022\r\n\005level\030\003 \001(\005\022\r\n\005shots\030\004 \003(" +
-      "\005*!\n\tCellState\022\n\n\006ACTIVE\020\001\022\010\n\004HIDE\020\002B\024\n\010" +
-      "protocolB\010Pbmethod"
+      "(\005\022\016\n\006userId\030\021 \001(\005\"e\n\006PbCell\022\014\n\004type\030\001 \001" +
+      "(\005\022\017\n\007chunkId\030\002 \001(\005\022\032\n\003pos\030\003 \001(\0132\r.pbdso",
+      "n.PbPos\022 \n\005state\030\004 \001(\0162\021.pbdson.CellStat" +
+      "e\".\n\013PbListChunk\022\037\n\006aChunk\030\001 \003(\0132\017.pbdso" +
+      "n.PbChunk\"P\n\007PbChunk\022\n\n\002id\030\001 \001(\005\022\032\n\003pos\030" +
+      "\002 \001(\0132\r.pbdson.PbPos\022\035\n\005cells\030\003 \003(\0132\016.pb" +
+      "dson.PbCell\"l\n\tPbInitMap\022\r\n\005mapId\030\001 \001(\005\022" +
+      "\020\n\010battleId\030\002 \001(\003\022\037\n\006chunks\030\003 \003(\0132\017.pbds" +
+      "on.PbChunk\022\035\n\005units\030\004 \003(\0132\016.pbdson.PbUni" +
+      "t\"\215\001\n\007PbState\022\022\n\nserverTime\030\001 \001(\002\022\"\n\007uni" +
+      "tPos\030\002 \003(\0132\021.pbdson.PbUnitPos\022\037\n\007unitAdd" +
+      "\030\003 \003(\0132\016.pbdson.PbUnit\022)\n\013aUnitUpdate\030\004 ",
+      "\003(\0132\024.pbdson.PbUnitUpdate\":\n\017PbListUnitS" +
+      "tate\022\'\n\naUnitState\030\001 \003(\0132\023.pbdson.PbUnit" +
+      "State\"8\n\013PbUnitState\022\n\n\002id\030\001 \001(\003\022\016\n\006stat" +
+      "us\030\002 \003(\005\022\r\n\005point\030\003 \003(\005\"\351\002\n\006PbClan\022\n\n\002id" +
+      "\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\016\n\006server\030\003 \001(\005\022\020\n\010" +
+      "masterId\030\004 \001(\005\022\022\n\nmasterName\030\005 \001(\t\022\024\n\014nu" +
+      "mberMember\030\006 \001(\005\022\021\n\tmaxMember\030\007 \001(\005\022\020\n\010j" +
+      "oinRule\030\010 \001(\005\022\"\n\006member\030\t \003(\0132\022.pbdson.C" +
+      "lanMember\022\r\n\005intro\030\n \001(\t\022\023\n\013activityLog\030" +
+      "\013 \003(\t\022\r\n\005level\030\014 \001(\005\022\013\n\003exp\030\r \001(\003\022\016\n\006max",
+      "Exp\030\016 \001(\003\022\016\n\006avatar\030\017 \001(\005\022\014\n\004rank\030\020 \001(\005\022" +
+      "\r\n\005power\030\021 \001(\003\022\022\n\njoinTrophy\030\022 \001(\005\022\014\n\004st" +
+      "ar\030\023 \001(\005\022\021\n\tpointRank\030\024 \001(\003\"K\n\nPbListUse" +
+      "r\022\035\n\005aUser\030\001 \003(\0132\016.pbdson.PbUser\022\036\n\006myIn" +
+      "fo\030\002 \001(\0132\016.pbdson.PbUser\"\263\002\n\nClanMember\022" +
+      "\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\016\n\006trophy\030\003 \001(" +
+      "\005\022\020\n\010warPoint\030\004 \001(\005\022\r\n\005level\030\005 \001(\005\022\024\n\014re" +
+      "ceiveTroop\030\006 \001(\005\022\021\n\tsendTroop\030\007 \001(\005\022\r\n\005i" +
+      "sNew\030\010 \001(\010\022\020\n\010position\030\t \001(\005\022\023\n\013clanDona" +
+      "ted\030\027 \001(\005\022\022\n\nkungfuClan\030\030 \001(\t\022\022\n\nlastAct",
+      "ion\030\031 \001(\003\022\013\n\003vip\030\n \001(\005\022\022\n\nrankTrophy\030\013 \001" +
+      "(\005\022\016\n\006avatar\030\014 \003(\005\022\022\n\ncurDonated\030\r \001(\005\022\016" +
+      "\n\006online\030\016 \001(\010\"J\n\nPbListClan\022\034\n\004clan\030\001 \003" +
+      "(\0132\016.pbdson.PbClan\022\036\n\006myClan\030\002 \001(\0132\016.pbd" +
+      "son.PbClan\"3\n\rPbListHistory\022\"\n\007history\030\001" +
+      " \003(\0132\021.pbdson.PbHistory\"\260\001\n\tPbHistory\022\020\n" +
+      "\010isAttack\030\001 \001(\010\022\020\n\010targetId\030\002 \001(\005\022\016\n\006sta" +
+      "tus\030\003 \001(\005\022\022\n\ntimeAttack\030\004 \001(\005\022\016\n\006point1\030" +
+      "\005 \001(\005\022\016\n\006point2\030\006 \001(\005\022\014\n\004time\030\007 \001(\003\022\034\n\004u" +
+      "ser\030\010 \001(\0132\016.pbdson.PbUser\022\017\n\007myPoint\030\t \001",
+      "(\005\"\311\001\n\007PbArena\022\022\n\ntimeRemain\030\001 \001(\003\022\016\n\006my" +
+      "Rank\030\002 \001(\005\022\017\n\007myPoint\030\003 \001(\005\022!\n\topponents" +
+      "\030\004 \003(\0132\016.pbdson.PbUser\022\021\n\tfeeTicket\030\005 \001(" +
+      "\005\022\024\n\014curBuyTicket\030\006 \001(\005\022\024\n\014maxBuyTicket\030" +
+      "\007 \001(\005\022\022\n\nhasDefense\030\010 \001(\010\022\023\n\013defenseTeam" +
+      "\030\t \003(\005\"\237\004\n\006PbUser\022\n\n\002id\030\001 \001(\005\022\020\n\010usernam" +
+      "e\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\014\n\004gold\030\004 \001(\003\022\013\n\003g" +
+      "em\030\005 \001(\003\022\013\n\003exp\030\006 \001(\003\022\r\n\005level\030\007 \001(\005\022\016\n\006" +
+      "avatar\030\010 \003(\005\022\013\n\003vip\030\t \003(\005\022&\n\010clanInfo\030\n " +
+      "\001(\0132\024.pbdson.CommonVector\022\"\n\004info\030\013 \001(\0132",
+      "\024.pbdson.CommonVector\022\r\n\005petId\030\014 \003(\005\022\020\n\010" +
+      "facebook\030\r \001(\t\022&\n\010userInfo\030\016 \001(\0132\024.pbdso" +
+      "n.CommonVector\022%\n\007weapons\030\017 \003(\0132\024.pbdson" +
+      ".PbUserWeapon\022\014\n\004rank\030\020 \001(\005\022\014\n\004desc\030\021 \001(" +
+      "\t\022\023\n\013weaponEquip\030\022 \003(\005\022\r\n\005point\030\023 \003(\005\022\026\n" +
+      "\016timeLastAction\030\024 \001(\003\022\r\n\005honor\030\025 \001(\005\022\r\n\005" +
+      "power\030\026 \001(\003\022\021\n\titemEquip\030\027 \003(\005\022\017\n\007channe" +
+      "l\030\030 \003(\005\022\021\n\tpointRank\030\031 \001(\003\022\021\n\tarenaRank\030" +
+      "\032 \001(\005\022\014\n\004ruby\030\033 \001(\003\022\013\n\003pet\030\034 \003(\005\"n\n\017PbAr" +
+      "enaTeamInfo\022\014\n\004team\030\001 \001(\005\022\'\n\006heroes\030\002 \003(",
+      "\0132\027.pbdson.PbArenaHeroInfo\022$\n\004pets\030\003 \003(\013" +
+      "2\026.pbdson.PbArenaPetInfo\"I\n\017PbArenaHeroI" +
+      "nfo\022\016\n\006avatar\030\001 \001(\005\022&\n\007weapons\030\002 \003(\0132\025.p" +
+      "bdson.PbArenaWeapon\".\n\016PbArenaPetInfo\022\016\n" +
+      "\006avatar\030\001 \001(\005\022\014\n\004star\030\002 \001(\005\"8\n\rPbArenaWe" +
+      "apon\022\n\n\002id\030\001 \001(\005\022\014\n\004slot\030\002 \001(\005\022\r\n\005level\030" +
+      "\003 \001(\005\"\355\004\n\nPbUserData\022\025\n\rlvGachaWeapon\030\001 " +
+      "\001(\005\022\022\n\nlvGachaPet\030\002 \001(\005\022\022\n\nlvTraining\030\004 " +
+      "\001(\005\022\025\n\rmaxlvTraining\030\005 \001(\005\022\025\n\rnumPointLe" +
+      "vel\030\006 \001(\005\022\r\n\005stone\030\007 \001(\005\022\020\n\010stoneVip\030\010 \001",
+      "(\005\022!\n\005items\030\t \001(\0132\022.pbdson.PbListItem\0223\n" +
+      "\016itemEquipments\030\n \001(\0132\033.pbdson.PbListIte" +
+      "mEquipment\022+\n\naItemEquip\030\013 \003(\0132\027.pbdson." +
+      "PbItemEquipment\022\'\n\naItemPoint\030\014 \003(\0132\023.pb" +
+      "dson.PbItemPoint\022%\n\taItemFarm\030\r \003(\0132\022.pb" +
+      "dson.PbItemFarm\022#\n\naItemPiece\030\016 \003(\0132\017.pb" +
+      "dson.PbPiece\022\033\n\004aPet\030\017 \003(\0132\r.pbdson.PbPe" +
+      "t\022\035\n\005aHero\030\020 \003(\0132\016.pbdson.PbHero\022\020\n\010tuto" +
+      "rial\030\021 \001(\005\022\021\n\tdameSkins\030\022 \003(\005\022\025\n\rdameSki" +
+      "nEquip\030\023 \001(\005\022\017\n\007bossGod\030\024 \003(\005\022\022\n\nchatFra",
+      "mes\030\025 \003(\005\022\026\n\016chatFrameEquip\030\026 \001(\005\022\016\n\006tri" +
+      "als\030\027 \003(\005\022\022\n\ntrialEquip\030\030 \001(\005\"*\n\nPbListI" +
+      "tem\022\034\n\004item\030\001 \003(\0132\016.pbdson.PbItem\"(\n\tPbL" +
+      "istPet\022\033\n\004pets\030\001 \003(\0132\r.pbdson.PbPet\"^\n\005P" +
+      "bPet\022\n\n\002id\030\001 \001(\005\022\014\n\004star\030\002 \001(\005\022\n\n\002hp\030\004 \001" +
+      "(\005\022\r\n\005maxHp\030\005 \001(\005\022\r\n\005power\030\006 \001(\003\022\021\n\tbonu" +
+      "sStar\030\007 \003(\005\"7\n\016PbListItemFarm\022%\n\titemFar" +
+      "ms\030\001 \003(\0132\022.pbdson.PbItemFarm\":\n\017PbListIt" +
+      "emPoint\022\'\n\nitemPoints\030\001 \003(\0132\023.pbdson.PbI" +
+      "temPoint\"A\n\023PbListItemEquipment\022*\n\titemE",
+      "quip\030\001 \003(\0132\027.pbdson.PbItemEquipment\"+\n\nP" +
+      "bListChat\022\035\n\005aChat\030\001 \003(\0132\016.pbdson.PbChat" +
+      "\"+\n\nPbListHero\022\035\n\005aHero\030\001 \003(\0132\016.pbdson.P" +
+      "bHero\"\225\001\n\nPbListLand\022\035\n\005aLand\030\001 \003(\0132\016.pb" +
+      "dson.PbLand\022\016\n\006aBonus\030\002 \003(\003\022\022\n\ntreeStatu" +
+      "s\030\003 \003(\003\022\014\n\004deco\030\004 \003(\005\022\021\n\tbonusTime\030\005 \001(\005" +
+      "\022\021\n\tbonusItem\030\006 \001(\005\022\020\n\010bonusExp\030\007 \001(\005\"\225\001" +
+      "\n\006PbLand\022\016\n\006landId\030\001 \001(\005\022\016\n\006treeId\030\002 \001(\005" +
+      "\022\021\n\ttimePlant\030\003 \001(\003\022\023\n\013timeHarvest\030\004 \001(\003" +
+      "\022\020\n\010hasWater\030\005 \001(\005\022\021\n\tfertilize\030\006 \001(\005\022\017\n",
+      "\007ferTime\030\007 \001(\005\022\r\n\005bonus\030\010 \003(\003\"<\n\006PbHero\022" +
+      "\016\n\006heroId\030\001 \001(\005\022\r\n\005skins\030\002 \003(\005\022\023\n\013itemEq" +
+      "uipId\030\003 \003(\005\"\211\001\n\006PbChat\022\017\n\007reqTime\030\001 \001(\003\022" +
+      "\017\n\007message\030\002 \001(\t\022\014\n\004type\030\003 \001(\005\022\034\n\004user\030\004" +
+      " \001(\0132\016.pbdson.PbUser\022\"\n\004info\030\005 \001(\0132\024.pbd" +
+      "son.CommonVector\022\r\n\005point\030\006 \003(\005\"7\n\020PbLis" +
+      "tChatFriend\022#\n\005chats\030\001 \003(\0132\024.pbdson.PbCh" +
+      "atFriend\"j\n\014PbChatFriend\022\016\n\006userId\030\001 \001(\005" +
+      "\022\017\n\007message\030\002 \001(\t\022\016\n\006avatar\030\003 \003(\005\022\014\n\004nam" +
+      "e\030\004 \001(\t\022\014\n\004time\030\005 \001(\003\022\r\n\005level\030\006 \001(\005\"v\n\006",
+      "PbShop\022\"\n\006tabSet\030\001 \003(\0132\022.pbdson.PbItemSh" +
+      "op\022#\n\007tabDeal\030\002 \003(\0132\022.pbdson.PbItemShop\022" +
+      "#\n\007tabMisc\030\003 \003(\0132\022.pbdson.PbItemShop\"\245\001\n" +
+      "\nPbItemShop\022\n\n\002id\030\001 \001(\005\022\013\n\003tab\030\002 \001(\005\022\014\n\004" +
+      "name\030\003 \001(\t\022\014\n\004desc\030\004 \001(\t\022\014\n\004item\030\005 \003(\003\022\r" +
+      "\n\005price\030\006 \003(\003\022\r\n\005image\030\007 \001(\t\022\016\n\006status\030\010" +
+      " \001(\005\022\022\n\ndescStatus\030\t \001(\t\022\022\n\ntimeRemain\030\n" +
+      " \001(\003\"@\n\006PbItem\022\n\n\002id\030\001 \001(\005\022\014\n\004type\030\002 \001(\005" +
+      "\022\016\n\006number\030\003 \001(\005\022\014\n\004data\030\004 \001(\t\"6\n\nPbItem" +
+      "Farm\022\014\n\004type\030\001 \001(\005\022\n\n\002id\030\002 \001(\005\022\016\n\006number",
+      "\030\003 \001(\005\"3\n\007PbPiece\022\014\n\004type\030\001 \001(\005\022\n\n\002id\030\002 " +
+      "\001(\005\022\016\n\006number\030\003 \001(\005\".\n\013PbItemPoint\022\017\n\007it" +
+      "emKey\030\001 \001(\005\022\016\n\006number\030\002 \001(\003\"\216\001\n\017PbItemEq" +
+      "uipment\022\n\n\002id\030\001 \001(\003\022\017\n\007itemKey\030\002 \001(\005\022\r\n\005" +
+      "level\030\003 \001(\005\022\014\n\004lock\030\004 \001(\010\022\r\n\005point\030\005 \003(\005" +
+      "\022\016\n\006expire\030\006 \001(\003\022\023\n\013lockDestroy\030\007 \001(\010\022\r\n" +
+      "\005bless\030\010 \001(\005\"+\n\nPbListStat\022\035\n\005aStat\030\001 \003(" +
+      "\0132\016.pbdson.PbStat\"{\n\006PbStat\022\n\n\002id\030\001 \001(\005\022" +
+      "\016\n\006status\030\002 \001(\005\022\r\n\005level\030\003 \001(\005\022\021\n\tcondit" +
+      "ion\030\004 \003(\005\022\020\n\010maxLevel\030\005 \001(\005\022\020\n\010pointPer\030",
+      "\006 \001(\005\022\017\n\007formula\030\007 \003(\002\"9\n\020PbListUserWeap" +
+      "on\022%\n\007weapons\030\001 \003(\0132\024.pbdson.PbUserWeapo" +
+      "n\"i\n\014PbUserWeapon\022\n\n\002id\030\001 \001(\005\022\r\n\005level\030\002" +
+      " \001(\005\022\016\n\006number\030\003 \001(\005\022\017\n\007isEquid\030\004 \001(\005\022\016\n" +
+      "\006timeCd\030\005 \001(\002\022\r\n\005bless\030\006 \001(\005\"/\n\nListActi" +
+      "on\022!\n\007aAction\030\001 \003(\0132\020.pbdson.PbAction\"*\n" +
+      "\010PbAction\022\020\n\010actionId\030\001 \001(\005\022\014\n\004data\030\002 \001(" +
+      "\014\".\n\014CommonVector\022\r\n\005aLong\030\001 \003(\003\022\017\n\007aStr" +
+      "ing\030\002 \003(\t\"9\n\020ListCommonVector\022%\n\007aVector" +
+      "\030\001 \003(\0132\024.pbdson.CommonVector\"g\n\017PbCharac",
+      "terInfo\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\014\n\004tea" +
+      "m\030\003 \001(\005\022\016\n\006avatar\030\004 \003(\005\022\r\n\005aItem\030\005 \003(\005\022\r" +
+      "\n\005point\030\006 \003(\005\"+\n\nPbListMail\022\035\n\005aMail\030\001 \003" +
+      "(\0132\016.pbdson.PbMail\"\210\001\n\006PbMail\022\n\n\002id\030\001 \001(" +
+      "\005\022\r\n\005title\030\002 \001(\t\022\017\n\007message\030\003 \001(\t\022\r\n\005bon" +
+      "us\030\004 \003(\005\022\017\n\007receive\030\005 \001(\005\022\014\n\004time\030\006 \001(\003\022" +
+      "\020\n\010senderId\030\007 \001(\005\022\022\n\nsenderName\030\010 \001(\t\"\257\001" +
+      "\n\tPbEndGame\022\017\n\007popupId\030\001 \001(\005\022\021\n\tbattleKe" +
+      "y\030\002 \001(\t\022\r\n\005isWin\030\003 \001(\010\022\017\n\007message\030\004 \001(\t\022" +
+      "\r\n\005bonus\030\005 \003(\003\022\014\n\004time\030\006 \001(\005\022\017\n\007perDame\030",
+      "\007 \001(\005\022\014\n\004star\030\010 \001(\005\022\"\n\004info\030\t \001(\0132\024.pbds" +
+      "on.CommonVector\"{\n\nPbRoomInfo\022\020\n\010roomTyp" +
+      "e\030\001 \001(\005\022\017\n\007service\030\002 \001(\005\022!\n\003cmm\030\003 \001(\0132\024." +
+      "pbdson.CommonVector\022\'\n\005lstCm\030\004 \001(\0132\030.pbd" +
+      "son.ListCommonVector\"Z\n\017PbListMiniLotte\022" +
+      "\020\n\010allBonus\030\001 \003(\003\022\020\n\010luckyNum\030\002 \003(\005\022#\n\006a" +
+      "Lotte\030\003 \003(\0132\023.pbdson.PbMiniLotte\"C\n\013PbMi" +
+      "niLotte\022\021\n\tnumChoose\030\001 \003(\005\022\022\n\nprizeIndex" +
+      "\030\002 \001(\005\022\r\n\005bonus\030\003 \003(\005\"B\n\024PbListLotteryHi" +
+      "story\022*\n\010aLottery\030\001 \003(\0132\030.pbdson.PbLotte",
+      "ryHistory\"\247\001\n\020PbLotteryHistory\022\017\n\007eventI" +
+      "d\030\001 \001(\005\022\014\n\004type\030\002 \001(\005\022\020\n\010luckyNum\030\003 \001(\005\022" +
+      "\016\n\006number\030\004 \003(\005\022\014\n\004time\030\005 \001(\003\022\r\n\005bonus\030\006" +
+      " \003(\003\022\016\n\006status\030\007 \001(\005\022\021\n\tlistBonus\030\010 \003(\003\022" +
+      "\022\n\nlistResult\030\t \003(\005\"*\n\014PbUnitUpdate\022\014\n\004t" +
+      "ype\030\001 \001(\005\022\014\n\004data\030\002 \003(\014\"z\n\tPbUnitPos\022\n\n\002" +
+      "id\030\001 \001(\003\022\r\n\005speed\030\002 \001(\005\022\024\n\014lastInputSeq\030" +
+      "\003 \001(\003\022\032\n\003pos\030\004 \001(\0132\r.pbdson.PbPos\022 \n\tdir" +
+      "ection\030\005 \001(\0132\r.pbdson.PbPos\"1\n\014PbListBul" +
+      "let\022!\n\007bullets\030\001 \003(\0132\020.pbdson.PbBullet\"@",
+      "\n\010PbBullet\022\n\n\002id\030\001 \001(\005\022\032\n\003pos\030\002 \001(\0132\r.pb" +
+      "dson.PbPos\022\014\n\004info\030\003 \003(\005\"(\n\tPbListTab\022\033\n" +
+      "\004tabs\030\001 \003(\0132\r.pbdson.PbTab\"Z\n\005PbTab\022\r\n\005t" +
+      "abId\030\001 \001(\005\022\025\n\reventTemplate\030\002 \001(\005\022\r\n\005ima" +
+      "ge\030\003 \001(\t\022\014\n\004name\030\004 \001(\t\022\016\n\006notify\030\005 \001(\010\"\255" +
+      "\002\n\017PbEventBuyMonth\022\021\n\teventName\030\001 \001(\t\022\023\n" +
+      "\013imageBanner\030\002 \001(\t\022\022\n\ntextBanner\030\003 \001(\t\022\r" +
+      "\n\005level\030\004 \001(\005\022\020\n\010curPoint\030\005 \001(\005\022\020\n\010maxPo" +
+      "int\030\006 \001(\005\022\025\n\rbuttonAddGoto\030\007 \001(\005\022\017\n\007keyH" +
+      "elp\030\010 \001(\t\022\016\n\006timeCD\030\t \001(\003\022\021\n\tstatusBuy\030\n",
+      " \001(\005\022\r\n\005price\030\013 \003(\003\022\022\n\nnormalName\030\014 \001(\t\022" +
+      "\017\n\007vipName\030\r \001(\t\022,\n\005cells\030\016 \003(\0132\035.pbdson" +
+      ".PbCellPanelEventMonth\"\315\001\n\014PbEventTimer\022" +
+      "\n\n\002id\030\001 \001(\005\022\016\n\006status\030\002 \001(\005\022\022\n\ntimeRemai" +
+      "n\030\003 \001(\003\022\r\n\005bonus\030\004 \003(\003\022\r\n\005price\030\005 \003(\003\022\020\n" +
+      "\010oldPrice\030\006 \003(\003\022\014\n\004name\030\007 \001(\t\022\014\n\004desc\030\010 " +
+      "\001(\t\022\014\n\004sale\030\t \001(\t\022\017\n\007bgrPath\030\n \001(\t\022\"\n\004in" +
+      "fo\030\013 \001(\0132\024.pbdson.CommonVector\"w\n\025PbCell" +
+      "PanelEventMonth\022\r\n\005level\030\001 \001(\005\022\013\n\003exp\030\002 " +
+      "\001(\005\022\016\n\006status\030\003 \001(\005\022\021\n\tstatusVip\030\004 \001(\005\022\r",
+      "\n\005bonus\030\005 \003(\003\022\020\n\010bonusVip\030\006 \003(\003\"\221\001\n\023PbPa" +
+      "nelEventTabCell\022\021\n\teventName\030\001 \001(\t\022\023\n\013im" +
+      "ageBanner\030\002 \001(\t\022\022\n\ntextBanner\030\003 \001(\t\022\016\n\006t" +
+      "imeCD\030\t \001(\003\022.\n\005cells\030\016 \003(\0132\037.pbdson.PbCe" +
+      "llPanelEventTabCell\"i\n\027PbCellPanelEventT" +
+      "abCell\022\n\n\002id\030\001 \001(\005\022\020\n\010cellName\030\002 \001(\t\022\r\n\005" +
+      "bonus\030\003 \003(\003\022\013\n\003per\030\004 \001(\t\022\024\n\014buttonStatus" +
+      "\030\005 \001(\005\"\237\001\n\tPbWelfare\022\017\n\007eventId\030\001 \001(\005\022\016\n" +
+      "\006notify\030\002 \001(\010\022%\n\006banner\030\003 \001(\0132\025.pbdson.P" +
+      "bBannerEvent\022&\n\010tabEvent\030\004 \003(\0132\024.pbdson.",
+      "PbTabWelfare\022\017\n\007keyHelp\030\005 \001(\t\022\021\n\tcountdo" +
+      "wn\030\006 \001(\003\"b\n\014PbTabWelfare\022\r\n\005tabId\030\001 \001(\005\022" +
+      "\017\n\007tabName\030\002 \001(\t\022\"\n\005cells\030\003 \003(\0132\023.pbdson" +
+      ".PbCellEvent\022\016\n\006notify\030\004 \001(\010\"\263\001\n\rPbBanne" +
+      "rEvent\022\022\n\npathBanner\030\001 \001(\t\022\014\n\004text\030\002 \001(\t" +
+      "\022\022\n\nbonusImage\030\003 \001(\t\022\021\n\tboxStatus\030\004 \001(\005\022" +
+      "\020\n\010bonusBox\030\005 \003(\005\022\014\n\004desc\030\006 \001(\t\022\021\n\tpathT" +
+      "itle\030\007 \001(\t\022&\n\004info\030\010 \001(\0132\030.pbdson.ListCo" +
+      "mmonVector\"\353\001\n\013PbCellEvent\022\n\n\002id\030\001 \001(\005\022\r" +
+      "\n\005image\030\002 \001(\t\022\r\n\005bonus\030\003 \003(\005\022\020\n\010nameCell",
+      "\030\004 \001(\t\022\020\n\010textCell\030\005 \001(\t\022\020\n\010textDesc\030\006 \001" +
+      "(\t\022\016\n\006numBuy\030\007 \001(\005\022\r\n\005limit\030\010 \001(\005\022\r\n\005pri" +
+      "ce\030\t \003(\003\022\024\n\014buttonStatus\030\n \001(\005\022\020\n\010bonusD" +
+      "ay\030\013 \003(\005\022\022\n\ntimeRemain\030\014 \001(\003\022\022\n\ntimeExpi" +
+      "re\030\r \001(\003\"\225\001\n\013PbEvent7Day\022&\n\004days\030\001 \003(\0132\030" +
+      ".pbdson.PbPanelEvent7Day\022\022\n\ntimeRemain\030\002" +
+      " \001(\003\022\020\n\010curValue\030\003 \001(\005\022\020\n\010maxValue\030\004 \001(\005" +
+      "\022&\n\tposReward\030\005 \003(\0132\023.pbdson.PbPosReward" +
+      "\"U\n\013PbPosReward\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(" +
+      "\t\022\r\n\005point\030\003 \001(\005\022\r\n\005bonus\030\004 \003(\003\022\016\n\006statu",
+      "s\030\005 \001(\005\"R\n\016PbTabEvent7Day\022\n\n\002id\030\001 \001(\005\022\014\n" +
+      "\004name\030\002 \001(\t\022&\n\005cells\030\003 \003(\0132\027.pbdson.PbCe" +
+      "llEvent7Day\"\272\001\n\020PbPanelEvent7Day\022$\n\004tab1" +
+      "\030\001 \001(\0132\026.pbdson.PbTabEvent7Day\022$\n\004tab2\030\002" +
+      " \001(\0132\026.pbdson.PbTabEvent7Day\022$\n\004tab3\030\003 \001" +
+      "(\0132\026.pbdson.PbTabEvent7Day\022$\n\004tab4\030\004 \001(\013" +
+      "2\026.pbdson.PbTabEvent7Day\022\016\n\006isLock\030\005 \001(\010" +
+      "\"\306\001\n\017PbCellEvent7Day\022\n\n\002id\030\001 \001(\005\022\014\n\004name" +
+      "\030\002 \001(\t\022\014\n\004desc\030\003 \001(\t\022\020\n\010curValue\030\004 \001(\005\022\020" +
+      "\n\010maxValue\030\005 \001(\005\022\r\n\005bonus\030\006 \003(\003\022\024\n\014butto",
+      "nStatus\030\007 \001(\005\022\022\n\nbuttonGoto\030\010 \001(\005\022\020\n\010old" +
+      "Price\030\t \003(\003\022\020\n\010newPrice\030\n \003(\003\022\n\n\002xu\030\013 \001(" +
+      "\005\"\'\n\tPbListIAP\022\032\n\003iap\030\001 \003(\0132\r.pbdson.PpI" +
+      "AP\"\264\001\n\005PpIAP\022\n\n\002id\030\001 \001(\005\022\030\n\020productIdAnd" +
+      "roid\030\002 \001(\t\022\024\n\014productIdIos\030\003 \001(\t\022\014\n\004name" +
+      "\030\004 \001(\t\022\r\n\005price\030\005 \001(\t\022\r\n\005bonus\030\006 \003(\003\022\020\n\010" +
+      "addBonus\030\007 \003(\003\022\020\n\010addTitle\030\010 \001(\t\022\016\n\006vipE" +
+      "xp\030\t \001(\005\022\017\n\007priceQr\030\n \001(\t\"\354\001\n\rPbBattleAr" +
+      "ena\022\017\n\007mapInfo\030\001 \003(\005\022-\n\006myInfo\030\002 \001(\0132\035.p" +
+      "bdson.PbBattleArenaUserInfo\022.\n\007oppInfo\030\003",
+      " \001(\0132\035.pbdson.PbBattleArenaUserInfo\022-\n\006m" +
+      "yTeam\030\004 \001(\0132\035.pbdson.PbBattleListArenaHe" +
+      "ro\022.\n\007oppTeam\030\005 \001(\0132\035.pbdson.PbBattleLis" +
+      "tArenaHero\022\014\n\004time\030\006 \001(\005\"@\n\025PbBattleList" +
+      "ArenaHero\022\'\n\004team\030\001 \003(\0132\031.pbdson.PbBattl" +
+      "eArenaHero\"d\n\025PbBattleArenaUserInfo\022\016\n\006a" +
+      "vatar\030\001 \003(\005\022\r\n\005level\030\002 \001(\005\022\013\n\003vip\030\003 \001(\005\022" +
+      "\014\n\004name\030\004 \001(\t\022\021\n\trankPoint\030\005 \001(\005\"\337\001\n\021PbB" +
+      "attleArenaHero\022\n\n\002id\030\001 \001(\005\022\016\n\006avatar\030\002 \001" +
+      "(\005\022\020\n\010heroType\030\003 \001(\005\022\014\n\004slot\030\004 \001(\005\022\r\n\005le",
+      "vel\030\005 \001(\005\022\r\n\005point\030\006 \003(\005\022\013\n\003pos\030\007 \003(\002\022\021\n" +
+      "\tdirection\030\010 \003(\002\022\"\n\004info\030\t \001(\0132\024.pbdson." +
+      "CommonVector\022,\n\007weapons\030\n \003(\0132\033.pbdson.P" +
+      "bBattleArenaWeapon\"M\n\023PbBattleArenaWeapo" +
+      "n\022\n\n\002id\030\001 \001(\005\022\014\n\004slot\030\002 \001(\005\022\r\n\005level\030\003 \001" +
+      "(\005\022\r\n\005shots\030\004 \003(\005*!\n\tCellState\022\n\n\006ACTIVE" +
+      "\020\001\022\010\n\004HIDE\020\002*C\n\tStateType\022\023\n\017TYPE_ADD_RE" +
+      "MOVE\020\001\022\014\n\010TYPE_POS\020\002\022\023\n\017TYPE_UNIT_STATE\020" +
+      "\003B\024\n\010protocolB\010Pbmethod"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -99025,7 +99263,7 @@ public final class Pbmethod {
           internal_static_pbdson_PbUnit_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbUnit_descriptor,
-              new java.lang.String[] { "Type", "ChunkId", "Id", "IsAdd", "TeamId", "Avatar", "OwnerId", "Pos", "Direction", "Speed", "Info", "RangeAttack", "Name", "Alive", "LastInputSeq", "Point", });
+              new java.lang.String[] { "Type", "ChunkId", "Id", "IsAdd", "TeamId", "Avatar", "OwnerId", "Pos", "Direction", "Speed", "Info", "RangeAttack", "Name", "Alive", "LastInputSeq", "Point", "UserId", });
           internal_static_pbdson_PbCell_descriptor =
             getDescriptor().getMessageTypes().get(6);
           internal_static_pbdson_PbCell_fieldAccessorTable = new
@@ -99385,7 +99623,7 @@ public final class Pbmethod {
           internal_static_pbdson_PbUnitPos_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbUnitPos_descriptor,
-              new java.lang.String[] { "Id", "Speed", "Pos", "Direction", "LastInputSeq", });
+              new java.lang.String[] { "Id", "Speed", "LastInputSeq", "Pos", "Direction", });
           internal_static_pbdson_PbListBullet_descriptor =
             getDescriptor().getMessageTypes().get(66);
           internal_static_pbdson_PbListBullet_fieldAccessorTable = new

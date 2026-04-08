@@ -39,7 +39,7 @@ public class Pet extends Unit implements Serializable {
     @Override
     public Pbmethod.PbUnit toProtoAdd(int chunkId) {
         Pbmethod.PbUnit.Builder pb = Pbmethod.PbUnit.newBuilder();
-        pb.setType(Constans.TYPE_PET);
+        pb.setType(UnitType.PET.value);
         pb.setId(id);
         pb.setChunkId(chunkId);
         pb.setIsAdd(true);

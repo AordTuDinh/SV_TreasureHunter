@@ -50,7 +50,7 @@ public class BattleConfig {
 
     public static final float P_distionHitRun = 2f;// move đến cách tường khoảng này thì đổi hướng
     public static final float M_rangePushHit = 1f; // hệ số lực đẩy lùi
-    public static final long P_Weight = -1L; // hệ số lực đẩy lùi (-1 = k bị đẩy lùi)
+    public static final int P_Weight = -1; // hệ số lực đẩy lùi (-1 = k bị đẩy lùi)
     public static final float P_timeRunHit = 0.6f; // time di chuyển trước khi chuyển sang attack (Hit and run)
 
 

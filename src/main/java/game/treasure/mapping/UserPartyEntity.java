@@ -100,7 +100,7 @@ public class UserPartyEntity {
 
         for (MyUser u : shared) {
             List<Long> bm = Bonus.receiveListItem(u, "ShareExpParty", bonusX);
-            u.getPlayer().protoStatus(StateType.BONUS_SHARE_PARTY, bm.size(), bm);
+            u.getPlayer().protoStatus(StateType.BONUS_SHARE_PARTY, bm.size(), GsonUtil.toListInt(bm));
         }
 
         // set lại 75% cho người chính sau khi chia 35%

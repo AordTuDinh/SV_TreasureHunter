@@ -155,7 +155,7 @@ public abstract class BaseRoom extends MonoRoom {
             if (!protoUnitStateCopy.isEmpty()) {
                 builder.addAUnitUpdate(
                         ProtoState.protoUnitUpdate(
-                                Constans.TYPE_UPDATE_CHARACTER,
+                                Pbmethod.StateType.TYPE_UNIT_STATE_VALUE,
                                 ProtoState.protoListCharacterState(protoUnitStateCopy)
                         )
                 );

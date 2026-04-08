@@ -66,9 +66,9 @@ public class NInput {
             pb.addAllStatus(status);
             // data
             size = buffer.readInt();
-            List<Long> point = new ArrayList<>();
+            List<Integer> point = new ArrayList<>();
             for (int i = 0; i < size; i++) {
-                point.add((long) buffer.readInt());
+                point.add(buffer.readInt());
             }
             pb.addAllPoint(point);
             obj.clientState = pb;

@@ -48,7 +48,7 @@ public class ResItemEntity extends BaseEntity implements Serializable {
     public void init() {
         buffs = new ArrayList<>();
         itemType = ItemType.get(type);
-        List<Long> buff = GsonUtil.strToListLong(getPointBuff());
+        List<Integer> buff = GsonUtil.strToListInt(getPointBuff());
         for (int i = 0; i < buff.size(); i += 3) {
             buffs.add(new PointBuff(buff.get(i), buff.get(i + 1), buff.get(i + 2)));
         }

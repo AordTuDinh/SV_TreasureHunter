@@ -252,11 +252,11 @@ public class Player extends Unit implements Serializable {
         sendBonus(bonus, DetailActionType.SU_DUNG_ITEM.getKey(mUser.getUserId()));
         List<PointBuff> buffs = uItem.getRes().getBuffs();
         mUser.getPlayer().protoBuffPoint(buffs);
-        protoStatus(StateType.USE_ITEM_SLOT, (long) slot);
+        protoStatus(StateType.USE_ITEM_SLOT,  slot);
         if (uItem.getNumber() <= 0) {
             mUser.getUSetting().saveSlot(mUser, slot, 0);
             itemsBuf.set(slot * 2 + 1, 0);
-            protoStatus(StateType.UPDATE_ITEM_SLOT, GsonUtil.toListLong(itemsBuf));
+            protoStatus(StateType.UPDATE_ITEM_SLOT, itemsBuf);
         }
     }
 
@@ -347,12 +347,12 @@ public class Player extends Unit implements Serializable {
 //        return true;
 //    }
 
-    public void setTargetAttack(Unit attacker) {
-        this.targetAttack = attacker;
-        if (attacker != null) {
-            protoOneStatus(StateType.SWITCH_TARGET, (long) attacker.id);
-        }
-    }
+//    public void setTargetAttack(Unit attacker) {
+//        this.targetAttack = attacker;
+//        if (attacker != null) {
+//            protoOneStatus(StateType.SWITCH_TARGET,  attacker.id);
+//        }
+//    }
 
 
 //    @Override
@@ -408,7 +408,7 @@ public class Player extends Unit implements Serializable {
     public synchronized void protoDie(Unit killer) {
         super.protoDie(killer);
         if (sendDie) {
-            protoStatus(StateType.DIE, (long) FactionType.NULL.value);
+            protoStatus(StateType.DIE,  FactionType.NULL.value);
             sendDie = false;
         }
     }
@@ -434,7 +434,7 @@ public class Player extends Unit implements Serializable {
     public void revive() {
         timeRevive = System.currentTimeMillis();
         this.sendDie = false;
-        protoStatus(StateType.REVIVE, (long) (pos.x * 1000), (long) (pos.y * 1000));
+        protoStatus(StateType.REVIVE, (int) (pos.x * 1000), (int) (pos.y * 1000));
         this.alive = true;
         point.resetHpMp();
         protoStatus(StateType.SET_ALL_POINT, point.toProto());
@@ -442,9 +442,9 @@ public class Player extends Unit implements Serializable {
     }
 
     @Override
-    public Pbmethod.PbUnit toProtoAdd(int chunkId) {
+    public Pbmethod.PbUnit toProtoAdd(int chunkIdr) {
         Pbmethod.PbUnit.Builder pbAdd = Pbmethod.PbUnit.newBuilder();
-        pbAdd.setType(Constans.TYPE_PLAYER);
+        pbAdd.setType(UnitType.PLAYER.value);
         pbAdd.setId(id);
         pbAdd.setChunkId(chunkId);
         pbAdd.setIsAdd(true);
@@ -457,10 +457,9 @@ public class Player extends Unit implements Serializable {
         pbAdd.setSpeed((int) point.getMoveSpeed());
         pbAdd.setName(name);
         pbAdd.setAlive(alive);
+        pbAdd.setOwnerId(mUser.getUserId());
         pbAdd.setLastInputSeq(indexLastInputSeq);
         pbAdd.addAllPoint(point.toProto());
-
-
         pbAdd.addAllInfo(getListInfo());
         return pbAdd.build();
     }
@@ -510,7 +509,7 @@ public class Player extends Unit implements Serializable {
 
     public void sendBonus(List<Long> bonus, String title) {
         List<Long> bm = Bonus.receiveListItem(mUser, title, bonus);
-        protoStatus(StateType.ADD_BONUS, bm.size(), bm);
+        protoStatus(StateType.ADD_BONUS, bm.size(), GsonUtil.toListInt(bm));
     }
 
 
@@ -528,7 +527,7 @@ public class Player extends Unit implements Serializable {
         List<Long> bm = Bonus.receiveListItem(mUser, title, bonusReal);
         bm.add(0, (long) (posInstance.x * 1000));
         bm.add(1, (long) (posInstance.y * 1000));
-        protoStatus(StateType.BONUS_ADD_FORCE, bm.size(), bm);
+        protoStatus(StateType.BONUS_ADD_FORCE, bm.size(), GsonUtil.toListInt(bm));
 
     }
 

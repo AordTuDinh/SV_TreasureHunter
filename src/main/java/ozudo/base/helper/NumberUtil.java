@@ -254,6 +254,58 @@ public class NumberUtil {
         return ret.toUpperCase();
     }
 
+    public static Integer castStr2Int(String valueCast) {
+        int ret = 0;
+        int n1k = 1000;
+        int n1m = n1k * n1k;
+        int n1b = n1m * n1k;
+        int n1t = n1b * n1k;
+        int n1q = n1t * n1k;
+        if (NumberUtil.isLongNumber(valueCast)) {
+            return Integer.parseInt(valueCast);
+        }
+        String[] kNum = valueCast.toLowerCase().split("k");
+        if (kNum.length == 2) {
+            ret = Integer.parseInt(kNum[1]);
+        }
+        if (NumberUtil.isLongNumber(kNum[0])) {
+            ret += Integer.parseInt(kNum[0]) * n1k;
+        } else {
+            String[] mNum = kNum[0].split("m");
+            if (mNum.length == 2) {
+                ret += Integer.parseInt(mNum[1]) * n1k;
+            }
+            if (NumberUtil.isLongNumber(mNum[0])) {
+                ret += Integer.parseInt(mNum[0]) * n1m;
+            } else {
+                String[] bNum = mNum[0].split("b");
+                if (bNum.length == 2) {
+                    ret += Integer.parseInt(bNum[1]) * n1m;
+                }
+                if (NumberUtil.isLongNumber(bNum[0])) {
+                    ret += Integer.parseInt(bNum[0]) * n1b;
+                } else {
+                    String[] tNum = bNum[0].split("t");
+                    if (tNum.length == 2) {
+                        ret += Integer.parseInt(tNum[1]) * n1b;
+                    }
+                    if (NumberUtil.isLongNumber(tNum[0])) {
+                        ret += Integer.parseInt(tNum[0]) * n1t;
+                    } else {
+                        String[] qNum = tNum[0].split("q");
+                        if (qNum.length == 2) {
+                            ret += Integer.parseInt(qNum[1]) * n1t;
+                        }
+                        if (NumberUtil.isLongNumber(qNum[0])) {
+                            ret += Integer.parseInt(qNum[0]) * n1q;
+                        }
+                    }
+                }
+            }
+        }
+        return ret;
+    }
+
     public static Long castStr2Long(String valueCast) {
         long ret = 0;
         long n1k = 1000L;

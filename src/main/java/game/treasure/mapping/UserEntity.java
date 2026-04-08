@@ -163,8 +163,8 @@ public class UserEntity implements Serializable {
 
     Point calculatePoint(MyUser mUser) {
         Point point = mUser.getPlayer().getPoint();
-        long cacheHp = point.getCurHP();
-        long cacheMp = point.getCurMP();
+        int cacheHp = point.getCurHP();
+        int cacheMp = point.getCurMP();
         point = IMath.calculatePoint(mUser, true);
         point.setCurHp(Math.min(cacheHp, point.getMaxHp()));
         point.setCurMp(Math.min(cacheMp, point.getMaxMp()));
@@ -176,8 +176,8 @@ public class UserEntity implements Serializable {
     public Point getInitPoint(MyUser mUser) { // chỉ lấy từ lúc init player
         Point point = getCachePoint();
         // lấy lại cache hp và mp
-        long cacheHp = point.getCurHP();
-        long cacheMp = point.getCurMP();
+        int cacheHp = point.getCurHP();
+        int cacheMp = point.getCurMP();
         // tính lại point
         point = IMath.calculatePoint(mUser, true);
 
@@ -189,7 +189,7 @@ public class UserEntity implements Serializable {
 
     public Point getCachePoint() {
         if (pointData != null) {
-            return new Point(GsonUtil.strToListLong(pointData));
+            return new Point(GsonUtil.strToListInt(pointData));
         } else return new Point();
     }
 

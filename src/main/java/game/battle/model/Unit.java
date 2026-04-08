@@ -25,7 +25,6 @@ public abstract class Unit {
     // new
     int chunkId;
     long id; // tất cả các sinh vật đều sẽ có id này riêng lẻ, vào map sẽ gen id này
-
     // info
     // int id; // id in room
     int teamId;
@@ -140,20 +139,20 @@ public abstract class Unit {
 
 
     public void beAttackMelee(Unit attacker) {
-        long[] damage = IMath.calculateDamage(attacker, this, attacker.getFaction());
+        int[] damage = IMath.calculateDamage(attacker, this, attacker.getFaction());
         beAttackDamage(attacker, damage[1], damage[2]);
         addAtkInfoMelee(attacker);
-        protoBeDame(attacker, Arrays.asList((long) attacker.getId(), damage[0], -damage[1], -damage[2]));
+        protoBeDame(attacker, Arrays.asList(  damage[0],  -damage[1], -damage[2]));
     }
 
     public void beAttackCollider(Unit attacker) {
         addAtkInfoMelee(attacker);
-        long[] damage = IMath.calculateDamage(attacker, this, attacker.getFaction());
-        damage[1] = (long) (damage[1] * BattleConfig.M_PerDameCollider);
-        damage[2] = (long) (damage[2] * BattleConfig.M_PerDameCollider);
+        int[] damage = IMath.calculateDamage(attacker, this, attacker.getFaction());
+        damage[1] = (int) (damage[1] * BattleConfig.M_PerDameCollider);
+        damage[2] = (int) (damage[2] * BattleConfig.M_PerDameCollider);
         if (damage[1] <= 0 && damage[2] <= 0) damage[1] = 1;
         beAttackDamage(attacker, damage[1], damage[2]);
-        protoBeDame(attacker, Arrays.asList((long) attacker.getId(), damage[0], -damage[1], -damage[2]));
+        protoBeDame(attacker, Arrays.asList( damage[0], -damage[1], -damage[2]));
     }
 
 
@@ -178,7 +177,7 @@ public abstract class Unit {
     }
 
     // gửi riêng
-    public void beAttackDamage(Unit ownerDamage, long atkDame, long mAtkDame) {
+    public void beAttackDamage(Unit ownerDamage, int atkDame, int mAtkDame) {
         updateHp(ownerDamage, -atkDame, -mAtkDame);
         if (!alive) {
             timeDie = System.currentTimeMillis();
@@ -275,9 +274,9 @@ public abstract class Unit {
 
 
     public void stun(float time) {
-        long timStun = (long) (time * 1000);
+        int timStun = (int) (time * 1000);
         point.addStun(timStun);
-        protoStatus(StateType.UPDATE_MULTI_POINT, 2, List.of((long) Point.STUN, timStun));
+        protoStatus(StateType.UPDATE_MULTI_POINT, 2, List.of(Point.STUN, timStun));
     }
 
 
@@ -372,8 +371,8 @@ public abstract class Unit {
     public Pbmethod.PbUnit toProtoRemove(int chunkId) {
         Pbmethod.PbUnit.Builder builder = Pbmethod.PbUnit.newBuilder();
         builder.setType(type.value);
-        builder.setId(id);
         builder.setChunkId(chunkId);
+        builder.setId(id);
         builder.setIsAdd(false);
         return builder.build();
     }
@@ -384,104 +383,104 @@ public abstract class Unit {
         room.characterDie(this);
     }
 
-    public void updateHp(Unit attacker, long atkDame, long magDame) {
+    public void updateHp(Unit attacker, int atkDame, int magDame) {
         List<PointBuff> buffs = new ArrayList<>();
         buffs.add(new PointBuff(Point.CUR_HP, atkDame + magDame));
         protoBuffPoint(buffs);
         ((BaseBattleRoom) room).ChangeCharacterHp(attacker, this, atkDame, magDame);
     }
 
-    public void reHp(long addNum) {
-        protoStatus(StateType.EFFECT_BODY, EffectBodyType.HEALING.value, 0L);
+    public void reHp(int addNum) {
+        protoStatus(StateType.EFFECT_BODY, EffectBodyType.HEALING.value, 0);
         protoStatus(StateType.RE_HP, addNum);
         List<PointBuff> buffs = new ArrayList<>();
         buffs.add(new PointBuff(Point.CUR_HP, addNum));
         protoBuffPoint(buffs);
     }
 
-    public void buffShell(long addNum) {
+    public void buffShell(int addNum) {
         List<PointBuff> buffs = new ArrayList<>();
         buffs.add(new PointBuff(Point.SHELL, addNum));
         protoBuffPoint(buffs);
     }
 
-    public void reHpNoEff(long addNum) {
+    public void reHpNoEff(int addNum) {
         List<PointBuff> buffs = new ArrayList<>();
         buffs.add(new PointBuff(Point.CUR_HP, addNum));
         protoBuffPoint(buffs);
     }
 
-    public void reHpBasic(long addNum) {
-        protoStatus(StateType.EFFECT_BODY, EffectBodyType.HEALING_BASIC.value, 0L);
+    public void reHpBasic(int addNum) {
+        protoStatus(StateType.EFFECT_BODY, EffectBodyType.HEALING_BASIC.value, 0);
         List<PointBuff> buffs = new ArrayList<>();
         buffs.add(new PointBuff(Point.CUR_HP, addNum));
         protoBuffPoint(buffs);
     }
 
-    public void updateMp(long addMp) {
+    public void updateMp(int addMp) {
         List<PointBuff> buffs = new ArrayList<>();
         buffs.add(new PointBuff(Point.CUR_MP, addMp));
         protoBuffPoint(buffs);
     }
 
-    public void protoBuffPoint(int pointId, long addValue) { // bao gồm add point và trả vè - chỉ dùng cho các point add thưởng, point per phải làm khác
+    public void protoBuffPoint(int pointId, int addValue) { // bao gồm add point và trả vè - chỉ dùng cho các point add thưởng, point per phải làm khác
         List<PointBuff> buffs = new ArrayList<>();
         buffs.add(new PointBuff(pointId, addValue));
         protoBuffPoint(buffs);
     }
 
-    public void protoMultiPoint(List<Long> points) {  //[pointId - curValue] :  chỉ trả về, thường dùng cho add change
+    public void protoMultiPoint(List<Integer> points) {  //[pointId - curValue] :  chỉ trả về, thường dùng cho add change
         protoStatus(StateType.UPDATE_MULTI_POINT, points.size(), points);
     }
 
-    public void protoUpdatePoint(int pointId, long value) {  //[pointId - curValue] :  chỉ trả về, thường dùng cho add change
-        protoStatus(StateType.UPDATE_MULTI_POINT, 2, Arrays.asList((long) pointId, value));
+    public void protoUpdatePoint(int pointId, int value) {  //[pointId - curValue] :  chỉ trả về, thường dùng cho add change
+        protoStatus(StateType.UPDATE_MULTI_POINT, 2, Arrays.asList( pointId, value));
     }
 
     // buff point and send
     public synchronized void protoBuffPoint(List<PointBuff> buffs) {
         if (!alive) return;
-        List<Long> pointBuff = new ArrayList<>();
+        List<Integer> pointBuff = new ArrayList<>();
         for (int i = 0; i < buffs.size(); i++) {
             int pointId = buffs.get(i).getPointId();
-            long value = buffs.get(i).getValue();
+            int value = buffs.get(i).getValue();
             switch (pointId) {
                 case Point.BUFF_CUR_PER_HP -> {
-                    long reMax = (long) (value / 100f * point.getMaxHp());
+                    int reMax = (int) (value / 100f * point.getMaxHp());
                     point.addCurHp(reMax);
-                    pointBuff.add((long) Point.CUR_HP);
+                    pointBuff.add(Point.CUR_HP);
                     pointBuff.add(point.getCurHP());
                 }
                 case Point.BUFF_CUR_PER_MP -> {
-                    long reMax = (long) (value / 100f * point.getMaxMp());
+                    int reMax = (int) (value / 100f * point.getMaxMp());
                     point.addCurMp(reMax);
-                    pointBuff.add((long) Point.CUR_MP);
+                    pointBuff.add(Point.CUR_MP);
                     pointBuff.add(point.getCurMP());
                 }
                 case Point.CUR_HP -> {
-                    long shell = point.getCurShell();
+                    int shell = point.getCurShell();
                     if (shell > 0 && value < 0) {
                         shell += value;
                         point.setShell(shell > 0 ? shell : 0);
                         // trừ giáp trước, nếu hết giáp mới trừ máu
-                        pointBuff.add((long) Point.SHELL);
+                        pointBuff.add(Point.SHELL);
                         pointBuff.add(point.getCurShell());
                         // dame > shell
                         if (value + shell < 0) {
                             buffs.get(i).setValue(value + shell);
                             point.add(buffs.get(i), this);
-                            pointBuff.add((long) Point.CUR_HP);
+                            pointBuff.add( Point.CUR_HP);
                             pointBuff.add(point.getCurHP());
                         }
                     } else {
                         point.add(buffs.get(i), this);
-                        pointBuff.add((long) Point.CUR_HP);
+                        pointBuff.add( Point.CUR_HP);
                         pointBuff.add(point.getCurHP());
                     }
                 }
                 default -> {
                     point.add(buffs.get(i), this);
-                    pointBuff.add((long) pointId);
+                    pointBuff.add( pointId);
                     pointBuff.add(point.get(pointId));
                 }
             }
@@ -521,7 +520,7 @@ public abstract class Unit {
     }
 
     // region proto
-    public void protoBeDame(Unit attacker, List<Long> aInfo) {
+    public void protoBeDame(Unit attacker, List<Integer> aInfo) {
 //        if (type == UnitType.BOSS) {
 //            if (!beDameInfo.containsKey(attacker.getId())) beDameInfo.put(attacker.getId(), 0L);
 //            beDameInfo.put(attacker.getId(), beDameInfo.get(attacker.getId()) + aInfo.get(2) + aInfo.get(3));
@@ -529,7 +528,7 @@ public abstract class Unit {
         protoStatus(List.of(StateType.BE_DAMAGE), aInfo);
     }
 
-    public void protoBeDameEffect(List<Long> aInfo) { // size 3
+    public void protoBeDameEffect(List<Integer> aInfo) { // size 3
         protoStatus(List.of(StateType.EFFECT_DAME), aInfo);
     }
 
@@ -537,20 +536,20 @@ public abstract class Unit {
         if (room != null) room.getAProtoUnitState().add(protoState(List.of(status), new ArrayList<>()));
     }
 
-    public void protoStatus(StateType status, Long... info) {
+    public void protoStatus(StateType status, Integer... info) {
         if (room != null) room.getAProtoUnitState().add(protoState(List.of(status), Arrays.asList(info)));
     }
 
-    public void protoStatus(StateType status, Long id, Long size, List<Long> info) {
+    public void protoStatus(StateType status, Integer id, Integer size, List<Integer> info) {
         if (room != null) room.getAProtoUnitState().add(protoState(List.of(status), info));
     }
 
-    public void protoStatus(StateType status, List<Long> info) {
+    public void protoStatus(StateType status, List<Integer> info) {
         if (room != null) room.getAProtoUnitState().add(protoState(List.of(status), info));
     }
 
 
-    public void protoRangeDame(Unit attacker, List<Long> aInfo) {
+    public void protoRangeDame(Unit attacker, List<Integer> aInfo) {
 //        if (type == UnitType.BOSS) {
 //            if (!beDameInfo.containsKey(attacker.getId())) beDameInfo.put(attacker.getId(), 0L);
 //            beDameInfo.put(attacker.getId(), beDameInfo.get(attacker.getId()) + aInfo.get(2) + aInfo.get(3));
@@ -559,20 +558,20 @@ public abstract class Unit {
     }
 
 
-    public void protoStatus(List<StateType> aStatus, List<Long> aInfo) {
+    public void protoStatus(List<StateType> aStatus, List<Integer> aInfo) {
         if (room != null) room.getAProtoUnitState().add(protoState(aStatus, aInfo));
     }
 
-    public void protoOneStatus(StateType status, Long... info) {
+    public void protoOneStatus(StateType status, Integer... info) {
         if (room != null)
             room.getAProtoUnitState().add(protoState(List.of(status), List.of(status.length), Arrays.asList(info)));
     }
 
-    public void protoStatus(StateType status, int size, List<Long> aInfo) {
+    public void protoStatus(StateType status, int size, List<Integer> aInfo) {
         if (room != null) room.getAProtoUnitState().add(protoState(List.of(status), List.of(size), aInfo));
     }
 
-    Pbmethod.PbUnitState protoState(List<StateType> aStatus, List<Long> aInfo) {
+    Pbmethod.PbUnitState protoState(List<StateType> aStatus, List<Integer> aInfo) {
         Pbmethod.PbUnitState.Builder builder = Pbmethod.PbUnitState.newBuilder();
         builder.setId(id);
         for (int i = 0; i < aStatus.size(); i++) {
@@ -584,7 +583,7 @@ public abstract class Unit {
         return builder.build();
     }
 
-    Pbmethod.PbUnitState protoState(List<StateType> aStatus, List<Integer> size, List<Long> aInfo) {
+    Pbmethod.PbUnitState protoState(List<StateType> aStatus, List<Integer> size, List<Integer> aInfo) {
         Pbmethod.PbUnitState.Builder builder = Pbmethod.PbUnitState.newBuilder();
         builder.setId(id);
         for (int i = 0; i < aStatus.size(); i++) {

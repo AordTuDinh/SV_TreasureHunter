@@ -42,13 +42,20 @@ enum CellState{
   HIDE = 2;
 }
 
+enum StateType {
+  TYPE_ADD_REMOVE = 1;
+  TYPE_POS = 2;
+  TYPE_UNIT_STATE = 3;
+}
 
 
 message PbUnit{
+  // chung cả add + remove
   optional int32 type = 1;
   optional int32 chunkId = 2;
   optional  int64 id = 3;
   optional  bool isAdd = 4;
+  // dành cho add unit
   optional  int32 teamId = 5;
   optional int32  avatar = 6;
   optional int64  ownerId = 7;
@@ -60,7 +67,8 @@ message PbUnit{
   optional  string name = 13;
   optional  bool  alive = 14;
   optional int64 lastInputSeq = 15;
-  repeated int64 point = 16;
+  repeated int32 point = 16;
+  optional int32 userId = 17;
 }
 
 message PbCell {
@@ -105,7 +113,7 @@ message PbListUnitState {
 message  PbUnitState{
   optional  int64 id = 1;
   repeated int32 status = 2; // type - length
-  repeated int64 point = 3; // data
+  repeated int32 point = 3; // data
 }
 
 // -----------------------------
@@ -213,7 +221,7 @@ message PbUser {
   optional  int32  rank = 16;
   optional  string desc = 17;
   repeated int32 weaponEquip = 18;
-  repeated int64 point = 19;
+  repeated int32 point = 19;
   optional  int64  timeLastAction = 20;
   optional  int32  honor = 21;
   optional  int64 power = 22;
@@ -343,7 +351,7 @@ message PbChat {
   optional int32 type = 3;
   optional PbUser user = 4;
   optional CommonVector info = 5;
-  repeated int64 point = 6;
+  repeated int32 point = 6;
 }
 message  PbListChatFriend{
   repeated PbChatFriend chats = 1;
@@ -420,7 +428,7 @@ message  PbStat{
   optional  int32 level = 3;
   repeated  int32 condition = 4;
   optional int32 maxLevel = 5;
-  optional int64 pointPer = 6;
+  optional int32 pointPer = 6;
   repeated  float formula = 7;
 }
 
@@ -461,7 +469,7 @@ message  PbCharacterInfo{
   optional int32 team = 3;
   repeated int32 avatar = 4;
   repeated int32 aItem = 5;
-  repeated int64 point = 6;
+  repeated int32 point = 6;
 }
 
 message PbListMail {
@@ -540,9 +548,9 @@ message  PbUnitUpdate{
 message PbUnitPos {
   optional int64 id = 1;
   optional  int32 speed = 2;
-  optional PbPos pos = 3;
-  optional PbPos direction = 4;
-  optional int64 lastInputSeq = 5;
+  optional int64 lastInputSeq = 3;
+  optional PbPos pos = 4;
+  optional PbPos direction = 5;
 }
 
 
@@ -765,7 +773,7 @@ message PbBattleArenaHero{
   optional int32 heroType = 3;
   optional  int32  slot = 4;
   optional int32 level = 5;
-  repeated int64  point = 6;
+  repeated int32  point = 6;
   repeated float pos = 7;
   repeated float direction = 8;
   optional CommonVector info = 9;

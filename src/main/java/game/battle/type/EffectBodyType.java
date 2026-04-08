@@ -22,14 +22,14 @@ public enum EffectBodyType {
     ;
 
 
-    public long value;
+    public int value;
 
-    EffectBodyType(long value) {
+    EffectBodyType(int value) {
         this.value = value;
     }
 
     // lookup
-    static Map<Long, EffectBodyType> lookup = new HashMap<>();
+    static Map<Integer, EffectBodyType> lookup = new HashMap<>();
 
     static {
         for (EffectBodyType itemType : values()) {

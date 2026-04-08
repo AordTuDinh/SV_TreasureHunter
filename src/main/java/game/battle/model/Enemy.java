@@ -4,6 +4,7 @@ import game.battle.object.*;
 import game.battle.type.AttackType;
 import game.battle.type.RoomState;
 import game.battle.type.StateType;
+import game.battle.type.UnitType;
 import game.config.CfgEventDrop;
 import game.config.aEnum.DetailActionType;
 import game.treasure.BattleConfig;
@@ -40,7 +41,7 @@ public class Enemy extends Unit implements Serializable {
             timeRevive = System.currentTimeMillis();
             resetData();
             pos = instancePos.clone();
-            protoStatus(StateType.REVIVE, (long) (pos.x * 1000), (long) (pos.y * 1000));
+            protoStatus(StateType.REVIVE, (int) (pos.x * 1000), (int) (pos.y * 1000));
         }
     }
 
@@ -56,7 +57,7 @@ public class Enemy extends Unit implements Serializable {
     @Override
     public void protoDie(Unit killer) {
         super.protoDie(killer);
-        protoStatus(StateType.DIE, (long) faction.value);
+        protoStatus(StateType.DIE,faction.value);
     }
 
     @Override
@@ -452,7 +453,7 @@ public class Enemy extends Unit implements Serializable {
 
     public Pbmethod.PbUnit toProtoAdd(int chunkId) {
         Pbmethod.PbUnit.Builder pbAdd = Pbmethod.PbUnit.newBuilder();
-        pbAdd.setType(Constans.TYPE_MONSTER);
+        pbAdd.setType(UnitType.ENEMY.value);
         pbAdd.setId(id);
         pbAdd.setAvatar(model);
         pbAdd.setChunkId(chunkId);

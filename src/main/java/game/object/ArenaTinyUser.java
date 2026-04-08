@@ -66,7 +66,7 @@ public class ArenaTinyUser implements Serializable {
         pb.setPointRank(arenaPoint);
 //        pb.setArenaRank(arenaRank);
         pb.setPower(power);
-        pb.addAllPoint(pointData == null ? new Point().toProto() : new Point(GsonUtil.strToListLong(pointData)).toProto());
+        pb.addAllPoint(pointData == null ? new Point().toProto() : new Point(GsonUtil.strToListInt(pointData)).toProto());
         pb.addAllWeaponEquip(GsonUtil.strToListInt(weapon));
         pb.addAllItemEquip(getAllInfoItemEquip());
         pb.addAllChannel(Online.getUserChannelInfo(id));

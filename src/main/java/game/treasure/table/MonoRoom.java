@@ -64,7 +64,7 @@ public abstract class MonoRoom extends Mono {
     }
 
 
-    protocol.Pbmethod.PbUnitState.Builder protoState(int id, List<StateType> aStatus, List<Long> aInfo) {
+    protocol.Pbmethod.PbUnitState.Builder protoState(int id, List<StateType> aStatus, List<Integer> aInfo) {
         protocol.Pbmethod.PbUnitState.Builder builder = protocol.Pbmethod.PbUnitState.newBuilder();
         builder.setId(id);
         aStatus.forEach(status -> {
@@ -76,7 +76,7 @@ public abstract class MonoRoom extends Mono {
         return builder;
     }
 
-    protocol.Pbmethod.PbUnitState.Builder protoState(int id, List<StateType> aStatus, List<Integer> size, List<Long> aInfo) {
+    protocol.Pbmethod.PbUnitState.Builder protoState(int id, List<StateType> aStatus, List<Integer> size, List<Integer> aInfo) {
         protocol.Pbmethod.PbUnitState.Builder builder = protocol.Pbmethod.PbUnitState.newBuilder();
         builder.setId(id);
         for (int i = 0; i < aStatus.size(); i++) {

@@ -14,17 +14,17 @@ public class PointBuff {
     @Id
     int pointId;
     String name;
-    long value;
+    int value;
     long timeSeconds;
 
 
-    public PointBuff(long pointId, long value, long timeSeconds) {
+    public PointBuff(int pointId, int value, long timeSeconds) {
         this.pointId = (int) pointId;
         this.value = value;
         this.timeSeconds = timeSeconds;
     }
 
-    public PointBuff(int pointId, long value) {
+    public PointBuff(int pointId, int value) {
         this.pointId = pointId;
         this.value = value;
     }
