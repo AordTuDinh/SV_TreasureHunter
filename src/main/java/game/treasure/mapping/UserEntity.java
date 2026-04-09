@@ -207,7 +207,7 @@ public class UserEntity implements Serializable {
     public long getPower() {
         Point point = getCachePoint();
         if (point.getValues().length == 0) return 0;
-        long newPower = point.getValues()[Point.POWER];
+        long newPower = point.getPower();
         if (newPower != power) {
             if (updatePower(newPower, point)) {
                 return newPower;
