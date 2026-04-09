@@ -457,10 +457,10 @@ public class Player extends Unit implements Serializable {
         pbAdd.setSpeed((int) point.getMoveSpeed());
         pbAdd.setName(name);
         pbAdd.setAlive(alive);
-        pbAdd.setOwnerId(mUser.getUserId());
         pbAdd.setLastInputSeq(indexLastInputSeq);
         pbAdd.addAllPoint(point.toProto());
         pbAdd.addAllInfo(getListInfo());
+        pbAdd.setUserId(mUser.getUserId());
         return pbAdd.build();
     }
 

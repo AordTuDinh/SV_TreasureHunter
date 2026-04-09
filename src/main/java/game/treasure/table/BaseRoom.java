@@ -18,6 +18,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ozudo.base.helper.ChUtil;
+import ozudo.base.helper.GsonUtil;
 import ozudo.base.helper.Util;
 import ozudo.base.log.Logs;
 import protocol.Pbmethod;
@@ -331,7 +332,7 @@ public abstract class BaseRoom extends MonoRoom {
         // trả về 9 chunk xung quanh player
         int curChunk = player.getChunkId();
         List<Integer> chunkVisible = visibleByChunkId.get(curChunk);
-        protocol.Pbmethod.PbInitMap.Builder pbInit = newPbInitMap();
+        Pbmethod.PbInitMap.Builder pbInit = newPbInitMap();
 
         for (int i = 0; i < chunkVisible.size(); i++) {
             // add data chunks
@@ -376,6 +377,7 @@ public abstract class BaseRoom extends MonoRoom {
     public void addUnit(Unit unit) {
         if (roomState != RoomState.ACTIVE && roomState != RoomState.PAUSE) return;
         long idInMap = getIdNext();
+        System.out.println("idInMap ============== " + idInMap);
         unit.setId(idInMap);
         // tính chunk hiện tại nó đang ở
         int chunkId = worldPosToChunkId(unit.getPos());

@@ -197,8 +197,8 @@ public abstract class AHandler extends IAction {
 
     void debug(String msg) {
         if (CfgServer.isTestServer()) {
-            System.out.println(msg.length() < 500 ? msg : msg.substring(0, 500) + " ...");
-            System.out.println("");
+//            System.out.println(msg.length() < 500 ? msg : msg.substring(0, 500) + " ...");
+//            System.out.println("");
         }
     }
 
