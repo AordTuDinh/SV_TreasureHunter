@@ -23,10 +23,14 @@ public class ChunkObject {
     public Pbmethod.PbChunk toProto() {
         Pbmethod.PbChunk.Builder pb = Pbmethod.PbChunk.newBuilder();
         pb.setId(id);
+        pb.setIsAdd(true);
         pb.setPos(pos.toProto());
         for (CellObject cell : cells) {
             pb.addCells(cell.toProto());
         }
         return pb.build();
+    }
+    public Pbmethod.PbChunk toProtoRemove() {
+        return Pbmethod.PbChunk.newBuilder().setIsAdd(false).setId(id).build();
     }
 }

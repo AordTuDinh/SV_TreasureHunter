@@ -175,7 +175,7 @@ public class UserEntity implements Serializable {
 
     public Point getInitPoint(MyUser mUser) { // chỉ lấy từ lúc init player
         Point point = getCachePoint();
-        // lấy lại cache hp và mp
+        // lấy lại cache hp và mp   
         int cacheHp = point.getCurHP();
         int cacheMp = point.getCurMP();
         // tính lại point
@@ -184,6 +184,7 @@ public class UserEntity implements Serializable {
         point.setWeight(BattleConfig.P_Weight);
         point.setCurHp(cacheHp <= 0 ? point.getMaxHp() : cacheHp);
         point.setCurMp(cacheMp <= 0 ? point.getMaxMp() : cacheMp);
+        point.setMoveSpeed(6000);
         return point;
     }
 

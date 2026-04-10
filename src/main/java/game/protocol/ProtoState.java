@@ -35,10 +35,44 @@ public class ProtoState {
         parsePbUnitAdd(buffer, proto.getUnitAddList());
         parsePbUnitPos(buffer, proto.getUnitPosList());
         parsePbUnitUpdate(buffer, proto);
+        parsePbChunkState(buffer, proto.getChunkStateList());
         // endregion
         byte[] bytes = new byte[buffer.readableBytes()];
         buffer.readBytes(bytes);
         return bytes;
+    }
+
+    private static void parsePbChunkState(ByteBuf buffer, List<PbChunk> chunkStateList) {
+        try {
+            if (!chunkStateList.isEmpty()) {
+                buffer.writeByte(StateType.CHUNK_STATE);
+                buffer.writeByte(chunkStateList.size());
+                for (int i = 0; i < chunkStateList.size(); i++) {
+                    PbChunk tmp = chunkStateList.get(i);
+                    buffer.writeInt(tmp.getId());
+                    boolean isAdd = tmp.getIsAdd();
+                    if(isAdd){
+                        buffer.writeFloat(tmp.getPos().getX());
+                        buffer.writeFloat(tmp.getPos().getY());
+
+                        int sizeChunk =  tmp.getCellsCount();
+                        buffer.writeInt(sizeChunk);
+                        for (int j = 0; j < sizeChunk; j++) {
+                            PbCell cell = tmp.getCells(j);
+                            buffer.writeByte(cell.getType());
+                            buffer.writeInt(cell.getChunkId());
+                            buffer.writeFloat(cell.getPos().getX());
+                            buffer.writeFloat(cell.getPos().getY());
+                            // cell state
+                            buffer.writeByte(cell.getState().getNumber());
+                        }
+
+                    }
+                }
+            }
+        } catch (Exception ex) {
+            System.out.println("parsePbUnitAdd---->" + ex.getMessage());
+        }
     }
 
     public static void parsePbUnitAdd(ByteBuf buffer, List<PbUnit> aUnitAdd) {
@@ -74,7 +108,7 @@ public class ProtoState {
                         // point
                         buffer.writeByte(tmp.getPointCount());
                         for (int j = 0; j < tmp.getPointCount(); j++) {
-                            buffer.writeInt( tmp.getPoint(j));
+                            buffer.writeInt(tmp.getPoint(j));
                         }
                         buffer.writeInt(tmp.getUserId());
                     }
@@ -102,6 +136,7 @@ public class ProtoState {
         if (!aUnitPos.isEmpty()) {
             buffer.writeByte(StateType.TYPE_POS_VALUE);
             buffer.writeByte(aUnitPos.size());
+            
             for (int i = 0; i < aUnitPos.size(); i++) {
                 PbUnitPos tmp = aUnitPos.get(i);
                 buffer.writeLong(tmp.getId());
@@ -144,7 +179,7 @@ public class ProtoState {
                     buffer.writeByte(tmp.getStatus(j));
                 }
                 for (int j = 0; j < tmp.getPointCount(); j++) {
-                    buffer.writeInt( tmp.getPoint(j));
+                    buffer.writeInt(tmp.getPoint(j));
                 }
             }
         }

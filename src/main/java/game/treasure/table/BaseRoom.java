@@ -140,7 +140,7 @@ public abstract class BaseRoom extends MonoRoom {
                 List<Pbmethod.PbUnitPos> list = chunkUnitPosMap.get(vChunk);
                 if (list != null) {
                     for (Pbmethod.PbUnitPos u : list) {
-                        if (added.add((long) u.getId())) {
+                        if (added.add(u.getId())) {
                             builder.addUnitPos(u);
                         }
                     }
@@ -219,20 +219,14 @@ public abstract class BaseRoom extends MonoRoom {
         local_time += _dt / 1000.0;
         serverTime = local_time;
         // send data
-//        try {
-//            if (aPlayer.size() > 0) {
-//                sendTableState();
-//            } else cancelTask();
-//        } catch (Exception e) {
-//            System.out.println(e.getMessage());
-//        }
-//
-//        for (int i = 0; i < getAPlayer().size(); i++) {
-//            getAPlayer().get(i).Update();
-//        }
-//        for (int i = 0; i < getAEnemy().size(); i++) {
-//            getAEnemy().get(i).Update();
-//        }
+        try {
+            if (!aPlayerIds.isEmpty()) {
+                sendTableState();
+            } else cancelTask();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        mUnit.forEach((k,u)->u.Update());
     }
 
 
@@ -310,7 +304,6 @@ public abstract class BaseRoom extends MonoRoom {
             Set<Long> oldSet = chunkCharacter.get(oldChunk);
             if (oldSet != null) oldSet.remove(unit.getId());
         }
-
         Set<Long> newSet = chunkCharacter.get(newChunk);
         if (newSet == null) return false;
         newSet.add(unit.getId());
@@ -377,7 +370,6 @@ public abstract class BaseRoom extends MonoRoom {
     public void addUnit(Unit unit) {
         if (roomState != RoomState.ACTIVE && roomState != RoomState.PAUSE) return;
         long idInMap = getIdNext();
-        System.out.println("idInMap ============== " + idInMap);
         unit.setId(idInMap);
         // tính chunk hiện tại nó đang ở
         int chunkId = worldPosToChunkId(unit.getPos());
@@ -475,6 +467,9 @@ public abstract class BaseRoom extends MonoRoom {
                 // chunkId truyền vào proto là chunk historical theo view nhập mới
                 builder.addUnitAdd(u.toProtoAdd(chunkId));
             }
+            // add state cell in chunk
+            ChunkObject chunk = mChunk.get(chunkId);
+            builder.addChunkState(chunk.toProto());
         }
 
         // Remove toàn bộ unit trong các chunk rời khỏi view
@@ -492,6 +487,9 @@ public abstract class BaseRoom extends MonoRoom {
 
                 // remove theo chunk historical (chunk đang exited), không dùng u.getChunkId() hiện tại
                 builder.addUnitAdd(u.toProtoRemove(chunkId));
+                // add state cell in chunk
+                ChunkObject chunk = mChunk.get(chunkId);
+                builder.addChunkState(chunk.toProtoRemove());
             }
         }
 

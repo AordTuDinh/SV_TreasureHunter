@@ -46,6 +46,13 @@ enum StateType {
   TYPE_ADD_REMOVE = 1;
   TYPE_POS = 2;
   TYPE_UNIT_STATE = 3;
+  CHUNK_STATE = 4;
+}
+
+enum CellObjectType{
+  TREE = 1;
+  BOX = 2;
+  BONE = 3;
 }
 
 
@@ -72,7 +79,7 @@ message PbUnit{
 }
 
 message PbCell {
-  optional  int32 type = 1;
+  optional bytes type = 1;
   optional int32 chunkId = 2;
   optional PbPos pos = 3;
   optional CellState state = 4;
@@ -84,8 +91,9 @@ message PbListChunk {
 
 message PbChunk {
   optional int32 id = 1;
-  optional PbPos  pos = 2;
-  repeated PbCell cells = 3;
+  optional bool isAdd = 2;
+  optional PbPos  pos = 3;
+  repeated PbCell cells = 4;
 }
 
 message PbInitMap {
@@ -102,6 +110,7 @@ message PbState{
   repeated PbUnitPos unitPos = 2;
   repeated PbUnit unitAdd = 3;
   repeated PbUnitUpdate aUnitUpdate = 4;
+  repeated PbChunk chunkState = 5;
 }
 
 

@@ -107,6 +107,10 @@ public final class Pbmethod {
      * <code>TYPE_UNIT_STATE = 3;</code>
      */
     TYPE_UNIT_STATE(2, 3),
+    /**
+     * <code>CHUNK_STATE = 4;</code>
+     */
+    CHUNK_STATE(3, 4),
     ;
 
     /**
@@ -121,6 +125,10 @@ public final class Pbmethod {
      * <code>TYPE_UNIT_STATE = 3;</code>
      */
     public static final int TYPE_UNIT_STATE_VALUE = 3;
+    /**
+     * <code>CHUNK_STATE = 4;</code>
+     */
+    public static final int CHUNK_STATE_VALUE = 4;
 
 
     public final int getNumber() { return value; }
@@ -130,6 +138,7 @@ public final class Pbmethod {
         case 1: return TYPE_ADD_REMOVE;
         case 2: return TYPE_POS;
         case 3: return TYPE_UNIT_STATE;
+        case 4: return CHUNK_STATE;
         default: return null;
       }
     }
@@ -179,6 +188,97 @@ public final class Pbmethod {
     }
 
     // @@protoc_insertion_point(enum_scope:pbdson.StateType)
+  }
+
+  /**
+   * Protobuf enum {@code pbdson.CellObjectType}
+   */
+  public enum CellObjectType
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>TREE = 1;</code>
+     */
+    TREE(0, 1),
+    /**
+     * <code>BOX = 2;</code>
+     */
+    BOX(1, 2),
+    /**
+     * <code>BONE = 3;</code>
+     */
+    BONE(2, 3),
+    ;
+
+    /**
+     * <code>TREE = 1;</code>
+     */
+    public static final int TREE_VALUE = 1;
+    /**
+     * <code>BOX = 2;</code>
+     */
+    public static final int BOX_VALUE = 2;
+    /**
+     * <code>BONE = 3;</code>
+     */
+    public static final int BONE_VALUE = 3;
+
+
+    public final int getNumber() { return value; }
+
+    public static CellObjectType valueOf(int value) {
+      switch (value) {
+        case 1: return TREE;
+        case 2: return BOX;
+        case 3: return BONE;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<CellObjectType>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<CellObjectType>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<CellObjectType>() {
+            public CellObjectType findValueByNumber(int number) {
+              return CellObjectType.valueOf(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return protocol.Pbmethod.getDescriptor().getEnumTypes().get(2);
+    }
+
+    private static final CellObjectType[] VALUES = values();
+
+    public static CellObjectType valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int index;
+    private final int value;
+
+    private CellObjectType(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:pbdson.CellObjectType)
   }
 
   public interface RequestDataOrBuilder
@@ -7075,15 +7175,15 @@ public final class Pbmethod {
   public interface PbCellOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // optional int32 type = 1;
+    // optional bytes type = 1;
     /**
-     * <code>optional int32 type = 1;</code>
+     * <code>optional bytes type = 1;</code>
      */
     boolean hasType();
     /**
-     * <code>optional int32 type = 1;</code>
+     * <code>optional bytes type = 1;</code>
      */
-    int getType();
+    com.google.protobuf.ByteString getType();
 
     // optional int32 chunkId = 2;
     /**
@@ -7170,9 +7270,9 @@ public final class Pbmethod {
               }
               break;
             }
-            case 8: {
+            case 10: {
               bitField0_ |= 0x00000001;
-              type_ = input.readInt32();
+              type_ = input.readBytes();
               break;
             }
             case 16: {
@@ -7244,19 +7344,19 @@ public final class Pbmethod {
     }
 
     private int bitField0_;
-    // optional int32 type = 1;
+    // optional bytes type = 1;
     public static final int TYPE_FIELD_NUMBER = 1;
-    private int type_;
+    private com.google.protobuf.ByteString type_;
     /**
-     * <code>optional int32 type = 1;</code>
+     * <code>optional bytes type = 1;</code>
      */
     public boolean hasType() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>optional int32 type = 1;</code>
+     * <code>optional bytes type = 1;</code>
      */
-    public int getType() {
+    public com.google.protobuf.ByteString getType() {
       return type_;
     }
 
@@ -7315,7 +7415,7 @@ public final class Pbmethod {
     }
 
     private void initFields() {
-      type_ = 0;
+      type_ = com.google.protobuf.ByteString.EMPTY;
       chunkId_ = 0;
       pos_ = protocol.Pbmethod.PbPos.getDefaultInstance();
       state_ = protocol.Pbmethod.CellState.ACTIVE;
@@ -7333,7 +7433,7 @@ public final class Pbmethod {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(1, type_);
+        output.writeBytes(1, type_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeInt32(2, chunkId_);
@@ -7355,7 +7455,7 @@ public final class Pbmethod {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, type_);
+          .computeBytesSize(1, type_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
@@ -7486,7 +7586,7 @@ public final class Pbmethod {
 
       public Builder clear() {
         super.clear();
-        type_ = 0;
+        type_ = com.google.protobuf.ByteString.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000001);
         chunkId_ = 0;
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -7601,35 +7701,38 @@ public final class Pbmethod {
       }
       private int bitField0_;
 
-      // optional int32 type = 1;
-      private int type_ ;
+      // optional bytes type = 1;
+      private com.google.protobuf.ByteString type_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <code>optional int32 type = 1;</code>
+       * <code>optional bytes type = 1;</code>
        */
       public boolean hasType() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>optional int32 type = 1;</code>
+       * <code>optional bytes type = 1;</code>
        */
-      public int getType() {
+      public com.google.protobuf.ByteString getType() {
         return type_;
       }
       /**
-       * <code>optional int32 type = 1;</code>
+       * <code>optional bytes type = 1;</code>
        */
-      public Builder setType(int value) {
-        bitField0_ |= 0x00000001;
+      public Builder setType(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
         type_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int32 type = 1;</code>
+       * <code>optional bytes type = 1;</code>
        */
       public Builder clearType() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        type_ = 0;
+        type_ = getDefaultInstance().getType();
         onChanged();
         return this;
       }
@@ -8518,41 +8621,51 @@ public final class Pbmethod {
      */
     int getId();
 
-    // optional .pbdson.PbPos pos = 2;
+    // optional bool isAdd = 2;
     /**
-     * <code>optional .pbdson.PbPos pos = 2;</code>
+     * <code>optional bool isAdd = 2;</code>
+     */
+    boolean hasIsAdd();
+    /**
+     * <code>optional bool isAdd = 2;</code>
+     */
+    boolean getIsAdd();
+
+    // optional .pbdson.PbPos pos = 3;
+    /**
+     * <code>optional .pbdson.PbPos pos = 3;</code>
      */
     boolean hasPos();
     /**
-     * <code>optional .pbdson.PbPos pos = 2;</code>
+     * <code>optional .pbdson.PbPos pos = 3;</code>
      */
     protocol.Pbmethod.PbPos getPos();
     /**
-     * <code>optional .pbdson.PbPos pos = 2;</code>
+     * <code>optional .pbdson.PbPos pos = 3;</code>
      */
     protocol.Pbmethod.PbPosOrBuilder getPosOrBuilder();
 
-    // repeated .pbdson.PbCell cells = 3;
+    // repeated .pbdson.PbCell cells = 4;
     /**
-     * <code>repeated .pbdson.PbCell cells = 3;</code>
+     * <code>repeated .pbdson.PbCell cells = 4;</code>
      */
     java.util.List<protocol.Pbmethod.PbCell> 
         getCellsList();
     /**
-     * <code>repeated .pbdson.PbCell cells = 3;</code>
+     * <code>repeated .pbdson.PbCell cells = 4;</code>
      */
     protocol.Pbmethod.PbCell getCells(int index);
     /**
-     * <code>repeated .pbdson.PbCell cells = 3;</code>
+     * <code>repeated .pbdson.PbCell cells = 4;</code>
      */
     int getCellsCount();
     /**
-     * <code>repeated .pbdson.PbCell cells = 3;</code>
+     * <code>repeated .pbdson.PbCell cells = 4;</code>
      */
     java.util.List<? extends protocol.Pbmethod.PbCellOrBuilder> 
         getCellsOrBuilderList();
     /**
-     * <code>repeated .pbdson.PbCell cells = 3;</code>
+     * <code>repeated .pbdson.PbCell cells = 4;</code>
      */
     protocol.Pbmethod.PbCellOrBuilder getCellsOrBuilder(
         int index);
@@ -8613,9 +8726,14 @@ public final class Pbmethod {
               id_ = input.readInt32();
               break;
             }
-            case 18: {
+            case 16: {
+              bitField0_ |= 0x00000002;
+              isAdd_ = input.readBool();
+              break;
+            }
+            case 26: {
               protocol.Pbmethod.PbPos.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000002) == 0x00000002)) {
+              if (((bitField0_ & 0x00000004) == 0x00000004)) {
                 subBuilder = pos_.toBuilder();
               }
               pos_ = input.readMessage(protocol.Pbmethod.PbPos.PARSER, extensionRegistry);
@@ -8623,13 +8741,13 @@ public final class Pbmethod {
                 subBuilder.mergeFrom(pos_);
                 pos_ = subBuilder.buildPartial();
               }
-              bitField0_ |= 0x00000002;
+              bitField0_ |= 0x00000004;
               break;
             }
-            case 26: {
-              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+            case 34: {
+              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
                 cells_ = new java.util.ArrayList<protocol.Pbmethod.PbCell>();
-                mutable_bitField0_ |= 0x00000004;
+                mutable_bitField0_ |= 0x00000008;
               }
               cells_.add(input.readMessage(protocol.Pbmethod.PbCell.PARSER, extensionRegistry));
               break;
@@ -8642,7 +8760,7 @@ public final class Pbmethod {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
+        if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
           cells_ = java.util.Collections.unmodifiableList(cells_);
         }
         this.unknownFields = unknownFields.build();
@@ -8693,58 +8811,74 @@ public final class Pbmethod {
       return id_;
     }
 
-    // optional .pbdson.PbPos pos = 2;
-    public static final int POS_FIELD_NUMBER = 2;
-    private protocol.Pbmethod.PbPos pos_;
+    // optional bool isAdd = 2;
+    public static final int ISADD_FIELD_NUMBER = 2;
+    private boolean isAdd_;
     /**
-     * <code>optional .pbdson.PbPos pos = 2;</code>
+     * <code>optional bool isAdd = 2;</code>
      */
-    public boolean hasPos() {
+    public boolean hasIsAdd() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
-     * <code>optional .pbdson.PbPos pos = 2;</code>
+     * <code>optional bool isAdd = 2;</code>
+     */
+    public boolean getIsAdd() {
+      return isAdd_;
+    }
+
+    // optional .pbdson.PbPos pos = 3;
+    public static final int POS_FIELD_NUMBER = 3;
+    private protocol.Pbmethod.PbPos pos_;
+    /**
+     * <code>optional .pbdson.PbPos pos = 3;</code>
+     */
+    public boolean hasPos() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional .pbdson.PbPos pos = 3;</code>
      */
     public protocol.Pbmethod.PbPos getPos() {
       return pos_;
     }
     /**
-     * <code>optional .pbdson.PbPos pos = 2;</code>
+     * <code>optional .pbdson.PbPos pos = 3;</code>
      */
     public protocol.Pbmethod.PbPosOrBuilder getPosOrBuilder() {
       return pos_;
     }
 
-    // repeated .pbdson.PbCell cells = 3;
-    public static final int CELLS_FIELD_NUMBER = 3;
+    // repeated .pbdson.PbCell cells = 4;
+    public static final int CELLS_FIELD_NUMBER = 4;
     private java.util.List<protocol.Pbmethod.PbCell> cells_;
     /**
-     * <code>repeated .pbdson.PbCell cells = 3;</code>
+     * <code>repeated .pbdson.PbCell cells = 4;</code>
      */
     public java.util.List<protocol.Pbmethod.PbCell> getCellsList() {
       return cells_;
     }
     /**
-     * <code>repeated .pbdson.PbCell cells = 3;</code>
+     * <code>repeated .pbdson.PbCell cells = 4;</code>
      */
     public java.util.List<? extends protocol.Pbmethod.PbCellOrBuilder> 
         getCellsOrBuilderList() {
       return cells_;
     }
     /**
-     * <code>repeated .pbdson.PbCell cells = 3;</code>
+     * <code>repeated .pbdson.PbCell cells = 4;</code>
      */
     public int getCellsCount() {
       return cells_.size();
     }
     /**
-     * <code>repeated .pbdson.PbCell cells = 3;</code>
+     * <code>repeated .pbdson.PbCell cells = 4;</code>
      */
     public protocol.Pbmethod.PbCell getCells(int index) {
       return cells_.get(index);
     }
     /**
-     * <code>repeated .pbdson.PbCell cells = 3;</code>
+     * <code>repeated .pbdson.PbCell cells = 4;</code>
      */
     public protocol.Pbmethod.PbCellOrBuilder getCellsOrBuilder(
         int index) {
@@ -8753,6 +8887,7 @@ public final class Pbmethod {
 
     private void initFields() {
       id_ = 0;
+      isAdd_ = false;
       pos_ = protocol.Pbmethod.PbPos.getDefaultInstance();
       cells_ = java.util.Collections.emptyList();
     }
@@ -8772,10 +8907,13 @@ public final class Pbmethod {
         output.writeInt32(1, id_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeMessage(2, pos_);
+        output.writeBool(2, isAdd_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeMessage(3, pos_);
       }
       for (int i = 0; i < cells_.size(); i++) {
-        output.writeMessage(3, cells_.get(i));
+        output.writeMessage(4, cells_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -8792,11 +8930,15 @@ public final class Pbmethod {
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, pos_);
+          .computeBoolSize(2, isAdd_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(3, pos_);
       }
       for (int i = 0; i < cells_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, cells_.get(i));
+          .computeMessageSize(4, cells_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -8918,15 +9060,17 @@ public final class Pbmethod {
         super.clear();
         id_ = 0;
         bitField0_ = (bitField0_ & ~0x00000001);
+        isAdd_ = false;
+        bitField0_ = (bitField0_ & ~0x00000002);
         if (posBuilder_ == null) {
           pos_ = protocol.Pbmethod.PbPos.getDefaultInstance();
         } else {
           posBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000004);
         if (cellsBuilder_ == null) {
           cells_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000004);
+          bitField0_ = (bitField0_ & ~0x00000008);
         } else {
           cellsBuilder_.clear();
         }
@@ -8965,15 +9109,19 @@ public final class Pbmethod {
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
+        result.isAdd_ = isAdd_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
         if (posBuilder_ == null) {
           result.pos_ = pos_;
         } else {
           result.pos_ = posBuilder_.build();
         }
         if (cellsBuilder_ == null) {
-          if (((bitField0_ & 0x00000004) == 0x00000004)) {
+          if (((bitField0_ & 0x00000008) == 0x00000008)) {
             cells_ = java.util.Collections.unmodifiableList(cells_);
-            bitField0_ = (bitField0_ & ~0x00000004);
+            bitField0_ = (bitField0_ & ~0x00000008);
           }
           result.cells_ = cells_;
         } else {
@@ -8998,6 +9146,9 @@ public final class Pbmethod {
         if (other.hasId()) {
           setId(other.getId());
         }
+        if (other.hasIsAdd()) {
+          setIsAdd(other.getIsAdd());
+        }
         if (other.hasPos()) {
           mergePos(other.getPos());
         }
@@ -9005,7 +9156,7 @@ public final class Pbmethod {
           if (!other.cells_.isEmpty()) {
             if (cells_.isEmpty()) {
               cells_ = other.cells_;
-              bitField0_ = (bitField0_ & ~0x00000004);
+              bitField0_ = (bitField0_ & ~0x00000008);
             } else {
               ensureCellsIsMutable();
               cells_.addAll(other.cells_);
@@ -9018,7 +9169,7 @@ public final class Pbmethod {
               cellsBuilder_.dispose();
               cellsBuilder_ = null;
               cells_ = other.cells_;
-              bitField0_ = (bitField0_ & ~0x00000004);
+              bitField0_ = (bitField0_ & ~0x00000008);
               cellsBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getCellsFieldBuilder() : null;
@@ -9087,18 +9238,51 @@ public final class Pbmethod {
         return this;
       }
 
-      // optional .pbdson.PbPos pos = 2;
+      // optional bool isAdd = 2;
+      private boolean isAdd_ ;
+      /**
+       * <code>optional bool isAdd = 2;</code>
+       */
+      public boolean hasIsAdd() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional bool isAdd = 2;</code>
+       */
+      public boolean getIsAdd() {
+        return isAdd_;
+      }
+      /**
+       * <code>optional bool isAdd = 2;</code>
+       */
+      public Builder setIsAdd(boolean value) {
+        bitField0_ |= 0x00000002;
+        isAdd_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool isAdd = 2;</code>
+       */
+      public Builder clearIsAdd() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        isAdd_ = false;
+        onChanged();
+        return this;
+      }
+
+      // optional .pbdson.PbPos pos = 3;
       private protocol.Pbmethod.PbPos pos_ = protocol.Pbmethod.PbPos.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
           protocol.Pbmethod.PbPos, protocol.Pbmethod.PbPos.Builder, protocol.Pbmethod.PbPosOrBuilder> posBuilder_;
       /**
-       * <code>optional .pbdson.PbPos pos = 2;</code>
+       * <code>optional .pbdson.PbPos pos = 3;</code>
        */
       public boolean hasPos() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>optional .pbdson.PbPos pos = 2;</code>
+       * <code>optional .pbdson.PbPos pos = 3;</code>
        */
       public protocol.Pbmethod.PbPos getPos() {
         if (posBuilder_ == null) {
@@ -9108,7 +9292,7 @@ public final class Pbmethod {
         }
       }
       /**
-       * <code>optional .pbdson.PbPos pos = 2;</code>
+       * <code>optional .pbdson.PbPos pos = 3;</code>
        */
       public Builder setPos(protocol.Pbmethod.PbPos value) {
         if (posBuilder_ == null) {
@@ -9120,11 +9304,11 @@ public final class Pbmethod {
         } else {
           posBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000004;
         return this;
       }
       /**
-       * <code>optional .pbdson.PbPos pos = 2;</code>
+       * <code>optional .pbdson.PbPos pos = 3;</code>
        */
       public Builder setPos(
           protocol.Pbmethod.PbPos.Builder builderForValue) {
@@ -9134,15 +9318,15 @@ public final class Pbmethod {
         } else {
           posBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000004;
         return this;
       }
       /**
-       * <code>optional .pbdson.PbPos pos = 2;</code>
+       * <code>optional .pbdson.PbPos pos = 3;</code>
        */
       public Builder mergePos(protocol.Pbmethod.PbPos value) {
         if (posBuilder_ == null) {
-          if (((bitField0_ & 0x00000002) == 0x00000002) &&
+          if (((bitField0_ & 0x00000004) == 0x00000004) &&
               pos_ != protocol.Pbmethod.PbPos.getDefaultInstance()) {
             pos_ =
               protocol.Pbmethod.PbPos.newBuilder(pos_).mergeFrom(value).buildPartial();
@@ -9153,11 +9337,11 @@ public final class Pbmethod {
         } else {
           posBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000004;
         return this;
       }
       /**
-       * <code>optional .pbdson.PbPos pos = 2;</code>
+       * <code>optional .pbdson.PbPos pos = 3;</code>
        */
       public Builder clearPos() {
         if (posBuilder_ == null) {
@@ -9166,19 +9350,19 @@ public final class Pbmethod {
         } else {
           posBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
       /**
-       * <code>optional .pbdson.PbPos pos = 2;</code>
+       * <code>optional .pbdson.PbPos pos = 3;</code>
        */
       public protocol.Pbmethod.PbPos.Builder getPosBuilder() {
-        bitField0_ |= 0x00000002;
+        bitField0_ |= 0x00000004;
         onChanged();
         return getPosFieldBuilder().getBuilder();
       }
       /**
-       * <code>optional .pbdson.PbPos pos = 2;</code>
+       * <code>optional .pbdson.PbPos pos = 3;</code>
        */
       public protocol.Pbmethod.PbPosOrBuilder getPosOrBuilder() {
         if (posBuilder_ != null) {
@@ -9188,7 +9372,7 @@ public final class Pbmethod {
         }
       }
       /**
-       * <code>optional .pbdson.PbPos pos = 2;</code>
+       * <code>optional .pbdson.PbPos pos = 3;</code>
        */
       private com.google.protobuf.SingleFieldBuilder<
           protocol.Pbmethod.PbPos, protocol.Pbmethod.PbPos.Builder, protocol.Pbmethod.PbPosOrBuilder> 
@@ -9204,13 +9388,13 @@ public final class Pbmethod {
         return posBuilder_;
       }
 
-      // repeated .pbdson.PbCell cells = 3;
+      // repeated .pbdson.PbCell cells = 4;
       private java.util.List<protocol.Pbmethod.PbCell> cells_ =
         java.util.Collections.emptyList();
       private void ensureCellsIsMutable() {
-        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
+        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
           cells_ = new java.util.ArrayList<protocol.Pbmethod.PbCell>(cells_);
-          bitField0_ |= 0x00000004;
+          bitField0_ |= 0x00000008;
          }
       }
 
@@ -9218,7 +9402,7 @@ public final class Pbmethod {
           protocol.Pbmethod.PbCell, protocol.Pbmethod.PbCell.Builder, protocol.Pbmethod.PbCellOrBuilder> cellsBuilder_;
 
       /**
-       * <code>repeated .pbdson.PbCell cells = 3;</code>
+       * <code>repeated .pbdson.PbCell cells = 4;</code>
        */
       public java.util.List<protocol.Pbmethod.PbCell> getCellsList() {
         if (cellsBuilder_ == null) {
@@ -9228,7 +9412,7 @@ public final class Pbmethod {
         }
       }
       /**
-       * <code>repeated .pbdson.PbCell cells = 3;</code>
+       * <code>repeated .pbdson.PbCell cells = 4;</code>
        */
       public int getCellsCount() {
         if (cellsBuilder_ == null) {
@@ -9238,7 +9422,7 @@ public final class Pbmethod {
         }
       }
       /**
-       * <code>repeated .pbdson.PbCell cells = 3;</code>
+       * <code>repeated .pbdson.PbCell cells = 4;</code>
        */
       public protocol.Pbmethod.PbCell getCells(int index) {
         if (cellsBuilder_ == null) {
@@ -9248,7 +9432,7 @@ public final class Pbmethod {
         }
       }
       /**
-       * <code>repeated .pbdson.PbCell cells = 3;</code>
+       * <code>repeated .pbdson.PbCell cells = 4;</code>
        */
       public Builder setCells(
           int index, protocol.Pbmethod.PbCell value) {
@@ -9265,7 +9449,7 @@ public final class Pbmethod {
         return this;
       }
       /**
-       * <code>repeated .pbdson.PbCell cells = 3;</code>
+       * <code>repeated .pbdson.PbCell cells = 4;</code>
        */
       public Builder setCells(
           int index, protocol.Pbmethod.PbCell.Builder builderForValue) {
@@ -9279,7 +9463,7 @@ public final class Pbmethod {
         return this;
       }
       /**
-       * <code>repeated .pbdson.PbCell cells = 3;</code>
+       * <code>repeated .pbdson.PbCell cells = 4;</code>
        */
       public Builder addCells(protocol.Pbmethod.PbCell value) {
         if (cellsBuilder_ == null) {
@@ -9295,7 +9479,7 @@ public final class Pbmethod {
         return this;
       }
       /**
-       * <code>repeated .pbdson.PbCell cells = 3;</code>
+       * <code>repeated .pbdson.PbCell cells = 4;</code>
        */
       public Builder addCells(
           int index, protocol.Pbmethod.PbCell value) {
@@ -9312,7 +9496,7 @@ public final class Pbmethod {
         return this;
       }
       /**
-       * <code>repeated .pbdson.PbCell cells = 3;</code>
+       * <code>repeated .pbdson.PbCell cells = 4;</code>
        */
       public Builder addCells(
           protocol.Pbmethod.PbCell.Builder builderForValue) {
@@ -9326,7 +9510,7 @@ public final class Pbmethod {
         return this;
       }
       /**
-       * <code>repeated .pbdson.PbCell cells = 3;</code>
+       * <code>repeated .pbdson.PbCell cells = 4;</code>
        */
       public Builder addCells(
           int index, protocol.Pbmethod.PbCell.Builder builderForValue) {
@@ -9340,7 +9524,7 @@ public final class Pbmethod {
         return this;
       }
       /**
-       * <code>repeated .pbdson.PbCell cells = 3;</code>
+       * <code>repeated .pbdson.PbCell cells = 4;</code>
        */
       public Builder addAllCells(
           java.lang.Iterable<? extends protocol.Pbmethod.PbCell> values) {
@@ -9354,12 +9538,12 @@ public final class Pbmethod {
         return this;
       }
       /**
-       * <code>repeated .pbdson.PbCell cells = 3;</code>
+       * <code>repeated .pbdson.PbCell cells = 4;</code>
        */
       public Builder clearCells() {
         if (cellsBuilder_ == null) {
           cells_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000004);
+          bitField0_ = (bitField0_ & ~0x00000008);
           onChanged();
         } else {
           cellsBuilder_.clear();
@@ -9367,7 +9551,7 @@ public final class Pbmethod {
         return this;
       }
       /**
-       * <code>repeated .pbdson.PbCell cells = 3;</code>
+       * <code>repeated .pbdson.PbCell cells = 4;</code>
        */
       public Builder removeCells(int index) {
         if (cellsBuilder_ == null) {
@@ -9380,14 +9564,14 @@ public final class Pbmethod {
         return this;
       }
       /**
-       * <code>repeated .pbdson.PbCell cells = 3;</code>
+       * <code>repeated .pbdson.PbCell cells = 4;</code>
        */
       public protocol.Pbmethod.PbCell.Builder getCellsBuilder(
           int index) {
         return getCellsFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .pbdson.PbCell cells = 3;</code>
+       * <code>repeated .pbdson.PbCell cells = 4;</code>
        */
       public protocol.Pbmethod.PbCellOrBuilder getCellsOrBuilder(
           int index) {
@@ -9397,7 +9581,7 @@ public final class Pbmethod {
         }
       }
       /**
-       * <code>repeated .pbdson.PbCell cells = 3;</code>
+       * <code>repeated .pbdson.PbCell cells = 4;</code>
        */
       public java.util.List<? extends protocol.Pbmethod.PbCellOrBuilder> 
            getCellsOrBuilderList() {
@@ -9408,14 +9592,14 @@ public final class Pbmethod {
         }
       }
       /**
-       * <code>repeated .pbdson.PbCell cells = 3;</code>
+       * <code>repeated .pbdson.PbCell cells = 4;</code>
        */
       public protocol.Pbmethod.PbCell.Builder addCellsBuilder() {
         return getCellsFieldBuilder().addBuilder(
             protocol.Pbmethod.PbCell.getDefaultInstance());
       }
       /**
-       * <code>repeated .pbdson.PbCell cells = 3;</code>
+       * <code>repeated .pbdson.PbCell cells = 4;</code>
        */
       public protocol.Pbmethod.PbCell.Builder addCellsBuilder(
           int index) {
@@ -9423,7 +9607,7 @@ public final class Pbmethod {
             index, protocol.Pbmethod.PbCell.getDefaultInstance());
       }
       /**
-       * <code>repeated .pbdson.PbCell cells = 3;</code>
+       * <code>repeated .pbdson.PbCell cells = 4;</code>
        */
       public java.util.List<protocol.Pbmethod.PbCell.Builder> 
            getCellsBuilderList() {
@@ -9436,7 +9620,7 @@ public final class Pbmethod {
           cellsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               protocol.Pbmethod.PbCell, protocol.Pbmethod.PbCell.Builder, protocol.Pbmethod.PbCellOrBuilder>(
                   cells_,
-                  ((bitField0_ & 0x00000004) == 0x00000004),
+                  ((bitField0_ & 0x00000008) == 0x00000008),
                   getParentForChildren(),
                   isClean());
           cells_ = null;
@@ -10855,6 +11039,31 @@ public final class Pbmethod {
      */
     protocol.Pbmethod.PbUnitUpdateOrBuilder getAUnitUpdateOrBuilder(
         int index);
+
+    // repeated .pbdson.PbChunk chunkState = 5;
+    /**
+     * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+     */
+    java.util.List<protocol.Pbmethod.PbChunk> 
+        getChunkStateList();
+    /**
+     * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+     */
+    protocol.Pbmethod.PbChunk getChunkState(int index);
+    /**
+     * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+     */
+    int getChunkStateCount();
+    /**
+     * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+     */
+    java.util.List<? extends protocol.Pbmethod.PbChunkOrBuilder> 
+        getChunkStateOrBuilderList();
+    /**
+     * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+     */
+    protocol.Pbmethod.PbChunkOrBuilder getChunkStateOrBuilder(
+        int index);
   }
   /**
    * Protobuf type {@code pbdson.PbState}
@@ -10940,6 +11149,14 @@ public final class Pbmethod {
               aUnitUpdate_.add(input.readMessage(protocol.Pbmethod.PbUnitUpdate.PARSER, extensionRegistry));
               break;
             }
+            case 42: {
+              if (!((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+                chunkState_ = new java.util.ArrayList<protocol.Pbmethod.PbChunk>();
+                mutable_bitField0_ |= 0x00000010;
+              }
+              chunkState_.add(input.readMessage(protocol.Pbmethod.PbChunk.PARSER, extensionRegistry));
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -10956,6 +11173,9 @@ public final class Pbmethod {
         }
         if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
           aUnitUpdate_ = java.util.Collections.unmodifiableList(aUnitUpdate_);
+        }
+        if (((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+          chunkState_ = java.util.Collections.unmodifiableList(chunkState_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -11113,11 +11333,48 @@ public final class Pbmethod {
       return aUnitUpdate_.get(index);
     }
 
+    // repeated .pbdson.PbChunk chunkState = 5;
+    public static final int CHUNKSTATE_FIELD_NUMBER = 5;
+    private java.util.List<protocol.Pbmethod.PbChunk> chunkState_;
+    /**
+     * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+     */
+    public java.util.List<protocol.Pbmethod.PbChunk> getChunkStateList() {
+      return chunkState_;
+    }
+    /**
+     * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+     */
+    public java.util.List<? extends protocol.Pbmethod.PbChunkOrBuilder> 
+        getChunkStateOrBuilderList() {
+      return chunkState_;
+    }
+    /**
+     * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+     */
+    public int getChunkStateCount() {
+      return chunkState_.size();
+    }
+    /**
+     * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+     */
+    public protocol.Pbmethod.PbChunk getChunkState(int index) {
+      return chunkState_.get(index);
+    }
+    /**
+     * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+     */
+    public protocol.Pbmethod.PbChunkOrBuilder getChunkStateOrBuilder(
+        int index) {
+      return chunkState_.get(index);
+    }
+
     private void initFields() {
       serverTime_ = 0F;
       unitPos_ = java.util.Collections.emptyList();
       unitAdd_ = java.util.Collections.emptyList();
       aUnitUpdate_ = java.util.Collections.emptyList();
+      chunkState_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -11143,6 +11400,9 @@ public final class Pbmethod {
       for (int i = 0; i < aUnitUpdate_.size(); i++) {
         output.writeMessage(4, aUnitUpdate_.get(i));
       }
+      for (int i = 0; i < chunkState_.size(); i++) {
+        output.writeMessage(5, chunkState_.get(i));
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -11167,6 +11427,10 @@ public final class Pbmethod {
       for (int i = 0; i < aUnitUpdate_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(4, aUnitUpdate_.get(i));
+      }
+      for (int i = 0; i < chunkState_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(5, chunkState_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -11283,6 +11547,7 @@ public final class Pbmethod {
           getUnitPosFieldBuilder();
           getUnitAddFieldBuilder();
           getAUnitUpdateFieldBuilder();
+          getChunkStateFieldBuilder();
         }
       }
       private static Builder create() {
@@ -11310,6 +11575,12 @@ public final class Pbmethod {
           bitField0_ = (bitField0_ & ~0x00000008);
         } else {
           aUnitUpdateBuilder_.clear();
+        }
+        if (chunkStateBuilder_ == null) {
+          chunkState_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000010);
+        } else {
+          chunkStateBuilder_.clear();
         }
         return this;
       }
@@ -11369,6 +11640,15 @@ public final class Pbmethod {
           result.aUnitUpdate_ = aUnitUpdate_;
         } else {
           result.aUnitUpdate_ = aUnitUpdateBuilder_.build();
+        }
+        if (chunkStateBuilder_ == null) {
+          if (((bitField0_ & 0x00000010) == 0x00000010)) {
+            chunkState_ = java.util.Collections.unmodifiableList(chunkState_);
+            bitField0_ = (bitField0_ & ~0x00000010);
+          }
+          result.chunkState_ = chunkState_;
+        } else {
+          result.chunkState_ = chunkStateBuilder_.build();
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -11464,6 +11744,32 @@ public final class Pbmethod {
                    getAUnitUpdateFieldBuilder() : null;
             } else {
               aUnitUpdateBuilder_.addAllMessages(other.aUnitUpdate_);
+            }
+          }
+        }
+        if (chunkStateBuilder_ == null) {
+          if (!other.chunkState_.isEmpty()) {
+            if (chunkState_.isEmpty()) {
+              chunkState_ = other.chunkState_;
+              bitField0_ = (bitField0_ & ~0x00000010);
+            } else {
+              ensureChunkStateIsMutable();
+              chunkState_.addAll(other.chunkState_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.chunkState_.isEmpty()) {
+            if (chunkStateBuilder_.isEmpty()) {
+              chunkStateBuilder_.dispose();
+              chunkStateBuilder_ = null;
+              chunkState_ = other.chunkState_;
+              bitField0_ = (bitField0_ & ~0x00000010);
+              chunkStateBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getChunkStateFieldBuilder() : null;
+            } else {
+              chunkStateBuilder_.addAllMessages(other.chunkState_);
             }
           }
         }
@@ -12245,6 +12551,246 @@ public final class Pbmethod {
           aUnitUpdate_ = null;
         }
         return aUnitUpdateBuilder_;
+      }
+
+      // repeated .pbdson.PbChunk chunkState = 5;
+      private java.util.List<protocol.Pbmethod.PbChunk> chunkState_ =
+        java.util.Collections.emptyList();
+      private void ensureChunkStateIsMutable() {
+        if (!((bitField0_ & 0x00000010) == 0x00000010)) {
+          chunkState_ = new java.util.ArrayList<protocol.Pbmethod.PbChunk>(chunkState_);
+          bitField0_ |= 0x00000010;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          protocol.Pbmethod.PbChunk, protocol.Pbmethod.PbChunk.Builder, protocol.Pbmethod.PbChunkOrBuilder> chunkStateBuilder_;
+
+      /**
+       * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+       */
+      public java.util.List<protocol.Pbmethod.PbChunk> getChunkStateList() {
+        if (chunkStateBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(chunkState_);
+        } else {
+          return chunkStateBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+       */
+      public int getChunkStateCount() {
+        if (chunkStateBuilder_ == null) {
+          return chunkState_.size();
+        } else {
+          return chunkStateBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+       */
+      public protocol.Pbmethod.PbChunk getChunkState(int index) {
+        if (chunkStateBuilder_ == null) {
+          return chunkState_.get(index);
+        } else {
+          return chunkStateBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+       */
+      public Builder setChunkState(
+          int index, protocol.Pbmethod.PbChunk value) {
+        if (chunkStateBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureChunkStateIsMutable();
+          chunkState_.set(index, value);
+          onChanged();
+        } else {
+          chunkStateBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+       */
+      public Builder setChunkState(
+          int index, protocol.Pbmethod.PbChunk.Builder builderForValue) {
+        if (chunkStateBuilder_ == null) {
+          ensureChunkStateIsMutable();
+          chunkState_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          chunkStateBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+       */
+      public Builder addChunkState(protocol.Pbmethod.PbChunk value) {
+        if (chunkStateBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureChunkStateIsMutable();
+          chunkState_.add(value);
+          onChanged();
+        } else {
+          chunkStateBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+       */
+      public Builder addChunkState(
+          int index, protocol.Pbmethod.PbChunk value) {
+        if (chunkStateBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureChunkStateIsMutable();
+          chunkState_.add(index, value);
+          onChanged();
+        } else {
+          chunkStateBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+       */
+      public Builder addChunkState(
+          protocol.Pbmethod.PbChunk.Builder builderForValue) {
+        if (chunkStateBuilder_ == null) {
+          ensureChunkStateIsMutable();
+          chunkState_.add(builderForValue.build());
+          onChanged();
+        } else {
+          chunkStateBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+       */
+      public Builder addChunkState(
+          int index, protocol.Pbmethod.PbChunk.Builder builderForValue) {
+        if (chunkStateBuilder_ == null) {
+          ensureChunkStateIsMutable();
+          chunkState_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          chunkStateBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+       */
+      public Builder addAllChunkState(
+          java.lang.Iterable<? extends protocol.Pbmethod.PbChunk> values) {
+        if (chunkStateBuilder_ == null) {
+          ensureChunkStateIsMutable();
+          super.addAll(values, chunkState_);
+          onChanged();
+        } else {
+          chunkStateBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+       */
+      public Builder clearChunkState() {
+        if (chunkStateBuilder_ == null) {
+          chunkState_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000010);
+          onChanged();
+        } else {
+          chunkStateBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+       */
+      public Builder removeChunkState(int index) {
+        if (chunkStateBuilder_ == null) {
+          ensureChunkStateIsMutable();
+          chunkState_.remove(index);
+          onChanged();
+        } else {
+          chunkStateBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+       */
+      public protocol.Pbmethod.PbChunk.Builder getChunkStateBuilder(
+          int index) {
+        return getChunkStateFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+       */
+      public protocol.Pbmethod.PbChunkOrBuilder getChunkStateOrBuilder(
+          int index) {
+        if (chunkStateBuilder_ == null) {
+          return chunkState_.get(index);  } else {
+          return chunkStateBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+       */
+      public java.util.List<? extends protocol.Pbmethod.PbChunkOrBuilder> 
+           getChunkStateOrBuilderList() {
+        if (chunkStateBuilder_ != null) {
+          return chunkStateBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(chunkState_);
+        }
+      }
+      /**
+       * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+       */
+      public protocol.Pbmethod.PbChunk.Builder addChunkStateBuilder() {
+        return getChunkStateFieldBuilder().addBuilder(
+            protocol.Pbmethod.PbChunk.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+       */
+      public protocol.Pbmethod.PbChunk.Builder addChunkStateBuilder(
+          int index) {
+        return getChunkStateFieldBuilder().addBuilder(
+            index, protocol.Pbmethod.PbChunk.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .pbdson.PbChunk chunkState = 5;</code>
+       */
+      public java.util.List<protocol.Pbmethod.PbChunk.Builder> 
+           getChunkStateBuilderList() {
+        return getChunkStateFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          protocol.Pbmethod.PbChunk, protocol.Pbmethod.PbChunk.Builder, protocol.Pbmethod.PbChunkOrBuilder> 
+          getChunkStateFieldBuilder() {
+        if (chunkStateBuilder_ == null) {
+          chunkStateBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              protocol.Pbmethod.PbChunk, protocol.Pbmethod.PbChunk.Builder, protocol.Pbmethod.PbChunkOrBuilder>(
+                  chunkState_,
+                  ((bitField0_ & 0x00000010) == 0x00000010),
+                  getParentForChildren(),
+                  isClean());
+          chunkState_ = null;
+        }
+        return chunkStateBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:pbdson.PbState)
@@ -98962,266 +99508,269 @@ public final class Pbmethod {
       "angeAttack\030\014 \001(\002\022\014\n\004name\030\r \001(\t\022\r\n\005alive\030" +
       "\016 \001(\010\022\024\n\014lastInputSeq\030\017 \001(\003\022\r\n\005point\030\020 \003" +
       "(\005\022\016\n\006userId\030\021 \001(\005\"e\n\006PbCell\022\014\n\004type\030\001 \001" +
-      "(\005\022\017\n\007chunkId\030\002 \001(\005\022\032\n\003pos\030\003 \001(\0132\r.pbdso",
+      "(\014\022\017\n\007chunkId\030\002 \001(\005\022\032\n\003pos\030\003 \001(\0132\r.pbdso",
       "n.PbPos\022 \n\005state\030\004 \001(\0162\021.pbdson.CellStat" +
       "e\".\n\013PbListChunk\022\037\n\006aChunk\030\001 \003(\0132\017.pbdso" +
-      "n.PbChunk\"P\n\007PbChunk\022\n\n\002id\030\001 \001(\005\022\032\n\003pos\030" +
-      "\002 \001(\0132\r.pbdson.PbPos\022\035\n\005cells\030\003 \003(\0132\016.pb" +
-      "dson.PbCell\"l\n\tPbInitMap\022\r\n\005mapId\030\001 \001(\005\022" +
-      "\020\n\010battleId\030\002 \001(\003\022\037\n\006chunks\030\003 \003(\0132\017.pbds" +
-      "on.PbChunk\022\035\n\005units\030\004 \003(\0132\016.pbdson.PbUni" +
-      "t\"\215\001\n\007PbState\022\022\n\nserverTime\030\001 \001(\002\022\"\n\007uni" +
-      "tPos\030\002 \003(\0132\021.pbdson.PbUnitPos\022\037\n\007unitAdd" +
-      "\030\003 \003(\0132\016.pbdson.PbUnit\022)\n\013aUnitUpdate\030\004 ",
-      "\003(\0132\024.pbdson.PbUnitUpdate\":\n\017PbListUnitS" +
-      "tate\022\'\n\naUnitState\030\001 \003(\0132\023.pbdson.PbUnit" +
-      "State\"8\n\013PbUnitState\022\n\n\002id\030\001 \001(\003\022\016\n\006stat" +
-      "us\030\002 \003(\005\022\r\n\005point\030\003 \003(\005\"\351\002\n\006PbClan\022\n\n\002id" +
-      "\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\016\n\006server\030\003 \001(\005\022\020\n\010" +
-      "masterId\030\004 \001(\005\022\022\n\nmasterName\030\005 \001(\t\022\024\n\014nu" +
-      "mberMember\030\006 \001(\005\022\021\n\tmaxMember\030\007 \001(\005\022\020\n\010j" +
-      "oinRule\030\010 \001(\005\022\"\n\006member\030\t \003(\0132\022.pbdson.C" +
-      "lanMember\022\r\n\005intro\030\n \001(\t\022\023\n\013activityLog\030" +
-      "\013 \003(\t\022\r\n\005level\030\014 \001(\005\022\013\n\003exp\030\r \001(\003\022\016\n\006max",
-      "Exp\030\016 \001(\003\022\016\n\006avatar\030\017 \001(\005\022\014\n\004rank\030\020 \001(\005\022" +
-      "\r\n\005power\030\021 \001(\003\022\022\n\njoinTrophy\030\022 \001(\005\022\014\n\004st" +
-      "ar\030\023 \001(\005\022\021\n\tpointRank\030\024 \001(\003\"K\n\nPbListUse" +
-      "r\022\035\n\005aUser\030\001 \003(\0132\016.pbdson.PbUser\022\036\n\006myIn" +
-      "fo\030\002 \001(\0132\016.pbdson.PbUser\"\263\002\n\nClanMember\022" +
-      "\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\016\n\006trophy\030\003 \001(" +
-      "\005\022\020\n\010warPoint\030\004 \001(\005\022\r\n\005level\030\005 \001(\005\022\024\n\014re" +
-      "ceiveTroop\030\006 \001(\005\022\021\n\tsendTroop\030\007 \001(\005\022\r\n\005i" +
-      "sNew\030\010 \001(\010\022\020\n\010position\030\t \001(\005\022\023\n\013clanDona" +
-      "ted\030\027 \001(\005\022\022\n\nkungfuClan\030\030 \001(\t\022\022\n\nlastAct",
-      "ion\030\031 \001(\003\022\013\n\003vip\030\n \001(\005\022\022\n\nrankTrophy\030\013 \001" +
-      "(\005\022\016\n\006avatar\030\014 \003(\005\022\022\n\ncurDonated\030\r \001(\005\022\016" +
-      "\n\006online\030\016 \001(\010\"J\n\nPbListClan\022\034\n\004clan\030\001 \003" +
-      "(\0132\016.pbdson.PbClan\022\036\n\006myClan\030\002 \001(\0132\016.pbd" +
-      "son.PbClan\"3\n\rPbListHistory\022\"\n\007history\030\001" +
-      " \003(\0132\021.pbdson.PbHistory\"\260\001\n\tPbHistory\022\020\n" +
-      "\010isAttack\030\001 \001(\010\022\020\n\010targetId\030\002 \001(\005\022\016\n\006sta" +
-      "tus\030\003 \001(\005\022\022\n\ntimeAttack\030\004 \001(\005\022\016\n\006point1\030" +
-      "\005 \001(\005\022\016\n\006point2\030\006 \001(\005\022\014\n\004time\030\007 \001(\003\022\034\n\004u" +
-      "ser\030\010 \001(\0132\016.pbdson.PbUser\022\017\n\007myPoint\030\t \001",
-      "(\005\"\311\001\n\007PbArena\022\022\n\ntimeRemain\030\001 \001(\003\022\016\n\006my" +
-      "Rank\030\002 \001(\005\022\017\n\007myPoint\030\003 \001(\005\022!\n\topponents" +
-      "\030\004 \003(\0132\016.pbdson.PbUser\022\021\n\tfeeTicket\030\005 \001(" +
-      "\005\022\024\n\014curBuyTicket\030\006 \001(\005\022\024\n\014maxBuyTicket\030" +
-      "\007 \001(\005\022\022\n\nhasDefense\030\010 \001(\010\022\023\n\013defenseTeam" +
-      "\030\t \003(\005\"\237\004\n\006PbUser\022\n\n\002id\030\001 \001(\005\022\020\n\010usernam" +
-      "e\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\014\n\004gold\030\004 \001(\003\022\013\n\003g" +
-      "em\030\005 \001(\003\022\013\n\003exp\030\006 \001(\003\022\r\n\005level\030\007 \001(\005\022\016\n\006" +
-      "avatar\030\010 \003(\005\022\013\n\003vip\030\t \003(\005\022&\n\010clanInfo\030\n " +
-      "\001(\0132\024.pbdson.CommonVector\022\"\n\004info\030\013 \001(\0132",
-      "\024.pbdson.CommonVector\022\r\n\005petId\030\014 \003(\005\022\020\n\010" +
-      "facebook\030\r \001(\t\022&\n\010userInfo\030\016 \001(\0132\024.pbdso" +
-      "n.CommonVector\022%\n\007weapons\030\017 \003(\0132\024.pbdson" +
-      ".PbUserWeapon\022\014\n\004rank\030\020 \001(\005\022\014\n\004desc\030\021 \001(" +
-      "\t\022\023\n\013weaponEquip\030\022 \003(\005\022\r\n\005point\030\023 \003(\005\022\026\n" +
-      "\016timeLastAction\030\024 \001(\003\022\r\n\005honor\030\025 \001(\005\022\r\n\005" +
-      "power\030\026 \001(\003\022\021\n\titemEquip\030\027 \003(\005\022\017\n\007channe" +
-      "l\030\030 \003(\005\022\021\n\tpointRank\030\031 \001(\003\022\021\n\tarenaRank\030" +
-      "\032 \001(\005\022\014\n\004ruby\030\033 \001(\003\022\013\n\003pet\030\034 \003(\005\"n\n\017PbAr" +
-      "enaTeamInfo\022\014\n\004team\030\001 \001(\005\022\'\n\006heroes\030\002 \003(",
-      "\0132\027.pbdson.PbArenaHeroInfo\022$\n\004pets\030\003 \003(\013" +
-      "2\026.pbdson.PbArenaPetInfo\"I\n\017PbArenaHeroI" +
-      "nfo\022\016\n\006avatar\030\001 \001(\005\022&\n\007weapons\030\002 \003(\0132\025.p" +
-      "bdson.PbArenaWeapon\".\n\016PbArenaPetInfo\022\016\n" +
-      "\006avatar\030\001 \001(\005\022\014\n\004star\030\002 \001(\005\"8\n\rPbArenaWe" +
-      "apon\022\n\n\002id\030\001 \001(\005\022\014\n\004slot\030\002 \001(\005\022\r\n\005level\030" +
-      "\003 \001(\005\"\355\004\n\nPbUserData\022\025\n\rlvGachaWeapon\030\001 " +
-      "\001(\005\022\022\n\nlvGachaPet\030\002 \001(\005\022\022\n\nlvTraining\030\004 " +
-      "\001(\005\022\025\n\rmaxlvTraining\030\005 \001(\005\022\025\n\rnumPointLe" +
-      "vel\030\006 \001(\005\022\r\n\005stone\030\007 \001(\005\022\020\n\010stoneVip\030\010 \001",
-      "(\005\022!\n\005items\030\t \001(\0132\022.pbdson.PbListItem\0223\n" +
-      "\016itemEquipments\030\n \001(\0132\033.pbdson.PbListIte" +
-      "mEquipment\022+\n\naItemEquip\030\013 \003(\0132\027.pbdson." +
-      "PbItemEquipment\022\'\n\naItemPoint\030\014 \003(\0132\023.pb" +
-      "dson.PbItemPoint\022%\n\taItemFarm\030\r \003(\0132\022.pb" +
-      "dson.PbItemFarm\022#\n\naItemPiece\030\016 \003(\0132\017.pb" +
-      "dson.PbPiece\022\033\n\004aPet\030\017 \003(\0132\r.pbdson.PbPe" +
-      "t\022\035\n\005aHero\030\020 \003(\0132\016.pbdson.PbHero\022\020\n\010tuto" +
-      "rial\030\021 \001(\005\022\021\n\tdameSkins\030\022 \003(\005\022\025\n\rdameSki" +
-      "nEquip\030\023 \001(\005\022\017\n\007bossGod\030\024 \003(\005\022\022\n\nchatFra",
-      "mes\030\025 \003(\005\022\026\n\016chatFrameEquip\030\026 \001(\005\022\016\n\006tri" +
-      "als\030\027 \003(\005\022\022\n\ntrialEquip\030\030 \001(\005\"*\n\nPbListI" +
-      "tem\022\034\n\004item\030\001 \003(\0132\016.pbdson.PbItem\"(\n\tPbL" +
-      "istPet\022\033\n\004pets\030\001 \003(\0132\r.pbdson.PbPet\"^\n\005P" +
-      "bPet\022\n\n\002id\030\001 \001(\005\022\014\n\004star\030\002 \001(\005\022\n\n\002hp\030\004 \001" +
-      "(\005\022\r\n\005maxHp\030\005 \001(\005\022\r\n\005power\030\006 \001(\003\022\021\n\tbonu" +
-      "sStar\030\007 \003(\005\"7\n\016PbListItemFarm\022%\n\titemFar" +
-      "ms\030\001 \003(\0132\022.pbdson.PbItemFarm\":\n\017PbListIt" +
-      "emPoint\022\'\n\nitemPoints\030\001 \003(\0132\023.pbdson.PbI" +
-      "temPoint\"A\n\023PbListItemEquipment\022*\n\titemE",
-      "quip\030\001 \003(\0132\027.pbdson.PbItemEquipment\"+\n\nP" +
-      "bListChat\022\035\n\005aChat\030\001 \003(\0132\016.pbdson.PbChat" +
-      "\"+\n\nPbListHero\022\035\n\005aHero\030\001 \003(\0132\016.pbdson.P" +
-      "bHero\"\225\001\n\nPbListLand\022\035\n\005aLand\030\001 \003(\0132\016.pb" +
-      "dson.PbLand\022\016\n\006aBonus\030\002 \003(\003\022\022\n\ntreeStatu" +
-      "s\030\003 \003(\003\022\014\n\004deco\030\004 \003(\005\022\021\n\tbonusTime\030\005 \001(\005" +
-      "\022\021\n\tbonusItem\030\006 \001(\005\022\020\n\010bonusExp\030\007 \001(\005\"\225\001" +
-      "\n\006PbLand\022\016\n\006landId\030\001 \001(\005\022\016\n\006treeId\030\002 \001(\005" +
-      "\022\021\n\ttimePlant\030\003 \001(\003\022\023\n\013timeHarvest\030\004 \001(\003" +
-      "\022\020\n\010hasWater\030\005 \001(\005\022\021\n\tfertilize\030\006 \001(\005\022\017\n",
-      "\007ferTime\030\007 \001(\005\022\r\n\005bonus\030\010 \003(\003\"<\n\006PbHero\022" +
-      "\016\n\006heroId\030\001 \001(\005\022\r\n\005skins\030\002 \003(\005\022\023\n\013itemEq" +
-      "uipId\030\003 \003(\005\"\211\001\n\006PbChat\022\017\n\007reqTime\030\001 \001(\003\022" +
-      "\017\n\007message\030\002 \001(\t\022\014\n\004type\030\003 \001(\005\022\034\n\004user\030\004" +
-      " \001(\0132\016.pbdson.PbUser\022\"\n\004info\030\005 \001(\0132\024.pbd" +
-      "son.CommonVector\022\r\n\005point\030\006 \003(\005\"7\n\020PbLis" +
-      "tChatFriend\022#\n\005chats\030\001 \003(\0132\024.pbdson.PbCh" +
-      "atFriend\"j\n\014PbChatFriend\022\016\n\006userId\030\001 \001(\005" +
-      "\022\017\n\007message\030\002 \001(\t\022\016\n\006avatar\030\003 \003(\005\022\014\n\004nam" +
-      "e\030\004 \001(\t\022\014\n\004time\030\005 \001(\003\022\r\n\005level\030\006 \001(\005\"v\n\006",
-      "PbShop\022\"\n\006tabSet\030\001 \003(\0132\022.pbdson.PbItemSh" +
-      "op\022#\n\007tabDeal\030\002 \003(\0132\022.pbdson.PbItemShop\022" +
-      "#\n\007tabMisc\030\003 \003(\0132\022.pbdson.PbItemShop\"\245\001\n" +
-      "\nPbItemShop\022\n\n\002id\030\001 \001(\005\022\013\n\003tab\030\002 \001(\005\022\014\n\004" +
-      "name\030\003 \001(\t\022\014\n\004desc\030\004 \001(\t\022\014\n\004item\030\005 \003(\003\022\r" +
-      "\n\005price\030\006 \003(\003\022\r\n\005image\030\007 \001(\t\022\016\n\006status\030\010" +
-      " \001(\005\022\022\n\ndescStatus\030\t \001(\t\022\022\n\ntimeRemain\030\n" +
-      " \001(\003\"@\n\006PbItem\022\n\n\002id\030\001 \001(\005\022\014\n\004type\030\002 \001(\005" +
-      "\022\016\n\006number\030\003 \001(\005\022\014\n\004data\030\004 \001(\t\"6\n\nPbItem" +
-      "Farm\022\014\n\004type\030\001 \001(\005\022\n\n\002id\030\002 \001(\005\022\016\n\006number",
-      "\030\003 \001(\005\"3\n\007PbPiece\022\014\n\004type\030\001 \001(\005\022\n\n\002id\030\002 " +
-      "\001(\005\022\016\n\006number\030\003 \001(\005\".\n\013PbItemPoint\022\017\n\007it" +
-      "emKey\030\001 \001(\005\022\016\n\006number\030\002 \001(\003\"\216\001\n\017PbItemEq" +
-      "uipment\022\n\n\002id\030\001 \001(\003\022\017\n\007itemKey\030\002 \001(\005\022\r\n\005" +
-      "level\030\003 \001(\005\022\014\n\004lock\030\004 \001(\010\022\r\n\005point\030\005 \003(\005" +
-      "\022\016\n\006expire\030\006 \001(\003\022\023\n\013lockDestroy\030\007 \001(\010\022\r\n" +
-      "\005bless\030\010 \001(\005\"+\n\nPbListStat\022\035\n\005aStat\030\001 \003(" +
-      "\0132\016.pbdson.PbStat\"{\n\006PbStat\022\n\n\002id\030\001 \001(\005\022" +
-      "\016\n\006status\030\002 \001(\005\022\r\n\005level\030\003 \001(\005\022\021\n\tcondit" +
-      "ion\030\004 \003(\005\022\020\n\010maxLevel\030\005 \001(\005\022\020\n\010pointPer\030",
-      "\006 \001(\005\022\017\n\007formula\030\007 \003(\002\"9\n\020PbListUserWeap" +
-      "on\022%\n\007weapons\030\001 \003(\0132\024.pbdson.PbUserWeapo" +
-      "n\"i\n\014PbUserWeapon\022\n\n\002id\030\001 \001(\005\022\r\n\005level\030\002" +
-      " \001(\005\022\016\n\006number\030\003 \001(\005\022\017\n\007isEquid\030\004 \001(\005\022\016\n" +
-      "\006timeCd\030\005 \001(\002\022\r\n\005bless\030\006 \001(\005\"/\n\nListActi" +
-      "on\022!\n\007aAction\030\001 \003(\0132\020.pbdson.PbAction\"*\n" +
-      "\010PbAction\022\020\n\010actionId\030\001 \001(\005\022\014\n\004data\030\002 \001(" +
-      "\014\".\n\014CommonVector\022\r\n\005aLong\030\001 \003(\003\022\017\n\007aStr" +
-      "ing\030\002 \003(\t\"9\n\020ListCommonVector\022%\n\007aVector" +
-      "\030\001 \003(\0132\024.pbdson.CommonVector\"g\n\017PbCharac",
-      "terInfo\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\014\n\004tea" +
-      "m\030\003 \001(\005\022\016\n\006avatar\030\004 \003(\005\022\r\n\005aItem\030\005 \003(\005\022\r" +
-      "\n\005point\030\006 \003(\005\"+\n\nPbListMail\022\035\n\005aMail\030\001 \003" +
-      "(\0132\016.pbdson.PbMail\"\210\001\n\006PbMail\022\n\n\002id\030\001 \001(" +
-      "\005\022\r\n\005title\030\002 \001(\t\022\017\n\007message\030\003 \001(\t\022\r\n\005bon" +
-      "us\030\004 \003(\005\022\017\n\007receive\030\005 \001(\005\022\014\n\004time\030\006 \001(\003\022" +
-      "\020\n\010senderId\030\007 \001(\005\022\022\n\nsenderName\030\010 \001(\t\"\257\001" +
-      "\n\tPbEndGame\022\017\n\007popupId\030\001 \001(\005\022\021\n\tbattleKe" +
-      "y\030\002 \001(\t\022\r\n\005isWin\030\003 \001(\010\022\017\n\007message\030\004 \001(\t\022" +
-      "\r\n\005bonus\030\005 \003(\003\022\014\n\004time\030\006 \001(\005\022\017\n\007perDame\030",
-      "\007 \001(\005\022\014\n\004star\030\010 \001(\005\022\"\n\004info\030\t \001(\0132\024.pbds" +
-      "on.CommonVector\"{\n\nPbRoomInfo\022\020\n\010roomTyp" +
-      "e\030\001 \001(\005\022\017\n\007service\030\002 \001(\005\022!\n\003cmm\030\003 \001(\0132\024." +
-      "pbdson.CommonVector\022\'\n\005lstCm\030\004 \001(\0132\030.pbd" +
-      "son.ListCommonVector\"Z\n\017PbListMiniLotte\022" +
-      "\020\n\010allBonus\030\001 \003(\003\022\020\n\010luckyNum\030\002 \003(\005\022#\n\006a" +
-      "Lotte\030\003 \003(\0132\023.pbdson.PbMiniLotte\"C\n\013PbMi" +
-      "niLotte\022\021\n\tnumChoose\030\001 \003(\005\022\022\n\nprizeIndex" +
-      "\030\002 \001(\005\022\r\n\005bonus\030\003 \003(\005\"B\n\024PbListLotteryHi" +
-      "story\022*\n\010aLottery\030\001 \003(\0132\030.pbdson.PbLotte",
-      "ryHistory\"\247\001\n\020PbLotteryHistory\022\017\n\007eventI" +
-      "d\030\001 \001(\005\022\014\n\004type\030\002 \001(\005\022\020\n\010luckyNum\030\003 \001(\005\022" +
-      "\016\n\006number\030\004 \003(\005\022\014\n\004time\030\005 \001(\003\022\r\n\005bonus\030\006" +
-      " \003(\003\022\016\n\006status\030\007 \001(\005\022\021\n\tlistBonus\030\010 \003(\003\022" +
-      "\022\n\nlistResult\030\t \003(\005\"*\n\014PbUnitUpdate\022\014\n\004t" +
-      "ype\030\001 \001(\005\022\014\n\004data\030\002 \003(\014\"z\n\tPbUnitPos\022\n\n\002" +
-      "id\030\001 \001(\003\022\r\n\005speed\030\002 \001(\005\022\024\n\014lastInputSeq\030" +
-      "\003 \001(\003\022\032\n\003pos\030\004 \001(\0132\r.pbdson.PbPos\022 \n\tdir" +
-      "ection\030\005 \001(\0132\r.pbdson.PbPos\"1\n\014PbListBul" +
-      "let\022!\n\007bullets\030\001 \003(\0132\020.pbdson.PbBullet\"@",
-      "\n\010PbBullet\022\n\n\002id\030\001 \001(\005\022\032\n\003pos\030\002 \001(\0132\r.pb" +
-      "dson.PbPos\022\014\n\004info\030\003 \003(\005\"(\n\tPbListTab\022\033\n" +
-      "\004tabs\030\001 \003(\0132\r.pbdson.PbTab\"Z\n\005PbTab\022\r\n\005t" +
-      "abId\030\001 \001(\005\022\025\n\reventTemplate\030\002 \001(\005\022\r\n\005ima" +
-      "ge\030\003 \001(\t\022\014\n\004name\030\004 \001(\t\022\016\n\006notify\030\005 \001(\010\"\255" +
-      "\002\n\017PbEventBuyMonth\022\021\n\teventName\030\001 \001(\t\022\023\n" +
-      "\013imageBanner\030\002 \001(\t\022\022\n\ntextBanner\030\003 \001(\t\022\r" +
-      "\n\005level\030\004 \001(\005\022\020\n\010curPoint\030\005 \001(\005\022\020\n\010maxPo" +
-      "int\030\006 \001(\005\022\025\n\rbuttonAddGoto\030\007 \001(\005\022\017\n\007keyH" +
-      "elp\030\010 \001(\t\022\016\n\006timeCD\030\t \001(\003\022\021\n\tstatusBuy\030\n",
-      " \001(\005\022\r\n\005price\030\013 \003(\003\022\022\n\nnormalName\030\014 \001(\t\022" +
-      "\017\n\007vipName\030\r \001(\t\022,\n\005cells\030\016 \003(\0132\035.pbdson" +
-      ".PbCellPanelEventMonth\"\315\001\n\014PbEventTimer\022" +
-      "\n\n\002id\030\001 \001(\005\022\016\n\006status\030\002 \001(\005\022\022\n\ntimeRemai" +
-      "n\030\003 \001(\003\022\r\n\005bonus\030\004 \003(\003\022\r\n\005price\030\005 \003(\003\022\020\n" +
-      "\010oldPrice\030\006 \003(\003\022\014\n\004name\030\007 \001(\t\022\014\n\004desc\030\010 " +
-      "\001(\t\022\014\n\004sale\030\t \001(\t\022\017\n\007bgrPath\030\n \001(\t\022\"\n\004in" +
-      "fo\030\013 \001(\0132\024.pbdson.CommonVector\"w\n\025PbCell" +
-      "PanelEventMonth\022\r\n\005level\030\001 \001(\005\022\013\n\003exp\030\002 " +
-      "\001(\005\022\016\n\006status\030\003 \001(\005\022\021\n\tstatusVip\030\004 \001(\005\022\r",
-      "\n\005bonus\030\005 \003(\003\022\020\n\010bonusVip\030\006 \003(\003\"\221\001\n\023PbPa" +
-      "nelEventTabCell\022\021\n\teventName\030\001 \001(\t\022\023\n\013im" +
-      "ageBanner\030\002 \001(\t\022\022\n\ntextBanner\030\003 \001(\t\022\016\n\006t" +
-      "imeCD\030\t \001(\003\022.\n\005cells\030\016 \003(\0132\037.pbdson.PbCe" +
-      "llPanelEventTabCell\"i\n\027PbCellPanelEventT" +
-      "abCell\022\n\n\002id\030\001 \001(\005\022\020\n\010cellName\030\002 \001(\t\022\r\n\005" +
-      "bonus\030\003 \003(\003\022\013\n\003per\030\004 \001(\t\022\024\n\014buttonStatus" +
-      "\030\005 \001(\005\"\237\001\n\tPbWelfare\022\017\n\007eventId\030\001 \001(\005\022\016\n" +
-      "\006notify\030\002 \001(\010\022%\n\006banner\030\003 \001(\0132\025.pbdson.P" +
-      "bBannerEvent\022&\n\010tabEvent\030\004 \003(\0132\024.pbdson.",
-      "PbTabWelfare\022\017\n\007keyHelp\030\005 \001(\t\022\021\n\tcountdo" +
-      "wn\030\006 \001(\003\"b\n\014PbTabWelfare\022\r\n\005tabId\030\001 \001(\005\022" +
-      "\017\n\007tabName\030\002 \001(\t\022\"\n\005cells\030\003 \003(\0132\023.pbdson" +
-      ".PbCellEvent\022\016\n\006notify\030\004 \001(\010\"\263\001\n\rPbBanne" +
-      "rEvent\022\022\n\npathBanner\030\001 \001(\t\022\014\n\004text\030\002 \001(\t" +
-      "\022\022\n\nbonusImage\030\003 \001(\t\022\021\n\tboxStatus\030\004 \001(\005\022" +
-      "\020\n\010bonusBox\030\005 \003(\005\022\014\n\004desc\030\006 \001(\t\022\021\n\tpathT" +
-      "itle\030\007 \001(\t\022&\n\004info\030\010 \001(\0132\030.pbdson.ListCo" +
-      "mmonVector\"\353\001\n\013PbCellEvent\022\n\n\002id\030\001 \001(\005\022\r" +
-      "\n\005image\030\002 \001(\t\022\r\n\005bonus\030\003 \003(\005\022\020\n\010nameCell",
-      "\030\004 \001(\t\022\020\n\010textCell\030\005 \001(\t\022\020\n\010textDesc\030\006 \001" +
-      "(\t\022\016\n\006numBuy\030\007 \001(\005\022\r\n\005limit\030\010 \001(\005\022\r\n\005pri" +
-      "ce\030\t \003(\003\022\024\n\014buttonStatus\030\n \001(\005\022\020\n\010bonusD" +
-      "ay\030\013 \003(\005\022\022\n\ntimeRemain\030\014 \001(\003\022\022\n\ntimeExpi" +
-      "re\030\r \001(\003\"\225\001\n\013PbEvent7Day\022&\n\004days\030\001 \003(\0132\030" +
-      ".pbdson.PbPanelEvent7Day\022\022\n\ntimeRemain\030\002" +
-      " \001(\003\022\020\n\010curValue\030\003 \001(\005\022\020\n\010maxValue\030\004 \001(\005" +
-      "\022&\n\tposReward\030\005 \003(\0132\023.pbdson.PbPosReward" +
-      "\"U\n\013PbPosReward\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(" +
-      "\t\022\r\n\005point\030\003 \001(\005\022\r\n\005bonus\030\004 \003(\003\022\016\n\006statu",
-      "s\030\005 \001(\005\"R\n\016PbTabEvent7Day\022\n\n\002id\030\001 \001(\005\022\014\n" +
-      "\004name\030\002 \001(\t\022&\n\005cells\030\003 \003(\0132\027.pbdson.PbCe" +
-      "llEvent7Day\"\272\001\n\020PbPanelEvent7Day\022$\n\004tab1" +
-      "\030\001 \001(\0132\026.pbdson.PbTabEvent7Day\022$\n\004tab2\030\002" +
-      " \001(\0132\026.pbdson.PbTabEvent7Day\022$\n\004tab3\030\003 \001" +
-      "(\0132\026.pbdson.PbTabEvent7Day\022$\n\004tab4\030\004 \001(\013" +
-      "2\026.pbdson.PbTabEvent7Day\022\016\n\006isLock\030\005 \001(\010" +
-      "\"\306\001\n\017PbCellEvent7Day\022\n\n\002id\030\001 \001(\005\022\014\n\004name" +
-      "\030\002 \001(\t\022\014\n\004desc\030\003 \001(\t\022\020\n\010curValue\030\004 \001(\005\022\020" +
-      "\n\010maxValue\030\005 \001(\005\022\r\n\005bonus\030\006 \003(\003\022\024\n\014butto",
-      "nStatus\030\007 \001(\005\022\022\n\nbuttonGoto\030\010 \001(\005\022\020\n\010old" +
-      "Price\030\t \003(\003\022\020\n\010newPrice\030\n \003(\003\022\n\n\002xu\030\013 \001(" +
-      "\005\"\'\n\tPbListIAP\022\032\n\003iap\030\001 \003(\0132\r.pbdson.PpI" +
-      "AP\"\264\001\n\005PpIAP\022\n\n\002id\030\001 \001(\005\022\030\n\020productIdAnd" +
-      "roid\030\002 \001(\t\022\024\n\014productIdIos\030\003 \001(\t\022\014\n\004name" +
-      "\030\004 \001(\t\022\r\n\005price\030\005 \001(\t\022\r\n\005bonus\030\006 \003(\003\022\020\n\010" +
-      "addBonus\030\007 \003(\003\022\020\n\010addTitle\030\010 \001(\t\022\016\n\006vipE" +
-      "xp\030\t \001(\005\022\017\n\007priceQr\030\n \001(\t\"\354\001\n\rPbBattleAr" +
-      "ena\022\017\n\007mapInfo\030\001 \003(\005\022-\n\006myInfo\030\002 \001(\0132\035.p" +
-      "bdson.PbBattleArenaUserInfo\022.\n\007oppInfo\030\003",
-      " \001(\0132\035.pbdson.PbBattleArenaUserInfo\022-\n\006m" +
-      "yTeam\030\004 \001(\0132\035.pbdson.PbBattleListArenaHe" +
-      "ro\022.\n\007oppTeam\030\005 \001(\0132\035.pbdson.PbBattleLis" +
-      "tArenaHero\022\014\n\004time\030\006 \001(\005\"@\n\025PbBattleList" +
-      "ArenaHero\022\'\n\004team\030\001 \003(\0132\031.pbdson.PbBattl" +
-      "eArenaHero\"d\n\025PbBattleArenaUserInfo\022\016\n\006a" +
-      "vatar\030\001 \003(\005\022\r\n\005level\030\002 \001(\005\022\013\n\003vip\030\003 \001(\005\022" +
-      "\014\n\004name\030\004 \001(\t\022\021\n\trankPoint\030\005 \001(\005\"\337\001\n\021PbB" +
-      "attleArenaHero\022\n\n\002id\030\001 \001(\005\022\016\n\006avatar\030\002 \001" +
-      "(\005\022\020\n\010heroType\030\003 \001(\005\022\014\n\004slot\030\004 \001(\005\022\r\n\005le",
-      "vel\030\005 \001(\005\022\r\n\005point\030\006 \003(\005\022\013\n\003pos\030\007 \003(\002\022\021\n" +
-      "\tdirection\030\010 \003(\002\022\"\n\004info\030\t \001(\0132\024.pbdson." +
-      "CommonVector\022,\n\007weapons\030\n \003(\0132\033.pbdson.P" +
-      "bBattleArenaWeapon\"M\n\023PbBattleArenaWeapo" +
-      "n\022\n\n\002id\030\001 \001(\005\022\014\n\004slot\030\002 \001(\005\022\r\n\005level\030\003 \001" +
-      "(\005\022\r\n\005shots\030\004 \003(\005*!\n\tCellState\022\n\n\006ACTIVE" +
-      "\020\001\022\010\n\004HIDE\020\002*C\n\tStateType\022\023\n\017TYPE_ADD_RE" +
-      "MOVE\020\001\022\014\n\010TYPE_POS\020\002\022\023\n\017TYPE_UNIT_STATE\020" +
-      "\003B\024\n\010protocolB\010Pbmethod"
+      "n.PbChunk\"_\n\007PbChunk\022\n\n\002id\030\001 \001(\005\022\r\n\005isAd" +
+      "d\030\002 \001(\010\022\032\n\003pos\030\003 \001(\0132\r.pbdson.PbPos\022\035\n\005c" +
+      "ells\030\004 \003(\0132\016.pbdson.PbCell\"l\n\tPbInitMap\022" +
+      "\r\n\005mapId\030\001 \001(\005\022\020\n\010battleId\030\002 \001(\003\022\037\n\006chun" +
+      "ks\030\003 \003(\0132\017.pbdson.PbChunk\022\035\n\005units\030\004 \003(\013" +
+      "2\016.pbdson.PbUnit\"\262\001\n\007PbState\022\022\n\nserverTi" +
+      "me\030\001 \001(\002\022\"\n\007unitPos\030\002 \003(\0132\021.pbdson.PbUni" +
+      "tPos\022\037\n\007unitAdd\030\003 \003(\0132\016.pbdson.PbUnit\022)\n",
+      "\013aUnitUpdate\030\004 \003(\0132\024.pbdson.PbUnitUpdate" +
+      "\022#\n\nchunkState\030\005 \003(\0132\017.pbdson.PbChunk\":\n" +
+      "\017PbListUnitState\022\'\n\naUnitState\030\001 \003(\0132\023.p" +
+      "bdson.PbUnitState\"8\n\013PbUnitState\022\n\n\002id\030\001" +
+      " \001(\003\022\016\n\006status\030\002 \003(\005\022\r\n\005point\030\003 \003(\005\"\351\002\n\006" +
+      "PbClan\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\016\n\006serv" +
+      "er\030\003 \001(\005\022\020\n\010masterId\030\004 \001(\005\022\022\n\nmasterName" +
+      "\030\005 \001(\t\022\024\n\014numberMember\030\006 \001(\005\022\021\n\tmaxMembe" +
+      "r\030\007 \001(\005\022\020\n\010joinRule\030\010 \001(\005\022\"\n\006member\030\t \003(" +
+      "\0132\022.pbdson.ClanMember\022\r\n\005intro\030\n \001(\t\022\023\n\013",
+      "activityLog\030\013 \003(\t\022\r\n\005level\030\014 \001(\005\022\013\n\003exp\030" +
+      "\r \001(\003\022\016\n\006maxExp\030\016 \001(\003\022\016\n\006avatar\030\017 \001(\005\022\014\n" +
+      "\004rank\030\020 \001(\005\022\r\n\005power\030\021 \001(\003\022\022\n\njoinTrophy" +
+      "\030\022 \001(\005\022\014\n\004star\030\023 \001(\005\022\021\n\tpointRank\030\024 \001(\003\"" +
+      "K\n\nPbListUser\022\035\n\005aUser\030\001 \003(\0132\016.pbdson.Pb" +
+      "User\022\036\n\006myInfo\030\002 \001(\0132\016.pbdson.PbUser\"\263\002\n" +
+      "\nClanMember\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\016\n" +
+      "\006trophy\030\003 \001(\005\022\020\n\010warPoint\030\004 \001(\005\022\r\n\005level" +
+      "\030\005 \001(\005\022\024\n\014receiveTroop\030\006 \001(\005\022\021\n\tsendTroo" +
+      "p\030\007 \001(\005\022\r\n\005isNew\030\010 \001(\010\022\020\n\010position\030\t \001(\005",
+      "\022\023\n\013clanDonated\030\027 \001(\005\022\022\n\nkungfuClan\030\030 \001(" +
+      "\t\022\022\n\nlastAction\030\031 \001(\003\022\013\n\003vip\030\n \001(\005\022\022\n\nra" +
+      "nkTrophy\030\013 \001(\005\022\016\n\006avatar\030\014 \003(\005\022\022\n\ncurDon" +
+      "ated\030\r \001(\005\022\016\n\006online\030\016 \001(\010\"J\n\nPbListClan" +
+      "\022\034\n\004clan\030\001 \003(\0132\016.pbdson.PbClan\022\036\n\006myClan" +
+      "\030\002 \001(\0132\016.pbdson.PbClan\"3\n\rPbListHistory\022" +
+      "\"\n\007history\030\001 \003(\0132\021.pbdson.PbHistory\"\260\001\n\t" +
+      "PbHistory\022\020\n\010isAttack\030\001 \001(\010\022\020\n\010targetId\030" +
+      "\002 \001(\005\022\016\n\006status\030\003 \001(\005\022\022\n\ntimeAttack\030\004 \001(" +
+      "\005\022\016\n\006point1\030\005 \001(\005\022\016\n\006point2\030\006 \001(\005\022\014\n\004tim",
+      "e\030\007 \001(\003\022\034\n\004user\030\010 \001(\0132\016.pbdson.PbUser\022\017\n" +
+      "\007myPoint\030\t \001(\005\"\311\001\n\007PbArena\022\022\n\ntimeRemain" +
+      "\030\001 \001(\003\022\016\n\006myRank\030\002 \001(\005\022\017\n\007myPoint\030\003 \001(\005\022" +
+      "!\n\topponents\030\004 \003(\0132\016.pbdson.PbUser\022\021\n\tfe" +
+      "eTicket\030\005 \001(\005\022\024\n\014curBuyTicket\030\006 \001(\005\022\024\n\014m" +
+      "axBuyTicket\030\007 \001(\005\022\022\n\nhasDefense\030\010 \001(\010\022\023\n" +
+      "\013defenseTeam\030\t \003(\005\"\237\004\n\006PbUser\022\n\n\002id\030\001 \001(" +
+      "\005\022\020\n\010username\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\014\n\004gol" +
+      "d\030\004 \001(\003\022\013\n\003gem\030\005 \001(\003\022\013\n\003exp\030\006 \001(\003\022\r\n\005lev" +
+      "el\030\007 \001(\005\022\016\n\006avatar\030\010 \003(\005\022\013\n\003vip\030\t \003(\005\022&\n",
+      "\010clanInfo\030\n \001(\0132\024.pbdson.CommonVector\022\"\n" +
+      "\004info\030\013 \001(\0132\024.pbdson.CommonVector\022\r\n\005pet" +
+      "Id\030\014 \003(\005\022\020\n\010facebook\030\r \001(\t\022&\n\010userInfo\030\016" +
+      " \001(\0132\024.pbdson.CommonVector\022%\n\007weapons\030\017 " +
+      "\003(\0132\024.pbdson.PbUserWeapon\022\014\n\004rank\030\020 \001(\005\022" +
+      "\014\n\004desc\030\021 \001(\t\022\023\n\013weaponEquip\030\022 \003(\005\022\r\n\005po" +
+      "int\030\023 \003(\005\022\026\n\016timeLastAction\030\024 \001(\003\022\r\n\005hon" +
+      "or\030\025 \001(\005\022\r\n\005power\030\026 \001(\003\022\021\n\titemEquip\030\027 \003" +
+      "(\005\022\017\n\007channel\030\030 \003(\005\022\021\n\tpointRank\030\031 \001(\003\022\021" +
+      "\n\tarenaRank\030\032 \001(\005\022\014\n\004ruby\030\033 \001(\003\022\013\n\003pet\030\034",
+      " \003(\005\"n\n\017PbArenaTeamInfo\022\014\n\004team\030\001 \001(\005\022\'\n" +
+      "\006heroes\030\002 \003(\0132\027.pbdson.PbArenaHeroInfo\022$" +
+      "\n\004pets\030\003 \003(\0132\026.pbdson.PbArenaPetInfo\"I\n\017" +
+      "PbArenaHeroInfo\022\016\n\006avatar\030\001 \001(\005\022&\n\007weapo" +
+      "ns\030\002 \003(\0132\025.pbdson.PbArenaWeapon\".\n\016PbAre" +
+      "naPetInfo\022\016\n\006avatar\030\001 \001(\005\022\014\n\004star\030\002 \001(\005\"" +
+      "8\n\rPbArenaWeapon\022\n\n\002id\030\001 \001(\005\022\014\n\004slot\030\002 \001" +
+      "(\005\022\r\n\005level\030\003 \001(\005\"\355\004\n\nPbUserData\022\025\n\rlvGa" +
+      "chaWeapon\030\001 \001(\005\022\022\n\nlvGachaPet\030\002 \001(\005\022\022\n\nl" +
+      "vTraining\030\004 \001(\005\022\025\n\rmaxlvTraining\030\005 \001(\005\022\025",
+      "\n\rnumPointLevel\030\006 \001(\005\022\r\n\005stone\030\007 \001(\005\022\020\n\010" +
+      "stoneVip\030\010 \001(\005\022!\n\005items\030\t \001(\0132\022.pbdson.P" +
+      "bListItem\0223\n\016itemEquipments\030\n \001(\0132\033.pbds" +
+      "on.PbListItemEquipment\022+\n\naItemEquip\030\013 \003" +
+      "(\0132\027.pbdson.PbItemEquipment\022\'\n\naItemPoin" +
+      "t\030\014 \003(\0132\023.pbdson.PbItemPoint\022%\n\taItemFar" +
+      "m\030\r \003(\0132\022.pbdson.PbItemFarm\022#\n\naItemPiec" +
+      "e\030\016 \003(\0132\017.pbdson.PbPiece\022\033\n\004aPet\030\017 \003(\0132\r" +
+      ".pbdson.PbPet\022\035\n\005aHero\030\020 \003(\0132\016.pbdson.Pb" +
+      "Hero\022\020\n\010tutorial\030\021 \001(\005\022\021\n\tdameSkins\030\022 \003(",
+      "\005\022\025\n\rdameSkinEquip\030\023 \001(\005\022\017\n\007bossGod\030\024 \003(" +
+      "\005\022\022\n\nchatFrames\030\025 \003(\005\022\026\n\016chatFrameEquip\030" +
+      "\026 \001(\005\022\016\n\006trials\030\027 \003(\005\022\022\n\ntrialEquip\030\030 \001(" +
+      "\005\"*\n\nPbListItem\022\034\n\004item\030\001 \003(\0132\016.pbdson.P" +
+      "bItem\"(\n\tPbListPet\022\033\n\004pets\030\001 \003(\0132\r.pbdso" +
+      "n.PbPet\"^\n\005PbPet\022\n\n\002id\030\001 \001(\005\022\014\n\004star\030\002 \001" +
+      "(\005\022\n\n\002hp\030\004 \001(\005\022\r\n\005maxHp\030\005 \001(\005\022\r\n\005power\030\006" +
+      " \001(\003\022\021\n\tbonusStar\030\007 \003(\005\"7\n\016PbListItemFar" +
+      "m\022%\n\titemFarms\030\001 \003(\0132\022.pbdson.PbItemFarm" +
+      "\":\n\017PbListItemPoint\022\'\n\nitemPoints\030\001 \003(\0132",
+      "\023.pbdson.PbItemPoint\"A\n\023PbListItemEquipm" +
+      "ent\022*\n\titemEquip\030\001 \003(\0132\027.pbdson.PbItemEq" +
+      "uipment\"+\n\nPbListChat\022\035\n\005aChat\030\001 \003(\0132\016.p" +
+      "bdson.PbChat\"+\n\nPbListHero\022\035\n\005aHero\030\001 \003(" +
+      "\0132\016.pbdson.PbHero\"\225\001\n\nPbListLand\022\035\n\005aLan" +
+      "d\030\001 \003(\0132\016.pbdson.PbLand\022\016\n\006aBonus\030\002 \003(\003\022" +
+      "\022\n\ntreeStatus\030\003 \003(\003\022\014\n\004deco\030\004 \003(\005\022\021\n\tbon" +
+      "usTime\030\005 \001(\005\022\021\n\tbonusItem\030\006 \001(\005\022\020\n\010bonus" +
+      "Exp\030\007 \001(\005\"\225\001\n\006PbLand\022\016\n\006landId\030\001 \001(\005\022\016\n\006" +
+      "treeId\030\002 \001(\005\022\021\n\ttimePlant\030\003 \001(\003\022\023\n\013timeH",
+      "arvest\030\004 \001(\003\022\020\n\010hasWater\030\005 \001(\005\022\021\n\tfertil" +
+      "ize\030\006 \001(\005\022\017\n\007ferTime\030\007 \001(\005\022\r\n\005bonus\030\010 \003(" +
+      "\003\"<\n\006PbHero\022\016\n\006heroId\030\001 \001(\005\022\r\n\005skins\030\002 \003" +
+      "(\005\022\023\n\013itemEquipId\030\003 \003(\005\"\211\001\n\006PbChat\022\017\n\007re" +
+      "qTime\030\001 \001(\003\022\017\n\007message\030\002 \001(\t\022\014\n\004type\030\003 \001" +
+      "(\005\022\034\n\004user\030\004 \001(\0132\016.pbdson.PbUser\022\"\n\004info" +
+      "\030\005 \001(\0132\024.pbdson.CommonVector\022\r\n\005point\030\006 " +
+      "\003(\005\"7\n\020PbListChatFriend\022#\n\005chats\030\001 \003(\0132\024" +
+      ".pbdson.PbChatFriend\"j\n\014PbChatFriend\022\016\n\006" +
+      "userId\030\001 \001(\005\022\017\n\007message\030\002 \001(\t\022\016\n\006avatar\030",
+      "\003 \003(\005\022\014\n\004name\030\004 \001(\t\022\014\n\004time\030\005 \001(\003\022\r\n\005lev" +
+      "el\030\006 \001(\005\"v\n\006PbShop\022\"\n\006tabSet\030\001 \003(\0132\022.pbd" +
+      "son.PbItemShop\022#\n\007tabDeal\030\002 \003(\0132\022.pbdson" +
+      ".PbItemShop\022#\n\007tabMisc\030\003 \003(\0132\022.pbdson.Pb" +
+      "ItemShop\"\245\001\n\nPbItemShop\022\n\n\002id\030\001 \001(\005\022\013\n\003t" +
+      "ab\030\002 \001(\005\022\014\n\004name\030\003 \001(\t\022\014\n\004desc\030\004 \001(\t\022\014\n\004" +
+      "item\030\005 \003(\003\022\r\n\005price\030\006 \003(\003\022\r\n\005image\030\007 \001(\t" +
+      "\022\016\n\006status\030\010 \001(\005\022\022\n\ndescStatus\030\t \001(\t\022\022\n\n" +
+      "timeRemain\030\n \001(\003\"@\n\006PbItem\022\n\n\002id\030\001 \001(\005\022\014" +
+      "\n\004type\030\002 \001(\005\022\016\n\006number\030\003 \001(\005\022\014\n\004data\030\004 \001",
+      "(\t\"6\n\nPbItemFarm\022\014\n\004type\030\001 \001(\005\022\n\n\002id\030\002 \001" +
+      "(\005\022\016\n\006number\030\003 \001(\005\"3\n\007PbPiece\022\014\n\004type\030\001 " +
+      "\001(\005\022\n\n\002id\030\002 \001(\005\022\016\n\006number\030\003 \001(\005\".\n\013PbIte" +
+      "mPoint\022\017\n\007itemKey\030\001 \001(\005\022\016\n\006number\030\002 \001(\003\"" +
+      "\216\001\n\017PbItemEquipment\022\n\n\002id\030\001 \001(\003\022\017\n\007itemK" +
+      "ey\030\002 \001(\005\022\r\n\005level\030\003 \001(\005\022\014\n\004lock\030\004 \001(\010\022\r\n" +
+      "\005point\030\005 \003(\005\022\016\n\006expire\030\006 \001(\003\022\023\n\013lockDest" +
+      "roy\030\007 \001(\010\022\r\n\005bless\030\010 \001(\005\"+\n\nPbListStat\022\035" +
+      "\n\005aStat\030\001 \003(\0132\016.pbdson.PbStat\"{\n\006PbStat\022" +
+      "\n\n\002id\030\001 \001(\005\022\016\n\006status\030\002 \001(\005\022\r\n\005level\030\003 \001",
+      "(\005\022\021\n\tcondition\030\004 \003(\005\022\020\n\010maxLevel\030\005 \001(\005\022" +
+      "\020\n\010pointPer\030\006 \001(\005\022\017\n\007formula\030\007 \003(\002\"9\n\020Pb" +
+      "ListUserWeapon\022%\n\007weapons\030\001 \003(\0132\024.pbdson" +
+      ".PbUserWeapon\"i\n\014PbUserWeapon\022\n\n\002id\030\001 \001(" +
+      "\005\022\r\n\005level\030\002 \001(\005\022\016\n\006number\030\003 \001(\005\022\017\n\007isEq" +
+      "uid\030\004 \001(\005\022\016\n\006timeCd\030\005 \001(\002\022\r\n\005bless\030\006 \001(\005" +
+      "\"/\n\nListAction\022!\n\007aAction\030\001 \003(\0132\020.pbdson" +
+      ".PbAction\"*\n\010PbAction\022\020\n\010actionId\030\001 \001(\005\022" +
+      "\014\n\004data\030\002 \001(\014\".\n\014CommonVector\022\r\n\005aLong\030\001" +
+      " \003(\003\022\017\n\007aString\030\002 \003(\t\"9\n\020ListCommonVecto",
+      "r\022%\n\007aVector\030\001 \003(\0132\024.pbdson.CommonVector" +
+      "\"g\n\017PbCharacterInfo\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030" +
+      "\002 \001(\t\022\014\n\004team\030\003 \001(\005\022\016\n\006avatar\030\004 \003(\005\022\r\n\005a" +
+      "Item\030\005 \003(\005\022\r\n\005point\030\006 \003(\005\"+\n\nPbListMail\022" +
+      "\035\n\005aMail\030\001 \003(\0132\016.pbdson.PbMail\"\210\001\n\006PbMai" +
+      "l\022\n\n\002id\030\001 \001(\005\022\r\n\005title\030\002 \001(\t\022\017\n\007message\030" +
+      "\003 \001(\t\022\r\n\005bonus\030\004 \003(\005\022\017\n\007receive\030\005 \001(\005\022\014\n" +
+      "\004time\030\006 \001(\003\022\020\n\010senderId\030\007 \001(\005\022\022\n\nsenderN" +
+      "ame\030\010 \001(\t\"\257\001\n\tPbEndGame\022\017\n\007popupId\030\001 \001(\005" +
+      "\022\021\n\tbattleKey\030\002 \001(\t\022\r\n\005isWin\030\003 \001(\010\022\017\n\007me",
+      "ssage\030\004 \001(\t\022\r\n\005bonus\030\005 \003(\003\022\014\n\004time\030\006 \001(\005" +
+      "\022\017\n\007perDame\030\007 \001(\005\022\014\n\004star\030\010 \001(\005\022\"\n\004info\030" +
+      "\t \001(\0132\024.pbdson.CommonVector\"{\n\nPbRoomInf" +
+      "o\022\020\n\010roomType\030\001 \001(\005\022\017\n\007service\030\002 \001(\005\022!\n\003" +
+      "cmm\030\003 \001(\0132\024.pbdson.CommonVector\022\'\n\005lstCm" +
+      "\030\004 \001(\0132\030.pbdson.ListCommonVector\"Z\n\017PbLi" +
+      "stMiniLotte\022\020\n\010allBonus\030\001 \003(\003\022\020\n\010luckyNu" +
+      "m\030\002 \003(\005\022#\n\006aLotte\030\003 \003(\0132\023.pbdson.PbMiniL" +
+      "otte\"C\n\013PbMiniLotte\022\021\n\tnumChoose\030\001 \003(\005\022\022" +
+      "\n\nprizeIndex\030\002 \001(\005\022\r\n\005bonus\030\003 \003(\005\"B\n\024PbL",
+      "istLotteryHistory\022*\n\010aLottery\030\001 \003(\0132\030.pb" +
+      "dson.PbLotteryHistory\"\247\001\n\020PbLotteryHisto" +
+      "ry\022\017\n\007eventId\030\001 \001(\005\022\014\n\004type\030\002 \001(\005\022\020\n\010luc" +
+      "kyNum\030\003 \001(\005\022\016\n\006number\030\004 \003(\005\022\014\n\004time\030\005 \001(" +
+      "\003\022\r\n\005bonus\030\006 \003(\003\022\016\n\006status\030\007 \001(\005\022\021\n\tlist" +
+      "Bonus\030\010 \003(\003\022\022\n\nlistResult\030\t \003(\005\"*\n\014PbUni" +
+      "tUpdate\022\014\n\004type\030\001 \001(\005\022\014\n\004data\030\002 \003(\014\"z\n\tP" +
+      "bUnitPos\022\n\n\002id\030\001 \001(\003\022\r\n\005speed\030\002 \001(\005\022\024\n\014l" +
+      "astInputSeq\030\003 \001(\003\022\032\n\003pos\030\004 \001(\0132\r.pbdson." +
+      "PbPos\022 \n\tdirection\030\005 \001(\0132\r.pbdson.PbPos\"",
+      "1\n\014PbListBullet\022!\n\007bullets\030\001 \003(\0132\020.pbdso" +
+      "n.PbBullet\"@\n\010PbBullet\022\n\n\002id\030\001 \001(\005\022\032\n\003po" +
+      "s\030\002 \001(\0132\r.pbdson.PbPos\022\014\n\004info\030\003 \003(\005\"(\n\t" +
+      "PbListTab\022\033\n\004tabs\030\001 \003(\0132\r.pbdson.PbTab\"Z" +
+      "\n\005PbTab\022\r\n\005tabId\030\001 \001(\005\022\025\n\reventTemplate\030" +
+      "\002 \001(\005\022\r\n\005image\030\003 \001(\t\022\014\n\004name\030\004 \001(\t\022\016\n\006no" +
+      "tify\030\005 \001(\010\"\255\002\n\017PbEventBuyMonth\022\021\n\teventN" +
+      "ame\030\001 \001(\t\022\023\n\013imageBanner\030\002 \001(\t\022\022\n\ntextBa" +
+      "nner\030\003 \001(\t\022\r\n\005level\030\004 \001(\005\022\020\n\010curPoint\030\005 " +
+      "\001(\005\022\020\n\010maxPoint\030\006 \001(\005\022\025\n\rbuttonAddGoto\030\007",
+      " \001(\005\022\017\n\007keyHelp\030\010 \001(\t\022\016\n\006timeCD\030\t \001(\003\022\021\n" +
+      "\tstatusBuy\030\n \001(\005\022\r\n\005price\030\013 \003(\003\022\022\n\nnorma" +
+      "lName\030\014 \001(\t\022\017\n\007vipName\030\r \001(\t\022,\n\005cells\030\016 " +
+      "\003(\0132\035.pbdson.PbCellPanelEventMonth\"\315\001\n\014P" +
+      "bEventTimer\022\n\n\002id\030\001 \001(\005\022\016\n\006status\030\002 \001(\005\022" +
+      "\022\n\ntimeRemain\030\003 \001(\003\022\r\n\005bonus\030\004 \003(\003\022\r\n\005pr" +
+      "ice\030\005 \003(\003\022\020\n\010oldPrice\030\006 \003(\003\022\014\n\004name\030\007 \001(" +
+      "\t\022\014\n\004desc\030\010 \001(\t\022\014\n\004sale\030\t \001(\t\022\017\n\007bgrPath" +
+      "\030\n \001(\t\022\"\n\004info\030\013 \001(\0132\024.pbdson.CommonVect" +
+      "or\"w\n\025PbCellPanelEventMonth\022\r\n\005level\030\001 \001",
+      "(\005\022\013\n\003exp\030\002 \001(\005\022\016\n\006status\030\003 \001(\005\022\021\n\tstatu" +
+      "sVip\030\004 \001(\005\022\r\n\005bonus\030\005 \003(\003\022\020\n\010bonusVip\030\006 " +
+      "\003(\003\"\221\001\n\023PbPanelEventTabCell\022\021\n\teventName" +
+      "\030\001 \001(\t\022\023\n\013imageBanner\030\002 \001(\t\022\022\n\ntextBanne" +
+      "r\030\003 \001(\t\022\016\n\006timeCD\030\t \001(\003\022.\n\005cells\030\016 \003(\0132\037" +
+      ".pbdson.PbCellPanelEventTabCell\"i\n\027PbCel" +
+      "lPanelEventTabCell\022\n\n\002id\030\001 \001(\005\022\020\n\010cellNa" +
+      "me\030\002 \001(\t\022\r\n\005bonus\030\003 \003(\003\022\013\n\003per\030\004 \001(\t\022\024\n\014" +
+      "buttonStatus\030\005 \001(\005\"\237\001\n\tPbWelfare\022\017\n\007even" +
+      "tId\030\001 \001(\005\022\016\n\006notify\030\002 \001(\010\022%\n\006banner\030\003 \001(",
+      "\0132\025.pbdson.PbBannerEvent\022&\n\010tabEvent\030\004 \003" +
+      "(\0132\024.pbdson.PbTabWelfare\022\017\n\007keyHelp\030\005 \001(" +
+      "\t\022\021\n\tcountdown\030\006 \001(\003\"b\n\014PbTabWelfare\022\r\n\005" +
+      "tabId\030\001 \001(\005\022\017\n\007tabName\030\002 \001(\t\022\"\n\005cells\030\003 " +
+      "\003(\0132\023.pbdson.PbCellEvent\022\016\n\006notify\030\004 \001(\010" +
+      "\"\263\001\n\rPbBannerEvent\022\022\n\npathBanner\030\001 \001(\t\022\014" +
+      "\n\004text\030\002 \001(\t\022\022\n\nbonusImage\030\003 \001(\t\022\021\n\tboxS" +
+      "tatus\030\004 \001(\005\022\020\n\010bonusBox\030\005 \003(\005\022\014\n\004desc\030\006 " +
+      "\001(\t\022\021\n\tpathTitle\030\007 \001(\t\022&\n\004info\030\010 \001(\0132\030.p" +
+      "bdson.ListCommonVector\"\353\001\n\013PbCellEvent\022\n",
+      "\n\002id\030\001 \001(\005\022\r\n\005image\030\002 \001(\t\022\r\n\005bonus\030\003 \003(\005" +
+      "\022\020\n\010nameCell\030\004 \001(\t\022\020\n\010textCell\030\005 \001(\t\022\020\n\010" +
+      "textDesc\030\006 \001(\t\022\016\n\006numBuy\030\007 \001(\005\022\r\n\005limit\030" +
+      "\010 \001(\005\022\r\n\005price\030\t \003(\003\022\024\n\014buttonStatus\030\n \001" +
+      "(\005\022\020\n\010bonusDay\030\013 \003(\005\022\022\n\ntimeRemain\030\014 \001(\003" +
+      "\022\022\n\ntimeExpire\030\r \001(\003\"\225\001\n\013PbEvent7Day\022&\n\004" +
+      "days\030\001 \003(\0132\030.pbdson.PbPanelEvent7Day\022\022\n\n" +
+      "timeRemain\030\002 \001(\003\022\020\n\010curValue\030\003 \001(\005\022\020\n\010ma" +
+      "xValue\030\004 \001(\005\022&\n\tposReward\030\005 \003(\0132\023.pbdson" +
+      ".PbPosReward\"U\n\013PbPosReward\022\n\n\002id\030\001 \001(\005\022",
+      "\014\n\004name\030\002 \001(\t\022\r\n\005point\030\003 \001(\005\022\r\n\005bonus\030\004 " +
+      "\003(\003\022\016\n\006status\030\005 \001(\005\"R\n\016PbTabEvent7Day\022\n\n" +
+      "\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022&\n\005cells\030\003 \003(\0132\027" +
+      ".pbdson.PbCellEvent7Day\"\272\001\n\020PbPanelEvent" +
+      "7Day\022$\n\004tab1\030\001 \001(\0132\026.pbdson.PbTabEvent7D" +
+      "ay\022$\n\004tab2\030\002 \001(\0132\026.pbdson.PbTabEvent7Day" +
+      "\022$\n\004tab3\030\003 \001(\0132\026.pbdson.PbTabEvent7Day\022$" +
+      "\n\004tab4\030\004 \001(\0132\026.pbdson.PbTabEvent7Day\022\016\n\006" +
+      "isLock\030\005 \001(\010\"\306\001\n\017PbCellEvent7Day\022\n\n\002id\030\001" +
+      " \001(\005\022\014\n\004name\030\002 \001(\t\022\014\n\004desc\030\003 \001(\t\022\020\n\010curV",
+      "alue\030\004 \001(\005\022\020\n\010maxValue\030\005 \001(\005\022\r\n\005bonus\030\006 " +
+      "\003(\003\022\024\n\014buttonStatus\030\007 \001(\005\022\022\n\nbuttonGoto\030" +
+      "\010 \001(\005\022\020\n\010oldPrice\030\t \003(\003\022\020\n\010newPrice\030\n \003(" +
+      "\003\022\n\n\002xu\030\013 \001(\005\"\'\n\tPbListIAP\022\032\n\003iap\030\001 \003(\0132" +
+      "\r.pbdson.PpIAP\"\264\001\n\005PpIAP\022\n\n\002id\030\001 \001(\005\022\030\n\020" +
+      "productIdAndroid\030\002 \001(\t\022\024\n\014productIdIos\030\003" +
+      " \001(\t\022\014\n\004name\030\004 \001(\t\022\r\n\005price\030\005 \001(\t\022\r\n\005bon" +
+      "us\030\006 \003(\003\022\020\n\010addBonus\030\007 \003(\003\022\020\n\010addTitle\030\010" +
+      " \001(\t\022\016\n\006vipExp\030\t \001(\005\022\017\n\007priceQr\030\n \001(\t\"\354\001" +
+      "\n\rPbBattleArena\022\017\n\007mapInfo\030\001 \003(\005\022-\n\006myIn",
+      "fo\030\002 \001(\0132\035.pbdson.PbBattleArenaUserInfo\022" +
+      ".\n\007oppInfo\030\003 \001(\0132\035.pbdson.PbBattleArenaU" +
+      "serInfo\022-\n\006myTeam\030\004 \001(\0132\035.pbdson.PbBattl" +
+      "eListArenaHero\022.\n\007oppTeam\030\005 \001(\0132\035.pbdson" +
+      ".PbBattleListArenaHero\022\014\n\004time\030\006 \001(\005\"@\n\025" +
+      "PbBattleListArenaHero\022\'\n\004team\030\001 \003(\0132\031.pb" +
+      "dson.PbBattleArenaHero\"d\n\025PbBattleArenaU" +
+      "serInfo\022\016\n\006avatar\030\001 \003(\005\022\r\n\005level\030\002 \001(\005\022\013" +
+      "\n\003vip\030\003 \001(\005\022\014\n\004name\030\004 \001(\t\022\021\n\trankPoint\030\005" +
+      " \001(\005\"\337\001\n\021PbBattleArenaHero\022\n\n\002id\030\001 \001(\005\022\016",
+      "\n\006avatar\030\002 \001(\005\022\020\n\010heroType\030\003 \001(\005\022\014\n\004slot" +
+      "\030\004 \001(\005\022\r\n\005level\030\005 \001(\005\022\r\n\005point\030\006 \003(\005\022\013\n\003" +
+      "pos\030\007 \003(\002\022\021\n\tdirection\030\010 \003(\002\022\"\n\004info\030\t \001" +
+      "(\0132\024.pbdson.CommonVector\022,\n\007weapons\030\n \003(" +
+      "\0132\033.pbdson.PbBattleArenaWeapon\"M\n\023PbBatt" +
+      "leArenaWeapon\022\n\n\002id\030\001 \001(\005\022\014\n\004slot\030\002 \001(\005\022" +
+      "\r\n\005level\030\003 \001(\005\022\r\n\005shots\030\004 \003(\005*!\n\tCellSta" +
+      "te\022\n\n\006ACTIVE\020\001\022\010\n\004HIDE\020\002*T\n\tStateType\022\023\n" +
+      "\017TYPE_ADD_REMOVE\020\001\022\014\n\010TYPE_POS\020\002\022\023\n\017TYPE" +
+      "_UNIT_STATE\020\003\022\017\n\013CHUNK_STATE\020\004*-\n\016CellOb",
+      "jectType\022\010\n\004TREE\020\001\022\007\n\003BOX\020\002\022\010\n\004BONE\020\003B\024\n" +
+      "\010protocolB\010Pbmethod"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -99281,7 +99830,7 @@ public final class Pbmethod {
           internal_static_pbdson_PbChunk_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbChunk_descriptor,
-              new java.lang.String[] { "Id", "Pos", "Cells", });
+              new java.lang.String[] { "Id", "IsAdd", "Pos", "Cells", });
           internal_static_pbdson_PbInitMap_descriptor =
             getDescriptor().getMessageTypes().get(9);
           internal_static_pbdson_PbInitMap_fieldAccessorTable = new
@@ -99293,7 +99842,7 @@ public final class Pbmethod {
           internal_static_pbdson_PbState_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbState_descriptor,
-              new java.lang.String[] { "ServerTime", "UnitPos", "UnitAdd", "AUnitUpdate", });
+              new java.lang.String[] { "ServerTime", "UnitPos", "UnitAdd", "AUnitUpdate", "ChunkState", });
           internal_static_pbdson_PbListUnitState_descriptor =
             getDescriptor().getMessageTypes().get(11);
           internal_static_pbdson_PbListUnitState_fieldAccessorTable = new
