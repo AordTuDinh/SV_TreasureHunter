@@ -4,7 +4,6 @@ import com.google.protobuf.ByteString;
 import game.battle.type.UnitType;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
-import protocol.Pbmethod.*;
 
 import java.util.List;
 
@@ -34,6 +33,7 @@ public class ProtoState {
         // region add
         parsePbUnitAdd(buffer, proto.getUnitAddList());
         parsePbUnitPos(buffer, proto.getUnitPosList());
+
         parsePbUnitUpdate(buffer, proto);
         parsePbChunkState(buffer, proto.getChunkStateList());
         // endregion
@@ -45,7 +45,7 @@ public class ProtoState {
     private static void parsePbChunkState(ByteBuf buffer, List<PbChunk> chunkStateList) {
         try {
             if (!chunkStateList.isEmpty()) {
-                buffer.writeByte(StateType.CHUNK_STATE);
+                buffer.writeByte(StateType.TYPE_UNIT_STATE_VALUE);
                 buffer.writeByte(chunkStateList.size());
                 for (int i = 0; i < chunkStateList.size(); i++) {
                     PbChunk tmp = chunkStateList.get(i);
@@ -136,7 +136,6 @@ public class ProtoState {
         if (!aUnitPos.isEmpty()) {
             buffer.writeByte(StateType.TYPE_POS_VALUE);
             buffer.writeByte(aUnitPos.size());
-            
             for (int i = 0; i < aUnitPos.size(); i++) {
                 PbUnitPos tmp = aUnitPos.get(i);
                 buffer.writeLong(tmp.getId());
