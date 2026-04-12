@@ -154,17 +154,11 @@ public abstract class BaseRoom extends MonoRoom {
             }
 
             if (!protoUnitStateCopy.isEmpty()) {
-                builder.addAUnitUpdate(
-                        ProtoState.protoUnitUpdate(
-                                Pbmethod.StateType.TYPE_UNIT_STATE_VALUE,
-                                ProtoState.protoListCharacterState(protoUnitStateCopy)
-                        )
-                );
+                builder.setUnitUpdate(ProtoState.protoUnitUpdate(Pbmethod.StateType.TYPE_UNIT_STATE_VALUE,
+                        ProtoState.protoListCharacterState(protoUnitStateCopy)));
             }
 
-            chunkViewData.put(chunkId,
-                    ProtoState.convertProtoBuffToState(builder.build())
-            );
+            chunkViewData.put(chunkId, ProtoState.convertProtoBuffToState(builder.build()));
         }
 
         return chunkViewData;
@@ -226,7 +220,7 @@ public abstract class BaseRoom extends MonoRoom {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        mUnit.forEach((k,u)->u.Update());
+        mUnit.forEach((k, u) -> u.Update());
     }
 
 

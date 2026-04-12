@@ -1,6 +1,7 @@
 package game.protocol;
 
 import com.google.protobuf.ByteString;
+import com.google.protobuf.InvalidProtocolBufferException;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import protocol.Pbmethod;
@@ -12,11 +13,11 @@ public class ProtoState {
     public static Pbmethod.PbUnitUpdate protoUnitUpdate(int type, ByteString data) {
         Pbmethod.PbUnitUpdate.Builder builder = Pbmethod.PbUnitUpdate.newBuilder();
         builder.setType(type);
-        builder.addData(data);
+        builder.setData(data);
         return builder.build();
     }
 
-    public static ByteString protoListCharacterState(List<Pbmethod.PbUnitState> characterState) {
+    public static ByteString protoListCharacterState(List<PbUnitState> characterState) {
         Pbmethod.PbListUnitState.Builder builder = Pbmethod.PbListUnitState.newBuilder();
         int size = characterState.size();
         for (int i = 0; i < size; i++) {
@@ -33,9 +34,11 @@ public class ProtoState {
         buffer.writeFloat(proto.getServerTime());
         // region add
         parsePbUnitAdd(buffer, proto.getUnitAddList());
+        // pos
         parsePbUnitPos(buffer, proto.getUnitPosList());
-
-        parsePbUnitUpdate(buffer, proto);
+        // state update
+        parsePbUnitUpdate(buffer, proto.getUnitUpdate());
+        // chunk
         parsePbChunkState(buffer, proto.getChunkStateList());
         // endregion
         byte[] bytes = new byte[buffer.readableBytes()];
@@ -43,25 +46,29 @@ public class ProtoState {
         return bytes;
     }
 
-    private static void parsePbChunkState(ByteBuf buffer, List<Pbmethod.PbChunk> chunkStateList) {
+    private static void parsePbChunkState(ByteBuf buffer, List<PbChunk> chunkStateList) {
         try {
             if (!chunkStateList.isEmpty()) {
-                buffer.writeByte(Pbmethod.StateType.TYPE_UNIT_STATE_VALUE);
+                // type - size [ id  - isadd - x - y -size [type - chunkId - x - y - statetype]]
+                buffer.writeByte(StateType.TYPE_CHUNK_STATE_VALUE);
+
                 buffer.writeByte(chunkStateList.size());
+
                 for (int i = 0; i < chunkStateList.size(); i++) {
                     Pbmethod.PbChunk tmp = chunkStateList.get(i);
                     buffer.writeInt(tmp.getId());
                     boolean isAdd = tmp.getIsAdd();
-                    if(isAdd){
+                    buffer.writeBoolean(isAdd);
+                    if (isAdd) {
                         buffer.writeFloat(tmp.getPos().getX());
                         buffer.writeFloat(tmp.getPos().getY());
 
-                        int sizeChunk =  tmp.getCellsCount();
-                        buffer.writeInt(sizeChunk);
-                        for (int j = 0; j < sizeChunk; j++) {
+                        int sizeCell = tmp.getCellsCount();
+                        buffer.writeByte(sizeCell);
+                        for (int j = 0; j < sizeCell; j++) {
                             Pbmethod.PbCell cell = tmp.getCells(j);
                             buffer.writeByte(cell.getType());
-                            buffer.writeInt(cell.getChunkId());
+                            buffer.writeByte(cell.getChunkId());
                             buffer.writeFloat(cell.getPos().getX());
                             buffer.writeFloat(cell.getPos().getY());
                             // cell state
@@ -150,34 +157,36 @@ public class ProtoState {
         }
     }
 
-    public static void parsePbUnitUpdate(ByteBuf buffer, PbState proto) {
-        int size = proto.getAUnitUpdateCount();
-        for (int i = 0; i < size; i++) {
-            try {
-                PbUnitUpdate update = proto.getAUnitUpdate(i);
-                switch (update.getType()) {
-                    case StateType.TYPE_UNIT_STATE_VALUE:
-                        PbListUnitState aPlayerState = PbListUnitState.parseFrom(update.getData(0).toByteArray());
-                        parsePbUpdatePlayer(buffer, aPlayerState.getAUnitStateList());
-                        break;
+    public static void parsePbUnitUpdate(ByteBuf buffer, PbUnitUpdate protoUnitUpdate) {
+        switch (protoUnitUpdate.getType()) {
+            case StateType.TYPE_UNIT_STATE_VALUE:
+                buffer.writeByte(protoUnitUpdate.getType());
+                PbListUnitState aPlayerState = null;
+                try {
+                    aPlayerState = PbListUnitState.parseFrom(protoUnitUpdate.getData().toByteArray());
+                } catch (InvalidProtocolBufferException e) {
+                    throw new RuntimeException(e);
                 }
-            } catch (Exception ex) {
-                System.err.println("Error at index " + i + ": " + ex);
-            }
+                // type - size - data
+                parsePbUpdatePlayer(buffer, aPlayerState.getAUnitStateList());
+                break;
         }
+
     }
 
     public static void parsePbUpdatePlayer(ByteBuf buffer, List<PbUnitState> aCharacterState) {
         if (!aCharacterState.isEmpty()) {
-            buffer.writeByte(StateType.TYPE_UNIT_STATE_VALUE);
             buffer.writeByte(aCharacterState.size());
             for (int i = 0; i < aCharacterState.size(); i++) {
                 PbUnitState tmp = aCharacterState.get(i);
+                // id
                 buffer.writeLong(tmp.getId());
+                // status
                 buffer.writeByte(tmp.getStatusCount());
                 for (int j = 0; j < tmp.getStatusCount(); j++) {
                     buffer.writeByte(tmp.getStatus(j));
                 }
+                // data
                 for (int j = 0; j < tmp.getPointCount(); j++) {
                     buffer.writeInt(tmp.getPoint(j));
                 }

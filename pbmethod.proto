@@ -46,7 +46,7 @@ enum StateType {
   TYPE_ADD_REMOVE = 1;
   TYPE_POS = 2;
   TYPE_UNIT_STATE = 3;
-  CHUNK_STATE = 4;
+  TYPE_CHUNK_STATE = 4;
 }
 
 enum CellObjectType{
@@ -109,7 +109,7 @@ message PbState{
   optional float serverTime = 1;
   repeated PbUnitPos unitPos = 2;
   repeated PbUnit unitAdd = 3;
-  repeated PbUnitUpdate aUnitUpdate = 4;
+  optional PbUnitUpdate unitUpdate = 4;
   repeated PbChunk chunkState = 5;
 }
 
@@ -120,7 +120,7 @@ message PbListUnitState {
 }
 
 message  PbUnitState{
-  optional  int64 id = 1;
+  optional int64 id = 1;
   repeated int32 status = 2; // type - length
   repeated int32 point = 3; // data
 }
@@ -550,7 +550,7 @@ message  PbLotteryHistory {
 
 message  PbUnitUpdate{
   optional int32  type = 1;
-  repeated bytes data = 2;
+  optional bytes data = 2;
 }
 
 
