@@ -19,7 +19,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ozudo.base.database.DBJPA;
 import ozudo.base.helper.*;
-import protocol.Pbmethod;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -263,8 +262,8 @@ public class UserEntity implements Serializable {
         return builder;
     }
 
-    public Pbmethod.PbBattleArenaUserInfo toProtoArenaInfo(int point) {
-        Pbmethod.PbBattleArenaUserInfo.Builder pb = Pbmethod.PbBattleArenaUserInfo.newBuilder();
+    public protocol.Pbmethod.PbBattleArenaUserInfo toProtoArenaInfo(int point) {
+        protocol.Pbmethod.PbBattleArenaUserInfo.Builder pb = protocol.Pbmethod.PbBattleArenaUserInfo.newBuilder();
         pb.addAllAvatar(getAvatar());
         pb.setLevel(level);
         pb.setVip(vip);

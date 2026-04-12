@@ -7175,15 +7175,15 @@ public final class Pbmethod {
   public interface PbCellOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // optional bytes type = 1;
+    // optional int32 type = 1;
     /**
-     * <code>optional bytes type = 1;</code>
+     * <code>optional int32 type = 1;</code>
      */
     boolean hasType();
     /**
-     * <code>optional bytes type = 1;</code>
+     * <code>optional int32 type = 1;</code>
      */
-    com.google.protobuf.ByteString getType();
+    int getType();
 
     // optional int32 chunkId = 2;
     /**
@@ -7270,9 +7270,9 @@ public final class Pbmethod {
               }
               break;
             }
-            case 10: {
+            case 8: {
               bitField0_ |= 0x00000001;
-              type_ = input.readBytes();
+              type_ = input.readInt32();
               break;
             }
             case 16: {
@@ -7344,19 +7344,19 @@ public final class Pbmethod {
     }
 
     private int bitField0_;
-    // optional bytes type = 1;
+    // optional int32 type = 1;
     public static final int TYPE_FIELD_NUMBER = 1;
-    private com.google.protobuf.ByteString type_;
+    private int type_;
     /**
-     * <code>optional bytes type = 1;</code>
+     * <code>optional int32 type = 1;</code>
      */
     public boolean hasType() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>optional bytes type = 1;</code>
+     * <code>optional int32 type = 1;</code>
      */
-    public com.google.protobuf.ByteString getType() {
+    public int getType() {
       return type_;
     }
 
@@ -7415,7 +7415,7 @@ public final class Pbmethod {
     }
 
     private void initFields() {
-      type_ = com.google.protobuf.ByteString.EMPTY;
+      type_ = 0;
       chunkId_ = 0;
       pos_ = protocol.Pbmethod.PbPos.getDefaultInstance();
       state_ = protocol.Pbmethod.CellState.ACTIVE;
@@ -7433,7 +7433,7 @@ public final class Pbmethod {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, type_);
+        output.writeInt32(1, type_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeInt32(2, chunkId_);
@@ -7455,7 +7455,7 @@ public final class Pbmethod {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, type_);
+          .computeInt32Size(1, type_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
@@ -7586,7 +7586,7 @@ public final class Pbmethod {
 
       public Builder clear() {
         super.clear();
-        type_ = com.google.protobuf.ByteString.EMPTY;
+        type_ = 0;
         bitField0_ = (bitField0_ & ~0x00000001);
         chunkId_ = 0;
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -7701,38 +7701,35 @@ public final class Pbmethod {
       }
       private int bitField0_;
 
-      // optional bytes type = 1;
-      private com.google.protobuf.ByteString type_ = com.google.protobuf.ByteString.EMPTY;
+      // optional int32 type = 1;
+      private int type_ ;
       /**
-       * <code>optional bytes type = 1;</code>
+       * <code>optional int32 type = 1;</code>
        */
       public boolean hasType() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>optional bytes type = 1;</code>
+       * <code>optional int32 type = 1;</code>
        */
-      public com.google.protobuf.ByteString getType() {
+      public int getType() {
         return type_;
       }
       /**
-       * <code>optional bytes type = 1;</code>
+       * <code>optional int32 type = 1;</code>
        */
-      public Builder setType(com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000001;
+      public Builder setType(int value) {
+        bitField0_ |= 0x00000001;
         type_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional bytes type = 1;</code>
+       * <code>optional int32 type = 1;</code>
        */
       public Builder clearType() {
         bitField0_ = (bitField0_ & ~0x00000001);
-        type_ = getDefaultInstance().getType();
+        type_ = 0;
         onChanged();
         return this;
       }
@@ -99508,7 +99505,7 @@ public final class Pbmethod {
       "angeAttack\030\014 \001(\002\022\014\n\004name\030\r \001(\t\022\r\n\005alive\030" +
       "\016 \001(\010\022\024\n\014lastInputSeq\030\017 \001(\003\022\r\n\005point\030\020 \003" +
       "(\005\022\016\n\006userId\030\021 \001(\005\"e\n\006PbCell\022\014\n\004type\030\001 \001" +
-      "(\014\022\017\n\007chunkId\030\002 \001(\005\022\032\n\003pos\030\003 \001(\0132\r.pbdso",
+      "(\005\022\017\n\007chunkId\030\002 \001(\005\022\032\n\003pos\030\003 \001(\0132\r.pbdso",
       "n.PbPos\022 \n\005state\030\004 \001(\0162\021.pbdson.CellStat" +
       "e\".\n\013PbListChunk\022\037\n\006aChunk\030\001 \003(\0132\017.pbdso" +
       "n.PbChunk\"_\n\007PbChunk\022\n\n\002id\030\001 \001(\005\022\r\n\005isAd" +

@@ -1,22 +1,23 @@
 package game.protocol;
 
 import com.google.protobuf.ByteString;
-import game.battle.type.UnitType;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
+import protocol.Pbmethod;
+import protocol.Pbmethod.*;
 
 import java.util.List;
 
 public class ProtoState {
-    public static PbUnitUpdate.Builder protoUnitUpdate(int type, ByteString data) {
-        PbUnitUpdate.Builder builder = PbUnitUpdate.newBuilder();
+    public static Pbmethod.PbUnitUpdate protoUnitUpdate(int type, ByteString data) {
+        Pbmethod.PbUnitUpdate.Builder builder = Pbmethod.PbUnitUpdate.newBuilder();
         builder.setType(type);
         builder.addData(data);
-        return builder;
+        return builder.build();
     }
 
-    public static ByteString protoListCharacterState(List<PbUnitState> characterState) {
-        PbListUnitState.Builder builder = PbListUnitState.newBuilder();
+    public static ByteString protoListCharacterState(List<Pbmethod.PbUnitState> characterState) {
+        Pbmethod.PbListUnitState.Builder builder = Pbmethod.PbListUnitState.newBuilder();
         int size = characterState.size();
         for (int i = 0; i < size; i++) {
             if (characterState.get(0) != null) {
@@ -42,13 +43,13 @@ public class ProtoState {
         return bytes;
     }
 
-    private static void parsePbChunkState(ByteBuf buffer, List<PbChunk> chunkStateList) {
+    private static void parsePbChunkState(ByteBuf buffer, List<Pbmethod.PbChunk> chunkStateList) {
         try {
             if (!chunkStateList.isEmpty()) {
-                buffer.writeByte(StateType.TYPE_UNIT_STATE_VALUE);
+                buffer.writeByte(Pbmethod.StateType.TYPE_UNIT_STATE_VALUE);
                 buffer.writeByte(chunkStateList.size());
                 for (int i = 0; i < chunkStateList.size(); i++) {
-                    PbChunk tmp = chunkStateList.get(i);
+                    Pbmethod.PbChunk tmp = chunkStateList.get(i);
                     buffer.writeInt(tmp.getId());
                     boolean isAdd = tmp.getIsAdd();
                     if(isAdd){
@@ -58,7 +59,7 @@ public class ProtoState {
                         int sizeChunk =  tmp.getCellsCount();
                         buffer.writeInt(sizeChunk);
                         for (int j = 0; j < sizeChunk; j++) {
-                            PbCell cell = tmp.getCells(j);
+                            Pbmethod.PbCell cell = tmp.getCells(j);
                             buffer.writeByte(cell.getType());
                             buffer.writeInt(cell.getChunkId());
                             buffer.writeFloat(cell.getPos().getX());

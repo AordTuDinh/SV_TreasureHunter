@@ -79,7 +79,7 @@ message PbUnit{
 }
 
 message PbCell {
-  optional bytes type = 1;
+  optional int32 type = 1;
   optional int32 chunkId = 2;
   optional PbPos pos = 3;
   optional CellState state = 4;
