@@ -56,9 +56,9 @@ public class ResMapEntity extends BaseEntity implements Serializable {
         topRightP = new Pos(topRight);
 
         minChunkX = -widthChunk / 2;
-        maxChunkX = widthChunk / 2 - 1;
         minChunkY = -heightChunk / 2;
-        maxChunkY = heightChunk / 2;
+        maxChunkX = minChunkX + widthChunk - 1;
+        maxChunkY = minChunkY + heightChunk - 1;
 
         // gen default chunk
         for (int y = minChunkY; y <= maxChunkY; y++) {
@@ -142,7 +142,7 @@ public class ResMapEntity extends BaseEntity implements Serializable {
     // để private, từ tọa độ thế giới y ra chunk y local
     int worldToChunkY(int worldY) {
         int localY = (int) (worldY - botLeftP.y); // 0..69
-        int ny = Math.floorDiv(localY, 10); // 0..6
+        int ny = Math.floorDiv(localY, BattleConfig.CHUNK_SIZE);
         return minChunkY + ny; // -3..3
     }
 

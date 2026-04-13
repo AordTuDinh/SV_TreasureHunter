@@ -280,7 +280,7 @@ public abstract class BaseRoom extends MonoRoom {
         if (unit == null) return false;
         int oldChunk = unit.getChunkId();
         if (oldChunk == newChunk) return false;
-
+        System.out.println("oldChunk = " + oldChunk +" ---------newChunk = "+newChunk);
 
         if (!isValidChunkId(newChunk)) {
             Logs.warn("joinChunk invalid newChunk=" + newChunk + ", unitId=" + unit.getId());
@@ -426,6 +426,7 @@ public abstract class BaseRoom extends MonoRoom {
         if (player == null || player.getMUser() == null || player.getMUser().getChannel() == null) return;
         List<Integer> oldVisible = visibleByChunkId.get(oldChunk);
         List<Integer> newVisible = visibleByChunkId.get(newChunk);
+        System.out.println("newVisible = " + newVisible);
         if (oldVisible == null || newVisible == null) return;
 
         // entered = newVisible - oldVisible
