@@ -24,7 +24,7 @@ public abstract class MonoRoom extends Mono {
     @Getter
     long timeCreateRoom = 0;
     @Getter
-    float local_time = 0.016f; // The local timer in seconds
+    float localTime = 0.016f; // The local timer in seconds
     long _dte; // The local timer last frame time
     @Getter
     protected long battleId; // id room khác với id init

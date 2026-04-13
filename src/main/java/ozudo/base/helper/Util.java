@@ -170,7 +170,7 @@ public class Util {
     public static void sendGameData(Channel channel, byte[] data, String... magic) {
         if (channel != null && channel.isOpen() && channel.isWritable()) {
             try {
-                data = data == null ? new byte[0] : data;
+                if (data == null || data.length == 0) return;
                 ByteBuf buffer = Unpooled.buffer();
                 buffer.writeBytes(magic[0].getBytes());
                 buffer.writeInt(data.length);

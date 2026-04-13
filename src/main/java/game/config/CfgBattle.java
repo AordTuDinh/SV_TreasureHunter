@@ -22,9 +22,6 @@ public class CfgBattle {
     public static int periodFixedUpdate = 20;//0.02s
     public static int periodEffectUpdate = 500; //0.5s
     public static int periodUpdate1s = 1000; //1s
-    public static float decTimeEff = periodUpdate1s / 1000f;
-    public static float decTimeEffRoom = periodEffectUpdate / 1000f;
-    public static float updateTime = periodUpdate / 1000f;
     //
 
 

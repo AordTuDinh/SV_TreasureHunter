@@ -133,7 +133,7 @@ public abstract class Unit {
         int oldChunk = chunkId;
         int newChunk = room.worldPosToChunkId(worldPos);
         if (room.joinChunk(this, newChunk) && type == UnitType.PLAYER) {
-           room.syncViewDeltaForPlayer(this.getPlayer(),newChunk,oldChunk);
+           room.syncViewDeltaForPlayer(this.getPlayer(),oldChunk,newChunk);
         }
     }
 

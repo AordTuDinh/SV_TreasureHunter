@@ -16,7 +16,7 @@ public class NInput {
     //endregion
     //
 
-    public int seq, clientTime;
+    public int seq;
     public int typeId, skillIndex;
     public Pos playerPos;
     public Pos playerDirection;
@@ -32,8 +32,6 @@ public class NInput {
         obj.typeId = buffer.readByte();
         if (obj.typeId == INPUT_PLAYER_MOVE) {
             obj.seq = buffer.readInt();
-            obj.clientTime = buffer.readInt();
-
             float x1 = buffer.readShort() / 1000f;
             float y1 = buffer.readShort() / 1000f;
             float x2 = buffer.readShort() / 1000f;

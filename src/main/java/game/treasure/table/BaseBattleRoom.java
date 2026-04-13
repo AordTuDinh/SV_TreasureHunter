@@ -53,7 +53,7 @@ public abstract class BaseBattleRoom extends BaseRoom {
 
 
     protected void cancelTask() {
-        //System.out.println("cancelTask ------------------- " + keyRoom);
+        System.out.println("cancelTask ------------------- " + battleId);
         clearRoom();
         if (key1 != null) TaskMonitor.getInstance().cancel(key1);
         if (key2 != null) TaskMonitor.getInstance().cancel(key2);

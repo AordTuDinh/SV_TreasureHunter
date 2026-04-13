@@ -11,8 +11,8 @@ import java.util.List;
 @Data
 public class ChunkObject {
     int id;
-    Pos pos;
     List<CellObject> cells;
+    Pos pos;
 
     public ChunkObject(int id, Pos pos, List<CellObject> cells) {
         this.id = id;
@@ -24,7 +24,6 @@ public class ChunkObject {
         Pbmethod.PbChunk.Builder pb = Pbmethod.PbChunk.newBuilder();
         pb.setId(id);
         pb.setIsAdd(true);
-        pb.setPos(pos.toProto());
         for (CellObject cell : cells) {
             pb.addCells(cell.toProto());
         }

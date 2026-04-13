@@ -60,9 +60,6 @@ public class ProtoState {
                     boolean isAdd = tmp.getIsAdd();
                     buffer.writeBoolean(isAdd);
                     if (isAdd) {
-                        buffer.writeFloat(tmp.getPos().getX());
-                        buffer.writeFloat(tmp.getPos().getY());
-
                         int sizeCell = tmp.getCellsCount();
                         buffer.writeByte(sizeCell);
                         for (int j = 0; j < sizeCell; j++) {

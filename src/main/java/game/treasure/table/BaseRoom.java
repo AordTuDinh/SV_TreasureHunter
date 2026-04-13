@@ -18,7 +18,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import ozudo.base.helper.ChUtil;
-import ozudo.base.helper.GsonUtil;
 import ozudo.base.helper.Util;
 import ozudo.base.log.Logs;
 import protocol.Pbmethod;
@@ -106,8 +105,8 @@ public abstract class BaseRoom extends MonoRoom {
 
 
     protected Map<Integer, byte[]> buildChunkViewData() {
+        int action = IAction.TABLE_STATE;// K dùng nhưng viết ở đây để referent
         Map<Integer, byte[]> chunkViewData = new HashMap<>();
-
         // 1. cache unit theo chunk (convert 1 lần)
         Map<Integer, List<Pbmethod.PbUnitPos>> chunkUnitPosMap = new HashMap<>();
         for (Map.Entry<Integer, Set<Long>> entry : chunkCharacter.entrySet()) {
@@ -210,13 +209,11 @@ public abstract class BaseRoom extends MonoRoom {
     public void Update() {
         long _dt = System.currentTimeMillis() - _dte;
         _dte = System.currentTimeMillis();
-        local_time += _dt / 1000.0;
-        serverTime = local_time;
+        localTime += _dt / 1000.0;
+        serverTime = localTime;
         // send data
         try {
-            if (!aPlayerIds.isEmpty()) {
-                sendTableState();
-            } else cancelTask();
+            sendTableState();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -282,7 +279,7 @@ public abstract class BaseRoom extends MonoRoom {
     public boolean joinChunk(Unit unit, int newChunk) {
         if (unit == null) return false;
         int oldChunk = unit.getChunkId();
-        if (oldChunk == newChunk) return true;
+        if (oldChunk == newChunk) return false;
 
 
         if (!isValidChunkId(newChunk)) {
@@ -300,8 +297,8 @@ public abstract class BaseRoom extends MonoRoom {
         }
         Set<Long> newSet = chunkCharacter.get(newChunk);
         if (newSet == null) return false;
-        newSet.add(unit.getId());
 
+        newSet.add(unit.getId());
         unit.setChunkId(newChunk);
 
         // chỉ gửi remove nếu oldChunk hợp lệ
@@ -427,7 +424,6 @@ public abstract class BaseRoom extends MonoRoom {
 
     public void syncViewDeltaForPlayer(Player player, int oldChunk, int newChunk) {
         if (player == null || player.getMUser() == null || player.getMUser().getChannel() == null) return;
-
         List<Integer> oldVisible = visibleByChunkId.get(oldChunk);
         List<Integer> newVisible = visibleByChunkId.get(newChunk);
         if (oldVisible == null || newVisible == null) return;
@@ -450,17 +446,16 @@ public abstract class BaseRoom extends MonoRoom {
         for (Integer chunkId : entered) {
             Set<Long> unitIds = chunkCharacter.get(chunkId);
             if (unitIds == null) continue;
-
             for (Long uid : unitIds) {
                 if (uid == selfId) continue; // skip self nếu muốn
                 if (!added.add(uid)) continue;
 
                 Unit u = mUnit.get(uid);
                 if (u == null || !u.isAlive()) continue;
-
                 // chunkId truyền vào proto là chunk historical theo view nhập mới
                 builder.addUnitAdd(u.toProtoAdd(chunkId));
             }
+
             // add state cell in chunk
             ChunkObject chunk = mChunk.get(chunkId);
             builder.addChunkState(chunk.toProto());
@@ -478,13 +473,14 @@ public abstract class BaseRoom extends MonoRoom {
 
                 Unit u = mUnit.get(uid);
                 if (u == null) continue;
-
                 // remove theo chunk historical (chunk đang exited), không dùng u.getChunkId() hiện tại
                 builder.addUnitAdd(u.toProtoRemove(chunkId));
-                // add state cell in chunk
-                ChunkObject chunk = mChunk.get(chunkId);
-                builder.addChunkState(chunk.toProtoRemove());
+
             }
+
+            // add state cell in chunk
+            ChunkObject chunk = mChunk.get(chunkId);
+            builder.addChunkState(chunk.toProtoRemove());
         }
 
         byte[] state = ProtoState.convertProtoBuffToState(builder.build());
