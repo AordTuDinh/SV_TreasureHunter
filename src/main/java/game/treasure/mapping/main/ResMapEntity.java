@@ -130,13 +130,6 @@ public class ResMapEntity extends BaseEntity implements Serializable {
         int chunkX = worldToChunkX(fx);
         int chunkY = worldToChunkY(fy);
         int id = chunkPosToId(chunkX, chunkY);
-        int nx = chunkX - minChunkX;
-        int ny = chunkY - minChunkY;
-        System.out.printf(
-                "[worldPosToChunkId] pos=(%.4f,%.4f) floor=(%d,%d) -> chunkXY=(%d,%d) nx=%d ny=%d widthChunk=%d -> id=%d botLeft=(%.2f,%.2f)%n",
-                pos.getX(), pos.getY(), fx, fy, chunkX, chunkY, nx, ny, widthChunk, id,
-                botLeftP.getX(), botLeftP.getY()
-        );
         return id;
 
 

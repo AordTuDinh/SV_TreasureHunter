@@ -484,11 +484,6 @@ public abstract class BaseRoom extends MonoRoom {
 
         byte[] state = ProtoState.convertProtoBuffToState(builder.build());
         Util.sendGameData(player.getMUser().getChannel(), state, Constans.MAGIC_IN_PUT);
-
-        Logs.debug("[syncView] playerId=" + player.getId()
-                + " oldChunk=" + oldChunk + " newChunk=" + newChunk
-                + " entered=" + entered + " exited=" + exited);
-
     }
 
 
