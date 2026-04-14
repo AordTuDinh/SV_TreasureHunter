@@ -92,7 +92,8 @@ message PbListChunk {
 message PbChunk {
   optional int32 id = 1;
   optional bool isAdd = 2;
-  repeated PbCell cells = 3;
+  optional PbPos pos =3;
+  repeated PbCell cells = 4;
 }
 
 message PbInitMap {

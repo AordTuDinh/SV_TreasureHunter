@@ -442,7 +442,7 @@ public class Player extends Unit implements Serializable {
     }
 
     @Override
-    public Pbmethod.PbUnit toProtoAdd(int chunkIdr) {
+    public Pbmethod.PbUnit toProtoAdd(int chunkId) {
         Pbmethod.PbUnit.Builder pbAdd = Pbmethod.PbUnit.newBuilder();
         pbAdd.setType(UnitType.PLAYER.value);
         pbAdd.setId(id);

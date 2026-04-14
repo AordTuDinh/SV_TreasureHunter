@@ -51,7 +51,6 @@ public class ProtoState {
             if (!chunkStateList.isEmpty()) {
                 // type - size [ id  - isadd - x - y -size [type - chunkId - x - y - statetype]]
                 buffer.writeByte(StateType.TYPE_CHUNK_STATE_VALUE);
-
                 buffer.writeByte(chunkStateList.size());
 
                 for (int i = 0; i < chunkStateList.size(); i++) {
@@ -60,6 +59,9 @@ public class ProtoState {
                     boolean isAdd = tmp.getIsAdd();
                     buffer.writeBoolean(isAdd);
                     if (isAdd) {
+                        buffer.writeFloat(tmp.getPos().getX());
+                        buffer.writeFloat(tmp.getPos().getY());
+
                         int sizeCell = tmp.getCellsCount();
                         buffer.writeByte(sizeCell);
                         for (int j = 0; j < sizeCell; j++) {
@@ -184,6 +186,7 @@ public class ProtoState {
                     buffer.writeByte(tmp.getStatus(j));
                 }
                 // data
+                buffer.writeByte(tmp.getPointCount());
                 for (int j = 0; j < tmp.getPointCount(); j++) {
                     buffer.writeInt(tmp.getPoint(j));
                 }

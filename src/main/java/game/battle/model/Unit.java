@@ -16,6 +16,7 @@ import game.object.PointBuff;
 import lombok.Data;
 import ozudo.base.helper.DateTime;
 import ozudo.base.helper.NumberUtil;
+import ozudo.base.log.Logs;
 import protocol.Pbmethod;
 
 import java.util.*;
@@ -122,38 +123,38 @@ public abstract class Unit {
     }
 
     public void setPosAndDirection(Pos newPos, Pos newDirection) {
-        this.pos = newPos.round();
-        this.direction = newDirection.normalized();
+        pos = newPos.round();
+        direction = newDirection.normalized();
         this.setMove(true);
-        updateChunkByPos(newPos);
+        updateChunkByPos(pos);
     }
 
     protected void updateChunkByPos(Pos worldPos) {
         if (room == null || worldPos == null) return;
         int oldChunk = chunkId;
         int newChunk = room.worldPosToChunkId(worldPos);
+
         if (room.joinChunk(this, newChunk) && type == UnitType.PLAYER) {
-           room.syncViewDeltaForPlayer(this.getPlayer(),oldChunk,newChunk);
+            room.syncViewDeltaForPlayer(this.getPlayer(), oldChunk, newChunk);
         }
     }
-
 
     public void beAttackMelee(Unit attacker) {
         int[] damage = IMath.calculateDamage(attacker, this, attacker.getFaction());
         beAttackDamage(attacker, damage[1], damage[2]);
         addAtkInfoMelee(attacker);
-        protoBeDame(attacker, Arrays.asList(  damage[0],  -damage[1], -damage[2]));
+        protoBeDame(attacker, Arrays.asList(damage[0], -damage[1], -damage[2]));
     }
 
-    public void beAttackCollider(Unit attacker) {
-        addAtkInfoMelee(attacker);
-        int[] damage = IMath.calculateDamage(attacker, this, attacker.getFaction());
-        damage[1] = (int) (damage[1] * BattleConfig.M_PerDameCollider);
-        damage[2] = (int) (damage[2] * BattleConfig.M_PerDameCollider);
-        if (damage[1] <= 0 && damage[2] <= 0) damage[1] = 1;
-        beAttackDamage(attacker, damage[1], damage[2]);
-        protoBeDame(attacker, Arrays.asList( damage[0], -damage[1], -damage[2]));
-    }
+//    public void beAttackCollider(Unit attacker) {
+//        addAtkInfoMelee(attacker);
+//        int[] damage = IMath.calculateDamage(attacker, this, attacker.getFaction());
+//        damage[1] = (int) (damage[1] * BattleConfig.M_PerDameCollider);
+//        damage[2] = (int) (damage[2] * BattleConfig.M_PerDameCollider);
+//        if (damage[1] <= 0 && damage[2] <= 0) damage[1] = 1;
+//        beAttackDamage(attacker, damage[1], damage[2]);
+//        protoBeDame(attacker, Arrays.asList(damage[0], -damage[1], -damage[2]));
+//    }
 
 
     public long getBeDameInfo(int userId) {
@@ -351,7 +352,7 @@ public abstract class Unit {
         return pbUser.build();
     }
 
-    public abstract   Pbmethod.PbUnit toProtoAdd(int chunkId);
+    public abstract Pbmethod.PbUnit toProtoAdd(int chunkId);
 
     public void revive() {
     }
@@ -434,7 +435,7 @@ public abstract class Unit {
     }
 
     public void protoUpdatePoint(int pointId, int value) {  //[pointId - curValue] :  chỉ trả về, thường dùng cho add change
-        protoStatus(StateType.UPDATE_MULTI_POINT, 2, Arrays.asList( pointId, value));
+        protoStatus(StateType.UPDATE_MULTI_POINT, 2, Arrays.asList(pointId, value));
     }
 
     // buff point and send
@@ -469,18 +470,18 @@ public abstract class Unit {
                         if (value + shell < 0) {
                             buffs.get(i).setValue(value + shell);
                             point.add(buffs.get(i), this);
-                            pointBuff.add( Point.CUR_HP);
+                            pointBuff.add(Point.CUR_HP);
                             pointBuff.add(point.getCurHP());
                         }
                     } else {
                         point.add(buffs.get(i), this);
-                        pointBuff.add( Point.CUR_HP);
+                        pointBuff.add(Point.CUR_HP);
                         pointBuff.add(point.getCurHP());
                     }
                 }
                 default -> {
                     point.add(buffs.get(i), this);
-                    pointBuff.add( pointId);
+                    pointBuff.add(pointId);
                     pointBuff.add(point.get(pointId));
                 }
             }

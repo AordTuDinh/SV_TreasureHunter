@@ -280,7 +280,6 @@ public abstract class BaseRoom extends MonoRoom {
         if (unit == null) return false;
         int oldChunk = unit.getChunkId();
         if (oldChunk == newChunk) return false;
-        System.out.println("oldChunk = " + oldChunk +" ---------newChunk = "+newChunk);
 
         if (!isValidChunkId(newChunk)) {
             Logs.warn("joinChunk invalid newChunk=" + newChunk + ", unitId=" + unit.getId());
@@ -306,6 +305,7 @@ public abstract class BaseRoom extends MonoRoom {
             aProtoChange.add(unit.toProtoRemove(oldChunk));
         }
         aProtoChange.add(unit.toProtoAdd(newChunk));
+
         return true;
     }
 
@@ -426,7 +426,6 @@ public abstract class BaseRoom extends MonoRoom {
         if (player == null || player.getMUser() == null || player.getMUser().getChannel() == null) return;
         List<Integer> oldVisible = visibleByChunkId.get(oldChunk);
         List<Integer> newVisible = visibleByChunkId.get(newChunk);
-        System.out.println("newVisible = " + newVisible);
         if (oldVisible == null || newVisible == null) return;
 
         // entered = newVisible - oldVisible
@@ -441,7 +440,6 @@ public abstract class BaseRoom extends MonoRoom {
         builder.setServerTime(serverTime);
 
         long selfId = player.getId();
-
         // Add toàn bộ unit trong các chunk mới lọt vào view
         Set<Long> added = new HashSet<>();
         for (Integer chunkId : entered) {
@@ -486,6 +484,10 @@ public abstract class BaseRoom extends MonoRoom {
 
         byte[] state = ProtoState.convertProtoBuffToState(builder.build());
         Util.sendGameData(player.getMUser().getChannel(), state, Constans.MAGIC_IN_PUT);
+
+        Logs.debug("[syncView] playerId=" + player.getId()
+                + " oldChunk=" + oldChunk + " newChunk=" + newChunk
+                + " entered=" + entered + " exited=" + exited);
 
     }
 

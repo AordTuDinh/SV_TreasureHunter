@@ -20,6 +20,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static game.treasure.BattleConfig.CHUNK_SIZE;
+
 @Entity
 public class ResMapEntity extends BaseEntity implements Serializable {
     @Id
@@ -64,7 +66,16 @@ public class ResMapEntity extends BaseEntity implements Serializable {
         for (int y = minChunkY; y <= maxChunkY; y++) {
             for (int x = minChunkX; x <= maxChunkX; x++) {
                 int chunkId = chunkPosToId(x, y);
-                ChunkObject chunk = new ChunkObject(chunkId, new Pos(x, y), new ArrayList<>());
+
+                int baseX100 = Math.round(botLeftP.x * 100f);
+                int baseY100 = Math.round(botLeftP.y * 100f);
+                int worldX100 = baseX100 + (x - minChunkX) * BattleConfig.CHUNK_SIZE * 100;
+                int worldY100 = baseY100 + (y - minChunkY) * BattleConfig.CHUNK_SIZE * 100;
+
+
+
+                ChunkObject chunk = new ChunkObject(chunkId, new Pos(worldX100, worldY100), new ArrayList<>());
+
                 mChunk.put(chunkId, chunk);
             }
         }
@@ -72,19 +83,27 @@ public class ResMapEntity extends BaseEntity implements Serializable {
         // parse map object
         for (MapData.CellDto c : mapData.cells) {
             validateType(c.type);
-            if (!isInsideWorld(c.x, c.y)) {
-                System.out.println("[MapLoad] skip out-of-world cell: x=" + c.x + ", y=" + c.y);
+            // c.x, c.y đang là fixed-point x100
+            float wx = c.x / 100f;
+            float wy = c.y / 100f;
+            // snap về world cell int
+            int worldX = Math.round(wx);
+            int worldY = Math.round(wy);
+
+            if (!isInsideWorld(worldX, worldY)) {
+                System.out.println("[MapLoad] skip out-of-world cell: x=" + worldX + ", y=" +worldY);
                 continue;
             }
 
-            int chunkX = worldToChunkX(c.x);
-            int chunkY = worldToChunkY(c.y);
+            int chunkX = worldToChunkX(worldX);
+            int chunkY = worldToChunkY(worldY);
             int chunkId = chunkPosToId(chunkX, chunkY);
             Pos pos = new Pos(c.x, c.y);
+
             CellObject cell = new CellObject(pos , c.type, chunkId, Pbmethod.CellState.ACTIVE );
             if (chunkX < minChunkX || chunkX > maxChunkX
                     || chunkY < minChunkY || chunkY > maxChunkY) {
-                System.out.println("[MapLoad] skip out-of-bound cell: x=" + c.x + ", y=" + c.y
+                System.out.println("[MapLoad] skip out-of-bound cell: x=" +worldX + ", y=" +worldY
                         + ", chunkX=" + chunkX + ", chunkY=" + chunkY);
                 continue;
             }
@@ -106,7 +125,22 @@ public class ResMapEntity extends BaseEntity implements Serializable {
 
     // từ tọa độ thế giới đổi sang id chunk
     public  int worldPosToChunkId(Pos pos){
-        return chunkPosToId(worldToChunkX((int) Math.floor(pos.getX())),worldToChunkY((int) Math.floor(pos.getY())));
+        int fx = (int) Math.floor(pos.getX());
+        int fy = (int) Math.floor(pos.getY());
+        int chunkX = worldToChunkX(fx);
+        int chunkY = worldToChunkY(fy);
+        int id = chunkPosToId(chunkX, chunkY);
+        int nx = chunkX - minChunkX;
+        int ny = chunkY - minChunkY;
+        System.out.printf(
+                "[worldPosToChunkId] pos=(%.4f,%.4f) floor=(%d,%d) -> chunkXY=(%d,%d) nx=%d ny=%d widthChunk=%d -> id=%d botLeft=(%.2f,%.2f)%n",
+                pos.getX(), pos.getY(), fx, fy, chunkX, chunkY, nx, ny, widthChunk, id,
+                botLeftP.getX(), botLeftP.getY()
+        );
+        return id;
+
+
+      //  return chunkPosToId(worldToChunkX((int) Math.floor(pos.getX())),worldToChunkY((int) Math.floor(pos.getY())));
     }
 
 
@@ -136,13 +170,13 @@ public class ResMapEntity extends BaseEntity implements Serializable {
     // để private, từ tọa độ thế giới x ra chunk x local
     int worldToChunkX(int worldX) {
         int localX = (int) (worldX - botLeftP.x); // 0..99
-        int nx = Math.floorDiv(localX, BattleConfig.CHUNK_SIZE); // 0..9
+        int nx = Math.floorDiv(localX, CHUNK_SIZE); // 0..9
         return minChunkX + nx; // -5..4
     }
     // để private, từ tọa độ thế giới y ra chunk y local
     int worldToChunkY(int worldY) {
         int localY = (int) (worldY - botLeftP.y); // 0..69
-        int ny = Math.floorDiv(localY, BattleConfig.CHUNK_SIZE);
+        int ny = Math.floorDiv(localY, CHUNK_SIZE);
         return minChunkY + ny; // -3..3
     }
 

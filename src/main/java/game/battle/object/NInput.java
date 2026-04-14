@@ -32,23 +32,23 @@ public class NInput {
         obj.typeId = buffer.readByte();
         if (obj.typeId == INPUT_PLAYER_MOVE) {
             obj.seq = buffer.readInt();
-            float x1 = buffer.readShort() / 1000f;
-            float y1 = buffer.readShort() / 1000f;
-            float x2 = buffer.readShort() / 1000f;
-            float y2 = buffer.readShort() / 1000f;
+            float x1 = buffer.readShort() / 100f;
+            float y1 = buffer.readShort() / 100f;
+            float x2 = buffer.readShort() / 100f;
+            float y2 = buffer.readShort() / 100f;
             obj.playerPos = new Pos(x1, y1).round();
             obj.playerDirection = new Pos(x2, y2).round();
         } else if (obj.typeId == PET_MOVE) {
-            float x1 = buffer.readShort() / 1000f;
-            float y1 = buffer.readShort() / 1000f;
-            float x2 = buffer.readShort() / 1000f;
-            float y2 = buffer.readShort() / 1000f;
+            float x1 = buffer.readShort() / 100f;
+            float y1 = buffer.readShort() / 100f;
+            float x2 = buffer.readShort() / 100f;
+            float y2 = buffer.readShort() / 100f;
             obj.petPos = new Pos(x1, y1).round();
             obj.petDirection = new Pos(x2, y2).round();
         } else if (obj.typeId == INPUT_SLOT) {
             obj.skillIndex = buffer.readByte();
-            float x1 = buffer.readShort() / 1000f;
-            float y1 = buffer.readShort() / 1000f;
+            float x1 = buffer.readShort() / 100f;
+            float y1 = buffer.readShort() / 100f;
             obj.targetDirection = new Pos(x1, y1);
             obj.slotActive[0] = buffer.readByte();
             obj.slotActive[1] = buffer.readByte();
