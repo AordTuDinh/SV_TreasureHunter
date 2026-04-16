@@ -9,7 +9,6 @@ import game.treasure.mapping.main.ResTutorialQuestEntity;
 import game.treasure.service.Services;
 import game.object.DataDaily;
 import game.object.DataQuest;
-import game.treasure.mapping.main.ResQuestBEntity;
 import game.treasure.mapping.main.ResQuestEntity;
 import game.treasure.server.IAction;
 import game.treasure.service.resource.ResQuest;
@@ -28,7 +27,8 @@ import java.util.Map;
 public class QuestHandler extends AHandler {
     @Override
     public void initAction(Map<Integer, AHandler> mHandler) {
-        List<Integer> actions = Arrays.asList(QUEST_STATUS, QUEST_RECEIVE, BUY_GOLD_STATUS, BUY_GOLD_BUY, QUEST_REWARD_BAR, QUEST_B_RECEIVE_QUEST, QUEST_B_STATUS);
+        List<Integer> actions = Arrays.asList(QUEST_STATUS, QUEST_RECEIVE, BUY_GOLD_STATUS, BUY_GOLD_BUY, QUEST_REWARD_BAR
+                );
         actions.forEach(action -> mHandler.put(action, this));
     }
 
@@ -57,8 +57,6 @@ public class QuestHandler extends AHandler {
                 case IAction.QUEST_STATUS -> questStatus(QuestType.get(getInputInt()));
                 case IAction.QUEST_RECEIVE -> receiveQuest();
                 case IAction.QUEST_REWARD_BAR -> receiveBarQuestD();
-                case IAction.QUEST_B_STATUS -> questBStatus();
-                case IAction.QUEST_B_RECEIVE_QUEST -> questBReceive();
                 case IAction.BUY_GOLD_STATUS -> buyGoldStatus();
                 case IAction.BUY_GOLD_BUY -> buyGoldBuy();
             }
@@ -214,26 +212,6 @@ public class QuestHandler extends AHandler {
         } else addErrResponse();
     }
 
-    void questBStatus() {
-        int id = getInputInt();
-        UserItemEntity uItem = mUser.getResources().getItem(id);
-        if (!checkItemQuestB(uItem)) return;
-        List<Integer> data = uItem.getDataListInt();
-        // check status data
-        boolean update = false;
-        for (int i = 1; i < data.size(); i += 2) {
-            StatusType status = StatusType.get(data.get(i));
-            if (status != StatusType.PROCESSING) continue;
-            ResQuestBEntity res = ResQuest.mQuestB.get(i / 2 + 1);
-            if (data.get(i + 1) >= res.getNumber()) {
-                data.set(i, StatusType.RECEIVE.value);
-                update = true;
-            }
-        }
-        if (update && uItem.update(List.of("data", StringHelper.toDBString(data)))) uItem.setData(data.toString());
-        data.remove(0);
-        addResponse(getCommonIntVector(data));
-    }
 
     boolean checkItemQuestB(UserItemEntity itemQuestB) {
         if (itemQuestB == null) {
@@ -251,52 +229,6 @@ public class QuestHandler extends AHandler {
         return true;
     }
 
-    void questBReceive() {
-        List<Long> listData = getInputALong();
-        int id = listData.get(0).intValue();
-        UserItemEntity uItem = mUser.getResources().getItem(id);
-        if (!checkItemQuestB(uItem)) return;
-        int index = listData.get(1).intValue();
-        int indexItem = index * 2 + 1;
-        // check gửi đúng index
-        boolean check = CfgQuest.checkIndex(index);
-        if (!check) {
-            addErrResponse(getLang(Lang.err_params));
-            return;
-        }
-        List<Integer> questStatus = uItem.getDataListInt();
-        // check nhận rồi
-        if (questStatus.get(indexItem) == StatusType.DONE.value) {
-            addErrResponse(getLang(Lang.err_received_bonus));
-            return;
-        }
-        // check hoàn thành chưa
-        ResQuestBEntity quest = ResQuest.mQuestB.get(index + 1);
-        if (questStatus.get(indexItem + 1) < quest.getNumber()) {
-            addErrResponse(getLang(Lang.err_quest_done));
-            return;
-        }
-        // check vip
-        List<Long> bonus = quest.getABonus();
-        UserPackEntity packQB = mUser.getResources().getPack(PackType.QUEST_B);
-        if (packQB != null && packQB.hasHSD()) {
-            bonus = Bonus.xBonus(bonus, CfgQuest.packX2);
-        }
-        List<Long> retBonus = Bonus.receiveListItem(mUser, DetailActionType.BONUS_QUEST_B.getKey(index), bonus);
-        if (retBonus.isEmpty()) {
-            addErrResponse();
-            return;
-        }
-        questStatus.set(indexItem, StatusType.DONE.value);
-        if (uItem.update(List.of("data", StringHelper.toDBString(questStatus)))) {
-            Pbmethod.ListCommonVector.Builder lst = Pbmethod.ListCommonVector.newBuilder();
-            uItem.setData(questStatus.toString());
-            questStatus.remove(0);
-            lst.addAVector(getCommonIntVector(questStatus));
-            lst.addAVector(getCommonVector(retBonus));
-            addResponse(lst.build());
-        } else addErrSystem();
-    }
 
     void buyGoldStatus() {
         Pbmethod.CommonVector.Builder builder = Pbmethod.CommonVector.newBuilder();

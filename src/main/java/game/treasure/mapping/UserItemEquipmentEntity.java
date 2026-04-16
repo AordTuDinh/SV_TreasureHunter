@@ -2,7 +2,6 @@ package game.treasure.mapping;
 
 import game.treasure.mapping.main.ResItemEquipmentEntity;
 import game.treasure.service.resource.ResItem;
-import game.treasure.service.resource.ResPointEquipment;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ozudo.base.database.DBJPA;
@@ -35,7 +34,6 @@ public class UserItemEquipmentEntity {
         this.isLock = isLock;
         this.bless = 0;
         ResItemEquipmentEntity res = getRes();
-        this.point = StringHelper.toDBString(ResPointEquipment.genItemEquipData(res));
         if (expire > -1) expire = System.currentTimeMillis() / 1000 + expire;
         this.expire = expire;
         this.lockDestroy = 0;

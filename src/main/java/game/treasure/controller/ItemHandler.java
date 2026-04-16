@@ -9,7 +9,6 @@ import game.treasure.mapping.main.ResItemEntity;
 import game.treasure.mapping.main.ResItemEquipmentEntity;
 import game.treasure.server.IAction;
 import game.treasure.service.resource.ResItem;
-import game.treasure.service.resource.ResPointEquipment;
 import game.treasure.service.user.Bonus;
 import game.monitor.Online;
 import game.object.BonusConfig;
@@ -353,31 +352,6 @@ public class ItemHandler extends AHandler {
                 if (resItemEquip.getType() != EquipSlotType.WEAPON) {
                     addErrParam();
                     return;
-                }// đá hoàn trả
-
-                if (resItem.getId() == ItemKey.BUA_HOAN_TRA_VU_KHI.id) {
-                    int idDaoGam = 39;
-                    ResItemEquipmentEntity resDaoGam = ResItem.getItemEquipment(idDaoGam);
-                    int stone = 0;
-                    if (resItemEquip.getId() == idDaoGam) // dao găm
-                    {
-                        addErrResponse(getLang(Lang.err_no_forgot));
-                        return;
-                    }
-                    stone += ((resItemEquip.getRank() - 1) * 15) + uItemEquip.getLevel();
-                    if (stone > 0) {
-                        fee.addAll(Bonus.viewItem(ItemKey.DA_TIEN_HOA_VU_KHI, stone));
-                    }
-                    String dataPoint = StringHelper.toDBString(ResPointEquipment.genItemEquipData(resDaoGam));
-                    if (uItemEquip.updateNextItem(idDaoGam, 0, dataPoint)) {
-                        uItemEquip.setLevel(0);
-                        uItemEquip.setItemId(idDaoGam);
-                        uItemEquip.setPoint(dataPoint);
-                        listEquipment(List.of(uItemEquip.getId()), this, mUser);
-                    } else {
-                        addErrSystem();
-                        return;
-                    }
                 }
                 addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.SU_DUNG_ITEM.getKey(idItem), Bonus.merge(fee))));
 

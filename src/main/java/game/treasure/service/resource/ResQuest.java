@@ -3,7 +3,6 @@ package game.treasure.service.resource;
 import game.config.CfgQuest;
 import game.config.CfgServer;
 import game.treasure.mapping.main.ResQuestEntity;
-import game.treasure.mapping.main.ResQuestBEntity;
 import game.treasure.mapping.main.ResTutorialQuestEntity;
 import ozudo.base.database.DBResource;
 import ozudo.base.helper.NumberUtil;
@@ -16,9 +15,7 @@ public class ResQuest {
     static List<ResQuestEntity> aQuest = new ArrayList<>();
     public static Map<Integer, List<ResQuestEntity>> mQuestType = new HashMap<>();
     // quest c
-    public static Map<Integer, ResQuestBEntity> mQuestB = new HashMap<>();
     public static Map<Integer, ResTutorialQuestEntity> mTutQuest = new HashMap<>();
-    static List<ResQuestBEntity> aQuestB = new ArrayList<>();
 
     public static void init() {
         // quest D + C
@@ -28,13 +25,6 @@ public class ResQuest {
             mQuest.put(quest.getId(), quest);
             if (!mQuestType.containsKey(quest.getType())) mQuestType.put(quest.getType(), new ArrayList<>());
             mQuestType.get(quest.getType()).add(quest);
-        });
-        // quest B
-        aQuestB = DBResource.getInstance().getList(CfgServer.DB_MAIN + "res_quest_b", ResQuestBEntity.class);
-        mQuestB.clear();
-        aQuestB.forEach(quest -> {
-            quest.init();
-            mQuestB.put(quest.getId(), quest);
         });
         // tut quest
         List<ResTutorialQuestEntity> aTutQuest = DBResource.getInstance().getList(CfgServer.DB_MAIN + "res_tutorial_quest", ResTutorialQuestEntity.class);

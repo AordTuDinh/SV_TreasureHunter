@@ -12,7 +12,6 @@ import game.treasure.mapping.UserSettingsEntity;
 import game.treasure.mapping.main.*;
 import game.treasure.server.Constans;
 import game.treasure.service.resource.ResMap;
-import game.treasure.service.resource.ResTeleport;
 import game.treasure.service.user.Bonus;
 import game.treasure.table.*;
 import game.object.MyUser;
@@ -86,20 +85,6 @@ public class BattleHandler extends AHandler implements Serializable {
         PopupType pType =   PopupType.get(popupType);
         if (initMapType == InitMapType.ROOMTYPE) {
             initMapByTypeId(MapType.get(type), Pos.zero(),pType);
-        } else {
-            ResTeleportEntity resTeleport = ResTeleport.getTeleport(data);
-            if (resTeleport == null) {
-                initMapByTypeId(MapType.HOME, Pos.zero(), pType);
-                return;
-            }
-            ResTeleportEntity nextPort = resTeleport.getNext();
-            if (nextPort == null) {
-                initMapByTypeId(MapType.HOME, Pos.zero(), pType);
-                return;
-            }
-
-            initMapByTypeId(nextPort.getMap(), nextPort.getPlayerPosInit(), pType);
-            mUser.setCurTeleport(nextPort);
         }
     }
 
@@ -192,18 +177,13 @@ public class BattleHandler extends AHandler implements Serializable {
     void revivePlayer() {
         int type = getInputInt();
         Player player = ((MyUser) ChUtil.get(channel, ChUtil.KEY_M_USER)).getPlayer();
-        ResTeleportEntity resTeleport = ResTeleport.getHomeTeleport();
-        if (type != 0 && type != 1 || player.isAlive()) {
-            addErrParam();
-            return;
-        }
         long checkTime = player.getTimeDie() + 4000;
         int per5 = (int) (mUser.getUser().getExp() * 0.1);
         if (type == 0 && System.currentTimeMillis() < checkTime) { // backHome
             player.revive();
             if (mUser.getUser().getExp() >= per5)
                 addBonusPrivate(Bonus.receiveListItem(mUser, DetailActionType.REVIVE_FEE_10.getKey(), Bonus.viewExp(-per5)));
-            initMapByTypeId(resTeleport.getMap(),mUser.getCachePos(),PopupType.NULL);
+            initMapByTypeId(MapType.HOME,mUser.getCachePos(),PopupType.NULL);
         } else {
             List<Long> fee = Bonus.viewItem(ItemKey.VE_HOI_SINH, -1);
             String err = Bonus.checkMoney(mUser, fee);
@@ -211,7 +191,7 @@ public class BattleHandler extends AHandler implements Serializable {
                 player.revive();
                 if (mUser.getUser().getExp() >= per5)
                     addBonusPrivate(Bonus.receiveListItem(mUser, DetailActionType.REVIVE_FEE_10.getKey(), Bonus.viewExp(-per5)));
-                initMapByTypeId(resTeleport.getMap(),mUser.getCachePos(),PopupType.NULL);
+                initMapByTypeId(MapType.HOME,mUser.getCachePos(),PopupType.NULL);
             } else {
                 player.revive();
                 addBonusToast(Bonus.receiveListItem(mUser, DetailActionType.REVIVE_PLAYER.getKey(), fee));

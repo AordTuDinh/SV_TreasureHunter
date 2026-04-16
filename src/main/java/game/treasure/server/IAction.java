@@ -125,10 +125,6 @@ public class IAction {
     public static final int QUEST_STATUS = 200;
     public static final int QUEST_RECEIVE = 201;
     public static final int QUEST_REWARD_BAR = 202;
-    // quest C
-    public static final int QUEST_B_STATUS = 205;
-    public static final int QUEST_B_RECEIVE_QUEST = 207;
-
     // clan
     public static final int CLAN_CREATE = 300; // tạo bang
     public static final int CLAN_APPLICATION_LIST = 301; //

@@ -9,7 +9,6 @@ import game.config.*;
 import game.config.aEnum.*;
 import game.treasure.controller.UserHandler;
 import game.treasure.mapping.*;
-import game.treasure.mapping.main.ResTeleportEntity;
 import game.treasure.server.IAction;
 import game.treasure.service.Services;
 import game.treasure.service.resource.ResItem;
@@ -50,7 +49,6 @@ public class MyUser implements Serializable {
     Player player;
     Pet pet;
     Channel channel;
-    ResTeleportEntity curTeleport;
     Pos cachePos;
     int roomChanelId = 1; // 1-1000
     Map<Integer, List<FriendChatObject>> aChatFriends = new HashMap<>();

@@ -554,12 +554,6 @@ public class EventHandler extends AHandler {
         if (pack.getPackId() == PackType.QUEST_B.value) {
             List<Integer> questStatus = mUser.getResources().getItem(ItemKey.QUEST_B).getDataListInt();
             questStatus.remove(0);
-            for (int i = 0; i < questStatus.size(); i += 2) {
-                if (questStatus.get(i) == StatusType.DONE.value) {
-                    ResQuestBEntity rQuest = ResQuest.mQuestB.get(i / 2 + 1);
-                    bonus.addAll(new ArrayList<>(rQuest.getABonus()));
-                }
-            }
         }
         return bonus;
     }
