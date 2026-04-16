@@ -80,8 +80,7 @@ public class BattleHandler extends AHandler implements Serializable {
             addErrParam();
             return;
         }
-        int data = Math.toIntExact(pbUB.getALong(1));
-        int popupType = Math.toIntExact(pbUB.getALong(2));
+        int popupType = Math.toIntExact(pbUB.getALong(1));
         PopupType pType =   PopupType.get(popupType);
         if (initMapType == InitMapType.ROOMTYPE) {
             initMapByTypeId(MapType.get(type), Pos.zero(),pType);

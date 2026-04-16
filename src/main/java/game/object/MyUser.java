@@ -87,11 +87,7 @@ public class MyUser implements Serializable {
         if (gifts.size() > 0) ret.add((long) NotifyType.FRIEND_SEND_GIFT.value);
         // phúc lợi
         if (notifyPhucLoi(uIntDaily)) ret.add((long) NotifyType.PHUC_LOI.value);
-        // summon free
-        UserSummonEntity uSummon = Services.userDAO.getUserSummon(this);
-        if (userClan != null && uSummon.getCDSummonFree() <= 0) {
-            ret.add((long) NotifyType.SUMMON_FREE.value);
-        }
+
         // Quest 7 day
         UserEventSevenDayEntity uEvent7 = Services.userDAO.getUserSevenDay(this);
         if (uEvent7 != null && uEvent7.hasNotify(this)) {

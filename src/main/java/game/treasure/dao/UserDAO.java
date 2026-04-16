@@ -228,38 +228,6 @@ public class UserDAO {
         return null;
     }
 
-    public UserEventPanelMonthEntity getUserEventMonth(MyUser mUser, int eventId) {
-        UserEventPanelMonthEntity uAfk = (UserEventPanelMonthEntity) mUser.getCache().get("user_event_month_" + eventId);
-        if (uAfk == null) {
-            uAfk = dbGetUserEventMonth(mUser.getUser().getId(), eventId);
-            if (uAfk != null) {
-                mUser.getCache().set("user_event_month_" + eventId, uAfk);
-            }
-        }
-        return uAfk;
-    }
-
-    private UserEventPanelMonthEntity dbGetUserEventMonth(int userId, int eventId) {
-        EntityManager session = null;
-        try {
-            session = DBJPA.getEntityManager();
-            List<UserEventPanelMonthEntity> aUserAfk = session.createNativeQuery("select * from user_event_panel_month where user_id=" + userId + " and event_id=" + eventId, UserEventPanelMonthEntity.class).getResultList();
-            if (aUserAfk.isEmpty()) {
-                UserEventPanelMonthEntity uAfk = new UserEventPanelMonthEntity(userId, eventId);
-                session.getTransaction().begin();
-                session.persist(uAfk);
-                session.getTransaction().commit();
-                return uAfk;
-            }
-            return aUserAfk.get(0);
-        } catch (Exception ex) {
-            Logs.error(ex);
-        } finally {
-            closeSession(session);
-        }
-        return null;
-    }
-
 
     public UserEntity getUser(int userId) {
         return (UserEntity) DBJPA.getUnique("user", UserEntity.class, "id", userId);
@@ -325,39 +293,6 @@ public class UserDAO {
         return null;
     }
 
-
-    public UserSummonEntity getUserSummon(MyUser mUser) {
-        UserSummonEntity summon = (UserSummonEntity) mUser.getCache().get("user_summon");
-        if (summon == null) {
-            summon = getUserSummon(mUser.getUser().getId());
-            if (summon != null) mUser.getCache().set("user_summon", summon);
-        }
-        return summon;
-    }
-
-
-    private UserSummonEntity getUserSummon(int userId) {
-        EntityManager session = null;
-        try {
-            session = DBJPA.getEntityManager();
-            Query query = session.createNativeQuery("select * from user_summon where user_id =:user_id", UserSummonEntity.class);
-            query.setParameter("user_id", userId);
-            List<UserSummonEntity> aUserSum = query.getResultList();
-            if (aUserSum.isEmpty()) {
-                UserSummonEntity userS = new UserSummonEntity(userId);
-                session.getTransaction().begin();
-                session.persist(userS);
-                session.getTransaction().commit();
-                return userS;
-            }
-            return aUserSum.get(0);
-        } catch (Exception ex) {
-            Logs.error(GUtil.exToString(ex));
-        } finally {
-            closeSession(session);
-        }
-        return null;
-    }
 
     public UserLuckySpineEntity getUserSpine(MyUser mUser) {
         UserLuckySpineEntity userSpine = (UserLuckySpineEntity) mUser.getCache().get("user_spine");

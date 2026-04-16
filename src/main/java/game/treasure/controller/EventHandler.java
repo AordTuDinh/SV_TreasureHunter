@@ -64,7 +64,6 @@ public class EventHandler extends AHandler {
                 case IAction.EVENT_FI_PU_STATUS -> fipuStatus();
                 case IAction.EVENT_GROUP_ACTIVE -> groupActive();
                 case IAction.EVENT_GROUP_STATUS -> groupStatus();
-                case IAction.EVENT_GROUP_GET_CELL_MONTH -> getCellMonth();
                 case IAction.EVENT_COMMUNITY_STATUS -> communityStatus();
                 case IAction.EVENT_COMMUNITY_REWARD -> communityReward();
                 case IAction.EVENT_FREE_100_STATUS -> free100Status();
@@ -594,19 +593,19 @@ public class EventHandler extends AHandler {
         Pbmethod.PbListTab.Builder pb = Pbmethod.PbListTab.newBuilder();
         Pbmethod.PbTab.Builder packMonth = Pbmethod.PbTab.newBuilder();
         // List event chiến tập
-        List<ResEventPanelMonthEntity> panelMonth = ResEventPanel.aPanelMonth;
-        for (int i = 0; i < panelMonth.size(); i++) {
-            ResEventPanelMonthEntity panel = panelMonth.get(i);
-            if (panel != null && panel.isActive()) {
-                packMonth.setTabId(panel.getId());
-                packMonth.setEventTemplate(EventPanel.PACK_MONTH.id);
-                packMonth.setImage(panel.getTabImage());
-                packMonth.setName(panel.getTabName());
-                //todo check notify
-                packMonth.setNotify(false);
-                pb.addTabs(packMonth);
-            }
-        }
+//        List<ResEventPanelMonthEntity> panelMonth = ResEventPanel.aPanelMonth;
+//        for (int i = 0; i < panelMonth.size(); i++) {
+//            ResEventPanelMonthEntity panel = panelMonth.get(i);
+//            if (panel != null && panel.isActive()) {
+//                packMonth.setTabId(panel.getId());
+//                packMonth.setEventTemplate(EventPanel.PACK_MONTH.id);
+//                packMonth.setImage(panel.getTabImage());
+//                packMonth.setName(panel.getTabName());
+//                //todo check notify
+//                packMonth.setNotify(false);
+//                pb.addTabs(packMonth);
+//            }
+//        }
         //Tab Mục Tiêu Tháng
         Pbmethod.PbTab.Builder tabCell = Pbmethod.PbTab.newBuilder();
         tabCell.setEventTemplate(EventPanel.TAB_CELL.id);
@@ -623,71 +622,11 @@ public class EventHandler extends AHandler {
         int eventId = inputs.get(0).intValue();
         EventPanel eventPanel = EventPanel.get(inputs.get(1).intValue());
         switch (eventPanel) {
-            case PACK_MONTH -> packMonth(eventId);
             case TAB_CELL -> tabCell(eventId);
             default -> addErrParam();
         }
     }
 
-
-    private void packMonth(int eventId) {
-        ResEventPanelMonthEntity rEvent = ResEventPanel.getPanelMonth(eventId);
-        if (rEvent == null) {
-            addErrParam();
-            return;
-        }
-        if (!rEvent.isActive()) {
-            addErrResponse(getLang(Lang.err_event_not_active));
-            return;
-        }
-
-        UserEventPanelMonthEntity uEvent = Services.userDAO.getUserEventMonth(mUser, rEvent.getId());
-        if (uEvent == null) {
-            addErrSystem();
-            return;
-        }
-        //todo bổ sung vào res rEvent panel
-        int statusButtonBuy = StatusType.PROCESSING.value;
-        UserPackEntity packBuy = mUser.getResources().getPack(rEvent.getPack().getId());
-        if (packBuy != null) {
-            statusButtonBuy = StatusType.DONE.value;
-        }
-        int curPoint = 0;
-        if (eventId == 1) curPoint = mUser.getUQuest().getPoint();
-        else curPoint = uEvent.getPoint();
-        List<Integer> exps = rEvent.getExp();
-        List<Integer> dataLevel = ResEventPanel.getLevelPanelMonth(exps, curPoint);
-        ResPackEntity pack = rEvent.getPack();
-        Pbmethod.PbEventBuyMonth.Builder pb = Pbmethod.PbEventBuyMonth.newBuilder();
-        pb.setEventName(rEvent.getTitleEventName(mUser));
-        pb.setImageBanner(rEvent.getImageBanner());
-        pb.setTextBanner(rEvent.getTitleBanner(mUser));
-        pb.setLevel(dataLevel.get(0));
-        pb.setCurPoint(curPoint);
-        pb.setMaxPoint(dataLevel.get(1));
-        pb.setButtonAddGoto(rEvent.getAddGoto());
-        pb.setKeyHelp(rEvent.getKeyHelp());
-        pb.setTimeCD(rEvent.getCD());
-        pb.setStatusBuy(statusButtonBuy);
-        pb.addAllPrice(pack.getPrice());
-        pb.setNormalName(rEvent.getTitleNameNormal(mUser));
-        pb.setNormalName(rEvent.getTitleNameVip(mUser));
-        List<List<Long>> aBonusNormal = rEvent.getABonusNormal();
-        List<List<Long>> aBonusVip = rEvent.getABonusNormal();
-        List<Integer> statusNormal = uEvent.getStatusNormal();
-        List<Integer> statusVip = uEvent.getStatusVip();
-        for (int i = 0; i < exps.size(); i++) {
-            Pbmethod.PbCellPanelEventMonth.Builder cell = Pbmethod.PbCellPanelEventMonth.newBuilder();
-            cell.setLevel(i + 1);
-            cell.setExp(exps.get(i));
-            cell.setStatus(statusNormal.get(i));
-            cell.setStatusVip(statusVip.get(i));
-            cell.addAllBonus(aBonusNormal.get(i));
-            cell.addAllBonusVip(aBonusVip.get(i));
-            pb.addCells(cell);
-        }
-        addResponse(pb.build());
-    }
 
     void tabCell(int eventId) {
         UserQuestEntity uQuest = mUser.getUQuest();
@@ -717,64 +656,5 @@ public class EventHandler extends AHandler {
             }
         }
         addResponse(event.build());
-    }
-
-    void getCellMonth() {
-        List<Long> inputs = getInputALong();
-        int eventId = inputs.get(0).intValue();
-        int cellIndex = inputs.get(1).intValue();
-        int type = inputs.get(2).intValue();
-        if (type != 0 && type != 1) {
-            addErrParam();
-            return;
-        }
-        ResEventPanelMonthEntity rEvent = ResEventPanel.getPanelMonth(eventId);
-        if (rEvent == null) {
-            addErrParam();
-            return;
-        }
-        if (!rEvent.isActive()) {
-            addErrResponse(getLang(Lang.err_event_not_active));
-            return;
-        }
-
-        UserEventPanelMonthEntity uEvent = Services.userDAO.getUserEventMonth(mUser, rEvent.getId());
-        if (uEvent == null) {
-            addErrSystem();
-            return;
-        }
-        //todo bổ sung vào res rEvent panel
-        StatusType statusPack = StatusType.PROCESSING;
-        UserPackEntity packBuy = mUser.getResources().getPack(rEvent.getPack().getId());
-        if (packBuy != null) {
-            statusPack = StatusType.DONE;
-        }
-        int curPoint = 0;
-        if (eventId == 1) curPoint = mUser.getUQuest().getPoint();
-        else curPoint = uEvent.getPoint();
-        List<Integer> exps = rEvent.getExp();
-        int curLevel = ResEventPanel.getLevelPanelMonth(exps, curPoint).get(0);
-        if (cellIndex < curLevel) {
-            addErrResponse(String.format(getLang(Lang.err_require_level_to_receive), cellIndex));
-            return;
-        }
-        List<Integer> status = null;
-        if (type == 0) {
-            status = uEvent.getStatusNormal();
-        } else status = uEvent.getStatusVip();
-        if (status.get(cellIndex) == StatusType.DONE.value) {
-            addErrResponse(getLang(Lang.err_received_bonus));
-            return;
-        }
-        if (statusPack != StatusType.DONE && type == 1) {
-            addErrResponse(getLang(Lang.err_has_buy_pack_event));
-            return;
-        }
-        status.set(cellIndex, StatusType.DONE.value);
-        if (type == 0 && uEvent.update(List.of("status_normal", StringHelper.toDBString(status)))) {
-            addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.GET_CELL_MONTH_NORMAL.getKey(cellIndex), rEvent.getBonusNormalIndex(cellIndex))));
-        } else if (type == 1 && uEvent.update(List.of("status_vip", StringHelper.toDBString(status)))) {
-            addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.GET_CELL_MONTH_NORMAL.getKey(cellIndex), rEvent.getBonusVipIndex(cellIndex))));
-        } else addErrSystem();
     }
 }

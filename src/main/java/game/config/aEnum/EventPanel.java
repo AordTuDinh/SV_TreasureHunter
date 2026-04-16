@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum EventPanel {
-    PACK_MONTH(1),
     TAB_CELL(2),
     ;
 

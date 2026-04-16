@@ -20,7 +20,8 @@
         <slf4j.version>2.0.16</slf4j.version>
 
         <!-- Serialization -->
-        <protobuf.version>3.25.6</protobuf.version>
+        <!-- Keep protobuf runtime compatible with existing generated gencode (Pbmethod.java). -->
+        <protobuf.version>3.10.0</protobuf.version>
         <jackson.version>2.17.2</jackson.version>
         <gson.version>2.11.0</gson.version>
 
