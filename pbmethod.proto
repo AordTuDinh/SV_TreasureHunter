@@ -50,9 +50,15 @@ enum StateType {
 }
 
 enum CellObjectType{
-  TREE = 1;
-  BOX = 2;
-  BONE = 3;
+  ROCK = 1;
+  SIGN = 2;
+  CACTUS = 3;
+  FLOWER = 4;
+  SKULL = 5;
+  CHEST = 6;
+  BONES = 7;
+  GRAVESTONE = 8;
+  HELMET = 9;
 }
 
 

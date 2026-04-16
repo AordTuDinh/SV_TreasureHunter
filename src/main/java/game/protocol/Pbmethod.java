@@ -196,40 +196,94 @@ public final class Pbmethod {
   public enum CellObjectType
       implements com.google.protobuf.ProtocolMessageEnum {
     /**
-     * <code>TREE = 1;</code>
+     * <code>ROCK = 1;</code>
      */
-    TREE(0, 1),
+    ROCK(0, 1),
     /**
-     * <code>BOX = 2;</code>
+     * <code>SIGN = 2;</code>
      */
-    BOX(1, 2),
+    SIGN(1, 2),
     /**
-     * <code>BONE = 3;</code>
+     * <code>CACTUS = 3;</code>
      */
-    BONE(2, 3),
+    CACTUS(2, 3),
+    /**
+     * <code>FLOWER = 4;</code>
+     */
+    FLOWER(3, 4),
+    /**
+     * <code>SKULL = 5;</code>
+     */
+    SKULL(4, 5),
+    /**
+     * <code>CHEST = 6;</code>
+     */
+    CHEST(5, 6),
+    /**
+     * <code>BONES = 7;</code>
+     */
+    BONES(6, 7),
+    /**
+     * <code>GRAVESTONE = 8;</code>
+     */
+    GRAVESTONE(7, 8),
+    /**
+     * <code>HELMET = 9;</code>
+     */
+    HELMET(8, 9),
     ;
 
     /**
-     * <code>TREE = 1;</code>
+     * <code>ROCK = 1;</code>
      */
-    public static final int TREE_VALUE = 1;
+    public static final int ROCK_VALUE = 1;
     /**
-     * <code>BOX = 2;</code>
+     * <code>SIGN = 2;</code>
      */
-    public static final int BOX_VALUE = 2;
+    public static final int SIGN_VALUE = 2;
     /**
-     * <code>BONE = 3;</code>
+     * <code>CACTUS = 3;</code>
      */
-    public static final int BONE_VALUE = 3;
+    public static final int CACTUS_VALUE = 3;
+    /**
+     * <code>FLOWER = 4;</code>
+     */
+    public static final int FLOWER_VALUE = 4;
+    /**
+     * <code>SKULL = 5;</code>
+     */
+    public static final int SKULL_VALUE = 5;
+    /**
+     * <code>CHEST = 6;</code>
+     */
+    public static final int CHEST_VALUE = 6;
+    /**
+     * <code>BONES = 7;</code>
+     */
+    public static final int BONES_VALUE = 7;
+    /**
+     * <code>GRAVESTONE = 8;</code>
+     */
+    public static final int GRAVESTONE_VALUE = 8;
+    /**
+     * <code>HELMET = 9;</code>
+     */
+    public static final int HELMET_VALUE = 9;
 
 
     public final int getNumber() { return value; }
 
     public static CellObjectType valueOf(int value) {
       switch (value) {
-        case 1: return TREE;
-        case 2: return BOX;
-        case 3: return BONE;
+        case 1: return ROCK;
+        case 2: return SIGN;
+        case 3: return CACTUS;
+        case 4: return FLOWER;
+        case 5: return SKULL;
+        case 6: return CHEST;
+        case 7: return BONES;
+        case 8: return GRAVESTONE;
+        case 9: return HELMET;
         default: return null;
       }
     }
@@ -99529,9 +99583,11 @@ public final class Pbmethod {
       "\n\005level\030\003 \001(\005\022\r\n\005shots\030\004 \003(\005*!\n\tCellStat" +
       "e\022\n\n\006ACTIVE\020\001\022\010\n\004HIDE\020\002*Y\n\tStateType\022\023\n\017" +
       "TYPE_ADD_REMOVE\020\001\022\014\n\010TYPE_POS\020\002\022\023\n\017TYPE_" +
-      "UNIT_STATE\020\003\022\024\n\020TYPE_CHUNK_STATE\020\004*-\n\016Ce",
-      "llObjectType\022\010\n\004TREE\020\001\022\007\n\003BOX\020\002\022\010\n\004BONE\020" +
-      "\003B\024\n\010protocolB\010Pbmethod"
+      "UNIT_STATE\020\003\022\024\n\020TYPE_CHUNK_STATE\020\004*y\n\016Ce",
+      "llObjectType\022\010\n\004ROCK\020\001\022\010\n\004SIGN\020\002\022\n\n\006CACT" +
+      "US\020\003\022\n\n\006FLOWER\020\004\022\t\n\005SKULL\020\005\022\t\n\005CHEST\020\006\022\t" +
+      "\n\005BONES\020\007\022\016\n\nGRAVESTONE\020\010\022\n\n\006HELMET\020\tB\024\n" +
+      "\010protocolB\010Pbmethod"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
