@@ -93,10 +93,8 @@ public class UserPartyEntity {
         if (shared.isEmpty()) return;
 
         int numShare = shared.size();
-        long addExp = Math.max(1, (long) (bonusShare.getExp() * 0.35f / numShare));
         long addGold = Math.max(1, (long) (bonusShare.getGold() * 0.35f / numShare));
         List<Long> bonusX = Bonus.viewGold(addGold);
-        bonusX.addAll(Bonus.viewExp(addExp));
 
         for (MyUser u : shared) {
             List<Long> bm = Bonus.receiveListItem(u, "ShareExpParty", bonusX);

@@ -135,36 +135,9 @@ public class UserHandler extends AHandler {
             addErrResponse(getLang(Lang.err_string_prefix));
             return;
         }
-        int characterId = (int) cmm.getALong(0);
-        if (!CfgUser.config.heroStart.contains(characterId)) {
-            addErrParam();
-            return;
-        }
-        //them vao nhan vat, free con dau
-//        UserHeroEntity uHero = new UserHeroEntity(user.getId(), characterId);
-//        if (!DBJPA.saveOrUpdate(uHero)) {
-//            addErrResponse();
-//            return;
-//        }
-//        mUser.getResources().addHero(uHero);
-        // tang them cho 5 cai phi tieu
-//        UserWeaponEntity w1 = new UserWeaponEntity(user.getId(), 1);
-//        DBJPA.saveOrUpdate(w1);
-//        mUser.getResources().addWeapon(w1);
-//        w1 = new UserWeaponEntity(user.getId(), 2);
-//        DBJPA.saveOrUpdate(w1);
-//        mUser.getResources().addWeapon(w1);
-//        w1 = new UserWeaponEntity(user.getId(), 3);
-//        DBJPA.saveOrUpdate(w1);
-//        mUser.getResources().addWeapon(w1);
-//        w1 = new UserWeaponEntity(user.getId(), 4);
-//        DBJPA.saveOrUpdate(w1);
-//        mUser.getResources().addWeapon(w1);
-//        w1 = new UserWeaponEntity(user.getId(), 5);
-//        DBJPA.saveOrUpdate(w1);
-//        mUser.getResources().addWeapon(w1);
 
-        if (mUser.getUser().updateCreateUser(userName, characterId)) {
+
+        if (mUser.getUser().updateCreateUser(userName)) {
             Pbmethod.PbLoginGame.Builder builder = Pbmethod.PbLoginGame.newBuilder();
             builder.setUser(user.toProto(mUser));
             //  user point

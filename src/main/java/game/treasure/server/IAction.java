@@ -24,7 +24,6 @@ public class IAction {
     public static final int ADD_NOTIFY = 18;
     public static final int LOGIN_GAME_BLOCK = 19;
 
-
     //region resource
     public static final int SERVER_INFO = 20;
     public static final int INIT_MAP = 21;

@@ -80,10 +80,6 @@ public class Enemy extends Unit implements Serializable {
                 int num = bm.getMax() == 1 ? 1 : NumberUtil.getRandom(bm.getMin(), bm.getMax());
                 num += num * perBuff.get(1) / 100f;
                 result.setGold(num);
-            } else if (bm.getBonus().get(0).intValue() == Bonus.BONUS_EXP) {
-                int num = bm.getMax() == 1 ? 1 : NumberUtil.getRandom(bm.getMin(), bm.getMax());
-                num += num * perBuff.get(2) / 100f;
-                result.setExp(num);
             } else {
                 int rand = NumberUtil.getRandom(1000);
                 if (rand < bm.getRate() + perBuff.get(0) / 10)

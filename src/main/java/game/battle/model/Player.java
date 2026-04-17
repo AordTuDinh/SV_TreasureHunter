@@ -516,14 +516,12 @@ public class Player extends Unit implements Serializable {
     // bonus bắn ra từ điểm
     public void sendForceBonus(BonusKillEnemy bonus, String title, Pos posInstance) {
         // tính vào exp party
-
         UserPartyEntity uParty = mUser.getUser().getParty();
         if (uParty != null) {
             uParty.shareBonusParty(mUser, bonus);
         }
         List<Long> bonusReal = bonus.getBonus();
         if (bonus.getGold() > 0) bonusReal.addAll(Bonus.viewGold(bonus.getGold()));
-        if (bonus.getExp() > 0) bonusReal.addAll(Bonus.viewExp(bonus.getExp()));
         List<Long> bm = Bonus.receiveListItem(mUser, title, bonusReal);
         bm.add(0, (long) (posInstance.x * 1000));
         bm.add(1, (long) (posInstance.y * 1000));

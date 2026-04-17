@@ -21,7 +21,6 @@ public class Bonus {
     public static final int BONUS_GOLD = 1;
     public static final int BONUS_GEM = 2;
     public static final int BONUS_ITEM_EQUIPMENT = 3;
-    public static final int BONUS_EXP = 4;
     public static final int BONUS_ITEM = 6;
     public static final int BONUS_WEAPON = 7;
     public static final int BONUS_AVATAR = 8;
@@ -34,7 +33,6 @@ public class Bonus {
         put(BONUS_GOLD, 1);
         put(BONUS_GEM, 1);
         put(BONUS_ITEM_EQUIPMENT, 3);
-        put(BONUS_EXP, 1);
         put(BONUS_ITEM, 2);
         put(BONUS_WEAPON, 1);
         put(BONUS_AVATAR, 2);
@@ -94,10 +92,6 @@ public class Bonus {
         return view(BONUS_RUBY, number);
     }
 
-    public static List<Long> viewExp(long number) {
-        return view(BONUS_EXP, number);
-    }
-
     public static List<Long> viewVipExp(long number) {
         return view(BONUS_VIP_EXP, number);
     }
@@ -110,7 +104,6 @@ public class Bonus {
             case BONUS_GOLD:
             case BONUS_GEM:
             case BONUS_ITEM_EQUIPMENT:
-            case BONUS_EXP:
             case BONUS_ITEM:
             case BONUS_WEAPON:
             case BONUS_VIP_EXP:
@@ -172,9 +165,6 @@ public class Bonus {
                     break;
                 case BONUS_ITEM_EQUIPMENT:
                     aLong.addAll(addItemEquipment(mUser, aBonus, index, detailAction));
-                    break;
-                case BONUS_EXP:
-                    aLong.addAll(addUserExp(mUser, aBonus, index, detailAction));
                     break;
                 case BONUS_VIP_EXP:
                     aLong.addAll(addVipExp(mUser, aBonus, index, detailAction));
@@ -342,30 +332,6 @@ public class Bonus {
             return Arrays.asList((long) BONUS_VIP_EXP, (long) user.getVip(), (long) user.getVipExp(), (long) addExp);
         }
         return new ArrayList<>();
-    }
-
-    static List<Long> addUserExp(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-        int addExp = aBonus.get(index++).getAsInt();
-        int oldLevel = mUser.getUser().getLevel();
-        mUser.getUser().addExp(mUser, addExp);
-        int numUp = mUser.getUser().getLevel() - oldLevel;
-        if (detailAction.equals(DetailActionType.BONUS_KILL_ENEMY)) {
-            if (numUp > 0) {
-                mUser.getUData().increNumPointUpLV(mUser, numUp);
-                mUser.getUser().update(new ArrayList<>());
-            }
-            return Arrays.asList((long) BONUS_EXP, (long) mUser.getUser().getLevel(), mUser.getUser().getExp(), (long) addExp);
-        } else {
-            if (mUser.getUser().update(new ArrayList<>())) {
-                if (CfgServer.isRealServer())
-                    Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "user_exp", "level", mUser.getUser().getLevel(), "exp", mUser.getUser().getExp(), "addExp", addExp);
-                if (numUp > 0) {
-                    mUser.getUData().increNumPointUpLV(mUser, numUp);
-                }
-                return Arrays.asList((long) BONUS_EXP, (long) mUser.getUser().getLevel(), mUser.getUser().getExp(), (long) addExp);
-            }
-            return new ArrayList<>();
-        }
     }
 
     static List<Long> addGold(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {

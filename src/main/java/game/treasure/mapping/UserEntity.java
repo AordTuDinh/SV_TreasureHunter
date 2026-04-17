@@ -356,31 +356,6 @@ public class UserEntity implements Serializable {
         gold += value;
     }
 
-    public synchronized void addExp(MyUser mUser, long value) {
-        int maxLevel = CfgUser.config.exp.size();
-        if (level >= maxLevel) return;
-        exp += value;
-        while (exp >= CfgUser.getExpByLevel(level)) {
-            exp -= CfgUser.getExpByLevel(level);  // k phải bằng 0 vì có thể thừa exp
-            level++;
-            CfgEvent.processTriggerEventTimer(mUser, level, TriggerEventTimer.LEVEL);
-            if (level >= maxLevel) {
-                level = maxLevel; // set lại những thằng đã quá
-                exp = 0;
-                break;
-            }
-            mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.HAS_LEVEL, 1);
-            ResTutorialQuestEntity res = ResQuest.mTutQuest.get(mUser.getUData().getQuestTutorial());
-            if (res == null) return;
-            // check đúng loại  type value k
-            if (res.getType() == QuestTutType.HAS_LEVEL) {
-                mUser.getUData().setQuestTutorialNumber(level);
-                Util.sendProtoData(mUser.getChannel(), CommonProto.getCommonVector(mUser.getUData().getQuestTutorial(), level), IAction.TUTORIAL_QUEST_UPDATE);
-            }
-
-        }
-    }
-
     public synchronized void addVipExp(long value) {
         if (vip >= ResEvent.lengthVip) return; // max vip k tăng exp nữa
         vipExp += value;
@@ -400,10 +375,9 @@ public class UserEntity implements Serializable {
     }
 
     // region db
-    public boolean updateCreateUser(String name, int character) {
-        if (update(Arrays.asList("name", name, "avatar", String.format("[0,%s,%s,0,0]", character, character)))) {
+    public boolean updateCreateUser(String name) {
+        if (update(Arrays.asList("name", name))) {
             this.name = name;
-            this.avatar = "[0," + character + "," + character + ",0,0]";
             return true;
         }
         return false;

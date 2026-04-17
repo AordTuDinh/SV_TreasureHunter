@@ -180,16 +180,12 @@ public class BattleHandler extends AHandler implements Serializable {
         int per5 = (int) (mUser.getUser().getExp() * 0.1);
         if (type == 0 && System.currentTimeMillis() < checkTime) { // backHome
             player.revive();
-            if (mUser.getUser().getExp() >= per5)
-                addBonusPrivate(Bonus.receiveListItem(mUser, DetailActionType.REVIVE_FEE_10.getKey(), Bonus.viewExp(-per5)));
             initMapByTypeId(MapType.HOME,mUser.getCachePos(),PopupType.NULL);
         } else {
             List<Long> fee = Bonus.viewItem(ItemKey.VE_HOI_SINH, -1);
             String err = Bonus.checkMoney(mUser, fee);
             if (err != null) {
                 player.revive();
-                if (mUser.getUser().getExp() >= per5)
-                    addBonusPrivate(Bonus.receiveListItem(mUser, DetailActionType.REVIVE_FEE_10.getKey(), Bonus.viewExp(-per5)));
                 initMapByTypeId(MapType.HOME,mUser.getCachePos(),PopupType.NULL);
             } else {
                 player.revive();
