@@ -384,6 +384,7 @@ public class LoginHandler extends AHandler {
         cmm.addALong((long) (BattleConfig.m_LerpSpeedBar * 100));
         cmm.addALong(BattleConfig.maxNumberOpenItem * 100);
         cmm.addALong((long) (BattleConfig.P_timeNoMove * 100));
+        cmm.addALong (BattleConfig.CHUNK_SIZE * 100L);
 
         //
         addResponse(IAction.BATTLE_CONFIG, cmm.build());

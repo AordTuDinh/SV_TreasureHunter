@@ -125,7 +125,7 @@ public abstract class Unit {
     public void setPosAndDirection(Pos newPos, Pos newDirection) {
         pos = newPos.round();
         direction = newDirection.normalized();
-        this.setMove(true);
+        setMove(true);
         updateChunkByPos(pos);
     }
 
@@ -246,17 +246,6 @@ public abstract class Unit {
     }
 
 
-//    @Override
-//    public void Update1s() { //1s update 1 lần
-//        if (room == null || room.getRoomState() != RoomState.ACTIVE) return;
-//        if (alive) {
-//            long reHp = point.getHpRegen();
-//            if (reHp > 0 && point.getCurHP() < point.getMaxHp()) reHpNoEff(reHp);
-//            long reMp = point.getMpRegen();
-//            if (reMp > 0 && point.getCurMP() < point.getMaxMp()) updateMp(reMp);
-//        }
-//    }
-
 
     public void Update() {
     }
@@ -296,6 +285,11 @@ public abstract class Unit {
     public void setMove(boolean isMove) {
         if (isMove) timeActionMove = System.currentTimeMillis();
         this.isMove = isMove;
+    }
+
+    public boolean isMove() {
+        this.isMove = !DateTime.isAfterTime(timeActionMove, BattleConfig.P_timeNoMove);
+        return isMove;
     }
 
 
@@ -348,7 +342,8 @@ public abstract class Unit {
         pbUser.setId(id);
         pbUser.setPos(pos.toProto());
         pbUser.setDirection(direction.toProto());
-        pbUser.setSpeed((int) point.getMoveSpeed());
+        pbUser.setSpeed(point.getMoveSpeed());
+        pbUser.setChunkId(chunkId);
         return pbUser.build();
     }
 

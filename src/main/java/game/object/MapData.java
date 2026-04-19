@@ -8,7 +8,6 @@ public class MapData implements Serializable {
     public List<CellDto> cells = new ArrayList<>();
 
     public static class CellDto {
-        public int id;
         public int x;
         public int y;
         public int type;

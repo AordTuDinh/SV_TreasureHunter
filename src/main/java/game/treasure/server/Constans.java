@@ -16,20 +16,4 @@ public class Constans implements Serializable {
     public static final int PROTOCOL_TCP = 1;
 
     public static final String KEY_PROTOCOL = "protocol";
-
-
-    // ******** RUNTIME MAP ***************
-
-    public static final Map<Long, String> mIdToBattleId = new HashMap<>();
-    public static long counterId;
-
-    //region state
-    public static synchronized long getCounterId() {
-        return ++counterId;
-    }
-
-    public static String[] getKeyRoomById(long battleId) {
-        return (mIdToBattleId.getOrDefault(battleId, "0_0")).split("_");
-    }
-
 }

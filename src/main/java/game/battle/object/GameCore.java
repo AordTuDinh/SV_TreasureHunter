@@ -1,6 +1,7 @@
 package game.battle.object;
 
 import game.battle.calculate.MathLab;
+import game.battle.model.MapService;
 import game.battle.model.Unit;
 import game.battle.model.Player;
 import game.battle.type.GeometryType;
@@ -142,7 +143,7 @@ public class GameCore {
         List<Integer> out = new ArrayList<>();
         for (int y = minY; y <= maxY; y++) {
             for (int x = minX; x <= maxX; x++) {
-                out.add(mapInfo.chunkPosToId(x, y));
+                out.add(MapService.chunkPosToId(mapInfo,x, y));
             }
         }
         return out;

@@ -5,9 +5,11 @@ import game.battle.object.Mono;
 import game.battle.type.RoomState;
 import game.battle.type.StateType;
 import game.config.aEnum.MapType;
+import game.object.TaskMonitor;
 import game.treasure.server.Constans;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.quartz.JobKey;
 import protocol.Pbmethod.*;
 
@@ -30,7 +32,9 @@ public abstract class MonoRoom extends Mono {
     protected long battleId; // id room khác với id init
     List<Coroutine> coroutines;
     MapType mapType;
-
+    @Getter
+    @Setter
+    String keyRoom;
 
     // data thay đổi trong chunk
     @Getter
@@ -44,11 +48,11 @@ public abstract class MonoRoom extends Mono {
         this.roomState = RoomState.INIT;
         this.timeCreateRoom = System.currentTimeMillis();
         this.coroutines = new ArrayList<>();
-        this.battleId = Constans.getCounterId();
-        this.mapType = MapType.get(Integer.parseInt(Constans.getKeyRoomById(this.battleId)[1]));
+        this.battleId = TaskMonitor.getCounterId();
+        this.mapType = MapType.get(Integer.parseInt(TaskMonitor.getKeyRoomById(this.battleId)[1]));
         this.aProtoChange = new ArrayList<>();
         this.aProtoUnitState = new ArrayList<>();
-        Constans.mIdToBattleId.put(this.battleId, keyRoom);
+        TaskMonitor.addBattleKey(battleId, keyRoom);
     }
 
 

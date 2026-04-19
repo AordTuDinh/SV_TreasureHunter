@@ -7,6 +7,7 @@ import game.battle.object.*;
 import game.battle.type.RoomState;
 import game.config.CfgServer;
 import game.config.aEnum.MapType;
+import game.object.TaskMonitor;
 import game.treasure.controller.AHandler;
 import game.treasure.mapping.main.ResMapEntity;
 import game.treasure.server.Constans;
@@ -54,7 +55,7 @@ public abstract class BaseRoom extends MonoRoom {
         }
         for (int y = mapInfo.getMinChunkY(); y <= mapInfo.getMaxChunkY(); y++) {
             for (int x = mapInfo.getMinChunkX(); x <= mapInfo.getMaxChunkX(); x++) {
-                int centerId = mapInfo.chunkPosToId(x, y);
+                int centerId = MapService.chunkPosToId(mapInfo,x, y);
                 visibleByChunkId.put(centerId, GameCore.getVisibleChunkIds(mapInfo, x, y));
             }
         }
@@ -109,6 +110,7 @@ public abstract class BaseRoom extends MonoRoom {
         Map<Integer, byte[]> chunkViewData = new HashMap<>();
         // 1. cache unit theo chunk (convert 1 lần)
         Map<Integer, List<Pbmethod.PbUnitPos>> chunkUnitPosMap = new HashMap<>();
+
         for (Map.Entry<Integer, Set<Long>> entry : chunkCharacter.entrySet()) {
             List<Pbmethod.PbUnitPos> list = new ArrayList<>();
             for (Long unitId : entry.getValue()) {
@@ -123,6 +125,11 @@ public abstract class BaseRoom extends MonoRoom {
         // copy event
         List<Pbmethod.PbUnit> protoChange = new ArrayList<>(aProtoChange);
         aProtoChange.clear();
+
+        Map<Long, List<Pbmethod.PbUnit>> protoChangeByUnitId = new LinkedHashMap<>();
+        for (Pbmethod.PbUnit u : protoChange) {
+            protoChangeByUnitId.computeIfAbsent(u.getId(), k -> new ArrayList<>()).add(u);
+        }
 
         List<Pbmethod.PbUnitState> protoUnitStateCopy = new ArrayList<>(aProtoUnitState);
         aProtoUnitState.clear();
@@ -140,17 +147,14 @@ public abstract class BaseRoom extends MonoRoom {
                 if (list != null) {
                     for (Pbmethod.PbUnitPos u : list) {
                         if (added.add(u.getId())) {
+                            System.out.println("u.getChunkId() = " + u.getChunkId());
                             builder.addUnitPos(u);
                         }
                     }
                 }
             }
 
-            for (Pbmethod.PbUnit u : protoChange) {
-                if (visibleChunks.contains(u.getChunkId())) {
-                    builder.addUnitAdd(u);
-                }
-            }
+            appendProtoChangeForViewer(visibleChunks, builder, protoChangeByUnitId);
 
             if (!protoUnitStateCopy.isEmpty()) {
                 builder.setUnitUpdate(ProtoState.protoUnitUpdate(Pbmethod.StateType.TYPE_UNIT_STATE_VALUE,
@@ -199,6 +203,46 @@ public abstract class BaseRoom extends MonoRoom {
             System.out.println(msg);
         }
     }
+
+
+    private static void appendProtoChangeForViewer(List<Integer> visibleChunks, protocol.Pbmethod.PbState.Builder builder,
+        Map<Long, List<Pbmethod.PbUnit>> protoChangeByUnitId) {
+        if (visibleChunks == null) return;
+        for (List<Pbmethod.PbUnit> events : protoChangeByUnitId.values()) {
+            if (events.isEmpty()) continue;
+            if (events.size() == 1) {
+                Pbmethod.PbUnit u = events.get(0);
+                if (visibleChunks.contains(u.getChunkId())) {
+                    builder.addUnitAdd(u);
+                }
+                continue;
+            }
+            if (events.size() == 2
+                    && !events.get(0).getIsAdd()
+                    && events.get(1).getIsAdd()) {
+                Pbmethod.PbUnit rem = events.get(0);
+                Pbmethod.PbUnit add = events.get(1);
+                boolean seeOld = visibleChunks.contains(rem.getChunkId());
+                boolean seeNew = visibleChunks.contains(add.getChunkId());
+                if (seeOld && seeNew) {
+                    continue;
+                }
+                if (seeOld) {
+                    builder.addUnitAdd(rem);
+                }
+                if (seeNew) {
+                    builder.addUnitAdd(add);
+                }
+                continue;
+            }
+            for (Pbmethod.PbUnit u : events) {
+                if (visibleChunks.contains(u.getChunkId())) {
+                    builder.addUnitAdd(u);
+                }
+            }
+        }
+    }
+
 
     public Unit getPlayerId(long id) {
         return mUnit.getOrDefault(id, null);
@@ -301,9 +345,8 @@ public abstract class BaseRoom extends MonoRoom {
         unit.setChunkId(newChunk);
 
         // chỉ gửi remove nếu oldChunk hợp lệ
-        if (oldValid) {
-            aProtoChange.add(unit.toProtoRemove(oldChunk));
-        }
+        if (oldValid) aProtoChange.add(unit.toProtoRemove(oldChunk));
+
         aProtoChange.add(unit.toProtoAdd(newChunk));
 
         return true;
@@ -349,7 +392,7 @@ public abstract class BaseRoom extends MonoRoom {
     }
 
     public int worldPosToChunkId(Pos pos) {
-        return mapInfo.worldPosToChunkId(pos);
+        return MapService.worldPosToChunkId(mapInfo,pos);
     }
 
     public boolean isValidChunkId(int chunkId) {
@@ -411,15 +454,15 @@ public abstract class BaseRoom extends MonoRoom {
     protected abstract void cancelTask();
 
     public int getRoomTypeId() { // = id map
-        return Integer.parseInt(Constans.getKeyRoomById(battleId)[1]);
+        return Integer.parseInt(TaskMonitor.getKeyRoomById(battleId)[1]);
     }
 
     public MapType getRoomType() { // = id map
-        return MapType.get(Integer.parseInt(Constans.getKeyRoomById(battleId)[1]));
+        return MapType.get(Integer.parseInt(TaskMonitor.getKeyRoomById(battleId)[1]));
     }
 
     public int getChannelId() {
-        return Integer.parseInt(Constans.getKeyRoomById(battleId)[2]);
+        return Integer.parseInt(TaskMonitor.getKeyRoomById(battleId)[2]);
     }
 
     public void syncViewDeltaForPlayer(Player player, int oldChunk, int newChunk) {
@@ -476,13 +519,13 @@ public abstract class BaseRoom extends MonoRoom {
                 builder.addUnitAdd(u.toProtoRemove(chunkId));
 
             }
-
             // add state cell in chunk
             ChunkObject chunk = mChunk.get(chunkId);
             builder.addChunkState(chunk.toProtoRemove());
         }
 
         byte[] state = ProtoState.convertProtoBuffToState(builder.build());
+        System.out.println("player.getChunkId() = " + player.getChunkId());
         Util.sendGameData(player.getMUser().getChannel(), state, Constans.MAGIC_IN_PUT);
     }
 

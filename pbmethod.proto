@@ -87,8 +87,9 @@ message PbUnit{
 message PbCell {
   optional int32 type = 1;
   optional int32 chunkId = 2;
-  optional PbPos pos = 3;
-  optional CellState state = 4;
+  optional int32 id = 3;
+  optional PbPos pos = 4;
+  optional CellState state = 5;
 }
 
 message PbListChunk {
@@ -98,7 +99,7 @@ message PbListChunk {
 message PbChunk {
   optional int32 id = 1;
   optional bool isAdd = 2;
-  optional PbPos pos =3;
+  optional PbPos pos = 3;
   repeated PbCell cells = 4;
 }
 
@@ -554,6 +555,14 @@ message  PbLotteryHistory {
 
 //region ------------------------------------------------------ battle
 
+enum sortTargetAttack {
+  OBJECT = 0;
+  ENEMY = 1;
+  BOSS = 2;
+  PLAYER = 3;
+}
+
+
 message  PbUnitUpdate{
   optional int32  type = 1;
   optional bytes data = 2;
@@ -566,6 +575,7 @@ message PbUnitPos {
   optional int64 lastInputSeq = 3;
   optional PbPos pos = 4;
   optional PbPos direction = 5;
+  optional int32 chunkId = 6;
 }
 
 

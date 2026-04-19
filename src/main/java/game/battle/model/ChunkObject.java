@@ -4,33 +4,34 @@ import game.battle.object.Pos;
 import lombok.Data;
 import protocol.Pbmethod;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 
 @Data
 public class ChunkObject {
-    int id;
-    List<CellObject> cells;
+    int chunkId;
+    Map<Integer, CellObject> mCells = new HashMap<>(); // id - cell
     Pos pos;
 
-    public ChunkObject(int id, Pos pos, List<CellObject> cells) {
-        this.id = id;
+    public ChunkObject(int chunkId, Pos pos, Map<Integer, CellObject> cells) {
+        this.chunkId = chunkId;
         this.pos = pos;
-        this.cells = cells;
+        this.mCells = cells;
     }
 
     public Pbmethod.PbChunk toProto() {
         Pbmethod.PbChunk.Builder pb = Pbmethod.PbChunk.newBuilder();
-        pb.setId(id);
+        pb.setId(chunkId);
         pb.setPos(pos.toProto());
         pb.setIsAdd(true);
-        for (CellObject cell : cells) {
-            pb.addCells(cell.toProto());
+
+        for (Map.Entry<Integer, CellObject> entry : mCells.entrySet()) {
+            pb.addCells(entry.getValue().toProto());
         }
         return pb.build();
     }
+
     public Pbmethod.PbChunk toProtoRemove() {
-        return Pbmethod.PbChunk.newBuilder().setIsAdd(false).setId(id).build();
+        return Pbmethod.PbChunk.newBuilder().setIsAdd(false).setId(chunkId).build();
     }
 }

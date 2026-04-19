@@ -55,7 +55,7 @@ public class ProtoState {
 
                 for (int i = 0; i < chunkStateList.size(); i++) {
                     Pbmethod.PbChunk tmp = chunkStateList.get(i);
-                    buffer.writeInt(tmp.getId());
+                    buffer.writeShort(tmp.getId());
                     boolean isAdd = tmp.getIsAdd();
                     buffer.writeBoolean(isAdd);
                     if (isAdd) {
@@ -68,6 +68,7 @@ public class ProtoState {
                             Pbmethod.PbCell cell = tmp.getCells(j);
                             buffer.writeByte(cell.getType());
                             buffer.writeByte(cell.getChunkId());
+                            buffer.writeShort(cell.getId());
                             buffer.writeFloat(cell.getPos().getX());
                             buffer.writeFloat(cell.getPos().getY());
                             // cell state
@@ -146,12 +147,13 @@ public class ProtoState {
             for (int i = 0; i < aUnitPos.size(); i++) {
                 PbUnitPos tmp = aUnitPos.get(i);
                 buffer.writeLong(tmp.getId());
-                buffer.writeInt(tmp.getSpeed());
+                buffer.writeShort(tmp.getSpeed());
                 buffer.writeLong(tmp.getLastInputSeq());
                 buffer.writeFloat(tmp.getPos().getX());
                 buffer.writeFloat(tmp.getPos().getY());
                 buffer.writeFloat(tmp.getDirection().getX());
                 buffer.writeFloat(tmp.getDirection().getY());
+                buffer.writeShort(tmp.getChunkId());
             }
         }
     }

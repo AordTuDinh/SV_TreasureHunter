@@ -31,7 +31,7 @@ public class BattleHandler extends AHandler implements Serializable {
     @Override
     public void initAction(Map<Integer, AHandler> mHandler) {
         List<Integer> actions = Arrays.asList(SERVER_INFO, INIT_MAP, CAMPAIGN_DATA, CAMPAIGN_REWARD,
-                CAMPAIGN_SMART,  JOIN_MAP, BOSS_GOD_DATA, REVIVE_PLAYER, CHANGE_AUTO_MODE, CHANGE_ITEM_SLOT,
+                CAMPAIGN_SMART, JOIN_MAP, BOSS_GOD_DATA, REVIVE_PLAYER, CHANGE_AUTO_MODE, CHANGE_ITEM_SLOT,
                 CHANGE_CHANEL, SMART_BOSS, CHANGE_AUTO_SLOT);
         actions.forEach(action -> mHandler.put(action, this));
     }
@@ -81,9 +81,9 @@ public class BattleHandler extends AHandler implements Serializable {
             return;
         }
         int popupType = Math.toIntExact(pbUB.getALong(1));
-        PopupType pType =   PopupType.get(popupType);
+        PopupType pType = PopupType.get(popupType);
         if (initMapType == InitMapType.ROOMTYPE) {
-            initMapByTypeId(MapType.get(type), Pos.zero(),pType);
+            initMapByTypeId(MapType.get(type), Pos.zero(), pType);
         }
     }
 
@@ -112,9 +112,8 @@ public class BattleHandler extends AHandler implements Serializable {
         }
         int chanelId = mUser.getRoomChanelId();
         BaseRoom curRoom = (BaseRoom) ChUtil.get(channel, ChUtil.KEY_ROOM);
-        String curKeyRoom = curRoom != null ? Constans.mIdToBattleId.get(curRoom.getBattleId()) : "";
+        String curKeyRoom = curRoom != null ? TaskMonitor.mBattleIdToKey.get(curRoom.getBattleId()) : "";
         String keyRoom = CfgBattle.getKeyRoom(mUser, mapType.value, chanelId);
-
         if (curRoom != null && curKeyRoom.equals(keyRoom)) {
             addErrResponse(getLang(Lang.err_in_room_already));
             return;
@@ -139,7 +138,6 @@ public class BattleHandler extends AHandler implements Serializable {
         // check có room hay chưa, có rồi thì join
         player.clearDataForChangeRoom(posInit);
         player.resetData();
-
         if (room == null) {
             switch (mapType) {
                 case HOME:
@@ -169,7 +167,6 @@ public class BattleHandler extends AHandler implements Serializable {
             return;
         }
         mUser.getPlayer().setJoinMap(curRoom);
-
         curRoom.joinRoom(this, mUser.getPlayer());
     }
 
@@ -180,13 +177,13 @@ public class BattleHandler extends AHandler implements Serializable {
         int per5 = (int) (mUser.getUser().getExp() * 0.1);
         if (type == 0 && System.currentTimeMillis() < checkTime) { // backHome
             player.revive();
-            initMapByTypeId(MapType.HOME,mUser.getCachePos(),PopupType.NULL);
+            initMapByTypeId(MapType.HOME, mUser.getCachePos(), PopupType.NULL);
         } else {
             List<Long> fee = Bonus.viewItem(ItemKey.VE_HOI_SINH, -1);
             String err = Bonus.checkMoney(mUser, fee);
             if (err != null) {
                 player.revive();
-                initMapByTypeId(MapType.HOME,mUser.getCachePos(),PopupType.NULL);
+                initMapByTypeId(MapType.HOME, mUser.getCachePos(), PopupType.NULL);
             } else {
                 player.revive();
                 addBonusToast(Bonus.receiveListItem(mUser, DetailActionType.REVIVE_PLAYER.getKey(), fee));

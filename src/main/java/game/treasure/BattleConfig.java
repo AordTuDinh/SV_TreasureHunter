@@ -2,9 +2,7 @@ package game.treasure;
 
 public class BattleConfig {
     // new config
-    public  static int CHUNK_SIZE = 10;
-
-
+    public static int CHUNK_SIZE = 10;
 
 
     // player config
@@ -32,7 +30,7 @@ public class BattleConfig {
     public static final float M_timeBeHitClient = M_timeBeHit - 0.05f; // Cái này cho client chặn di chuyển
     public static final float m_LerpSpeedBar = 0.05f; // tốc độ giảm hp, càng tăng thì tốc độ giảm càng nhanh theo hàm lerp
     public static final int maxNumberOpenItem = 100;
-    public static float P_timeNoMove = 0.02f; // sau khoảng time này thì từ move -> k move - dùng để check nhân vật có đang move hay k
+    public static float P_timeNoMove = 0.1f; // sau khoảng time này thì từ move -> k move - dùng để check nhân vật có đang move hay k
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
     // server config - không gửi cho client config
     public static final float E_ReviveReady = 0.5f; //hồi sinh xong cho bât tử 1 lúc

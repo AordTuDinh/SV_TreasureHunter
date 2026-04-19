@@ -23,7 +23,10 @@ public class TaskMonitor {
     }
 
     public Map<Long, MonoRoom> mRoom = new HashMap<>();
+    public static Map<Long, String> mBattleIdToKey = new HashMap<>();
+    public static Map<String, Long> mKeyToBattleId = new HashMap<>();
     int threadCount = 0;
+    static long counterId;
 
     public void addRoom(MonoRoom room) {
         if (room != null) mRoom.put(room.getBattleId(), room);
@@ -33,8 +36,13 @@ public class TaskMonitor {
         mRoom.remove(id);
     }
 
-    public MonoRoom getRoom(String id) {
-        return mRoom.get(id);
+    public MonoRoom getRoom(long id) {
+        return mRoom.getOrDefault(id,null);
+    }
+
+    public MonoRoom getRoom(String roomKey) {
+        if(!mKeyToBattleId.containsKey(roomKey)) return null;
+        return getRoom(mKeyToBattleId.get(roomKey));
     }
 
     static Scheduler sched;
@@ -73,4 +81,20 @@ public class TaskMonitor {
         }
         threadCount--;
     }
+
+
+    public static void addBattleKey(long battleId, String key){
+        mBattleIdToKey.put(battleId,key);
+        mKeyToBattleId.put(key,battleId);
+    }
+
+    public static String[] getKeyRoomById(long battleId) {
+        return (mBattleIdToKey.getOrDefault(battleId, "0_0")).split("_");
+    }
+
+    //region state
+    public static synchronized long getCounterId() {
+        return ++counterId;
+    }
+
 }

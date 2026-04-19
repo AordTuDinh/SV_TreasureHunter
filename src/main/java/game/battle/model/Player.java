@@ -5,6 +5,7 @@ import game.battle.type.*;
 import game.config.CfgAchievement;
 import game.config.CfgQuest;
 import game.config.aEnum.*;
+import game.object.TaskMonitor;
 import game.treasure.BattleConfig;
 import game.treasure.controller.UserHandler;
 import game.treasure.mapping.*;
@@ -418,17 +419,10 @@ public class Player extends Unit implements Serializable {
 
     }
 
-    @Override
-    public Pbmethod.PbUnitPos toProtoPos() {
-        Pbmethod.PbUnitPos.Builder pbUser = Pbmethod.PbUnitPos.newBuilder();
-        pbUser.setId(id);
-        pbUser.setPos(pos.toProto());
-//        System.out.println("pos.toString() = " + pos.toString());
-        pbUser.setDirection(direction.toProto());
-        pbUser.setSpeed((int) point.getMoveSpeed());
-        pbUser.setLastInputSeq(indexLastInputSeq);
-        return pbUser.build();
-    }
+//    @Override
+//    public Pbmethod.PbUnitPos toProtoPos() {
+//        return super.toProtoPos().toBuilder().setLastInputSeq(indexLastInputSeq).build();
+//    }
 
     @Override
     public void revive() {
@@ -475,7 +469,7 @@ public class Player extends Unit implements Serializable {
 
     public void toPbEndGame(boolean isWin, int per, List<Long> bonus, int timeAttack, PopupType popup, List<Integer> info) {
         protocol.Pbmethod.PbEndGame.Builder pb = protocol.Pbmethod.PbEndGame.newBuilder();
-        pb.setBattleKey(Constans.mIdToBattleId.get(getRoom().getBattleId()));
+        pb.setBattleKey(TaskMonitor.mBattleIdToKey.get(getRoom().getBattleId()));
         pb.setIsWin(isWin);
         pb.setPopupId(popup.value);
         if (bonus != null) {
