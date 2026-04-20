@@ -127,13 +127,18 @@ public abstract class Unit {
         direction = newDirection.normalized();
         setMove(true);
         updateChunkByPos(pos);
+
     }
 
     protected void updateChunkByPos(Pos worldPos) {
         if (room == null || worldPos == null) return;
         int oldChunk = chunkId;
         int newChunk = room.worldPosToChunkId(worldPos);
-
+        int fx = (int)Math.floor(worldPos.x);
+        int fy = (int)Math.floor(worldPos.y);
+        int curCell = MapService.worldPosToGlobalCellId(room.getMapInfo(), worldPos);
+        int cuCellId = MapService.worldCellPosToGlobalCellId(room.getMapInfo(), fx, fy);
+        System.out.println("newChunk = " + newChunk +"  cellIndex - "+curCell+"   -- cuCellId == "+cuCellId);
         if (room.joinChunk(this, newChunk) && type == UnitType.PLAYER) {
             room.syncViewDeltaForPlayer(this.getPlayer(), oldChunk, newChunk);
         }

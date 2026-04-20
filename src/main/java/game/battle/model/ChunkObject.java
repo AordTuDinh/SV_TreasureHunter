@@ -10,7 +10,7 @@ import java.util.*;
 @Data
 public class ChunkObject {
     int chunkId;
-    Map<Integer, CellObject> mCells = new HashMap<>(); // id - cell
+    Map<Integer, CellObject> mCells; // id - cell
     Pos pos;
 
     public ChunkObject(int chunkId, Pos pos, Map<Integer, CellObject> cells) {

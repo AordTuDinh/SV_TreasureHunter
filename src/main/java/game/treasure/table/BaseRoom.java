@@ -300,21 +300,9 @@ public abstract class BaseRoom extends MonoRoom {
             player.setTimeLastProcessInput(System.currentTimeMillis());
             player.setIndexLastInputSeq(lastInputSeq);
             if (player.isAlive()) player.setPosAndDirection(input.playerPos, input.playerDirection);
-        } else if (input.typeId == NInput.PET_MOVE && player.getPetUse() != null) {
-            player.getPetUse().setPosAndDirection(input.petPos, input.petDirection);
-        } else if (input.typeId == NInput.INPUT_SLOT) {
-            if (player.beBlock()) return;
-            int[] slots = input.slotActive;
-            for (int i = 0; i < slots.length; i++) {
-                if (!player.isAlive()) return;
-                if (slots[i] > -1 && player.hasUseItem(i)) {
-                    player.setTimeUseItem(i);
-                    player.useItem(i);
-                }
-            }
         } else if (input.typeId == NInput.PING_GAME) {
             Util.sendProtoData(player.getMUser().getChannel(), null, IAction.PING_GAME);
-        } else if (input.typeId == NInput.CLIENT_STATE) {
+        } else if (input.typeId == NInput.ATTACK) {
 
         }
     }

@@ -336,9 +336,9 @@ public final class Pbmethod {
   }
 
   /**
-   * Protobuf enum {@code pbdson.sortTargetAttack}
+   * Protobuf enum {@code pbdson.TargetAttack}
    */
-  public enum sortTargetAttack
+  public enum TargetAttack
       implements com.google.protobuf.ProtocolMessageEnum {
     /**
      * <code>OBJECT = 0;</code>
@@ -378,7 +378,7 @@ public final class Pbmethod {
 
     public final int getNumber() { return value; }
 
-    public static sortTargetAttack valueOf(int value) {
+    public static TargetAttack valueOf(int value) {
       switch (value) {
         case 0: return OBJECT;
         case 1: return ENEMY;
@@ -388,15 +388,15 @@ public final class Pbmethod {
       }
     }
 
-    public static com.google.protobuf.Internal.EnumLiteMap<sortTargetAttack>
+    public static com.google.protobuf.Internal.EnumLiteMap<TargetAttack>
         internalGetValueMap() {
       return internalValueMap;
     }
-    private static com.google.protobuf.Internal.EnumLiteMap<sortTargetAttack>
+    private static com.google.protobuf.Internal.EnumLiteMap<TargetAttack>
         internalValueMap =
-          new com.google.protobuf.Internal.EnumLiteMap<sortTargetAttack>() {
-            public sortTargetAttack findValueByNumber(int number) {
-              return sortTargetAttack.valueOf(number);
+          new com.google.protobuf.Internal.EnumLiteMap<TargetAttack>() {
+            public TargetAttack findValueByNumber(int number) {
+              return TargetAttack.valueOf(number);
             }
           };
 
@@ -413,9 +413,9 @@ public final class Pbmethod {
       return protocol.Pbmethod.getDescriptor().getEnumTypes().get(3);
     }
 
-    private static final sortTargetAttack[] VALUES = values();
+    private static final TargetAttack[] VALUES = values();
 
-    public static sortTargetAttack valueOf(
+    public static TargetAttack valueOf(
         com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
       if (desc.getType() != getDescriptor()) {
         throw new java.lang.IllegalArgumentException(
@@ -427,12 +427,12 @@ public final class Pbmethod {
     private final int index;
     private final int value;
 
-    private sortTargetAttack(int index, int value) {
+    private TargetAttack(int index, int value) {
       this.index = index;
       this.value = value;
     }
 
-    // @@protoc_insertion_point(enum_scope:pbdson.sortTargetAttack)
+    // @@protoc_insertion_point(enum_scope:pbdson.TargetAttack)
   }
 
   public interface RequestDataOrBuilder
@@ -99849,9 +99849,9 @@ public final class Pbmethod {
       "\020\003\022\024\n\020TYPE_CHUNK_STATE\020\004*y\n\016CellObjectTy" +
       "pe\022\010\n\004ROCK\020\001\022\010\n\004SIGN\020\002\022\n\n\006CACTUS\020\003\022\n\n\006FL" +
       "OWER\020\004\022\t\n\005SKULL\020\005\022\t\n\005CHEST\020\006\022\t\n\005BONES\020\007\022" +
-      "\016\n\nGRAVESTONE\020\010\022\n\n\006HELMET\020\t*?\n\020sortTarge" +
-      "tAttack\022\n\n\006OBJECT\020\000\022\t\n\005ENEMY\020\001\022\010\n\004BOSS\020\002" +
-      "\022\n\n\006PLAYER\020\003B\024\n\010protocolB\010Pbmethod"
+      "\016\n\nGRAVESTONE\020\010\022\n\n\006HELMET\020\t*;\n\014TargetAtt" +
+      "ack\022\n\n\006OBJECT\020\000\022\t\n\005ENEMY\020\001\022\010\n\004BOSS\020\002\022\n\n\006" +
+      "PLAYER\020\003B\024\n\010protocolB\010Pbmethod"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

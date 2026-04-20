@@ -18,12 +18,12 @@ public class CellObject {
     Pbmethod.CellState state;
     Pbmethod.CellObjectType objectType;
 
-    public CellObject(Pos pos, int type, int chunkId, Pbmethod.CellState state,ResMapEntity map ) {
+    public CellObject(Pos pos, int type, int chunkId,int id,  Pbmethod.CellState state, ResMapEntity map) {
         this.pos = pos;
         this.chunkId = chunkId;
         this.state = state;
         this.objectType = Pbmethod.CellObjectType.valueOf(type);
-        this.id = MapService.worldPosToGlobalCellId(map, pos);
+        this.id = id;
     }
 
 

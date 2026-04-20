@@ -94,7 +94,8 @@ public class ResMapEntity extends BaseEntity implements Serializable {
             int chunkY = MapService.worldToChunkY(this, worldY);
             int chunkId = MapService.chunkPosToId(this, chunkX, chunkY);
             Pos pos = new Pos(c.x, c.y);
-            CellObject cell = new CellObject(pos, c.type, chunkId, Pbmethod.CellState.ACTIVE, this);
+            int cellId = MapService.worldCellPosToGlobalCellId(this,worldX,worldY);
+            CellObject cell = new CellObject(pos, c.type, chunkId,cellId, Pbmethod.CellState.ACTIVE, this);
             if (chunkX < minChunkX || chunkX > maxChunkX
                     || chunkY < minChunkY || chunkY > maxChunkY) {
                 System.out.println("[MapLoad] skip out-of-bound cell: x=" + worldX + ", y=" + worldY
@@ -117,9 +118,9 @@ public class ResMapEntity extends BaseEntity implements Serializable {
     }
 
     boolean isInsideWorld(int worldX, int worldY) {
-        return worldX >= botLeftP.getX()
+        return worldX > botLeftP.getX()
                 && worldX < topRightP.x
-                && worldY >= botLeftP.y
+                && worldY > botLeftP.y
                 && worldY < topRightP.y;
     }
 

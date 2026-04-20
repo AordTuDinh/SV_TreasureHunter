@@ -555,7 +555,7 @@ message  PbLotteryHistory {
 
 //region ------------------------------------------------------ battle
 
-enum sortTargetAttack {
+enum TargetAttack {
   OBJECT = 0;
   ENEMY = 1;
   BOSS = 2;

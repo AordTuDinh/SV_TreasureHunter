@@ -7,5 +7,4 @@ public interface RootLogger {
     default Logger getLogger() {
         return slib_Logger.root();
     }
-
 }
