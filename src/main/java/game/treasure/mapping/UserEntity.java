@@ -183,7 +183,7 @@ public class UserEntity implements Serializable {
         point.setWeight(BattleConfig.P_Weight);
         point.setCurHp(cacheHp <= 0 ? point.getMaxHp() : cacheHp);
         point.setCurMp(cacheMp <= 0 ? point.getMaxMp() : cacheMp);
-        point.setMoveSpeed(6000);
+        point.setMoveSpeed(3000);
         return point;
     }
 

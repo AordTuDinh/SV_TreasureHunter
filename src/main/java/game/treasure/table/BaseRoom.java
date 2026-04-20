@@ -147,7 +147,7 @@ public abstract class BaseRoom extends MonoRoom {
                 if (list != null) {
                     for (Pbmethod.PbUnitPos u : list) {
                         if (added.add(u.getId())) {
-                            System.out.println("u.getChunkId() = " + u.getChunkId());
+                           // System.out.println("u.getChunkId() = " + u.getChunkId());
                             builder.addUnitPos(u);
                         }
                     }
