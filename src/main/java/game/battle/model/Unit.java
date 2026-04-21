@@ -126,16 +126,12 @@ public abstract class Unit {
         direction = newDirection.normalized();
         setMove(true);
         updateChunkByPos(pos);
-
     }
 
     protected void updateChunkByPos(Pos worldPos) {
         if (room == null || worldPos == null) return;
         int oldChunk = chunkId;
         int newChunk = room.worldPosToChunkId(worldPos);
-        int fx = (int)Math.floor(worldPos.x);
-        int fy = (int)Math.floor(worldPos.y);
-
         if (room.joinChunk(this, newChunk) && type == UnitType.PLAYER) {
             room.syncViewDeltaForPlayer(this.getPlayer(), oldChunk, newChunk);
         }

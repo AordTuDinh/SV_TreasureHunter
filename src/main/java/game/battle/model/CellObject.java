@@ -43,10 +43,12 @@ public class CellObject {
         timeBeAttack = System.currentTimeMillis();
         this.curHp -= damage;
         curHp = Math.max(curHp, 0);
+        System.out.println("curHp ============= " + curHp);
         if (curHp == 0) {
             state = Pbmethod.CellState.HIDE;
-            return  true;
+            return true;
         }
+
         return false;
     }
 
