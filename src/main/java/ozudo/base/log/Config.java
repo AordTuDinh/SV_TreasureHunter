@@ -42,6 +42,11 @@ public class Config {
         mProps = new slib_Properties(filename);
     }
 
+    /** Call when no config.xml is used; enables {@link #setString} for runtime keys from DB. */
+    public static void loadEmpty() {
+        mProps = new slib_Properties();
+    }
+
     public static String getConfigPath() {
         return ""; // it is the same folder of app
     }
@@ -125,6 +130,9 @@ public class Config {
     }
 
     public static void setString(String aKey, String aValue) {
+        if (mProps == null) {
+            loadEmpty();
+        }
         mProps.setString(aKey, aValue);
     }
 

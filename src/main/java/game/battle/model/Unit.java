@@ -65,7 +65,6 @@ public abstract class Unit {
     long timeActiveRandomMove;
     long timeActionAttack;
     long timeCheckDirectionAttack;
-    long[] timeActiveSlot = new long[]{0, 0, 0};
     //long timeBeAttack;
     Pos directionMoveAttack = Pos.zero(); // chưa có hướng move attack melee
     // save attacker info
@@ -136,9 +135,7 @@ public abstract class Unit {
         int newChunk = room.worldPosToChunkId(worldPos);
         int fx = (int)Math.floor(worldPos.x);
         int fy = (int)Math.floor(worldPos.y);
-        int curCell = MapService.worldPosToGlobalCellId(room.getMapInfo(), worldPos);
-        int cuCellId = MapService.worldCellPosToGlobalCellId(room.getMapInfo(), fx, fy);
-        System.out.println("newChunk = " + newChunk +"  cellIndex - "+curCell+"   -- cuCellId == "+cuCellId);
+
         if (room.joinChunk(this, newChunk) && type == UnitType.PLAYER) {
             room.syncViewDeltaForPlayer(this.getPlayer(), oldChunk, newChunk);
         }
@@ -365,9 +362,6 @@ public abstract class Unit {
         timeActionAttack = System.currentTimeMillis();
     }
 
-    public void setTimeUseItem(int slot) {
-        timeActiveSlot[slot] = System.currentTimeMillis();
-    }
 
     public Pbmethod.PbUnit toProtoRemove(int chunkId) {
         Pbmethod.PbUnit.Builder builder = Pbmethod.PbUnit.newBuilder();

@@ -5,19 +5,14 @@ import game.battle.type.*;
 import game.config.CfgAchievement;
 import game.config.CfgQuest;
 import game.config.aEnum.*;
-import game.object.TaskMonitor;
 import game.treasure.BattleConfig;
-import game.treasure.controller.UserHandler;
 import game.treasure.mapping.*;
-import game.treasure.server.Constans;
-import game.treasure.server.IAction;
 import game.treasure.service.resource.ResMap;
 import game.treasure.service.user.Bonus;
 import game.treasure.table.BaseRoom;
 import game.object.PointBuff;
 import game.object.DataQuest;
 import game.object.MyUser;
-import game.protocol.CommonProto;
 import lombok.Data;
 import ozudo.base.helper.*;
 import protocol.Pbmethod;
@@ -102,27 +97,6 @@ public class Player extends Unit implements Serializable {
         }
     }
 
-    public void CheckUpdateBuff() {
-        List<Long> buffCache = mUser.getUData().getBuff(); // 9 số
-        List<Long> buffNew = NumberUtil.genListLong(3, 0L); // drop - gold -exp
-        // buff từ phúc lợi bang và trang bị
-        Point point = getPoint();
-        buffNew.set(0, (long) point.getBuffDrop());
-        buffNew.set(1, (long) point.getBuffGold());
-        buffNew.set(2, (long) point.getBuffExp());
-
-        for (int i = 0; i < buffCache.size(); i++) {
-            BuffItemType type = BuffItemType.getByIndex(i);
-            long timeCache = buffCache.get(i);
-            if (timeCache > System.currentTimeMillis()) {
-                buffNew.set(type.pointIndex, buffNew.get(type.pointIndex) + type.valueBuff);
-            }
-        }
-        if (!buffNew.equals(buffs)) {
-            UserHandler.buffInfo(mUser);
-        }
-    }
-
     public Player( int teamId, Point point, UnitType type) {
         initDefault( teamId, point);
         this.type = type;
@@ -180,67 +154,14 @@ public class Player extends Unit implements Serializable {
         updateBuff();
     }
 
-
-    void nextSkillSlot() {
-        skillSlotNext++;
-        if (skillSlotNext > 4) skillSlotNext = 0;
-    }
-
-    public void setTick(long time) {
-        if (curTick == 0) curTick = time;
-        else {
-            int tick = (int) (time - curTick);
-            listTick.add(tick);
-            curTick = time;
-            if (listTick.size() > poolSizeTick) {
-                listTick.remove(0);
-            }
-        }
-    }
-
     public boolean isAuto() {
         return DateTime.isAfterTime(timeLastAction, BattleConfig.P_timeIdleToAuto);
     }
 
-    public int getLangOfset() {
-        if (listTick.isEmpty()) return 45; // 45 ms = fix update min
-        IntSummaryStatistics intStats = listTick.stream().mapToInt((x) -> x).summaryStatistics();
-        return intStats.getMin();
-    }
 
-    public void playerAutoBuff() {
-//        for (int i = 0; i < itemsBuf.size() - 3; i += 3) {
-//            long triggerHp = itemsBuf.get(i);
-//            long triggerMp = itemsBuf.get(i + 1);
-//            int itemId = Math.toIntExact(itemsBuf.get(i + 2));
-//            if (triggerHp != 0 && itemId != 0) {
-//                TriggerAutoItem trigger = getTriggerHp();
-//                if (trigger != TriggerAutoItem.NULL && triggerHp >= trigger.value) {
-//                    buff(itemId, i / 3);
-//                }
-//
-//            }
-//            if (triggerMp != 0 && itemId != 0) {
-//                TriggerMp trigger = getTriggerMp();
-//                if (trigger != TriggerMp.NULL && triggerMp >= trigger.value) {
-//                    buff(itemId, i / 3);
-//                }
-//            }
-//        }
-    }
-
-    boolean hasBuffItem(int slot) {
-        if (timeBuff.isEmpty()) return true;
-        return DateTime.isAfterTime(timeBuff.get(slot), BattleConfig.P_delayUseItemSlot);
-    }
 
     public synchronized void addGold(long gold) {
         mUser.getUser().addGold(gold);
-    }
-
-    public void activeSkill(int skillIndex) {
-        setTimeAttack();
-        //protoStatus(StateType.USE_SKILL, (long) (skillIndex), shu.getTimeActiveSkill() - System.currentTimeMillis(), shu.getNumberAttack(), (long) (getDirection().x * 1000L), (long) (getDirection().y * 1000L), isPowerSkill ? 1L : 0L);
     }
 
     // todo : edit to use item in slot
@@ -261,46 +182,11 @@ public class Player extends Unit implements Serializable {
         }
     }
 
-    public Pos getDirectionHitRun() {
-        float nearest = BattleConfig.P_distionHitRun;
-        if (distionTop() > nearest && distionBot() > nearest && distionLeft() > nearest && distionRight() > nearest) {
-            if (distionTop() <= distionBot()) {
-                direction = Pos.up();
-            } else if (distionTop() > distionBot()) {
-                direction = Pos.down();
-            }
-        } else if (distionTop() <= nearest && distionRight() > nearest) {
-            direction = Pos.right();
-        } else if (distionTop() <= nearest && distionRight() <= nearest) {
-            direction = Pos.down();
-        } else if (distionRight() <= nearest && distionBot() > nearest) {
-            direction = Pos.down();
-        } else if (distionRight() <= nearest && distionBot() <= nearest) {
-            direction = Pos.left();
-        } else if (distionBot() <= nearest && distionLeft() > nearest) {
-            direction = Pos.left();
-        } else if (distionBot() <= nearest && distionLeft() <= nearest) {
-            direction = Pos.up();
-        } else if (distionLeft() <= nearest && distionTop() > nearest) {
-            direction = Pos.up();
-        } else if (distionLeft() <= nearest && distionTop() <= nearest) {
-            direction = Pos.right();
-        }
-        // System.out.println("directionHitRun return = " + directionHitRun);
-        return directionHitRun;
-    }
 
-    public void setTimeRunHit() {
-        timeRunHit = System.currentTimeMillis();
-    }
-
-    public boolean hasActiveSkill() {  // delay giữa 2 lần đánh
+    public boolean hasAttack() {  // delay giữa 2 lần đánh
         return DateTime.isAfterTime(timeActionAttack, point.getAttackSpeed());
     }
 
-    public boolean hasUseItem(int slot) {  // delay giữa 2 lần buff
-        return DateTime.isAfterTime(timeActiveSlot[slot], BattleConfig.P_TimeDelayActiveItem);
-    }
 
     @Override
     public boolean isReviveReady() {
@@ -344,67 +230,6 @@ public class Player extends Unit implements Serializable {
         return isMove;
     }
 
-//    public boolean hasAttackAfterMove() {
-//        return true;
-//    }
-
-//    public void setTargetAttack(Unit attacker) {
-//        this.targetAttack = attacker;
-//        if (attacker != null) {
-//            protoOneStatus(StateType.SWITCH_TARGET,  attacker.id);
-//        }
-//    }
-
-
-//    @Override
-//    public void FixedUpdate() {
-//        super.FixedUpdate();
-//        int ic = getInputs().size();
-//        if (isAlive() && ic > 0) {
-//            for (int index = 0; index < ic; ++index) {
-//                NInput input = getAndRemoveInput(0);
-//                if (input == null) return;
-//                for (int i = 0; i < input.keys.size(); i++) {
-//                    int typeInput = input.keys.get(i);
-//                    if (typeInput == NInput.NONE) {
-//                        continue;
-//                    }
-//                    List<Pos> direction = new ArrayList<>();
-//                    if (typeInput <= NInput.RightDown) {
-//                        direction.addAll(Arrays.asList(NInput.mapInput.get(typeInput)));
-//                    }
-//                    for (Pos direct : direction) {
-//                        if (beBlock()) return;
-//                        Pos nd = Pos.moveFromDirection(direct, getCurSpeed());
-//                        move(nd);
-//                        System.out.println(" --- pos ==== " + pos.toString());
-//                        if (!nd.equals(Pos.zero())) {
-//                            setDirection(nd.normalized());
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-
-
-    public Pos findEnemyNearest(List<Unit> lstEnemy) {
-        if (lstEnemy.size() <= 0) return Pos.zero();
-        if (getTargetAttack() != null && getTargetAttack().isAlive()) return getTargetAttack().getPos();
-        float min = 999999f;
-        Pos ret = Pos.zero();
-        Unit target = null;
-        for (int i = 0; i < lstEnemy.size(); i++) {
-            if (lstEnemy.get(i).isAlive() && min > getPos().distance(lstEnemy.get(i).getPos()) && lstEnemy.get(i).isReady()) {
-                min = (float) getPos().distance(lstEnemy.get(i).getPos());
-                target = lstEnemy.get(i);
-                ret = lstEnemy.get(i).getPos();
-            }
-        }
-        setTargetAttack(target);
-        return ret;
-    }
-
     @Override
     public synchronized void protoDie(Unit killer) {
         super.protoDie(killer);
@@ -418,11 +243,6 @@ public class Player extends Unit implements Serializable {
     public void bonusKillMe(Unit killer) {
 
     }
-
-//    @Override
-//    public Pbmethod.PbUnitPos toProtoPos() {
-//        return super.toProtoPos().toBuilder().setLastInputSeq(indexLastInputSeq).build();
-//    }
 
     @Override
     public void revive() {
@@ -465,39 +285,6 @@ public class Player extends Unit implements Serializable {
         lst.add(idTrial);
         lst.add(mUser.getUData().getEffInit());
         return lst;
-    }
-
-    public void toPbEndGame(boolean isWin, int per, List<Long> bonus, int timeAttack, PopupType popup, List<Integer> info) {
-        protocol.Pbmethod.PbEndGame.Builder pb = protocol.Pbmethod.PbEndGame.newBuilder();
-        pb.setBattleKey(TaskMonitor.mBattleIdToKey.get(getRoom().getBattleId()));
-        pb.setIsWin(isWin);
-        pb.setPopupId(popup.value);
-        if (bonus != null) {
-            pb.addAllBonus(bonus);
-        }
-        pb.setTime(timeAttack);
-        pb.setPerDame(Math.min(per, 100));
-        pb.setInfo(CommonProto.getCommonIntVectorProto(info));
-        Util.sendProtoData(mUser.getChannel(), pb.build(), IAction.END_GAME);
-    }
-
-    public void toPbStartGame(float timeRemain) {
-        Util.sendProtoData(mUser.getChannel(), CommonProto.getCommonVector((long) (timeRemain)), IAction.START_GAME);
-    }
-
-
-    public NInput getAndRemoveInput(int index) {
-        if (!isReady()) return null;
-        NInput input = inputs.get(index);
-        inputs.remove(input);
-        return input;
-    }
-
-    public NInput getAndRemoveInput2(int index) {
-        if (!isReady()) return null;
-        NInput input = inputsNew.get(index);
-        inputsNew.remove(input);
-        return input;
     }
 
 

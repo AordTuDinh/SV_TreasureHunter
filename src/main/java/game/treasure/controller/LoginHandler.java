@@ -385,17 +385,18 @@ public class LoginHandler extends AHandler {
         cmm.addALong(BattleConfig.maxNumberOpenItem * 100);
         cmm.addALong((long) (BattleConfig.P_timeNoMove * 100));
         cmm.addALong (BattleConfig.CHUNK_SIZE * 100L);
+        cmm.addALong ((long) (BattleConfig.attackSpeed * 100L));
 
         //
         addResponse(IAction.BATTLE_CONFIG, cmm.build());
     }
 
-    public boolean registerGame(String username) {
+    public void registerGame(String username) {
         String realUsername = Online.getRealUsername(username);
         int serverId = Online.getServer(username);
         MainUserEntity mainUser = (MainUserEntity) DBJPA.getUnique(CfgServer.DB_MAIN + "main_user", MainUserEntity.class, "username", realUsername);
         if (mainUser == null) {
-            return false;
+            return;
         }
         String version = mainUser.getVersion();
         if (version == null) version = "";
@@ -411,14 +412,12 @@ public class LoginHandler extends AHandler {
             // add cho 1 vai item
             // session.persist(new UserItemEntity(user.getId(), 22, 1));
             session.getTransaction().commit();
-            return true;
         } catch (Exception ex) {
             ex.printStackTrace();
             Logs.error(username + " " + cp + "->" + GUtil.exToString(ex));
         } finally {
             closeSession(session);
         }
-        return false;
     }
 
     MyUser initUser(UserEntity user) {

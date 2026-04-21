@@ -11,14 +11,25 @@ import java.util.Map;
 
 public class ResMap {
     static Map<Integer, ResMapEntity> mMap = new HashMap<>();
+    public static Map<Integer, ResObjectEntity> mResObject = new HashMap<>();
 
 
     public static ResMapEntity getMap(MapType type) {
         return mMap.getOrDefault(type.value, null);
     }
 
+    public static ResObjectEntity getResObject(int id) {
+        return mResObject.getOrDefault(id, null);
+    }
+
 
     public static void init() {
+        // object
+        List<ResObjectEntity> aObj = DBResource.getInstance().getList(CfgServer.DB_MAIN + "res_object", ResObjectEntity.class);
+        mResObject.clear();
+        aObj.forEach(obj -> mResObject.put(obj.getId(), obj));
+
+
         // map
         List<ResMapEntity> aMap = DBResource.getInstance().getList(CfgServer.DB_MAIN + "res_map", ResMapEntity.class);
         mMap.clear();
@@ -27,5 +38,6 @@ public class ResMap {
             item.init();
             mMap.put(item.getId(), item);
         });
+
     }
 }

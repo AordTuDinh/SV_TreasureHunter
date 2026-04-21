@@ -5,6 +5,7 @@ import game.battle.calculate.IMath;
 import game.battle.model.Unit;
 import game.object.PointBuff;
 import game.protocol.CommonProto;
+import game.treasure.BattleConfig;
 import lombok.Getter;
 import lombok.Setter;
 import protocol.Pbmethod;
@@ -181,7 +182,7 @@ public class Point {
     }
 
     public synchronized void add(PointBuff buff, Unit unit) {
-        if(!unit.isAlive()) return;
+        if (!unit.isAlive()) return;
         switch (buff.getPointId()) {
             case CUR_HP -> {
                 unit.setAlive(addCurHp(buff.getValue()));
@@ -335,10 +336,11 @@ public class Point {
     }
 
     public int getAttackDamage() {
-        int baseAttack = values[ATTACK];
-        int perAttack = values[P_ATTACK];
-        int changeValue = values[CHANGE_ATTACK];
-        return (int) (((baseAttack + baseAttack * perAttack / 100f) * (BasePerZen + values[ZEN_ATTACK]) / 100f) * (changeValue / 100f));
+//        int baseAttack = values[ATTACK];
+//        int perAttack = values[P_ATTACK];
+//        int changeValue = values[CHANGE_ATTACK];
+//        return (int) (((baseAttack + baseAttack * perAttack / 100f) * (BasePerZen + values[ZEN_ATTACK]) / 100f) * (changeValue / 100f));
+        return 200;
     }
 
     public int getDoge() { // né
@@ -416,10 +418,7 @@ public class Point {
     }
 
     public float getAttackSpeed() {
-        float baseValue = values[ATTACK_SPEED] / 100f;
-        float perValue = values[P_ATTACK_SPEED];
-        int changeValue = values[CHANGE_ATTACK_SPEED];
-        return 1 / ((baseValue + baseValue * perValue / 100f)) * (changeValue / 100f);
+        return BattleConfig.attackSpeed;
     }
 
     public int getBuffDrop() {
@@ -729,8 +728,8 @@ public class Point {
     }
 
 
-    public void buffPer(int per){
-        addBattlePower(getPower()*per);
+    public void buffPer(int per) {
+        addBattlePower(getPower() * per);
         addPerHp(per);
         addPerMp(per);
         addPerAttack(per);
@@ -738,7 +737,7 @@ public class Point {
         addPerMoveSpeed(per);
         addPerDef(per);
         addPerMagicResist(per);
-        addCrit(per/10);
+        addCrit(per / 10);
         addCritDamage(per);
         addImmunity(per);
         addAgility(per);

@@ -26,6 +26,12 @@ public class slib_Properties {
         this(new File(aFileName));
     }
 
+    /** In-memory store only (no XML file); used when config is supplied via {@link Config#setString} etc. */
+    public slib_Properties() {
+        mFile = null;
+        mDoc = null;
+    }
+
     protected slib_Properties(File aFile) throws Exception {
         this.mFile = aFile;
         if (!aFile.exists()) {

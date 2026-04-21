@@ -30,26 +30,14 @@ public class AppInit {
     }
 
     private static void initConfig() throws Exception {
-        Config.load("config.xml");
-        CfgServer.serverId = Config.getInt("config.server.id");
-        CfgServer.runningPort = Config.getInt("config.server.port");
-        CfgServer.serverType = Config.getString("config.server.type");
         AppConfig.load("config.json");
-        // add sv (Redis) - tạm comment khi chạy không Redis
-        // String ids = JCache.getInstance().getValue(CfgServer.SVID);
-        // if (ids == null) {
-        //     JCache.getInstance().setValue(CfgServer.SVID, StringHelper.toDBString(Arrays.asList(CfgServer.serverId)), JCache.EXPIRE_1D * 30);
-        // } else {
-        //     List<Integer> svs = GsonUtil.strToListInt(ids);
-        //     if (!svs.contains(CfgServer.serverId)) {
-        //         svs.add(CfgServer.serverId);
-        //         JCache.getInstance().setValue(CfgServer.SVID, StringHelper.toDBString(svs));
-        //     }
-        // }
+        CfgServer.serverId = AppConfig.cfg.serverId;
+        CfgServer.runningPort = AppConfig.cfg.serverPort;
+        CfgServer.serverType = AppConfig.cfg.serverType;
+        Config.loadEmpty();
     }
 
     private static void initDb() {
-        // tạm comment khi chạy không DB
          DBJPA.init(AppConfig.cfg.db.entity1);
          DBJPA2.init(AppConfig.cfg.db.entity2);
          DBResource.getInstance().init(AppConfig.cfg.db.entityResource);

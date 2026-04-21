@@ -22,7 +22,6 @@ public abstract class BaseBattleRoom extends BaseRoom {
     @Getter
     GameCore controller;
 
-
     public BaseBattleRoom(ResMapEntity mapInfo, Map<Integer, ChunkObject> mChunk, String keyRoom) {
         super(mapInfo, mChunk, keyRoom);
     }
@@ -70,7 +69,6 @@ public abstract class BaseBattleRoom extends BaseRoom {
     }
 
     public synchronized void FixedUpdate() {
-        controller.FixedUpdate(this);
         for (int i = 0; i < coroutines.size(); i++) {
             Coroutine coroutine = coroutines.get(i);
             if (System.currentTimeMillis() > coroutine.timeAction) {

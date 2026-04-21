@@ -1,6 +1,5 @@
 package game.treasure.server;
 
-import game.battle.object.MainJob;
 import game.cache.JCache;
 import game.cache.JCachePubSub;
 import game.config.CfgServer;
@@ -34,22 +33,22 @@ public class App {
     public static void main(String[] args) throws Exception {
         TimeZone.setDefault(TimeZone.getTimeZone("GMT+07:00"));
         init();
-        createMainJob();
+       // createMainJob();
         startNetwork();
     }
-
-    static void createMainJob() {
-        JobDetail job = newJob(MainJob.class).withIdentity("server_job_" + CfgServer.serverId, "all").build();
-        SimpleTrigger trigger = newTrigger().withIdentity("sv_trigger_" + CfgServer.serverId, "all").
-                startAt(Calendar.getInstance().getTime()).withSchedule(simpleSchedule().withIntervalInSeconds(3).repeatForever()).build();
-        try {
-            Scheduler scheduler = new StdSchedulerFactory().getScheduler();
-            scheduler.start();
-            scheduler.scheduleJob(job, trigger);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//
+//    static void createMainJob() {
+//        JobDetail job = newJob(MainJob.class).withIdentity("server_job_" + CfgServer.serverId, "all").build();
+//        SimpleTrigger trigger = newTrigger().withIdentity("sv_trigger_" + CfgServer.serverId, "all").
+//                startAt(Calendar.getInstance().getTime()).withSchedule(simpleSchedule().withIntervalInSeconds(3).repeatForever()).build();
+//        try {
+//            Scheduler scheduler = new StdSchedulerFactory().getScheduler();
+//            scheduler.start();
+//            scheduler.scheduleJob(job, trigger);
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
 
     static void startNetwork() {
         System.out.println("*********************************************");
@@ -101,8 +100,6 @@ public class App {
 
     static void init() throws Exception {
         AppInit.initAll();
-
-
         // tạm comment khi chạy không DB/Redis
         initConfig();
         JCache.getInstance();

@@ -78,12 +78,9 @@ public class ResMapEntity extends BaseEntity implements Serializable {
         // parse map object
         for (MapData.CellDto c : mapData.cells) {
             MapService.validateType(c.type);
-            // c.x, c.y đang là fixed-point x100
-            float wx = c.x / 100f;
-            float wy = c.y / 100f;
-            // snap về world cell int
-            int worldX = Math.round(wx);
-            int worldY = Math.round(wy);
+            // c.x, c.y là tọa độ world trực tiếp (không còn x100)
+            int worldX = c.x;
+            int worldY = c.y;
 
             if (!isInsideWorld(worldX, worldY)) {
                 System.out.println("[MapLoad] skip out-of-world cell: x=" + worldX + ", y=" + worldY);
@@ -93,9 +90,9 @@ public class ResMapEntity extends BaseEntity implements Serializable {
             int chunkX = MapService.worldToChunkX(this, worldX);
             int chunkY = MapService.worldToChunkY(this, worldY);
             int chunkId = MapService.chunkPosToId(this, chunkX, chunkY);
-            Pos pos = new Pos(c.x, c.y);
+            Pos pos = new Pos(worldX, worldY);
             int cellId = MapService.worldCellPosToGlobalCellId(this,worldX,worldY);
-            CellObject cell = new CellObject(pos, c.type, chunkId,cellId, Pbmethod.CellState.ACTIVE, this);
+            CellObject cell = new CellObject(pos, c.type, chunkId,cellId);
             if (chunkX < minChunkX || chunkX > maxChunkX
                     || chunkY < minChunkY || chunkY > maxChunkY) {
                 System.out.println("[MapLoad] skip out-of-bound cell: x=" + worldX + ", y=" + worldY

@@ -24,11 +24,18 @@ public class CommonProto {
         return builder.build();
     }
 
-    public protocol.Pbmethod.CommonVector getCommonVector(Object... values) {
-        protocol.Pbmethod.CommonVector.Builder builder = protocol.Pbmethod.CommonVector.newBuilder();
+    public static CommonVector getCommonVector(Object... values) {
+        CommonVector.Builder builder = CommonVector.newBuilder();
         for (Object value : values) {
-            builder.addALong(Long.parseLong(value.toString()));
+            if (value instanceof Number) {
+                builder.addALong(((Number) value).longValue());
+            } else if (value instanceof String) {
+                builder.addAString((String) value);
+            } else {
+                throw new IllegalArgumentException("Unsupported type: " + value.getClass());
+            }
         }
+
         return builder.build();
     }
 

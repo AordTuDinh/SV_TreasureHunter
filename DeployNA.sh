@@ -10,7 +10,6 @@ rsync -avz -e "ssh -i $KEY" ./target/ $SERVER:$REMOTE_DIR/target/
 
 # 2. Upload file pom.xml
 scp -i $KEY pom.xml $SERVER:$REMOTE_DIR/
-scp -i $KEY config.xml $SERVER:$REMOTE_DIR/
 scp -i $KEY config.json $SERVER:$REMOTE_DIR/
 scp -i $KEY log4j2.xml $SERVER:$REMOTE_DIR/
 #scp -i $KEY run.sh $SERVER:$REMOTE_DIR/

@@ -12,10 +12,10 @@ public class ClearOldItemJob {
         System.exit(0);
     }
 
-    private void process() throws Exception {
+    private void process()  {
         try {
             AppConfig.load("config.json");
-            Config.load("config.xml");
+            Config.loadEmpty();
             DBResource.getInstance().init(AppConfig.cfg.db.entityResource);
             processClear();
         } catch (Exception ex) {

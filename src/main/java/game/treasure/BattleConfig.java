@@ -3,6 +3,8 @@ package game.treasure;
 public class BattleConfig {
     // new config
     public static int CHUNK_SIZE = 10;
+    public static int timeReviveObject = 3;  // sau 3s thì revive object
+    public static float attackSpeed = 0.8f;
 
 
     // player config

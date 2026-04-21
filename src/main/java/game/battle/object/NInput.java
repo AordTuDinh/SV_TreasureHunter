@@ -19,7 +19,6 @@ public class NInput {
     public Pos playerPos;
     public Pos playerDirection;
     public Pbmethod.TargetAttack targetAttack;
-    public Pbmethod.PbUnitState.Builder clientState;
     public long idAttack;
 
     public static NInput parse(byte[] data) {

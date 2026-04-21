@@ -38,6 +38,11 @@ public abstract class BaseRoom extends MonoRoom {
 
     // id chunk -> list unit id ở trong chunk = thay đổi giữa các chunk chỉ cần set  lại ở đây
     Map<Integer, Set<Long>> chunkCharacter = new HashMap<>();
+    // danh cách các cell object đang xử lí ( hồi sinh, xóa)
+    Map<Integer, Set<Integer>> cellObjectProcess = new HashMap<>();
+    //
+    Set<CellObject> cellObjectDie = new HashSet<>();
+
 
     float serverTime;
     @Getter
@@ -52,10 +57,11 @@ public abstract class BaseRoom extends MonoRoom {
         // gen chunk default
         for (Integer key : mChunk.keySet()) {
             chunkCharacter.put(key, new HashSet<>());
+            cellObjectProcess.put(key, new HashSet<>());
         }
         for (int y = mapInfo.getMinChunkY(); y <= mapInfo.getMaxChunkY(); y++) {
             for (int x = mapInfo.getMinChunkX(); x <= mapInfo.getMaxChunkX(); x++) {
-                int centerId = MapService.chunkPosToId(mapInfo,x, y);
+                int centerId = MapService.chunkPosToId(mapInfo, x, y);
                 visibleByChunkId.put(centerId, GameCore.getVisibleChunkIds(mapInfo, x, y));
             }
         }
@@ -147,7 +153,7 @@ public abstract class BaseRoom extends MonoRoom {
                 if (list != null) {
                     for (Pbmethod.PbUnitPos u : list) {
                         if (added.add(u.getId())) {
-                           // System.out.println("u.getChunkId() = " + u.getChunkId());
+                            // System.out.println("u.getChunkId() = " + u.getChunkId());
                             builder.addUnitPos(u);
                         }
                     }
@@ -161,52 +167,47 @@ public abstract class BaseRoom extends MonoRoom {
                         ProtoState.protoListCharacterState(protoUnitStateCopy)));
             }
 
+            Set<Integer> cellObjects = cellObjectProcess.get(chunkId);
+            if (cellObjects != null && !cellObjects.isEmpty()) {
+                ChunkObject chunkObject = mChunk.get(chunkId);
+                builder.addChunkState(chunkObject.toProtoUpdate(cellObjects));
+                // clear các cell đã xử lí để tránh gửi lại mỗi tick
+                cellObjects.clear();
+            }
+
             chunkViewData.put(chunkId, ProtoState.convertProtoBuffToState(builder.build()));
         }
 
         return chunkViewData;
     }
 
-//    protected byte[] genTableState() {
-//        int action = IAction.TABLE_STATE;// K dùng nhưng viết ở đây để referent
-//        protocol.Pbmethod.PbState.Builder builder = protocol.Pbmethod.PbState.newBuilder();
-//        builder.setServerTime(serverTime);
-//
-//        String debug = "";
-//        boolean send = false;
-//
-//        for (Unit unit : mUnit.values()) {
-//            if (unit != null && unit.isAlive() && unit.isMove()) {
-//                builder.addUnitPos(unit.toProtoPos());
-//                send = true;
-//            }
-//        }
-//        int size = aProtoAdd.size();
-//        for (int i = 0; i < size; i++) {
-//            // trả về cho những thằng trong chunk view thôi
-//            builder.addUnitAdd(aProtoAdd.get(0));
-//            aProtoAdd.remove(0);
-//            send = true;
-//        }
-//        if (!aProtoUnitState.isEmpty()) {
-//            builder.addAUnitUpdate(ProtoState.protoUnitUpdate(Constans.TYPE_UPDATE_CHARACTER, ProtoState.protoListCharacterState(aProtoUnitState)));
-//            send = true;
-//            aProtoUnitState.clear();
-//        }
-
-    /// /        if (!debug.isEmpty()) System.out.println("debug = " + debug);
-//        if (send) return ProtoState.convertProtoBuffToState(builder.build());
-//        else return null;
-//    }
     protected void debug(String msg) {
         if (CfgServer.isRealServer()) {
             System.out.println(msg);
         }
     }
 
+    protected void ProcessReviveCell() {
+        if (cellObjectDie.isEmpty()) return;
+        Iterator<CellObject> it = cellObjectDie.iterator();
+        while (it.hasNext()) {
+            CellObject cell = it.next();
+            if (cell == null || cell.canAttack()) {
+                it.remove();
+                continue;
+            }
+            // nếu đủ điều kiện hồi sinh thì revive + mark update để client nhận state
+            if (cell.canRevive()) {
+                cell.revive();
+                addCellProcess(cell);
+                it.remove();
+            }
+        }
+    }
+
 
     private static void appendProtoChangeForViewer(List<Integer> visibleChunks, protocol.Pbmethod.PbState.Builder builder,
-        Map<Long, List<Pbmethod.PbUnit>> protoChangeByUnitId) {
+                                                   Map<Long, List<Pbmethod.PbUnit>> protoChangeByUnitId) {
         if (visibleChunks == null) return;
         for (List<Pbmethod.PbUnit> events : protoChangeByUnitId.values()) {
             if (events.isEmpty()) continue;
@@ -248,6 +249,10 @@ public abstract class BaseRoom extends MonoRoom {
         return mUnit.getOrDefault(id, null);
     }
 
+    @Override
+    public void Update1s() {
+        ProcessReviveCell();
+    }
 
     @Override
     public void Update() {
@@ -303,9 +308,32 @@ public abstract class BaseRoom extends MonoRoom {
         } else if (input.typeId == NInput.PING_GAME) {
             Util.sendProtoData(player.getMUser().getChannel(), null, IAction.PING_GAME);
         } else if (input.typeId == NInput.ATTACK) {
-
+            int globalCellId = MapService.worldPosToGlobalCellId(mapInfo, player.getPos());
+            CellObject cellObject = getCellObject(globalCellId, player.getChunkId());
+            if (cellObject != null && cellObject.canAttack() && player.hasAttack()) {
+                addCellProcess(cellObject);
+                boolean cellDie = cellObject.attack(player.getPoint().getAttackDamage());
+                player.setTimeAttack();
+                if (cellDie) addCellDie(cellObject);
+            }
         }
     }
+
+
+    public void addCellProcess(CellObject cellObject) {
+        cellObjectProcess.get(cellObject.getChunkId()).add(cellObject.getId());
+    }
+
+    public void addCellDie(CellObject cellObject) {
+        cellObjectDie.add(cellObject);
+    }
+
+    public CellObject getCellObject(int globalCellId, int chunkId) {
+        if (mChunk.containsKey(chunkId) && mChunk.get(chunkId).getMCells().containsKey(globalCellId))
+            return mChunk.get(chunkId).getMCells().get(globalCellId);
+        return null;
+    }
+
 
     // tất cả unit sẽ gọi qua hàm này
     public boolean joinChunk(Unit unit, int newChunk) {
@@ -352,7 +380,7 @@ public abstract class BaseRoom extends MonoRoom {
         for (int i = 0; i < chunkVisible.size(); i++) {
             // add data chunks
             ChunkObject chunkData = mChunk.get(chunkVisible.get(i));
-            pbInit.addChunks(chunkData.toProto());
+            pbInit.addChunks(chunkData.toProtoAdd());
             Set<Long> aCharInChunk = chunkCharacter.get(chunkVisible.get(i));
             for (Long charId : aCharInChunk) {
                 Unit unit = mUnit.get(charId);
@@ -380,7 +408,7 @@ public abstract class BaseRoom extends MonoRoom {
     }
 
     public int worldPosToChunkId(Pos pos) {
-        return MapService.worldPosToChunkId(mapInfo,pos);
+        return MapService.worldPosToChunkId(mapInfo, pos);
     }
 
     public boolean isValidChunkId(int chunkId) {
@@ -488,7 +516,7 @@ public abstract class BaseRoom extends MonoRoom {
 
             // add state cell in chunk
             ChunkObject chunk = mChunk.get(chunkId);
-            builder.addChunkState(chunk.toProto());
+            builder.addChunkState(chunk.toProtoAdd());
         }
 
         // Remove toàn bộ unit trong các chunk rời khỏi view
@@ -513,7 +541,6 @@ public abstract class BaseRoom extends MonoRoom {
         }
 
         byte[] state = ProtoState.convertProtoBuffToState(builder.build());
-        System.out.println("player.getChunkId() = " + player.getChunkId());
         Util.sendGameData(player.getMUser().getChannel(), state, Constans.MAGIC_IN_PUT);
     }
 

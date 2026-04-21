@@ -38,10 +38,21 @@ public class AppConfig {
         cfg = new Gson().fromJson(data, DataConfig.class);
         if (StringHelper.isEmpty(cfg.keyConfig)) cfg.keyConfig = "server_config";
         else cfg.keyConfig = "server_config_" + cfg.keyConfig;
+        if (StringHelper.isEmpty(cfg.serverType)) {
+            Logs.error("config.json: serverType is required");
+            throw new IllegalStateException("Missing serverType in config.json");
+        }
+        if (cfg.serverPort <= 0) {
+            Logs.error("config.json: serverPort must be > 0");
+            throw new IllegalStateException("Missing or invalid serverPort in config.json");
+        }
     }
 
     public class DataConfig {
         public String name, keyConfig, prefixIp;
+        public int serverId;
+        public int serverPort;
+        public String serverType;
         public boolean battleFake;
         public boolean isRealTest;
         public TelegramConfig telegram;

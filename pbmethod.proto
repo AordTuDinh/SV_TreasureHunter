@@ -85,11 +85,9 @@ message PbUnit{
 }
 
 message PbCell {
-  optional int32 type = 1;
-  optional int32 chunkId = 2;
-  optional int32 id = 3;
-  optional PbPos pos = 4;
-  optional CellState state = 5;
+  optional int32 id = 1;
+  optional CellState state = 2;
+  optional int32 hp = 3;
 }
 
 message PbListChunk {
@@ -577,10 +575,6 @@ message PbUnitPos {
   optional PbPos direction = 5;
   optional int32 chunkId = 6;
 }
-
-
-
-
 
 message PbListBullet {
   repeated PbBullet bullets = 1;

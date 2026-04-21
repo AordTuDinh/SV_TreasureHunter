@@ -10,7 +10,6 @@ import java.util.List;
 @Data
 public class BonusKillEnemy {
     long gold;
-    long exp;
     List<Long> bonus=new ArrayList<>();
 
     public void addBonus(List<Long> bonus){
@@ -19,6 +18,5 @@ public class BonusKillEnemy {
 
     public void set75(){
         gold =Math.max(1, (long) (gold*0.75f));
-        exp =Math.max(1, (long) (exp*0.75f));
     }
 }
