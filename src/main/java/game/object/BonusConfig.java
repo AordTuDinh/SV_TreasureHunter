@@ -1,7 +1,10 @@
 package game.object;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import game.treasure.service.user.Bonus;
 import lombok.Getter;
+import ozudo.base.helper.GsonUtil;
 import ozudo.base.helper.NumberUtil;
 
 import java.io.Serializable;
@@ -19,10 +22,15 @@ public class BonusConfig implements Serializable {
     int rate; // 0 -1000
 
 
+    public static List<BonusConfig> parseBonus(String bonusConfigJson) {
+        return new Gson().fromJson(bonusConfigJson, new TypeToken<List<BonusConfig>>() {
+        }.getType());
+    }
+
+    // lấy bonus của 1 config theo rate (hoặc luôn có nếu -1)
     List<Long> getBonusWithPer() {
         if (rate == -1) { // mặc định là có
             int num = max == 1 ? 1 : NumberUtil.getRandom(min, max);
-            num += num;
             return Bonus.viewXNumber(new ArrayList<>(bonus), num);
         } else {
             int rand = NumberUtil.getRandom(1000);
@@ -32,6 +40,7 @@ public class BonusConfig implements Serializable {
     }
 
     //random từng cái theo rate riêng, cái nào random trúng thì add cái đó
+    // cộng dồn bonus của từng config (mỗi config tự roll)
     public static List<Long> getRandomBonusMulti(List<BonusConfig> aBonus) {
         List<Long> ret = new ArrayList<>();
         for (int i = 0; i < aBonus.size(); i++) {
@@ -42,6 +51,7 @@ public class BonusConfig implements Serializable {
     }
 
     // chỉ nhận được 1 bonus, cái nào random trúng thì trả về cái đó
+    // chọn đúng 1 config theo “rate phân phối”, trả bonus config đó
     public static List<Long> getRandomOneBonus(List<BonusConfig> aBonus) {
         int per = NumberUtil.getRandom(1000);
 
@@ -51,7 +61,7 @@ public class BonusConfig implements Serializable {
                 int num = bm.max == 1 ? 1 : NumberUtil.getRandom(bm.min, bm.max);
                 return Bonus.viewXNumber(new ArrayList<>(bm.bonus), num);
             } else {
-                if (per <= bm.rate) {
+                if (per < bm.rate) {
                     int num = NumberUtil.getRandom(bm.min, bm.max);
                     return Bonus.viewXNumber(new ArrayList<>(bm.bonus), num);
                 } else per -= bm.rate;
@@ -61,7 +71,8 @@ public class BonusConfig implements Serializable {
     }
 
     // check cả bonus -1 , còn lại thì trả về 1 bonus theo per
-    public static List<Long> getRandomBonus(List<BonusConfig> aBonus) {
+    // luôn lấy tất cả config rate=-1, và thêm tối đa 1 config rate>=0
+    public List<Long> getRandomBonus(List<BonusConfig> aBonus) {
         int per = NumberUtil.getRandom(1000);
         List<Long> ret = new ArrayList<>();
         boolean hasBonusOne = false;
@@ -81,6 +92,7 @@ public class BonusConfig implements Serializable {
     }
 
     // only boss
+    // như getRandomBonus nhưng có buff perBonusAdd
     public static List<Long> getRandomBonusBoss(List<BonusConfig> aBonus, List<Integer> perBonusAdd) {
         int per = NumberUtil.getRandom(1000);
         List<Long> ret = new ArrayList<>();
@@ -93,7 +105,7 @@ public class BonusConfig implements Serializable {
                 ret.addAll(Bonus.viewXNumber(new ArrayList<>(bm.bonus), num));
             } else if (!hasBonusOne) {
                 if (per < bm.rate + perBonusAdd.get(1) * 10) {
-                    int num =NumberUtil.getRandom(bm.min, bm.max);
+                    int num = NumberUtil.getRandom(bm.min, bm.max);
                     num += (int) (num * perBonusAdd.get(0) / 100f);
                     ret.addAll(Bonus.viewXNumber(new ArrayList<>(bm.bonus), num));
                     hasBonusOne = true;

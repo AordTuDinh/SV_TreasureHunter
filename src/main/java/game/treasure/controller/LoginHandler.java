@@ -133,17 +133,17 @@ public class LoginHandler extends AHandler {
         if (numberBuy > 0) { // đã mua
             int dif = DateTime.getDayToNumberDay(numberBuy);
             if (dif == 1 && uEvent.getFirstPurchase() == 0 && uEvent.update(Arrays.asList("first_purchase", 1))) {
-                MailCreatorCache.sendMail(UserMailEntity.builder().senderId(0).userId(user.getId()).senderName(String.format(getTitle(mUser,"bonus_first_purchase"), user.getName())).title(String.format(Lang.getTitle(mUser,"title_mail_first_purchase"), 2)).bonus(StringHelper.toDBString(ResIAP.bonusDayFirstPurchase.get(0))).build());
+                MailCreatorCache.sendMail(UserMailEntity.builder().senderId(0).userId(user.getId()).senderName(String.format(getTitle(mUser, "bonus_first_purchase"), user.getName())).title(String.format(Lang.getTitle(mUser, "title_mail_first_purchase"), 2)).bonus(StringHelper.toDBString(ResIAP.bonusDayFirstPurchase.get(0))).build());
                 uEvent.setFirstPurchase(1);
             }
             if (dif > 1) {
                 int status = 0;
                 if (uEvent.getFirstPurchase() == 0) {
-                    MailCreatorCache.sendMail(UserMailEntity.builder().senderId(0).userId(user.getId()).senderName(String.format(getTitle(mUser,"bonus_first_purchase"), user.getName())).title(String.format(Lang.getTitle(mUser,"title_mail_first_purchase"), 2)).bonus(StringHelper.toDBString(ResIAP.bonusDayFirstPurchase.get(0))).build());
+                    MailCreatorCache.sendMail(UserMailEntity.builder().senderId(0).userId(user.getId()).senderName(String.format(getTitle(mUser, "bonus_first_purchase"), user.getName())).title(String.format(Lang.getTitle(mUser, "title_mail_first_purchase"), 2)).bonus(StringHelper.toDBString(ResIAP.bonusDayFirstPurchase.get(0))).build());
                     status = 1;
                 }
                 if (uEvent.getFirstPurchase() == 1) {
-                    MailCreatorCache.sendMail(UserMailEntity.builder().senderId(0).userId(user.getId()).senderName(String.format(getTitle(mUser,"bonus_first_purchase"), user.getName())).title(String.format(Lang.getTitle(mUser,"title_mail_first_purchase"), 3)).bonus(StringHelper.toDBString(ResIAP.bonusDayFirstPurchase.get(1))).build());
+                    MailCreatorCache.sendMail(UserMailEntity.builder().senderId(0).userId(user.getId()).senderName(String.format(getTitle(mUser, "bonus_first_purchase"), user.getName())).title(String.format(Lang.getTitle(mUser, "title_mail_first_purchase"), 3)).bonus(StringHelper.toDBString(ResIAP.bonusDayFirstPurchase.get(1))).build());
                     status = 2;
                 }
                 if (status > 0 && uEvent.update(Arrays.asList("first_purchase", status))) {
@@ -194,10 +194,10 @@ public class LoginHandler extends AHandler {
             return;
         }
         userName = serverId + "_" + userName;
-        UserEntity user = loginByUsername(userName, cmm,language);
+        UserEntity user = loginByUsername(userName, cmm, language);
         if (user == null) {
             registerGame(userName);
-            user = loginByUsername(userName, cmm,language);
+            user = loginByUsername(userName, cmm, language);
             if (user == null) {
                 addResponse(LOGIN_GAME_FAIL, CommonProto.getErrorMsg(getLang(Lang.err_login)));
                 return;
@@ -209,7 +209,7 @@ public class LoginHandler extends AHandler {
             return;
         }
         //check open server
-        if (CfgServer.isRealServer() &&  Calendar.getInstance().getTime().getTime() < Constans.timeOpenServer.getTime() && mainUser.getCp().equals("test")) {
+        if (CfgServer.isRealServer() && Calendar.getInstance().getTime().getTime() < Constans.timeOpenServer.getTime() && mainUser.getCp().equals("test")) {
             addResponse(POPUP_INFO, Pbmethod.CommonVector.newBuilder().addALong(1).
                     addAString(getLang(Lang.msg_server_not_open)).build());
             return;
@@ -253,7 +253,7 @@ public class LoginHandler extends AHandler {
         // game config
         //loadGameConfig(mUser);
         // battleConfig
-        //loadBattleConfig();
+        loadBattleConfig();
         // user info
         builder.setUser(user.toProto(mUser));
         this.user = user;
@@ -276,13 +276,13 @@ public class LoginHandler extends AHandler {
             mainUser.setServerIds(serverIds.toString());
         }
         UserPartyEntity uParty = user.getParty();
-        if(uParty!=null) uParty.addChannel(mUser);
+        if (uParty != null) uParty.addChannel(mUser);
         // notify
         CompletableFuture.runAsync(() -> Services.userService.afterLogin(mUser));
     }
     //region logic
 
-    UserEntity loginByUsername(String username, Pbmethod.CommonVector cmm,String language) {
+    UserEntity loginByUsername(String username, Pbmethod.CommonVector cmm, String language) {
         EntityManager session = null;
         try {
             session = DBJPA.getEntityManager();
@@ -360,33 +360,19 @@ public class LoginHandler extends AHandler {
 
     private void loadBattleConfig() {
         Pbmethod.CommonVector.Builder cmm = Pbmethod.CommonVector.newBuilder();
+        cmm.addALong(BattleConfig.CHUNK_SIZE * 100L);
+        cmm.addALong((long) (BattleConfig.attackSpeed * 100L));
         cmm.addALong((long) (BattleConfig.P_Height * 100));
         cmm.addALong((long) (BattleConfig.P_Width * 100));
         cmm.addALong((long) (BattleConfig.hSpeed * 1000));
-        cmm.addALong((long) (BattleConfig.P_timeQuestRevive * 100));
-        cmm.addALong((long) (BattleConfig.P_timeImmortal * 100));
-        cmm.addALong((long) (BattleConfig.B_timeDelayAnim * 100));
-        cmm.addALong(BattleConfig.B_acceleration * 100);
-        cmm.addALong((long) (BattleConfig.C_Collider * 100));
-        cmm.addALong((long) (BattleConfig.C_timeDelayAttackToMove * 100));
-        cmm.addALong((long) (BattleConfig.M_timeBeHit * 100));
-        cmm.addALong((long) (BattleConfig.CL_timeAliveTextHit * 100));
-        cmm.addALong((long) (BattleConfig.CL_timeAliveComboHit * 100));
         cmm.addALong((long) (BattleConfig.P_timeStartAuto * 100));
         cmm.addALong((long) (BattleConfig.P_timeIdleToAuto * 100));
         cmm.addALong((long) (BattleConfig.P_delayReady * 100));
-        cmm.addALong((long) (BattleConfig.P_attackRun2 * 100));
         cmm.addALong((long) (BattleConfig.C_SCALE_SPEED * 100));
-        cmm.addALong((long) (BattleConfig.P_attackBlockMove * 100));
-        cmm.addALong((long) (BattleConfig.P_TimeDelayActiveItem * 100));
         cmm.addALong((long) (BattleConfig.P_TimeDelayMoveDone * 100));
-        cmm.addALong((long) (BattleConfig.M_timeBeHitClient * 100));
         cmm.addALong((long) (BattleConfig.m_LerpSpeedBar * 100));
-        cmm.addALong(BattleConfig.maxNumberOpenItem * 100);
+        cmm.addALong((BattleConfig.m_LimitUseItem * 100));
         cmm.addALong((long) (BattleConfig.P_timeNoMove * 100));
-        cmm.addALong (BattleConfig.CHUNK_SIZE * 100L);
-        cmm.addALong ((long) (BattleConfig.attackSpeed * 100L));
-
         //
         addResponse(IAction.BATTLE_CONFIG, cmm.build());
     }

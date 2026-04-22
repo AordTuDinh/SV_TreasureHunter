@@ -50,11 +50,6 @@ public class Enemy extends Unit implements Serializable {
     }
 
     @Override
-    public boolean isHit() {
-        return !DateTime.isAfterTime(timeBeHit, BattleConfig.M_timeBeHit);
-    }
-
-    @Override
     public void protoDie(Unit killer) {
         super.protoDie(killer);
         protoStatus(StateType.DIE,faction.value);

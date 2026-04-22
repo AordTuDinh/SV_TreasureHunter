@@ -493,13 +493,7 @@ public abstract class Unit {
     }
 
     public boolean beBlock() {
-        return isHit() || attackBlockMove() || point.beBlock();
-    }
-
-//    public abstract void activeSkill(int skillId);
-
-    public boolean attackBlockMove() {
-        return !DateTime.isAfterTime(timeActionAttack, BattleConfig.P_attackBlockMove);
+        return isHit() ||  point.beBlock();
     }
 
     public boolean isHit() {

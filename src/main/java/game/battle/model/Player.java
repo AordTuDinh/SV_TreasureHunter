@@ -63,8 +63,8 @@ public class Player extends Unit implements Serializable {
 
     private void initDefault( int teamId, Point point) {
         this.teamId = teamId;
-        this.rangeAttack = BattleConfig.P_RangeAttack;
-        this.cacheRangeAttack = BattleConfig.P_RangeAttack;
+//        this.rangeAttack = BattleConfig.P_RangeAttack;
+//        this.cacheRangeAttack = BattleConfig.P_RangeAttack;
         this.timeLastAction = 0;
         this.indexLastInputSeq = -1;
         this.timeLastProcessInput = 0;
@@ -190,7 +190,7 @@ public class Player extends Unit implements Serializable {
 
     @Override
     public boolean isReviveReady() {
-        return DateTime.isAfterTime(timeRevive, BattleConfig.P_timeImmortal);
+        return true;
     }
 
     @Override
@@ -198,22 +198,6 @@ public class Player extends Unit implements Serializable {
 
     }
 
-    // code đảo chiều dựa theo 2 điều kiện - dùng trong vòng lặp thời gian set liên tục
-    public void setTimeAttackRun2(Pos target) {
-        if (isAttackRun2Done()) isAttackRun2 = false;
-        if (isAttackRun2 == true) return;
-        this.timeAttackRun2 = System.currentTimeMillis();
-        this.targetDirectionAttackRun2 = getPos().getRandDiectionTo(target, 10f);
-        this.isAttackRun2 = true;
-    }
-
-    public boolean isAttackRun2Done() {
-        return DateTime.isAfterTime(timeAttackRun2, BattleConfig.P_attackRun2);
-    }
-
-    public boolean isRunHit() {
-        return !DateTime.isAfterTime(timeRunHit, BattleConfig.P_timeRunHit);
-    }
 
     public boolean targetInSizeAttack() {
         if (targetAttack == null) return false;

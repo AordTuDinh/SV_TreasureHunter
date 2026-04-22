@@ -20,59 +20,61 @@ import java.util.*;
 public class Bonus {
     public static final int BONUS_GOLD = 1;
     public static final int BONUS_GEM = 2;
-    public static final int BONUS_ITEM_EQUIPMENT = 3;
-    public static final int BONUS_ITEM = 6;
-    public static final int BONUS_WEAPON = 7;
-    public static final int BONUS_AVATAR = 8;
-    public static final int BONUS_VIP_EXP = 9;
-    public static final int BONUS_PET = 10; // type - id
-    public static final int BONUS_SKIN = 11; //type -id
-    public static final int BONUS_RUBY = 15;
+    public static final int BONUS_RUBY = 3;
+    public static final int BONUS_EQUIPMENT = 4;
+    public static final int BONUS_ARTIFACT = 5;
+    public static final int BONUS_MATERIAL = 6;
+    public static final int BONUS_SKIN = 7; //type -id
+    public static final int BONUS_VIP_EXP = 8;
+    public static final int BONUS_PET = 9;
+    public static final int BONUS_MOUNT = 10;
 
+
+    // type length for parsing VIEW-format bonus input (type + values...)
     public static final Map<Integer, Integer> mTypeLength = new HashMap<>() {{
-        put(BONUS_GOLD, 1);
-        put(BONUS_GEM, 1);
-        put(BONUS_ITEM_EQUIPMENT, 3);
-        put(BONUS_ITEM, 2);
-        put(BONUS_WEAPON, 1);
-        put(BONUS_AVATAR, 2);
-        put(BONUS_VIP_EXP, 1);
-        put(BONUS_PET, 1);
-        put(BONUS_SKIN, 2);
-        put(BONUS_RUBY, 1);
+        put(BONUS_GOLD, 1);      // addGold
+        put(BONUS_GEM, 1);       // addGem
+        put(BONUS_RUBY, 1);      // addRuby
+        put(BONUS_EQUIPMENT, 1);
+        put(BONUS_ARTIFACT, 1);
+        put(BONUS_MATERIAL, 1);
+        put(BONUS_SKIN, 2);      // type, skinId
+        put(BONUS_VIP_EXP, 1);   // addExp
+        put(BONUS_PET, 1);       // petId
+        put(BONUS_MOUNT, 1);     // mountId
     }};
 
-    public static List<Integer> bonusSinger = Arrays.asList(BONUS_ITEM_EQUIPMENT, BONUS_AVATAR, BONUS_WEAPON, BONUS_PET, BONUS_SKIN);
-
+    public static List<Integer> bonusSinger = Arrays.asList(BONUS_EQUIPMENT, BONUS_ARTIFACT, BONUS_MATERIAL, BONUS_PET, BONUS_MOUNT, BONUS_SKIN);
 
     public static boolean isBonusSinger(int type) {
         return bonusSinger.contains(type);
     }
 
-    public static List<Long> viewHeroAvatar(int heroId) {
-        return view(BONUS_AVATAR, 0, heroId);
-    }
 
     public static List<Long> viewGold(long number) {
         return view(BONUS_GOLD, number);
     }
 
     public static List<Long> viewItem(int itemId, long number) {
-        return view(BONUS_ITEM, itemId, number);
+        // new format: material is "singer" by itemKey; quantity is represented by repeating entries
+        List<Long> one = view(BONUS_MATERIAL, itemId);
+        return viewXNumber(one, (int) number);
     }
 
     public static List<Long> viewItemMaterial(MaterialType type, long number) {
-        return view(BONUS_ITEM, type.id, number);
+        List<Long> one = view(BONUS_MATERIAL, type.id);
+        return viewXNumber(one, (int) number);
     }
-
-    public static List<Long> viewItem(ItemKey itemKey, long number) {
-        return view(BONUS_ITEM, itemKey.id, number);
-    }
-
 
     public static List<Long> viewPet( int itemId) {
         return view(BONUS_PET,  itemId);
     }
+
+    public static List<Long> viewItem(ItemKey itemKey, long number) {
+        List<Long> one = view(BONUS_MATERIAL, itemKey.id);
+        return viewXNumber(one, (int) number);
+    }
+
 
     public static List<Long> viewDameSkin(int skinId) {
         return view(BONUS_SKIN, SkinType.DAMAGE_SKIN.value, skinId);
@@ -80,7 +82,8 @@ public class Bonus {
 
 
     public static List<Long> viewItemEquipment(int itemId, int lock, long time) {
-        return view(BONUS_ITEM_EQUIPMENT, itemId, lock, time);
+        // new format: only itemKey; lock/time are ignored
+        return view(BONUS_EQUIPMENT, itemId);
     }
 
 
@@ -100,22 +103,7 @@ public class Bonus {
     public static List<Long> view(int bonusType, long... values) {
         List<Long> aLong = new ArrayList<>();
         aLong.add((long) bonusType);
-        switch (bonusType) {
-            case BONUS_GOLD:
-            case BONUS_GEM:
-            case BONUS_ITEM_EQUIPMENT:
-            case BONUS_ITEM:
-            case BONUS_WEAPON:
-            case BONUS_VIP_EXP:
-            case BONUS_PET:
-            case BONUS_SKIN:
-            case BONUS_RUBY:
-                for (int i = 0; i < values.length; i++) aLong.add((long) values[i]);
-                break;
-            default:
-                for (int i = 0; i < values.length; i++) aLong.add((long) values[i]);
-                break;
-        }
+        for (int i = 0; i < values.length; i++) aLong.add(values[i]);
         return aLong;
     }
 
@@ -123,10 +111,10 @@ public class Bonus {
     public static int getIdItem(List<Long> bonus) {
         int type = Math.toIntExact(bonus.get(0));
         switch (type) {
-            case BONUS_ITEM, BONUS_ITEM_EQUIPMENT, BONUS_WEAPON, BONUS_PET -> {
+            case BONUS_MATERIAL, BONUS_EQUIPMENT, BONUS_ARTIFACT -> {
                 return Math.toIntExact(bonus.get(1));
             }
-            case BONUS_AVATAR, BONUS_SKIN -> {
+            case BONUS_SKIN -> {
                 return Math.toIntExact(bonus.get(2));
             }
         }
@@ -163,29 +151,33 @@ public class Bonus {
                 case BONUS_GEM:
                     aLong.addAll(addGem(mUser, aBonus, index, detailAction));
                     break;
-                case BONUS_ITEM_EQUIPMENT:
+                case BONUS_RUBY:
+                    aLong.addAll(addRuby(mUser, aBonus, index, detailAction));
+                    break;
+                case BONUS_EQUIPMENT:
                     aLong.addAll(addItemEquipment(mUser, aBonus, index, detailAction));
+                    break;
+                case BONUS_ARTIFACT:
+                    aLong.addAll(addItemArtifact(mUser, aBonus, index, detailAction));
                     break;
                 case BONUS_VIP_EXP:
                     aLong.addAll(addVipExp(mUser, aBonus, index, detailAction));
                     break;
-                case BONUS_ITEM:
-                    aLong.addAll(addItem(mUser, aBonus, index, detailAction));
-                    break;
-                case BONUS_AVATAR:
-                    aLong.addAll(addAvatar(mUser, aBonus, index, detailAction));
-                    break;
-                case BONUS_PET:
-                    aLong.addAll(addPet(mUser, aBonus, index, detailAction));
+                case BONUS_MATERIAL:
+                    aLong.addAll(addItemMaterial(mUser, aBonus, index, detailAction));
                     break;
                 case BONUS_SKIN:
                     aLong.addAll(addSkin(mUser, aBonus, index, detailAction));
                     break;
-                case BONUS_RUBY:
-                    aLong.addAll(addRuby(mUser, aBonus, index, detailAction));
+                case BONUS_PET:
+                    aLong.addAll(addPet(mUser, aBonus, index, detailAction));
                     break;
+                case BONUS_MOUNT:
+                    aLong.addAll(addMount(mUser, aBonus, index, detailAction));
+                    break;
+
             }
-            index += mTypeLength.containsKey(type) ? mTypeLength.get(type) : 0;
+            index += mTypeLength.getOrDefault(type, 0);
         }
         return aLong;
     }
@@ -193,34 +185,10 @@ public class Bonus {
 
     //region Logic
 
-    static List<Long> addAvatar(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-        int typeId = aBonus.get(index++).getAsInt();
-        int avatarId = aBonus.get(index++).getAsInt();
-
-        if (DBJPA.saveOrUpdate(new UserAvatarEntity(mUser.getUser().getId(), avatarId, typeId))) {
-            Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "avatar", "typeId", typeId, "id", avatarId);
-            return Arrays.asList((long) BONUS_AVATAR, (long) typeId, (long) avatarId);
-        }
-        return new ArrayList<>();
-    }
-
     static List<Long> addSkin(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
         int type = aBonus.get(index++).getAsInt();
         int skinId = aBonus.get(index++).getAsInt();
-        if (type == SkinType.CHARACTER.value) {
-//            if (mUser.getResources().getHero(heroKey) == null) return new ArrayList<>();
-//            UserHeroEntity uHero = new UserHeroEntity(mUser.getUser().getId(), heroKey);
-//            // yêu cầu sở hữu hero trước
-//            if (uHero == null) return new ArrayList<>();
-//            uHero.addSkin(skinId);
-//            if (DBJPA.save(uHero)) {
-//                mUser.getResources().addHero(uHero);
-//                if (CfgServer.isRealServer())
-//                    Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "heroKey", "skinId", heroKey, skinId);
-//                return Arrays.asList((long) BONUS_SKIN, (long) heroKey, (long) skinId);
-//            }
-//            return new ArrayList<>();
-        } else if (type == SkinType.DAMAGE_SKIN.value) {
+        if (type == SkinType.DAMAGE_SKIN.value) {
             if (mUser.getUData().addDameSkin(skinId) && mUser.getUData().update(List.of("dame_skin", mUser.getUData().getDameSkin()))) {
                 if (CfgServer.isRealServer())
                     Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "dameSkin", "skinId", skinId);
@@ -245,24 +213,29 @@ public class Bonus {
         return new ArrayList<>();
     }
 
-    static List<Long> addItem(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-        int itemId = aBonus.get(index++).getAsInt();
-        int number = aBonus.get(index++).getAsInt();
-        UserItemEntity uItem = null;
-        if (itemId == ItemKey.TICKER_NORMAL.id) uItem = checkGenItemData(mUser, number);
+    static List<Long> addItemMaterial(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
+        int itemKey = aBonus.get(index++).getAsInt();
+        int addNumber = 1;
+        UserItemEntity uItem;
+        if (itemKey == ItemKey.TICKER_NORMAL.id) uItem = checkGenItemData(mUser, addNumber);
         else {
-            uItem = mUser.getResources().getItem(itemId);
-            if (uItem == null) uItem = new UserItemEntity(mUser.getUser().getId(), itemId, number);
-            else uItem.add(number);
+            uItem = mUser.getResources().getItem(itemKey);
+            if (uItem == null) uItem = new UserItemEntity(mUser.getUser().getId(), itemKey, addNumber);
+            else uItem.add(addNumber);
             if (uItem.getNumber() < 0) return new ArrayList<>();
-
         }
         boolean isOk = DBJPA.saveOrUpdate(uItem);
         if (isOk) {
             if (!mUser.getResources().hasItem(uItem.getItemId())) mUser.getResources().addItem(uItem);
-            if (CfgServer.isRealServer())
-                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "item", "itemId", itemId, "value", uItem.getNumber(), "addValue", number);
-            return Arrays.asList((long) BONUS_ITEM, (long) uItem.getItemId(), (long) uItem.getNumber(), (long) number);
+            if (CfgServer.isRealServer()) {
+                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
+                        "type", "item",
+                        "itemId", itemKey,
+                        "value", uItem.getNumber(),
+                        "addValue", addNumber);
+            }
+            // receive-format: [type, itemKey]
+            return Arrays.asList((long) BONUS_MATERIAL, (long) itemKey);
         }
         return new ArrayList<>();
     }
@@ -296,29 +269,31 @@ public class Bonus {
 
 
     static List<Long> addItemEquipment(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-        int itemId = aBonus.get(index++).getAsInt();
-        long expire = aBonus.get(index++).getAsLong();
-        long isLock = aBonus.get(index++).getAsLong();
-        UserItemEquipmentEntity uItemEquip = new UserItemEquipmentEntity(mUser.getUser().getId(), itemId, expire, (int) isLock);
+        int itemKey = aBonus.get(index++).getAsInt();
+        long expire = -1; // default: permanent
+        int isLock = 0;
+        UserItemEquipmentEntity uItemEquip = new UserItemEquipmentEntity(mUser.getUser().getId(), itemKey, expire, isLock);
         if (DBJPA.save(uItemEquip)) {
             mUser.getResources().addItemEquip(uItemEquip);
             if (CfgServer.isRealServer())
-                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "item_equipment", "id", uItemEquip.getId());
-            return Arrays.asList((long) BONUS_ITEM_EQUIPMENT, uItemEquip.getId(), (long) itemId, expire, isLock);
+                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "item_equipment", "id", uItemEquip.getId(), "itemKey", itemKey);
+            // receive-format: [type, itemKey]
+            return Arrays.asList((long) BONUS_EQUIPMENT, (long) itemKey);
         }
         return new ArrayList<>();
     }
 
-
-    static List<Long> addPet(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-        int id = aBonus.get(index++).getAsInt();
-        UserPetEntity uPet = mUser.getResources().getPet(id);
-        if (uPet == null) uPet = new UserPetEntity(mUser.getUser(),  id);
-        else return new ArrayList<>();
-        if (DBJPA.save(uPet)) {
-            mUser.getResources().addPet(uPet);
-            Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "pet", "id", id);
-            return Arrays.asList((long) BONUS_PET,  (long) id);
+    static List<Long> addItemArtifact(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
+        int itemKey = aBonus.get(index++).getAsInt();
+        long expire = -1; // default: permanent
+        int isLock = 0;
+        UserItemEquipmentEntity uItemEquip = new UserItemEquipmentEntity(mUser.getUser().getId(), itemKey, expire, isLock);
+        if (DBJPA.save(uItemEquip)) {
+            mUser.getResources().addItemEquip(uItemEquip);
+            if (CfgServer.isRealServer())
+                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "item_artifact", "id", uItemEquip.getId(), "itemKey", itemKey);
+            // receive-format: [type, itemKey]
+            return Arrays.asList((long) BONUS_ARTIFACT, (long) itemKey);
         }
         return new ArrayList<>();
     }
@@ -329,9 +304,36 @@ public class Bonus {
         mUser.getUser().addVipExp(addExp);
         if (DBJPA.update("user", Arrays.asList("vip_exp", user.getVipExp(), "vip", user.getVip()), Arrays.asList("id", user.getId()))) {
             Actions.save(user, Actions.GRECEIVE, detailAction, "type", "vip_exp", "vip", user.getVip(), "exp", user.getVipExp(), "addExp", addExp);
-            return Arrays.asList((long) BONUS_VIP_EXP, (long) user.getVip(), (long) user.getVipExp(), (long) addExp);
+            // receive-format: [type, curExp, addExp, vip]
+            return Arrays.asList((long) BONUS_VIP_EXP, (long) user.getVipExp(), (long) addExp, (long) user.getVip());
         }
         return new ArrayList<>();
+    }
+
+    static List<Long> addPet(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
+        int petId = aBonus.get(index++).getAsInt();
+        // already have => ignore
+        if (mUser.getResources().getPet(petId) != null) return new ArrayList<>();
+        UserPetEntity uPet = new UserPetEntity(mUser.getUser(), petId);
+        if (DBJPA.save(uPet)) {
+            mUser.getResources().addPet(uPet);
+            if (CfgServer.isRealServer()) {
+                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "pet", "petId", petId);
+            }
+            // receive-format: [type, petId]
+            return Arrays.asList((long) BONUS_PET, (long) petId);
+        }
+        return new ArrayList<>();
+    }
+
+    static List<Long> addMount(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
+        int mountId = aBonus.get(index++).getAsInt();
+        // NOTE: Mount persistence is not implemented elsewhere in this server codebase.
+        // We still return receive-format so client can show the bonus.
+        if (CfgServer.isRealServer()) {
+            Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "mount", "mountId", mountId);
+        }
+        return Arrays.asList((long) BONUS_MOUNT, (long) mountId);
     }
 
     static List<Long> addGold(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
@@ -415,7 +417,7 @@ public class Bonus {
                     if (mUser.getUser().getRuby() + aBonus.get(index++) < 0)
                         return Lang.instance(mUser).get(Lang.err_not_enough_ruby);
                     break;
-                case BONUS_ITEM:
+                case BONUS_MATERIAL:
                     int itemId = aBonus.get(index++).intValue();
                     UserItemEntity uItem = mUser.getResources().getItem(itemId);
                     ResItemEntity resItem = ResItem.getItem(itemId);
@@ -472,7 +474,7 @@ public class Bonus {
             while (index < bonus.size()) {
                 List<Long> tmp = new ArrayList<>();
                 int type = bonus.get(index++).intValue();
-                int length = mTypeLength.containsKey(type) ? mTypeLength.get(type) : 0;
+                int length = mTypeLength.getOrDefault(type, 0);
                 tmp.add((long) type);
                 for (int i = index; i < index + length; i++) {
                     tmp.add(bonus.get(i));

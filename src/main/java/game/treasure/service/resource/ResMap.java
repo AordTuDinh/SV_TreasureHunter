@@ -27,7 +27,10 @@ public class ResMap {
         // object
         List<ResObjectEntity> aObj = DBResource.getInstance().getList(CfgServer.DB_MAIN + "res_object", ResObjectEntity.class);
         mResObject.clear();
-        aObj.forEach(obj -> mResObject.put(obj.getId(), obj));
+        aObj.forEach(obj -> {
+            obj.init();
+            mResObject.put(obj.getId(), obj);
+        });
 
 
         // map

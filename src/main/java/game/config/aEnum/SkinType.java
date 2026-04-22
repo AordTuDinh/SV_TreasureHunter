@@ -5,7 +5,7 @@ import java.util.Map;
 
 public enum SkinType {
     NULL(0),
-    CHARACTER(1),
+    ATTACK(1),
     DAMAGE_SKIN(2),
     CHAT_FRAME(3),
     TRIAL(4),

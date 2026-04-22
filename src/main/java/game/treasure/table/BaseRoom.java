@@ -5,7 +5,9 @@ import game.battle.model.*;
 import game.battle.model.Unit;
 import game.battle.object.*;
 import game.battle.type.RoomState;
+import game.battle.type.StateType;
 import game.config.CfgServer;
+import game.config.aEnum.DetailActionType;
 import game.config.aEnum.MapType;
 import game.object.TaskMonitor;
 import game.treasure.controller.AHandler;
@@ -314,7 +316,10 @@ public abstract class BaseRoom extends MonoRoom {
                 addCellProcess(cellObject);
                 boolean cellDie = cellObject.attack(player.getPoint().getAttackDamage());
                 player.setTimeAttack();
-                if (cellDie) addCellDie(cellObject);
+                if (cellDie) {
+                    addCellDie(cellObject);
+                    player.sendBonus(cellObject.getBonusKillMe(), DetailActionType.SU_DUNG_ITEM.getKey(player.getMUser().getUserId()));
+                }
             }
         }
     }

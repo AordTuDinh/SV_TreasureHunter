@@ -2,6 +2,7 @@ package game.battle.model;
 
 import com.mysql.cj.util.TimeUtil;
 import game.battle.object.Pos;
+import game.object.BonusConfig;
 import game.treasure.BattleConfig;
 import game.treasure.mapping.main.ResMapEntity;
 import game.treasure.mapping.main.ResObjectEntity;
@@ -11,6 +12,8 @@ import ozudo.base.helper.DateTime;
 import protocol.Pbmethod;
 
 import javax.persistence.Transient;
+
+import java.util.List;
 
 import static game.treasure.BattleConfig.CHUNK_SIZE;
 
@@ -26,6 +29,7 @@ public class CellObject {
     // runtime data
     int curHp;
     long timeBeAttack;
+    List<BonusConfig> bonusConfig;
 
 
     public CellObject(Pos pos, int type, int chunkId, int id) {
@@ -37,13 +41,18 @@ public class CellObject {
         ResObjectEntity resObject = ResMap.getResObject(type);
         this.curHp = resObject.getHp();
         this.baseHp = resObject.getHp();
+        this.bonusConfig = resObject.getBonus();
     }
 
-    public boolean attack(int damage) {
+
+    public List<Long> getBonusKillMe(){
+        return BonusConfig.getRandomOneBonus(bonusConfig);
+    }
+
+    public synchronized boolean attack(int damage) {
         timeBeAttack = System.currentTimeMillis();
         this.curHp -= damage;
         curHp = Math.max(curHp, 0);
-        System.out.println("curHp ============= " + curHp);
         if (curHp == 0) {
             state = Pbmethod.CellState.HIDE;
             return true;
