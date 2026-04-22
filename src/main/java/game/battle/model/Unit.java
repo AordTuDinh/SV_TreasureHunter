@@ -4,19 +4,14 @@ import game.battle.calculate.IMath;
 import game.battle.calculate.MathLab;
 import game.battle.object.*;
 import game.battle.type.*;
-import game.config.aEnum.FactionType;
-import game.config.aEnum.MapType;
 import game.treasure.BattleConfig;
 import game.treasure.mapping.main.ResMapEntity;
-import game.treasure.server.Constans;
-import game.treasure.service.resource.ResMap;
 import game.treasure.table.BaseBattleRoom;
 import game.treasure.table.BaseRoom;
 import game.object.PointBuff;
 import lombok.Data;
 import ozudo.base.helper.DateTime;
 import ozudo.base.helper.NumberUtil;
-import ozudo.base.log.Logs;
 import protocol.Pbmethod;
 
 import java.util.*;
@@ -28,7 +23,7 @@ public abstract class Unit {
     long id; // tất cả các sinh vật đều sẽ có id này riêng lẻ, vào map sẽ gen id này
     // info
     // int id; // id in room
-    int teamId;
+    int clanId;
 
     float rangeAttack;
     int idDameSkin = 0;
@@ -49,7 +44,6 @@ public abstract class Unit {
     long timeDie, timeRevive;
     boolean hasBonusKillMe;
     Unit targetAttack;
-    public FactionType faction = FactionType.NULL;
     long timeBeHit = 0;
     long killById;
 
@@ -138,7 +132,7 @@ public abstract class Unit {
     }
 
     public void beAttackMelee(Unit attacker) {
-        int[] damage = IMath.calculateDamage(attacker, this, attacker.getFaction());
+        int[] damage = IMath.calculateDamage(attacker, this);
         beAttackDamage(attacker, damage[1], damage[2]);
         addAtkInfoMelee(attacker);
         protoBeDame(attacker, Arrays.asList(damage[0], -damage[1], -damage[2]));
@@ -220,7 +214,7 @@ public abstract class Unit {
 
     // tránh trường hợp ăn đòn liên hoàn, sau 1 khoảng time mới ăn đòn từ thằng đó tiếp
     public boolean hasReciveMelee(Unit attacker) {
-        return canBeAttack(attacker.teamId) && DateTime.isAfterTime(getTimeAttack(attacker.getId()), BattleConfig.C_haSReciveDamage);
+        return canBeAttack(attacker.clanId) && DateTime.isAfterTime(getTimeAttack(attacker.getId()), BattleConfig.C_haSReciveDamage);
     }
 
     public boolean hasReceiveEffMelee(Unit attacker) {
@@ -240,16 +234,15 @@ public abstract class Unit {
     }
 
     public boolean sameTeam(int teamId) {
-        return this.teamId == teamId;
+        return this.clanId == teamId;
     }
-
 
 
     public void Update() {
     }
 
     public boolean sameTeam(Unit other) {
-        return other.getTeamId() == this.teamId;
+        return other.getClanId() == this.clanId;
     }
 
     public long getTimeAttack(long attackerId) {
@@ -389,12 +382,6 @@ public abstract class Unit {
         protoBuffPoint(buffs);
     }
 
-    public void buffShell(int addNum) {
-        List<PointBuff> buffs = new ArrayList<>();
-        buffs.add(new PointBuff(Point.SHELL, addNum));
-        protoBuffPoint(buffs);
-    }
-
     public void reHpNoEff(int addNum) {
         List<PointBuff> buffs = new ArrayList<>();
         buffs.add(new PointBuff(Point.CUR_HP, addNum));
@@ -405,12 +392,6 @@ public abstract class Unit {
         protoStatus(StateType.EFFECT_BODY, EffectBodyType.HEALING_BASIC.value, 0);
         List<PointBuff> buffs = new ArrayList<>();
         buffs.add(new PointBuff(Point.CUR_HP, addNum));
-        protoBuffPoint(buffs);
-    }
-
-    public void updateMp(int addMp) {
-        List<PointBuff> buffs = new ArrayList<>();
-        buffs.add(new PointBuff(Point.CUR_MP, addMp));
         protoBuffPoint(buffs);
     }
 
@@ -436,38 +417,10 @@ public abstract class Unit {
             int pointId = buffs.get(i).getPointId();
             int value = buffs.get(i).getValue();
             switch (pointId) {
-                case Point.BUFF_CUR_PER_HP -> {
-                    int reMax = (int) (value / 100f * point.getMaxHp());
-                    point.addCurHp(reMax);
+                case Point.CUR_HP -> {
+                    point.add(buffs.get(i), this);
                     pointBuff.add(Point.CUR_HP);
                     pointBuff.add(point.getCurHP());
-                }
-                case Point.BUFF_CUR_PER_MP -> {
-                    int reMax = (int) (value / 100f * point.getMaxMp());
-                    point.addCurMp(reMax);
-                    pointBuff.add(Point.CUR_MP);
-                    pointBuff.add(point.getCurMP());
-                }
-                case Point.CUR_HP -> {
-                    int shell = point.getCurShell();
-                    if (shell > 0 && value < 0) {
-                        shell += value;
-                        point.setShell(shell > 0 ? shell : 0);
-                        // trừ giáp trước, nếu hết giáp mới trừ máu
-                        pointBuff.add(Point.SHELL);
-                        pointBuff.add(point.getCurShell());
-                        // dame > shell
-                        if (value + shell < 0) {
-                            buffs.get(i).setValue(value + shell);
-                            point.add(buffs.get(i), this);
-                            pointBuff.add(Point.CUR_HP);
-                            pointBuff.add(point.getCurHP());
-                        }
-                    } else {
-                        point.add(buffs.get(i), this);
-                        pointBuff.add(Point.CUR_HP);
-                        pointBuff.add(point.getCurHP());
-                    }
                 }
                 default -> {
                     point.add(buffs.get(i), this);
@@ -493,7 +446,7 @@ public abstract class Unit {
     }
 
     public boolean beBlock() {
-        return isHit() ||  point.beBlock();
+        return isHit() || point.beBlock();
     }
 
     public boolean isHit() {

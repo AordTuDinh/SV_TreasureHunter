@@ -5172,23 +5172,23 @@ public final class Pbmethod {
      */
     boolean getIsAdd();
 
-    // optional int32 teamId = 5;
+    // optional int32 clanId = 5;
     /**
-     * <code>optional int32 teamId = 5;</code>
+     * <code>optional int32 clanId = 5;</code>
      *
      * <pre>
      * dành cho add unit
      * </pre>
      */
-    boolean hasTeamId();
+    boolean hasClanId();
     /**
-     * <code>optional int32 teamId = 5;</code>
+     * <code>optional int32 clanId = 5;</code>
      *
      * <pre>
      * dành cho add unit
      * </pre>
      */
-    int getTeamId();
+    int getClanId();
 
     // optional int32 avatar = 6;
     /**
@@ -5404,7 +5404,7 @@ public final class Pbmethod {
             }
             case 40: {
               bitField0_ |= 0x00000010;
-              teamId_ = input.readInt32();
+              clanId_ = input.readInt32();
               break;
             }
             case 48: {
@@ -5633,28 +5633,28 @@ public final class Pbmethod {
       return isAdd_;
     }
 
-    // optional int32 teamId = 5;
-    public static final int TEAMID_FIELD_NUMBER = 5;
-    private int teamId_;
+    // optional int32 clanId = 5;
+    public static final int CLANID_FIELD_NUMBER = 5;
+    private int clanId_;
     /**
-     * <code>optional int32 teamId = 5;</code>
+     * <code>optional int32 clanId = 5;</code>
      *
      * <pre>
      * dành cho add unit
      * </pre>
      */
-    public boolean hasTeamId() {
+    public boolean hasClanId() {
       return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
-     * <code>optional int32 teamId = 5;</code>
+     * <code>optional int32 clanId = 5;</code>
      *
      * <pre>
      * dành cho add unit
      * </pre>
      */
-    public int getTeamId() {
-      return teamId_;
+    public int getClanId() {
+      return clanId_;
     }
 
     // optional int32 avatar = 6;
@@ -5907,7 +5907,7 @@ public final class Pbmethod {
       chunkId_ = 0;
       id_ = 0L;
       isAdd_ = false;
-      teamId_ = 0;
+      clanId_ = 0;
       avatar_ = 0;
       ownerId_ = 0L;
       pos_ = protocol.Pbmethod.PbPos.getDefaultInstance();
@@ -5946,7 +5946,7 @@ public final class Pbmethod {
         output.writeBool(4, isAdd_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeInt32(5, teamId_);
+        output.writeInt32(5, clanId_);
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         output.writeInt32(6, avatar_);
@@ -6011,7 +6011,7 @@ public final class Pbmethod {
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(5, teamId_);
+          .computeInt32Size(5, clanId_);
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
@@ -6197,7 +6197,7 @@ public final class Pbmethod {
         bitField0_ = (bitField0_ & ~0x00000004);
         isAdd_ = false;
         bitField0_ = (bitField0_ & ~0x00000008);
-        teamId_ = 0;
+        clanId_ = 0;
         bitField0_ = (bitField0_ & ~0x00000010);
         avatar_ = 0;
         bitField0_ = (bitField0_ & ~0x00000020);
@@ -6278,7 +6278,7 @@ public final class Pbmethod {
         if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
           to_bitField0_ |= 0x00000010;
         }
-        result.teamId_ = teamId_;
+        result.clanId_ = clanId_;
         if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
           to_bitField0_ |= 0x00000020;
         }
@@ -6365,8 +6365,8 @@ public final class Pbmethod {
         if (other.hasIsAdd()) {
           setIsAdd(other.getIsAdd());
         }
-        if (other.hasTeamId()) {
-          setTeamId(other.getTeamId());
+        if (other.hasClanId()) {
+          setClanId(other.getClanId());
         }
         if (other.hasAvatar()) {
           setAvatar(other.getAvatar());
@@ -6595,51 +6595,51 @@ public final class Pbmethod {
         return this;
       }
 
-      // optional int32 teamId = 5;
-      private int teamId_ ;
+      // optional int32 clanId = 5;
+      private int clanId_ ;
       /**
-       * <code>optional int32 teamId = 5;</code>
+       * <code>optional int32 clanId = 5;</code>
        *
        * <pre>
        * dành cho add unit
        * </pre>
        */
-      public boolean hasTeamId() {
+      public boolean hasClanId() {
         return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
-       * <code>optional int32 teamId = 5;</code>
+       * <code>optional int32 clanId = 5;</code>
        *
        * <pre>
        * dành cho add unit
        * </pre>
        */
-      public int getTeamId() {
-        return teamId_;
+      public int getClanId() {
+        return clanId_;
       }
       /**
-       * <code>optional int32 teamId = 5;</code>
+       * <code>optional int32 clanId = 5;</code>
        *
        * <pre>
        * dành cho add unit
        * </pre>
        */
-      public Builder setTeamId(int value) {
+      public Builder setClanId(int value) {
         bitField0_ |= 0x00000010;
-        teamId_ = value;
+        clanId_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int32 teamId = 5;</code>
+       * <code>optional int32 clanId = 5;</code>
        *
        * <pre>
        * dành cho add unit
        * </pre>
        */
-      public Builder clearTeamId() {
+      public Builder clearClanId() {
         bitField0_ = (bitField0_ & ~0x00000010);
-        teamId_ = 0;
+        clanId_ = 0;
         onChanged();
         return this;
       }
@@ -99305,7 +99305,7 @@ public final class Pbmethod {
       "\001 \001(\t\022\034\n\004user\030\002 \001(\0132\016.pbdson.PbUser\"\035\n\005P",
       "bPos\022\t\n\001x\030\001 \001(\002\022\t\n\001y\030\002 \001(\002\"\265\002\n\006PbUnit\022\014\n" +
       "\004type\030\001 \001(\005\022\017\n\007chunkId\030\002 \001(\005\022\n\n\002id\030\003 \001(\003" +
-      "\022\r\n\005isAdd\030\004 \001(\010\022\016\n\006teamId\030\005 \001(\005\022\016\n\006avata" +
+      "\022\r\n\005isAdd\030\004 \001(\010\022\016\n\006clanId\030\005 \001(\005\022\016\n\006avata" +
       "r\030\006 \001(\005\022\017\n\007ownerId\030\007 \001(\003\022\032\n\003pos\030\010 \001(\0132\r." +
       "pbdson.PbPos\022 \n\tdirection\030\t \001(\0132\r.pbdson" +
       ".PbPos\022\r\n\005speed\030\n \001(\005\022\014\n\004info\030\013 \003(\005\022\023\n\013r" +
@@ -99619,7 +99619,7 @@ public final class Pbmethod {
           internal_static_pbdson_PbUnit_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbUnit_descriptor,
-              new java.lang.String[] { "Type", "ChunkId", "Id", "IsAdd", "TeamId", "Avatar", "OwnerId", "Pos", "Direction", "Speed", "Info", "RangeAttack", "Name", "Alive", "LastInputSeq", "Point", "UserId", });
+              new java.lang.String[] { "Type", "ChunkId", "Id", "IsAdd", "ClanId", "Avatar", "OwnerId", "Pos", "Direction", "Speed", "Info", "RangeAttack", "Name", "Alive", "LastInputSeq", "Point", "UserId", });
           internal_static_pbdson_PbCell_descriptor =
             getDescriptor().getMessageTypes().get(6);
           internal_static_pbdson_PbCell_fieldAccessorTable = new

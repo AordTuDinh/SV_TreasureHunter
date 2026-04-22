@@ -62,7 +62,7 @@ public class Player extends Unit implements Serializable {
     }
 
     private void initDefault( int teamId, Point point) {
-        this.teamId = teamId;
+        this.clanId = teamId;
 //        this.rangeAttack = BattleConfig.P_RangeAttack;
 //        this.cacheRangeAttack = BattleConfig.P_RangeAttack;
         this.timeLastAction = 0;
@@ -86,7 +86,6 @@ public class Player extends Unit implements Serializable {
         Point point = getPoint();
         buffs.set(0, (long) point.getBuffDrop());
         buffs.set(1, (long) point.getBuffGold());
-        buffs.set(2, (long) point.getBuffExp());
 
         for (int i = 0; i < buffCache.size(); i++) {
             BuffItemType type = BuffItemType.getByIndex(i);
@@ -218,7 +217,7 @@ public class Player extends Unit implements Serializable {
     public synchronized void protoDie(Unit killer) {
         super.protoDie(killer);
         if (sendDie) {
-            protoStatus(StateType.DIE,  FactionType.NULL.value);
+            protoStatus(StateType.DIE);
             sendDie = false;
         }
     }
@@ -249,7 +248,7 @@ public class Player extends Unit implements Serializable {
         pbAdd.setPos(pos.toProto());
         if (panelMap == null) panelMap = ResMap.getMap(MapType.HOME);
         pbAdd.setDirection(direction.toProto());
-        pbAdd.setTeamId(teamId);
+        pbAdd.setClanId(clanId);
         pbAdd.setRangeAttack(rangeAttack);
         pbAdd.setAvatar(mUser.getUser().getHeroMain());
         pbAdd.setSpeed((int) point.getMoveSpeed());

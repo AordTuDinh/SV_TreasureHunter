@@ -8,7 +8,6 @@ import game.battle.type.UnitType;
 import game.config.CfgEventDrop;
 import game.config.aEnum.DetailActionType;
 import game.treasure.BattleConfig;
-import game.treasure.server.Constans;
 import game.treasure.service.user.Bonus;
 import game.object.BonusConfig;
 import lombok.Data;
@@ -34,6 +33,9 @@ public class Enemy extends Unit implements Serializable {
     float rangeView;
 
 
+    public Enemy() {
+        this.clanId = -1;
+    }
 
     @Override
     public void revive() {
@@ -52,7 +54,7 @@ public class Enemy extends Unit implements Serializable {
     @Override
     public void protoDie(Unit killer) {
         super.protoDie(killer);
-        protoStatus(StateType.DIE,faction.value);
+        protoStatus(StateType.DIE, 1);
     }
 
     @Override
@@ -278,7 +280,7 @@ public class Enemy extends Unit implements Serializable {
         }
 
         if (isBeAttack) {
-            if (targetAttack != null && targetAttack.canBeAttack(getTeamId())) {
+            if (targetAttack != null && targetAttack.canBeAttack(getClanId())) {
                 activeSkill(skillNormal);
                 if (hasAttackLongRange()) {
                     //getBattleRoom().addBullet(this, skillNormal, enemyAttackLongRange());
@@ -448,7 +450,7 @@ public class Enemy extends Unit implements Serializable {
         pbAdd.setId(id);
         pbAdd.setAvatar(model);
         pbAdd.setChunkId(chunkId);
-        pbAdd.setTeamId(teamId);
+        pbAdd.setClanId(clanId);
         pbAdd.setRangeAttack(rangeAttack);
         pbAdd.setIsAdd(true);
         pbAdd.setPos(pos.toProto());

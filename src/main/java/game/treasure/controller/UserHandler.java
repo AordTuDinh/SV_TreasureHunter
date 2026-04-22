@@ -565,7 +565,6 @@ public class UserHandler extends AHandler {
         Point point = mUser.getPlayer().getPoint();
         sumBuff.set(0, sumBuff.get(0) + point.getBuffDrop());
         sumBuff.set(1, sumBuff.get(1) + point.getBuffGold());
-        sumBuff.set(2, sumBuff.get(2) + point.getBuffExp());
         //
         sumBuff.addAll(ret);
         Util.sendProtoData(mUser.getChannel(), CommonProto.getCommonVector(sumBuff), IAction.BUFF_INFO);

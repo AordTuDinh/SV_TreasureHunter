@@ -5,7 +5,6 @@ import com.google.gson.reflect.TypeToken;
 import game.battle.object.Point;
 import game.battle.object.Pos;
 import game.battle.type.UnitType;
-import game.config.aEnum.FactionType;
 import game.object.BonusConfig;
 import game.object.BossSkillConfig;
 import lombok.Data;
@@ -60,26 +59,18 @@ public class ResBossEntity extends BaseEntity {
         point = new Point();
         point.setBaseHp(longHp);
         point.setCurHp(longHp);
-        point.setBaseHpRegen(longHpRegen);
         point.setBaseAttack(longAttack);
-        point.setBaseMagicAttack(longMagicAttack);
         point.setDefense(defense);
-        point.setMagicResist(magic_resist);
         point.setBaseCritChange(crit * 10);
         point.setCritDamage(critDamage);
         point.setAgility(agility);
         point.setImmunity(immunity);
         point.setMoveSpeed(moveSpeed);
-        point.setWeight(weight);
         point.calculatorPower(level,0);
     }
 
     public List<Long> getBonusKillBoss(List<Integer> perBonusAdd) {
         return BonusConfig.getRandomBonusBoss(aReward,perBonusAdd);
-    }
-
-    public FactionType getFaction() {
-        return FactionType.get(faction);
     }
 
     public float getRangeAttack() {

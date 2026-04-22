@@ -93,7 +93,7 @@ public class ProtoState {
                     buffer.writeBoolean(tmp.getIsAdd());
                     // riêng add
                     if (tmp.getIsAdd()) {
-                        buffer.writeInt(tmp.getTeamId());
+                        buffer.writeInt(tmp.getClanId());
                         buffer.writeInt(tmp.getAvatar());
                         buffer.writeLong(tmp.getOwnerId());
                         buffer.writeFloat(tmp.getPos().getX());

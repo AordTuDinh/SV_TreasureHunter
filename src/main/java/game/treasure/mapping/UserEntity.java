@@ -5,16 +5,11 @@ import game.battle.object.Point;
 import game.config.*;
 import game.config.aEnum.*;
 import game.config.lang.Lang;
-import game.treasure.BattleConfig;
-import game.treasure.mapping.main.ResTutorialQuestEntity;
-import game.treasure.server.IAction;
 import game.treasure.service.resource.ResEvent;
 import game.treasure.service.resource.ResParty;
-import game.treasure.service.resource.ResQuest;
 import game.monitor.ClanManager;
 import game.monitor.Online;
 import game.object.MyUser;
-import game.protocol.CommonProto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ozudo.base.database.DBJPA;
@@ -163,10 +158,8 @@ public class UserEntity implements Serializable {
     Point calculatePoint(MyUser mUser) {
         Point point = mUser.getPlayer().getPoint();
         int cacheHp = point.getCurHP();
-        int cacheMp = point.getCurMP();
         point = IMath.calculatePoint(mUser, true);
         point.setCurHp(Math.min(cacheHp, point.getMaxHp()));
-        point.setCurMp(Math.min(cacheMp, point.getMaxMp()));
         mUser.getPlayer().setPoint(point);
         //todo tính thêm chỉ số của thẻ monster
         return point;
@@ -176,14 +169,9 @@ public class UserEntity implements Serializable {
         Point point = getCachePoint();
         // lấy lại cache hp và mp   
         int cacheHp = point.getCurHP();
-        int cacheMp = point.getCurMP();
         // tính lại point
         point = IMath.calculatePoint(mUser, true);
-
-        point.setWeight(BattleConfig.P_Weight);
         point.setCurHp(cacheHp <= 0 ? point.getMaxHp() : cacheHp);
-        point.setCurMp(cacheMp <= 0 ? point.getMaxMp() : cacheMp);
-        point.setMoveSpeed(3000);
         return point;
     }
 

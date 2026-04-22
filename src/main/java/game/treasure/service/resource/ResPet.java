@@ -20,9 +20,8 @@ public class ResPet {
     public static void init() {
         // for item
         List<ResPetEntity> aPet = DBResource.getInstance().getList(CfgServer.DB_MAIN + "res_pet", ResPetEntity.class);
-             mPet.clear();
+        mPet.clear();
         aPet.forEach(pet -> {
-            pet.init();
             mPet.put(pet.getId(), pet);
             if (!aPetByRank.containsKey(pet.getRank())) {
                 aPetByRank.put(pet.getRank(), new ArrayList<>());

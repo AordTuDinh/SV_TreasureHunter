@@ -3,11 +3,9 @@ package game.battle.model;
 import game.battle.object.Point;
 import game.battle.object.Pos;
 import game.battle.type.UnitType;
-import game.config.aEnum.FactionType;
 import game.treasure.BattleConfig;
 import game.treasure.mapping.UserPetEntity;
 import game.treasure.mapping.main.ResPetEntity;
-import game.treasure.server.Constans;
 import ozudo.base.helper.DateTime;
 import protocol.Pbmethod;
 
@@ -21,13 +19,12 @@ public class Pet extends Unit implements Serializable {
         this.type = UnitType.PET;
         this.model = uPet.getPetId();
         this.direction = Pos.RandomDirection();
-        this.teamId = 0;
+        this.clanId = 0;
         this.pos = owner.getPos().clone();
         this.point = new Point();
         this.point.setMoveSpeed(100);
         this.owner = owner;
         ResPetEntity res = uPet.getResPet();
-        this.faction = FactionType.get(res.getFaction());
         this.timePetActive = res.getTimeActive();
     }
 
@@ -45,7 +42,7 @@ public class Pet extends Unit implements Serializable {
         pb.setIsAdd(true);
         pb.setPos(pos.toProto());
         pb.setDirection(direction.toProto());
-        pb.setTeamId(teamId);
+        pb.setClanId(clanId);
         pb.setAvatar(model);
         pb.setOwnerId(owner.id);
         pb.setSpeed((int) point.getMoveSpeed());

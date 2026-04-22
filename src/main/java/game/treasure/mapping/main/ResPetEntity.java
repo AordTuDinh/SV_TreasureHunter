@@ -1,6 +1,5 @@
 package game.treasure.mapping.main;
 
-import game.config.aEnum.FactionType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ozudo.base.helper.GsonUtil;
@@ -20,8 +19,6 @@ public class ResPetEntity implements Serializable {
     String name, desc, data, skill, bonusFaction;
     int rank, faction, showSummon; // showSummon: có thể summon ra
     float timeActive;
-    @Transient
-    FactionType factionType;
 
     public List<List<Long>> getData() {
         return GsonUtil.strTo2ListLong(data);
@@ -30,9 +27,5 @@ public class ResPetEntity implements Serializable {
 
     public List<Long> getBonusFaction() {
         return GsonUtil.strToListLong(bonusFaction);
-    }
-
-    public void init() {
-        factionType = FactionType.get(faction);
     }
 }

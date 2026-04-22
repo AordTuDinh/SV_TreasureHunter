@@ -3,9 +3,7 @@ package game.battle.calculate;
 import game.battle.object.Point;
 import game.battle.object.Pos;
 import game.battle.model.Unit;
-import game.battle.type.UnitType;
 import game.config.CfgClan;
-import game.config.aEnum.FactionType;
 import game.treasure.mapping.*;
 import game.treasure.mapping.main.*;
 import game.treasure.service.Services;
@@ -373,11 +371,11 @@ public class IMath {
     }
 
 
-    public static int[] calculateDamage(Unit attacker, Unit target, FactionType factionAttack) {// crit,atk,matk
-        return calculateDamage(attacker, target, factionAttack, attacker.getPoint().getAttackDamage(), attacker.getPoint().getMagicDamage());
+    public static int[] calculateDamage(Unit attacker, Unit target) {// crit,atk,matk
+        return calculateDamage(attacker, target,  attacker.getPoint().getAttackDamage());
     }
 
-    public static int[] calculateDamage(Unit attacker, Unit target, FactionType factionAttack, int atkDame, int mAtkDame) {
+    public static int[] calculateDamage(Unit attacker, Unit target, int atkDame) {
         int status = 0;
         float critPer = 1f;
         if (isCrit(attacker.getPoint().getCrit())) {
@@ -385,20 +383,13 @@ public class IMath {
             critPer = attacker.getPoint().getCritDamage() - target.getPoint().getCritDamageReduce();
             critPer = critPer / 100f <= 1.5f ? 1.5f : 1 + critPer / 100f;
         }
-        int[] dame = calculateDamageBase(atkDame, mAtkDame, factionAttack, target, critPer, null, attacker);
+        int[] dame = calculateDamageBase(atkDame,  target, critPer, null, attacker);
         return new int[]{status, dame[0], dame[1]};
     }
 
-    public static float perNguHanh(FactionType factionAttack, FactionType factionBeAttack) {
-        if (factionAttack == null) return 0;
-        if (factionAttack.isWin(factionBeAttack)) return 0.15f;
-        if (factionAttack.isLost(factionBeAttack)) return -0.15f;
-        return 0;
-    }
-
     // Hàm gốc - tất cả đều tính qua hàm này
-    public static int[] calculateDamageBase(int atkDame, int magicDame, FactionType factionAttack, Unit beAttacker, float critPer, PointBuff buff, Unit attacker) {
-        int atk = 0, mag = 0, def = 0, magicResist = 0;
+    public static int[] calculateDamageBase(int atkDame, Unit beAttacker, float critPer, PointBuff buff, Unit attacker) {
+        int atk = 0, def = 0;
         int doge = beAttacker.getPoint().getDoge();//miss
 //        if (beAttacker.getType() == UnitType.BOSS) {
 //            long dameToBoss = attacker.getPoint().getDameToBoss();
@@ -408,35 +399,22 @@ public class IMath {
 //            }
 //        }
         if (doge > 0 && NumberUtil.getRandom(100) < doge) { // né
-            return new int[]{atk, mag};
+            return new int[]{atk};
         }
         // Lưu ý : Sát thương chuẩn sẽ mạnh hơn giảm dame trực tiếp
         float changeDame = beAttacker.getPoint().getChangeDame();
-        if (!beAttacker.getPoint().isTrueDame()) { // không phải sát thương chuẩn
-            def = beAttacker.getPoint().getDefense();
-            if (buff != null && buff.getPointId() == Point.DEFENSE) {
-                def += buff.getValue();
-            }
-            magicResist = beAttacker.getPoint().getMagicResist();
-            if (buff != null && buff.getPointId() == Point.MAGIC_RESIST) {
-                magicResist += buff.getValue();
-            }
-        } else { // sát thương chuẩn nhưng có giảm sát thương thì giảm sát thương sẽ =1 (bỏ qua giảm sát thương)
-            if (changeDame < 1) changeDame = 1;
-        }
-        // bổ sung dame khắc hệ
 
-        float perNguHanh = perNguHanh(factionAttack, beAttacker.faction);
-        atkDame += (long) (perNguHanh * atkDame);
-        magicDame += (long) (perNguHanh * magicDame);
+        def = beAttacker.getPoint().getDefense();
+        if (buff != null && buff.getPointId() == Point.DEFENSE) {
+            def += buff.getValue();
+        }
+
         // tinh dame
         atk = (int) (atkDame * 1000 * critPer / (1140f + 3.5 * def));
-        mag = (int) (magicDame * critPer * 1000 / (1140f + 3.5 * magicResist));
         // Đoạn này nhân với giảm dame trực tiếp
         atk *= (long) changeDame;
-        mag *= (long) (changeDame);
-        if (atk == 0 && mag == 0) atk = 1;
-        return new int[]{atk, mag};
+        if (atk == 0) atk = 1;
+        return new int[]{atk};
     }
 
 
@@ -464,7 +442,7 @@ public class IMath {
                 addPointData(pt, Math.toIntExact(pointAdd.get(j)), pointAdd.get(j + 1) / 100f);
             }
             // Bonus Faction Pet
-            if (petId == rPet.getId() ) {
+            if (petId == rPet.getId()) {
                 List<Long> bonusFaction = rPet.getBonusFaction();
                 for (int i = 0; i < bonusFaction.size(); i += 2) {
                     addPointData(pt, Math.toIntExact(bonusFaction.get(i)), bonusFaction.get(i + 1) / 100f);

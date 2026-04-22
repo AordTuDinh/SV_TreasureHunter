@@ -39,7 +39,6 @@ public class EventTopJob {
         Map<Integer, ResPetEntity> mPet = new HashMap<>();
         List<ResPetEntity> aPet = DBResource.getInstance().getList(CfgServer.DB_MAIN + "res_pet", ResPetEntity.class);
         aPet.forEach(pet -> {
-            pet.init();
             mPet.put(pet.getId(), pet);
         });
 

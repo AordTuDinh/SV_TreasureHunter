@@ -69,7 +69,7 @@ message PbUnit{
   optional  int64 id = 3;
   optional  bool isAdd = 4;
   // dành cho add unit
-  optional  int32 teamId = 5;
+  optional  int32 clanId = 5;
   optional int32  avatar = 6;
   optional int64  ownerId = 7;
   optional PbPos pos = 8;
