@@ -191,7 +191,7 @@ public class MyUser implements Serializable {
 
     public Player getPlayer() {
         if (player == null) {
-            player = new Player(this, 1);
+            player = new Player(this, user.getClan());
         }
         return player;
     }

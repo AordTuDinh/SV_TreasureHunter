@@ -48,8 +48,8 @@ public class Player extends Unit implements Serializable {
     int countUpdate;
     Pet petUse;
 
-    public Player(MyUser mUser, int teamId) {
-        initDefault( teamId, mUser.getUser().getInitPoint(mUser));
+    public Player(MyUser mUser, int clanId) {
+        initDefault( clanId, mUser.getUser().getInitPoint(mUser));
         this.type = UnitType.PLAYER;
         this.name = mUser.getUser().getName();
         this.mUser = mUser;
@@ -61,8 +61,8 @@ public class Player extends Unit implements Serializable {
         this.petUse = mUser.getPet(this);
     }
 
-    private void initDefault( int teamId, Point point) {
-        this.clanId = teamId;
+    private void initDefault( int clanId, Point point) {
+        this.clanId = clanId;
 //        this.rangeAttack = BattleConfig.P_RangeAttack;
 //        this.cacheRangeAttack = BattleConfig.P_RangeAttack;
         this.timeLastAction = 0;
