@@ -61,7 +61,6 @@ enum CellObjectType{
   HELMET = 9;
 }
 
-
 message PbUnit{
   // chung cả add + remove
   optional int32 type = 1;
@@ -108,7 +107,6 @@ message PbInitMap {
   repeated PbUnit units = 4;
 }
 
-
 // lúc đã init xong thì trả về state để update trạng thái của client
 message PbState{
   optional float serverTime = 1;
@@ -117,7 +115,6 @@ message PbState{
   optional PbUnitUpdate unitUpdate = 4;
   repeated PbChunk chunkState = 5;
 }
-
 
 // state ngắn dùng listlong siêu nhẹ
 message PbListUnitState {

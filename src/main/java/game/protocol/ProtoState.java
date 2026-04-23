@@ -169,7 +169,6 @@ public class ProtoState {
                 parsePbUpdatePlayer(buffer, aPlayerState.getAUnitStateList());
                 break;
         }
-
     }
 
     public static void parsePbUpdatePlayer(ByteBuf buffer, List<PbUnitState> aCharacterState) {
