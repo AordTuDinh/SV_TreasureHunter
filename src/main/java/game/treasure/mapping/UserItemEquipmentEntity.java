@@ -56,8 +56,8 @@ public class UserItemEquipmentEntity {
         setHeroIdEquip(0);
     }
 
-    public List<Integer> getPoint() {
-        return GsonUtil.strToListInt(point);
+    public List<Long> getPoint() {
+        return GsonUtil.strToListLong(point);
     }
 
     public List<Long> getPointLong() {

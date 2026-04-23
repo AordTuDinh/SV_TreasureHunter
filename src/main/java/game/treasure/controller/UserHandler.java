@@ -513,7 +513,7 @@ public class UserHandler extends AHandler {
         }
         if (mUser.getUData().update(List.of("dame_skin_equip", skinId))) {
             mUser.getUData().setDameSkinEquip(skinId);
-            mUser.getPlayer().protoStatus(StateType.UPDATE_TEXT_DAME, skinId);
+            mUser.getPlayer().protoStatus(StateType.UPDATE_TEXT_DAME, (long) skinId);
             addResponse(getCommonVector(skinId));
         } else addErrSystem();
     }
@@ -526,7 +526,7 @@ public class UserHandler extends AHandler {
         }
         if (mUser.getUData().update(List.of("chat_frame_equip", frameId))) {
             mUser.getUData().setChatFrameEquip(frameId);
-            mUser.getPlayer().protoStatus(StateType.UPDATE_CHAT_FRAME,  frameId);
+            mUser.getPlayer().protoStatus(StateType.UPDATE_CHAT_FRAME, (long) frameId);
             addResponse(getCommonVector(frameId));
         } else addErrSystem();
     }
@@ -539,7 +539,7 @@ public class UserHandler extends AHandler {
         }
         if (mUser.getUData().update(List.of("trial_equip", trialId))) {
             mUser.getUData().setTrialEquip(trialId);
-            mUser.getPlayer().protoStatus(StateType.UPDATE_TRIAL,  trialId);
+            mUser.getPlayer().protoStatus(StateType.UPDATE_TRIAL, (long) trialId);
             addResponse(getCommonVector(trialId));
         } else addErrSystem();
     }

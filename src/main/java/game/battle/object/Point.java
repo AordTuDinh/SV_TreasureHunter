@@ -57,10 +57,11 @@ public class Point {
     public static int size = 100;
     private int BasePerZen = 100;
 
-    int[] values;
+    @Getter
+    long[] values;
 
     public Point() {
-        values = new int[size];
+        values = new long[size];
         initDefault();
     }
 
@@ -81,7 +82,7 @@ public class Point {
     }
 
     public Point(List<Integer> data) {
-        values = new int[size];
+        values = new long[size];
         initDefault();
         for (int i = 0; i < data.size(); i++) {
             values[i] = data.get(i);
@@ -144,14 +145,14 @@ public class Point {
     }
 
     //region get
-    public int get(int index) {
+    public long get(int index) {
         if (index >= values.length) return 0;
         return values[index];
     }
 
-    public void addStun(int time) {
-        int newStun = time + (int) System.currentTimeMillis();
-        int curStun = get(Point.STUN);
+    public void addStun(long time) {
+        long newStun = time + (int) System.currentTimeMillis();
+        long curStun = get(Point.STUN);
         if (curStun < newStun) { // cái nào stun lâu hơn thì chọn cái đó
             values[STUN] = newStun;
         }
@@ -170,7 +171,7 @@ public class Point {
         values[ATTACK] += value;
     }
 
-    public int setCurHp(int curHp) {
+    public long setCurHp(long curHp) {
         return values[CUR_HP] = curHp;
     }
 
@@ -180,7 +181,7 @@ public class Point {
         setCurHp(getMaxHp());
     }
 
-    public int forceDie() {
+    public long forceDie() {
         return values[CUR_HP] = 0;
     }
 
@@ -217,50 +218,49 @@ public class Point {
         values[MOVE_SPEED] = value;
     }
 
-    public int getCrit() {
-        int baseValue = values[CRIT];
-        int changeValue = values[CHANGE_CRIT];
+    public long getCrit() {
+        long baseValue = values[CRIT];
+        long changeValue = values[CHANGE_CRIT];
         return (int) ((baseValue) * (changeValue / 100f));
     }
 
 
-    public int getCritDamage() {
-        int baseValue = values[CRIT_DAMAGE];
-        int changeValue = values[CHANGE_CRIT_DAMAGE];
-        return (int) ((baseValue) * (changeValue / 100f));
+    public long getCritDamage() {
+        long baseValue = values[CRIT_DAMAGE];
+        long changeValue = values[CHANGE_CRIT_DAMAGE];
+        return (long) ((baseValue) * (changeValue / 100f));
     }
 
-    public int getAttackDamage() {
-//        int baseAttack = values[ATTACK];
-//        int perAttack = values[P_ATTACK];
-//        int changeValue = values[CHANGE_ATTACK];
-//        return (int) (((baseAttack + baseAttack * perAttack / 100f) * (BasePerZen + values[ZEN_ATTACK]) / 100f) * (changeValue / 100f));
-        return 200;
+    public long getAttackDamage() {
+        long baseAttack = values[ATTACK];
+        long perAttack = values[P_ATTACK];
+        long changeValue = values[CHANGE_ATTACK];
+        return (long) (baseAttack + baseAttack * perAttack / 100f);
     }
 
-    public int getDoge() { // né
+    public long getDoge() { // né
         return values[DOGE];
     }
 
 
-    public int getImmunity() {
+    public long getImmunity() {
         return values[IMMUNITY];
     }
 
-    public int getAgility() {
-        int baseValue = values[AGILITY];
+    public long getAgility() {
+        long baseValue = values[AGILITY];
 //        System.out.println("baseValue = " + baseValue);
-        int changeValue = values[CHANGE_AGILITY];
+        long changeValue = values[CHANGE_AGILITY];
 //        System.out.println("changeValue = " + changeValue);
 //        System.out.println("baseValue * changeValue = " + baseValue * changeValue);
         return (baseValue * changeValue) / 100;
     }
 
-    public int getMoveSpeed() {
-        int baseValue = values[MOVE_SPEED];
-        int perValue = values[P_MOVE_SPEED];
-        int changeSpeed = values[CHANGE_MOVE_SPEED];
-        return (int) ((baseValue + baseValue * perValue / 100f) * (changeSpeed / 100f));
+    public long getMoveSpeed() {
+        long baseValue = values[MOVE_SPEED];
+        long perValue = values[P_MOVE_SPEED];
+        long changeSpeed = values[CHANGE_MOVE_SPEED];
+        return (long) ((baseValue + baseValue * perValue / 100f) * (changeSpeed / 100f));
     }
 
     public boolean equals(Point point) {
@@ -270,14 +270,14 @@ public class Point {
     // logic hơi phức tạp, buff <=100 thì buff thoải mái, dec >100 thì dec thoải mái.
     // trường hợp có dec mới thì phải so với dec cũ xem dec nào tốt hơn thì active, th buff cũ hết time thì áp buff mới vào luôn
     // thôi khó quá, trừ max 90% cho dễ =))
-    public int buffChange(int changId, int buff, int maxChange) {
+    public long buffChange(int changId, long buff, long maxChange) {
         if (buff > 0) { // add
             values[changId] += buff;
             return buff;
         } else { // dec
-            int maxReduce = 100 - maxChange;
+            long maxReduce = 100 - maxChange;
             if (values[changId] + buff < maxReduce) {
-                int realBuff = values[changId] - maxReduce;
+                long realBuff = values[changId] - maxReduce;
                 values[changId] = maxReduce;
                 return realBuff;
             } else {
@@ -287,7 +287,7 @@ public class Point {
         }
     }
 
-    public int getAccuracy() {
+    public long getAccuracy() {
         return values[ACCURACY];
     }
 
@@ -303,18 +303,18 @@ public class Point {
         return (int) (values[P_GOLD_INCREASE]);
     }
 
-    public int getDefense() {
-        int baseValue = values[DEFENSE];
-        int perValue = values[P_DEFENSE];
-        int changeValue = values[CHANGE_DEFENSE];
-        return (int) ((baseValue + baseValue * perValue / 100f) * (changeValue / 100f));
+    public long getDefense() {
+        long baseValue = values[DEFENSE];
+        long perValue = values[P_DEFENSE];
+        long changeValue = values[CHANGE_DEFENSE];
+        return (long) ((baseValue + baseValue * perValue / 100f) * (changeValue / 100f));
     }
 
     public float getChangeDame() {
         return values[CHANGE_DAME] / 100f;
     }
 
-    public int getCritDamageReduce() {
+    public long getCritDamageReduce() {
         return values[CRIT_DAMAGE_REDUCTION];
     }
     //
@@ -335,7 +335,7 @@ public class Point {
         return point;
     }
 
-    public synchronized int getCurHP() {
+    public synchronized long getCurHP() {
         return values[CUR_HP];
     }
 
@@ -343,18 +343,18 @@ public class Point {
         return (int) (getCurHP() * 100 / getMaxHp());
     }
 
-    public int getMaxHp() { // max HP
-        int baseValue = values[HP];
-        int perValue = values[P_HP];
-        return (int) (baseValue + baseValue * perValue / 100f);
+    public Long getMaxHp() { // max HP
+        long baseValue = values[HP];
+        long perValue = values[P_HP];
+        return (long) (baseValue + baseValue * perValue / 100f);
     }
 
 
-    public int getCurStun() {
+    public Long getCurStun() {
         return get(STUN);
     }
 
-    public int getPower() {
+    public Long getPower() {
         return values[POWER];
     }
 
@@ -383,10 +383,6 @@ public class Point {
 
     }
 
-    public int[] getValues() {
-        return values;
-    }
-
     public boolean beBlock() {
         int now = (int) System.currentTimeMillis();
         return values[STUN] > now || values[FREEZE] > now || values[Point.BLOCK_PARALYZE] > now;
@@ -407,7 +403,7 @@ public class Point {
     }
 
     public void copySpecialValue(Point point) {
-        int[] newValues = point.getValues();
+        long[] newValues = point.getValues();
         int size = Math.min(newValues.length, values.length);
         for (int i = 0; i < size; i++) {
             if (values[i] < newValues[i]) values[i] = newValues[i];
@@ -415,8 +411,8 @@ public class Point {
     }
 
     // tang giam chi so
-    public synchronized boolean addCurHp(int value) {
-        values[CUR_HP] += value * values[CHANGE_HEATH] / 100f; // nhân với giảm khả năng hồi phục
+    public synchronized boolean addCurHp(long value) {
+        values[CUR_HP] += (long) (value * values[CHANGE_HEATH] / 100f); // nhân với giảm khả năng hồi phục
         values[CUR_HP] = values[CUR_HP] < 0 ? 0 : values[CUR_HP];
         values[CUR_HP] = Math.min(values[CUR_HP], getMaxHp());
         return values[CUR_HP] > 0; // true = alive
@@ -471,7 +467,7 @@ public class Point {
         values[AGILITY] += value;
     }
 
-    public void addBattlePower(int value) {
+    public void addBattlePower(long value) {
         values[POWER] += value;
     }
 
@@ -488,8 +484,8 @@ public class Point {
     }
 
 
-    public List<Integer> toProto() {
-        List<Integer> ret = new ArrayList<>(getValues().length);
+    public List<Long> toProto() {
+        List<Long> ret = new ArrayList<>(getValues().length);
         for (int i = 0; i < getValues().length; i++) {
             ret.add(getValues()[i]);
         }
@@ -497,7 +493,7 @@ public class Point {
     }
 
     public Pbmethod.CommonVector toCommonVector() {
-        return CommonProto.getCommonIntVector(toProto());
+        return CommonProto.getCommonVector(toProto());
     }
 
 

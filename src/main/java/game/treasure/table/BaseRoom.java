@@ -4,6 +4,7 @@ import com.google.protobuf.AbstractMessage;
 import game.battle.model.*;
 import game.battle.model.Unit;
 import game.battle.object.*;
+import game.battle.type.AnimationType;
 import game.battle.type.RoomState;
 import game.battle.type.StateType;
 import game.config.CfgServer;
@@ -313,13 +314,14 @@ public abstract class BaseRoom extends MonoRoom {
             Util.sendProtoData(player.getMUser().getChannel(), null, IAction.PING_GAME);
         } else if (input.typeId == NInput.ATTACK) {
             int globalCellId = MapService.worldPosToGlobalCellId(mapInfo, player.getPos());
-            if (player.canAttack()) return;
+            if (!player.canAttack()) return;
             if (input.targetAttack == Pbmethod.TargetAttack.OBJECT) {
                 CellObject cellObject = getCellObject(globalCellId, player.getChunkId());
                 if (cellObject != null && cellObject.canAttack() && player.hasAttack()) {
                     addCellProcess(cellObject);
                     boolean cellDie = cellObject.attack(player.getPoint().getAttackDamage());
                     player.setTimeAttack();
+                    player.protoStatus(StateType.PLAY_ANIM,(long) AnimationType.ATTACK.value);
                     if (cellDie) {
                         addCellDie(cellObject);
                         player.sendBonus(cellObject.getBonusKillMe(), DetailActionType.SU_DUNG_ITEM.getKey(player.getMUser().getUserId()));
@@ -329,6 +331,8 @@ public abstract class BaseRoom extends MonoRoom {
                 Unit unit = mUnit.get(input.idAttack);
                 if (unit == null) return;
                 if (player.getClanId() != 0 && player.getClanId() == unit.getClanId()) return;
+                player.setTimeAttack();
+                player.protoStatus(StateType.PLAY_ANIM, (long)AnimationType.ATTACK.value);
                 unit.attackUnit(player);
             }
         }

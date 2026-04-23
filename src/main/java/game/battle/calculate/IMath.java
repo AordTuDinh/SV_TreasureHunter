@@ -371,11 +371,11 @@ public class IMath {
     }
 
 
-    public static int[] calculateDamage(Unit attacker, Unit target) {// crit,atk,matk
+    public static long[] calculateDamage(Unit attacker, Unit target) {// crit,atk,matk
         return calculateDamage(attacker, target,  attacker.getPoint().getAttackDamage());
     }
 
-    public static int[] calculateDamage(Unit attacker, Unit target, int atkDame) {
+    public static long[] calculateDamage(Unit attacker, Unit target, long atkDame) {
         int status = 0;
         float critPer = 1f;
         if (isCrit(attacker.getPoint().getCrit())) {
@@ -384,20 +384,20 @@ public class IMath {
             critPer = critPer / 100f <= 1.5f ? 1.5f : 1 + critPer / 100f;
         }
         int dame = calculateDamageBase(atkDame,  target, critPer, null, attacker);
-        return new int[]{status, dame};
+        return new long[]{status, dame};
     }
 
     // Hàm gốc - tất cả đều tính qua hàm này
-    public static int calculateDamageBase(int atkDame, Unit beAttacker, float critPer, PointBuff buff, Unit attacker) {
+    public static int calculateDamageBase(long atkDame, Unit beAttacker, float critPer, PointBuff buff, Unit attacker) {
         int atk = 0;
-        int doge = beAttacker.getPoint().getDoge();//miss
+        long doge = beAttacker.getPoint().getDoge();//miss
         if (doge > 0 && NumberUtil.getRandom(100) < doge) { // né
             return atk;
         }
         // Lưu ý : Sát thương chuẩn sẽ mạnh hơn giảm dame trực tiếp
         float changeDame = beAttacker.getPoint().getChangeDame();
 
-        int def = beAttacker.getPoint().getDefense();
+        long def = beAttacker.getPoint().getDefense();
         if (buff != null && buff.getPointId() == Point.DEFENSE) {
             def += buff.getValue();
         }
@@ -465,9 +465,9 @@ public class IMath {
         for (int i = 0; i < itemIds.size(); i++) {
             UserItemEquipmentEntity item = mUser.getResources().getItemEquipment((long) itemIds.get(i));
             if (item == null) continue;
-            List<Integer> itemPoint = item.getPoint();
+            List<Long> itemPoint = item.getPoint();
             for (int j = 0; j < itemPoint.size(); j += 3) {
-                addPointData(pt, itemPoint.get(j + 1), itemPoint.get(j + 2) / 100f);
+                addPointData(pt, Math.toIntExact(itemPoint.get(j + 1)), itemPoint.get(j + 2) / 100f);
             }
         }
     }

@@ -14,7 +14,7 @@ public class PointBuff {
     @Id
     int pointId;
     String name;
-    int value;
+    long value;
     long timeSeconds;
 
 
@@ -24,7 +24,7 @@ public class PointBuff {
         this.timeSeconds = timeSeconds;
     }
 
-    public PointBuff(int pointId, int value) {
+    public PointBuff(int pointId, long value) {
         this.pointId = pointId;
         this.value = value;
     }

@@ -157,7 +157,7 @@ public class UserEntity implements Serializable {
 
     Point calculatePoint(MyUser mUser) {
         Point point = mUser.getPlayer().getPoint();
-        int cacheHp = point.getCurHP();
+        long cacheHp = point.getCurHP();
         point = IMath.calculatePoint(mUser, true);
         point.setCurHp(Math.min(cacheHp, point.getMaxHp()));
         mUser.getPlayer().setPoint(point);
@@ -168,7 +168,7 @@ public class UserEntity implements Serializable {
     public Point getInitPoint(MyUser mUser) { // chỉ lấy từ lúc init player
         Point point = getCachePoint();
         // lấy lại cache hp và mp   
-        int cacheHp = point.getCurHP();
+        long cacheHp = point.getCurHP();
         // tính lại point
         point = IMath.calculatePoint(mUser, true);
         point.setCurHp(cacheHp <= 0 ? point.getMaxHp() : cacheHp);
@@ -248,16 +248,6 @@ public class UserEntity implements Serializable {
         checkRank();
         builder.setClanInfo(protocol.Pbmethod.CommonVector.newBuilder().addAString(clanName).addALong(clan).addALong(clanPosition).addALong(clanRank).addALong(clanAvatar).build());
         return builder;
-    }
-
-    public protocol.Pbmethod.PbBattleArenaUserInfo toProtoArenaInfo(int point) {
-        protocol.Pbmethod.PbBattleArenaUserInfo.Builder pb = protocol.Pbmethod.PbBattleArenaUserInfo.newBuilder();
-        pb.addAllAvatar(getAvatar());
-        pb.setLevel(level);
-        pb.setVip(vip);
-        pb.setName(name);
-        pb.setRankPoint(point);
-        return pb.build();
     }
 
 

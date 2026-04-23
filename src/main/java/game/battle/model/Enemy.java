@@ -43,7 +43,7 @@ public class Enemy extends Unit implements Serializable {
             timeRevive = System.currentTimeMillis();
             resetData();
             pos = instancePos.clone();
-            protoStatus(StateType.REVIVE, (int) (pos.x * 1000), (int) (pos.y * 1000));
+            protoStatus(StateType.REVIVE, (long) (pos.x * 1000), (long) (pos.y * 1000));
         }
     }
 
@@ -54,7 +54,7 @@ public class Enemy extends Unit implements Serializable {
     @Override
     public void protoDie(Unit killer) {
         super.protoDie(killer);
-        protoStatus(StateType.DIE, 1);
+        protoStatus(StateType.DIE, 1L);
     }
 
     @Override

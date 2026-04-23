@@ -5307,19 +5307,19 @@ public final class Pbmethod {
      */
     long getLastInputSeq();
 
-    // repeated int32 point = 16;
+    // repeated int64 point = 16;
     /**
-     * <code>repeated int32 point = 16;</code>
+     * <code>repeated int64 point = 16;</code>
      */
-    java.util.List<java.lang.Integer> getPointList();
+    java.util.List<java.lang.Long> getPointList();
     /**
-     * <code>repeated int32 point = 16;</code>
+     * <code>repeated int64 point = 16;</code>
      */
     int getPointCount();
     /**
-     * <code>repeated int32 point = 16;</code>
+     * <code>repeated int64 point = 16;</code>
      */
-    int getPoint(int index);
+    long getPoint(int index);
 
     // optional int32 userId = 17;
     /**
@@ -5491,21 +5491,21 @@ public final class Pbmethod {
             }
             case 128: {
               if (!((mutable_bitField0_ & 0x00008000) == 0x00008000)) {
-                point_ = new java.util.ArrayList<java.lang.Integer>();
+                point_ = new java.util.ArrayList<java.lang.Long>();
                 mutable_bitField0_ |= 0x00008000;
               }
-              point_.add(input.readInt32());
+              point_.add(input.readInt64());
               break;
             }
             case 130: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
               if (!((mutable_bitField0_ & 0x00008000) == 0x00008000) && input.getBytesUntilLimit() > 0) {
-                point_ = new java.util.ArrayList<java.lang.Integer>();
+                point_ = new java.util.ArrayList<java.lang.Long>();
                 mutable_bitField0_ |= 0x00008000;
               }
               while (input.getBytesUntilLimit() > 0) {
-                point_.add(input.readInt32());
+                point_.add(input.readInt64());
               }
               input.popLimit(limit);
               break;
@@ -5863,26 +5863,26 @@ public final class Pbmethod {
       return lastInputSeq_;
     }
 
-    // repeated int32 point = 16;
+    // repeated int64 point = 16;
     public static final int POINT_FIELD_NUMBER = 16;
-    private java.util.List<java.lang.Integer> point_;
+    private java.util.List<java.lang.Long> point_;
     /**
-     * <code>repeated int32 point = 16;</code>
+     * <code>repeated int64 point = 16;</code>
      */
-    public java.util.List<java.lang.Integer>
+    public java.util.List<java.lang.Long>
         getPointList() {
       return point_;
     }
     /**
-     * <code>repeated int32 point = 16;</code>
+     * <code>repeated int64 point = 16;</code>
      */
     public int getPointCount() {
       return point_.size();
     }
     /**
-     * <code>repeated int32 point = 16;</code>
+     * <code>repeated int64 point = 16;</code>
      */
-    public int getPoint(int index) {
+    public long getPoint(int index) {
       return point_.get(index);
     }
 
@@ -5979,7 +5979,7 @@ public final class Pbmethod {
         output.writeInt64(15, lastInputSeq_);
       }
       for (int i = 0; i < point_.size(); i++) {
-        output.writeInt32(16, point_.get(i));
+        output.writeInt64(16, point_.get(i));
       }
       if (((bitField0_ & 0x00004000) == 0x00004000)) {
         output.writeInt32(17, userId_);
@@ -6062,7 +6062,7 @@ public final class Pbmethod {
         int dataSize = 0;
         for (int i = 0; i < point_.size(); i++) {
           dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(point_.get(i));
+            .computeInt64SizeNoTag(point_.get(i));
         }
         size += dataSize;
         size += 2 * getPointList().size();
@@ -7216,64 +7216,64 @@ public final class Pbmethod {
         return this;
       }
 
-      // repeated int32 point = 16;
-      private java.util.List<java.lang.Integer> point_ = java.util.Collections.emptyList();
+      // repeated int64 point = 16;
+      private java.util.List<java.lang.Long> point_ = java.util.Collections.emptyList();
       private void ensurePointIsMutable() {
         if (!((bitField0_ & 0x00008000) == 0x00008000)) {
-          point_ = new java.util.ArrayList<java.lang.Integer>(point_);
+          point_ = new java.util.ArrayList<java.lang.Long>(point_);
           bitField0_ |= 0x00008000;
          }
       }
       /**
-       * <code>repeated int32 point = 16;</code>
+       * <code>repeated int64 point = 16;</code>
        */
-      public java.util.List<java.lang.Integer>
+      public java.util.List<java.lang.Long>
           getPointList() {
         return java.util.Collections.unmodifiableList(point_);
       }
       /**
-       * <code>repeated int32 point = 16;</code>
+       * <code>repeated int64 point = 16;</code>
        */
       public int getPointCount() {
         return point_.size();
       }
       /**
-       * <code>repeated int32 point = 16;</code>
+       * <code>repeated int64 point = 16;</code>
        */
-      public int getPoint(int index) {
+      public long getPoint(int index) {
         return point_.get(index);
       }
       /**
-       * <code>repeated int32 point = 16;</code>
+       * <code>repeated int64 point = 16;</code>
        */
       public Builder setPoint(
-          int index, int value) {
+          int index, long value) {
         ensurePointIsMutable();
         point_.set(index, value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 point = 16;</code>
+       * <code>repeated int64 point = 16;</code>
        */
-      public Builder addPoint(int value) {
+      public Builder addPoint(long value) {
         ensurePointIsMutable();
         point_.add(value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 point = 16;</code>
+       * <code>repeated int64 point = 16;</code>
        */
       public Builder addAllPoint(
-          java.lang.Iterable<? extends java.lang.Integer> values) {
+          java.lang.Iterable<? extends java.lang.Long> values) {
         ensurePointIsMutable();
         super.addAll(values, point_);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 point = 16;</code>
+       * <code>repeated int64 point = 16;</code>
        */
       public Builder clearPoint() {
         point_ = java.util.Collections.emptyList();
@@ -13314,17 +13314,17 @@ public final class Pbmethod {
      */
     int getStatus(int index);
 
-    // repeated int32 point = 3;
+    // repeated int64 point = 3;
     /**
-     * <code>repeated int32 point = 3;</code>
+     * <code>repeated int64 point = 3;</code>
      *
      * <pre>
      * data
      * </pre>
      */
-    java.util.List<java.lang.Integer> getPointList();
+    java.util.List<java.lang.Long> getPointList();
     /**
-     * <code>repeated int32 point = 3;</code>
+     * <code>repeated int64 point = 3;</code>
      *
      * <pre>
      * data
@@ -13332,13 +13332,13 @@ public final class Pbmethod {
      */
     int getPointCount();
     /**
-     * <code>repeated int32 point = 3;</code>
+     * <code>repeated int64 point = 3;</code>
      *
      * <pre>
      * data
      * </pre>
      */
-    int getPoint(int index);
+    long getPoint(int index);
   }
   /**
    * Protobuf type {@code pbdson.PbUnitState}
@@ -13419,21 +13419,21 @@ public final class Pbmethod {
             }
             case 24: {
               if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
-                point_ = new java.util.ArrayList<java.lang.Integer>();
+                point_ = new java.util.ArrayList<java.lang.Long>();
                 mutable_bitField0_ |= 0x00000004;
               }
-              point_.add(input.readInt32());
+              point_.add(input.readInt64());
               break;
             }
             case 26: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
               if (!((mutable_bitField0_ & 0x00000004) == 0x00000004) && input.getBytesUntilLimit() > 0) {
-                point_ = new java.util.ArrayList<java.lang.Integer>();
+                point_ = new java.util.ArrayList<java.lang.Long>();
                 mutable_bitField0_ |= 0x00000004;
               }
               while (input.getBytesUntilLimit() > 0) {
-                point_.add(input.readInt32());
+                point_.add(input.readInt64());
               }
               input.popLimit(limit);
               break;
@@ -13535,22 +13535,22 @@ public final class Pbmethod {
       return status_.get(index);
     }
 
-    // repeated int32 point = 3;
+    // repeated int64 point = 3;
     public static final int POINT_FIELD_NUMBER = 3;
-    private java.util.List<java.lang.Integer> point_;
+    private java.util.List<java.lang.Long> point_;
     /**
-     * <code>repeated int32 point = 3;</code>
+     * <code>repeated int64 point = 3;</code>
      *
      * <pre>
      * data
      * </pre>
      */
-    public java.util.List<java.lang.Integer>
+    public java.util.List<java.lang.Long>
         getPointList() {
       return point_;
     }
     /**
-     * <code>repeated int32 point = 3;</code>
+     * <code>repeated int64 point = 3;</code>
      *
      * <pre>
      * data
@@ -13560,13 +13560,13 @@ public final class Pbmethod {
       return point_.size();
     }
     /**
-     * <code>repeated int32 point = 3;</code>
+     * <code>repeated int64 point = 3;</code>
      *
      * <pre>
      * data
      * </pre>
      */
-    public int getPoint(int index) {
+    public long getPoint(int index) {
       return point_.get(index);
     }
 
@@ -13594,7 +13594,7 @@ public final class Pbmethod {
         output.writeInt32(2, status_.get(i));
       }
       for (int i = 0; i < point_.size(); i++) {
-        output.writeInt32(3, point_.get(i));
+        output.writeInt64(3, point_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -13622,7 +13622,7 @@ public final class Pbmethod {
         int dataSize = 0;
         for (int i = 0; i < point_.size(); i++) {
           dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(point_.get(i));
+            .computeInt64SizeNoTag(point_.get(i));
         }
         size += dataSize;
         size += 1 * getPointList().size();
@@ -13984,27 +13984,27 @@ public final class Pbmethod {
         return this;
       }
 
-      // repeated int32 point = 3;
-      private java.util.List<java.lang.Integer> point_ = java.util.Collections.emptyList();
+      // repeated int64 point = 3;
+      private java.util.List<java.lang.Long> point_ = java.util.Collections.emptyList();
       private void ensurePointIsMutable() {
         if (!((bitField0_ & 0x00000004) == 0x00000004)) {
-          point_ = new java.util.ArrayList<java.lang.Integer>(point_);
+          point_ = new java.util.ArrayList<java.lang.Long>(point_);
           bitField0_ |= 0x00000004;
          }
       }
       /**
-       * <code>repeated int32 point = 3;</code>
+       * <code>repeated int64 point = 3;</code>
        *
        * <pre>
        * data
        * </pre>
        */
-      public java.util.List<java.lang.Integer>
+      public java.util.List<java.lang.Long>
           getPointList() {
         return java.util.Collections.unmodifiableList(point_);
       }
       /**
-       * <code>repeated int32 point = 3;</code>
+       * <code>repeated int64 point = 3;</code>
        *
        * <pre>
        * data
@@ -14014,58 +14014,58 @@ public final class Pbmethod {
         return point_.size();
       }
       /**
-       * <code>repeated int32 point = 3;</code>
+       * <code>repeated int64 point = 3;</code>
        *
        * <pre>
        * data
        * </pre>
        */
-      public int getPoint(int index) {
+      public long getPoint(int index) {
         return point_.get(index);
       }
       /**
-       * <code>repeated int32 point = 3;</code>
+       * <code>repeated int64 point = 3;</code>
        *
        * <pre>
        * data
        * </pre>
        */
       public Builder setPoint(
-          int index, int value) {
+          int index, long value) {
         ensurePointIsMutable();
         point_.set(index, value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 point = 3;</code>
+       * <code>repeated int64 point = 3;</code>
        *
        * <pre>
        * data
        * </pre>
        */
-      public Builder addPoint(int value) {
+      public Builder addPoint(long value) {
         ensurePointIsMutable();
         point_.add(value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 point = 3;</code>
+       * <code>repeated int64 point = 3;</code>
        *
        * <pre>
        * data
        * </pre>
        */
       public Builder addAllPoint(
-          java.lang.Iterable<? extends java.lang.Integer> values) {
+          java.lang.Iterable<? extends java.lang.Long> values) {
         ensurePointIsMutable();
         super.addAll(values, point_);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 point = 3;</code>
+       * <code>repeated int64 point = 3;</code>
        *
        * <pre>
        * data
@@ -20290,3236 +20290,6 @@ public final class Pbmethod {
     // @@protoc_insertion_point(class_scope:pbdson.PbListClan)
   }
 
-  public interface PbListHistoryOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // repeated .pbdson.PbHistory history = 1;
-    /**
-     * <code>repeated .pbdson.PbHistory history = 1;</code>
-     */
-    java.util.List<protocol.Pbmethod.PbHistory> 
-        getHistoryList();
-    /**
-     * <code>repeated .pbdson.PbHistory history = 1;</code>
-     */
-    protocol.Pbmethod.PbHistory getHistory(int index);
-    /**
-     * <code>repeated .pbdson.PbHistory history = 1;</code>
-     */
-    int getHistoryCount();
-    /**
-     * <code>repeated .pbdson.PbHistory history = 1;</code>
-     */
-    java.util.List<? extends protocol.Pbmethod.PbHistoryOrBuilder> 
-        getHistoryOrBuilderList();
-    /**
-     * <code>repeated .pbdson.PbHistory history = 1;</code>
-     */
-    protocol.Pbmethod.PbHistoryOrBuilder getHistoryOrBuilder(
-        int index);
-  }
-  /**
-   * Protobuf type {@code pbdson.PbListHistory}
-   */
-  public static final class PbListHistory extends
-      com.google.protobuf.GeneratedMessage
-      implements PbListHistoryOrBuilder {
-    // Use PbListHistory.newBuilder() to construct.
-    private PbListHistory(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private PbListHistory(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final PbListHistory defaultInstance;
-    public static PbListHistory getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public PbListHistory getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private PbListHistory(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 10: {
-              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-                history_ = new java.util.ArrayList<protocol.Pbmethod.PbHistory>();
-                mutable_bitField0_ |= 0x00000001;
-              }
-              history_.add(input.readMessage(protocol.Pbmethod.PbHistory.PARSER, extensionRegistry));
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-          history_ = java.util.Collections.unmodifiableList(history_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return protocol.Pbmethod.internal_static_pbdson_PbListHistory_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return protocol.Pbmethod.internal_static_pbdson_PbListHistory_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              protocol.Pbmethod.PbListHistory.class, protocol.Pbmethod.PbListHistory.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<PbListHistory> PARSER =
-        new com.google.protobuf.AbstractParser<PbListHistory>() {
-      public PbListHistory parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PbListHistory(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<PbListHistory> getParserForType() {
-      return PARSER;
-    }
-
-    // repeated .pbdson.PbHistory history = 1;
-    public static final int HISTORY_FIELD_NUMBER = 1;
-    private java.util.List<protocol.Pbmethod.PbHistory> history_;
-    /**
-     * <code>repeated .pbdson.PbHistory history = 1;</code>
-     */
-    public java.util.List<protocol.Pbmethod.PbHistory> getHistoryList() {
-      return history_;
-    }
-    /**
-     * <code>repeated .pbdson.PbHistory history = 1;</code>
-     */
-    public java.util.List<? extends protocol.Pbmethod.PbHistoryOrBuilder> 
-        getHistoryOrBuilderList() {
-      return history_;
-    }
-    /**
-     * <code>repeated .pbdson.PbHistory history = 1;</code>
-     */
-    public int getHistoryCount() {
-      return history_.size();
-    }
-    /**
-     * <code>repeated .pbdson.PbHistory history = 1;</code>
-     */
-    public protocol.Pbmethod.PbHistory getHistory(int index) {
-      return history_.get(index);
-    }
-    /**
-     * <code>repeated .pbdson.PbHistory history = 1;</code>
-     */
-    public protocol.Pbmethod.PbHistoryOrBuilder getHistoryOrBuilder(
-        int index) {
-      return history_.get(index);
-    }
-
-    private void initFields() {
-      history_ = java.util.Collections.emptyList();
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      for (int i = 0; i < history_.size(); i++) {
-        output.writeMessage(1, history_.get(i));
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      for (int i = 0; i < history_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, history_.get(i));
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static protocol.Pbmethod.PbListHistory parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbListHistory parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbListHistory parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbListHistory parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbListHistory parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbListHistory parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbListHistory parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static protocol.Pbmethod.PbListHistory parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbListHistory parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbListHistory parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(protocol.Pbmethod.PbListHistory prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code pbdson.PbListHistory}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements protocol.Pbmethod.PbListHistoryOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return protocol.Pbmethod.internal_static_pbdson_PbListHistory_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return protocol.Pbmethod.internal_static_pbdson_PbListHistory_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                protocol.Pbmethod.PbListHistory.class, protocol.Pbmethod.PbListHistory.Builder.class);
-      }
-
-      // Construct using protocol.Pbmethod.PbListHistory.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getHistoryFieldBuilder();
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        if (historyBuilder_ == null) {
-          history_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
-        } else {
-          historyBuilder_.clear();
-        }
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return protocol.Pbmethod.internal_static_pbdson_PbListHistory_descriptor;
-      }
-
-      public protocol.Pbmethod.PbListHistory getDefaultInstanceForType() {
-        return protocol.Pbmethod.PbListHistory.getDefaultInstance();
-      }
-
-      public protocol.Pbmethod.PbListHistory build() {
-        protocol.Pbmethod.PbListHistory result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public protocol.Pbmethod.PbListHistory buildPartial() {
-        protocol.Pbmethod.PbListHistory result = new protocol.Pbmethod.PbListHistory(this);
-        int from_bitField0_ = bitField0_;
-        if (historyBuilder_ == null) {
-          if (((bitField0_ & 0x00000001) == 0x00000001)) {
-            history_ = java.util.Collections.unmodifiableList(history_);
-            bitField0_ = (bitField0_ & ~0x00000001);
-          }
-          result.history_ = history_;
-        } else {
-          result.history_ = historyBuilder_.build();
-        }
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof protocol.Pbmethod.PbListHistory) {
-          return mergeFrom((protocol.Pbmethod.PbListHistory)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(protocol.Pbmethod.PbListHistory other) {
-        if (other == protocol.Pbmethod.PbListHistory.getDefaultInstance()) return this;
-        if (historyBuilder_ == null) {
-          if (!other.history_.isEmpty()) {
-            if (history_.isEmpty()) {
-              history_ = other.history_;
-              bitField0_ = (bitField0_ & ~0x00000001);
-            } else {
-              ensureHistoryIsMutable();
-              history_.addAll(other.history_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.history_.isEmpty()) {
-            if (historyBuilder_.isEmpty()) {
-              historyBuilder_.dispose();
-              historyBuilder_ = null;
-              history_ = other.history_;
-              bitField0_ = (bitField0_ & ~0x00000001);
-              historyBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getHistoryFieldBuilder() : null;
-            } else {
-              historyBuilder_.addAllMessages(other.history_);
-            }
-          }
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        protocol.Pbmethod.PbListHistory parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (protocol.Pbmethod.PbListHistory) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // repeated .pbdson.PbHistory history = 1;
-      private java.util.List<protocol.Pbmethod.PbHistory> history_ =
-        java.util.Collections.emptyList();
-      private void ensureHistoryIsMutable() {
-        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          history_ = new java.util.ArrayList<protocol.Pbmethod.PbHistory>(history_);
-          bitField0_ |= 0x00000001;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbHistory, protocol.Pbmethod.PbHistory.Builder, protocol.Pbmethod.PbHistoryOrBuilder> historyBuilder_;
-
-      /**
-       * <code>repeated .pbdson.PbHistory history = 1;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbHistory> getHistoryList() {
-        if (historyBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(history_);
-        } else {
-          return historyBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbHistory history = 1;</code>
-       */
-      public int getHistoryCount() {
-        if (historyBuilder_ == null) {
-          return history_.size();
-        } else {
-          return historyBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbHistory history = 1;</code>
-       */
-      public protocol.Pbmethod.PbHistory getHistory(int index) {
-        if (historyBuilder_ == null) {
-          return history_.get(index);
-        } else {
-          return historyBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbHistory history = 1;</code>
-       */
-      public Builder setHistory(
-          int index, protocol.Pbmethod.PbHistory value) {
-        if (historyBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureHistoryIsMutable();
-          history_.set(index, value);
-          onChanged();
-        } else {
-          historyBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbHistory history = 1;</code>
-       */
-      public Builder setHistory(
-          int index, protocol.Pbmethod.PbHistory.Builder builderForValue) {
-        if (historyBuilder_ == null) {
-          ensureHistoryIsMutable();
-          history_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          historyBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbHistory history = 1;</code>
-       */
-      public Builder addHistory(protocol.Pbmethod.PbHistory value) {
-        if (historyBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureHistoryIsMutable();
-          history_.add(value);
-          onChanged();
-        } else {
-          historyBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbHistory history = 1;</code>
-       */
-      public Builder addHistory(
-          int index, protocol.Pbmethod.PbHistory value) {
-        if (historyBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureHistoryIsMutable();
-          history_.add(index, value);
-          onChanged();
-        } else {
-          historyBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbHistory history = 1;</code>
-       */
-      public Builder addHistory(
-          protocol.Pbmethod.PbHistory.Builder builderForValue) {
-        if (historyBuilder_ == null) {
-          ensureHistoryIsMutable();
-          history_.add(builderForValue.build());
-          onChanged();
-        } else {
-          historyBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbHistory history = 1;</code>
-       */
-      public Builder addHistory(
-          int index, protocol.Pbmethod.PbHistory.Builder builderForValue) {
-        if (historyBuilder_ == null) {
-          ensureHistoryIsMutable();
-          history_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          historyBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbHistory history = 1;</code>
-       */
-      public Builder addAllHistory(
-          java.lang.Iterable<? extends protocol.Pbmethod.PbHistory> values) {
-        if (historyBuilder_ == null) {
-          ensureHistoryIsMutable();
-          super.addAll(values, history_);
-          onChanged();
-        } else {
-          historyBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbHistory history = 1;</code>
-       */
-      public Builder clearHistory() {
-        if (historyBuilder_ == null) {
-          history_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
-          onChanged();
-        } else {
-          historyBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbHistory history = 1;</code>
-       */
-      public Builder removeHistory(int index) {
-        if (historyBuilder_ == null) {
-          ensureHistoryIsMutable();
-          history_.remove(index);
-          onChanged();
-        } else {
-          historyBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbHistory history = 1;</code>
-       */
-      public protocol.Pbmethod.PbHistory.Builder getHistoryBuilder(
-          int index) {
-        return getHistoryFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .pbdson.PbHistory history = 1;</code>
-       */
-      public protocol.Pbmethod.PbHistoryOrBuilder getHistoryOrBuilder(
-          int index) {
-        if (historyBuilder_ == null) {
-          return history_.get(index);  } else {
-          return historyBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbHistory history = 1;</code>
-       */
-      public java.util.List<? extends protocol.Pbmethod.PbHistoryOrBuilder> 
-           getHistoryOrBuilderList() {
-        if (historyBuilder_ != null) {
-          return historyBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(history_);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbHistory history = 1;</code>
-       */
-      public protocol.Pbmethod.PbHistory.Builder addHistoryBuilder() {
-        return getHistoryFieldBuilder().addBuilder(
-            protocol.Pbmethod.PbHistory.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbHistory history = 1;</code>
-       */
-      public protocol.Pbmethod.PbHistory.Builder addHistoryBuilder(
-          int index) {
-        return getHistoryFieldBuilder().addBuilder(
-            index, protocol.Pbmethod.PbHistory.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbHistory history = 1;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbHistory.Builder> 
-           getHistoryBuilderList() {
-        return getHistoryFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbHistory, protocol.Pbmethod.PbHistory.Builder, protocol.Pbmethod.PbHistoryOrBuilder> 
-          getHistoryFieldBuilder() {
-        if (historyBuilder_ == null) {
-          historyBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              protocol.Pbmethod.PbHistory, protocol.Pbmethod.PbHistory.Builder, protocol.Pbmethod.PbHistoryOrBuilder>(
-                  history_,
-                  ((bitField0_ & 0x00000001) == 0x00000001),
-                  getParentForChildren(),
-                  isClean());
-          history_ = null;
-        }
-        return historyBuilder_;
-      }
-
-      // @@protoc_insertion_point(builder_scope:pbdson.PbListHistory)
-    }
-
-    static {
-      defaultInstance = new PbListHistory(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:pbdson.PbListHistory)
-  }
-
-  public interface PbHistoryOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // optional bool isAttack = 1;
-    /**
-     * <code>optional bool isAttack = 1;</code>
-     */
-    boolean hasIsAttack();
-    /**
-     * <code>optional bool isAttack = 1;</code>
-     */
-    boolean getIsAttack();
-
-    // optional int32 targetId = 2;
-    /**
-     * <code>optional int32 targetId = 2;</code>
-     */
-    boolean hasTargetId();
-    /**
-     * <code>optional int32 targetId = 2;</code>
-     */
-    int getTargetId();
-
-    // optional int32 status = 3;
-    /**
-     * <code>optional int32 status = 3;</code>
-     */
-    boolean hasStatus();
-    /**
-     * <code>optional int32 status = 3;</code>
-     */
-    int getStatus();
-
-    // optional int32 timeAttack = 4;
-    /**
-     * <code>optional int32 timeAttack = 4;</code>
-     */
-    boolean hasTimeAttack();
-    /**
-     * <code>optional int32 timeAttack = 4;</code>
-     */
-    int getTimeAttack();
-
-    // optional int32 point1 = 5;
-    /**
-     * <code>optional int32 point1 = 5;</code>
-     */
-    boolean hasPoint1();
-    /**
-     * <code>optional int32 point1 = 5;</code>
-     */
-    int getPoint1();
-
-    // optional int32 point2 = 6;
-    /**
-     * <code>optional int32 point2 = 6;</code>
-     */
-    boolean hasPoint2();
-    /**
-     * <code>optional int32 point2 = 6;</code>
-     */
-    int getPoint2();
-
-    // optional int64 time = 7;
-    /**
-     * <code>optional int64 time = 7;</code>
-     */
-    boolean hasTime();
-    /**
-     * <code>optional int64 time = 7;</code>
-     */
-    long getTime();
-
-    // optional .pbdson.PbUser user = 8;
-    /**
-     * <code>optional .pbdson.PbUser user = 8;</code>
-     */
-    boolean hasUser();
-    /**
-     * <code>optional .pbdson.PbUser user = 8;</code>
-     */
-    protocol.Pbmethod.PbUser getUser();
-    /**
-     * <code>optional .pbdson.PbUser user = 8;</code>
-     */
-    protocol.Pbmethod.PbUserOrBuilder getUserOrBuilder();
-
-    // optional int32 myPoint = 9;
-    /**
-     * <code>optional int32 myPoint = 9;</code>
-     */
-    boolean hasMyPoint();
-    /**
-     * <code>optional int32 myPoint = 9;</code>
-     */
-    int getMyPoint();
-  }
-  /**
-   * Protobuf type {@code pbdson.PbHistory}
-   */
-  public static final class PbHistory extends
-      com.google.protobuf.GeneratedMessage
-      implements PbHistoryOrBuilder {
-    // Use PbHistory.newBuilder() to construct.
-    private PbHistory(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private PbHistory(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final PbHistory defaultInstance;
-    public static PbHistory getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public PbHistory getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private PbHistory(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-              bitField0_ |= 0x00000001;
-              isAttack_ = input.readBool();
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              targetId_ = input.readInt32();
-              break;
-            }
-            case 24: {
-              bitField0_ |= 0x00000004;
-              status_ = input.readInt32();
-              break;
-            }
-            case 32: {
-              bitField0_ |= 0x00000008;
-              timeAttack_ = input.readInt32();
-              break;
-            }
-            case 40: {
-              bitField0_ |= 0x00000010;
-              point1_ = input.readInt32();
-              break;
-            }
-            case 48: {
-              bitField0_ |= 0x00000020;
-              point2_ = input.readInt32();
-              break;
-            }
-            case 56: {
-              bitField0_ |= 0x00000040;
-              time_ = input.readInt64();
-              break;
-            }
-            case 66: {
-              protocol.Pbmethod.PbUser.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000080) == 0x00000080)) {
-                subBuilder = user_.toBuilder();
-              }
-              user_ = input.readMessage(protocol.Pbmethod.PbUser.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(user_);
-                user_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000080;
-              break;
-            }
-            case 72: {
-              bitField0_ |= 0x00000100;
-              myPoint_ = input.readInt32();
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return protocol.Pbmethod.internal_static_pbdson_PbHistory_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return protocol.Pbmethod.internal_static_pbdson_PbHistory_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              protocol.Pbmethod.PbHistory.class, protocol.Pbmethod.PbHistory.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<PbHistory> PARSER =
-        new com.google.protobuf.AbstractParser<PbHistory>() {
-      public PbHistory parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PbHistory(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<PbHistory> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    // optional bool isAttack = 1;
-    public static final int ISATTACK_FIELD_NUMBER = 1;
-    private boolean isAttack_;
-    /**
-     * <code>optional bool isAttack = 1;</code>
-     */
-    public boolean hasIsAttack() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>optional bool isAttack = 1;</code>
-     */
-    public boolean getIsAttack() {
-      return isAttack_;
-    }
-
-    // optional int32 targetId = 2;
-    public static final int TARGETID_FIELD_NUMBER = 2;
-    private int targetId_;
-    /**
-     * <code>optional int32 targetId = 2;</code>
-     */
-    public boolean hasTargetId() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>optional int32 targetId = 2;</code>
-     */
-    public int getTargetId() {
-      return targetId_;
-    }
-
-    // optional int32 status = 3;
-    public static final int STATUS_FIELD_NUMBER = 3;
-    private int status_;
-    /**
-     * <code>optional int32 status = 3;</code>
-     */
-    public boolean hasStatus() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>optional int32 status = 3;</code>
-     */
-    public int getStatus() {
-      return status_;
-    }
-
-    // optional int32 timeAttack = 4;
-    public static final int TIMEATTACK_FIELD_NUMBER = 4;
-    private int timeAttack_;
-    /**
-     * <code>optional int32 timeAttack = 4;</code>
-     */
-    public boolean hasTimeAttack() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>optional int32 timeAttack = 4;</code>
-     */
-    public int getTimeAttack() {
-      return timeAttack_;
-    }
-
-    // optional int32 point1 = 5;
-    public static final int POINT1_FIELD_NUMBER = 5;
-    private int point1_;
-    /**
-     * <code>optional int32 point1 = 5;</code>
-     */
-    public boolean hasPoint1() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    /**
-     * <code>optional int32 point1 = 5;</code>
-     */
-    public int getPoint1() {
-      return point1_;
-    }
-
-    // optional int32 point2 = 6;
-    public static final int POINT2_FIELD_NUMBER = 6;
-    private int point2_;
-    /**
-     * <code>optional int32 point2 = 6;</code>
-     */
-    public boolean hasPoint2() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
-    }
-    /**
-     * <code>optional int32 point2 = 6;</code>
-     */
-    public int getPoint2() {
-      return point2_;
-    }
-
-    // optional int64 time = 7;
-    public static final int TIME_FIELD_NUMBER = 7;
-    private long time_;
-    /**
-     * <code>optional int64 time = 7;</code>
-     */
-    public boolean hasTime() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
-    }
-    /**
-     * <code>optional int64 time = 7;</code>
-     */
-    public long getTime() {
-      return time_;
-    }
-
-    // optional .pbdson.PbUser user = 8;
-    public static final int USER_FIELD_NUMBER = 8;
-    private protocol.Pbmethod.PbUser user_;
-    /**
-     * <code>optional .pbdson.PbUser user = 8;</code>
-     */
-    public boolean hasUser() {
-      return ((bitField0_ & 0x00000080) == 0x00000080);
-    }
-    /**
-     * <code>optional .pbdson.PbUser user = 8;</code>
-     */
-    public protocol.Pbmethod.PbUser getUser() {
-      return user_;
-    }
-    /**
-     * <code>optional .pbdson.PbUser user = 8;</code>
-     */
-    public protocol.Pbmethod.PbUserOrBuilder getUserOrBuilder() {
-      return user_;
-    }
-
-    // optional int32 myPoint = 9;
-    public static final int MYPOINT_FIELD_NUMBER = 9;
-    private int myPoint_;
-    /**
-     * <code>optional int32 myPoint = 9;</code>
-     */
-    public boolean hasMyPoint() {
-      return ((bitField0_ & 0x00000100) == 0x00000100);
-    }
-    /**
-     * <code>optional int32 myPoint = 9;</code>
-     */
-    public int getMyPoint() {
-      return myPoint_;
-    }
-
-    private void initFields() {
-      isAttack_ = false;
-      targetId_ = 0;
-      status_ = 0;
-      timeAttack_ = 0;
-      point1_ = 0;
-      point2_ = 0;
-      time_ = 0L;
-      user_ = protocol.Pbmethod.PbUser.getDefaultInstance();
-      myPoint_ = 0;
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBool(1, isAttack_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt32(2, targetId_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeInt32(3, status_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeInt32(4, timeAttack_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeInt32(5, point1_);
-      }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeInt32(6, point2_);
-      }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeInt64(7, time_);
-      }
-      if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        output.writeMessage(8, user_);
-      }
-      if (((bitField0_ & 0x00000100) == 0x00000100)) {
-        output.writeInt32(9, myPoint_);
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(1, isAttack_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, targetId_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, status_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(4, timeAttack_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(5, point1_);
-      }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(6, point2_);
-      }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(7, time_);
-      }
-      if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(8, user_);
-      }
-      if (((bitField0_ & 0x00000100) == 0x00000100)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(9, myPoint_);
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static protocol.Pbmethod.PbHistory parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbHistory parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbHistory parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbHistory parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbHistory parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbHistory parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbHistory parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static protocol.Pbmethod.PbHistory parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbHistory parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbHistory parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(protocol.Pbmethod.PbHistory prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code pbdson.PbHistory}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements protocol.Pbmethod.PbHistoryOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return protocol.Pbmethod.internal_static_pbdson_PbHistory_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return protocol.Pbmethod.internal_static_pbdson_PbHistory_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                protocol.Pbmethod.PbHistory.class, protocol.Pbmethod.PbHistory.Builder.class);
-      }
-
-      // Construct using protocol.Pbmethod.PbHistory.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getUserFieldBuilder();
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        isAttack_ = false;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        targetId_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        status_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000004);
-        timeAttack_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000008);
-        point1_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000010);
-        point2_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000020);
-        time_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000040);
-        if (userBuilder_ == null) {
-          user_ = protocol.Pbmethod.PbUser.getDefaultInstance();
-        } else {
-          userBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000080);
-        myPoint_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000100);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return protocol.Pbmethod.internal_static_pbdson_PbHistory_descriptor;
-      }
-
-      public protocol.Pbmethod.PbHistory getDefaultInstanceForType() {
-        return protocol.Pbmethod.PbHistory.getDefaultInstance();
-      }
-
-      public protocol.Pbmethod.PbHistory build() {
-        protocol.Pbmethod.PbHistory result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public protocol.Pbmethod.PbHistory buildPartial() {
-        protocol.Pbmethod.PbHistory result = new protocol.Pbmethod.PbHistory(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.isAttack_ = isAttack_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.targetId_ = targetId_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.status_ = status_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.timeAttack_ = timeAttack_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        result.point1_ = point1_;
-        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
-          to_bitField0_ |= 0x00000020;
-        }
-        result.point2_ = point2_;
-        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
-          to_bitField0_ |= 0x00000040;
-        }
-        result.time_ = time_;
-        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
-          to_bitField0_ |= 0x00000080;
-        }
-        if (userBuilder_ == null) {
-          result.user_ = user_;
-        } else {
-          result.user_ = userBuilder_.build();
-        }
-        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
-          to_bitField0_ |= 0x00000100;
-        }
-        result.myPoint_ = myPoint_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof protocol.Pbmethod.PbHistory) {
-          return mergeFrom((protocol.Pbmethod.PbHistory)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(protocol.Pbmethod.PbHistory other) {
-        if (other == protocol.Pbmethod.PbHistory.getDefaultInstance()) return this;
-        if (other.hasIsAttack()) {
-          setIsAttack(other.getIsAttack());
-        }
-        if (other.hasTargetId()) {
-          setTargetId(other.getTargetId());
-        }
-        if (other.hasStatus()) {
-          setStatus(other.getStatus());
-        }
-        if (other.hasTimeAttack()) {
-          setTimeAttack(other.getTimeAttack());
-        }
-        if (other.hasPoint1()) {
-          setPoint1(other.getPoint1());
-        }
-        if (other.hasPoint2()) {
-          setPoint2(other.getPoint2());
-        }
-        if (other.hasTime()) {
-          setTime(other.getTime());
-        }
-        if (other.hasUser()) {
-          mergeUser(other.getUser());
-        }
-        if (other.hasMyPoint()) {
-          setMyPoint(other.getMyPoint());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        protocol.Pbmethod.PbHistory parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (protocol.Pbmethod.PbHistory) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // optional bool isAttack = 1;
-      private boolean isAttack_ ;
-      /**
-       * <code>optional bool isAttack = 1;</code>
-       */
-      public boolean hasIsAttack() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>optional bool isAttack = 1;</code>
-       */
-      public boolean getIsAttack() {
-        return isAttack_;
-      }
-      /**
-       * <code>optional bool isAttack = 1;</code>
-       */
-      public Builder setIsAttack(boolean value) {
-        bitField0_ |= 0x00000001;
-        isAttack_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional bool isAttack = 1;</code>
-       */
-      public Builder clearIsAttack() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        isAttack_ = false;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 targetId = 2;
-      private int targetId_ ;
-      /**
-       * <code>optional int32 targetId = 2;</code>
-       */
-      public boolean hasTargetId() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>optional int32 targetId = 2;</code>
-       */
-      public int getTargetId() {
-        return targetId_;
-      }
-      /**
-       * <code>optional int32 targetId = 2;</code>
-       */
-      public Builder setTargetId(int value) {
-        bitField0_ |= 0x00000002;
-        targetId_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 targetId = 2;</code>
-       */
-      public Builder clearTargetId() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        targetId_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 status = 3;
-      private int status_ ;
-      /**
-       * <code>optional int32 status = 3;</code>
-       */
-      public boolean hasStatus() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional int32 status = 3;</code>
-       */
-      public int getStatus() {
-        return status_;
-      }
-      /**
-       * <code>optional int32 status = 3;</code>
-       */
-      public Builder setStatus(int value) {
-        bitField0_ |= 0x00000004;
-        status_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 status = 3;</code>
-       */
-      public Builder clearStatus() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        status_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 timeAttack = 4;
-      private int timeAttack_ ;
-      /**
-       * <code>optional int32 timeAttack = 4;</code>
-       */
-      public boolean hasTimeAttack() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      /**
-       * <code>optional int32 timeAttack = 4;</code>
-       */
-      public int getTimeAttack() {
-        return timeAttack_;
-      }
-      /**
-       * <code>optional int32 timeAttack = 4;</code>
-       */
-      public Builder setTimeAttack(int value) {
-        bitField0_ |= 0x00000008;
-        timeAttack_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 timeAttack = 4;</code>
-       */
-      public Builder clearTimeAttack() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        timeAttack_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 point1 = 5;
-      private int point1_ ;
-      /**
-       * <code>optional int32 point1 = 5;</code>
-       */
-      public boolean hasPoint1() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      /**
-       * <code>optional int32 point1 = 5;</code>
-       */
-      public int getPoint1() {
-        return point1_;
-      }
-      /**
-       * <code>optional int32 point1 = 5;</code>
-       */
-      public Builder setPoint1(int value) {
-        bitField0_ |= 0x00000010;
-        point1_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 point1 = 5;</code>
-       */
-      public Builder clearPoint1() {
-        bitField0_ = (bitField0_ & ~0x00000010);
-        point1_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 point2 = 6;
-      private int point2_ ;
-      /**
-       * <code>optional int32 point2 = 6;</code>
-       */
-      public boolean hasPoint2() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
-      }
-      /**
-       * <code>optional int32 point2 = 6;</code>
-       */
-      public int getPoint2() {
-        return point2_;
-      }
-      /**
-       * <code>optional int32 point2 = 6;</code>
-       */
-      public Builder setPoint2(int value) {
-        bitField0_ |= 0x00000020;
-        point2_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 point2 = 6;</code>
-       */
-      public Builder clearPoint2() {
-        bitField0_ = (bitField0_ & ~0x00000020);
-        point2_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int64 time = 7;
-      private long time_ ;
-      /**
-       * <code>optional int64 time = 7;</code>
-       */
-      public boolean hasTime() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
-      }
-      /**
-       * <code>optional int64 time = 7;</code>
-       */
-      public long getTime() {
-        return time_;
-      }
-      /**
-       * <code>optional int64 time = 7;</code>
-       */
-      public Builder setTime(long value) {
-        bitField0_ |= 0x00000040;
-        time_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int64 time = 7;</code>
-       */
-      public Builder clearTime() {
-        bitField0_ = (bitField0_ & ~0x00000040);
-        time_ = 0L;
-        onChanged();
-        return this;
-      }
-
-      // optional .pbdson.PbUser user = 8;
-      private protocol.Pbmethod.PbUser user_ = protocol.Pbmethod.PbUser.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
-          protocol.Pbmethod.PbUser, protocol.Pbmethod.PbUser.Builder, protocol.Pbmethod.PbUserOrBuilder> userBuilder_;
-      /**
-       * <code>optional .pbdson.PbUser user = 8;</code>
-       */
-      public boolean hasUser() {
-        return ((bitField0_ & 0x00000080) == 0x00000080);
-      }
-      /**
-       * <code>optional .pbdson.PbUser user = 8;</code>
-       */
-      public protocol.Pbmethod.PbUser getUser() {
-        if (userBuilder_ == null) {
-          return user_;
-        } else {
-          return userBuilder_.getMessage();
-        }
-      }
-      /**
-       * <code>optional .pbdson.PbUser user = 8;</code>
-       */
-      public Builder setUser(protocol.Pbmethod.PbUser value) {
-        if (userBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          user_ = value;
-          onChanged();
-        } else {
-          userBuilder_.setMessage(value);
-        }
-        bitField0_ |= 0x00000080;
-        return this;
-      }
-      /**
-       * <code>optional .pbdson.PbUser user = 8;</code>
-       */
-      public Builder setUser(
-          protocol.Pbmethod.PbUser.Builder builderForValue) {
-        if (userBuilder_ == null) {
-          user_ = builderForValue.build();
-          onChanged();
-        } else {
-          userBuilder_.setMessage(builderForValue.build());
-        }
-        bitField0_ |= 0x00000080;
-        return this;
-      }
-      /**
-       * <code>optional .pbdson.PbUser user = 8;</code>
-       */
-      public Builder mergeUser(protocol.Pbmethod.PbUser value) {
-        if (userBuilder_ == null) {
-          if (((bitField0_ & 0x00000080) == 0x00000080) &&
-              user_ != protocol.Pbmethod.PbUser.getDefaultInstance()) {
-            user_ =
-              protocol.Pbmethod.PbUser.newBuilder(user_).mergeFrom(value).buildPartial();
-          } else {
-            user_ = value;
-          }
-          onChanged();
-        } else {
-          userBuilder_.mergeFrom(value);
-        }
-        bitField0_ |= 0x00000080;
-        return this;
-      }
-      /**
-       * <code>optional .pbdson.PbUser user = 8;</code>
-       */
-      public Builder clearUser() {
-        if (userBuilder_ == null) {
-          user_ = protocol.Pbmethod.PbUser.getDefaultInstance();
-          onChanged();
-        } else {
-          userBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000080);
-        return this;
-      }
-      /**
-       * <code>optional .pbdson.PbUser user = 8;</code>
-       */
-      public protocol.Pbmethod.PbUser.Builder getUserBuilder() {
-        bitField0_ |= 0x00000080;
-        onChanged();
-        return getUserFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>optional .pbdson.PbUser user = 8;</code>
-       */
-      public protocol.Pbmethod.PbUserOrBuilder getUserOrBuilder() {
-        if (userBuilder_ != null) {
-          return userBuilder_.getMessageOrBuilder();
-        } else {
-          return user_;
-        }
-      }
-      /**
-       * <code>optional .pbdson.PbUser user = 8;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilder<
-          protocol.Pbmethod.PbUser, protocol.Pbmethod.PbUser.Builder, protocol.Pbmethod.PbUserOrBuilder> 
-          getUserFieldBuilder() {
-        if (userBuilder_ == null) {
-          userBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              protocol.Pbmethod.PbUser, protocol.Pbmethod.PbUser.Builder, protocol.Pbmethod.PbUserOrBuilder>(
-                  user_,
-                  getParentForChildren(),
-                  isClean());
-          user_ = null;
-        }
-        return userBuilder_;
-      }
-
-      // optional int32 myPoint = 9;
-      private int myPoint_ ;
-      /**
-       * <code>optional int32 myPoint = 9;</code>
-       */
-      public boolean hasMyPoint() {
-        return ((bitField0_ & 0x00000100) == 0x00000100);
-      }
-      /**
-       * <code>optional int32 myPoint = 9;</code>
-       */
-      public int getMyPoint() {
-        return myPoint_;
-      }
-      /**
-       * <code>optional int32 myPoint = 9;</code>
-       */
-      public Builder setMyPoint(int value) {
-        bitField0_ |= 0x00000100;
-        myPoint_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 myPoint = 9;</code>
-       */
-      public Builder clearMyPoint() {
-        bitField0_ = (bitField0_ & ~0x00000100);
-        myPoint_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:pbdson.PbHistory)
-    }
-
-    static {
-      defaultInstance = new PbHistory(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:pbdson.PbHistory)
-  }
-
-  public interface PbArenaOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // optional int64 timeRemain = 1;
-    /**
-     * <code>optional int64 timeRemain = 1;</code>
-     */
-    boolean hasTimeRemain();
-    /**
-     * <code>optional int64 timeRemain = 1;</code>
-     */
-    long getTimeRemain();
-
-    // optional int32 myRank = 2;
-    /**
-     * <code>optional int32 myRank = 2;</code>
-     */
-    boolean hasMyRank();
-    /**
-     * <code>optional int32 myRank = 2;</code>
-     */
-    int getMyRank();
-
-    // optional int32 myPoint = 3;
-    /**
-     * <code>optional int32 myPoint = 3;</code>
-     */
-    boolean hasMyPoint();
-    /**
-     * <code>optional int32 myPoint = 3;</code>
-     */
-    int getMyPoint();
-
-    // repeated .pbdson.PbUser opponents = 4;
-    /**
-     * <code>repeated .pbdson.PbUser opponents = 4;</code>
-     */
-    java.util.List<protocol.Pbmethod.PbUser> 
-        getOpponentsList();
-    /**
-     * <code>repeated .pbdson.PbUser opponents = 4;</code>
-     */
-    protocol.Pbmethod.PbUser getOpponents(int index);
-    /**
-     * <code>repeated .pbdson.PbUser opponents = 4;</code>
-     */
-    int getOpponentsCount();
-    /**
-     * <code>repeated .pbdson.PbUser opponents = 4;</code>
-     */
-    java.util.List<? extends protocol.Pbmethod.PbUserOrBuilder> 
-        getOpponentsOrBuilderList();
-    /**
-     * <code>repeated .pbdson.PbUser opponents = 4;</code>
-     */
-    protocol.Pbmethod.PbUserOrBuilder getOpponentsOrBuilder(
-        int index);
-
-    // optional int32 feeTicket = 5;
-    /**
-     * <code>optional int32 feeTicket = 5;</code>
-     */
-    boolean hasFeeTicket();
-    /**
-     * <code>optional int32 feeTicket = 5;</code>
-     */
-    int getFeeTicket();
-
-    // optional int32 curBuyTicket = 6;
-    /**
-     * <code>optional int32 curBuyTicket = 6;</code>
-     */
-    boolean hasCurBuyTicket();
-    /**
-     * <code>optional int32 curBuyTicket = 6;</code>
-     */
-    int getCurBuyTicket();
-
-    // optional int32 maxBuyTicket = 7;
-    /**
-     * <code>optional int32 maxBuyTicket = 7;</code>
-     */
-    boolean hasMaxBuyTicket();
-    /**
-     * <code>optional int32 maxBuyTicket = 7;</code>
-     */
-    int getMaxBuyTicket();
-
-    // optional bool hasDefense = 8;
-    /**
-     * <code>optional bool hasDefense = 8;</code>
-     */
-    boolean hasHasDefense();
-    /**
-     * <code>optional bool hasDefense = 8;</code>
-     */
-    boolean getHasDefense();
-
-    // repeated int32 defenseTeam = 9;
-    /**
-     * <code>repeated int32 defenseTeam = 9;</code>
-     */
-    java.util.List<java.lang.Integer> getDefenseTeamList();
-    /**
-     * <code>repeated int32 defenseTeam = 9;</code>
-     */
-    int getDefenseTeamCount();
-    /**
-     * <code>repeated int32 defenseTeam = 9;</code>
-     */
-    int getDefenseTeam(int index);
-  }
-  /**
-   * Protobuf type {@code pbdson.PbArena}
-   */
-  public static final class PbArena extends
-      com.google.protobuf.GeneratedMessage
-      implements PbArenaOrBuilder {
-    // Use PbArena.newBuilder() to construct.
-    private PbArena(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private PbArena(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final PbArena defaultInstance;
-    public static PbArena getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public PbArena getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private PbArena(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-              bitField0_ |= 0x00000001;
-              timeRemain_ = input.readInt64();
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              myRank_ = input.readInt32();
-              break;
-            }
-            case 24: {
-              bitField0_ |= 0x00000004;
-              myPoint_ = input.readInt32();
-              break;
-            }
-            case 34: {
-              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
-                opponents_ = new java.util.ArrayList<protocol.Pbmethod.PbUser>();
-                mutable_bitField0_ |= 0x00000008;
-              }
-              opponents_.add(input.readMessage(protocol.Pbmethod.PbUser.PARSER, extensionRegistry));
-              break;
-            }
-            case 40: {
-              bitField0_ |= 0x00000008;
-              feeTicket_ = input.readInt32();
-              break;
-            }
-            case 48: {
-              bitField0_ |= 0x00000010;
-              curBuyTicket_ = input.readInt32();
-              break;
-            }
-            case 56: {
-              bitField0_ |= 0x00000020;
-              maxBuyTicket_ = input.readInt32();
-              break;
-            }
-            case 64: {
-              bitField0_ |= 0x00000040;
-              hasDefense_ = input.readBool();
-              break;
-            }
-            case 72: {
-              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
-                defenseTeam_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000100;
-              }
-              defenseTeam_.add(input.readInt32());
-              break;
-            }
-            case 74: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100) && input.getBytesUntilLimit() > 0) {
-                defenseTeam_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000100;
-              }
-              while (input.getBytesUntilLimit() > 0) {
-                defenseTeam_.add(input.readInt32());
-              }
-              input.popLimit(limit);
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
-          opponents_ = java.util.Collections.unmodifiableList(opponents_);
-        }
-        if (((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
-          defenseTeam_ = java.util.Collections.unmodifiableList(defenseTeam_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return protocol.Pbmethod.internal_static_pbdson_PbArena_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return protocol.Pbmethod.internal_static_pbdson_PbArena_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              protocol.Pbmethod.PbArena.class, protocol.Pbmethod.PbArena.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<PbArena> PARSER =
-        new com.google.protobuf.AbstractParser<PbArena>() {
-      public PbArena parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PbArena(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<PbArena> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    // optional int64 timeRemain = 1;
-    public static final int TIMEREMAIN_FIELD_NUMBER = 1;
-    private long timeRemain_;
-    /**
-     * <code>optional int64 timeRemain = 1;</code>
-     */
-    public boolean hasTimeRemain() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>optional int64 timeRemain = 1;</code>
-     */
-    public long getTimeRemain() {
-      return timeRemain_;
-    }
-
-    // optional int32 myRank = 2;
-    public static final int MYRANK_FIELD_NUMBER = 2;
-    private int myRank_;
-    /**
-     * <code>optional int32 myRank = 2;</code>
-     */
-    public boolean hasMyRank() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>optional int32 myRank = 2;</code>
-     */
-    public int getMyRank() {
-      return myRank_;
-    }
-
-    // optional int32 myPoint = 3;
-    public static final int MYPOINT_FIELD_NUMBER = 3;
-    private int myPoint_;
-    /**
-     * <code>optional int32 myPoint = 3;</code>
-     */
-    public boolean hasMyPoint() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>optional int32 myPoint = 3;</code>
-     */
-    public int getMyPoint() {
-      return myPoint_;
-    }
-
-    // repeated .pbdson.PbUser opponents = 4;
-    public static final int OPPONENTS_FIELD_NUMBER = 4;
-    private java.util.List<protocol.Pbmethod.PbUser> opponents_;
-    /**
-     * <code>repeated .pbdson.PbUser opponents = 4;</code>
-     */
-    public java.util.List<protocol.Pbmethod.PbUser> getOpponentsList() {
-      return opponents_;
-    }
-    /**
-     * <code>repeated .pbdson.PbUser opponents = 4;</code>
-     */
-    public java.util.List<? extends protocol.Pbmethod.PbUserOrBuilder> 
-        getOpponentsOrBuilderList() {
-      return opponents_;
-    }
-    /**
-     * <code>repeated .pbdson.PbUser opponents = 4;</code>
-     */
-    public int getOpponentsCount() {
-      return opponents_.size();
-    }
-    /**
-     * <code>repeated .pbdson.PbUser opponents = 4;</code>
-     */
-    public protocol.Pbmethod.PbUser getOpponents(int index) {
-      return opponents_.get(index);
-    }
-    /**
-     * <code>repeated .pbdson.PbUser opponents = 4;</code>
-     */
-    public protocol.Pbmethod.PbUserOrBuilder getOpponentsOrBuilder(
-        int index) {
-      return opponents_.get(index);
-    }
-
-    // optional int32 feeTicket = 5;
-    public static final int FEETICKET_FIELD_NUMBER = 5;
-    private int feeTicket_;
-    /**
-     * <code>optional int32 feeTicket = 5;</code>
-     */
-    public boolean hasFeeTicket() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>optional int32 feeTicket = 5;</code>
-     */
-    public int getFeeTicket() {
-      return feeTicket_;
-    }
-
-    // optional int32 curBuyTicket = 6;
-    public static final int CURBUYTICKET_FIELD_NUMBER = 6;
-    private int curBuyTicket_;
-    /**
-     * <code>optional int32 curBuyTicket = 6;</code>
-     */
-    public boolean hasCurBuyTicket() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    /**
-     * <code>optional int32 curBuyTicket = 6;</code>
-     */
-    public int getCurBuyTicket() {
-      return curBuyTicket_;
-    }
-
-    // optional int32 maxBuyTicket = 7;
-    public static final int MAXBUYTICKET_FIELD_NUMBER = 7;
-    private int maxBuyTicket_;
-    /**
-     * <code>optional int32 maxBuyTicket = 7;</code>
-     */
-    public boolean hasMaxBuyTicket() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
-    }
-    /**
-     * <code>optional int32 maxBuyTicket = 7;</code>
-     */
-    public int getMaxBuyTicket() {
-      return maxBuyTicket_;
-    }
-
-    // optional bool hasDefense = 8;
-    public static final int HASDEFENSE_FIELD_NUMBER = 8;
-    private boolean hasDefense_;
-    /**
-     * <code>optional bool hasDefense = 8;</code>
-     */
-    public boolean hasHasDefense() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
-    }
-    /**
-     * <code>optional bool hasDefense = 8;</code>
-     */
-    public boolean getHasDefense() {
-      return hasDefense_;
-    }
-
-    // repeated int32 defenseTeam = 9;
-    public static final int DEFENSETEAM_FIELD_NUMBER = 9;
-    private java.util.List<java.lang.Integer> defenseTeam_;
-    /**
-     * <code>repeated int32 defenseTeam = 9;</code>
-     */
-    public java.util.List<java.lang.Integer>
-        getDefenseTeamList() {
-      return defenseTeam_;
-    }
-    /**
-     * <code>repeated int32 defenseTeam = 9;</code>
-     */
-    public int getDefenseTeamCount() {
-      return defenseTeam_.size();
-    }
-    /**
-     * <code>repeated int32 defenseTeam = 9;</code>
-     */
-    public int getDefenseTeam(int index) {
-      return defenseTeam_.get(index);
-    }
-
-    private void initFields() {
-      timeRemain_ = 0L;
-      myRank_ = 0;
-      myPoint_ = 0;
-      opponents_ = java.util.Collections.emptyList();
-      feeTicket_ = 0;
-      curBuyTicket_ = 0;
-      maxBuyTicket_ = 0;
-      hasDefense_ = false;
-      defenseTeam_ = java.util.Collections.emptyList();
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt64(1, timeRemain_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt32(2, myRank_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeInt32(3, myPoint_);
-      }
-      for (int i = 0; i < opponents_.size(); i++) {
-        output.writeMessage(4, opponents_.get(i));
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeInt32(5, feeTicket_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeInt32(6, curBuyTicket_);
-      }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeInt32(7, maxBuyTicket_);
-      }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeBool(8, hasDefense_);
-      }
-      for (int i = 0; i < defenseTeam_.size(); i++) {
-        output.writeInt32(9, defenseTeam_.get(i));
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(1, timeRemain_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, myRank_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, myPoint_);
-      }
-      for (int i = 0; i < opponents_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, opponents_.get(i));
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(5, feeTicket_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(6, curBuyTicket_);
-      }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(7, maxBuyTicket_);
-      }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(8, hasDefense_);
-      }
-      {
-        int dataSize = 0;
-        for (int i = 0; i < defenseTeam_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(defenseTeam_.get(i));
-        }
-        size += dataSize;
-        size += 1 * getDefenseTeamList().size();
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static protocol.Pbmethod.PbArena parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbArena parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbArena parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbArena parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbArena parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbArena parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbArena parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static protocol.Pbmethod.PbArena parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbArena parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbArena parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(protocol.Pbmethod.PbArena prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code pbdson.PbArena}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements protocol.Pbmethod.PbArenaOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return protocol.Pbmethod.internal_static_pbdson_PbArena_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return protocol.Pbmethod.internal_static_pbdson_PbArena_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                protocol.Pbmethod.PbArena.class, protocol.Pbmethod.PbArena.Builder.class);
-      }
-
-      // Construct using protocol.Pbmethod.PbArena.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getOpponentsFieldBuilder();
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        timeRemain_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        myRank_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        myPoint_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000004);
-        if (opponentsBuilder_ == null) {
-          opponents_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000008);
-        } else {
-          opponentsBuilder_.clear();
-        }
-        feeTicket_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000010);
-        curBuyTicket_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000020);
-        maxBuyTicket_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000040);
-        hasDefense_ = false;
-        bitField0_ = (bitField0_ & ~0x00000080);
-        defenseTeam_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000100);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return protocol.Pbmethod.internal_static_pbdson_PbArena_descriptor;
-      }
-
-      public protocol.Pbmethod.PbArena getDefaultInstanceForType() {
-        return protocol.Pbmethod.PbArena.getDefaultInstance();
-      }
-
-      public protocol.Pbmethod.PbArena build() {
-        protocol.Pbmethod.PbArena result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public protocol.Pbmethod.PbArena buildPartial() {
-        protocol.Pbmethod.PbArena result = new protocol.Pbmethod.PbArena(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.timeRemain_ = timeRemain_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.myRank_ = myRank_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.myPoint_ = myPoint_;
-        if (opponentsBuilder_ == null) {
-          if (((bitField0_ & 0x00000008) == 0x00000008)) {
-            opponents_ = java.util.Collections.unmodifiableList(opponents_);
-            bitField0_ = (bitField0_ & ~0x00000008);
-          }
-          result.opponents_ = opponents_;
-        } else {
-          result.opponents_ = opponentsBuilder_.build();
-        }
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.feeTicket_ = feeTicket_;
-        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        result.curBuyTicket_ = curBuyTicket_;
-        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
-          to_bitField0_ |= 0x00000020;
-        }
-        result.maxBuyTicket_ = maxBuyTicket_;
-        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
-          to_bitField0_ |= 0x00000040;
-        }
-        result.hasDefense_ = hasDefense_;
-        if (((bitField0_ & 0x00000100) == 0x00000100)) {
-          defenseTeam_ = java.util.Collections.unmodifiableList(defenseTeam_);
-          bitField0_ = (bitField0_ & ~0x00000100);
-        }
-        result.defenseTeam_ = defenseTeam_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof protocol.Pbmethod.PbArena) {
-          return mergeFrom((protocol.Pbmethod.PbArena)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(protocol.Pbmethod.PbArena other) {
-        if (other == protocol.Pbmethod.PbArena.getDefaultInstance()) return this;
-        if (other.hasTimeRemain()) {
-          setTimeRemain(other.getTimeRemain());
-        }
-        if (other.hasMyRank()) {
-          setMyRank(other.getMyRank());
-        }
-        if (other.hasMyPoint()) {
-          setMyPoint(other.getMyPoint());
-        }
-        if (opponentsBuilder_ == null) {
-          if (!other.opponents_.isEmpty()) {
-            if (opponents_.isEmpty()) {
-              opponents_ = other.opponents_;
-              bitField0_ = (bitField0_ & ~0x00000008);
-            } else {
-              ensureOpponentsIsMutable();
-              opponents_.addAll(other.opponents_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.opponents_.isEmpty()) {
-            if (opponentsBuilder_.isEmpty()) {
-              opponentsBuilder_.dispose();
-              opponentsBuilder_ = null;
-              opponents_ = other.opponents_;
-              bitField0_ = (bitField0_ & ~0x00000008);
-              opponentsBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getOpponentsFieldBuilder() : null;
-            } else {
-              opponentsBuilder_.addAllMessages(other.opponents_);
-            }
-          }
-        }
-        if (other.hasFeeTicket()) {
-          setFeeTicket(other.getFeeTicket());
-        }
-        if (other.hasCurBuyTicket()) {
-          setCurBuyTicket(other.getCurBuyTicket());
-        }
-        if (other.hasMaxBuyTicket()) {
-          setMaxBuyTicket(other.getMaxBuyTicket());
-        }
-        if (other.hasHasDefense()) {
-          setHasDefense(other.getHasDefense());
-        }
-        if (!other.defenseTeam_.isEmpty()) {
-          if (defenseTeam_.isEmpty()) {
-            defenseTeam_ = other.defenseTeam_;
-            bitField0_ = (bitField0_ & ~0x00000100);
-          } else {
-            ensureDefenseTeamIsMutable();
-            defenseTeam_.addAll(other.defenseTeam_);
-          }
-          onChanged();
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        protocol.Pbmethod.PbArena parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (protocol.Pbmethod.PbArena) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // optional int64 timeRemain = 1;
-      private long timeRemain_ ;
-      /**
-       * <code>optional int64 timeRemain = 1;</code>
-       */
-      public boolean hasTimeRemain() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>optional int64 timeRemain = 1;</code>
-       */
-      public long getTimeRemain() {
-        return timeRemain_;
-      }
-      /**
-       * <code>optional int64 timeRemain = 1;</code>
-       */
-      public Builder setTimeRemain(long value) {
-        bitField0_ |= 0x00000001;
-        timeRemain_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int64 timeRemain = 1;</code>
-       */
-      public Builder clearTimeRemain() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        timeRemain_ = 0L;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 myRank = 2;
-      private int myRank_ ;
-      /**
-       * <code>optional int32 myRank = 2;</code>
-       */
-      public boolean hasMyRank() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>optional int32 myRank = 2;</code>
-       */
-      public int getMyRank() {
-        return myRank_;
-      }
-      /**
-       * <code>optional int32 myRank = 2;</code>
-       */
-      public Builder setMyRank(int value) {
-        bitField0_ |= 0x00000002;
-        myRank_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 myRank = 2;</code>
-       */
-      public Builder clearMyRank() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        myRank_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 myPoint = 3;
-      private int myPoint_ ;
-      /**
-       * <code>optional int32 myPoint = 3;</code>
-       */
-      public boolean hasMyPoint() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional int32 myPoint = 3;</code>
-       */
-      public int getMyPoint() {
-        return myPoint_;
-      }
-      /**
-       * <code>optional int32 myPoint = 3;</code>
-       */
-      public Builder setMyPoint(int value) {
-        bitField0_ |= 0x00000004;
-        myPoint_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 myPoint = 3;</code>
-       */
-      public Builder clearMyPoint() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        myPoint_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // repeated .pbdson.PbUser opponents = 4;
-      private java.util.List<protocol.Pbmethod.PbUser> opponents_ =
-        java.util.Collections.emptyList();
-      private void ensureOpponentsIsMutable() {
-        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
-          opponents_ = new java.util.ArrayList<protocol.Pbmethod.PbUser>(opponents_);
-          bitField0_ |= 0x00000008;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbUser, protocol.Pbmethod.PbUser.Builder, protocol.Pbmethod.PbUserOrBuilder> opponentsBuilder_;
-
-      /**
-       * <code>repeated .pbdson.PbUser opponents = 4;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbUser> getOpponentsList() {
-        if (opponentsBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(opponents_);
-        } else {
-          return opponentsBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbUser opponents = 4;</code>
-       */
-      public int getOpponentsCount() {
-        if (opponentsBuilder_ == null) {
-          return opponents_.size();
-        } else {
-          return opponentsBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbUser opponents = 4;</code>
-       */
-      public protocol.Pbmethod.PbUser getOpponents(int index) {
-        if (opponentsBuilder_ == null) {
-          return opponents_.get(index);
-        } else {
-          return opponentsBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbUser opponents = 4;</code>
-       */
-      public Builder setOpponents(
-          int index, protocol.Pbmethod.PbUser value) {
-        if (opponentsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureOpponentsIsMutable();
-          opponents_.set(index, value);
-          onChanged();
-        } else {
-          opponentsBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbUser opponents = 4;</code>
-       */
-      public Builder setOpponents(
-          int index, protocol.Pbmethod.PbUser.Builder builderForValue) {
-        if (opponentsBuilder_ == null) {
-          ensureOpponentsIsMutable();
-          opponents_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          opponentsBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbUser opponents = 4;</code>
-       */
-      public Builder addOpponents(protocol.Pbmethod.PbUser value) {
-        if (opponentsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureOpponentsIsMutable();
-          opponents_.add(value);
-          onChanged();
-        } else {
-          opponentsBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbUser opponents = 4;</code>
-       */
-      public Builder addOpponents(
-          int index, protocol.Pbmethod.PbUser value) {
-        if (opponentsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureOpponentsIsMutable();
-          opponents_.add(index, value);
-          onChanged();
-        } else {
-          opponentsBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbUser opponents = 4;</code>
-       */
-      public Builder addOpponents(
-          protocol.Pbmethod.PbUser.Builder builderForValue) {
-        if (opponentsBuilder_ == null) {
-          ensureOpponentsIsMutable();
-          opponents_.add(builderForValue.build());
-          onChanged();
-        } else {
-          opponentsBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbUser opponents = 4;</code>
-       */
-      public Builder addOpponents(
-          int index, protocol.Pbmethod.PbUser.Builder builderForValue) {
-        if (opponentsBuilder_ == null) {
-          ensureOpponentsIsMutable();
-          opponents_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          opponentsBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbUser opponents = 4;</code>
-       */
-      public Builder addAllOpponents(
-          java.lang.Iterable<? extends protocol.Pbmethod.PbUser> values) {
-        if (opponentsBuilder_ == null) {
-          ensureOpponentsIsMutable();
-          super.addAll(values, opponents_);
-          onChanged();
-        } else {
-          opponentsBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbUser opponents = 4;</code>
-       */
-      public Builder clearOpponents() {
-        if (opponentsBuilder_ == null) {
-          opponents_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000008);
-          onChanged();
-        } else {
-          opponentsBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbUser opponents = 4;</code>
-       */
-      public Builder removeOpponents(int index) {
-        if (opponentsBuilder_ == null) {
-          ensureOpponentsIsMutable();
-          opponents_.remove(index);
-          onChanged();
-        } else {
-          opponentsBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbUser opponents = 4;</code>
-       */
-      public protocol.Pbmethod.PbUser.Builder getOpponentsBuilder(
-          int index) {
-        return getOpponentsFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .pbdson.PbUser opponents = 4;</code>
-       */
-      public protocol.Pbmethod.PbUserOrBuilder getOpponentsOrBuilder(
-          int index) {
-        if (opponentsBuilder_ == null) {
-          return opponents_.get(index);  } else {
-          return opponentsBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbUser opponents = 4;</code>
-       */
-      public java.util.List<? extends protocol.Pbmethod.PbUserOrBuilder> 
-           getOpponentsOrBuilderList() {
-        if (opponentsBuilder_ != null) {
-          return opponentsBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(opponents_);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbUser opponents = 4;</code>
-       */
-      public protocol.Pbmethod.PbUser.Builder addOpponentsBuilder() {
-        return getOpponentsFieldBuilder().addBuilder(
-            protocol.Pbmethod.PbUser.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbUser opponents = 4;</code>
-       */
-      public protocol.Pbmethod.PbUser.Builder addOpponentsBuilder(
-          int index) {
-        return getOpponentsFieldBuilder().addBuilder(
-            index, protocol.Pbmethod.PbUser.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbUser opponents = 4;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbUser.Builder> 
-           getOpponentsBuilderList() {
-        return getOpponentsFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbUser, protocol.Pbmethod.PbUser.Builder, protocol.Pbmethod.PbUserOrBuilder> 
-          getOpponentsFieldBuilder() {
-        if (opponentsBuilder_ == null) {
-          opponentsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              protocol.Pbmethod.PbUser, protocol.Pbmethod.PbUser.Builder, protocol.Pbmethod.PbUserOrBuilder>(
-                  opponents_,
-                  ((bitField0_ & 0x00000008) == 0x00000008),
-                  getParentForChildren(),
-                  isClean());
-          opponents_ = null;
-        }
-        return opponentsBuilder_;
-      }
-
-      // optional int32 feeTicket = 5;
-      private int feeTicket_ ;
-      /**
-       * <code>optional int32 feeTicket = 5;</code>
-       */
-      public boolean hasFeeTicket() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      /**
-       * <code>optional int32 feeTicket = 5;</code>
-       */
-      public int getFeeTicket() {
-        return feeTicket_;
-      }
-      /**
-       * <code>optional int32 feeTicket = 5;</code>
-       */
-      public Builder setFeeTicket(int value) {
-        bitField0_ |= 0x00000010;
-        feeTicket_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 feeTicket = 5;</code>
-       */
-      public Builder clearFeeTicket() {
-        bitField0_ = (bitField0_ & ~0x00000010);
-        feeTicket_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 curBuyTicket = 6;
-      private int curBuyTicket_ ;
-      /**
-       * <code>optional int32 curBuyTicket = 6;</code>
-       */
-      public boolean hasCurBuyTicket() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
-      }
-      /**
-       * <code>optional int32 curBuyTicket = 6;</code>
-       */
-      public int getCurBuyTicket() {
-        return curBuyTicket_;
-      }
-      /**
-       * <code>optional int32 curBuyTicket = 6;</code>
-       */
-      public Builder setCurBuyTicket(int value) {
-        bitField0_ |= 0x00000020;
-        curBuyTicket_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 curBuyTicket = 6;</code>
-       */
-      public Builder clearCurBuyTicket() {
-        bitField0_ = (bitField0_ & ~0x00000020);
-        curBuyTicket_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 maxBuyTicket = 7;
-      private int maxBuyTicket_ ;
-      /**
-       * <code>optional int32 maxBuyTicket = 7;</code>
-       */
-      public boolean hasMaxBuyTicket() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
-      }
-      /**
-       * <code>optional int32 maxBuyTicket = 7;</code>
-       */
-      public int getMaxBuyTicket() {
-        return maxBuyTicket_;
-      }
-      /**
-       * <code>optional int32 maxBuyTicket = 7;</code>
-       */
-      public Builder setMaxBuyTicket(int value) {
-        bitField0_ |= 0x00000040;
-        maxBuyTicket_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 maxBuyTicket = 7;</code>
-       */
-      public Builder clearMaxBuyTicket() {
-        bitField0_ = (bitField0_ & ~0x00000040);
-        maxBuyTicket_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional bool hasDefense = 8;
-      private boolean hasDefense_ ;
-      /**
-       * <code>optional bool hasDefense = 8;</code>
-       */
-      public boolean hasHasDefense() {
-        return ((bitField0_ & 0x00000080) == 0x00000080);
-      }
-      /**
-       * <code>optional bool hasDefense = 8;</code>
-       */
-      public boolean getHasDefense() {
-        return hasDefense_;
-      }
-      /**
-       * <code>optional bool hasDefense = 8;</code>
-       */
-      public Builder setHasDefense(boolean value) {
-        bitField0_ |= 0x00000080;
-        hasDefense_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional bool hasDefense = 8;</code>
-       */
-      public Builder clearHasDefense() {
-        bitField0_ = (bitField0_ & ~0x00000080);
-        hasDefense_ = false;
-        onChanged();
-        return this;
-      }
-
-      // repeated int32 defenseTeam = 9;
-      private java.util.List<java.lang.Integer> defenseTeam_ = java.util.Collections.emptyList();
-      private void ensureDefenseTeamIsMutable() {
-        if (!((bitField0_ & 0x00000100) == 0x00000100)) {
-          defenseTeam_ = new java.util.ArrayList<java.lang.Integer>(defenseTeam_);
-          bitField0_ |= 0x00000100;
-         }
-      }
-      /**
-       * <code>repeated int32 defenseTeam = 9;</code>
-       */
-      public java.util.List<java.lang.Integer>
-          getDefenseTeamList() {
-        return java.util.Collections.unmodifiableList(defenseTeam_);
-      }
-      /**
-       * <code>repeated int32 defenseTeam = 9;</code>
-       */
-      public int getDefenseTeamCount() {
-        return defenseTeam_.size();
-      }
-      /**
-       * <code>repeated int32 defenseTeam = 9;</code>
-       */
-      public int getDefenseTeam(int index) {
-        return defenseTeam_.get(index);
-      }
-      /**
-       * <code>repeated int32 defenseTeam = 9;</code>
-       */
-      public Builder setDefenseTeam(
-          int index, int value) {
-        ensureDefenseTeamIsMutable();
-        defenseTeam_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 defenseTeam = 9;</code>
-       */
-      public Builder addDefenseTeam(int value) {
-        ensureDefenseTeamIsMutable();
-        defenseTeam_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 defenseTeam = 9;</code>
-       */
-      public Builder addAllDefenseTeam(
-          java.lang.Iterable<? extends java.lang.Integer> values) {
-        ensureDefenseTeamIsMutable();
-        super.addAll(values, defenseTeam_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 defenseTeam = 9;</code>
-       */
-      public Builder clearDefenseTeam() {
-        defenseTeam_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000100);
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:pbdson.PbArena)
-    }
-
-    static {
-      defaultInstance = new PbArena(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:pbdson.PbArena)
-  }
-
   public interface PbUserOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
@@ -23702,31 +20472,6 @@ public final class Pbmethod {
      */
     protocol.Pbmethod.CommonVectorOrBuilder getUserInfoOrBuilder();
 
-    // repeated .pbdson.PbUserWeapon weapons = 15;
-    /**
-     * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-     */
-    java.util.List<protocol.Pbmethod.PbUserWeapon> 
-        getWeaponsList();
-    /**
-     * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-     */
-    protocol.Pbmethod.PbUserWeapon getWeapons(int index);
-    /**
-     * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-     */
-    int getWeaponsCount();
-    /**
-     * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-     */
-    java.util.List<? extends protocol.Pbmethod.PbUserWeaponOrBuilder> 
-        getWeaponsOrBuilderList();
-    /**
-     * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-     */
-    protocol.Pbmethod.PbUserWeaponOrBuilder getWeaponsOrBuilder(
-        int index);
-
     // optional int32 rank = 16;
     /**
      * <code>optional int32 rank = 16;</code>
@@ -23766,19 +20511,19 @@ public final class Pbmethod {
      */
     int getWeaponEquip(int index);
 
-    // repeated int32 point = 19;
+    // repeated int64 point = 19;
     /**
-     * <code>repeated int32 point = 19;</code>
+     * <code>repeated int64 point = 19;</code>
      */
-    java.util.List<java.lang.Integer> getPointList();
+    java.util.List<java.lang.Long> getPointList();
     /**
-     * <code>repeated int32 point = 19;</code>
+     * <code>repeated int64 point = 19;</code>
      */
     int getPointCount();
     /**
-     * <code>repeated int32 point = 19;</code>
+     * <code>repeated int64 point = 19;</code>
      */
-    int getPoint(int index);
+    long getPoint(int index);
 
     // optional int64 timeLastAction = 20;
     /**
@@ -24075,14 +20820,6 @@ public final class Pbmethod {
               bitField0_ |= 0x00000400;
               break;
             }
-            case 122: {
-              if (!((mutable_bitField0_ & 0x00004000) == 0x00004000)) {
-                weapons_ = new java.util.ArrayList<protocol.Pbmethod.PbUserWeapon>();
-                mutable_bitField0_ |= 0x00004000;
-              }
-              weapons_.add(input.readMessage(protocol.Pbmethod.PbUserWeapon.PARSER, extensionRegistry));
-              break;
-            }
             case 128: {
               bitField0_ |= 0x00000800;
               rank_ = input.readInt32();
@@ -24094,9 +20831,9 @@ public final class Pbmethod {
               break;
             }
             case 144: {
-              if (!((mutable_bitField0_ & 0x00020000) == 0x00020000)) {
+              if (!((mutable_bitField0_ & 0x00010000) == 0x00010000)) {
                 weaponEquip_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00020000;
+                mutable_bitField0_ |= 0x00010000;
               }
               weaponEquip_.add(input.readInt32());
               break;
@@ -24104,9 +20841,9 @@ public final class Pbmethod {
             case 146: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00020000) == 0x00020000) && input.getBytesUntilLimit() > 0) {
+              if (!((mutable_bitField0_ & 0x00010000) == 0x00010000) && input.getBytesUntilLimit() > 0) {
                 weaponEquip_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00020000;
+                mutable_bitField0_ |= 0x00010000;
               }
               while (input.getBytesUntilLimit() > 0) {
                 weaponEquip_.add(input.readInt32());
@@ -24115,22 +20852,22 @@ public final class Pbmethod {
               break;
             }
             case 152: {
-              if (!((mutable_bitField0_ & 0x00040000) == 0x00040000)) {
-                point_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00040000;
+              if (!((mutable_bitField0_ & 0x00020000) == 0x00020000)) {
+                point_ = new java.util.ArrayList<java.lang.Long>();
+                mutable_bitField0_ |= 0x00020000;
               }
-              point_.add(input.readInt32());
+              point_.add(input.readInt64());
               break;
             }
             case 154: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00040000) == 0x00040000) && input.getBytesUntilLimit() > 0) {
-                point_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00040000;
+              if (!((mutable_bitField0_ & 0x00020000) == 0x00020000) && input.getBytesUntilLimit() > 0) {
+                point_ = new java.util.ArrayList<java.lang.Long>();
+                mutable_bitField0_ |= 0x00020000;
               }
               while (input.getBytesUntilLimit() > 0) {
-                point_.add(input.readInt32());
+                point_.add(input.readInt64());
               }
               input.popLimit(limit);
               break;
@@ -24151,9 +20888,9 @@ public final class Pbmethod {
               break;
             }
             case 184: {
-              if (!((mutable_bitField0_ & 0x00400000) == 0x00400000)) {
+              if (!((mutable_bitField0_ & 0x00200000) == 0x00200000)) {
                 itemEquip_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00400000;
+                mutable_bitField0_ |= 0x00200000;
               }
               itemEquip_.add(input.readInt32());
               break;
@@ -24161,9 +20898,9 @@ public final class Pbmethod {
             case 186: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00400000) == 0x00400000) && input.getBytesUntilLimit() > 0) {
+              if (!((mutable_bitField0_ & 0x00200000) == 0x00200000) && input.getBytesUntilLimit() > 0) {
                 itemEquip_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00400000;
+                mutable_bitField0_ |= 0x00200000;
               }
               while (input.getBytesUntilLimit() > 0) {
                 itemEquip_.add(input.readInt32());
@@ -24172,9 +20909,9 @@ public final class Pbmethod {
               break;
             }
             case 192: {
-              if (!((mutable_bitField0_ & 0x00800000) == 0x00800000)) {
+              if (!((mutable_bitField0_ & 0x00400000) == 0x00400000)) {
                 channel_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00800000;
+                mutable_bitField0_ |= 0x00400000;
               }
               channel_.add(input.readInt32());
               break;
@@ -24182,9 +20919,9 @@ public final class Pbmethod {
             case 194: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00800000) == 0x00800000) && input.getBytesUntilLimit() > 0) {
+              if (!((mutable_bitField0_ & 0x00400000) == 0x00400000) && input.getBytesUntilLimit() > 0) {
                 channel_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00800000;
+                mutable_bitField0_ |= 0x00400000;
               }
               while (input.getBytesUntilLimit() > 0) {
                 channel_.add(input.readInt32());
@@ -24208,9 +20945,9 @@ public final class Pbmethod {
               break;
             }
             case 224: {
-              if (!((mutable_bitField0_ & 0x08000000) == 0x08000000)) {
+              if (!((mutable_bitField0_ & 0x04000000) == 0x04000000)) {
                 pet_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x08000000;
+                mutable_bitField0_ |= 0x04000000;
               }
               pet_.add(input.readInt32());
               break;
@@ -24218,9 +20955,9 @@ public final class Pbmethod {
             case 226: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x08000000) == 0x08000000) && input.getBytesUntilLimit() > 0) {
+              if (!((mutable_bitField0_ & 0x04000000) == 0x04000000) && input.getBytesUntilLimit() > 0) {
                 pet_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x08000000;
+                mutable_bitField0_ |= 0x04000000;
               }
               while (input.getBytesUntilLimit() > 0) {
                 pet_.add(input.readInt32());
@@ -24245,22 +20982,19 @@ public final class Pbmethod {
         if (((mutable_bitField0_ & 0x00000800) == 0x00000800)) {
           petId_ = java.util.Collections.unmodifiableList(petId_);
         }
-        if (((mutable_bitField0_ & 0x00004000) == 0x00004000)) {
-          weapons_ = java.util.Collections.unmodifiableList(weapons_);
-        }
-        if (((mutable_bitField0_ & 0x00020000) == 0x00020000)) {
+        if (((mutable_bitField0_ & 0x00010000) == 0x00010000)) {
           weaponEquip_ = java.util.Collections.unmodifiableList(weaponEquip_);
         }
-        if (((mutable_bitField0_ & 0x00040000) == 0x00040000)) {
+        if (((mutable_bitField0_ & 0x00020000) == 0x00020000)) {
           point_ = java.util.Collections.unmodifiableList(point_);
         }
-        if (((mutable_bitField0_ & 0x00400000) == 0x00400000)) {
+        if (((mutable_bitField0_ & 0x00200000) == 0x00200000)) {
           itemEquip_ = java.util.Collections.unmodifiableList(itemEquip_);
         }
-        if (((mutable_bitField0_ & 0x00800000) == 0x00800000)) {
+        if (((mutable_bitField0_ & 0x00400000) == 0x00400000)) {
           channel_ = java.util.Collections.unmodifiableList(channel_);
         }
-        if (((mutable_bitField0_ & 0x08000000) == 0x08000000)) {
+        if (((mutable_bitField0_ & 0x04000000) == 0x04000000)) {
           pet_ = java.util.Collections.unmodifiableList(pet_);
         }
         this.unknownFields = unknownFields.build();
@@ -24639,42 +21373,6 @@ public final class Pbmethod {
       return userInfo_;
     }
 
-    // repeated .pbdson.PbUserWeapon weapons = 15;
-    public static final int WEAPONS_FIELD_NUMBER = 15;
-    private java.util.List<protocol.Pbmethod.PbUserWeapon> weapons_;
-    /**
-     * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-     */
-    public java.util.List<protocol.Pbmethod.PbUserWeapon> getWeaponsList() {
-      return weapons_;
-    }
-    /**
-     * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-     */
-    public java.util.List<? extends protocol.Pbmethod.PbUserWeaponOrBuilder> 
-        getWeaponsOrBuilderList() {
-      return weapons_;
-    }
-    /**
-     * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-     */
-    public int getWeaponsCount() {
-      return weapons_.size();
-    }
-    /**
-     * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-     */
-    public protocol.Pbmethod.PbUserWeapon getWeapons(int index) {
-      return weapons_.get(index);
-    }
-    /**
-     * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-     */
-    public protocol.Pbmethod.PbUserWeaponOrBuilder getWeaponsOrBuilder(
-        int index) {
-      return weapons_.get(index);
-    }
-
     // optional int32 rank = 16;
     public static final int RANK_FIELD_NUMBER = 16;
     private int rank_;
@@ -24757,26 +21455,26 @@ public final class Pbmethod {
       return weaponEquip_.get(index);
     }
 
-    // repeated int32 point = 19;
+    // repeated int64 point = 19;
     public static final int POINT_FIELD_NUMBER = 19;
-    private java.util.List<java.lang.Integer> point_;
+    private java.util.List<java.lang.Long> point_;
     /**
-     * <code>repeated int32 point = 19;</code>
+     * <code>repeated int64 point = 19;</code>
      */
-    public java.util.List<java.lang.Integer>
+    public java.util.List<java.lang.Long>
         getPointList() {
       return point_;
     }
     /**
-     * <code>repeated int32 point = 19;</code>
+     * <code>repeated int64 point = 19;</code>
      */
     public int getPointCount() {
       return point_.size();
     }
     /**
-     * <code>repeated int32 point = 19;</code>
+     * <code>repeated int64 point = 19;</code>
      */
-    public int getPoint(int index) {
+    public long getPoint(int index) {
       return point_.get(index);
     }
 
@@ -24960,7 +21658,6 @@ public final class Pbmethod {
       petId_ = java.util.Collections.emptyList();
       facebook_ = "";
       userInfo_ = protocol.Pbmethod.CommonVector.getDefaultInstance();
-      weapons_ = java.util.Collections.emptyList();
       rank_ = 0;
       desc_ = "";
       weaponEquip_ = java.util.Collections.emptyList();
@@ -25029,9 +21726,6 @@ public final class Pbmethod {
       if (((bitField0_ & 0x00000400) == 0x00000400)) {
         output.writeMessage(14, userInfo_);
       }
-      for (int i = 0; i < weapons_.size(); i++) {
-        output.writeMessage(15, weapons_.get(i));
-      }
       if (((bitField0_ & 0x00000800) == 0x00000800)) {
         output.writeInt32(16, rank_);
       }
@@ -25042,7 +21736,7 @@ public final class Pbmethod {
         output.writeInt32(18, weaponEquip_.get(i));
       }
       for (int i = 0; i < point_.size(); i++) {
-        output.writeInt32(19, point_.get(i));
+        output.writeInt64(19, point_.get(i));
       }
       if (((bitField0_ & 0x00002000) == 0x00002000)) {
         output.writeInt64(20, timeLastAction_);
@@ -25151,10 +21845,6 @@ public final class Pbmethod {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(14, userInfo_);
       }
-      for (int i = 0; i < weapons_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(15, weapons_.get(i));
-      }
       if (((bitField0_ & 0x00000800) == 0x00000800)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(16, rank_);
@@ -25176,7 +21866,7 @@ public final class Pbmethod {
         int dataSize = 0;
         for (int i = 0; i < point_.size(); i++) {
           dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(point_.get(i));
+            .computeInt64SizeNoTag(point_.get(i));
         }
         size += dataSize;
         size += 2 * getPointList().size();
@@ -25343,7 +22033,6 @@ public final class Pbmethod {
           getClanInfoFieldBuilder();
           getInfoFieldBuilder();
           getUserInfoFieldBuilder();
-          getWeaponsFieldBuilder();
         }
       }
       private static Builder create() {
@@ -25392,38 +22081,32 @@ public final class Pbmethod {
           userInfoBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00002000);
-        if (weaponsBuilder_ == null) {
-          weapons_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00004000);
-        } else {
-          weaponsBuilder_.clear();
-        }
         rank_ = 0;
-        bitField0_ = (bitField0_ & ~0x00008000);
+        bitField0_ = (bitField0_ & ~0x00004000);
         desc_ = "";
-        bitField0_ = (bitField0_ & ~0x00010000);
+        bitField0_ = (bitField0_ & ~0x00008000);
         weaponEquip_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00020000);
+        bitField0_ = (bitField0_ & ~0x00010000);
         point_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00040000);
+        bitField0_ = (bitField0_ & ~0x00020000);
         timeLastAction_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00080000);
+        bitField0_ = (bitField0_ & ~0x00040000);
         honor_ = 0;
-        bitField0_ = (bitField0_ & ~0x00100000);
+        bitField0_ = (bitField0_ & ~0x00080000);
         power_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00200000);
+        bitField0_ = (bitField0_ & ~0x00100000);
         itemEquip_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00400000);
+        bitField0_ = (bitField0_ & ~0x00200000);
         channel_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00800000);
+        bitField0_ = (bitField0_ & ~0x00400000);
         pointRank_ = 0L;
-        bitField0_ = (bitField0_ & ~0x01000000);
+        bitField0_ = (bitField0_ & ~0x00800000);
         arenaRank_ = 0;
-        bitField0_ = (bitField0_ & ~0x02000000);
+        bitField0_ = (bitField0_ & ~0x01000000);
         ruby_ = 0L;
-        bitField0_ = (bitField0_ & ~0x04000000);
+        bitField0_ = (bitField0_ & ~0x02000000);
         pet_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x08000000);
+        bitField0_ = (bitField0_ & ~0x04000000);
         return this;
       }
 
@@ -25523,70 +22206,61 @@ public final class Pbmethod {
         } else {
           result.userInfo_ = userInfoBuilder_.build();
         }
-        if (weaponsBuilder_ == null) {
-          if (((bitField0_ & 0x00004000) == 0x00004000)) {
-            weapons_ = java.util.Collections.unmodifiableList(weapons_);
-            bitField0_ = (bitField0_ & ~0x00004000);
-          }
-          result.weapons_ = weapons_;
-        } else {
-          result.weapons_ = weaponsBuilder_.build();
-        }
-        if (((from_bitField0_ & 0x00008000) == 0x00008000)) {
+        if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
           to_bitField0_ |= 0x00000800;
         }
         result.rank_ = rank_;
-        if (((from_bitField0_ & 0x00010000) == 0x00010000)) {
+        if (((from_bitField0_ & 0x00008000) == 0x00008000)) {
           to_bitField0_ |= 0x00001000;
         }
         result.desc_ = desc_;
-        if (((bitField0_ & 0x00020000) == 0x00020000)) {
+        if (((bitField0_ & 0x00010000) == 0x00010000)) {
           weaponEquip_ = java.util.Collections.unmodifiableList(weaponEquip_);
-          bitField0_ = (bitField0_ & ~0x00020000);
+          bitField0_ = (bitField0_ & ~0x00010000);
         }
         result.weaponEquip_ = weaponEquip_;
-        if (((bitField0_ & 0x00040000) == 0x00040000)) {
+        if (((bitField0_ & 0x00020000) == 0x00020000)) {
           point_ = java.util.Collections.unmodifiableList(point_);
-          bitField0_ = (bitField0_ & ~0x00040000);
+          bitField0_ = (bitField0_ & ~0x00020000);
         }
         result.point_ = point_;
-        if (((from_bitField0_ & 0x00080000) == 0x00080000)) {
+        if (((from_bitField0_ & 0x00040000) == 0x00040000)) {
           to_bitField0_ |= 0x00002000;
         }
         result.timeLastAction_ = timeLastAction_;
-        if (((from_bitField0_ & 0x00100000) == 0x00100000)) {
+        if (((from_bitField0_ & 0x00080000) == 0x00080000)) {
           to_bitField0_ |= 0x00004000;
         }
         result.honor_ = honor_;
-        if (((from_bitField0_ & 0x00200000) == 0x00200000)) {
+        if (((from_bitField0_ & 0x00100000) == 0x00100000)) {
           to_bitField0_ |= 0x00008000;
         }
         result.power_ = power_;
-        if (((bitField0_ & 0x00400000) == 0x00400000)) {
+        if (((bitField0_ & 0x00200000) == 0x00200000)) {
           itemEquip_ = java.util.Collections.unmodifiableList(itemEquip_);
-          bitField0_ = (bitField0_ & ~0x00400000);
+          bitField0_ = (bitField0_ & ~0x00200000);
         }
         result.itemEquip_ = itemEquip_;
-        if (((bitField0_ & 0x00800000) == 0x00800000)) {
+        if (((bitField0_ & 0x00400000) == 0x00400000)) {
           channel_ = java.util.Collections.unmodifiableList(channel_);
-          bitField0_ = (bitField0_ & ~0x00800000);
+          bitField0_ = (bitField0_ & ~0x00400000);
         }
         result.channel_ = channel_;
-        if (((from_bitField0_ & 0x01000000) == 0x01000000)) {
+        if (((from_bitField0_ & 0x00800000) == 0x00800000)) {
           to_bitField0_ |= 0x00010000;
         }
         result.pointRank_ = pointRank_;
-        if (((from_bitField0_ & 0x02000000) == 0x02000000)) {
+        if (((from_bitField0_ & 0x01000000) == 0x01000000)) {
           to_bitField0_ |= 0x00020000;
         }
         result.arenaRank_ = arenaRank_;
-        if (((from_bitField0_ & 0x04000000) == 0x04000000)) {
+        if (((from_bitField0_ & 0x02000000) == 0x02000000)) {
           to_bitField0_ |= 0x00040000;
         }
         result.ruby_ = ruby_;
-        if (((bitField0_ & 0x08000000) == 0x08000000)) {
+        if (((bitField0_ & 0x04000000) == 0x04000000)) {
           pet_ = java.util.Collections.unmodifiableList(pet_);
-          bitField0_ = (bitField0_ & ~0x08000000);
+          bitField0_ = (bitField0_ & ~0x04000000);
         }
         result.pet_ = pet_;
         result.bitField0_ = to_bitField0_;
@@ -25674,44 +22348,18 @@ public final class Pbmethod {
         if (other.hasUserInfo()) {
           mergeUserInfo(other.getUserInfo());
         }
-        if (weaponsBuilder_ == null) {
-          if (!other.weapons_.isEmpty()) {
-            if (weapons_.isEmpty()) {
-              weapons_ = other.weapons_;
-              bitField0_ = (bitField0_ & ~0x00004000);
-            } else {
-              ensureWeaponsIsMutable();
-              weapons_.addAll(other.weapons_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.weapons_.isEmpty()) {
-            if (weaponsBuilder_.isEmpty()) {
-              weaponsBuilder_.dispose();
-              weaponsBuilder_ = null;
-              weapons_ = other.weapons_;
-              bitField0_ = (bitField0_ & ~0x00004000);
-              weaponsBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getWeaponsFieldBuilder() : null;
-            } else {
-              weaponsBuilder_.addAllMessages(other.weapons_);
-            }
-          }
-        }
         if (other.hasRank()) {
           setRank(other.getRank());
         }
         if (other.hasDesc()) {
-          bitField0_ |= 0x00010000;
+          bitField0_ |= 0x00008000;
           desc_ = other.desc_;
           onChanged();
         }
         if (!other.weaponEquip_.isEmpty()) {
           if (weaponEquip_.isEmpty()) {
             weaponEquip_ = other.weaponEquip_;
-            bitField0_ = (bitField0_ & ~0x00020000);
+            bitField0_ = (bitField0_ & ~0x00010000);
           } else {
             ensureWeaponEquipIsMutable();
             weaponEquip_.addAll(other.weaponEquip_);
@@ -25721,7 +22369,7 @@ public final class Pbmethod {
         if (!other.point_.isEmpty()) {
           if (point_.isEmpty()) {
             point_ = other.point_;
-            bitField0_ = (bitField0_ & ~0x00040000);
+            bitField0_ = (bitField0_ & ~0x00020000);
           } else {
             ensurePointIsMutable();
             point_.addAll(other.point_);
@@ -25740,7 +22388,7 @@ public final class Pbmethod {
         if (!other.itemEquip_.isEmpty()) {
           if (itemEquip_.isEmpty()) {
             itemEquip_ = other.itemEquip_;
-            bitField0_ = (bitField0_ & ~0x00400000);
+            bitField0_ = (bitField0_ & ~0x00200000);
           } else {
             ensureItemEquipIsMutable();
             itemEquip_.addAll(other.itemEquip_);
@@ -25750,7 +22398,7 @@ public final class Pbmethod {
         if (!other.channel_.isEmpty()) {
           if (channel_.isEmpty()) {
             channel_ = other.channel_;
-            bitField0_ = (bitField0_ & ~0x00800000);
+            bitField0_ = (bitField0_ & ~0x00400000);
           } else {
             ensureChannelIsMutable();
             channel_.addAll(other.channel_);
@@ -25769,7 +22417,7 @@ public final class Pbmethod {
         if (!other.pet_.isEmpty()) {
           if (pet_.isEmpty()) {
             pet_ = other.pet_;
-            bitField0_ = (bitField0_ & ~0x08000000);
+            bitField0_ = (bitField0_ & ~0x04000000);
           } else {
             ensurePetIsMutable();
             pet_.addAll(other.pet_);
@@ -26739,253 +23387,13 @@ public final class Pbmethod {
         return userInfoBuilder_;
       }
 
-      // repeated .pbdson.PbUserWeapon weapons = 15;
-      private java.util.List<protocol.Pbmethod.PbUserWeapon> weapons_ =
-        java.util.Collections.emptyList();
-      private void ensureWeaponsIsMutable() {
-        if (!((bitField0_ & 0x00004000) == 0x00004000)) {
-          weapons_ = new java.util.ArrayList<protocol.Pbmethod.PbUserWeapon>(weapons_);
-          bitField0_ |= 0x00004000;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbUserWeapon, protocol.Pbmethod.PbUserWeapon.Builder, protocol.Pbmethod.PbUserWeaponOrBuilder> weaponsBuilder_;
-
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbUserWeapon> getWeaponsList() {
-        if (weaponsBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(weapons_);
-        } else {
-          return weaponsBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-       */
-      public int getWeaponsCount() {
-        if (weaponsBuilder_ == null) {
-          return weapons_.size();
-        } else {
-          return weaponsBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-       */
-      public protocol.Pbmethod.PbUserWeapon getWeapons(int index) {
-        if (weaponsBuilder_ == null) {
-          return weapons_.get(index);
-        } else {
-          return weaponsBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-       */
-      public Builder setWeapons(
-          int index, protocol.Pbmethod.PbUserWeapon value) {
-        if (weaponsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureWeaponsIsMutable();
-          weapons_.set(index, value);
-          onChanged();
-        } else {
-          weaponsBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-       */
-      public Builder setWeapons(
-          int index, protocol.Pbmethod.PbUserWeapon.Builder builderForValue) {
-        if (weaponsBuilder_ == null) {
-          ensureWeaponsIsMutable();
-          weapons_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          weaponsBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-       */
-      public Builder addWeapons(protocol.Pbmethod.PbUserWeapon value) {
-        if (weaponsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureWeaponsIsMutable();
-          weapons_.add(value);
-          onChanged();
-        } else {
-          weaponsBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-       */
-      public Builder addWeapons(
-          int index, protocol.Pbmethod.PbUserWeapon value) {
-        if (weaponsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureWeaponsIsMutable();
-          weapons_.add(index, value);
-          onChanged();
-        } else {
-          weaponsBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-       */
-      public Builder addWeapons(
-          protocol.Pbmethod.PbUserWeapon.Builder builderForValue) {
-        if (weaponsBuilder_ == null) {
-          ensureWeaponsIsMutable();
-          weapons_.add(builderForValue.build());
-          onChanged();
-        } else {
-          weaponsBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-       */
-      public Builder addWeapons(
-          int index, protocol.Pbmethod.PbUserWeapon.Builder builderForValue) {
-        if (weaponsBuilder_ == null) {
-          ensureWeaponsIsMutable();
-          weapons_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          weaponsBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-       */
-      public Builder addAllWeapons(
-          java.lang.Iterable<? extends protocol.Pbmethod.PbUserWeapon> values) {
-        if (weaponsBuilder_ == null) {
-          ensureWeaponsIsMutable();
-          super.addAll(values, weapons_);
-          onChanged();
-        } else {
-          weaponsBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-       */
-      public Builder clearWeapons() {
-        if (weaponsBuilder_ == null) {
-          weapons_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00004000);
-          onChanged();
-        } else {
-          weaponsBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-       */
-      public Builder removeWeapons(int index) {
-        if (weaponsBuilder_ == null) {
-          ensureWeaponsIsMutable();
-          weapons_.remove(index);
-          onChanged();
-        } else {
-          weaponsBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-       */
-      public protocol.Pbmethod.PbUserWeapon.Builder getWeaponsBuilder(
-          int index) {
-        return getWeaponsFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-       */
-      public protocol.Pbmethod.PbUserWeaponOrBuilder getWeaponsOrBuilder(
-          int index) {
-        if (weaponsBuilder_ == null) {
-          return weapons_.get(index);  } else {
-          return weaponsBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-       */
-      public java.util.List<? extends protocol.Pbmethod.PbUserWeaponOrBuilder> 
-           getWeaponsOrBuilderList() {
-        if (weaponsBuilder_ != null) {
-          return weaponsBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(weapons_);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-       */
-      public protocol.Pbmethod.PbUserWeapon.Builder addWeaponsBuilder() {
-        return getWeaponsFieldBuilder().addBuilder(
-            protocol.Pbmethod.PbUserWeapon.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-       */
-      public protocol.Pbmethod.PbUserWeapon.Builder addWeaponsBuilder(
-          int index) {
-        return getWeaponsFieldBuilder().addBuilder(
-            index, protocol.Pbmethod.PbUserWeapon.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 15;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbUserWeapon.Builder> 
-           getWeaponsBuilderList() {
-        return getWeaponsFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbUserWeapon, protocol.Pbmethod.PbUserWeapon.Builder, protocol.Pbmethod.PbUserWeaponOrBuilder> 
-          getWeaponsFieldBuilder() {
-        if (weaponsBuilder_ == null) {
-          weaponsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              protocol.Pbmethod.PbUserWeapon, protocol.Pbmethod.PbUserWeapon.Builder, protocol.Pbmethod.PbUserWeaponOrBuilder>(
-                  weapons_,
-                  ((bitField0_ & 0x00004000) == 0x00004000),
-                  getParentForChildren(),
-                  isClean());
-          weapons_ = null;
-        }
-        return weaponsBuilder_;
-      }
-
       // optional int32 rank = 16;
       private int rank_ ;
       /**
        * <code>optional int32 rank = 16;</code>
        */
       public boolean hasRank() {
-        return ((bitField0_ & 0x00008000) == 0x00008000);
+        return ((bitField0_ & 0x00004000) == 0x00004000);
       }
       /**
        * <code>optional int32 rank = 16;</code>
@@ -26997,7 +23405,7 @@ public final class Pbmethod {
        * <code>optional int32 rank = 16;</code>
        */
       public Builder setRank(int value) {
-        bitField0_ |= 0x00008000;
+        bitField0_ |= 0x00004000;
         rank_ = value;
         onChanged();
         return this;
@@ -27006,7 +23414,7 @@ public final class Pbmethod {
        * <code>optional int32 rank = 16;</code>
        */
       public Builder clearRank() {
-        bitField0_ = (bitField0_ & ~0x00008000);
+        bitField0_ = (bitField0_ & ~0x00004000);
         rank_ = 0;
         onChanged();
         return this;
@@ -27018,7 +23426,7 @@ public final class Pbmethod {
        * <code>optional string desc = 17;</code>
        */
       public boolean hasDesc() {
-        return ((bitField0_ & 0x00010000) == 0x00010000);
+        return ((bitField0_ & 0x00008000) == 0x00008000);
       }
       /**
        * <code>optional string desc = 17;</code>
@@ -27058,7 +23466,7 @@ public final class Pbmethod {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00010000;
+  bitField0_ |= 0x00008000;
         desc_ = value;
         onChanged();
         return this;
@@ -27067,7 +23475,7 @@ public final class Pbmethod {
        * <code>optional string desc = 17;</code>
        */
       public Builder clearDesc() {
-        bitField0_ = (bitField0_ & ~0x00010000);
+        bitField0_ = (bitField0_ & ~0x00008000);
         desc_ = getDefaultInstance().getDesc();
         onChanged();
         return this;
@@ -27080,7 +23488,7 @@ public final class Pbmethod {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00010000;
+  bitField0_ |= 0x00008000;
         desc_ = value;
         onChanged();
         return this;
@@ -27089,9 +23497,9 @@ public final class Pbmethod {
       // repeated int32 weaponEquip = 18;
       private java.util.List<java.lang.Integer> weaponEquip_ = java.util.Collections.emptyList();
       private void ensureWeaponEquipIsMutable() {
-        if (!((bitField0_ & 0x00020000) == 0x00020000)) {
+        if (!((bitField0_ & 0x00010000) == 0x00010000)) {
           weaponEquip_ = new java.util.ArrayList<java.lang.Integer>(weaponEquip_);
-          bitField0_ |= 0x00020000;
+          bitField0_ |= 0x00010000;
          }
       }
       /**
@@ -27147,73 +23555,73 @@ public final class Pbmethod {
        */
       public Builder clearWeaponEquip() {
         weaponEquip_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00020000);
+        bitField0_ = (bitField0_ & ~0x00010000);
         onChanged();
         return this;
       }
 
-      // repeated int32 point = 19;
-      private java.util.List<java.lang.Integer> point_ = java.util.Collections.emptyList();
+      // repeated int64 point = 19;
+      private java.util.List<java.lang.Long> point_ = java.util.Collections.emptyList();
       private void ensurePointIsMutable() {
-        if (!((bitField0_ & 0x00040000) == 0x00040000)) {
-          point_ = new java.util.ArrayList<java.lang.Integer>(point_);
-          bitField0_ |= 0x00040000;
+        if (!((bitField0_ & 0x00020000) == 0x00020000)) {
+          point_ = new java.util.ArrayList<java.lang.Long>(point_);
+          bitField0_ |= 0x00020000;
          }
       }
       /**
-       * <code>repeated int32 point = 19;</code>
+       * <code>repeated int64 point = 19;</code>
        */
-      public java.util.List<java.lang.Integer>
+      public java.util.List<java.lang.Long>
           getPointList() {
         return java.util.Collections.unmodifiableList(point_);
       }
       /**
-       * <code>repeated int32 point = 19;</code>
+       * <code>repeated int64 point = 19;</code>
        */
       public int getPointCount() {
         return point_.size();
       }
       /**
-       * <code>repeated int32 point = 19;</code>
+       * <code>repeated int64 point = 19;</code>
        */
-      public int getPoint(int index) {
+      public long getPoint(int index) {
         return point_.get(index);
       }
       /**
-       * <code>repeated int32 point = 19;</code>
+       * <code>repeated int64 point = 19;</code>
        */
       public Builder setPoint(
-          int index, int value) {
+          int index, long value) {
         ensurePointIsMutable();
         point_.set(index, value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 point = 19;</code>
+       * <code>repeated int64 point = 19;</code>
        */
-      public Builder addPoint(int value) {
+      public Builder addPoint(long value) {
         ensurePointIsMutable();
         point_.add(value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 point = 19;</code>
+       * <code>repeated int64 point = 19;</code>
        */
       public Builder addAllPoint(
-          java.lang.Iterable<? extends java.lang.Integer> values) {
+          java.lang.Iterable<? extends java.lang.Long> values) {
         ensurePointIsMutable();
         super.addAll(values, point_);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 point = 19;</code>
+       * <code>repeated int64 point = 19;</code>
        */
       public Builder clearPoint() {
         point_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00040000);
+        bitField0_ = (bitField0_ & ~0x00020000);
         onChanged();
         return this;
       }
@@ -27224,7 +23632,7 @@ public final class Pbmethod {
        * <code>optional int64 timeLastAction = 20;</code>
        */
       public boolean hasTimeLastAction() {
-        return ((bitField0_ & 0x00080000) == 0x00080000);
+        return ((bitField0_ & 0x00040000) == 0x00040000);
       }
       /**
        * <code>optional int64 timeLastAction = 20;</code>
@@ -27236,7 +23644,7 @@ public final class Pbmethod {
        * <code>optional int64 timeLastAction = 20;</code>
        */
       public Builder setTimeLastAction(long value) {
-        bitField0_ |= 0x00080000;
+        bitField0_ |= 0x00040000;
         timeLastAction_ = value;
         onChanged();
         return this;
@@ -27245,7 +23653,7 @@ public final class Pbmethod {
        * <code>optional int64 timeLastAction = 20;</code>
        */
       public Builder clearTimeLastAction() {
-        bitField0_ = (bitField0_ & ~0x00080000);
+        bitField0_ = (bitField0_ & ~0x00040000);
         timeLastAction_ = 0L;
         onChanged();
         return this;
@@ -27257,7 +23665,7 @@ public final class Pbmethod {
        * <code>optional int32 honor = 21;</code>
        */
       public boolean hasHonor() {
-        return ((bitField0_ & 0x00100000) == 0x00100000);
+        return ((bitField0_ & 0x00080000) == 0x00080000);
       }
       /**
        * <code>optional int32 honor = 21;</code>
@@ -27269,7 +23677,7 @@ public final class Pbmethod {
        * <code>optional int32 honor = 21;</code>
        */
       public Builder setHonor(int value) {
-        bitField0_ |= 0x00100000;
+        bitField0_ |= 0x00080000;
         honor_ = value;
         onChanged();
         return this;
@@ -27278,7 +23686,7 @@ public final class Pbmethod {
        * <code>optional int32 honor = 21;</code>
        */
       public Builder clearHonor() {
-        bitField0_ = (bitField0_ & ~0x00100000);
+        bitField0_ = (bitField0_ & ~0x00080000);
         honor_ = 0;
         onChanged();
         return this;
@@ -27290,7 +23698,7 @@ public final class Pbmethod {
        * <code>optional int64 power = 22;</code>
        */
       public boolean hasPower() {
-        return ((bitField0_ & 0x00200000) == 0x00200000);
+        return ((bitField0_ & 0x00100000) == 0x00100000);
       }
       /**
        * <code>optional int64 power = 22;</code>
@@ -27302,7 +23710,7 @@ public final class Pbmethod {
        * <code>optional int64 power = 22;</code>
        */
       public Builder setPower(long value) {
-        bitField0_ |= 0x00200000;
+        bitField0_ |= 0x00100000;
         power_ = value;
         onChanged();
         return this;
@@ -27311,7 +23719,7 @@ public final class Pbmethod {
        * <code>optional int64 power = 22;</code>
        */
       public Builder clearPower() {
-        bitField0_ = (bitField0_ & ~0x00200000);
+        bitField0_ = (bitField0_ & ~0x00100000);
         power_ = 0L;
         onChanged();
         return this;
@@ -27320,9 +23728,9 @@ public final class Pbmethod {
       // repeated int32 itemEquip = 23;
       private java.util.List<java.lang.Integer> itemEquip_ = java.util.Collections.emptyList();
       private void ensureItemEquipIsMutable() {
-        if (!((bitField0_ & 0x00400000) == 0x00400000)) {
+        if (!((bitField0_ & 0x00200000) == 0x00200000)) {
           itemEquip_ = new java.util.ArrayList<java.lang.Integer>(itemEquip_);
-          bitField0_ |= 0x00400000;
+          bitField0_ |= 0x00200000;
          }
       }
       /**
@@ -27378,7 +23786,7 @@ public final class Pbmethod {
        */
       public Builder clearItemEquip() {
         itemEquip_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00400000);
+        bitField0_ = (bitField0_ & ~0x00200000);
         onChanged();
         return this;
       }
@@ -27386,9 +23794,9 @@ public final class Pbmethod {
       // repeated int32 channel = 24;
       private java.util.List<java.lang.Integer> channel_ = java.util.Collections.emptyList();
       private void ensureChannelIsMutable() {
-        if (!((bitField0_ & 0x00800000) == 0x00800000)) {
+        if (!((bitField0_ & 0x00400000) == 0x00400000)) {
           channel_ = new java.util.ArrayList<java.lang.Integer>(channel_);
-          bitField0_ |= 0x00800000;
+          bitField0_ |= 0x00400000;
          }
       }
       /**
@@ -27444,7 +23852,7 @@ public final class Pbmethod {
        */
       public Builder clearChannel() {
         channel_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00800000);
+        bitField0_ = (bitField0_ & ~0x00400000);
         onChanged();
         return this;
       }
@@ -27455,7 +23863,7 @@ public final class Pbmethod {
        * <code>optional int64 pointRank = 25;</code>
        */
       public boolean hasPointRank() {
-        return ((bitField0_ & 0x01000000) == 0x01000000);
+        return ((bitField0_ & 0x00800000) == 0x00800000);
       }
       /**
        * <code>optional int64 pointRank = 25;</code>
@@ -27467,7 +23875,7 @@ public final class Pbmethod {
        * <code>optional int64 pointRank = 25;</code>
        */
       public Builder setPointRank(long value) {
-        bitField0_ |= 0x01000000;
+        bitField0_ |= 0x00800000;
         pointRank_ = value;
         onChanged();
         return this;
@@ -27476,7 +23884,7 @@ public final class Pbmethod {
        * <code>optional int64 pointRank = 25;</code>
        */
       public Builder clearPointRank() {
-        bitField0_ = (bitField0_ & ~0x01000000);
+        bitField0_ = (bitField0_ & ~0x00800000);
         pointRank_ = 0L;
         onChanged();
         return this;
@@ -27488,7 +23896,7 @@ public final class Pbmethod {
        * <code>optional int32 arenaRank = 26;</code>
        */
       public boolean hasArenaRank() {
-        return ((bitField0_ & 0x02000000) == 0x02000000);
+        return ((bitField0_ & 0x01000000) == 0x01000000);
       }
       /**
        * <code>optional int32 arenaRank = 26;</code>
@@ -27500,7 +23908,7 @@ public final class Pbmethod {
        * <code>optional int32 arenaRank = 26;</code>
        */
       public Builder setArenaRank(int value) {
-        bitField0_ |= 0x02000000;
+        bitField0_ |= 0x01000000;
         arenaRank_ = value;
         onChanged();
         return this;
@@ -27509,7 +23917,7 @@ public final class Pbmethod {
        * <code>optional int32 arenaRank = 26;</code>
        */
       public Builder clearArenaRank() {
-        bitField0_ = (bitField0_ & ~0x02000000);
+        bitField0_ = (bitField0_ & ~0x01000000);
         arenaRank_ = 0;
         onChanged();
         return this;
@@ -27521,7 +23929,7 @@ public final class Pbmethod {
        * <code>optional int64 ruby = 27;</code>
        */
       public boolean hasRuby() {
-        return ((bitField0_ & 0x04000000) == 0x04000000);
+        return ((bitField0_ & 0x02000000) == 0x02000000);
       }
       /**
        * <code>optional int64 ruby = 27;</code>
@@ -27533,7 +23941,7 @@ public final class Pbmethod {
        * <code>optional int64 ruby = 27;</code>
        */
       public Builder setRuby(long value) {
-        bitField0_ |= 0x04000000;
+        bitField0_ |= 0x02000000;
         ruby_ = value;
         onChanged();
         return this;
@@ -27542,7 +23950,7 @@ public final class Pbmethod {
        * <code>optional int64 ruby = 27;</code>
        */
       public Builder clearRuby() {
-        bitField0_ = (bitField0_ & ~0x04000000);
+        bitField0_ = (bitField0_ & ~0x02000000);
         ruby_ = 0L;
         onChanged();
         return this;
@@ -27551,9 +23959,9 @@ public final class Pbmethod {
       // repeated int32 pet = 28;
       private java.util.List<java.lang.Integer> pet_ = java.util.Collections.emptyList();
       private void ensurePetIsMutable() {
-        if (!((bitField0_ & 0x08000000) == 0x08000000)) {
+        if (!((bitField0_ & 0x04000000) == 0x04000000)) {
           pet_ = new java.util.ArrayList<java.lang.Integer>(pet_);
-          bitField0_ |= 0x08000000;
+          bitField0_ |= 0x04000000;
          }
       }
       /**
@@ -27609,7 +24017,7 @@ public final class Pbmethod {
        */
       public Builder clearPet() {
         pet_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x08000000);
+        bitField0_ = (bitField0_ & ~0x04000000);
         onChanged();
         return this;
       }
@@ -27623,2919 +24031,6 @@ public final class Pbmethod {
     }
 
     // @@protoc_insertion_point(class_scope:pbdson.PbUser)
-  }
-
-  public interface PbArenaTeamInfoOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // optional int32 team = 1;
-    /**
-     * <code>optional int32 team = 1;</code>
-     */
-    boolean hasTeam();
-    /**
-     * <code>optional int32 team = 1;</code>
-     */
-    int getTeam();
-
-    // repeated .pbdson.PbArenaHeroInfo heroes = 2;
-    /**
-     * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-     */
-    java.util.List<protocol.Pbmethod.PbArenaHeroInfo> 
-        getHeroesList();
-    /**
-     * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-     */
-    protocol.Pbmethod.PbArenaHeroInfo getHeroes(int index);
-    /**
-     * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-     */
-    int getHeroesCount();
-    /**
-     * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-     */
-    java.util.List<? extends protocol.Pbmethod.PbArenaHeroInfoOrBuilder> 
-        getHeroesOrBuilderList();
-    /**
-     * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-     */
-    protocol.Pbmethod.PbArenaHeroInfoOrBuilder getHeroesOrBuilder(
-        int index);
-
-    // repeated .pbdson.PbArenaPetInfo pets = 3;
-    /**
-     * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-     */
-    java.util.List<protocol.Pbmethod.PbArenaPetInfo> 
-        getPetsList();
-    /**
-     * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-     */
-    protocol.Pbmethod.PbArenaPetInfo getPets(int index);
-    /**
-     * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-     */
-    int getPetsCount();
-    /**
-     * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-     */
-    java.util.List<? extends protocol.Pbmethod.PbArenaPetInfoOrBuilder> 
-        getPetsOrBuilderList();
-    /**
-     * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-     */
-    protocol.Pbmethod.PbArenaPetInfoOrBuilder getPetsOrBuilder(
-        int index);
-  }
-  /**
-   * Protobuf type {@code pbdson.PbArenaTeamInfo}
-   */
-  public static final class PbArenaTeamInfo extends
-      com.google.protobuf.GeneratedMessage
-      implements PbArenaTeamInfoOrBuilder {
-    // Use PbArenaTeamInfo.newBuilder() to construct.
-    private PbArenaTeamInfo(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private PbArenaTeamInfo(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final PbArenaTeamInfo defaultInstance;
-    public static PbArenaTeamInfo getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public PbArenaTeamInfo getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private PbArenaTeamInfo(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-              bitField0_ |= 0x00000001;
-              team_ = input.readInt32();
-              break;
-            }
-            case 18: {
-              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-                heroes_ = new java.util.ArrayList<protocol.Pbmethod.PbArenaHeroInfo>();
-                mutable_bitField0_ |= 0x00000002;
-              }
-              heroes_.add(input.readMessage(protocol.Pbmethod.PbArenaHeroInfo.PARSER, extensionRegistry));
-              break;
-            }
-            case 26: {
-              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
-                pets_ = new java.util.ArrayList<protocol.Pbmethod.PbArenaPetInfo>();
-                mutable_bitField0_ |= 0x00000004;
-              }
-              pets_.add(input.readMessage(protocol.Pbmethod.PbArenaPetInfo.PARSER, extensionRegistry));
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-          heroes_ = java.util.Collections.unmodifiableList(heroes_);
-        }
-        if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
-          pets_ = java.util.Collections.unmodifiableList(pets_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return protocol.Pbmethod.internal_static_pbdson_PbArenaTeamInfo_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return protocol.Pbmethod.internal_static_pbdson_PbArenaTeamInfo_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              protocol.Pbmethod.PbArenaTeamInfo.class, protocol.Pbmethod.PbArenaTeamInfo.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<PbArenaTeamInfo> PARSER =
-        new com.google.protobuf.AbstractParser<PbArenaTeamInfo>() {
-      public PbArenaTeamInfo parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PbArenaTeamInfo(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<PbArenaTeamInfo> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    // optional int32 team = 1;
-    public static final int TEAM_FIELD_NUMBER = 1;
-    private int team_;
-    /**
-     * <code>optional int32 team = 1;</code>
-     */
-    public boolean hasTeam() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>optional int32 team = 1;</code>
-     */
-    public int getTeam() {
-      return team_;
-    }
-
-    // repeated .pbdson.PbArenaHeroInfo heroes = 2;
-    public static final int HEROES_FIELD_NUMBER = 2;
-    private java.util.List<protocol.Pbmethod.PbArenaHeroInfo> heroes_;
-    /**
-     * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-     */
-    public java.util.List<protocol.Pbmethod.PbArenaHeroInfo> getHeroesList() {
-      return heroes_;
-    }
-    /**
-     * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-     */
-    public java.util.List<? extends protocol.Pbmethod.PbArenaHeroInfoOrBuilder> 
-        getHeroesOrBuilderList() {
-      return heroes_;
-    }
-    /**
-     * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-     */
-    public int getHeroesCount() {
-      return heroes_.size();
-    }
-    /**
-     * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-     */
-    public protocol.Pbmethod.PbArenaHeroInfo getHeroes(int index) {
-      return heroes_.get(index);
-    }
-    /**
-     * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-     */
-    public protocol.Pbmethod.PbArenaHeroInfoOrBuilder getHeroesOrBuilder(
-        int index) {
-      return heroes_.get(index);
-    }
-
-    // repeated .pbdson.PbArenaPetInfo pets = 3;
-    public static final int PETS_FIELD_NUMBER = 3;
-    private java.util.List<protocol.Pbmethod.PbArenaPetInfo> pets_;
-    /**
-     * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-     */
-    public java.util.List<protocol.Pbmethod.PbArenaPetInfo> getPetsList() {
-      return pets_;
-    }
-    /**
-     * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-     */
-    public java.util.List<? extends protocol.Pbmethod.PbArenaPetInfoOrBuilder> 
-        getPetsOrBuilderList() {
-      return pets_;
-    }
-    /**
-     * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-     */
-    public int getPetsCount() {
-      return pets_.size();
-    }
-    /**
-     * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-     */
-    public protocol.Pbmethod.PbArenaPetInfo getPets(int index) {
-      return pets_.get(index);
-    }
-    /**
-     * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-     */
-    public protocol.Pbmethod.PbArenaPetInfoOrBuilder getPetsOrBuilder(
-        int index) {
-      return pets_.get(index);
-    }
-
-    private void initFields() {
-      team_ = 0;
-      heroes_ = java.util.Collections.emptyList();
-      pets_ = java.util.Collections.emptyList();
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(1, team_);
-      }
-      for (int i = 0; i < heroes_.size(); i++) {
-        output.writeMessage(2, heroes_.get(i));
-      }
-      for (int i = 0; i < pets_.size(); i++) {
-        output.writeMessage(3, pets_.get(i));
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, team_);
-      }
-      for (int i = 0; i < heroes_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, heroes_.get(i));
-      }
-      for (int i = 0; i < pets_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, pets_.get(i));
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static protocol.Pbmethod.PbArenaTeamInfo parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbArenaTeamInfo parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbArenaTeamInfo parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbArenaTeamInfo parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbArenaTeamInfo parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbArenaTeamInfo parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbArenaTeamInfo parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static protocol.Pbmethod.PbArenaTeamInfo parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbArenaTeamInfo parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbArenaTeamInfo parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(protocol.Pbmethod.PbArenaTeamInfo prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code pbdson.PbArenaTeamInfo}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements protocol.Pbmethod.PbArenaTeamInfoOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return protocol.Pbmethod.internal_static_pbdson_PbArenaTeamInfo_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return protocol.Pbmethod.internal_static_pbdson_PbArenaTeamInfo_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                protocol.Pbmethod.PbArenaTeamInfo.class, protocol.Pbmethod.PbArenaTeamInfo.Builder.class);
-      }
-
-      // Construct using protocol.Pbmethod.PbArenaTeamInfo.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getHeroesFieldBuilder();
-          getPetsFieldBuilder();
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        team_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        if (heroesBuilder_ == null) {
-          heroes_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000002);
-        } else {
-          heroesBuilder_.clear();
-        }
-        if (petsBuilder_ == null) {
-          pets_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000004);
-        } else {
-          petsBuilder_.clear();
-        }
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return protocol.Pbmethod.internal_static_pbdson_PbArenaTeamInfo_descriptor;
-      }
-
-      public protocol.Pbmethod.PbArenaTeamInfo getDefaultInstanceForType() {
-        return protocol.Pbmethod.PbArenaTeamInfo.getDefaultInstance();
-      }
-
-      public protocol.Pbmethod.PbArenaTeamInfo build() {
-        protocol.Pbmethod.PbArenaTeamInfo result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public protocol.Pbmethod.PbArenaTeamInfo buildPartial() {
-        protocol.Pbmethod.PbArenaTeamInfo result = new protocol.Pbmethod.PbArenaTeamInfo(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.team_ = team_;
-        if (heroesBuilder_ == null) {
-          if (((bitField0_ & 0x00000002) == 0x00000002)) {
-            heroes_ = java.util.Collections.unmodifiableList(heroes_);
-            bitField0_ = (bitField0_ & ~0x00000002);
-          }
-          result.heroes_ = heroes_;
-        } else {
-          result.heroes_ = heroesBuilder_.build();
-        }
-        if (petsBuilder_ == null) {
-          if (((bitField0_ & 0x00000004) == 0x00000004)) {
-            pets_ = java.util.Collections.unmodifiableList(pets_);
-            bitField0_ = (bitField0_ & ~0x00000004);
-          }
-          result.pets_ = pets_;
-        } else {
-          result.pets_ = petsBuilder_.build();
-        }
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof protocol.Pbmethod.PbArenaTeamInfo) {
-          return mergeFrom((protocol.Pbmethod.PbArenaTeamInfo)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(protocol.Pbmethod.PbArenaTeamInfo other) {
-        if (other == protocol.Pbmethod.PbArenaTeamInfo.getDefaultInstance()) return this;
-        if (other.hasTeam()) {
-          setTeam(other.getTeam());
-        }
-        if (heroesBuilder_ == null) {
-          if (!other.heroes_.isEmpty()) {
-            if (heroes_.isEmpty()) {
-              heroes_ = other.heroes_;
-              bitField0_ = (bitField0_ & ~0x00000002);
-            } else {
-              ensureHeroesIsMutable();
-              heroes_.addAll(other.heroes_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.heroes_.isEmpty()) {
-            if (heroesBuilder_.isEmpty()) {
-              heroesBuilder_.dispose();
-              heroesBuilder_ = null;
-              heroes_ = other.heroes_;
-              bitField0_ = (bitField0_ & ~0x00000002);
-              heroesBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getHeroesFieldBuilder() : null;
-            } else {
-              heroesBuilder_.addAllMessages(other.heroes_);
-            }
-          }
-        }
-        if (petsBuilder_ == null) {
-          if (!other.pets_.isEmpty()) {
-            if (pets_.isEmpty()) {
-              pets_ = other.pets_;
-              bitField0_ = (bitField0_ & ~0x00000004);
-            } else {
-              ensurePetsIsMutable();
-              pets_.addAll(other.pets_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.pets_.isEmpty()) {
-            if (petsBuilder_.isEmpty()) {
-              petsBuilder_.dispose();
-              petsBuilder_ = null;
-              pets_ = other.pets_;
-              bitField0_ = (bitField0_ & ~0x00000004);
-              petsBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getPetsFieldBuilder() : null;
-            } else {
-              petsBuilder_.addAllMessages(other.pets_);
-            }
-          }
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        protocol.Pbmethod.PbArenaTeamInfo parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (protocol.Pbmethod.PbArenaTeamInfo) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // optional int32 team = 1;
-      private int team_ ;
-      /**
-       * <code>optional int32 team = 1;</code>
-       */
-      public boolean hasTeam() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>optional int32 team = 1;</code>
-       */
-      public int getTeam() {
-        return team_;
-      }
-      /**
-       * <code>optional int32 team = 1;</code>
-       */
-      public Builder setTeam(int value) {
-        bitField0_ |= 0x00000001;
-        team_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 team = 1;</code>
-       */
-      public Builder clearTeam() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        team_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // repeated .pbdson.PbArenaHeroInfo heroes = 2;
-      private java.util.List<protocol.Pbmethod.PbArenaHeroInfo> heroes_ =
-        java.util.Collections.emptyList();
-      private void ensureHeroesIsMutable() {
-        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
-          heroes_ = new java.util.ArrayList<protocol.Pbmethod.PbArenaHeroInfo>(heroes_);
-          bitField0_ |= 0x00000002;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbArenaHeroInfo, protocol.Pbmethod.PbArenaHeroInfo.Builder, protocol.Pbmethod.PbArenaHeroInfoOrBuilder> heroesBuilder_;
-
-      /**
-       * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbArenaHeroInfo> getHeroesList() {
-        if (heroesBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(heroes_);
-        } else {
-          return heroesBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-       */
-      public int getHeroesCount() {
-        if (heroesBuilder_ == null) {
-          return heroes_.size();
-        } else {
-          return heroesBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-       */
-      public protocol.Pbmethod.PbArenaHeroInfo getHeroes(int index) {
-        if (heroesBuilder_ == null) {
-          return heroes_.get(index);
-        } else {
-          return heroesBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-       */
-      public Builder setHeroes(
-          int index, protocol.Pbmethod.PbArenaHeroInfo value) {
-        if (heroesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureHeroesIsMutable();
-          heroes_.set(index, value);
-          onChanged();
-        } else {
-          heroesBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-       */
-      public Builder setHeroes(
-          int index, protocol.Pbmethod.PbArenaHeroInfo.Builder builderForValue) {
-        if (heroesBuilder_ == null) {
-          ensureHeroesIsMutable();
-          heroes_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          heroesBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-       */
-      public Builder addHeroes(protocol.Pbmethod.PbArenaHeroInfo value) {
-        if (heroesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureHeroesIsMutable();
-          heroes_.add(value);
-          onChanged();
-        } else {
-          heroesBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-       */
-      public Builder addHeroes(
-          int index, protocol.Pbmethod.PbArenaHeroInfo value) {
-        if (heroesBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureHeroesIsMutable();
-          heroes_.add(index, value);
-          onChanged();
-        } else {
-          heroesBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-       */
-      public Builder addHeroes(
-          protocol.Pbmethod.PbArenaHeroInfo.Builder builderForValue) {
-        if (heroesBuilder_ == null) {
-          ensureHeroesIsMutable();
-          heroes_.add(builderForValue.build());
-          onChanged();
-        } else {
-          heroesBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-       */
-      public Builder addHeroes(
-          int index, protocol.Pbmethod.PbArenaHeroInfo.Builder builderForValue) {
-        if (heroesBuilder_ == null) {
-          ensureHeroesIsMutable();
-          heroes_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          heroesBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-       */
-      public Builder addAllHeroes(
-          java.lang.Iterable<? extends protocol.Pbmethod.PbArenaHeroInfo> values) {
-        if (heroesBuilder_ == null) {
-          ensureHeroesIsMutable();
-          super.addAll(values, heroes_);
-          onChanged();
-        } else {
-          heroesBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-       */
-      public Builder clearHeroes() {
-        if (heroesBuilder_ == null) {
-          heroes_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000002);
-          onChanged();
-        } else {
-          heroesBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-       */
-      public Builder removeHeroes(int index) {
-        if (heroesBuilder_ == null) {
-          ensureHeroesIsMutable();
-          heroes_.remove(index);
-          onChanged();
-        } else {
-          heroesBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-       */
-      public protocol.Pbmethod.PbArenaHeroInfo.Builder getHeroesBuilder(
-          int index) {
-        return getHeroesFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-       */
-      public protocol.Pbmethod.PbArenaHeroInfoOrBuilder getHeroesOrBuilder(
-          int index) {
-        if (heroesBuilder_ == null) {
-          return heroes_.get(index);  } else {
-          return heroesBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-       */
-      public java.util.List<? extends protocol.Pbmethod.PbArenaHeroInfoOrBuilder> 
-           getHeroesOrBuilderList() {
-        if (heroesBuilder_ != null) {
-          return heroesBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(heroes_);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-       */
-      public protocol.Pbmethod.PbArenaHeroInfo.Builder addHeroesBuilder() {
-        return getHeroesFieldBuilder().addBuilder(
-            protocol.Pbmethod.PbArenaHeroInfo.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-       */
-      public protocol.Pbmethod.PbArenaHeroInfo.Builder addHeroesBuilder(
-          int index) {
-        return getHeroesFieldBuilder().addBuilder(
-            index, protocol.Pbmethod.PbArenaHeroInfo.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaHeroInfo heroes = 2;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbArenaHeroInfo.Builder> 
-           getHeroesBuilderList() {
-        return getHeroesFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbArenaHeroInfo, protocol.Pbmethod.PbArenaHeroInfo.Builder, protocol.Pbmethod.PbArenaHeroInfoOrBuilder> 
-          getHeroesFieldBuilder() {
-        if (heroesBuilder_ == null) {
-          heroesBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              protocol.Pbmethod.PbArenaHeroInfo, protocol.Pbmethod.PbArenaHeroInfo.Builder, protocol.Pbmethod.PbArenaHeroInfoOrBuilder>(
-                  heroes_,
-                  ((bitField0_ & 0x00000002) == 0x00000002),
-                  getParentForChildren(),
-                  isClean());
-          heroes_ = null;
-        }
-        return heroesBuilder_;
-      }
-
-      // repeated .pbdson.PbArenaPetInfo pets = 3;
-      private java.util.List<protocol.Pbmethod.PbArenaPetInfo> pets_ =
-        java.util.Collections.emptyList();
-      private void ensurePetsIsMutable() {
-        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
-          pets_ = new java.util.ArrayList<protocol.Pbmethod.PbArenaPetInfo>(pets_);
-          bitField0_ |= 0x00000004;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbArenaPetInfo, protocol.Pbmethod.PbArenaPetInfo.Builder, protocol.Pbmethod.PbArenaPetInfoOrBuilder> petsBuilder_;
-
-      /**
-       * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbArenaPetInfo> getPetsList() {
-        if (petsBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(pets_);
-        } else {
-          return petsBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-       */
-      public int getPetsCount() {
-        if (petsBuilder_ == null) {
-          return pets_.size();
-        } else {
-          return petsBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-       */
-      public protocol.Pbmethod.PbArenaPetInfo getPets(int index) {
-        if (petsBuilder_ == null) {
-          return pets_.get(index);
-        } else {
-          return petsBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-       */
-      public Builder setPets(
-          int index, protocol.Pbmethod.PbArenaPetInfo value) {
-        if (petsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensurePetsIsMutable();
-          pets_.set(index, value);
-          onChanged();
-        } else {
-          petsBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-       */
-      public Builder setPets(
-          int index, protocol.Pbmethod.PbArenaPetInfo.Builder builderForValue) {
-        if (petsBuilder_ == null) {
-          ensurePetsIsMutable();
-          pets_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          petsBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-       */
-      public Builder addPets(protocol.Pbmethod.PbArenaPetInfo value) {
-        if (petsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensurePetsIsMutable();
-          pets_.add(value);
-          onChanged();
-        } else {
-          petsBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-       */
-      public Builder addPets(
-          int index, protocol.Pbmethod.PbArenaPetInfo value) {
-        if (petsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensurePetsIsMutable();
-          pets_.add(index, value);
-          onChanged();
-        } else {
-          petsBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-       */
-      public Builder addPets(
-          protocol.Pbmethod.PbArenaPetInfo.Builder builderForValue) {
-        if (petsBuilder_ == null) {
-          ensurePetsIsMutable();
-          pets_.add(builderForValue.build());
-          onChanged();
-        } else {
-          petsBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-       */
-      public Builder addPets(
-          int index, protocol.Pbmethod.PbArenaPetInfo.Builder builderForValue) {
-        if (petsBuilder_ == null) {
-          ensurePetsIsMutable();
-          pets_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          petsBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-       */
-      public Builder addAllPets(
-          java.lang.Iterable<? extends protocol.Pbmethod.PbArenaPetInfo> values) {
-        if (petsBuilder_ == null) {
-          ensurePetsIsMutable();
-          super.addAll(values, pets_);
-          onChanged();
-        } else {
-          petsBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-       */
-      public Builder clearPets() {
-        if (petsBuilder_ == null) {
-          pets_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000004);
-          onChanged();
-        } else {
-          petsBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-       */
-      public Builder removePets(int index) {
-        if (petsBuilder_ == null) {
-          ensurePetsIsMutable();
-          pets_.remove(index);
-          onChanged();
-        } else {
-          petsBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-       */
-      public protocol.Pbmethod.PbArenaPetInfo.Builder getPetsBuilder(
-          int index) {
-        return getPetsFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-       */
-      public protocol.Pbmethod.PbArenaPetInfoOrBuilder getPetsOrBuilder(
-          int index) {
-        if (petsBuilder_ == null) {
-          return pets_.get(index);  } else {
-          return petsBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-       */
-      public java.util.List<? extends protocol.Pbmethod.PbArenaPetInfoOrBuilder> 
-           getPetsOrBuilderList() {
-        if (petsBuilder_ != null) {
-          return petsBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(pets_);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-       */
-      public protocol.Pbmethod.PbArenaPetInfo.Builder addPetsBuilder() {
-        return getPetsFieldBuilder().addBuilder(
-            protocol.Pbmethod.PbArenaPetInfo.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-       */
-      public protocol.Pbmethod.PbArenaPetInfo.Builder addPetsBuilder(
-          int index) {
-        return getPetsFieldBuilder().addBuilder(
-            index, protocol.Pbmethod.PbArenaPetInfo.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaPetInfo pets = 3;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbArenaPetInfo.Builder> 
-           getPetsBuilderList() {
-        return getPetsFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbArenaPetInfo, protocol.Pbmethod.PbArenaPetInfo.Builder, protocol.Pbmethod.PbArenaPetInfoOrBuilder> 
-          getPetsFieldBuilder() {
-        if (petsBuilder_ == null) {
-          petsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              protocol.Pbmethod.PbArenaPetInfo, protocol.Pbmethod.PbArenaPetInfo.Builder, protocol.Pbmethod.PbArenaPetInfoOrBuilder>(
-                  pets_,
-                  ((bitField0_ & 0x00000004) == 0x00000004),
-                  getParentForChildren(),
-                  isClean());
-          pets_ = null;
-        }
-        return petsBuilder_;
-      }
-
-      // @@protoc_insertion_point(builder_scope:pbdson.PbArenaTeamInfo)
-    }
-
-    static {
-      defaultInstance = new PbArenaTeamInfo(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:pbdson.PbArenaTeamInfo)
-  }
-
-  public interface PbArenaHeroInfoOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // optional int32 avatar = 1;
-    /**
-     * <code>optional int32 avatar = 1;</code>
-     */
-    boolean hasAvatar();
-    /**
-     * <code>optional int32 avatar = 1;</code>
-     */
-    int getAvatar();
-
-    // repeated .pbdson.PbArenaWeapon weapons = 2;
-    /**
-     * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-     */
-    java.util.List<protocol.Pbmethod.PbArenaWeapon> 
-        getWeaponsList();
-    /**
-     * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-     */
-    protocol.Pbmethod.PbArenaWeapon getWeapons(int index);
-    /**
-     * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-     */
-    int getWeaponsCount();
-    /**
-     * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-     */
-    java.util.List<? extends protocol.Pbmethod.PbArenaWeaponOrBuilder> 
-        getWeaponsOrBuilderList();
-    /**
-     * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-     */
-    protocol.Pbmethod.PbArenaWeaponOrBuilder getWeaponsOrBuilder(
-        int index);
-  }
-  /**
-   * Protobuf type {@code pbdson.PbArenaHeroInfo}
-   */
-  public static final class PbArenaHeroInfo extends
-      com.google.protobuf.GeneratedMessage
-      implements PbArenaHeroInfoOrBuilder {
-    // Use PbArenaHeroInfo.newBuilder() to construct.
-    private PbArenaHeroInfo(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private PbArenaHeroInfo(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final PbArenaHeroInfo defaultInstance;
-    public static PbArenaHeroInfo getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public PbArenaHeroInfo getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private PbArenaHeroInfo(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-              bitField0_ |= 0x00000001;
-              avatar_ = input.readInt32();
-              break;
-            }
-            case 18: {
-              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-                weapons_ = new java.util.ArrayList<protocol.Pbmethod.PbArenaWeapon>();
-                mutable_bitField0_ |= 0x00000002;
-              }
-              weapons_.add(input.readMessage(protocol.Pbmethod.PbArenaWeapon.PARSER, extensionRegistry));
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-          weapons_ = java.util.Collections.unmodifiableList(weapons_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return protocol.Pbmethod.internal_static_pbdson_PbArenaHeroInfo_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return protocol.Pbmethod.internal_static_pbdson_PbArenaHeroInfo_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              protocol.Pbmethod.PbArenaHeroInfo.class, protocol.Pbmethod.PbArenaHeroInfo.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<PbArenaHeroInfo> PARSER =
-        new com.google.protobuf.AbstractParser<PbArenaHeroInfo>() {
-      public PbArenaHeroInfo parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PbArenaHeroInfo(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<PbArenaHeroInfo> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    // optional int32 avatar = 1;
-    public static final int AVATAR_FIELD_NUMBER = 1;
-    private int avatar_;
-    /**
-     * <code>optional int32 avatar = 1;</code>
-     */
-    public boolean hasAvatar() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>optional int32 avatar = 1;</code>
-     */
-    public int getAvatar() {
-      return avatar_;
-    }
-
-    // repeated .pbdson.PbArenaWeapon weapons = 2;
-    public static final int WEAPONS_FIELD_NUMBER = 2;
-    private java.util.List<protocol.Pbmethod.PbArenaWeapon> weapons_;
-    /**
-     * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-     */
-    public java.util.List<protocol.Pbmethod.PbArenaWeapon> getWeaponsList() {
-      return weapons_;
-    }
-    /**
-     * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-     */
-    public java.util.List<? extends protocol.Pbmethod.PbArenaWeaponOrBuilder> 
-        getWeaponsOrBuilderList() {
-      return weapons_;
-    }
-    /**
-     * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-     */
-    public int getWeaponsCount() {
-      return weapons_.size();
-    }
-    /**
-     * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-     */
-    public protocol.Pbmethod.PbArenaWeapon getWeapons(int index) {
-      return weapons_.get(index);
-    }
-    /**
-     * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-     */
-    public protocol.Pbmethod.PbArenaWeaponOrBuilder getWeaponsOrBuilder(
-        int index) {
-      return weapons_.get(index);
-    }
-
-    private void initFields() {
-      avatar_ = 0;
-      weapons_ = java.util.Collections.emptyList();
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(1, avatar_);
-      }
-      for (int i = 0; i < weapons_.size(); i++) {
-        output.writeMessage(2, weapons_.get(i));
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, avatar_);
-      }
-      for (int i = 0; i < weapons_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, weapons_.get(i));
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static protocol.Pbmethod.PbArenaHeroInfo parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbArenaHeroInfo parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbArenaHeroInfo parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbArenaHeroInfo parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbArenaHeroInfo parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbArenaHeroInfo parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbArenaHeroInfo parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static protocol.Pbmethod.PbArenaHeroInfo parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbArenaHeroInfo parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbArenaHeroInfo parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(protocol.Pbmethod.PbArenaHeroInfo prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code pbdson.PbArenaHeroInfo}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements protocol.Pbmethod.PbArenaHeroInfoOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return protocol.Pbmethod.internal_static_pbdson_PbArenaHeroInfo_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return protocol.Pbmethod.internal_static_pbdson_PbArenaHeroInfo_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                protocol.Pbmethod.PbArenaHeroInfo.class, protocol.Pbmethod.PbArenaHeroInfo.Builder.class);
-      }
-
-      // Construct using protocol.Pbmethod.PbArenaHeroInfo.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getWeaponsFieldBuilder();
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        avatar_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        if (weaponsBuilder_ == null) {
-          weapons_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000002);
-        } else {
-          weaponsBuilder_.clear();
-        }
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return protocol.Pbmethod.internal_static_pbdson_PbArenaHeroInfo_descriptor;
-      }
-
-      public protocol.Pbmethod.PbArenaHeroInfo getDefaultInstanceForType() {
-        return protocol.Pbmethod.PbArenaHeroInfo.getDefaultInstance();
-      }
-
-      public protocol.Pbmethod.PbArenaHeroInfo build() {
-        protocol.Pbmethod.PbArenaHeroInfo result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public protocol.Pbmethod.PbArenaHeroInfo buildPartial() {
-        protocol.Pbmethod.PbArenaHeroInfo result = new protocol.Pbmethod.PbArenaHeroInfo(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.avatar_ = avatar_;
-        if (weaponsBuilder_ == null) {
-          if (((bitField0_ & 0x00000002) == 0x00000002)) {
-            weapons_ = java.util.Collections.unmodifiableList(weapons_);
-            bitField0_ = (bitField0_ & ~0x00000002);
-          }
-          result.weapons_ = weapons_;
-        } else {
-          result.weapons_ = weaponsBuilder_.build();
-        }
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof protocol.Pbmethod.PbArenaHeroInfo) {
-          return mergeFrom((protocol.Pbmethod.PbArenaHeroInfo)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(protocol.Pbmethod.PbArenaHeroInfo other) {
-        if (other == protocol.Pbmethod.PbArenaHeroInfo.getDefaultInstance()) return this;
-        if (other.hasAvatar()) {
-          setAvatar(other.getAvatar());
-        }
-        if (weaponsBuilder_ == null) {
-          if (!other.weapons_.isEmpty()) {
-            if (weapons_.isEmpty()) {
-              weapons_ = other.weapons_;
-              bitField0_ = (bitField0_ & ~0x00000002);
-            } else {
-              ensureWeaponsIsMutable();
-              weapons_.addAll(other.weapons_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.weapons_.isEmpty()) {
-            if (weaponsBuilder_.isEmpty()) {
-              weaponsBuilder_.dispose();
-              weaponsBuilder_ = null;
-              weapons_ = other.weapons_;
-              bitField0_ = (bitField0_ & ~0x00000002);
-              weaponsBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getWeaponsFieldBuilder() : null;
-            } else {
-              weaponsBuilder_.addAllMessages(other.weapons_);
-            }
-          }
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        protocol.Pbmethod.PbArenaHeroInfo parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (protocol.Pbmethod.PbArenaHeroInfo) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // optional int32 avatar = 1;
-      private int avatar_ ;
-      /**
-       * <code>optional int32 avatar = 1;</code>
-       */
-      public boolean hasAvatar() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>optional int32 avatar = 1;</code>
-       */
-      public int getAvatar() {
-        return avatar_;
-      }
-      /**
-       * <code>optional int32 avatar = 1;</code>
-       */
-      public Builder setAvatar(int value) {
-        bitField0_ |= 0x00000001;
-        avatar_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 avatar = 1;</code>
-       */
-      public Builder clearAvatar() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        avatar_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // repeated .pbdson.PbArenaWeapon weapons = 2;
-      private java.util.List<protocol.Pbmethod.PbArenaWeapon> weapons_ =
-        java.util.Collections.emptyList();
-      private void ensureWeaponsIsMutable() {
-        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
-          weapons_ = new java.util.ArrayList<protocol.Pbmethod.PbArenaWeapon>(weapons_);
-          bitField0_ |= 0x00000002;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbArenaWeapon, protocol.Pbmethod.PbArenaWeapon.Builder, protocol.Pbmethod.PbArenaWeaponOrBuilder> weaponsBuilder_;
-
-      /**
-       * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbArenaWeapon> getWeaponsList() {
-        if (weaponsBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(weapons_);
-        } else {
-          return weaponsBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-       */
-      public int getWeaponsCount() {
-        if (weaponsBuilder_ == null) {
-          return weapons_.size();
-        } else {
-          return weaponsBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-       */
-      public protocol.Pbmethod.PbArenaWeapon getWeapons(int index) {
-        if (weaponsBuilder_ == null) {
-          return weapons_.get(index);
-        } else {
-          return weaponsBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-       */
-      public Builder setWeapons(
-          int index, protocol.Pbmethod.PbArenaWeapon value) {
-        if (weaponsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureWeaponsIsMutable();
-          weapons_.set(index, value);
-          onChanged();
-        } else {
-          weaponsBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-       */
-      public Builder setWeapons(
-          int index, protocol.Pbmethod.PbArenaWeapon.Builder builderForValue) {
-        if (weaponsBuilder_ == null) {
-          ensureWeaponsIsMutable();
-          weapons_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          weaponsBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-       */
-      public Builder addWeapons(protocol.Pbmethod.PbArenaWeapon value) {
-        if (weaponsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureWeaponsIsMutable();
-          weapons_.add(value);
-          onChanged();
-        } else {
-          weaponsBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-       */
-      public Builder addWeapons(
-          int index, protocol.Pbmethod.PbArenaWeapon value) {
-        if (weaponsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureWeaponsIsMutable();
-          weapons_.add(index, value);
-          onChanged();
-        } else {
-          weaponsBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-       */
-      public Builder addWeapons(
-          protocol.Pbmethod.PbArenaWeapon.Builder builderForValue) {
-        if (weaponsBuilder_ == null) {
-          ensureWeaponsIsMutable();
-          weapons_.add(builderForValue.build());
-          onChanged();
-        } else {
-          weaponsBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-       */
-      public Builder addWeapons(
-          int index, protocol.Pbmethod.PbArenaWeapon.Builder builderForValue) {
-        if (weaponsBuilder_ == null) {
-          ensureWeaponsIsMutable();
-          weapons_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          weaponsBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-       */
-      public Builder addAllWeapons(
-          java.lang.Iterable<? extends protocol.Pbmethod.PbArenaWeapon> values) {
-        if (weaponsBuilder_ == null) {
-          ensureWeaponsIsMutable();
-          super.addAll(values, weapons_);
-          onChanged();
-        } else {
-          weaponsBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-       */
-      public Builder clearWeapons() {
-        if (weaponsBuilder_ == null) {
-          weapons_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000002);
-          onChanged();
-        } else {
-          weaponsBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-       */
-      public Builder removeWeapons(int index) {
-        if (weaponsBuilder_ == null) {
-          ensureWeaponsIsMutable();
-          weapons_.remove(index);
-          onChanged();
-        } else {
-          weaponsBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-       */
-      public protocol.Pbmethod.PbArenaWeapon.Builder getWeaponsBuilder(
-          int index) {
-        return getWeaponsFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-       */
-      public protocol.Pbmethod.PbArenaWeaponOrBuilder getWeaponsOrBuilder(
-          int index) {
-        if (weaponsBuilder_ == null) {
-          return weapons_.get(index);  } else {
-          return weaponsBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-       */
-      public java.util.List<? extends protocol.Pbmethod.PbArenaWeaponOrBuilder> 
-           getWeaponsOrBuilderList() {
-        if (weaponsBuilder_ != null) {
-          return weaponsBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(weapons_);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-       */
-      public protocol.Pbmethod.PbArenaWeapon.Builder addWeaponsBuilder() {
-        return getWeaponsFieldBuilder().addBuilder(
-            protocol.Pbmethod.PbArenaWeapon.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-       */
-      public protocol.Pbmethod.PbArenaWeapon.Builder addWeaponsBuilder(
-          int index) {
-        return getWeaponsFieldBuilder().addBuilder(
-            index, protocol.Pbmethod.PbArenaWeapon.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbArenaWeapon weapons = 2;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbArenaWeapon.Builder> 
-           getWeaponsBuilderList() {
-        return getWeaponsFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbArenaWeapon, protocol.Pbmethod.PbArenaWeapon.Builder, protocol.Pbmethod.PbArenaWeaponOrBuilder> 
-          getWeaponsFieldBuilder() {
-        if (weaponsBuilder_ == null) {
-          weaponsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              protocol.Pbmethod.PbArenaWeapon, protocol.Pbmethod.PbArenaWeapon.Builder, protocol.Pbmethod.PbArenaWeaponOrBuilder>(
-                  weapons_,
-                  ((bitField0_ & 0x00000002) == 0x00000002),
-                  getParentForChildren(),
-                  isClean());
-          weapons_ = null;
-        }
-        return weaponsBuilder_;
-      }
-
-      // @@protoc_insertion_point(builder_scope:pbdson.PbArenaHeroInfo)
-    }
-
-    static {
-      defaultInstance = new PbArenaHeroInfo(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:pbdson.PbArenaHeroInfo)
-  }
-
-  public interface PbArenaPetInfoOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // optional int32 avatar = 1;
-    /**
-     * <code>optional int32 avatar = 1;</code>
-     */
-    boolean hasAvatar();
-    /**
-     * <code>optional int32 avatar = 1;</code>
-     */
-    int getAvatar();
-
-    // optional int32 star = 2;
-    /**
-     * <code>optional int32 star = 2;</code>
-     */
-    boolean hasStar();
-    /**
-     * <code>optional int32 star = 2;</code>
-     */
-    int getStar();
-  }
-  /**
-   * Protobuf type {@code pbdson.PbArenaPetInfo}
-   */
-  public static final class PbArenaPetInfo extends
-      com.google.protobuf.GeneratedMessage
-      implements PbArenaPetInfoOrBuilder {
-    // Use PbArenaPetInfo.newBuilder() to construct.
-    private PbArenaPetInfo(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private PbArenaPetInfo(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final PbArenaPetInfo defaultInstance;
-    public static PbArenaPetInfo getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public PbArenaPetInfo getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private PbArenaPetInfo(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-              bitField0_ |= 0x00000001;
-              avatar_ = input.readInt32();
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              star_ = input.readInt32();
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return protocol.Pbmethod.internal_static_pbdson_PbArenaPetInfo_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return protocol.Pbmethod.internal_static_pbdson_PbArenaPetInfo_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              protocol.Pbmethod.PbArenaPetInfo.class, protocol.Pbmethod.PbArenaPetInfo.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<PbArenaPetInfo> PARSER =
-        new com.google.protobuf.AbstractParser<PbArenaPetInfo>() {
-      public PbArenaPetInfo parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PbArenaPetInfo(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<PbArenaPetInfo> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    // optional int32 avatar = 1;
-    public static final int AVATAR_FIELD_NUMBER = 1;
-    private int avatar_;
-    /**
-     * <code>optional int32 avatar = 1;</code>
-     */
-    public boolean hasAvatar() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>optional int32 avatar = 1;</code>
-     */
-    public int getAvatar() {
-      return avatar_;
-    }
-
-    // optional int32 star = 2;
-    public static final int STAR_FIELD_NUMBER = 2;
-    private int star_;
-    /**
-     * <code>optional int32 star = 2;</code>
-     */
-    public boolean hasStar() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>optional int32 star = 2;</code>
-     */
-    public int getStar() {
-      return star_;
-    }
-
-    private void initFields() {
-      avatar_ = 0;
-      star_ = 0;
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(1, avatar_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt32(2, star_);
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, avatar_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, star_);
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static protocol.Pbmethod.PbArenaPetInfo parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbArenaPetInfo parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbArenaPetInfo parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbArenaPetInfo parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbArenaPetInfo parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbArenaPetInfo parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbArenaPetInfo parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static protocol.Pbmethod.PbArenaPetInfo parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbArenaPetInfo parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbArenaPetInfo parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(protocol.Pbmethod.PbArenaPetInfo prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code pbdson.PbArenaPetInfo}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements protocol.Pbmethod.PbArenaPetInfoOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return protocol.Pbmethod.internal_static_pbdson_PbArenaPetInfo_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return protocol.Pbmethod.internal_static_pbdson_PbArenaPetInfo_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                protocol.Pbmethod.PbArenaPetInfo.class, protocol.Pbmethod.PbArenaPetInfo.Builder.class);
-      }
-
-      // Construct using protocol.Pbmethod.PbArenaPetInfo.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        avatar_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        star_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return protocol.Pbmethod.internal_static_pbdson_PbArenaPetInfo_descriptor;
-      }
-
-      public protocol.Pbmethod.PbArenaPetInfo getDefaultInstanceForType() {
-        return protocol.Pbmethod.PbArenaPetInfo.getDefaultInstance();
-      }
-
-      public protocol.Pbmethod.PbArenaPetInfo build() {
-        protocol.Pbmethod.PbArenaPetInfo result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public protocol.Pbmethod.PbArenaPetInfo buildPartial() {
-        protocol.Pbmethod.PbArenaPetInfo result = new protocol.Pbmethod.PbArenaPetInfo(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.avatar_ = avatar_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.star_ = star_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof protocol.Pbmethod.PbArenaPetInfo) {
-          return mergeFrom((protocol.Pbmethod.PbArenaPetInfo)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(protocol.Pbmethod.PbArenaPetInfo other) {
-        if (other == protocol.Pbmethod.PbArenaPetInfo.getDefaultInstance()) return this;
-        if (other.hasAvatar()) {
-          setAvatar(other.getAvatar());
-        }
-        if (other.hasStar()) {
-          setStar(other.getStar());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        protocol.Pbmethod.PbArenaPetInfo parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (protocol.Pbmethod.PbArenaPetInfo) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // optional int32 avatar = 1;
-      private int avatar_ ;
-      /**
-       * <code>optional int32 avatar = 1;</code>
-       */
-      public boolean hasAvatar() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>optional int32 avatar = 1;</code>
-       */
-      public int getAvatar() {
-        return avatar_;
-      }
-      /**
-       * <code>optional int32 avatar = 1;</code>
-       */
-      public Builder setAvatar(int value) {
-        bitField0_ |= 0x00000001;
-        avatar_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 avatar = 1;</code>
-       */
-      public Builder clearAvatar() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        avatar_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 star = 2;
-      private int star_ ;
-      /**
-       * <code>optional int32 star = 2;</code>
-       */
-      public boolean hasStar() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>optional int32 star = 2;</code>
-       */
-      public int getStar() {
-        return star_;
-      }
-      /**
-       * <code>optional int32 star = 2;</code>
-       */
-      public Builder setStar(int value) {
-        bitField0_ |= 0x00000002;
-        star_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 star = 2;</code>
-       */
-      public Builder clearStar() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        star_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:pbdson.PbArenaPetInfo)
-    }
-
-    static {
-      defaultInstance = new PbArenaPetInfo(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:pbdson.PbArenaPetInfo)
-  }
-
-  public interface PbArenaWeaponOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // optional int32 id = 1;
-    /**
-     * <code>optional int32 id = 1;</code>
-     */
-    boolean hasId();
-    /**
-     * <code>optional int32 id = 1;</code>
-     */
-    int getId();
-
-    // optional int32 slot = 2;
-    /**
-     * <code>optional int32 slot = 2;</code>
-     */
-    boolean hasSlot();
-    /**
-     * <code>optional int32 slot = 2;</code>
-     */
-    int getSlot();
-
-    // optional int32 level = 3;
-    /**
-     * <code>optional int32 level = 3;</code>
-     */
-    boolean hasLevel();
-    /**
-     * <code>optional int32 level = 3;</code>
-     */
-    int getLevel();
-  }
-  /**
-   * Protobuf type {@code pbdson.PbArenaWeapon}
-   */
-  public static final class PbArenaWeapon extends
-      com.google.protobuf.GeneratedMessage
-      implements PbArenaWeaponOrBuilder {
-    // Use PbArenaWeapon.newBuilder() to construct.
-    private PbArenaWeapon(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private PbArenaWeapon(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final PbArenaWeapon defaultInstance;
-    public static PbArenaWeapon getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public PbArenaWeapon getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private PbArenaWeapon(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-              bitField0_ |= 0x00000001;
-              id_ = input.readInt32();
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              slot_ = input.readInt32();
-              break;
-            }
-            case 24: {
-              bitField0_ |= 0x00000004;
-              level_ = input.readInt32();
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return protocol.Pbmethod.internal_static_pbdson_PbArenaWeapon_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return protocol.Pbmethod.internal_static_pbdson_PbArenaWeapon_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              protocol.Pbmethod.PbArenaWeapon.class, protocol.Pbmethod.PbArenaWeapon.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<PbArenaWeapon> PARSER =
-        new com.google.protobuf.AbstractParser<PbArenaWeapon>() {
-      public PbArenaWeapon parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PbArenaWeapon(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<PbArenaWeapon> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    // optional int32 id = 1;
-    public static final int ID_FIELD_NUMBER = 1;
-    private int id_;
-    /**
-     * <code>optional int32 id = 1;</code>
-     */
-    public boolean hasId() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>optional int32 id = 1;</code>
-     */
-    public int getId() {
-      return id_;
-    }
-
-    // optional int32 slot = 2;
-    public static final int SLOT_FIELD_NUMBER = 2;
-    private int slot_;
-    /**
-     * <code>optional int32 slot = 2;</code>
-     */
-    public boolean hasSlot() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>optional int32 slot = 2;</code>
-     */
-    public int getSlot() {
-      return slot_;
-    }
-
-    // optional int32 level = 3;
-    public static final int LEVEL_FIELD_NUMBER = 3;
-    private int level_;
-    /**
-     * <code>optional int32 level = 3;</code>
-     */
-    public boolean hasLevel() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>optional int32 level = 3;</code>
-     */
-    public int getLevel() {
-      return level_;
-    }
-
-    private void initFields() {
-      id_ = 0;
-      slot_ = 0;
-      level_ = 0;
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(1, id_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt32(2, slot_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeInt32(3, level_);
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, id_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, slot_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, level_);
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static protocol.Pbmethod.PbArenaWeapon parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbArenaWeapon parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbArenaWeapon parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbArenaWeapon parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbArenaWeapon parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbArenaWeapon parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbArenaWeapon parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static protocol.Pbmethod.PbArenaWeapon parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbArenaWeapon parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbArenaWeapon parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(protocol.Pbmethod.PbArenaWeapon prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code pbdson.PbArenaWeapon}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements protocol.Pbmethod.PbArenaWeaponOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return protocol.Pbmethod.internal_static_pbdson_PbArenaWeapon_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return protocol.Pbmethod.internal_static_pbdson_PbArenaWeapon_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                protocol.Pbmethod.PbArenaWeapon.class, protocol.Pbmethod.PbArenaWeapon.Builder.class);
-      }
-
-      // Construct using protocol.Pbmethod.PbArenaWeapon.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        id_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        slot_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        level_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000004);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return protocol.Pbmethod.internal_static_pbdson_PbArenaWeapon_descriptor;
-      }
-
-      public protocol.Pbmethod.PbArenaWeapon getDefaultInstanceForType() {
-        return protocol.Pbmethod.PbArenaWeapon.getDefaultInstance();
-      }
-
-      public protocol.Pbmethod.PbArenaWeapon build() {
-        protocol.Pbmethod.PbArenaWeapon result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public protocol.Pbmethod.PbArenaWeapon buildPartial() {
-        protocol.Pbmethod.PbArenaWeapon result = new protocol.Pbmethod.PbArenaWeapon(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.id_ = id_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.slot_ = slot_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.level_ = level_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof protocol.Pbmethod.PbArenaWeapon) {
-          return mergeFrom((protocol.Pbmethod.PbArenaWeapon)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(protocol.Pbmethod.PbArenaWeapon other) {
-        if (other == protocol.Pbmethod.PbArenaWeapon.getDefaultInstance()) return this;
-        if (other.hasId()) {
-          setId(other.getId());
-        }
-        if (other.hasSlot()) {
-          setSlot(other.getSlot());
-        }
-        if (other.hasLevel()) {
-          setLevel(other.getLevel());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        protocol.Pbmethod.PbArenaWeapon parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (protocol.Pbmethod.PbArenaWeapon) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // optional int32 id = 1;
-      private int id_ ;
-      /**
-       * <code>optional int32 id = 1;</code>
-       */
-      public boolean hasId() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>optional int32 id = 1;</code>
-       */
-      public int getId() {
-        return id_;
-      }
-      /**
-       * <code>optional int32 id = 1;</code>
-       */
-      public Builder setId(int value) {
-        bitField0_ |= 0x00000001;
-        id_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 id = 1;</code>
-       */
-      public Builder clearId() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        id_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 slot = 2;
-      private int slot_ ;
-      /**
-       * <code>optional int32 slot = 2;</code>
-       */
-      public boolean hasSlot() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>optional int32 slot = 2;</code>
-       */
-      public int getSlot() {
-        return slot_;
-      }
-      /**
-       * <code>optional int32 slot = 2;</code>
-       */
-      public Builder setSlot(int value) {
-        bitField0_ |= 0x00000002;
-        slot_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 slot = 2;</code>
-       */
-      public Builder clearSlot() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        slot_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 level = 3;
-      private int level_ ;
-      /**
-       * <code>optional int32 level = 3;</code>
-       */
-      public boolean hasLevel() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional int32 level = 3;</code>
-       */
-      public int getLevel() {
-        return level_;
-      }
-      /**
-       * <code>optional int32 level = 3;</code>
-       */
-      public Builder setLevel(int value) {
-        bitField0_ |= 0x00000004;
-        level_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 level = 3;</code>
-       */
-      public Builder clearLevel() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        level_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:pbdson.PbArenaWeapon)
-    }
-
-    static {
-      defaultInstance = new PbArenaWeapon(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:pbdson.PbArenaWeapon)
   }
 
   public interface PbUserDataOrBuilder
@@ -30689,56 +24184,6 @@ public final class Pbmethod {
     protocol.Pbmethod.PbItemPointOrBuilder getAItemPointOrBuilder(
         int index);
 
-    // repeated .pbdson.PbItemFarm aItemFarm = 13;
-    /**
-     * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-     */
-    java.util.List<protocol.Pbmethod.PbItemFarm> 
-        getAItemFarmList();
-    /**
-     * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-     */
-    protocol.Pbmethod.PbItemFarm getAItemFarm(int index);
-    /**
-     * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-     */
-    int getAItemFarmCount();
-    /**
-     * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-     */
-    java.util.List<? extends protocol.Pbmethod.PbItemFarmOrBuilder> 
-        getAItemFarmOrBuilderList();
-    /**
-     * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-     */
-    protocol.Pbmethod.PbItemFarmOrBuilder getAItemFarmOrBuilder(
-        int index);
-
-    // repeated .pbdson.PbPiece aItemPiece = 14;
-    /**
-     * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-     */
-    java.util.List<protocol.Pbmethod.PbPiece> 
-        getAItemPieceList();
-    /**
-     * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-     */
-    protocol.Pbmethod.PbPiece getAItemPiece(int index);
-    /**
-     * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-     */
-    int getAItemPieceCount();
-    /**
-     * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-     */
-    java.util.List<? extends protocol.Pbmethod.PbPieceOrBuilder> 
-        getAItemPieceOrBuilderList();
-    /**
-     * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-     */
-    protocol.Pbmethod.PbPieceOrBuilder getAItemPieceOrBuilder(
-        int index);
-
     // repeated .pbdson.PbPet aPet = 15;
     /**
      * <code>repeated .pbdson.PbPet aPet = 15;</code>
@@ -30762,31 +24207,6 @@ public final class Pbmethod {
      * <code>repeated .pbdson.PbPet aPet = 15;</code>
      */
     protocol.Pbmethod.PbPetOrBuilder getAPetOrBuilder(
-        int index);
-
-    // repeated .pbdson.PbHero aHero = 16;
-    /**
-     * <code>repeated .pbdson.PbHero aHero = 16;</code>
-     */
-    java.util.List<protocol.Pbmethod.PbHero> 
-        getAHeroList();
-    /**
-     * <code>repeated .pbdson.PbHero aHero = 16;</code>
-     */
-    protocol.Pbmethod.PbHero getAHero(int index);
-    /**
-     * <code>repeated .pbdson.PbHero aHero = 16;</code>
-     */
-    int getAHeroCount();
-    /**
-     * <code>repeated .pbdson.PbHero aHero = 16;</code>
-     */
-    java.util.List<? extends protocol.Pbmethod.PbHeroOrBuilder> 
-        getAHeroOrBuilderList();
-    /**
-     * <code>repeated .pbdson.PbHero aHero = 16;</code>
-     */
-    protocol.Pbmethod.PbHeroOrBuilder getAHeroOrBuilder(
         int index);
 
     // optional int32 tutorial = 17;
@@ -31013,36 +24433,12 @@ public final class Pbmethod {
               aItemPoint_.add(input.readMessage(protocol.Pbmethod.PbItemPoint.PARSER, extensionRegistry));
               break;
             }
-            case 106: {
+            case 122: {
               if (!((mutable_bitField0_ & 0x00000800) == 0x00000800)) {
-                aItemFarm_ = new java.util.ArrayList<protocol.Pbmethod.PbItemFarm>();
+                aPet_ = new java.util.ArrayList<protocol.Pbmethod.PbPet>();
                 mutable_bitField0_ |= 0x00000800;
               }
-              aItemFarm_.add(input.readMessage(protocol.Pbmethod.PbItemFarm.PARSER, extensionRegistry));
-              break;
-            }
-            case 114: {
-              if (!((mutable_bitField0_ & 0x00001000) == 0x00001000)) {
-                aItemPiece_ = new java.util.ArrayList<protocol.Pbmethod.PbPiece>();
-                mutable_bitField0_ |= 0x00001000;
-              }
-              aItemPiece_.add(input.readMessage(protocol.Pbmethod.PbPiece.PARSER, extensionRegistry));
-              break;
-            }
-            case 122: {
-              if (!((mutable_bitField0_ & 0x00002000) == 0x00002000)) {
-                aPet_ = new java.util.ArrayList<protocol.Pbmethod.PbPet>();
-                mutable_bitField0_ |= 0x00002000;
-              }
               aPet_.add(input.readMessage(protocol.Pbmethod.PbPet.PARSER, extensionRegistry));
-              break;
-            }
-            case 130: {
-              if (!((mutable_bitField0_ & 0x00004000) == 0x00004000)) {
-                aHero_ = new java.util.ArrayList<protocol.Pbmethod.PbHero>();
-                mutable_bitField0_ |= 0x00004000;
-              }
-              aHero_.add(input.readMessage(protocol.Pbmethod.PbHero.PARSER, extensionRegistry));
               break;
             }
             case 136: {
@@ -31051,9 +24447,9 @@ public final class Pbmethod {
               break;
             }
             case 144: {
-              if (!((mutable_bitField0_ & 0x00010000) == 0x00010000)) {
+              if (!((mutable_bitField0_ & 0x00002000) == 0x00002000)) {
                 dameSkins_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00010000;
+                mutable_bitField0_ |= 0x00002000;
               }
               dameSkins_.add(input.readInt32());
               break;
@@ -31061,9 +24457,9 @@ public final class Pbmethod {
             case 146: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00010000) == 0x00010000) && input.getBytesUntilLimit() > 0) {
+              if (!((mutable_bitField0_ & 0x00002000) == 0x00002000) && input.getBytesUntilLimit() > 0) {
                 dameSkins_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00010000;
+                mutable_bitField0_ |= 0x00002000;
               }
               while (input.getBytesUntilLimit() > 0) {
                 dameSkins_.add(input.readInt32());
@@ -31077,9 +24473,9 @@ public final class Pbmethod {
               break;
             }
             case 160: {
-              if (!((mutable_bitField0_ & 0x00040000) == 0x00040000)) {
+              if (!((mutable_bitField0_ & 0x00008000) == 0x00008000)) {
                 bossGod_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00040000;
+                mutable_bitField0_ |= 0x00008000;
               }
               bossGod_.add(input.readInt32());
               break;
@@ -31087,9 +24483,9 @@ public final class Pbmethod {
             case 162: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00040000) == 0x00040000) && input.getBytesUntilLimit() > 0) {
+              if (!((mutable_bitField0_ & 0x00008000) == 0x00008000) && input.getBytesUntilLimit() > 0) {
                 bossGod_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00040000;
+                mutable_bitField0_ |= 0x00008000;
               }
               while (input.getBytesUntilLimit() > 0) {
                 bossGod_.add(input.readInt32());
@@ -31098,9 +24494,9 @@ public final class Pbmethod {
               break;
             }
             case 168: {
-              if (!((mutable_bitField0_ & 0x00080000) == 0x00080000)) {
+              if (!((mutable_bitField0_ & 0x00010000) == 0x00010000)) {
                 chatFrames_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00080000;
+                mutable_bitField0_ |= 0x00010000;
               }
               chatFrames_.add(input.readInt32());
               break;
@@ -31108,9 +24504,9 @@ public final class Pbmethod {
             case 170: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00080000) == 0x00080000) && input.getBytesUntilLimit() > 0) {
+              if (!((mutable_bitField0_ & 0x00010000) == 0x00010000) && input.getBytesUntilLimit() > 0) {
                 chatFrames_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00080000;
+                mutable_bitField0_ |= 0x00010000;
               }
               while (input.getBytesUntilLimit() > 0) {
                 chatFrames_.add(input.readInt32());
@@ -31124,9 +24520,9 @@ public final class Pbmethod {
               break;
             }
             case 184: {
-              if (!((mutable_bitField0_ & 0x00200000) == 0x00200000)) {
+              if (!((mutable_bitField0_ & 0x00040000) == 0x00040000)) {
                 trials_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00200000;
+                mutable_bitField0_ |= 0x00040000;
               }
               trials_.add(input.readInt32());
               break;
@@ -31134,9 +24530,9 @@ public final class Pbmethod {
             case 186: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00200000) == 0x00200000) && input.getBytesUntilLimit() > 0) {
+              if (!((mutable_bitField0_ & 0x00040000) == 0x00040000) && input.getBytesUntilLimit() > 0) {
                 trials_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00200000;
+                mutable_bitField0_ |= 0x00040000;
               }
               while (input.getBytesUntilLimit() > 0) {
                 trials_.add(input.readInt32());
@@ -31164,27 +24560,18 @@ public final class Pbmethod {
           aItemPoint_ = java.util.Collections.unmodifiableList(aItemPoint_);
         }
         if (((mutable_bitField0_ & 0x00000800) == 0x00000800)) {
-          aItemFarm_ = java.util.Collections.unmodifiableList(aItemFarm_);
-        }
-        if (((mutable_bitField0_ & 0x00001000) == 0x00001000)) {
-          aItemPiece_ = java.util.Collections.unmodifiableList(aItemPiece_);
-        }
-        if (((mutable_bitField0_ & 0x00002000) == 0x00002000)) {
           aPet_ = java.util.Collections.unmodifiableList(aPet_);
         }
-        if (((mutable_bitField0_ & 0x00004000) == 0x00004000)) {
-          aHero_ = java.util.Collections.unmodifiableList(aHero_);
-        }
-        if (((mutable_bitField0_ & 0x00010000) == 0x00010000)) {
+        if (((mutable_bitField0_ & 0x00002000) == 0x00002000)) {
           dameSkins_ = java.util.Collections.unmodifiableList(dameSkins_);
         }
-        if (((mutable_bitField0_ & 0x00040000) == 0x00040000)) {
+        if (((mutable_bitField0_ & 0x00008000) == 0x00008000)) {
           bossGod_ = java.util.Collections.unmodifiableList(bossGod_);
         }
-        if (((mutable_bitField0_ & 0x00080000) == 0x00080000)) {
+        if (((mutable_bitField0_ & 0x00010000) == 0x00010000)) {
           chatFrames_ = java.util.Collections.unmodifiableList(chatFrames_);
         }
-        if (((mutable_bitField0_ & 0x00200000) == 0x00200000)) {
+        if (((mutable_bitField0_ & 0x00040000) == 0x00040000)) {
           trials_ = java.util.Collections.unmodifiableList(trials_);
         }
         this.unknownFields = unknownFields.build();
@@ -31447,78 +24834,6 @@ public final class Pbmethod {
       return aItemPoint_.get(index);
     }
 
-    // repeated .pbdson.PbItemFarm aItemFarm = 13;
-    public static final int AITEMFARM_FIELD_NUMBER = 13;
-    private java.util.List<protocol.Pbmethod.PbItemFarm> aItemFarm_;
-    /**
-     * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-     */
-    public java.util.List<protocol.Pbmethod.PbItemFarm> getAItemFarmList() {
-      return aItemFarm_;
-    }
-    /**
-     * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-     */
-    public java.util.List<? extends protocol.Pbmethod.PbItemFarmOrBuilder> 
-        getAItemFarmOrBuilderList() {
-      return aItemFarm_;
-    }
-    /**
-     * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-     */
-    public int getAItemFarmCount() {
-      return aItemFarm_.size();
-    }
-    /**
-     * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-     */
-    public protocol.Pbmethod.PbItemFarm getAItemFarm(int index) {
-      return aItemFarm_.get(index);
-    }
-    /**
-     * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-     */
-    public protocol.Pbmethod.PbItemFarmOrBuilder getAItemFarmOrBuilder(
-        int index) {
-      return aItemFarm_.get(index);
-    }
-
-    // repeated .pbdson.PbPiece aItemPiece = 14;
-    public static final int AITEMPIECE_FIELD_NUMBER = 14;
-    private java.util.List<protocol.Pbmethod.PbPiece> aItemPiece_;
-    /**
-     * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-     */
-    public java.util.List<protocol.Pbmethod.PbPiece> getAItemPieceList() {
-      return aItemPiece_;
-    }
-    /**
-     * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-     */
-    public java.util.List<? extends protocol.Pbmethod.PbPieceOrBuilder> 
-        getAItemPieceOrBuilderList() {
-      return aItemPiece_;
-    }
-    /**
-     * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-     */
-    public int getAItemPieceCount() {
-      return aItemPiece_.size();
-    }
-    /**
-     * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-     */
-    public protocol.Pbmethod.PbPiece getAItemPiece(int index) {
-      return aItemPiece_.get(index);
-    }
-    /**
-     * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-     */
-    public protocol.Pbmethod.PbPieceOrBuilder getAItemPieceOrBuilder(
-        int index) {
-      return aItemPiece_.get(index);
-    }
-
     // repeated .pbdson.PbPet aPet = 15;
     public static final int APET_FIELD_NUMBER = 15;
     private java.util.List<protocol.Pbmethod.PbPet> aPet_;
@@ -31553,42 +24868,6 @@ public final class Pbmethod {
     public protocol.Pbmethod.PbPetOrBuilder getAPetOrBuilder(
         int index) {
       return aPet_.get(index);
-    }
-
-    // repeated .pbdson.PbHero aHero = 16;
-    public static final int AHERO_FIELD_NUMBER = 16;
-    private java.util.List<protocol.Pbmethod.PbHero> aHero_;
-    /**
-     * <code>repeated .pbdson.PbHero aHero = 16;</code>
-     */
-    public java.util.List<protocol.Pbmethod.PbHero> getAHeroList() {
-      return aHero_;
-    }
-    /**
-     * <code>repeated .pbdson.PbHero aHero = 16;</code>
-     */
-    public java.util.List<? extends protocol.Pbmethod.PbHeroOrBuilder> 
-        getAHeroOrBuilderList() {
-      return aHero_;
-    }
-    /**
-     * <code>repeated .pbdson.PbHero aHero = 16;</code>
-     */
-    public int getAHeroCount() {
-      return aHero_.size();
-    }
-    /**
-     * <code>repeated .pbdson.PbHero aHero = 16;</code>
-     */
-    public protocol.Pbmethod.PbHero getAHero(int index) {
-      return aHero_.get(index);
-    }
-    /**
-     * <code>repeated .pbdson.PbHero aHero = 16;</code>
-     */
-    public protocol.Pbmethod.PbHeroOrBuilder getAHeroOrBuilder(
-        int index) {
-      return aHero_.get(index);
     }
 
     // optional int32 tutorial = 17;
@@ -31759,10 +25038,7 @@ public final class Pbmethod {
       itemEquipments_ = protocol.Pbmethod.PbListItemEquipment.getDefaultInstance();
       aItemEquip_ = java.util.Collections.emptyList();
       aItemPoint_ = java.util.Collections.emptyList();
-      aItemFarm_ = java.util.Collections.emptyList();
-      aItemPiece_ = java.util.Collections.emptyList();
       aPet_ = java.util.Collections.emptyList();
-      aHero_ = java.util.Collections.emptyList();
       tutorial_ = 0;
       dameSkins_ = java.util.Collections.emptyList();
       dameSkinEquip_ = 0;
@@ -31817,17 +25093,8 @@ public final class Pbmethod {
       for (int i = 0; i < aItemPoint_.size(); i++) {
         output.writeMessage(12, aItemPoint_.get(i));
       }
-      for (int i = 0; i < aItemFarm_.size(); i++) {
-        output.writeMessage(13, aItemFarm_.get(i));
-      }
-      for (int i = 0; i < aItemPiece_.size(); i++) {
-        output.writeMessage(14, aItemPiece_.get(i));
-      }
       for (int i = 0; i < aPet_.size(); i++) {
         output.writeMessage(15, aPet_.get(i));
-      }
-      for (int i = 0; i < aHero_.size(); i++) {
-        output.writeMessage(16, aHero_.get(i));
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         output.writeInt32(17, tutorial_);
@@ -31906,21 +25173,9 @@ public final class Pbmethod {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(12, aItemPoint_.get(i));
       }
-      for (int i = 0; i < aItemFarm_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(13, aItemFarm_.get(i));
-      }
-      for (int i = 0; i < aItemPiece_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(14, aItemPiece_.get(i));
-      }
       for (int i = 0; i < aPet_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(15, aPet_.get(i));
-      }
-      for (int i = 0; i < aHero_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(16, aHero_.get(i));
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         size += com.google.protobuf.CodedOutputStream
@@ -32086,10 +25341,7 @@ public final class Pbmethod {
           getItemEquipmentsFieldBuilder();
           getAItemEquipFieldBuilder();
           getAItemPointFieldBuilder();
-          getAItemFarmFieldBuilder();
-          getAItemPieceFieldBuilder();
           getAPetFieldBuilder();
-          getAHeroFieldBuilder();
         }
       }
       private static Builder create() {
@@ -32136,46 +25388,28 @@ public final class Pbmethod {
         } else {
           aItemPointBuilder_.clear();
         }
-        if (aItemFarmBuilder_ == null) {
-          aItemFarm_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000800);
-        } else {
-          aItemFarmBuilder_.clear();
-        }
-        if (aItemPieceBuilder_ == null) {
-          aItemPiece_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00001000);
-        } else {
-          aItemPieceBuilder_.clear();
-        }
         if (aPetBuilder_ == null) {
           aPet_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00002000);
+          bitField0_ = (bitField0_ & ~0x00000800);
         } else {
           aPetBuilder_.clear();
         }
-        if (aHeroBuilder_ == null) {
-          aHero_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00004000);
-        } else {
-          aHeroBuilder_.clear();
-        }
         tutorial_ = 0;
-        bitField0_ = (bitField0_ & ~0x00008000);
+        bitField0_ = (bitField0_ & ~0x00001000);
         dameSkins_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00010000);
+        bitField0_ = (bitField0_ & ~0x00002000);
         dameSkinEquip_ = 0;
-        bitField0_ = (bitField0_ & ~0x00020000);
+        bitField0_ = (bitField0_ & ~0x00004000);
         bossGod_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00040000);
+        bitField0_ = (bitField0_ & ~0x00008000);
         chatFrames_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00080000);
+        bitField0_ = (bitField0_ & ~0x00010000);
         chatFrameEquip_ = 0;
-        bitField0_ = (bitField0_ & ~0x00100000);
+        bitField0_ = (bitField0_ & ~0x00020000);
         trials_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00200000);
+        bitField0_ = (bitField0_ & ~0x00040000);
         trialEquip_ = 0;
-        bitField0_ = (bitField0_ & ~0x00400000);
+        bitField0_ = (bitField0_ & ~0x00080000);
         return this;
       }
 
@@ -32266,75 +25500,48 @@ public final class Pbmethod {
         } else {
           result.aItemPoint_ = aItemPointBuilder_.build();
         }
-        if (aItemFarmBuilder_ == null) {
-          if (((bitField0_ & 0x00000800) == 0x00000800)) {
-            aItemFarm_ = java.util.Collections.unmodifiableList(aItemFarm_);
-            bitField0_ = (bitField0_ & ~0x00000800);
-          }
-          result.aItemFarm_ = aItemFarm_;
-        } else {
-          result.aItemFarm_ = aItemFarmBuilder_.build();
-        }
-        if (aItemPieceBuilder_ == null) {
-          if (((bitField0_ & 0x00001000) == 0x00001000)) {
-            aItemPiece_ = java.util.Collections.unmodifiableList(aItemPiece_);
-            bitField0_ = (bitField0_ & ~0x00001000);
-          }
-          result.aItemPiece_ = aItemPiece_;
-        } else {
-          result.aItemPiece_ = aItemPieceBuilder_.build();
-        }
         if (aPetBuilder_ == null) {
-          if (((bitField0_ & 0x00002000) == 0x00002000)) {
+          if (((bitField0_ & 0x00000800) == 0x00000800)) {
             aPet_ = java.util.Collections.unmodifiableList(aPet_);
-            bitField0_ = (bitField0_ & ~0x00002000);
+            bitField0_ = (bitField0_ & ~0x00000800);
           }
           result.aPet_ = aPet_;
         } else {
           result.aPet_ = aPetBuilder_.build();
         }
-        if (aHeroBuilder_ == null) {
-          if (((bitField0_ & 0x00004000) == 0x00004000)) {
-            aHero_ = java.util.Collections.unmodifiableList(aHero_);
-            bitField0_ = (bitField0_ & ~0x00004000);
-          }
-          result.aHero_ = aHero_;
-        } else {
-          result.aHero_ = aHeroBuilder_.build();
-        }
-        if (((from_bitField0_ & 0x00008000) == 0x00008000)) {
+        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
           to_bitField0_ |= 0x00000200;
         }
         result.tutorial_ = tutorial_;
-        if (((bitField0_ & 0x00010000) == 0x00010000)) {
+        if (((bitField0_ & 0x00002000) == 0x00002000)) {
           dameSkins_ = java.util.Collections.unmodifiableList(dameSkins_);
-          bitField0_ = (bitField0_ & ~0x00010000);
+          bitField0_ = (bitField0_ & ~0x00002000);
         }
         result.dameSkins_ = dameSkins_;
-        if (((from_bitField0_ & 0x00020000) == 0x00020000)) {
+        if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
           to_bitField0_ |= 0x00000400;
         }
         result.dameSkinEquip_ = dameSkinEquip_;
-        if (((bitField0_ & 0x00040000) == 0x00040000)) {
+        if (((bitField0_ & 0x00008000) == 0x00008000)) {
           bossGod_ = java.util.Collections.unmodifiableList(bossGod_);
-          bitField0_ = (bitField0_ & ~0x00040000);
+          bitField0_ = (bitField0_ & ~0x00008000);
         }
         result.bossGod_ = bossGod_;
-        if (((bitField0_ & 0x00080000) == 0x00080000)) {
+        if (((bitField0_ & 0x00010000) == 0x00010000)) {
           chatFrames_ = java.util.Collections.unmodifiableList(chatFrames_);
-          bitField0_ = (bitField0_ & ~0x00080000);
+          bitField0_ = (bitField0_ & ~0x00010000);
         }
         result.chatFrames_ = chatFrames_;
-        if (((from_bitField0_ & 0x00100000) == 0x00100000)) {
+        if (((from_bitField0_ & 0x00020000) == 0x00020000)) {
           to_bitField0_ |= 0x00000800;
         }
         result.chatFrameEquip_ = chatFrameEquip_;
-        if (((bitField0_ & 0x00200000) == 0x00200000)) {
+        if (((bitField0_ & 0x00040000) == 0x00040000)) {
           trials_ = java.util.Collections.unmodifiableList(trials_);
-          bitField0_ = (bitField0_ & ~0x00200000);
+          bitField0_ = (bitField0_ & ~0x00040000);
         }
         result.trials_ = trials_;
-        if (((from_bitField0_ & 0x00400000) == 0x00400000)) {
+        if (((from_bitField0_ & 0x00080000) == 0x00080000)) {
           to_bitField0_ |= 0x00001000;
         }
         result.trialEquip_ = trialEquip_;
@@ -32433,63 +25640,11 @@ public final class Pbmethod {
             }
           }
         }
-        if (aItemFarmBuilder_ == null) {
-          if (!other.aItemFarm_.isEmpty()) {
-            if (aItemFarm_.isEmpty()) {
-              aItemFarm_ = other.aItemFarm_;
-              bitField0_ = (bitField0_ & ~0x00000800);
-            } else {
-              ensureAItemFarmIsMutable();
-              aItemFarm_.addAll(other.aItemFarm_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.aItemFarm_.isEmpty()) {
-            if (aItemFarmBuilder_.isEmpty()) {
-              aItemFarmBuilder_.dispose();
-              aItemFarmBuilder_ = null;
-              aItemFarm_ = other.aItemFarm_;
-              bitField0_ = (bitField0_ & ~0x00000800);
-              aItemFarmBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getAItemFarmFieldBuilder() : null;
-            } else {
-              aItemFarmBuilder_.addAllMessages(other.aItemFarm_);
-            }
-          }
-        }
-        if (aItemPieceBuilder_ == null) {
-          if (!other.aItemPiece_.isEmpty()) {
-            if (aItemPiece_.isEmpty()) {
-              aItemPiece_ = other.aItemPiece_;
-              bitField0_ = (bitField0_ & ~0x00001000);
-            } else {
-              ensureAItemPieceIsMutable();
-              aItemPiece_.addAll(other.aItemPiece_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.aItemPiece_.isEmpty()) {
-            if (aItemPieceBuilder_.isEmpty()) {
-              aItemPieceBuilder_.dispose();
-              aItemPieceBuilder_ = null;
-              aItemPiece_ = other.aItemPiece_;
-              bitField0_ = (bitField0_ & ~0x00001000);
-              aItemPieceBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getAItemPieceFieldBuilder() : null;
-            } else {
-              aItemPieceBuilder_.addAllMessages(other.aItemPiece_);
-            }
-          }
-        }
         if (aPetBuilder_ == null) {
           if (!other.aPet_.isEmpty()) {
             if (aPet_.isEmpty()) {
               aPet_ = other.aPet_;
-              bitField0_ = (bitField0_ & ~0x00002000);
+              bitField0_ = (bitField0_ & ~0x00000800);
             } else {
               ensureAPetIsMutable();
               aPet_.addAll(other.aPet_);
@@ -32502,38 +25657,12 @@ public final class Pbmethod {
               aPetBuilder_.dispose();
               aPetBuilder_ = null;
               aPet_ = other.aPet_;
-              bitField0_ = (bitField0_ & ~0x00002000);
+              bitField0_ = (bitField0_ & ~0x00000800);
               aPetBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getAPetFieldBuilder() : null;
             } else {
               aPetBuilder_.addAllMessages(other.aPet_);
-            }
-          }
-        }
-        if (aHeroBuilder_ == null) {
-          if (!other.aHero_.isEmpty()) {
-            if (aHero_.isEmpty()) {
-              aHero_ = other.aHero_;
-              bitField0_ = (bitField0_ & ~0x00004000);
-            } else {
-              ensureAHeroIsMutable();
-              aHero_.addAll(other.aHero_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.aHero_.isEmpty()) {
-            if (aHeroBuilder_.isEmpty()) {
-              aHeroBuilder_.dispose();
-              aHeroBuilder_ = null;
-              aHero_ = other.aHero_;
-              bitField0_ = (bitField0_ & ~0x00004000);
-              aHeroBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getAHeroFieldBuilder() : null;
-            } else {
-              aHeroBuilder_.addAllMessages(other.aHero_);
             }
           }
         }
@@ -32543,7 +25672,7 @@ public final class Pbmethod {
         if (!other.dameSkins_.isEmpty()) {
           if (dameSkins_.isEmpty()) {
             dameSkins_ = other.dameSkins_;
-            bitField0_ = (bitField0_ & ~0x00010000);
+            bitField0_ = (bitField0_ & ~0x00002000);
           } else {
             ensureDameSkinsIsMutable();
             dameSkins_.addAll(other.dameSkins_);
@@ -32556,7 +25685,7 @@ public final class Pbmethod {
         if (!other.bossGod_.isEmpty()) {
           if (bossGod_.isEmpty()) {
             bossGod_ = other.bossGod_;
-            bitField0_ = (bitField0_ & ~0x00040000);
+            bitField0_ = (bitField0_ & ~0x00008000);
           } else {
             ensureBossGodIsMutable();
             bossGod_.addAll(other.bossGod_);
@@ -32566,7 +25695,7 @@ public final class Pbmethod {
         if (!other.chatFrames_.isEmpty()) {
           if (chatFrames_.isEmpty()) {
             chatFrames_ = other.chatFrames_;
-            bitField0_ = (bitField0_ & ~0x00080000);
+            bitField0_ = (bitField0_ & ~0x00010000);
           } else {
             ensureChatFramesIsMutable();
             chatFrames_.addAll(other.chatFrames_);
@@ -32579,7 +25708,7 @@ public final class Pbmethod {
         if (!other.trials_.isEmpty()) {
           if (trials_.isEmpty()) {
             trials_ = other.trials_;
-            bitField0_ = (bitField0_ & ~0x00200000);
+            bitField0_ = (bitField0_ & ~0x00040000);
           } else {
             ensureTrialsIsMutable();
             trials_.addAll(other.trials_);
@@ -33561,493 +26690,13 @@ public final class Pbmethod {
         return aItemPointBuilder_;
       }
 
-      // repeated .pbdson.PbItemFarm aItemFarm = 13;
-      private java.util.List<protocol.Pbmethod.PbItemFarm> aItemFarm_ =
-        java.util.Collections.emptyList();
-      private void ensureAItemFarmIsMutable() {
-        if (!((bitField0_ & 0x00000800) == 0x00000800)) {
-          aItemFarm_ = new java.util.ArrayList<protocol.Pbmethod.PbItemFarm>(aItemFarm_);
-          bitField0_ |= 0x00000800;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbItemFarm, protocol.Pbmethod.PbItemFarm.Builder, protocol.Pbmethod.PbItemFarmOrBuilder> aItemFarmBuilder_;
-
-      /**
-       * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbItemFarm> getAItemFarmList() {
-        if (aItemFarmBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(aItemFarm_);
-        } else {
-          return aItemFarmBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-       */
-      public int getAItemFarmCount() {
-        if (aItemFarmBuilder_ == null) {
-          return aItemFarm_.size();
-        } else {
-          return aItemFarmBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-       */
-      public protocol.Pbmethod.PbItemFarm getAItemFarm(int index) {
-        if (aItemFarmBuilder_ == null) {
-          return aItemFarm_.get(index);
-        } else {
-          return aItemFarmBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-       */
-      public Builder setAItemFarm(
-          int index, protocol.Pbmethod.PbItemFarm value) {
-        if (aItemFarmBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureAItemFarmIsMutable();
-          aItemFarm_.set(index, value);
-          onChanged();
-        } else {
-          aItemFarmBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-       */
-      public Builder setAItemFarm(
-          int index, protocol.Pbmethod.PbItemFarm.Builder builderForValue) {
-        if (aItemFarmBuilder_ == null) {
-          ensureAItemFarmIsMutable();
-          aItemFarm_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          aItemFarmBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-       */
-      public Builder addAItemFarm(protocol.Pbmethod.PbItemFarm value) {
-        if (aItemFarmBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureAItemFarmIsMutable();
-          aItemFarm_.add(value);
-          onChanged();
-        } else {
-          aItemFarmBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-       */
-      public Builder addAItemFarm(
-          int index, protocol.Pbmethod.PbItemFarm value) {
-        if (aItemFarmBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureAItemFarmIsMutable();
-          aItemFarm_.add(index, value);
-          onChanged();
-        } else {
-          aItemFarmBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-       */
-      public Builder addAItemFarm(
-          protocol.Pbmethod.PbItemFarm.Builder builderForValue) {
-        if (aItemFarmBuilder_ == null) {
-          ensureAItemFarmIsMutable();
-          aItemFarm_.add(builderForValue.build());
-          onChanged();
-        } else {
-          aItemFarmBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-       */
-      public Builder addAItemFarm(
-          int index, protocol.Pbmethod.PbItemFarm.Builder builderForValue) {
-        if (aItemFarmBuilder_ == null) {
-          ensureAItemFarmIsMutable();
-          aItemFarm_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          aItemFarmBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-       */
-      public Builder addAllAItemFarm(
-          java.lang.Iterable<? extends protocol.Pbmethod.PbItemFarm> values) {
-        if (aItemFarmBuilder_ == null) {
-          ensureAItemFarmIsMutable();
-          super.addAll(values, aItemFarm_);
-          onChanged();
-        } else {
-          aItemFarmBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-       */
-      public Builder clearAItemFarm() {
-        if (aItemFarmBuilder_ == null) {
-          aItemFarm_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000800);
-          onChanged();
-        } else {
-          aItemFarmBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-       */
-      public Builder removeAItemFarm(int index) {
-        if (aItemFarmBuilder_ == null) {
-          ensureAItemFarmIsMutable();
-          aItemFarm_.remove(index);
-          onChanged();
-        } else {
-          aItemFarmBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-       */
-      public protocol.Pbmethod.PbItemFarm.Builder getAItemFarmBuilder(
-          int index) {
-        return getAItemFarmFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-       */
-      public protocol.Pbmethod.PbItemFarmOrBuilder getAItemFarmOrBuilder(
-          int index) {
-        if (aItemFarmBuilder_ == null) {
-          return aItemFarm_.get(index);  } else {
-          return aItemFarmBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-       */
-      public java.util.List<? extends protocol.Pbmethod.PbItemFarmOrBuilder> 
-           getAItemFarmOrBuilderList() {
-        if (aItemFarmBuilder_ != null) {
-          return aItemFarmBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(aItemFarm_);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-       */
-      public protocol.Pbmethod.PbItemFarm.Builder addAItemFarmBuilder() {
-        return getAItemFarmFieldBuilder().addBuilder(
-            protocol.Pbmethod.PbItemFarm.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-       */
-      public protocol.Pbmethod.PbItemFarm.Builder addAItemFarmBuilder(
-          int index) {
-        return getAItemFarmFieldBuilder().addBuilder(
-            index, protocol.Pbmethod.PbItemFarm.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm aItemFarm = 13;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbItemFarm.Builder> 
-           getAItemFarmBuilderList() {
-        return getAItemFarmFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbItemFarm, protocol.Pbmethod.PbItemFarm.Builder, protocol.Pbmethod.PbItemFarmOrBuilder> 
-          getAItemFarmFieldBuilder() {
-        if (aItemFarmBuilder_ == null) {
-          aItemFarmBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              protocol.Pbmethod.PbItemFarm, protocol.Pbmethod.PbItemFarm.Builder, protocol.Pbmethod.PbItemFarmOrBuilder>(
-                  aItemFarm_,
-                  ((bitField0_ & 0x00000800) == 0x00000800),
-                  getParentForChildren(),
-                  isClean());
-          aItemFarm_ = null;
-        }
-        return aItemFarmBuilder_;
-      }
-
-      // repeated .pbdson.PbPiece aItemPiece = 14;
-      private java.util.List<protocol.Pbmethod.PbPiece> aItemPiece_ =
-        java.util.Collections.emptyList();
-      private void ensureAItemPieceIsMutable() {
-        if (!((bitField0_ & 0x00001000) == 0x00001000)) {
-          aItemPiece_ = new java.util.ArrayList<protocol.Pbmethod.PbPiece>(aItemPiece_);
-          bitField0_ |= 0x00001000;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbPiece, protocol.Pbmethod.PbPiece.Builder, protocol.Pbmethod.PbPieceOrBuilder> aItemPieceBuilder_;
-
-      /**
-       * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbPiece> getAItemPieceList() {
-        if (aItemPieceBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(aItemPiece_);
-        } else {
-          return aItemPieceBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-       */
-      public int getAItemPieceCount() {
-        if (aItemPieceBuilder_ == null) {
-          return aItemPiece_.size();
-        } else {
-          return aItemPieceBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-       */
-      public protocol.Pbmethod.PbPiece getAItemPiece(int index) {
-        if (aItemPieceBuilder_ == null) {
-          return aItemPiece_.get(index);
-        } else {
-          return aItemPieceBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-       */
-      public Builder setAItemPiece(
-          int index, protocol.Pbmethod.PbPiece value) {
-        if (aItemPieceBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureAItemPieceIsMutable();
-          aItemPiece_.set(index, value);
-          onChanged();
-        } else {
-          aItemPieceBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-       */
-      public Builder setAItemPiece(
-          int index, protocol.Pbmethod.PbPiece.Builder builderForValue) {
-        if (aItemPieceBuilder_ == null) {
-          ensureAItemPieceIsMutable();
-          aItemPiece_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          aItemPieceBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-       */
-      public Builder addAItemPiece(protocol.Pbmethod.PbPiece value) {
-        if (aItemPieceBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureAItemPieceIsMutable();
-          aItemPiece_.add(value);
-          onChanged();
-        } else {
-          aItemPieceBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-       */
-      public Builder addAItemPiece(
-          int index, protocol.Pbmethod.PbPiece value) {
-        if (aItemPieceBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureAItemPieceIsMutable();
-          aItemPiece_.add(index, value);
-          onChanged();
-        } else {
-          aItemPieceBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-       */
-      public Builder addAItemPiece(
-          protocol.Pbmethod.PbPiece.Builder builderForValue) {
-        if (aItemPieceBuilder_ == null) {
-          ensureAItemPieceIsMutable();
-          aItemPiece_.add(builderForValue.build());
-          onChanged();
-        } else {
-          aItemPieceBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-       */
-      public Builder addAItemPiece(
-          int index, protocol.Pbmethod.PbPiece.Builder builderForValue) {
-        if (aItemPieceBuilder_ == null) {
-          ensureAItemPieceIsMutable();
-          aItemPiece_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          aItemPieceBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-       */
-      public Builder addAllAItemPiece(
-          java.lang.Iterable<? extends protocol.Pbmethod.PbPiece> values) {
-        if (aItemPieceBuilder_ == null) {
-          ensureAItemPieceIsMutable();
-          super.addAll(values, aItemPiece_);
-          onChanged();
-        } else {
-          aItemPieceBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-       */
-      public Builder clearAItemPiece() {
-        if (aItemPieceBuilder_ == null) {
-          aItemPiece_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00001000);
-          onChanged();
-        } else {
-          aItemPieceBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-       */
-      public Builder removeAItemPiece(int index) {
-        if (aItemPieceBuilder_ == null) {
-          ensureAItemPieceIsMutable();
-          aItemPiece_.remove(index);
-          onChanged();
-        } else {
-          aItemPieceBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-       */
-      public protocol.Pbmethod.PbPiece.Builder getAItemPieceBuilder(
-          int index) {
-        return getAItemPieceFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-       */
-      public protocol.Pbmethod.PbPieceOrBuilder getAItemPieceOrBuilder(
-          int index) {
-        if (aItemPieceBuilder_ == null) {
-          return aItemPiece_.get(index);  } else {
-          return aItemPieceBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-       */
-      public java.util.List<? extends protocol.Pbmethod.PbPieceOrBuilder> 
-           getAItemPieceOrBuilderList() {
-        if (aItemPieceBuilder_ != null) {
-          return aItemPieceBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(aItemPiece_);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-       */
-      public protocol.Pbmethod.PbPiece.Builder addAItemPieceBuilder() {
-        return getAItemPieceFieldBuilder().addBuilder(
-            protocol.Pbmethod.PbPiece.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-       */
-      public protocol.Pbmethod.PbPiece.Builder addAItemPieceBuilder(
-          int index) {
-        return getAItemPieceFieldBuilder().addBuilder(
-            index, protocol.Pbmethod.PbPiece.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbPiece aItemPiece = 14;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbPiece.Builder> 
-           getAItemPieceBuilderList() {
-        return getAItemPieceFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbPiece, protocol.Pbmethod.PbPiece.Builder, protocol.Pbmethod.PbPieceOrBuilder> 
-          getAItemPieceFieldBuilder() {
-        if (aItemPieceBuilder_ == null) {
-          aItemPieceBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              protocol.Pbmethod.PbPiece, protocol.Pbmethod.PbPiece.Builder, protocol.Pbmethod.PbPieceOrBuilder>(
-                  aItemPiece_,
-                  ((bitField0_ & 0x00001000) == 0x00001000),
-                  getParentForChildren(),
-                  isClean());
-          aItemPiece_ = null;
-        }
-        return aItemPieceBuilder_;
-      }
-
       // repeated .pbdson.PbPet aPet = 15;
       private java.util.List<protocol.Pbmethod.PbPet> aPet_ =
         java.util.Collections.emptyList();
       private void ensureAPetIsMutable() {
-        if (!((bitField0_ & 0x00002000) == 0x00002000)) {
+        if (!((bitField0_ & 0x00000800) == 0x00000800)) {
           aPet_ = new java.util.ArrayList<protocol.Pbmethod.PbPet>(aPet_);
-          bitField0_ |= 0x00002000;
+          bitField0_ |= 0x00000800;
          }
       }
 
@@ -34196,7 +26845,7 @@ public final class Pbmethod {
       public Builder clearAPet() {
         if (aPetBuilder_ == null) {
           aPet_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00002000);
+          bitField0_ = (bitField0_ & ~0x00000800);
           onChanged();
         } else {
           aPetBuilder_.clear();
@@ -34273,252 +26922,12 @@ public final class Pbmethod {
           aPetBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               protocol.Pbmethod.PbPet, protocol.Pbmethod.PbPet.Builder, protocol.Pbmethod.PbPetOrBuilder>(
                   aPet_,
-                  ((bitField0_ & 0x00002000) == 0x00002000),
+                  ((bitField0_ & 0x00000800) == 0x00000800),
                   getParentForChildren(),
                   isClean());
           aPet_ = null;
         }
         return aPetBuilder_;
-      }
-
-      // repeated .pbdson.PbHero aHero = 16;
-      private java.util.List<protocol.Pbmethod.PbHero> aHero_ =
-        java.util.Collections.emptyList();
-      private void ensureAHeroIsMutable() {
-        if (!((bitField0_ & 0x00004000) == 0x00004000)) {
-          aHero_ = new java.util.ArrayList<protocol.Pbmethod.PbHero>(aHero_);
-          bitField0_ |= 0x00004000;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbHero, protocol.Pbmethod.PbHero.Builder, protocol.Pbmethod.PbHeroOrBuilder> aHeroBuilder_;
-
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 16;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbHero> getAHeroList() {
-        if (aHeroBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(aHero_);
-        } else {
-          return aHeroBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 16;</code>
-       */
-      public int getAHeroCount() {
-        if (aHeroBuilder_ == null) {
-          return aHero_.size();
-        } else {
-          return aHeroBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 16;</code>
-       */
-      public protocol.Pbmethod.PbHero getAHero(int index) {
-        if (aHeroBuilder_ == null) {
-          return aHero_.get(index);
-        } else {
-          return aHeroBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 16;</code>
-       */
-      public Builder setAHero(
-          int index, protocol.Pbmethod.PbHero value) {
-        if (aHeroBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureAHeroIsMutable();
-          aHero_.set(index, value);
-          onChanged();
-        } else {
-          aHeroBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 16;</code>
-       */
-      public Builder setAHero(
-          int index, protocol.Pbmethod.PbHero.Builder builderForValue) {
-        if (aHeroBuilder_ == null) {
-          ensureAHeroIsMutable();
-          aHero_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          aHeroBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 16;</code>
-       */
-      public Builder addAHero(protocol.Pbmethod.PbHero value) {
-        if (aHeroBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureAHeroIsMutable();
-          aHero_.add(value);
-          onChanged();
-        } else {
-          aHeroBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 16;</code>
-       */
-      public Builder addAHero(
-          int index, protocol.Pbmethod.PbHero value) {
-        if (aHeroBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureAHeroIsMutable();
-          aHero_.add(index, value);
-          onChanged();
-        } else {
-          aHeroBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 16;</code>
-       */
-      public Builder addAHero(
-          protocol.Pbmethod.PbHero.Builder builderForValue) {
-        if (aHeroBuilder_ == null) {
-          ensureAHeroIsMutable();
-          aHero_.add(builderForValue.build());
-          onChanged();
-        } else {
-          aHeroBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 16;</code>
-       */
-      public Builder addAHero(
-          int index, protocol.Pbmethod.PbHero.Builder builderForValue) {
-        if (aHeroBuilder_ == null) {
-          ensureAHeroIsMutable();
-          aHero_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          aHeroBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 16;</code>
-       */
-      public Builder addAllAHero(
-          java.lang.Iterable<? extends protocol.Pbmethod.PbHero> values) {
-        if (aHeroBuilder_ == null) {
-          ensureAHeroIsMutable();
-          super.addAll(values, aHero_);
-          onChanged();
-        } else {
-          aHeroBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 16;</code>
-       */
-      public Builder clearAHero() {
-        if (aHeroBuilder_ == null) {
-          aHero_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00004000);
-          onChanged();
-        } else {
-          aHeroBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 16;</code>
-       */
-      public Builder removeAHero(int index) {
-        if (aHeroBuilder_ == null) {
-          ensureAHeroIsMutable();
-          aHero_.remove(index);
-          onChanged();
-        } else {
-          aHeroBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 16;</code>
-       */
-      public protocol.Pbmethod.PbHero.Builder getAHeroBuilder(
-          int index) {
-        return getAHeroFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 16;</code>
-       */
-      public protocol.Pbmethod.PbHeroOrBuilder getAHeroOrBuilder(
-          int index) {
-        if (aHeroBuilder_ == null) {
-          return aHero_.get(index);  } else {
-          return aHeroBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 16;</code>
-       */
-      public java.util.List<? extends protocol.Pbmethod.PbHeroOrBuilder> 
-           getAHeroOrBuilderList() {
-        if (aHeroBuilder_ != null) {
-          return aHeroBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(aHero_);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 16;</code>
-       */
-      public protocol.Pbmethod.PbHero.Builder addAHeroBuilder() {
-        return getAHeroFieldBuilder().addBuilder(
-            protocol.Pbmethod.PbHero.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 16;</code>
-       */
-      public protocol.Pbmethod.PbHero.Builder addAHeroBuilder(
-          int index) {
-        return getAHeroFieldBuilder().addBuilder(
-            index, protocol.Pbmethod.PbHero.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 16;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbHero.Builder> 
-           getAHeroBuilderList() {
-        return getAHeroFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbHero, protocol.Pbmethod.PbHero.Builder, protocol.Pbmethod.PbHeroOrBuilder> 
-          getAHeroFieldBuilder() {
-        if (aHeroBuilder_ == null) {
-          aHeroBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              protocol.Pbmethod.PbHero, protocol.Pbmethod.PbHero.Builder, protocol.Pbmethod.PbHeroOrBuilder>(
-                  aHero_,
-                  ((bitField0_ & 0x00004000) == 0x00004000),
-                  getParentForChildren(),
-                  isClean());
-          aHero_ = null;
-        }
-        return aHeroBuilder_;
       }
 
       // optional int32 tutorial = 17;
@@ -34527,7 +26936,7 @@ public final class Pbmethod {
        * <code>optional int32 tutorial = 17;</code>
        */
       public boolean hasTutorial() {
-        return ((bitField0_ & 0x00008000) == 0x00008000);
+        return ((bitField0_ & 0x00001000) == 0x00001000);
       }
       /**
        * <code>optional int32 tutorial = 17;</code>
@@ -34539,7 +26948,7 @@ public final class Pbmethod {
        * <code>optional int32 tutorial = 17;</code>
        */
       public Builder setTutorial(int value) {
-        bitField0_ |= 0x00008000;
+        bitField0_ |= 0x00001000;
         tutorial_ = value;
         onChanged();
         return this;
@@ -34548,7 +26957,7 @@ public final class Pbmethod {
        * <code>optional int32 tutorial = 17;</code>
        */
       public Builder clearTutorial() {
-        bitField0_ = (bitField0_ & ~0x00008000);
+        bitField0_ = (bitField0_ & ~0x00001000);
         tutorial_ = 0;
         onChanged();
         return this;
@@ -34557,9 +26966,9 @@ public final class Pbmethod {
       // repeated int32 dameSkins = 18;
       private java.util.List<java.lang.Integer> dameSkins_ = java.util.Collections.emptyList();
       private void ensureDameSkinsIsMutable() {
-        if (!((bitField0_ & 0x00010000) == 0x00010000)) {
+        if (!((bitField0_ & 0x00002000) == 0x00002000)) {
           dameSkins_ = new java.util.ArrayList<java.lang.Integer>(dameSkins_);
-          bitField0_ |= 0x00010000;
+          bitField0_ |= 0x00002000;
          }
       }
       /**
@@ -34615,7 +27024,7 @@ public final class Pbmethod {
        */
       public Builder clearDameSkins() {
         dameSkins_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00010000);
+        bitField0_ = (bitField0_ & ~0x00002000);
         onChanged();
         return this;
       }
@@ -34626,7 +27035,7 @@ public final class Pbmethod {
        * <code>optional int32 dameSkinEquip = 19;</code>
        */
       public boolean hasDameSkinEquip() {
-        return ((bitField0_ & 0x00020000) == 0x00020000);
+        return ((bitField0_ & 0x00004000) == 0x00004000);
       }
       /**
        * <code>optional int32 dameSkinEquip = 19;</code>
@@ -34638,7 +27047,7 @@ public final class Pbmethod {
        * <code>optional int32 dameSkinEquip = 19;</code>
        */
       public Builder setDameSkinEquip(int value) {
-        bitField0_ |= 0x00020000;
+        bitField0_ |= 0x00004000;
         dameSkinEquip_ = value;
         onChanged();
         return this;
@@ -34647,7 +27056,7 @@ public final class Pbmethod {
        * <code>optional int32 dameSkinEquip = 19;</code>
        */
       public Builder clearDameSkinEquip() {
-        bitField0_ = (bitField0_ & ~0x00020000);
+        bitField0_ = (bitField0_ & ~0x00004000);
         dameSkinEquip_ = 0;
         onChanged();
         return this;
@@ -34656,9 +27065,9 @@ public final class Pbmethod {
       // repeated int32 bossGod = 20;
       private java.util.List<java.lang.Integer> bossGod_ = java.util.Collections.emptyList();
       private void ensureBossGodIsMutable() {
-        if (!((bitField0_ & 0x00040000) == 0x00040000)) {
+        if (!((bitField0_ & 0x00008000) == 0x00008000)) {
           bossGod_ = new java.util.ArrayList<java.lang.Integer>(bossGod_);
-          bitField0_ |= 0x00040000;
+          bitField0_ |= 0x00008000;
          }
       }
       /**
@@ -34714,7 +27123,7 @@ public final class Pbmethod {
        */
       public Builder clearBossGod() {
         bossGod_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00040000);
+        bitField0_ = (bitField0_ & ~0x00008000);
         onChanged();
         return this;
       }
@@ -34722,9 +27131,9 @@ public final class Pbmethod {
       // repeated int32 chatFrames = 21;
       private java.util.List<java.lang.Integer> chatFrames_ = java.util.Collections.emptyList();
       private void ensureChatFramesIsMutable() {
-        if (!((bitField0_ & 0x00080000) == 0x00080000)) {
+        if (!((bitField0_ & 0x00010000) == 0x00010000)) {
           chatFrames_ = new java.util.ArrayList<java.lang.Integer>(chatFrames_);
-          bitField0_ |= 0x00080000;
+          bitField0_ |= 0x00010000;
          }
       }
       /**
@@ -34780,7 +27189,7 @@ public final class Pbmethod {
        */
       public Builder clearChatFrames() {
         chatFrames_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00080000);
+        bitField0_ = (bitField0_ & ~0x00010000);
         onChanged();
         return this;
       }
@@ -34791,7 +27200,7 @@ public final class Pbmethod {
        * <code>optional int32 chatFrameEquip = 22;</code>
        */
       public boolean hasChatFrameEquip() {
-        return ((bitField0_ & 0x00100000) == 0x00100000);
+        return ((bitField0_ & 0x00020000) == 0x00020000);
       }
       /**
        * <code>optional int32 chatFrameEquip = 22;</code>
@@ -34803,7 +27212,7 @@ public final class Pbmethod {
        * <code>optional int32 chatFrameEquip = 22;</code>
        */
       public Builder setChatFrameEquip(int value) {
-        bitField0_ |= 0x00100000;
+        bitField0_ |= 0x00020000;
         chatFrameEquip_ = value;
         onChanged();
         return this;
@@ -34812,7 +27221,7 @@ public final class Pbmethod {
        * <code>optional int32 chatFrameEquip = 22;</code>
        */
       public Builder clearChatFrameEquip() {
-        bitField0_ = (bitField0_ & ~0x00100000);
+        bitField0_ = (bitField0_ & ~0x00020000);
         chatFrameEquip_ = 0;
         onChanged();
         return this;
@@ -34821,9 +27230,9 @@ public final class Pbmethod {
       // repeated int32 trials = 23;
       private java.util.List<java.lang.Integer> trials_ = java.util.Collections.emptyList();
       private void ensureTrialsIsMutable() {
-        if (!((bitField0_ & 0x00200000) == 0x00200000)) {
+        if (!((bitField0_ & 0x00040000) == 0x00040000)) {
           trials_ = new java.util.ArrayList<java.lang.Integer>(trials_);
-          bitField0_ |= 0x00200000;
+          bitField0_ |= 0x00040000;
          }
       }
       /**
@@ -34879,7 +27288,7 @@ public final class Pbmethod {
        */
       public Builder clearTrials() {
         trials_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00200000);
+        bitField0_ = (bitField0_ & ~0x00040000);
         onChanged();
         return this;
       }
@@ -34890,7 +27299,7 @@ public final class Pbmethod {
        * <code>optional int32 trialEquip = 24;</code>
        */
       public boolean hasTrialEquip() {
-        return ((bitField0_ & 0x00400000) == 0x00400000);
+        return ((bitField0_ & 0x00080000) == 0x00080000);
       }
       /**
        * <code>optional int32 trialEquip = 24;</code>
@@ -34902,7 +27311,7 @@ public final class Pbmethod {
        * <code>optional int32 trialEquip = 24;</code>
        */
       public Builder setTrialEquip(int value) {
-        bitField0_ |= 0x00400000;
+        bitField0_ |= 0x00080000;
         trialEquip_ = value;
         onChanged();
         return this;
@@ -34911,7 +27320,7 @@ public final class Pbmethod {
        * <code>optional int32 trialEquip = 24;</code>
        */
       public Builder clearTrialEquip() {
-        bitField0_ = (bitField0_ & ~0x00400000);
+        bitField0_ = (bitField0_ & ~0x00080000);
         trialEquip_ = 0;
         onChanged();
         return this;
@@ -37153,680 +29562,6 @@ public final class Pbmethod {
     // @@protoc_insertion_point(class_scope:pbdson.PbPet)
   }
 
-  public interface PbListItemFarmOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // repeated .pbdson.PbItemFarm itemFarms = 1;
-    /**
-     * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-     */
-    java.util.List<protocol.Pbmethod.PbItemFarm> 
-        getItemFarmsList();
-    /**
-     * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-     */
-    protocol.Pbmethod.PbItemFarm getItemFarms(int index);
-    /**
-     * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-     */
-    int getItemFarmsCount();
-    /**
-     * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-     */
-    java.util.List<? extends protocol.Pbmethod.PbItemFarmOrBuilder> 
-        getItemFarmsOrBuilderList();
-    /**
-     * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-     */
-    protocol.Pbmethod.PbItemFarmOrBuilder getItemFarmsOrBuilder(
-        int index);
-  }
-  /**
-   * Protobuf type {@code pbdson.PbListItemFarm}
-   */
-  public static final class PbListItemFarm extends
-      com.google.protobuf.GeneratedMessage
-      implements PbListItemFarmOrBuilder {
-    // Use PbListItemFarm.newBuilder() to construct.
-    private PbListItemFarm(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private PbListItemFarm(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final PbListItemFarm defaultInstance;
-    public static PbListItemFarm getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public PbListItemFarm getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private PbListItemFarm(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 10: {
-              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-                itemFarms_ = new java.util.ArrayList<protocol.Pbmethod.PbItemFarm>();
-                mutable_bitField0_ |= 0x00000001;
-              }
-              itemFarms_.add(input.readMessage(protocol.Pbmethod.PbItemFarm.PARSER, extensionRegistry));
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-          itemFarms_ = java.util.Collections.unmodifiableList(itemFarms_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return protocol.Pbmethod.internal_static_pbdson_PbListItemFarm_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return protocol.Pbmethod.internal_static_pbdson_PbListItemFarm_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              protocol.Pbmethod.PbListItemFarm.class, protocol.Pbmethod.PbListItemFarm.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<PbListItemFarm> PARSER =
-        new com.google.protobuf.AbstractParser<PbListItemFarm>() {
-      public PbListItemFarm parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PbListItemFarm(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<PbListItemFarm> getParserForType() {
-      return PARSER;
-    }
-
-    // repeated .pbdson.PbItemFarm itemFarms = 1;
-    public static final int ITEMFARMS_FIELD_NUMBER = 1;
-    private java.util.List<protocol.Pbmethod.PbItemFarm> itemFarms_;
-    /**
-     * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-     */
-    public java.util.List<protocol.Pbmethod.PbItemFarm> getItemFarmsList() {
-      return itemFarms_;
-    }
-    /**
-     * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-     */
-    public java.util.List<? extends protocol.Pbmethod.PbItemFarmOrBuilder> 
-        getItemFarmsOrBuilderList() {
-      return itemFarms_;
-    }
-    /**
-     * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-     */
-    public int getItemFarmsCount() {
-      return itemFarms_.size();
-    }
-    /**
-     * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-     */
-    public protocol.Pbmethod.PbItemFarm getItemFarms(int index) {
-      return itemFarms_.get(index);
-    }
-    /**
-     * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-     */
-    public protocol.Pbmethod.PbItemFarmOrBuilder getItemFarmsOrBuilder(
-        int index) {
-      return itemFarms_.get(index);
-    }
-
-    private void initFields() {
-      itemFarms_ = java.util.Collections.emptyList();
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      for (int i = 0; i < itemFarms_.size(); i++) {
-        output.writeMessage(1, itemFarms_.get(i));
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      for (int i = 0; i < itemFarms_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, itemFarms_.get(i));
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static protocol.Pbmethod.PbListItemFarm parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbListItemFarm parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbListItemFarm parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbListItemFarm parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbListItemFarm parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbListItemFarm parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbListItemFarm parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static protocol.Pbmethod.PbListItemFarm parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbListItemFarm parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbListItemFarm parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(protocol.Pbmethod.PbListItemFarm prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code pbdson.PbListItemFarm}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements protocol.Pbmethod.PbListItemFarmOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return protocol.Pbmethod.internal_static_pbdson_PbListItemFarm_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return protocol.Pbmethod.internal_static_pbdson_PbListItemFarm_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                protocol.Pbmethod.PbListItemFarm.class, protocol.Pbmethod.PbListItemFarm.Builder.class);
-      }
-
-      // Construct using protocol.Pbmethod.PbListItemFarm.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getItemFarmsFieldBuilder();
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        if (itemFarmsBuilder_ == null) {
-          itemFarms_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
-        } else {
-          itemFarmsBuilder_.clear();
-        }
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return protocol.Pbmethod.internal_static_pbdson_PbListItemFarm_descriptor;
-      }
-
-      public protocol.Pbmethod.PbListItemFarm getDefaultInstanceForType() {
-        return protocol.Pbmethod.PbListItemFarm.getDefaultInstance();
-      }
-
-      public protocol.Pbmethod.PbListItemFarm build() {
-        protocol.Pbmethod.PbListItemFarm result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public protocol.Pbmethod.PbListItemFarm buildPartial() {
-        protocol.Pbmethod.PbListItemFarm result = new protocol.Pbmethod.PbListItemFarm(this);
-        int from_bitField0_ = bitField0_;
-        if (itemFarmsBuilder_ == null) {
-          if (((bitField0_ & 0x00000001) == 0x00000001)) {
-            itemFarms_ = java.util.Collections.unmodifiableList(itemFarms_);
-            bitField0_ = (bitField0_ & ~0x00000001);
-          }
-          result.itemFarms_ = itemFarms_;
-        } else {
-          result.itemFarms_ = itemFarmsBuilder_.build();
-        }
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof protocol.Pbmethod.PbListItemFarm) {
-          return mergeFrom((protocol.Pbmethod.PbListItemFarm)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(protocol.Pbmethod.PbListItemFarm other) {
-        if (other == protocol.Pbmethod.PbListItemFarm.getDefaultInstance()) return this;
-        if (itemFarmsBuilder_ == null) {
-          if (!other.itemFarms_.isEmpty()) {
-            if (itemFarms_.isEmpty()) {
-              itemFarms_ = other.itemFarms_;
-              bitField0_ = (bitField0_ & ~0x00000001);
-            } else {
-              ensureItemFarmsIsMutable();
-              itemFarms_.addAll(other.itemFarms_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.itemFarms_.isEmpty()) {
-            if (itemFarmsBuilder_.isEmpty()) {
-              itemFarmsBuilder_.dispose();
-              itemFarmsBuilder_ = null;
-              itemFarms_ = other.itemFarms_;
-              bitField0_ = (bitField0_ & ~0x00000001);
-              itemFarmsBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getItemFarmsFieldBuilder() : null;
-            } else {
-              itemFarmsBuilder_.addAllMessages(other.itemFarms_);
-            }
-          }
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        protocol.Pbmethod.PbListItemFarm parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (protocol.Pbmethod.PbListItemFarm) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // repeated .pbdson.PbItemFarm itemFarms = 1;
-      private java.util.List<protocol.Pbmethod.PbItemFarm> itemFarms_ =
-        java.util.Collections.emptyList();
-      private void ensureItemFarmsIsMutable() {
-        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          itemFarms_ = new java.util.ArrayList<protocol.Pbmethod.PbItemFarm>(itemFarms_);
-          bitField0_ |= 0x00000001;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbItemFarm, protocol.Pbmethod.PbItemFarm.Builder, protocol.Pbmethod.PbItemFarmOrBuilder> itemFarmsBuilder_;
-
-      /**
-       * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbItemFarm> getItemFarmsList() {
-        if (itemFarmsBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(itemFarms_);
-        } else {
-          return itemFarmsBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-       */
-      public int getItemFarmsCount() {
-        if (itemFarmsBuilder_ == null) {
-          return itemFarms_.size();
-        } else {
-          return itemFarmsBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-       */
-      public protocol.Pbmethod.PbItemFarm getItemFarms(int index) {
-        if (itemFarmsBuilder_ == null) {
-          return itemFarms_.get(index);
-        } else {
-          return itemFarmsBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-       */
-      public Builder setItemFarms(
-          int index, protocol.Pbmethod.PbItemFarm value) {
-        if (itemFarmsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureItemFarmsIsMutable();
-          itemFarms_.set(index, value);
-          onChanged();
-        } else {
-          itemFarmsBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-       */
-      public Builder setItemFarms(
-          int index, protocol.Pbmethod.PbItemFarm.Builder builderForValue) {
-        if (itemFarmsBuilder_ == null) {
-          ensureItemFarmsIsMutable();
-          itemFarms_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          itemFarmsBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-       */
-      public Builder addItemFarms(protocol.Pbmethod.PbItemFarm value) {
-        if (itemFarmsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureItemFarmsIsMutable();
-          itemFarms_.add(value);
-          onChanged();
-        } else {
-          itemFarmsBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-       */
-      public Builder addItemFarms(
-          int index, protocol.Pbmethod.PbItemFarm value) {
-        if (itemFarmsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureItemFarmsIsMutable();
-          itemFarms_.add(index, value);
-          onChanged();
-        } else {
-          itemFarmsBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-       */
-      public Builder addItemFarms(
-          protocol.Pbmethod.PbItemFarm.Builder builderForValue) {
-        if (itemFarmsBuilder_ == null) {
-          ensureItemFarmsIsMutable();
-          itemFarms_.add(builderForValue.build());
-          onChanged();
-        } else {
-          itemFarmsBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-       */
-      public Builder addItemFarms(
-          int index, protocol.Pbmethod.PbItemFarm.Builder builderForValue) {
-        if (itemFarmsBuilder_ == null) {
-          ensureItemFarmsIsMutable();
-          itemFarms_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          itemFarmsBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-       */
-      public Builder addAllItemFarms(
-          java.lang.Iterable<? extends protocol.Pbmethod.PbItemFarm> values) {
-        if (itemFarmsBuilder_ == null) {
-          ensureItemFarmsIsMutable();
-          super.addAll(values, itemFarms_);
-          onChanged();
-        } else {
-          itemFarmsBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-       */
-      public Builder clearItemFarms() {
-        if (itemFarmsBuilder_ == null) {
-          itemFarms_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
-          onChanged();
-        } else {
-          itemFarmsBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-       */
-      public Builder removeItemFarms(int index) {
-        if (itemFarmsBuilder_ == null) {
-          ensureItemFarmsIsMutable();
-          itemFarms_.remove(index);
-          onChanged();
-        } else {
-          itemFarmsBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-       */
-      public protocol.Pbmethod.PbItemFarm.Builder getItemFarmsBuilder(
-          int index) {
-        return getItemFarmsFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-       */
-      public protocol.Pbmethod.PbItemFarmOrBuilder getItemFarmsOrBuilder(
-          int index) {
-        if (itemFarmsBuilder_ == null) {
-          return itemFarms_.get(index);  } else {
-          return itemFarmsBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-       */
-      public java.util.List<? extends protocol.Pbmethod.PbItemFarmOrBuilder> 
-           getItemFarmsOrBuilderList() {
-        if (itemFarmsBuilder_ != null) {
-          return itemFarmsBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(itemFarms_);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-       */
-      public protocol.Pbmethod.PbItemFarm.Builder addItemFarmsBuilder() {
-        return getItemFarmsFieldBuilder().addBuilder(
-            protocol.Pbmethod.PbItemFarm.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-       */
-      public protocol.Pbmethod.PbItemFarm.Builder addItemFarmsBuilder(
-          int index) {
-        return getItemFarmsFieldBuilder().addBuilder(
-            index, protocol.Pbmethod.PbItemFarm.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbItemFarm itemFarms = 1;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbItemFarm.Builder> 
-           getItemFarmsBuilderList() {
-        return getItemFarmsFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbItemFarm, protocol.Pbmethod.PbItemFarm.Builder, protocol.Pbmethod.PbItemFarmOrBuilder> 
-          getItemFarmsFieldBuilder() {
-        if (itemFarmsBuilder_ == null) {
-          itemFarmsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              protocol.Pbmethod.PbItemFarm, protocol.Pbmethod.PbItemFarm.Builder, protocol.Pbmethod.PbItemFarmOrBuilder>(
-                  itemFarms_,
-                  ((bitField0_ & 0x00000001) == 0x00000001),
-                  getParentForChildren(),
-                  isClean());
-          itemFarms_ = null;
-        }
-        return itemFarmsBuilder_;
-      }
-
-      // @@protoc_insertion_point(builder_scope:pbdson.PbListItemFarm)
-    }
-
-    static {
-      defaultInstance = new PbListItemFarm(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:pbdson.PbListItemFarm)
-  }
-
   public interface PbListItemPointOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
@@ -39849,3820 +31584,6 @@ public final class Pbmethod {
     // @@protoc_insertion_point(class_scope:pbdson.PbListChat)
   }
 
-  public interface PbListHeroOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // repeated .pbdson.PbHero aHero = 1;
-    /**
-     * <code>repeated .pbdson.PbHero aHero = 1;</code>
-     */
-    java.util.List<protocol.Pbmethod.PbHero> 
-        getAHeroList();
-    /**
-     * <code>repeated .pbdson.PbHero aHero = 1;</code>
-     */
-    protocol.Pbmethod.PbHero getAHero(int index);
-    /**
-     * <code>repeated .pbdson.PbHero aHero = 1;</code>
-     */
-    int getAHeroCount();
-    /**
-     * <code>repeated .pbdson.PbHero aHero = 1;</code>
-     */
-    java.util.List<? extends protocol.Pbmethod.PbHeroOrBuilder> 
-        getAHeroOrBuilderList();
-    /**
-     * <code>repeated .pbdson.PbHero aHero = 1;</code>
-     */
-    protocol.Pbmethod.PbHeroOrBuilder getAHeroOrBuilder(
-        int index);
-  }
-  /**
-   * Protobuf type {@code pbdson.PbListHero}
-   */
-  public static final class PbListHero extends
-      com.google.protobuf.GeneratedMessage
-      implements PbListHeroOrBuilder {
-    // Use PbListHero.newBuilder() to construct.
-    private PbListHero(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private PbListHero(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final PbListHero defaultInstance;
-    public static PbListHero getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public PbListHero getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private PbListHero(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 10: {
-              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-                aHero_ = new java.util.ArrayList<protocol.Pbmethod.PbHero>();
-                mutable_bitField0_ |= 0x00000001;
-              }
-              aHero_.add(input.readMessage(protocol.Pbmethod.PbHero.PARSER, extensionRegistry));
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-          aHero_ = java.util.Collections.unmodifiableList(aHero_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return protocol.Pbmethod.internal_static_pbdson_PbListHero_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return protocol.Pbmethod.internal_static_pbdson_PbListHero_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              protocol.Pbmethod.PbListHero.class, protocol.Pbmethod.PbListHero.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<PbListHero> PARSER =
-        new com.google.protobuf.AbstractParser<PbListHero>() {
-      public PbListHero parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PbListHero(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<PbListHero> getParserForType() {
-      return PARSER;
-    }
-
-    // repeated .pbdson.PbHero aHero = 1;
-    public static final int AHERO_FIELD_NUMBER = 1;
-    private java.util.List<protocol.Pbmethod.PbHero> aHero_;
-    /**
-     * <code>repeated .pbdson.PbHero aHero = 1;</code>
-     */
-    public java.util.List<protocol.Pbmethod.PbHero> getAHeroList() {
-      return aHero_;
-    }
-    /**
-     * <code>repeated .pbdson.PbHero aHero = 1;</code>
-     */
-    public java.util.List<? extends protocol.Pbmethod.PbHeroOrBuilder> 
-        getAHeroOrBuilderList() {
-      return aHero_;
-    }
-    /**
-     * <code>repeated .pbdson.PbHero aHero = 1;</code>
-     */
-    public int getAHeroCount() {
-      return aHero_.size();
-    }
-    /**
-     * <code>repeated .pbdson.PbHero aHero = 1;</code>
-     */
-    public protocol.Pbmethod.PbHero getAHero(int index) {
-      return aHero_.get(index);
-    }
-    /**
-     * <code>repeated .pbdson.PbHero aHero = 1;</code>
-     */
-    public protocol.Pbmethod.PbHeroOrBuilder getAHeroOrBuilder(
-        int index) {
-      return aHero_.get(index);
-    }
-
-    private void initFields() {
-      aHero_ = java.util.Collections.emptyList();
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      for (int i = 0; i < aHero_.size(); i++) {
-        output.writeMessage(1, aHero_.get(i));
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      for (int i = 0; i < aHero_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, aHero_.get(i));
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static protocol.Pbmethod.PbListHero parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbListHero parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbListHero parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbListHero parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbListHero parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbListHero parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbListHero parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static protocol.Pbmethod.PbListHero parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbListHero parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbListHero parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(protocol.Pbmethod.PbListHero prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code pbdson.PbListHero}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements protocol.Pbmethod.PbListHeroOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return protocol.Pbmethod.internal_static_pbdson_PbListHero_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return protocol.Pbmethod.internal_static_pbdson_PbListHero_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                protocol.Pbmethod.PbListHero.class, protocol.Pbmethod.PbListHero.Builder.class);
-      }
-
-      // Construct using protocol.Pbmethod.PbListHero.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getAHeroFieldBuilder();
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        if (aHeroBuilder_ == null) {
-          aHero_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
-        } else {
-          aHeroBuilder_.clear();
-        }
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return protocol.Pbmethod.internal_static_pbdson_PbListHero_descriptor;
-      }
-
-      public protocol.Pbmethod.PbListHero getDefaultInstanceForType() {
-        return protocol.Pbmethod.PbListHero.getDefaultInstance();
-      }
-
-      public protocol.Pbmethod.PbListHero build() {
-        protocol.Pbmethod.PbListHero result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public protocol.Pbmethod.PbListHero buildPartial() {
-        protocol.Pbmethod.PbListHero result = new protocol.Pbmethod.PbListHero(this);
-        int from_bitField0_ = bitField0_;
-        if (aHeroBuilder_ == null) {
-          if (((bitField0_ & 0x00000001) == 0x00000001)) {
-            aHero_ = java.util.Collections.unmodifiableList(aHero_);
-            bitField0_ = (bitField0_ & ~0x00000001);
-          }
-          result.aHero_ = aHero_;
-        } else {
-          result.aHero_ = aHeroBuilder_.build();
-        }
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof protocol.Pbmethod.PbListHero) {
-          return mergeFrom((protocol.Pbmethod.PbListHero)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(protocol.Pbmethod.PbListHero other) {
-        if (other == protocol.Pbmethod.PbListHero.getDefaultInstance()) return this;
-        if (aHeroBuilder_ == null) {
-          if (!other.aHero_.isEmpty()) {
-            if (aHero_.isEmpty()) {
-              aHero_ = other.aHero_;
-              bitField0_ = (bitField0_ & ~0x00000001);
-            } else {
-              ensureAHeroIsMutable();
-              aHero_.addAll(other.aHero_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.aHero_.isEmpty()) {
-            if (aHeroBuilder_.isEmpty()) {
-              aHeroBuilder_.dispose();
-              aHeroBuilder_ = null;
-              aHero_ = other.aHero_;
-              bitField0_ = (bitField0_ & ~0x00000001);
-              aHeroBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getAHeroFieldBuilder() : null;
-            } else {
-              aHeroBuilder_.addAllMessages(other.aHero_);
-            }
-          }
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        protocol.Pbmethod.PbListHero parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (protocol.Pbmethod.PbListHero) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // repeated .pbdson.PbHero aHero = 1;
-      private java.util.List<protocol.Pbmethod.PbHero> aHero_ =
-        java.util.Collections.emptyList();
-      private void ensureAHeroIsMutable() {
-        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          aHero_ = new java.util.ArrayList<protocol.Pbmethod.PbHero>(aHero_);
-          bitField0_ |= 0x00000001;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbHero, protocol.Pbmethod.PbHero.Builder, protocol.Pbmethod.PbHeroOrBuilder> aHeroBuilder_;
-
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 1;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbHero> getAHeroList() {
-        if (aHeroBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(aHero_);
-        } else {
-          return aHeroBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 1;</code>
-       */
-      public int getAHeroCount() {
-        if (aHeroBuilder_ == null) {
-          return aHero_.size();
-        } else {
-          return aHeroBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 1;</code>
-       */
-      public protocol.Pbmethod.PbHero getAHero(int index) {
-        if (aHeroBuilder_ == null) {
-          return aHero_.get(index);
-        } else {
-          return aHeroBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 1;</code>
-       */
-      public Builder setAHero(
-          int index, protocol.Pbmethod.PbHero value) {
-        if (aHeroBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureAHeroIsMutable();
-          aHero_.set(index, value);
-          onChanged();
-        } else {
-          aHeroBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 1;</code>
-       */
-      public Builder setAHero(
-          int index, protocol.Pbmethod.PbHero.Builder builderForValue) {
-        if (aHeroBuilder_ == null) {
-          ensureAHeroIsMutable();
-          aHero_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          aHeroBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 1;</code>
-       */
-      public Builder addAHero(protocol.Pbmethod.PbHero value) {
-        if (aHeroBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureAHeroIsMutable();
-          aHero_.add(value);
-          onChanged();
-        } else {
-          aHeroBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 1;</code>
-       */
-      public Builder addAHero(
-          int index, protocol.Pbmethod.PbHero value) {
-        if (aHeroBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureAHeroIsMutable();
-          aHero_.add(index, value);
-          onChanged();
-        } else {
-          aHeroBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 1;</code>
-       */
-      public Builder addAHero(
-          protocol.Pbmethod.PbHero.Builder builderForValue) {
-        if (aHeroBuilder_ == null) {
-          ensureAHeroIsMutable();
-          aHero_.add(builderForValue.build());
-          onChanged();
-        } else {
-          aHeroBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 1;</code>
-       */
-      public Builder addAHero(
-          int index, protocol.Pbmethod.PbHero.Builder builderForValue) {
-        if (aHeroBuilder_ == null) {
-          ensureAHeroIsMutable();
-          aHero_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          aHeroBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 1;</code>
-       */
-      public Builder addAllAHero(
-          java.lang.Iterable<? extends protocol.Pbmethod.PbHero> values) {
-        if (aHeroBuilder_ == null) {
-          ensureAHeroIsMutable();
-          super.addAll(values, aHero_);
-          onChanged();
-        } else {
-          aHeroBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 1;</code>
-       */
-      public Builder clearAHero() {
-        if (aHeroBuilder_ == null) {
-          aHero_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
-          onChanged();
-        } else {
-          aHeroBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 1;</code>
-       */
-      public Builder removeAHero(int index) {
-        if (aHeroBuilder_ == null) {
-          ensureAHeroIsMutable();
-          aHero_.remove(index);
-          onChanged();
-        } else {
-          aHeroBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 1;</code>
-       */
-      public protocol.Pbmethod.PbHero.Builder getAHeroBuilder(
-          int index) {
-        return getAHeroFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 1;</code>
-       */
-      public protocol.Pbmethod.PbHeroOrBuilder getAHeroOrBuilder(
-          int index) {
-        if (aHeroBuilder_ == null) {
-          return aHero_.get(index);  } else {
-          return aHeroBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 1;</code>
-       */
-      public java.util.List<? extends protocol.Pbmethod.PbHeroOrBuilder> 
-           getAHeroOrBuilderList() {
-        if (aHeroBuilder_ != null) {
-          return aHeroBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(aHero_);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 1;</code>
-       */
-      public protocol.Pbmethod.PbHero.Builder addAHeroBuilder() {
-        return getAHeroFieldBuilder().addBuilder(
-            protocol.Pbmethod.PbHero.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 1;</code>
-       */
-      public protocol.Pbmethod.PbHero.Builder addAHeroBuilder(
-          int index) {
-        return getAHeroFieldBuilder().addBuilder(
-            index, protocol.Pbmethod.PbHero.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbHero aHero = 1;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbHero.Builder> 
-           getAHeroBuilderList() {
-        return getAHeroFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbHero, protocol.Pbmethod.PbHero.Builder, protocol.Pbmethod.PbHeroOrBuilder> 
-          getAHeroFieldBuilder() {
-        if (aHeroBuilder_ == null) {
-          aHeroBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              protocol.Pbmethod.PbHero, protocol.Pbmethod.PbHero.Builder, protocol.Pbmethod.PbHeroOrBuilder>(
-                  aHero_,
-                  ((bitField0_ & 0x00000001) == 0x00000001),
-                  getParentForChildren(),
-                  isClean());
-          aHero_ = null;
-        }
-        return aHeroBuilder_;
-      }
-
-      // @@protoc_insertion_point(builder_scope:pbdson.PbListHero)
-    }
-
-    static {
-      defaultInstance = new PbListHero(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:pbdson.PbListHero)
-  }
-
-  public interface PbListLandOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // repeated .pbdson.PbLand aLand = 1;
-    /**
-     * <code>repeated .pbdson.PbLand aLand = 1;</code>
-     */
-    java.util.List<protocol.Pbmethod.PbLand> 
-        getALandList();
-    /**
-     * <code>repeated .pbdson.PbLand aLand = 1;</code>
-     */
-    protocol.Pbmethod.PbLand getALand(int index);
-    /**
-     * <code>repeated .pbdson.PbLand aLand = 1;</code>
-     */
-    int getALandCount();
-    /**
-     * <code>repeated .pbdson.PbLand aLand = 1;</code>
-     */
-    java.util.List<? extends protocol.Pbmethod.PbLandOrBuilder> 
-        getALandOrBuilderList();
-    /**
-     * <code>repeated .pbdson.PbLand aLand = 1;</code>
-     */
-    protocol.Pbmethod.PbLandOrBuilder getALandOrBuilder(
-        int index);
-
-    // repeated int64 aBonus = 2;
-    /**
-     * <code>repeated int64 aBonus = 2;</code>
-     */
-    java.util.List<java.lang.Long> getABonusList();
-    /**
-     * <code>repeated int64 aBonus = 2;</code>
-     */
-    int getABonusCount();
-    /**
-     * <code>repeated int64 aBonus = 2;</code>
-     */
-    long getABonus(int index);
-
-    // repeated int64 treeStatus = 3;
-    /**
-     * <code>repeated int64 treeStatus = 3;</code>
-     */
-    java.util.List<java.lang.Long> getTreeStatusList();
-    /**
-     * <code>repeated int64 treeStatus = 3;</code>
-     */
-    int getTreeStatusCount();
-    /**
-     * <code>repeated int64 treeStatus = 3;</code>
-     */
-    long getTreeStatus(int index);
-
-    // repeated int32 deco = 4;
-    /**
-     * <code>repeated int32 deco = 4;</code>
-     */
-    java.util.List<java.lang.Integer> getDecoList();
-    /**
-     * <code>repeated int32 deco = 4;</code>
-     */
-    int getDecoCount();
-    /**
-     * <code>repeated int32 deco = 4;</code>
-     */
-    int getDeco(int index);
-
-    // optional int32 bonusTime = 5;
-    /**
-     * <code>optional int32 bonusTime = 5;</code>
-     */
-    boolean hasBonusTime();
-    /**
-     * <code>optional int32 bonusTime = 5;</code>
-     */
-    int getBonusTime();
-
-    // optional int32 bonusItem = 6;
-    /**
-     * <code>optional int32 bonusItem = 6;</code>
-     */
-    boolean hasBonusItem();
-    /**
-     * <code>optional int32 bonusItem = 6;</code>
-     */
-    int getBonusItem();
-
-    // optional int32 bonusExp = 7;
-    /**
-     * <code>optional int32 bonusExp = 7;</code>
-     */
-    boolean hasBonusExp();
-    /**
-     * <code>optional int32 bonusExp = 7;</code>
-     */
-    int getBonusExp();
-  }
-  /**
-   * Protobuf type {@code pbdson.PbListLand}
-   */
-  public static final class PbListLand extends
-      com.google.protobuf.GeneratedMessage
-      implements PbListLandOrBuilder {
-    // Use PbListLand.newBuilder() to construct.
-    private PbListLand(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private PbListLand(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final PbListLand defaultInstance;
-    public static PbListLand getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public PbListLand getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private PbListLand(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 10: {
-              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-                aLand_ = new java.util.ArrayList<protocol.Pbmethod.PbLand>();
-                mutable_bitField0_ |= 0x00000001;
-              }
-              aLand_.add(input.readMessage(protocol.Pbmethod.PbLand.PARSER, extensionRegistry));
-              break;
-            }
-            case 16: {
-              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-                aBonus_ = new java.util.ArrayList<java.lang.Long>();
-                mutable_bitField0_ |= 0x00000002;
-              }
-              aBonus_.add(input.readInt64());
-              break;
-            }
-            case 18: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002) && input.getBytesUntilLimit() > 0) {
-                aBonus_ = new java.util.ArrayList<java.lang.Long>();
-                mutable_bitField0_ |= 0x00000002;
-              }
-              while (input.getBytesUntilLimit() > 0) {
-                aBonus_.add(input.readInt64());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 24: {
-              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
-                treeStatus_ = new java.util.ArrayList<java.lang.Long>();
-                mutable_bitField0_ |= 0x00000004;
-              }
-              treeStatus_.add(input.readInt64());
-              break;
-            }
-            case 26: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004) && input.getBytesUntilLimit() > 0) {
-                treeStatus_ = new java.util.ArrayList<java.lang.Long>();
-                mutable_bitField0_ |= 0x00000004;
-              }
-              while (input.getBytesUntilLimit() > 0) {
-                treeStatus_.add(input.readInt64());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 32: {
-              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
-                deco_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000008;
-              }
-              deco_.add(input.readInt32());
-              break;
-            }
-            case 34: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008) && input.getBytesUntilLimit() > 0) {
-                deco_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000008;
-              }
-              while (input.getBytesUntilLimit() > 0) {
-                deco_.add(input.readInt32());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 40: {
-              bitField0_ |= 0x00000001;
-              bonusTime_ = input.readInt32();
-              break;
-            }
-            case 48: {
-              bitField0_ |= 0x00000002;
-              bonusItem_ = input.readInt32();
-              break;
-            }
-            case 56: {
-              bitField0_ |= 0x00000004;
-              bonusExp_ = input.readInt32();
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-          aLand_ = java.util.Collections.unmodifiableList(aLand_);
-        }
-        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-          aBonus_ = java.util.Collections.unmodifiableList(aBonus_);
-        }
-        if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
-          treeStatus_ = java.util.Collections.unmodifiableList(treeStatus_);
-        }
-        if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
-          deco_ = java.util.Collections.unmodifiableList(deco_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return protocol.Pbmethod.internal_static_pbdson_PbListLand_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return protocol.Pbmethod.internal_static_pbdson_PbListLand_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              protocol.Pbmethod.PbListLand.class, protocol.Pbmethod.PbListLand.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<PbListLand> PARSER =
-        new com.google.protobuf.AbstractParser<PbListLand>() {
-      public PbListLand parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PbListLand(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<PbListLand> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    // repeated .pbdson.PbLand aLand = 1;
-    public static final int ALAND_FIELD_NUMBER = 1;
-    private java.util.List<protocol.Pbmethod.PbLand> aLand_;
-    /**
-     * <code>repeated .pbdson.PbLand aLand = 1;</code>
-     */
-    public java.util.List<protocol.Pbmethod.PbLand> getALandList() {
-      return aLand_;
-    }
-    /**
-     * <code>repeated .pbdson.PbLand aLand = 1;</code>
-     */
-    public java.util.List<? extends protocol.Pbmethod.PbLandOrBuilder> 
-        getALandOrBuilderList() {
-      return aLand_;
-    }
-    /**
-     * <code>repeated .pbdson.PbLand aLand = 1;</code>
-     */
-    public int getALandCount() {
-      return aLand_.size();
-    }
-    /**
-     * <code>repeated .pbdson.PbLand aLand = 1;</code>
-     */
-    public protocol.Pbmethod.PbLand getALand(int index) {
-      return aLand_.get(index);
-    }
-    /**
-     * <code>repeated .pbdson.PbLand aLand = 1;</code>
-     */
-    public protocol.Pbmethod.PbLandOrBuilder getALandOrBuilder(
-        int index) {
-      return aLand_.get(index);
-    }
-
-    // repeated int64 aBonus = 2;
-    public static final int ABONUS_FIELD_NUMBER = 2;
-    private java.util.List<java.lang.Long> aBonus_;
-    /**
-     * <code>repeated int64 aBonus = 2;</code>
-     */
-    public java.util.List<java.lang.Long>
-        getABonusList() {
-      return aBonus_;
-    }
-    /**
-     * <code>repeated int64 aBonus = 2;</code>
-     */
-    public int getABonusCount() {
-      return aBonus_.size();
-    }
-    /**
-     * <code>repeated int64 aBonus = 2;</code>
-     */
-    public long getABonus(int index) {
-      return aBonus_.get(index);
-    }
-
-    // repeated int64 treeStatus = 3;
-    public static final int TREESTATUS_FIELD_NUMBER = 3;
-    private java.util.List<java.lang.Long> treeStatus_;
-    /**
-     * <code>repeated int64 treeStatus = 3;</code>
-     */
-    public java.util.List<java.lang.Long>
-        getTreeStatusList() {
-      return treeStatus_;
-    }
-    /**
-     * <code>repeated int64 treeStatus = 3;</code>
-     */
-    public int getTreeStatusCount() {
-      return treeStatus_.size();
-    }
-    /**
-     * <code>repeated int64 treeStatus = 3;</code>
-     */
-    public long getTreeStatus(int index) {
-      return treeStatus_.get(index);
-    }
-
-    // repeated int32 deco = 4;
-    public static final int DECO_FIELD_NUMBER = 4;
-    private java.util.List<java.lang.Integer> deco_;
-    /**
-     * <code>repeated int32 deco = 4;</code>
-     */
-    public java.util.List<java.lang.Integer>
-        getDecoList() {
-      return deco_;
-    }
-    /**
-     * <code>repeated int32 deco = 4;</code>
-     */
-    public int getDecoCount() {
-      return deco_.size();
-    }
-    /**
-     * <code>repeated int32 deco = 4;</code>
-     */
-    public int getDeco(int index) {
-      return deco_.get(index);
-    }
-
-    // optional int32 bonusTime = 5;
-    public static final int BONUSTIME_FIELD_NUMBER = 5;
-    private int bonusTime_;
-    /**
-     * <code>optional int32 bonusTime = 5;</code>
-     */
-    public boolean hasBonusTime() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>optional int32 bonusTime = 5;</code>
-     */
-    public int getBonusTime() {
-      return bonusTime_;
-    }
-
-    // optional int32 bonusItem = 6;
-    public static final int BONUSITEM_FIELD_NUMBER = 6;
-    private int bonusItem_;
-    /**
-     * <code>optional int32 bonusItem = 6;</code>
-     */
-    public boolean hasBonusItem() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>optional int32 bonusItem = 6;</code>
-     */
-    public int getBonusItem() {
-      return bonusItem_;
-    }
-
-    // optional int32 bonusExp = 7;
-    public static final int BONUSEXP_FIELD_NUMBER = 7;
-    private int bonusExp_;
-    /**
-     * <code>optional int32 bonusExp = 7;</code>
-     */
-    public boolean hasBonusExp() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>optional int32 bonusExp = 7;</code>
-     */
-    public int getBonusExp() {
-      return bonusExp_;
-    }
-
-    private void initFields() {
-      aLand_ = java.util.Collections.emptyList();
-      aBonus_ = java.util.Collections.emptyList();
-      treeStatus_ = java.util.Collections.emptyList();
-      deco_ = java.util.Collections.emptyList();
-      bonusTime_ = 0;
-      bonusItem_ = 0;
-      bonusExp_ = 0;
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      for (int i = 0; i < aLand_.size(); i++) {
-        output.writeMessage(1, aLand_.get(i));
-      }
-      for (int i = 0; i < aBonus_.size(); i++) {
-        output.writeInt64(2, aBonus_.get(i));
-      }
-      for (int i = 0; i < treeStatus_.size(); i++) {
-        output.writeInt64(3, treeStatus_.get(i));
-      }
-      for (int i = 0; i < deco_.size(); i++) {
-        output.writeInt32(4, deco_.get(i));
-      }
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(5, bonusTime_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt32(6, bonusItem_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeInt32(7, bonusExp_);
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      for (int i = 0; i < aLand_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, aLand_.get(i));
-      }
-      {
-        int dataSize = 0;
-        for (int i = 0; i < aBonus_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt64SizeNoTag(aBonus_.get(i));
-        }
-        size += dataSize;
-        size += 1 * getABonusList().size();
-      }
-      {
-        int dataSize = 0;
-        for (int i = 0; i < treeStatus_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt64SizeNoTag(treeStatus_.get(i));
-        }
-        size += dataSize;
-        size += 1 * getTreeStatusList().size();
-      }
-      {
-        int dataSize = 0;
-        for (int i = 0; i < deco_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(deco_.get(i));
-        }
-        size += dataSize;
-        size += 1 * getDecoList().size();
-      }
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(5, bonusTime_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(6, bonusItem_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(7, bonusExp_);
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static protocol.Pbmethod.PbListLand parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbListLand parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbListLand parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbListLand parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbListLand parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbListLand parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbListLand parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static protocol.Pbmethod.PbListLand parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbListLand parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbListLand parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(protocol.Pbmethod.PbListLand prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code pbdson.PbListLand}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements protocol.Pbmethod.PbListLandOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return protocol.Pbmethod.internal_static_pbdson_PbListLand_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return protocol.Pbmethod.internal_static_pbdson_PbListLand_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                protocol.Pbmethod.PbListLand.class, protocol.Pbmethod.PbListLand.Builder.class);
-      }
-
-      // Construct using protocol.Pbmethod.PbListLand.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getALandFieldBuilder();
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        if (aLandBuilder_ == null) {
-          aLand_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
-        } else {
-          aLandBuilder_.clear();
-        }
-        aBonus_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000002);
-        treeStatus_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000004);
-        deco_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000008);
-        bonusTime_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000010);
-        bonusItem_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000020);
-        bonusExp_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000040);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return protocol.Pbmethod.internal_static_pbdson_PbListLand_descriptor;
-      }
-
-      public protocol.Pbmethod.PbListLand getDefaultInstanceForType() {
-        return protocol.Pbmethod.PbListLand.getDefaultInstance();
-      }
-
-      public protocol.Pbmethod.PbListLand build() {
-        protocol.Pbmethod.PbListLand result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public protocol.Pbmethod.PbListLand buildPartial() {
-        protocol.Pbmethod.PbListLand result = new protocol.Pbmethod.PbListLand(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (aLandBuilder_ == null) {
-          if (((bitField0_ & 0x00000001) == 0x00000001)) {
-            aLand_ = java.util.Collections.unmodifiableList(aLand_);
-            bitField0_ = (bitField0_ & ~0x00000001);
-          }
-          result.aLand_ = aLand_;
-        } else {
-          result.aLand_ = aLandBuilder_.build();
-        }
-        if (((bitField0_ & 0x00000002) == 0x00000002)) {
-          aBonus_ = java.util.Collections.unmodifiableList(aBonus_);
-          bitField0_ = (bitField0_ & ~0x00000002);
-        }
-        result.aBonus_ = aBonus_;
-        if (((bitField0_ & 0x00000004) == 0x00000004)) {
-          treeStatus_ = java.util.Collections.unmodifiableList(treeStatus_);
-          bitField0_ = (bitField0_ & ~0x00000004);
-        }
-        result.treeStatus_ = treeStatus_;
-        if (((bitField0_ & 0x00000008) == 0x00000008)) {
-          deco_ = java.util.Collections.unmodifiableList(deco_);
-          bitField0_ = (bitField0_ & ~0x00000008);
-        }
-        result.deco_ = deco_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.bonusTime_ = bonusTime_;
-        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.bonusItem_ = bonusItem_;
-        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.bonusExp_ = bonusExp_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof protocol.Pbmethod.PbListLand) {
-          return mergeFrom((protocol.Pbmethod.PbListLand)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(protocol.Pbmethod.PbListLand other) {
-        if (other == protocol.Pbmethod.PbListLand.getDefaultInstance()) return this;
-        if (aLandBuilder_ == null) {
-          if (!other.aLand_.isEmpty()) {
-            if (aLand_.isEmpty()) {
-              aLand_ = other.aLand_;
-              bitField0_ = (bitField0_ & ~0x00000001);
-            } else {
-              ensureALandIsMutable();
-              aLand_.addAll(other.aLand_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.aLand_.isEmpty()) {
-            if (aLandBuilder_.isEmpty()) {
-              aLandBuilder_.dispose();
-              aLandBuilder_ = null;
-              aLand_ = other.aLand_;
-              bitField0_ = (bitField0_ & ~0x00000001);
-              aLandBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getALandFieldBuilder() : null;
-            } else {
-              aLandBuilder_.addAllMessages(other.aLand_);
-            }
-          }
-        }
-        if (!other.aBonus_.isEmpty()) {
-          if (aBonus_.isEmpty()) {
-            aBonus_ = other.aBonus_;
-            bitField0_ = (bitField0_ & ~0x00000002);
-          } else {
-            ensureABonusIsMutable();
-            aBonus_.addAll(other.aBonus_);
-          }
-          onChanged();
-        }
-        if (!other.treeStatus_.isEmpty()) {
-          if (treeStatus_.isEmpty()) {
-            treeStatus_ = other.treeStatus_;
-            bitField0_ = (bitField0_ & ~0x00000004);
-          } else {
-            ensureTreeStatusIsMutable();
-            treeStatus_.addAll(other.treeStatus_);
-          }
-          onChanged();
-        }
-        if (!other.deco_.isEmpty()) {
-          if (deco_.isEmpty()) {
-            deco_ = other.deco_;
-            bitField0_ = (bitField0_ & ~0x00000008);
-          } else {
-            ensureDecoIsMutable();
-            deco_.addAll(other.deco_);
-          }
-          onChanged();
-        }
-        if (other.hasBonusTime()) {
-          setBonusTime(other.getBonusTime());
-        }
-        if (other.hasBonusItem()) {
-          setBonusItem(other.getBonusItem());
-        }
-        if (other.hasBonusExp()) {
-          setBonusExp(other.getBonusExp());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        protocol.Pbmethod.PbListLand parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (protocol.Pbmethod.PbListLand) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // repeated .pbdson.PbLand aLand = 1;
-      private java.util.List<protocol.Pbmethod.PbLand> aLand_ =
-        java.util.Collections.emptyList();
-      private void ensureALandIsMutable() {
-        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          aLand_ = new java.util.ArrayList<protocol.Pbmethod.PbLand>(aLand_);
-          bitField0_ |= 0x00000001;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbLand, protocol.Pbmethod.PbLand.Builder, protocol.Pbmethod.PbLandOrBuilder> aLandBuilder_;
-
-      /**
-       * <code>repeated .pbdson.PbLand aLand = 1;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbLand> getALandList() {
-        if (aLandBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(aLand_);
-        } else {
-          return aLandBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbLand aLand = 1;</code>
-       */
-      public int getALandCount() {
-        if (aLandBuilder_ == null) {
-          return aLand_.size();
-        } else {
-          return aLandBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbLand aLand = 1;</code>
-       */
-      public protocol.Pbmethod.PbLand getALand(int index) {
-        if (aLandBuilder_ == null) {
-          return aLand_.get(index);
-        } else {
-          return aLandBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbLand aLand = 1;</code>
-       */
-      public Builder setALand(
-          int index, protocol.Pbmethod.PbLand value) {
-        if (aLandBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureALandIsMutable();
-          aLand_.set(index, value);
-          onChanged();
-        } else {
-          aLandBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbLand aLand = 1;</code>
-       */
-      public Builder setALand(
-          int index, protocol.Pbmethod.PbLand.Builder builderForValue) {
-        if (aLandBuilder_ == null) {
-          ensureALandIsMutable();
-          aLand_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          aLandBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbLand aLand = 1;</code>
-       */
-      public Builder addALand(protocol.Pbmethod.PbLand value) {
-        if (aLandBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureALandIsMutable();
-          aLand_.add(value);
-          onChanged();
-        } else {
-          aLandBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbLand aLand = 1;</code>
-       */
-      public Builder addALand(
-          int index, protocol.Pbmethod.PbLand value) {
-        if (aLandBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureALandIsMutable();
-          aLand_.add(index, value);
-          onChanged();
-        } else {
-          aLandBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbLand aLand = 1;</code>
-       */
-      public Builder addALand(
-          protocol.Pbmethod.PbLand.Builder builderForValue) {
-        if (aLandBuilder_ == null) {
-          ensureALandIsMutable();
-          aLand_.add(builderForValue.build());
-          onChanged();
-        } else {
-          aLandBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbLand aLand = 1;</code>
-       */
-      public Builder addALand(
-          int index, protocol.Pbmethod.PbLand.Builder builderForValue) {
-        if (aLandBuilder_ == null) {
-          ensureALandIsMutable();
-          aLand_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          aLandBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbLand aLand = 1;</code>
-       */
-      public Builder addAllALand(
-          java.lang.Iterable<? extends protocol.Pbmethod.PbLand> values) {
-        if (aLandBuilder_ == null) {
-          ensureALandIsMutable();
-          super.addAll(values, aLand_);
-          onChanged();
-        } else {
-          aLandBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbLand aLand = 1;</code>
-       */
-      public Builder clearALand() {
-        if (aLandBuilder_ == null) {
-          aLand_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
-          onChanged();
-        } else {
-          aLandBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbLand aLand = 1;</code>
-       */
-      public Builder removeALand(int index) {
-        if (aLandBuilder_ == null) {
-          ensureALandIsMutable();
-          aLand_.remove(index);
-          onChanged();
-        } else {
-          aLandBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbLand aLand = 1;</code>
-       */
-      public protocol.Pbmethod.PbLand.Builder getALandBuilder(
-          int index) {
-        return getALandFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .pbdson.PbLand aLand = 1;</code>
-       */
-      public protocol.Pbmethod.PbLandOrBuilder getALandOrBuilder(
-          int index) {
-        if (aLandBuilder_ == null) {
-          return aLand_.get(index);  } else {
-          return aLandBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbLand aLand = 1;</code>
-       */
-      public java.util.List<? extends protocol.Pbmethod.PbLandOrBuilder> 
-           getALandOrBuilderList() {
-        if (aLandBuilder_ != null) {
-          return aLandBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(aLand_);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbLand aLand = 1;</code>
-       */
-      public protocol.Pbmethod.PbLand.Builder addALandBuilder() {
-        return getALandFieldBuilder().addBuilder(
-            protocol.Pbmethod.PbLand.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbLand aLand = 1;</code>
-       */
-      public protocol.Pbmethod.PbLand.Builder addALandBuilder(
-          int index) {
-        return getALandFieldBuilder().addBuilder(
-            index, protocol.Pbmethod.PbLand.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbLand aLand = 1;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbLand.Builder> 
-           getALandBuilderList() {
-        return getALandFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbLand, protocol.Pbmethod.PbLand.Builder, protocol.Pbmethod.PbLandOrBuilder> 
-          getALandFieldBuilder() {
-        if (aLandBuilder_ == null) {
-          aLandBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              protocol.Pbmethod.PbLand, protocol.Pbmethod.PbLand.Builder, protocol.Pbmethod.PbLandOrBuilder>(
-                  aLand_,
-                  ((bitField0_ & 0x00000001) == 0x00000001),
-                  getParentForChildren(),
-                  isClean());
-          aLand_ = null;
-        }
-        return aLandBuilder_;
-      }
-
-      // repeated int64 aBonus = 2;
-      private java.util.List<java.lang.Long> aBonus_ = java.util.Collections.emptyList();
-      private void ensureABonusIsMutable() {
-        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
-          aBonus_ = new java.util.ArrayList<java.lang.Long>(aBonus_);
-          bitField0_ |= 0x00000002;
-         }
-      }
-      /**
-       * <code>repeated int64 aBonus = 2;</code>
-       */
-      public java.util.List<java.lang.Long>
-          getABonusList() {
-        return java.util.Collections.unmodifiableList(aBonus_);
-      }
-      /**
-       * <code>repeated int64 aBonus = 2;</code>
-       */
-      public int getABonusCount() {
-        return aBonus_.size();
-      }
-      /**
-       * <code>repeated int64 aBonus = 2;</code>
-       */
-      public long getABonus(int index) {
-        return aBonus_.get(index);
-      }
-      /**
-       * <code>repeated int64 aBonus = 2;</code>
-       */
-      public Builder setABonus(
-          int index, long value) {
-        ensureABonusIsMutable();
-        aBonus_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int64 aBonus = 2;</code>
-       */
-      public Builder addABonus(long value) {
-        ensureABonusIsMutable();
-        aBonus_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int64 aBonus = 2;</code>
-       */
-      public Builder addAllABonus(
-          java.lang.Iterable<? extends java.lang.Long> values) {
-        ensureABonusIsMutable();
-        super.addAll(values, aBonus_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int64 aBonus = 2;</code>
-       */
-      public Builder clearABonus() {
-        aBonus_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000002);
-        onChanged();
-        return this;
-      }
-
-      // repeated int64 treeStatus = 3;
-      private java.util.List<java.lang.Long> treeStatus_ = java.util.Collections.emptyList();
-      private void ensureTreeStatusIsMutable() {
-        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
-          treeStatus_ = new java.util.ArrayList<java.lang.Long>(treeStatus_);
-          bitField0_ |= 0x00000004;
-         }
-      }
-      /**
-       * <code>repeated int64 treeStatus = 3;</code>
-       */
-      public java.util.List<java.lang.Long>
-          getTreeStatusList() {
-        return java.util.Collections.unmodifiableList(treeStatus_);
-      }
-      /**
-       * <code>repeated int64 treeStatus = 3;</code>
-       */
-      public int getTreeStatusCount() {
-        return treeStatus_.size();
-      }
-      /**
-       * <code>repeated int64 treeStatus = 3;</code>
-       */
-      public long getTreeStatus(int index) {
-        return treeStatus_.get(index);
-      }
-      /**
-       * <code>repeated int64 treeStatus = 3;</code>
-       */
-      public Builder setTreeStatus(
-          int index, long value) {
-        ensureTreeStatusIsMutable();
-        treeStatus_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int64 treeStatus = 3;</code>
-       */
-      public Builder addTreeStatus(long value) {
-        ensureTreeStatusIsMutable();
-        treeStatus_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int64 treeStatus = 3;</code>
-       */
-      public Builder addAllTreeStatus(
-          java.lang.Iterable<? extends java.lang.Long> values) {
-        ensureTreeStatusIsMutable();
-        super.addAll(values, treeStatus_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int64 treeStatus = 3;</code>
-       */
-      public Builder clearTreeStatus() {
-        treeStatus_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000004);
-        onChanged();
-        return this;
-      }
-
-      // repeated int32 deco = 4;
-      private java.util.List<java.lang.Integer> deco_ = java.util.Collections.emptyList();
-      private void ensureDecoIsMutable() {
-        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
-          deco_ = new java.util.ArrayList<java.lang.Integer>(deco_);
-          bitField0_ |= 0x00000008;
-         }
-      }
-      /**
-       * <code>repeated int32 deco = 4;</code>
-       */
-      public java.util.List<java.lang.Integer>
-          getDecoList() {
-        return java.util.Collections.unmodifiableList(deco_);
-      }
-      /**
-       * <code>repeated int32 deco = 4;</code>
-       */
-      public int getDecoCount() {
-        return deco_.size();
-      }
-      /**
-       * <code>repeated int32 deco = 4;</code>
-       */
-      public int getDeco(int index) {
-        return deco_.get(index);
-      }
-      /**
-       * <code>repeated int32 deco = 4;</code>
-       */
-      public Builder setDeco(
-          int index, int value) {
-        ensureDecoIsMutable();
-        deco_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 deco = 4;</code>
-       */
-      public Builder addDeco(int value) {
-        ensureDecoIsMutable();
-        deco_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 deco = 4;</code>
-       */
-      public Builder addAllDeco(
-          java.lang.Iterable<? extends java.lang.Integer> values) {
-        ensureDecoIsMutable();
-        super.addAll(values, deco_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 deco = 4;</code>
-       */
-      public Builder clearDeco() {
-        deco_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000008);
-        onChanged();
-        return this;
-      }
-
-      // optional int32 bonusTime = 5;
-      private int bonusTime_ ;
-      /**
-       * <code>optional int32 bonusTime = 5;</code>
-       */
-      public boolean hasBonusTime() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      /**
-       * <code>optional int32 bonusTime = 5;</code>
-       */
-      public int getBonusTime() {
-        return bonusTime_;
-      }
-      /**
-       * <code>optional int32 bonusTime = 5;</code>
-       */
-      public Builder setBonusTime(int value) {
-        bitField0_ |= 0x00000010;
-        bonusTime_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 bonusTime = 5;</code>
-       */
-      public Builder clearBonusTime() {
-        bitField0_ = (bitField0_ & ~0x00000010);
-        bonusTime_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 bonusItem = 6;
-      private int bonusItem_ ;
-      /**
-       * <code>optional int32 bonusItem = 6;</code>
-       */
-      public boolean hasBonusItem() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
-      }
-      /**
-       * <code>optional int32 bonusItem = 6;</code>
-       */
-      public int getBonusItem() {
-        return bonusItem_;
-      }
-      /**
-       * <code>optional int32 bonusItem = 6;</code>
-       */
-      public Builder setBonusItem(int value) {
-        bitField0_ |= 0x00000020;
-        bonusItem_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 bonusItem = 6;</code>
-       */
-      public Builder clearBonusItem() {
-        bitField0_ = (bitField0_ & ~0x00000020);
-        bonusItem_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 bonusExp = 7;
-      private int bonusExp_ ;
-      /**
-       * <code>optional int32 bonusExp = 7;</code>
-       */
-      public boolean hasBonusExp() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
-      }
-      /**
-       * <code>optional int32 bonusExp = 7;</code>
-       */
-      public int getBonusExp() {
-        return bonusExp_;
-      }
-      /**
-       * <code>optional int32 bonusExp = 7;</code>
-       */
-      public Builder setBonusExp(int value) {
-        bitField0_ |= 0x00000040;
-        bonusExp_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 bonusExp = 7;</code>
-       */
-      public Builder clearBonusExp() {
-        bitField0_ = (bitField0_ & ~0x00000040);
-        bonusExp_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:pbdson.PbListLand)
-    }
-
-    static {
-      defaultInstance = new PbListLand(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:pbdson.PbListLand)
-  }
-
-  public interface PbLandOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // optional int32 landId = 1;
-    /**
-     * <code>optional int32 landId = 1;</code>
-     */
-    boolean hasLandId();
-    /**
-     * <code>optional int32 landId = 1;</code>
-     */
-    int getLandId();
-
-    // optional int32 treeId = 2;
-    /**
-     * <code>optional int32 treeId = 2;</code>
-     */
-    boolean hasTreeId();
-    /**
-     * <code>optional int32 treeId = 2;</code>
-     */
-    int getTreeId();
-
-    // optional int64 timePlant = 3;
-    /**
-     * <code>optional int64 timePlant = 3;</code>
-     */
-    boolean hasTimePlant();
-    /**
-     * <code>optional int64 timePlant = 3;</code>
-     */
-    long getTimePlant();
-
-    // optional int64 timeHarvest = 4;
-    /**
-     * <code>optional int64 timeHarvest = 4;</code>
-     */
-    boolean hasTimeHarvest();
-    /**
-     * <code>optional int64 timeHarvest = 4;</code>
-     */
-    long getTimeHarvest();
-
-    // optional int32 hasWater = 5;
-    /**
-     * <code>optional int32 hasWater = 5;</code>
-     */
-    boolean hasHasWater();
-    /**
-     * <code>optional int32 hasWater = 5;</code>
-     */
-    int getHasWater();
-
-    // optional int32 fertilize = 6;
-    /**
-     * <code>optional int32 fertilize = 6;</code>
-     */
-    boolean hasFertilize();
-    /**
-     * <code>optional int32 fertilize = 6;</code>
-     */
-    int getFertilize();
-
-    // optional int32 ferTime = 7;
-    /**
-     * <code>optional int32 ferTime = 7;</code>
-     */
-    boolean hasFerTime();
-    /**
-     * <code>optional int32 ferTime = 7;</code>
-     */
-    int getFerTime();
-
-    // repeated int64 bonus = 8;
-    /**
-     * <code>repeated int64 bonus = 8;</code>
-     */
-    java.util.List<java.lang.Long> getBonusList();
-    /**
-     * <code>repeated int64 bonus = 8;</code>
-     */
-    int getBonusCount();
-    /**
-     * <code>repeated int64 bonus = 8;</code>
-     */
-    long getBonus(int index);
-  }
-  /**
-   * Protobuf type {@code pbdson.PbLand}
-   */
-  public static final class PbLand extends
-      com.google.protobuf.GeneratedMessage
-      implements PbLandOrBuilder {
-    // Use PbLand.newBuilder() to construct.
-    private PbLand(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private PbLand(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final PbLand defaultInstance;
-    public static PbLand getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public PbLand getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private PbLand(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-              bitField0_ |= 0x00000001;
-              landId_ = input.readInt32();
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              treeId_ = input.readInt32();
-              break;
-            }
-            case 24: {
-              bitField0_ |= 0x00000004;
-              timePlant_ = input.readInt64();
-              break;
-            }
-            case 32: {
-              bitField0_ |= 0x00000008;
-              timeHarvest_ = input.readInt64();
-              break;
-            }
-            case 40: {
-              bitField0_ |= 0x00000010;
-              hasWater_ = input.readInt32();
-              break;
-            }
-            case 48: {
-              bitField0_ |= 0x00000020;
-              fertilize_ = input.readInt32();
-              break;
-            }
-            case 56: {
-              bitField0_ |= 0x00000040;
-              ferTime_ = input.readInt32();
-              break;
-            }
-            case 64: {
-              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
-                bonus_ = new java.util.ArrayList<java.lang.Long>();
-                mutable_bitField0_ |= 0x00000080;
-              }
-              bonus_.add(input.readInt64());
-              break;
-            }
-            case 66: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080) && input.getBytesUntilLimit() > 0) {
-                bonus_ = new java.util.ArrayList<java.lang.Long>();
-                mutable_bitField0_ |= 0x00000080;
-              }
-              while (input.getBytesUntilLimit() > 0) {
-                bonus_.add(input.readInt64());
-              }
-              input.popLimit(limit);
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
-          bonus_ = java.util.Collections.unmodifiableList(bonus_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return protocol.Pbmethod.internal_static_pbdson_PbLand_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return protocol.Pbmethod.internal_static_pbdson_PbLand_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              protocol.Pbmethod.PbLand.class, protocol.Pbmethod.PbLand.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<PbLand> PARSER =
-        new com.google.protobuf.AbstractParser<PbLand>() {
-      public PbLand parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PbLand(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<PbLand> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    // optional int32 landId = 1;
-    public static final int LANDID_FIELD_NUMBER = 1;
-    private int landId_;
-    /**
-     * <code>optional int32 landId = 1;</code>
-     */
-    public boolean hasLandId() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>optional int32 landId = 1;</code>
-     */
-    public int getLandId() {
-      return landId_;
-    }
-
-    // optional int32 treeId = 2;
-    public static final int TREEID_FIELD_NUMBER = 2;
-    private int treeId_;
-    /**
-     * <code>optional int32 treeId = 2;</code>
-     */
-    public boolean hasTreeId() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>optional int32 treeId = 2;</code>
-     */
-    public int getTreeId() {
-      return treeId_;
-    }
-
-    // optional int64 timePlant = 3;
-    public static final int TIMEPLANT_FIELD_NUMBER = 3;
-    private long timePlant_;
-    /**
-     * <code>optional int64 timePlant = 3;</code>
-     */
-    public boolean hasTimePlant() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>optional int64 timePlant = 3;</code>
-     */
-    public long getTimePlant() {
-      return timePlant_;
-    }
-
-    // optional int64 timeHarvest = 4;
-    public static final int TIMEHARVEST_FIELD_NUMBER = 4;
-    private long timeHarvest_;
-    /**
-     * <code>optional int64 timeHarvest = 4;</code>
-     */
-    public boolean hasTimeHarvest() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>optional int64 timeHarvest = 4;</code>
-     */
-    public long getTimeHarvest() {
-      return timeHarvest_;
-    }
-
-    // optional int32 hasWater = 5;
-    public static final int HASWATER_FIELD_NUMBER = 5;
-    private int hasWater_;
-    /**
-     * <code>optional int32 hasWater = 5;</code>
-     */
-    public boolean hasHasWater() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    /**
-     * <code>optional int32 hasWater = 5;</code>
-     */
-    public int getHasWater() {
-      return hasWater_;
-    }
-
-    // optional int32 fertilize = 6;
-    public static final int FERTILIZE_FIELD_NUMBER = 6;
-    private int fertilize_;
-    /**
-     * <code>optional int32 fertilize = 6;</code>
-     */
-    public boolean hasFertilize() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
-    }
-    /**
-     * <code>optional int32 fertilize = 6;</code>
-     */
-    public int getFertilize() {
-      return fertilize_;
-    }
-
-    // optional int32 ferTime = 7;
-    public static final int FERTIME_FIELD_NUMBER = 7;
-    private int ferTime_;
-    /**
-     * <code>optional int32 ferTime = 7;</code>
-     */
-    public boolean hasFerTime() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
-    }
-    /**
-     * <code>optional int32 ferTime = 7;</code>
-     */
-    public int getFerTime() {
-      return ferTime_;
-    }
-
-    // repeated int64 bonus = 8;
-    public static final int BONUS_FIELD_NUMBER = 8;
-    private java.util.List<java.lang.Long> bonus_;
-    /**
-     * <code>repeated int64 bonus = 8;</code>
-     */
-    public java.util.List<java.lang.Long>
-        getBonusList() {
-      return bonus_;
-    }
-    /**
-     * <code>repeated int64 bonus = 8;</code>
-     */
-    public int getBonusCount() {
-      return bonus_.size();
-    }
-    /**
-     * <code>repeated int64 bonus = 8;</code>
-     */
-    public long getBonus(int index) {
-      return bonus_.get(index);
-    }
-
-    private void initFields() {
-      landId_ = 0;
-      treeId_ = 0;
-      timePlant_ = 0L;
-      timeHarvest_ = 0L;
-      hasWater_ = 0;
-      fertilize_ = 0;
-      ferTime_ = 0;
-      bonus_ = java.util.Collections.emptyList();
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(1, landId_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt32(2, treeId_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeInt64(3, timePlant_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeInt64(4, timeHarvest_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeInt32(5, hasWater_);
-      }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeInt32(6, fertilize_);
-      }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeInt32(7, ferTime_);
-      }
-      for (int i = 0; i < bonus_.size(); i++) {
-        output.writeInt64(8, bonus_.get(i));
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, landId_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, treeId_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(3, timePlant_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(4, timeHarvest_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(5, hasWater_);
-      }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(6, fertilize_);
-      }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(7, ferTime_);
-      }
-      {
-        int dataSize = 0;
-        for (int i = 0; i < bonus_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt64SizeNoTag(bonus_.get(i));
-        }
-        size += dataSize;
-        size += 1 * getBonusList().size();
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static protocol.Pbmethod.PbLand parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbLand parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbLand parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbLand parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbLand parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbLand parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbLand parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static protocol.Pbmethod.PbLand parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbLand parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbLand parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(protocol.Pbmethod.PbLand prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code pbdson.PbLand}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements protocol.Pbmethod.PbLandOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return protocol.Pbmethod.internal_static_pbdson_PbLand_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return protocol.Pbmethod.internal_static_pbdson_PbLand_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                protocol.Pbmethod.PbLand.class, protocol.Pbmethod.PbLand.Builder.class);
-      }
-
-      // Construct using protocol.Pbmethod.PbLand.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        landId_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        treeId_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        timePlant_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000004);
-        timeHarvest_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000008);
-        hasWater_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000010);
-        fertilize_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000020);
-        ferTime_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000040);
-        bonus_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000080);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return protocol.Pbmethod.internal_static_pbdson_PbLand_descriptor;
-      }
-
-      public protocol.Pbmethod.PbLand getDefaultInstanceForType() {
-        return protocol.Pbmethod.PbLand.getDefaultInstance();
-      }
-
-      public protocol.Pbmethod.PbLand build() {
-        protocol.Pbmethod.PbLand result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public protocol.Pbmethod.PbLand buildPartial() {
-        protocol.Pbmethod.PbLand result = new protocol.Pbmethod.PbLand(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.landId_ = landId_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.treeId_ = treeId_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.timePlant_ = timePlant_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.timeHarvest_ = timeHarvest_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        result.hasWater_ = hasWater_;
-        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
-          to_bitField0_ |= 0x00000020;
-        }
-        result.fertilize_ = fertilize_;
-        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
-          to_bitField0_ |= 0x00000040;
-        }
-        result.ferTime_ = ferTime_;
-        if (((bitField0_ & 0x00000080) == 0x00000080)) {
-          bonus_ = java.util.Collections.unmodifiableList(bonus_);
-          bitField0_ = (bitField0_ & ~0x00000080);
-        }
-        result.bonus_ = bonus_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof protocol.Pbmethod.PbLand) {
-          return mergeFrom((protocol.Pbmethod.PbLand)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(protocol.Pbmethod.PbLand other) {
-        if (other == protocol.Pbmethod.PbLand.getDefaultInstance()) return this;
-        if (other.hasLandId()) {
-          setLandId(other.getLandId());
-        }
-        if (other.hasTreeId()) {
-          setTreeId(other.getTreeId());
-        }
-        if (other.hasTimePlant()) {
-          setTimePlant(other.getTimePlant());
-        }
-        if (other.hasTimeHarvest()) {
-          setTimeHarvest(other.getTimeHarvest());
-        }
-        if (other.hasHasWater()) {
-          setHasWater(other.getHasWater());
-        }
-        if (other.hasFertilize()) {
-          setFertilize(other.getFertilize());
-        }
-        if (other.hasFerTime()) {
-          setFerTime(other.getFerTime());
-        }
-        if (!other.bonus_.isEmpty()) {
-          if (bonus_.isEmpty()) {
-            bonus_ = other.bonus_;
-            bitField0_ = (bitField0_ & ~0x00000080);
-          } else {
-            ensureBonusIsMutable();
-            bonus_.addAll(other.bonus_);
-          }
-          onChanged();
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        protocol.Pbmethod.PbLand parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (protocol.Pbmethod.PbLand) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // optional int32 landId = 1;
-      private int landId_ ;
-      /**
-       * <code>optional int32 landId = 1;</code>
-       */
-      public boolean hasLandId() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>optional int32 landId = 1;</code>
-       */
-      public int getLandId() {
-        return landId_;
-      }
-      /**
-       * <code>optional int32 landId = 1;</code>
-       */
-      public Builder setLandId(int value) {
-        bitField0_ |= 0x00000001;
-        landId_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 landId = 1;</code>
-       */
-      public Builder clearLandId() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        landId_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 treeId = 2;
-      private int treeId_ ;
-      /**
-       * <code>optional int32 treeId = 2;</code>
-       */
-      public boolean hasTreeId() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>optional int32 treeId = 2;</code>
-       */
-      public int getTreeId() {
-        return treeId_;
-      }
-      /**
-       * <code>optional int32 treeId = 2;</code>
-       */
-      public Builder setTreeId(int value) {
-        bitField0_ |= 0x00000002;
-        treeId_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 treeId = 2;</code>
-       */
-      public Builder clearTreeId() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        treeId_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int64 timePlant = 3;
-      private long timePlant_ ;
-      /**
-       * <code>optional int64 timePlant = 3;</code>
-       */
-      public boolean hasTimePlant() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional int64 timePlant = 3;</code>
-       */
-      public long getTimePlant() {
-        return timePlant_;
-      }
-      /**
-       * <code>optional int64 timePlant = 3;</code>
-       */
-      public Builder setTimePlant(long value) {
-        bitField0_ |= 0x00000004;
-        timePlant_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int64 timePlant = 3;</code>
-       */
-      public Builder clearTimePlant() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        timePlant_ = 0L;
-        onChanged();
-        return this;
-      }
-
-      // optional int64 timeHarvest = 4;
-      private long timeHarvest_ ;
-      /**
-       * <code>optional int64 timeHarvest = 4;</code>
-       */
-      public boolean hasTimeHarvest() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      /**
-       * <code>optional int64 timeHarvest = 4;</code>
-       */
-      public long getTimeHarvest() {
-        return timeHarvest_;
-      }
-      /**
-       * <code>optional int64 timeHarvest = 4;</code>
-       */
-      public Builder setTimeHarvest(long value) {
-        bitField0_ |= 0x00000008;
-        timeHarvest_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int64 timeHarvest = 4;</code>
-       */
-      public Builder clearTimeHarvest() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        timeHarvest_ = 0L;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 hasWater = 5;
-      private int hasWater_ ;
-      /**
-       * <code>optional int32 hasWater = 5;</code>
-       */
-      public boolean hasHasWater() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      /**
-       * <code>optional int32 hasWater = 5;</code>
-       */
-      public int getHasWater() {
-        return hasWater_;
-      }
-      /**
-       * <code>optional int32 hasWater = 5;</code>
-       */
-      public Builder setHasWater(int value) {
-        bitField0_ |= 0x00000010;
-        hasWater_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 hasWater = 5;</code>
-       */
-      public Builder clearHasWater() {
-        bitField0_ = (bitField0_ & ~0x00000010);
-        hasWater_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 fertilize = 6;
-      private int fertilize_ ;
-      /**
-       * <code>optional int32 fertilize = 6;</code>
-       */
-      public boolean hasFertilize() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
-      }
-      /**
-       * <code>optional int32 fertilize = 6;</code>
-       */
-      public int getFertilize() {
-        return fertilize_;
-      }
-      /**
-       * <code>optional int32 fertilize = 6;</code>
-       */
-      public Builder setFertilize(int value) {
-        bitField0_ |= 0x00000020;
-        fertilize_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 fertilize = 6;</code>
-       */
-      public Builder clearFertilize() {
-        bitField0_ = (bitField0_ & ~0x00000020);
-        fertilize_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 ferTime = 7;
-      private int ferTime_ ;
-      /**
-       * <code>optional int32 ferTime = 7;</code>
-       */
-      public boolean hasFerTime() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
-      }
-      /**
-       * <code>optional int32 ferTime = 7;</code>
-       */
-      public int getFerTime() {
-        return ferTime_;
-      }
-      /**
-       * <code>optional int32 ferTime = 7;</code>
-       */
-      public Builder setFerTime(int value) {
-        bitField0_ |= 0x00000040;
-        ferTime_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 ferTime = 7;</code>
-       */
-      public Builder clearFerTime() {
-        bitField0_ = (bitField0_ & ~0x00000040);
-        ferTime_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // repeated int64 bonus = 8;
-      private java.util.List<java.lang.Long> bonus_ = java.util.Collections.emptyList();
-      private void ensureBonusIsMutable() {
-        if (!((bitField0_ & 0x00000080) == 0x00000080)) {
-          bonus_ = new java.util.ArrayList<java.lang.Long>(bonus_);
-          bitField0_ |= 0x00000080;
-         }
-      }
-      /**
-       * <code>repeated int64 bonus = 8;</code>
-       */
-      public java.util.List<java.lang.Long>
-          getBonusList() {
-        return java.util.Collections.unmodifiableList(bonus_);
-      }
-      /**
-       * <code>repeated int64 bonus = 8;</code>
-       */
-      public int getBonusCount() {
-        return bonus_.size();
-      }
-      /**
-       * <code>repeated int64 bonus = 8;</code>
-       */
-      public long getBonus(int index) {
-        return bonus_.get(index);
-      }
-      /**
-       * <code>repeated int64 bonus = 8;</code>
-       */
-      public Builder setBonus(
-          int index, long value) {
-        ensureBonusIsMutable();
-        bonus_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int64 bonus = 8;</code>
-       */
-      public Builder addBonus(long value) {
-        ensureBonusIsMutable();
-        bonus_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int64 bonus = 8;</code>
-       */
-      public Builder addAllBonus(
-          java.lang.Iterable<? extends java.lang.Long> values) {
-        ensureBonusIsMutable();
-        super.addAll(values, bonus_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int64 bonus = 8;</code>
-       */
-      public Builder clearBonus() {
-        bonus_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000080);
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:pbdson.PbLand)
-    }
-
-    static {
-      defaultInstance = new PbLand(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:pbdson.PbLand)
-  }
-
-  public interface PbHeroOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // optional int32 heroId = 1;
-    /**
-     * <code>optional int32 heroId = 1;</code>
-     */
-    boolean hasHeroId();
-    /**
-     * <code>optional int32 heroId = 1;</code>
-     */
-    int getHeroId();
-
-    // repeated int32 skins = 2;
-    /**
-     * <code>repeated int32 skins = 2;</code>
-     */
-    java.util.List<java.lang.Integer> getSkinsList();
-    /**
-     * <code>repeated int32 skins = 2;</code>
-     */
-    int getSkinsCount();
-    /**
-     * <code>repeated int32 skins = 2;</code>
-     */
-    int getSkins(int index);
-
-    // repeated int32 itemEquipId = 3;
-    /**
-     * <code>repeated int32 itemEquipId = 3;</code>
-     */
-    java.util.List<java.lang.Integer> getItemEquipIdList();
-    /**
-     * <code>repeated int32 itemEquipId = 3;</code>
-     */
-    int getItemEquipIdCount();
-    /**
-     * <code>repeated int32 itemEquipId = 3;</code>
-     */
-    int getItemEquipId(int index);
-  }
-  /**
-   * Protobuf type {@code pbdson.PbHero}
-   */
-  public static final class PbHero extends
-      com.google.protobuf.GeneratedMessage
-      implements PbHeroOrBuilder {
-    // Use PbHero.newBuilder() to construct.
-    private PbHero(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private PbHero(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final PbHero defaultInstance;
-    public static PbHero getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public PbHero getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private PbHero(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-              bitField0_ |= 0x00000001;
-              heroId_ = input.readInt32();
-              break;
-            }
-            case 16: {
-              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-                skins_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000002;
-              }
-              skins_.add(input.readInt32());
-              break;
-            }
-            case 18: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000002) == 0x00000002) && input.getBytesUntilLimit() > 0) {
-                skins_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000002;
-              }
-              while (input.getBytesUntilLimit() > 0) {
-                skins_.add(input.readInt32());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 24: {
-              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
-                itemEquipId_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000004;
-              }
-              itemEquipId_.add(input.readInt32());
-              break;
-            }
-            case 26: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000004) == 0x00000004) && input.getBytesUntilLimit() > 0) {
-                itemEquipId_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000004;
-              }
-              while (input.getBytesUntilLimit() > 0) {
-                itemEquipId_.add(input.readInt32());
-              }
-              input.popLimit(limit);
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000002) == 0x00000002)) {
-          skins_ = java.util.Collections.unmodifiableList(skins_);
-        }
-        if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
-          itemEquipId_ = java.util.Collections.unmodifiableList(itemEquipId_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return protocol.Pbmethod.internal_static_pbdson_PbHero_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return protocol.Pbmethod.internal_static_pbdson_PbHero_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              protocol.Pbmethod.PbHero.class, protocol.Pbmethod.PbHero.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<PbHero> PARSER =
-        new com.google.protobuf.AbstractParser<PbHero>() {
-      public PbHero parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PbHero(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<PbHero> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    // optional int32 heroId = 1;
-    public static final int HEROID_FIELD_NUMBER = 1;
-    private int heroId_;
-    /**
-     * <code>optional int32 heroId = 1;</code>
-     */
-    public boolean hasHeroId() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>optional int32 heroId = 1;</code>
-     */
-    public int getHeroId() {
-      return heroId_;
-    }
-
-    // repeated int32 skins = 2;
-    public static final int SKINS_FIELD_NUMBER = 2;
-    private java.util.List<java.lang.Integer> skins_;
-    /**
-     * <code>repeated int32 skins = 2;</code>
-     */
-    public java.util.List<java.lang.Integer>
-        getSkinsList() {
-      return skins_;
-    }
-    /**
-     * <code>repeated int32 skins = 2;</code>
-     */
-    public int getSkinsCount() {
-      return skins_.size();
-    }
-    /**
-     * <code>repeated int32 skins = 2;</code>
-     */
-    public int getSkins(int index) {
-      return skins_.get(index);
-    }
-
-    // repeated int32 itemEquipId = 3;
-    public static final int ITEMEQUIPID_FIELD_NUMBER = 3;
-    private java.util.List<java.lang.Integer> itemEquipId_;
-    /**
-     * <code>repeated int32 itemEquipId = 3;</code>
-     */
-    public java.util.List<java.lang.Integer>
-        getItemEquipIdList() {
-      return itemEquipId_;
-    }
-    /**
-     * <code>repeated int32 itemEquipId = 3;</code>
-     */
-    public int getItemEquipIdCount() {
-      return itemEquipId_.size();
-    }
-    /**
-     * <code>repeated int32 itemEquipId = 3;</code>
-     */
-    public int getItemEquipId(int index) {
-      return itemEquipId_.get(index);
-    }
-
-    private void initFields() {
-      heroId_ = 0;
-      skins_ = java.util.Collections.emptyList();
-      itemEquipId_ = java.util.Collections.emptyList();
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(1, heroId_);
-      }
-      for (int i = 0; i < skins_.size(); i++) {
-        output.writeInt32(2, skins_.get(i));
-      }
-      for (int i = 0; i < itemEquipId_.size(); i++) {
-        output.writeInt32(3, itemEquipId_.get(i));
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, heroId_);
-      }
-      {
-        int dataSize = 0;
-        for (int i = 0; i < skins_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(skins_.get(i));
-        }
-        size += dataSize;
-        size += 1 * getSkinsList().size();
-      }
-      {
-        int dataSize = 0;
-        for (int i = 0; i < itemEquipId_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(itemEquipId_.get(i));
-        }
-        size += dataSize;
-        size += 1 * getItemEquipIdList().size();
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static protocol.Pbmethod.PbHero parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbHero parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbHero parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbHero parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbHero parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbHero parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbHero parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static protocol.Pbmethod.PbHero parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbHero parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbHero parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(protocol.Pbmethod.PbHero prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code pbdson.PbHero}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements protocol.Pbmethod.PbHeroOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return protocol.Pbmethod.internal_static_pbdson_PbHero_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return protocol.Pbmethod.internal_static_pbdson_PbHero_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                protocol.Pbmethod.PbHero.class, protocol.Pbmethod.PbHero.Builder.class);
-      }
-
-      // Construct using protocol.Pbmethod.PbHero.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        heroId_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        skins_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000002);
-        itemEquipId_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000004);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return protocol.Pbmethod.internal_static_pbdson_PbHero_descriptor;
-      }
-
-      public protocol.Pbmethod.PbHero getDefaultInstanceForType() {
-        return protocol.Pbmethod.PbHero.getDefaultInstance();
-      }
-
-      public protocol.Pbmethod.PbHero build() {
-        protocol.Pbmethod.PbHero result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public protocol.Pbmethod.PbHero buildPartial() {
-        protocol.Pbmethod.PbHero result = new protocol.Pbmethod.PbHero(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.heroId_ = heroId_;
-        if (((bitField0_ & 0x00000002) == 0x00000002)) {
-          skins_ = java.util.Collections.unmodifiableList(skins_);
-          bitField0_ = (bitField0_ & ~0x00000002);
-        }
-        result.skins_ = skins_;
-        if (((bitField0_ & 0x00000004) == 0x00000004)) {
-          itemEquipId_ = java.util.Collections.unmodifiableList(itemEquipId_);
-          bitField0_ = (bitField0_ & ~0x00000004);
-        }
-        result.itemEquipId_ = itemEquipId_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof protocol.Pbmethod.PbHero) {
-          return mergeFrom((protocol.Pbmethod.PbHero)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(protocol.Pbmethod.PbHero other) {
-        if (other == protocol.Pbmethod.PbHero.getDefaultInstance()) return this;
-        if (other.hasHeroId()) {
-          setHeroId(other.getHeroId());
-        }
-        if (!other.skins_.isEmpty()) {
-          if (skins_.isEmpty()) {
-            skins_ = other.skins_;
-            bitField0_ = (bitField0_ & ~0x00000002);
-          } else {
-            ensureSkinsIsMutable();
-            skins_.addAll(other.skins_);
-          }
-          onChanged();
-        }
-        if (!other.itemEquipId_.isEmpty()) {
-          if (itemEquipId_.isEmpty()) {
-            itemEquipId_ = other.itemEquipId_;
-            bitField0_ = (bitField0_ & ~0x00000004);
-          } else {
-            ensureItemEquipIdIsMutable();
-            itemEquipId_.addAll(other.itemEquipId_);
-          }
-          onChanged();
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        protocol.Pbmethod.PbHero parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (protocol.Pbmethod.PbHero) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // optional int32 heroId = 1;
-      private int heroId_ ;
-      /**
-       * <code>optional int32 heroId = 1;</code>
-       */
-      public boolean hasHeroId() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>optional int32 heroId = 1;</code>
-       */
-      public int getHeroId() {
-        return heroId_;
-      }
-      /**
-       * <code>optional int32 heroId = 1;</code>
-       */
-      public Builder setHeroId(int value) {
-        bitField0_ |= 0x00000001;
-        heroId_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 heroId = 1;</code>
-       */
-      public Builder clearHeroId() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        heroId_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // repeated int32 skins = 2;
-      private java.util.List<java.lang.Integer> skins_ = java.util.Collections.emptyList();
-      private void ensureSkinsIsMutable() {
-        if (!((bitField0_ & 0x00000002) == 0x00000002)) {
-          skins_ = new java.util.ArrayList<java.lang.Integer>(skins_);
-          bitField0_ |= 0x00000002;
-         }
-      }
-      /**
-       * <code>repeated int32 skins = 2;</code>
-       */
-      public java.util.List<java.lang.Integer>
-          getSkinsList() {
-        return java.util.Collections.unmodifiableList(skins_);
-      }
-      /**
-       * <code>repeated int32 skins = 2;</code>
-       */
-      public int getSkinsCount() {
-        return skins_.size();
-      }
-      /**
-       * <code>repeated int32 skins = 2;</code>
-       */
-      public int getSkins(int index) {
-        return skins_.get(index);
-      }
-      /**
-       * <code>repeated int32 skins = 2;</code>
-       */
-      public Builder setSkins(
-          int index, int value) {
-        ensureSkinsIsMutable();
-        skins_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 skins = 2;</code>
-       */
-      public Builder addSkins(int value) {
-        ensureSkinsIsMutable();
-        skins_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 skins = 2;</code>
-       */
-      public Builder addAllSkins(
-          java.lang.Iterable<? extends java.lang.Integer> values) {
-        ensureSkinsIsMutable();
-        super.addAll(values, skins_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 skins = 2;</code>
-       */
-      public Builder clearSkins() {
-        skins_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000002);
-        onChanged();
-        return this;
-      }
-
-      // repeated int32 itemEquipId = 3;
-      private java.util.List<java.lang.Integer> itemEquipId_ = java.util.Collections.emptyList();
-      private void ensureItemEquipIdIsMutable() {
-        if (!((bitField0_ & 0x00000004) == 0x00000004)) {
-          itemEquipId_ = new java.util.ArrayList<java.lang.Integer>(itemEquipId_);
-          bitField0_ |= 0x00000004;
-         }
-      }
-      /**
-       * <code>repeated int32 itemEquipId = 3;</code>
-       */
-      public java.util.List<java.lang.Integer>
-          getItemEquipIdList() {
-        return java.util.Collections.unmodifiableList(itemEquipId_);
-      }
-      /**
-       * <code>repeated int32 itemEquipId = 3;</code>
-       */
-      public int getItemEquipIdCount() {
-        return itemEquipId_.size();
-      }
-      /**
-       * <code>repeated int32 itemEquipId = 3;</code>
-       */
-      public int getItemEquipId(int index) {
-        return itemEquipId_.get(index);
-      }
-      /**
-       * <code>repeated int32 itemEquipId = 3;</code>
-       */
-      public Builder setItemEquipId(
-          int index, int value) {
-        ensureItemEquipIdIsMutable();
-        itemEquipId_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 itemEquipId = 3;</code>
-       */
-      public Builder addItemEquipId(int value) {
-        ensureItemEquipIdIsMutable();
-        itemEquipId_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 itemEquipId = 3;</code>
-       */
-      public Builder addAllItemEquipId(
-          java.lang.Iterable<? extends java.lang.Integer> values) {
-        ensureItemEquipIdIsMutable();
-        super.addAll(values, itemEquipId_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 itemEquipId = 3;</code>
-       */
-      public Builder clearItemEquipId() {
-        itemEquipId_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000004);
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:pbdson.PbHero)
-    }
-
-    static {
-      defaultInstance = new PbHero(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:pbdson.PbHero)
-  }
-
   public interface PbChatOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
@@ -43729,19 +31650,19 @@ public final class Pbmethod {
      */
     protocol.Pbmethod.CommonVectorOrBuilder getInfoOrBuilder();
 
-    // repeated int32 point = 6;
+    // repeated int64 point = 6;
     /**
-     * <code>repeated int32 point = 6;</code>
+     * <code>repeated int64 point = 6;</code>
      */
-    java.util.List<java.lang.Integer> getPointList();
+    java.util.List<java.lang.Long> getPointList();
     /**
-     * <code>repeated int32 point = 6;</code>
+     * <code>repeated int64 point = 6;</code>
      */
     int getPointCount();
     /**
-     * <code>repeated int32 point = 6;</code>
+     * <code>repeated int64 point = 6;</code>
      */
-    int getPoint(int index);
+    long getPoint(int index);
   }
   /**
    * Protobuf type {@code pbdson.PbChat}
@@ -43837,21 +31758,21 @@ public final class Pbmethod {
             }
             case 48: {
               if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
-                point_ = new java.util.ArrayList<java.lang.Integer>();
+                point_ = new java.util.ArrayList<java.lang.Long>();
                 mutable_bitField0_ |= 0x00000020;
               }
-              point_.add(input.readInt32());
+              point_.add(input.readInt64());
               break;
             }
             case 50: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
               if (!((mutable_bitField0_ & 0x00000020) == 0x00000020) && input.getBytesUntilLimit() > 0) {
-                point_ = new java.util.ArrayList<java.lang.Integer>();
+                point_ = new java.util.ArrayList<java.lang.Long>();
                 mutable_bitField0_ |= 0x00000020;
               }
               while (input.getBytesUntilLimit() > 0) {
-                point_.add(input.readInt32());
+                point_.add(input.readInt64());
               }
               input.popLimit(limit);
               break;
@@ -44018,26 +31939,26 @@ public final class Pbmethod {
       return info_;
     }
 
-    // repeated int32 point = 6;
+    // repeated int64 point = 6;
     public static final int POINT_FIELD_NUMBER = 6;
-    private java.util.List<java.lang.Integer> point_;
+    private java.util.List<java.lang.Long> point_;
     /**
-     * <code>repeated int32 point = 6;</code>
+     * <code>repeated int64 point = 6;</code>
      */
-    public java.util.List<java.lang.Integer>
+    public java.util.List<java.lang.Long>
         getPointList() {
       return point_;
     }
     /**
-     * <code>repeated int32 point = 6;</code>
+     * <code>repeated int64 point = 6;</code>
      */
     public int getPointCount() {
       return point_.size();
     }
     /**
-     * <code>repeated int32 point = 6;</code>
+     * <code>repeated int64 point = 6;</code>
      */
-    public int getPoint(int index) {
+    public long getPoint(int index) {
       return point_.get(index);
     }
 
@@ -44077,7 +31998,7 @@ public final class Pbmethod {
         output.writeMessage(5, info_);
       }
       for (int i = 0; i < point_.size(); i++) {
-        output.writeInt32(6, point_.get(i));
+        output.writeInt64(6, point_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -44112,7 +32033,7 @@ public final class Pbmethod {
         int dataSize = 0;
         for (int i = 0; i < point_.size(); i++) {
           dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(point_.get(i));
+            .computeInt64SizeNoTag(point_.get(i));
         }
         size += dataSize;
         size += 1 * getPointList().size();
@@ -44760,64 +32681,64 @@ public final class Pbmethod {
         return infoBuilder_;
       }
 
-      // repeated int32 point = 6;
-      private java.util.List<java.lang.Integer> point_ = java.util.Collections.emptyList();
+      // repeated int64 point = 6;
+      private java.util.List<java.lang.Long> point_ = java.util.Collections.emptyList();
       private void ensurePointIsMutable() {
         if (!((bitField0_ & 0x00000020) == 0x00000020)) {
-          point_ = new java.util.ArrayList<java.lang.Integer>(point_);
+          point_ = new java.util.ArrayList<java.lang.Long>(point_);
           bitField0_ |= 0x00000020;
          }
       }
       /**
-       * <code>repeated int32 point = 6;</code>
+       * <code>repeated int64 point = 6;</code>
        */
-      public java.util.List<java.lang.Integer>
+      public java.util.List<java.lang.Long>
           getPointList() {
         return java.util.Collections.unmodifiableList(point_);
       }
       /**
-       * <code>repeated int32 point = 6;</code>
+       * <code>repeated int64 point = 6;</code>
        */
       public int getPointCount() {
         return point_.size();
       }
       /**
-       * <code>repeated int32 point = 6;</code>
+       * <code>repeated int64 point = 6;</code>
        */
-      public int getPoint(int index) {
+      public long getPoint(int index) {
         return point_.get(index);
       }
       /**
-       * <code>repeated int32 point = 6;</code>
+       * <code>repeated int64 point = 6;</code>
        */
       public Builder setPoint(
-          int index, int value) {
+          int index, long value) {
         ensurePointIsMutable();
         point_.set(index, value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 point = 6;</code>
+       * <code>repeated int64 point = 6;</code>
        */
-      public Builder addPoint(int value) {
+      public Builder addPoint(long value) {
         ensurePointIsMutable();
         point_.add(value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 point = 6;</code>
+       * <code>repeated int64 point = 6;</code>
        */
       public Builder addAllPoint(
-          java.lang.Iterable<? extends java.lang.Integer> values) {
+          java.lang.Iterable<? extends java.lang.Long> values) {
         ensurePointIsMutable();
         super.addAll(values, point_);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 point = 6;</code>
+       * <code>repeated int64 point = 6;</code>
        */
       public Builder clearPoint() {
         point_ = java.util.Collections.emptyList();
@@ -50227,1122 +38148,6 @@ public final class Pbmethod {
     // @@protoc_insertion_point(class_scope:pbdson.PbItem)
   }
 
-  public interface PbItemFarmOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // optional int32 type = 1;
-    /**
-     * <code>optional int32 type = 1;</code>
-     */
-    boolean hasType();
-    /**
-     * <code>optional int32 type = 1;</code>
-     */
-    int getType();
-
-    // optional int32 id = 2;
-    /**
-     * <code>optional int32 id = 2;</code>
-     */
-    boolean hasId();
-    /**
-     * <code>optional int32 id = 2;</code>
-     */
-    int getId();
-
-    // optional int32 number = 3;
-    /**
-     * <code>optional int32 number = 3;</code>
-     */
-    boolean hasNumber();
-    /**
-     * <code>optional int32 number = 3;</code>
-     */
-    int getNumber();
-  }
-  /**
-   * Protobuf type {@code pbdson.PbItemFarm}
-   */
-  public static final class PbItemFarm extends
-      com.google.protobuf.GeneratedMessage
-      implements PbItemFarmOrBuilder {
-    // Use PbItemFarm.newBuilder() to construct.
-    private PbItemFarm(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private PbItemFarm(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final PbItemFarm defaultInstance;
-    public static PbItemFarm getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public PbItemFarm getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private PbItemFarm(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-              bitField0_ |= 0x00000001;
-              type_ = input.readInt32();
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              id_ = input.readInt32();
-              break;
-            }
-            case 24: {
-              bitField0_ |= 0x00000004;
-              number_ = input.readInt32();
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return protocol.Pbmethod.internal_static_pbdson_PbItemFarm_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return protocol.Pbmethod.internal_static_pbdson_PbItemFarm_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              protocol.Pbmethod.PbItemFarm.class, protocol.Pbmethod.PbItemFarm.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<PbItemFarm> PARSER =
-        new com.google.protobuf.AbstractParser<PbItemFarm>() {
-      public PbItemFarm parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PbItemFarm(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<PbItemFarm> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    // optional int32 type = 1;
-    public static final int TYPE_FIELD_NUMBER = 1;
-    private int type_;
-    /**
-     * <code>optional int32 type = 1;</code>
-     */
-    public boolean hasType() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>optional int32 type = 1;</code>
-     */
-    public int getType() {
-      return type_;
-    }
-
-    // optional int32 id = 2;
-    public static final int ID_FIELD_NUMBER = 2;
-    private int id_;
-    /**
-     * <code>optional int32 id = 2;</code>
-     */
-    public boolean hasId() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>optional int32 id = 2;</code>
-     */
-    public int getId() {
-      return id_;
-    }
-
-    // optional int32 number = 3;
-    public static final int NUMBER_FIELD_NUMBER = 3;
-    private int number_;
-    /**
-     * <code>optional int32 number = 3;</code>
-     */
-    public boolean hasNumber() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>optional int32 number = 3;</code>
-     */
-    public int getNumber() {
-      return number_;
-    }
-
-    private void initFields() {
-      type_ = 0;
-      id_ = 0;
-      number_ = 0;
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(1, type_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt32(2, id_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeInt32(3, number_);
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, type_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, id_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, number_);
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static protocol.Pbmethod.PbItemFarm parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbItemFarm parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbItemFarm parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbItemFarm parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbItemFarm parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbItemFarm parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbItemFarm parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static protocol.Pbmethod.PbItemFarm parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbItemFarm parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbItemFarm parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(protocol.Pbmethod.PbItemFarm prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code pbdson.PbItemFarm}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements protocol.Pbmethod.PbItemFarmOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return protocol.Pbmethod.internal_static_pbdson_PbItemFarm_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return protocol.Pbmethod.internal_static_pbdson_PbItemFarm_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                protocol.Pbmethod.PbItemFarm.class, protocol.Pbmethod.PbItemFarm.Builder.class);
-      }
-
-      // Construct using protocol.Pbmethod.PbItemFarm.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        type_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        id_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        number_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000004);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return protocol.Pbmethod.internal_static_pbdson_PbItemFarm_descriptor;
-      }
-
-      public protocol.Pbmethod.PbItemFarm getDefaultInstanceForType() {
-        return protocol.Pbmethod.PbItemFarm.getDefaultInstance();
-      }
-
-      public protocol.Pbmethod.PbItemFarm build() {
-        protocol.Pbmethod.PbItemFarm result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public protocol.Pbmethod.PbItemFarm buildPartial() {
-        protocol.Pbmethod.PbItemFarm result = new protocol.Pbmethod.PbItemFarm(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.type_ = type_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.id_ = id_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.number_ = number_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof protocol.Pbmethod.PbItemFarm) {
-          return mergeFrom((protocol.Pbmethod.PbItemFarm)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(protocol.Pbmethod.PbItemFarm other) {
-        if (other == protocol.Pbmethod.PbItemFarm.getDefaultInstance()) return this;
-        if (other.hasType()) {
-          setType(other.getType());
-        }
-        if (other.hasId()) {
-          setId(other.getId());
-        }
-        if (other.hasNumber()) {
-          setNumber(other.getNumber());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        protocol.Pbmethod.PbItemFarm parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (protocol.Pbmethod.PbItemFarm) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // optional int32 type = 1;
-      private int type_ ;
-      /**
-       * <code>optional int32 type = 1;</code>
-       */
-      public boolean hasType() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>optional int32 type = 1;</code>
-       */
-      public int getType() {
-        return type_;
-      }
-      /**
-       * <code>optional int32 type = 1;</code>
-       */
-      public Builder setType(int value) {
-        bitField0_ |= 0x00000001;
-        type_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 type = 1;</code>
-       */
-      public Builder clearType() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        type_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 id = 2;
-      private int id_ ;
-      /**
-       * <code>optional int32 id = 2;</code>
-       */
-      public boolean hasId() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>optional int32 id = 2;</code>
-       */
-      public int getId() {
-        return id_;
-      }
-      /**
-       * <code>optional int32 id = 2;</code>
-       */
-      public Builder setId(int value) {
-        bitField0_ |= 0x00000002;
-        id_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 id = 2;</code>
-       */
-      public Builder clearId() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        id_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 number = 3;
-      private int number_ ;
-      /**
-       * <code>optional int32 number = 3;</code>
-       */
-      public boolean hasNumber() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional int32 number = 3;</code>
-       */
-      public int getNumber() {
-        return number_;
-      }
-      /**
-       * <code>optional int32 number = 3;</code>
-       */
-      public Builder setNumber(int value) {
-        bitField0_ |= 0x00000004;
-        number_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 number = 3;</code>
-       */
-      public Builder clearNumber() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        number_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:pbdson.PbItemFarm)
-    }
-
-    static {
-      defaultInstance = new PbItemFarm(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:pbdson.PbItemFarm)
-  }
-
-  public interface PbPieceOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // optional int32 type = 1;
-    /**
-     * <code>optional int32 type = 1;</code>
-     */
-    boolean hasType();
-    /**
-     * <code>optional int32 type = 1;</code>
-     */
-    int getType();
-
-    // optional int32 id = 2;
-    /**
-     * <code>optional int32 id = 2;</code>
-     */
-    boolean hasId();
-    /**
-     * <code>optional int32 id = 2;</code>
-     */
-    int getId();
-
-    // optional int32 number = 3;
-    /**
-     * <code>optional int32 number = 3;</code>
-     */
-    boolean hasNumber();
-    /**
-     * <code>optional int32 number = 3;</code>
-     */
-    int getNumber();
-  }
-  /**
-   * Protobuf type {@code pbdson.PbPiece}
-   */
-  public static final class PbPiece extends
-      com.google.protobuf.GeneratedMessage
-      implements PbPieceOrBuilder {
-    // Use PbPiece.newBuilder() to construct.
-    private PbPiece(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private PbPiece(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final PbPiece defaultInstance;
-    public static PbPiece getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public PbPiece getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private PbPiece(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-              bitField0_ |= 0x00000001;
-              type_ = input.readInt32();
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              id_ = input.readInt32();
-              break;
-            }
-            case 24: {
-              bitField0_ |= 0x00000004;
-              number_ = input.readInt32();
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return protocol.Pbmethod.internal_static_pbdson_PbPiece_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return protocol.Pbmethod.internal_static_pbdson_PbPiece_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              protocol.Pbmethod.PbPiece.class, protocol.Pbmethod.PbPiece.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<PbPiece> PARSER =
-        new com.google.protobuf.AbstractParser<PbPiece>() {
-      public PbPiece parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PbPiece(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<PbPiece> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    // optional int32 type = 1;
-    public static final int TYPE_FIELD_NUMBER = 1;
-    private int type_;
-    /**
-     * <code>optional int32 type = 1;</code>
-     */
-    public boolean hasType() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>optional int32 type = 1;</code>
-     */
-    public int getType() {
-      return type_;
-    }
-
-    // optional int32 id = 2;
-    public static final int ID_FIELD_NUMBER = 2;
-    private int id_;
-    /**
-     * <code>optional int32 id = 2;</code>
-     */
-    public boolean hasId() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>optional int32 id = 2;</code>
-     */
-    public int getId() {
-      return id_;
-    }
-
-    // optional int32 number = 3;
-    public static final int NUMBER_FIELD_NUMBER = 3;
-    private int number_;
-    /**
-     * <code>optional int32 number = 3;</code>
-     */
-    public boolean hasNumber() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>optional int32 number = 3;</code>
-     */
-    public int getNumber() {
-      return number_;
-    }
-
-    private void initFields() {
-      type_ = 0;
-      id_ = 0;
-      number_ = 0;
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(1, type_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt32(2, id_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeInt32(3, number_);
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, type_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, id_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, number_);
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static protocol.Pbmethod.PbPiece parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbPiece parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbPiece parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbPiece parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbPiece parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbPiece parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbPiece parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static protocol.Pbmethod.PbPiece parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbPiece parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbPiece parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(protocol.Pbmethod.PbPiece prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code pbdson.PbPiece}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements protocol.Pbmethod.PbPieceOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return protocol.Pbmethod.internal_static_pbdson_PbPiece_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return protocol.Pbmethod.internal_static_pbdson_PbPiece_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                protocol.Pbmethod.PbPiece.class, protocol.Pbmethod.PbPiece.Builder.class);
-      }
-
-      // Construct using protocol.Pbmethod.PbPiece.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        type_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        id_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        number_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000004);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return protocol.Pbmethod.internal_static_pbdson_PbPiece_descriptor;
-      }
-
-      public protocol.Pbmethod.PbPiece getDefaultInstanceForType() {
-        return protocol.Pbmethod.PbPiece.getDefaultInstance();
-      }
-
-      public protocol.Pbmethod.PbPiece build() {
-        protocol.Pbmethod.PbPiece result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public protocol.Pbmethod.PbPiece buildPartial() {
-        protocol.Pbmethod.PbPiece result = new protocol.Pbmethod.PbPiece(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.type_ = type_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.id_ = id_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.number_ = number_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof protocol.Pbmethod.PbPiece) {
-          return mergeFrom((protocol.Pbmethod.PbPiece)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(protocol.Pbmethod.PbPiece other) {
-        if (other == protocol.Pbmethod.PbPiece.getDefaultInstance()) return this;
-        if (other.hasType()) {
-          setType(other.getType());
-        }
-        if (other.hasId()) {
-          setId(other.getId());
-        }
-        if (other.hasNumber()) {
-          setNumber(other.getNumber());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        protocol.Pbmethod.PbPiece parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (protocol.Pbmethod.PbPiece) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // optional int32 type = 1;
-      private int type_ ;
-      /**
-       * <code>optional int32 type = 1;</code>
-       */
-      public boolean hasType() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>optional int32 type = 1;</code>
-       */
-      public int getType() {
-        return type_;
-      }
-      /**
-       * <code>optional int32 type = 1;</code>
-       */
-      public Builder setType(int value) {
-        bitField0_ |= 0x00000001;
-        type_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 type = 1;</code>
-       */
-      public Builder clearType() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        type_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 id = 2;
-      private int id_ ;
-      /**
-       * <code>optional int32 id = 2;</code>
-       */
-      public boolean hasId() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>optional int32 id = 2;</code>
-       */
-      public int getId() {
-        return id_;
-      }
-      /**
-       * <code>optional int32 id = 2;</code>
-       */
-      public Builder setId(int value) {
-        bitField0_ |= 0x00000002;
-        id_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 id = 2;</code>
-       */
-      public Builder clearId() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        id_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 number = 3;
-      private int number_ ;
-      /**
-       * <code>optional int32 number = 3;</code>
-       */
-      public boolean hasNumber() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional int32 number = 3;</code>
-       */
-      public int getNumber() {
-        return number_;
-      }
-      /**
-       * <code>optional int32 number = 3;</code>
-       */
-      public Builder setNumber(int value) {
-        bitField0_ |= 0x00000004;
-        number_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 number = 3;</code>
-       */
-      public Builder clearNumber() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        number_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:pbdson.PbPiece)
-    }
-
-    static {
-      defaultInstance = new PbPiece(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:pbdson.PbPiece)
-  }
-
   public interface PbItemPointOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
@@ -51863,19 +38668,19 @@ public final class Pbmethod {
      */
     boolean getLock();
 
-    // repeated int32 point = 5;
+    // repeated int64 point = 5;
     /**
-     * <code>repeated int32 point = 5;</code>
+     * <code>repeated int64 point = 5;</code>
      */
-    java.util.List<java.lang.Integer> getPointList();
+    java.util.List<java.lang.Long> getPointList();
     /**
-     * <code>repeated int32 point = 5;</code>
+     * <code>repeated int64 point = 5;</code>
      */
     int getPointCount();
     /**
-     * <code>repeated int32 point = 5;</code>
+     * <code>repeated int64 point = 5;</code>
      */
-    int getPoint(int index);
+    long getPoint(int index);
 
     // optional int64 expire = 6;
     /**
@@ -51980,21 +38785,21 @@ public final class Pbmethod {
             }
             case 40: {
               if (!((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
-                point_ = new java.util.ArrayList<java.lang.Integer>();
+                point_ = new java.util.ArrayList<java.lang.Long>();
                 mutable_bitField0_ |= 0x00000010;
               }
-              point_.add(input.readInt32());
+              point_.add(input.readInt64());
               break;
             }
             case 42: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
               if (!((mutable_bitField0_ & 0x00000010) == 0x00000010) && input.getBytesUntilLimit() > 0) {
-                point_ = new java.util.ArrayList<java.lang.Integer>();
+                point_ = new java.util.ArrayList<java.lang.Long>();
                 mutable_bitField0_ |= 0x00000010;
               }
               while (input.getBytesUntilLimit() > 0) {
-                point_.add(input.readInt32());
+                point_.add(input.readInt64());
               }
               input.popLimit(limit);
               break;
@@ -52121,26 +38926,26 @@ public final class Pbmethod {
       return lock_;
     }
 
-    // repeated int32 point = 5;
+    // repeated int64 point = 5;
     public static final int POINT_FIELD_NUMBER = 5;
-    private java.util.List<java.lang.Integer> point_;
+    private java.util.List<java.lang.Long> point_;
     /**
-     * <code>repeated int32 point = 5;</code>
+     * <code>repeated int64 point = 5;</code>
      */
-    public java.util.List<java.lang.Integer>
+    public java.util.List<java.lang.Long>
         getPointList() {
       return point_;
     }
     /**
-     * <code>repeated int32 point = 5;</code>
+     * <code>repeated int64 point = 5;</code>
      */
     public int getPointCount() {
       return point_.size();
     }
     /**
-     * <code>repeated int32 point = 5;</code>
+     * <code>repeated int64 point = 5;</code>
      */
-    public int getPoint(int index) {
+    public long getPoint(int index) {
       return point_.get(index);
     }
 
@@ -52227,7 +39032,7 @@ public final class Pbmethod {
         output.writeBool(4, lock_);
       }
       for (int i = 0; i < point_.size(); i++) {
-        output.writeInt32(5, point_.get(i));
+        output.writeInt64(5, point_.get(i));
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeInt64(6, expire_);
@@ -52267,7 +39072,7 @@ public final class Pbmethod {
         int dataSize = 0;
         for (int i = 0; i < point_.size(); i++) {
           dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(point_.get(i));
+            .computeInt64SizeNoTag(point_.get(i));
         }
         size += dataSize;
         size += 1 * getPointList().size();
@@ -52683,64 +39488,64 @@ public final class Pbmethod {
         return this;
       }
 
-      // repeated int32 point = 5;
-      private java.util.List<java.lang.Integer> point_ = java.util.Collections.emptyList();
+      // repeated int64 point = 5;
+      private java.util.List<java.lang.Long> point_ = java.util.Collections.emptyList();
       private void ensurePointIsMutable() {
         if (!((bitField0_ & 0x00000010) == 0x00000010)) {
-          point_ = new java.util.ArrayList<java.lang.Integer>(point_);
+          point_ = new java.util.ArrayList<java.lang.Long>(point_);
           bitField0_ |= 0x00000010;
          }
       }
       /**
-       * <code>repeated int32 point = 5;</code>
+       * <code>repeated int64 point = 5;</code>
        */
-      public java.util.List<java.lang.Integer>
+      public java.util.List<java.lang.Long>
           getPointList() {
         return java.util.Collections.unmodifiableList(point_);
       }
       /**
-       * <code>repeated int32 point = 5;</code>
+       * <code>repeated int64 point = 5;</code>
        */
       public int getPointCount() {
         return point_.size();
       }
       /**
-       * <code>repeated int32 point = 5;</code>
+       * <code>repeated int64 point = 5;</code>
        */
-      public int getPoint(int index) {
+      public long getPoint(int index) {
         return point_.get(index);
       }
       /**
-       * <code>repeated int32 point = 5;</code>
+       * <code>repeated int64 point = 5;</code>
        */
       public Builder setPoint(
-          int index, int value) {
+          int index, long value) {
         ensurePointIsMutable();
         point_.set(index, value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 point = 5;</code>
+       * <code>repeated int64 point = 5;</code>
        */
-      public Builder addPoint(int value) {
+      public Builder addPoint(long value) {
         ensurePointIsMutable();
         point_.add(value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 point = 5;</code>
+       * <code>repeated int64 point = 5;</code>
        */
       public Builder addAllPoint(
-          java.lang.Iterable<? extends java.lang.Integer> values) {
+          java.lang.Iterable<? extends java.lang.Long> values) {
         ensurePointIsMutable();
         super.addAll(values, point_);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 point = 5;</code>
+       * <code>repeated int64 point = 5;</code>
        */
       public Builder clearPoint() {
         point_ = java.util.Collections.emptyList();
@@ -52857,3186 +39662,6 @@ public final class Pbmethod {
     }
 
     // @@protoc_insertion_point(class_scope:pbdson.PbItemEquipment)
-  }
-
-  public interface PbListStatOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // repeated .pbdson.PbStat aStat = 1;
-    /**
-     * <code>repeated .pbdson.PbStat aStat = 1;</code>
-     */
-    java.util.List<protocol.Pbmethod.PbStat> 
-        getAStatList();
-    /**
-     * <code>repeated .pbdson.PbStat aStat = 1;</code>
-     */
-    protocol.Pbmethod.PbStat getAStat(int index);
-    /**
-     * <code>repeated .pbdson.PbStat aStat = 1;</code>
-     */
-    int getAStatCount();
-    /**
-     * <code>repeated .pbdson.PbStat aStat = 1;</code>
-     */
-    java.util.List<? extends protocol.Pbmethod.PbStatOrBuilder> 
-        getAStatOrBuilderList();
-    /**
-     * <code>repeated .pbdson.PbStat aStat = 1;</code>
-     */
-    protocol.Pbmethod.PbStatOrBuilder getAStatOrBuilder(
-        int index);
-  }
-  /**
-   * Protobuf type {@code pbdson.PbListStat}
-   */
-  public static final class PbListStat extends
-      com.google.protobuf.GeneratedMessage
-      implements PbListStatOrBuilder {
-    // Use PbListStat.newBuilder() to construct.
-    private PbListStat(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private PbListStat(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final PbListStat defaultInstance;
-    public static PbListStat getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public PbListStat getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private PbListStat(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 10: {
-              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-                aStat_ = new java.util.ArrayList<protocol.Pbmethod.PbStat>();
-                mutable_bitField0_ |= 0x00000001;
-              }
-              aStat_.add(input.readMessage(protocol.Pbmethod.PbStat.PARSER, extensionRegistry));
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-          aStat_ = java.util.Collections.unmodifiableList(aStat_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return protocol.Pbmethod.internal_static_pbdson_PbListStat_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return protocol.Pbmethod.internal_static_pbdson_PbListStat_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              protocol.Pbmethod.PbListStat.class, protocol.Pbmethod.PbListStat.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<PbListStat> PARSER =
-        new com.google.protobuf.AbstractParser<PbListStat>() {
-      public PbListStat parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PbListStat(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<PbListStat> getParserForType() {
-      return PARSER;
-    }
-
-    // repeated .pbdson.PbStat aStat = 1;
-    public static final int ASTAT_FIELD_NUMBER = 1;
-    private java.util.List<protocol.Pbmethod.PbStat> aStat_;
-    /**
-     * <code>repeated .pbdson.PbStat aStat = 1;</code>
-     */
-    public java.util.List<protocol.Pbmethod.PbStat> getAStatList() {
-      return aStat_;
-    }
-    /**
-     * <code>repeated .pbdson.PbStat aStat = 1;</code>
-     */
-    public java.util.List<? extends protocol.Pbmethod.PbStatOrBuilder> 
-        getAStatOrBuilderList() {
-      return aStat_;
-    }
-    /**
-     * <code>repeated .pbdson.PbStat aStat = 1;</code>
-     */
-    public int getAStatCount() {
-      return aStat_.size();
-    }
-    /**
-     * <code>repeated .pbdson.PbStat aStat = 1;</code>
-     */
-    public protocol.Pbmethod.PbStat getAStat(int index) {
-      return aStat_.get(index);
-    }
-    /**
-     * <code>repeated .pbdson.PbStat aStat = 1;</code>
-     */
-    public protocol.Pbmethod.PbStatOrBuilder getAStatOrBuilder(
-        int index) {
-      return aStat_.get(index);
-    }
-
-    private void initFields() {
-      aStat_ = java.util.Collections.emptyList();
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      for (int i = 0; i < aStat_.size(); i++) {
-        output.writeMessage(1, aStat_.get(i));
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      for (int i = 0; i < aStat_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, aStat_.get(i));
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static protocol.Pbmethod.PbListStat parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbListStat parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbListStat parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbListStat parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbListStat parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbListStat parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbListStat parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static protocol.Pbmethod.PbListStat parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbListStat parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbListStat parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(protocol.Pbmethod.PbListStat prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code pbdson.PbListStat}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements protocol.Pbmethod.PbListStatOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return protocol.Pbmethod.internal_static_pbdson_PbListStat_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return protocol.Pbmethod.internal_static_pbdson_PbListStat_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                protocol.Pbmethod.PbListStat.class, protocol.Pbmethod.PbListStat.Builder.class);
-      }
-
-      // Construct using protocol.Pbmethod.PbListStat.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getAStatFieldBuilder();
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        if (aStatBuilder_ == null) {
-          aStat_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
-        } else {
-          aStatBuilder_.clear();
-        }
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return protocol.Pbmethod.internal_static_pbdson_PbListStat_descriptor;
-      }
-
-      public protocol.Pbmethod.PbListStat getDefaultInstanceForType() {
-        return protocol.Pbmethod.PbListStat.getDefaultInstance();
-      }
-
-      public protocol.Pbmethod.PbListStat build() {
-        protocol.Pbmethod.PbListStat result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public protocol.Pbmethod.PbListStat buildPartial() {
-        protocol.Pbmethod.PbListStat result = new protocol.Pbmethod.PbListStat(this);
-        int from_bitField0_ = bitField0_;
-        if (aStatBuilder_ == null) {
-          if (((bitField0_ & 0x00000001) == 0x00000001)) {
-            aStat_ = java.util.Collections.unmodifiableList(aStat_);
-            bitField0_ = (bitField0_ & ~0x00000001);
-          }
-          result.aStat_ = aStat_;
-        } else {
-          result.aStat_ = aStatBuilder_.build();
-        }
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof protocol.Pbmethod.PbListStat) {
-          return mergeFrom((protocol.Pbmethod.PbListStat)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(protocol.Pbmethod.PbListStat other) {
-        if (other == protocol.Pbmethod.PbListStat.getDefaultInstance()) return this;
-        if (aStatBuilder_ == null) {
-          if (!other.aStat_.isEmpty()) {
-            if (aStat_.isEmpty()) {
-              aStat_ = other.aStat_;
-              bitField0_ = (bitField0_ & ~0x00000001);
-            } else {
-              ensureAStatIsMutable();
-              aStat_.addAll(other.aStat_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.aStat_.isEmpty()) {
-            if (aStatBuilder_.isEmpty()) {
-              aStatBuilder_.dispose();
-              aStatBuilder_ = null;
-              aStat_ = other.aStat_;
-              bitField0_ = (bitField0_ & ~0x00000001);
-              aStatBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getAStatFieldBuilder() : null;
-            } else {
-              aStatBuilder_.addAllMessages(other.aStat_);
-            }
-          }
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        protocol.Pbmethod.PbListStat parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (protocol.Pbmethod.PbListStat) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // repeated .pbdson.PbStat aStat = 1;
-      private java.util.List<protocol.Pbmethod.PbStat> aStat_ =
-        java.util.Collections.emptyList();
-      private void ensureAStatIsMutable() {
-        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          aStat_ = new java.util.ArrayList<protocol.Pbmethod.PbStat>(aStat_);
-          bitField0_ |= 0x00000001;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbStat, protocol.Pbmethod.PbStat.Builder, protocol.Pbmethod.PbStatOrBuilder> aStatBuilder_;
-
-      /**
-       * <code>repeated .pbdson.PbStat aStat = 1;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbStat> getAStatList() {
-        if (aStatBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(aStat_);
-        } else {
-          return aStatBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbStat aStat = 1;</code>
-       */
-      public int getAStatCount() {
-        if (aStatBuilder_ == null) {
-          return aStat_.size();
-        } else {
-          return aStatBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbStat aStat = 1;</code>
-       */
-      public protocol.Pbmethod.PbStat getAStat(int index) {
-        if (aStatBuilder_ == null) {
-          return aStat_.get(index);
-        } else {
-          return aStatBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbStat aStat = 1;</code>
-       */
-      public Builder setAStat(
-          int index, protocol.Pbmethod.PbStat value) {
-        if (aStatBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureAStatIsMutable();
-          aStat_.set(index, value);
-          onChanged();
-        } else {
-          aStatBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbStat aStat = 1;</code>
-       */
-      public Builder setAStat(
-          int index, protocol.Pbmethod.PbStat.Builder builderForValue) {
-        if (aStatBuilder_ == null) {
-          ensureAStatIsMutable();
-          aStat_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          aStatBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbStat aStat = 1;</code>
-       */
-      public Builder addAStat(protocol.Pbmethod.PbStat value) {
-        if (aStatBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureAStatIsMutable();
-          aStat_.add(value);
-          onChanged();
-        } else {
-          aStatBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbStat aStat = 1;</code>
-       */
-      public Builder addAStat(
-          int index, protocol.Pbmethod.PbStat value) {
-        if (aStatBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureAStatIsMutable();
-          aStat_.add(index, value);
-          onChanged();
-        } else {
-          aStatBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbStat aStat = 1;</code>
-       */
-      public Builder addAStat(
-          protocol.Pbmethod.PbStat.Builder builderForValue) {
-        if (aStatBuilder_ == null) {
-          ensureAStatIsMutable();
-          aStat_.add(builderForValue.build());
-          onChanged();
-        } else {
-          aStatBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbStat aStat = 1;</code>
-       */
-      public Builder addAStat(
-          int index, protocol.Pbmethod.PbStat.Builder builderForValue) {
-        if (aStatBuilder_ == null) {
-          ensureAStatIsMutable();
-          aStat_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          aStatBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbStat aStat = 1;</code>
-       */
-      public Builder addAllAStat(
-          java.lang.Iterable<? extends protocol.Pbmethod.PbStat> values) {
-        if (aStatBuilder_ == null) {
-          ensureAStatIsMutable();
-          super.addAll(values, aStat_);
-          onChanged();
-        } else {
-          aStatBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbStat aStat = 1;</code>
-       */
-      public Builder clearAStat() {
-        if (aStatBuilder_ == null) {
-          aStat_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
-          onChanged();
-        } else {
-          aStatBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbStat aStat = 1;</code>
-       */
-      public Builder removeAStat(int index) {
-        if (aStatBuilder_ == null) {
-          ensureAStatIsMutable();
-          aStat_.remove(index);
-          onChanged();
-        } else {
-          aStatBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbStat aStat = 1;</code>
-       */
-      public protocol.Pbmethod.PbStat.Builder getAStatBuilder(
-          int index) {
-        return getAStatFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .pbdson.PbStat aStat = 1;</code>
-       */
-      public protocol.Pbmethod.PbStatOrBuilder getAStatOrBuilder(
-          int index) {
-        if (aStatBuilder_ == null) {
-          return aStat_.get(index);  } else {
-          return aStatBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbStat aStat = 1;</code>
-       */
-      public java.util.List<? extends protocol.Pbmethod.PbStatOrBuilder> 
-           getAStatOrBuilderList() {
-        if (aStatBuilder_ != null) {
-          return aStatBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(aStat_);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbStat aStat = 1;</code>
-       */
-      public protocol.Pbmethod.PbStat.Builder addAStatBuilder() {
-        return getAStatFieldBuilder().addBuilder(
-            protocol.Pbmethod.PbStat.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbStat aStat = 1;</code>
-       */
-      public protocol.Pbmethod.PbStat.Builder addAStatBuilder(
-          int index) {
-        return getAStatFieldBuilder().addBuilder(
-            index, protocol.Pbmethod.PbStat.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbStat aStat = 1;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbStat.Builder> 
-           getAStatBuilderList() {
-        return getAStatFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbStat, protocol.Pbmethod.PbStat.Builder, protocol.Pbmethod.PbStatOrBuilder> 
-          getAStatFieldBuilder() {
-        if (aStatBuilder_ == null) {
-          aStatBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              protocol.Pbmethod.PbStat, protocol.Pbmethod.PbStat.Builder, protocol.Pbmethod.PbStatOrBuilder>(
-                  aStat_,
-                  ((bitField0_ & 0x00000001) == 0x00000001),
-                  getParentForChildren(),
-                  isClean());
-          aStat_ = null;
-        }
-        return aStatBuilder_;
-      }
-
-      // @@protoc_insertion_point(builder_scope:pbdson.PbListStat)
-    }
-
-    static {
-      defaultInstance = new PbListStat(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:pbdson.PbListStat)
-  }
-
-  public interface PbStatOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // optional int32 id = 1;
-    /**
-     * <code>optional int32 id = 1;</code>
-     */
-    boolean hasId();
-    /**
-     * <code>optional int32 id = 1;</code>
-     */
-    int getId();
-
-    // optional int32 status = 2;
-    /**
-     * <code>optional int32 status = 2;</code>
-     */
-    boolean hasStatus();
-    /**
-     * <code>optional int32 status = 2;</code>
-     */
-    int getStatus();
-
-    // optional int32 level = 3;
-    /**
-     * <code>optional int32 level = 3;</code>
-     */
-    boolean hasLevel();
-    /**
-     * <code>optional int32 level = 3;</code>
-     */
-    int getLevel();
-
-    // repeated int32 condition = 4;
-    /**
-     * <code>repeated int32 condition = 4;</code>
-     */
-    java.util.List<java.lang.Integer> getConditionList();
-    /**
-     * <code>repeated int32 condition = 4;</code>
-     */
-    int getConditionCount();
-    /**
-     * <code>repeated int32 condition = 4;</code>
-     */
-    int getCondition(int index);
-
-    // optional int32 maxLevel = 5;
-    /**
-     * <code>optional int32 maxLevel = 5;</code>
-     */
-    boolean hasMaxLevel();
-    /**
-     * <code>optional int32 maxLevel = 5;</code>
-     */
-    int getMaxLevel();
-
-    // optional int32 pointPer = 6;
-    /**
-     * <code>optional int32 pointPer = 6;</code>
-     */
-    boolean hasPointPer();
-    /**
-     * <code>optional int32 pointPer = 6;</code>
-     */
-    int getPointPer();
-
-    // repeated float formula = 7;
-    /**
-     * <code>repeated float formula = 7;</code>
-     */
-    java.util.List<java.lang.Float> getFormulaList();
-    /**
-     * <code>repeated float formula = 7;</code>
-     */
-    int getFormulaCount();
-    /**
-     * <code>repeated float formula = 7;</code>
-     */
-    float getFormula(int index);
-  }
-  /**
-   * Protobuf type {@code pbdson.PbStat}
-   */
-  public static final class PbStat extends
-      com.google.protobuf.GeneratedMessage
-      implements PbStatOrBuilder {
-    // Use PbStat.newBuilder() to construct.
-    private PbStat(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private PbStat(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final PbStat defaultInstance;
-    public static PbStat getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public PbStat getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private PbStat(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-              bitField0_ |= 0x00000001;
-              id_ = input.readInt32();
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              status_ = input.readInt32();
-              break;
-            }
-            case 24: {
-              bitField0_ |= 0x00000004;
-              level_ = input.readInt32();
-              break;
-            }
-            case 32: {
-              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
-                condition_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000008;
-              }
-              condition_.add(input.readInt32());
-              break;
-            }
-            case 34: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008) && input.getBytesUntilLimit() > 0) {
-                condition_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000008;
-              }
-              while (input.getBytesUntilLimit() > 0) {
-                condition_.add(input.readInt32());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 40: {
-              bitField0_ |= 0x00000008;
-              maxLevel_ = input.readInt32();
-              break;
-            }
-            case 48: {
-              bitField0_ |= 0x00000010;
-              pointPer_ = input.readInt32();
-              break;
-            }
-            case 61: {
-              if (!((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
-                formula_ = new java.util.ArrayList<java.lang.Float>();
-                mutable_bitField0_ |= 0x00000040;
-              }
-              formula_.add(input.readFloat());
-              break;
-            }
-            case 58: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000040) == 0x00000040) && input.getBytesUntilLimit() > 0) {
-                formula_ = new java.util.ArrayList<java.lang.Float>();
-                mutable_bitField0_ |= 0x00000040;
-              }
-              while (input.getBytesUntilLimit() > 0) {
-                formula_.add(input.readFloat());
-              }
-              input.popLimit(limit);
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
-          condition_ = java.util.Collections.unmodifiableList(condition_);
-        }
-        if (((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
-          formula_ = java.util.Collections.unmodifiableList(formula_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return protocol.Pbmethod.internal_static_pbdson_PbStat_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return protocol.Pbmethod.internal_static_pbdson_PbStat_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              protocol.Pbmethod.PbStat.class, protocol.Pbmethod.PbStat.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<PbStat> PARSER =
-        new com.google.protobuf.AbstractParser<PbStat>() {
-      public PbStat parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PbStat(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<PbStat> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    // optional int32 id = 1;
-    public static final int ID_FIELD_NUMBER = 1;
-    private int id_;
-    /**
-     * <code>optional int32 id = 1;</code>
-     */
-    public boolean hasId() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>optional int32 id = 1;</code>
-     */
-    public int getId() {
-      return id_;
-    }
-
-    // optional int32 status = 2;
-    public static final int STATUS_FIELD_NUMBER = 2;
-    private int status_;
-    /**
-     * <code>optional int32 status = 2;</code>
-     */
-    public boolean hasStatus() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>optional int32 status = 2;</code>
-     */
-    public int getStatus() {
-      return status_;
-    }
-
-    // optional int32 level = 3;
-    public static final int LEVEL_FIELD_NUMBER = 3;
-    private int level_;
-    /**
-     * <code>optional int32 level = 3;</code>
-     */
-    public boolean hasLevel() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>optional int32 level = 3;</code>
-     */
-    public int getLevel() {
-      return level_;
-    }
-
-    // repeated int32 condition = 4;
-    public static final int CONDITION_FIELD_NUMBER = 4;
-    private java.util.List<java.lang.Integer> condition_;
-    /**
-     * <code>repeated int32 condition = 4;</code>
-     */
-    public java.util.List<java.lang.Integer>
-        getConditionList() {
-      return condition_;
-    }
-    /**
-     * <code>repeated int32 condition = 4;</code>
-     */
-    public int getConditionCount() {
-      return condition_.size();
-    }
-    /**
-     * <code>repeated int32 condition = 4;</code>
-     */
-    public int getCondition(int index) {
-      return condition_.get(index);
-    }
-
-    // optional int32 maxLevel = 5;
-    public static final int MAXLEVEL_FIELD_NUMBER = 5;
-    private int maxLevel_;
-    /**
-     * <code>optional int32 maxLevel = 5;</code>
-     */
-    public boolean hasMaxLevel() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>optional int32 maxLevel = 5;</code>
-     */
-    public int getMaxLevel() {
-      return maxLevel_;
-    }
-
-    // optional int32 pointPer = 6;
-    public static final int POINTPER_FIELD_NUMBER = 6;
-    private int pointPer_;
-    /**
-     * <code>optional int32 pointPer = 6;</code>
-     */
-    public boolean hasPointPer() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    /**
-     * <code>optional int32 pointPer = 6;</code>
-     */
-    public int getPointPer() {
-      return pointPer_;
-    }
-
-    // repeated float formula = 7;
-    public static final int FORMULA_FIELD_NUMBER = 7;
-    private java.util.List<java.lang.Float> formula_;
-    /**
-     * <code>repeated float formula = 7;</code>
-     */
-    public java.util.List<java.lang.Float>
-        getFormulaList() {
-      return formula_;
-    }
-    /**
-     * <code>repeated float formula = 7;</code>
-     */
-    public int getFormulaCount() {
-      return formula_.size();
-    }
-    /**
-     * <code>repeated float formula = 7;</code>
-     */
-    public float getFormula(int index) {
-      return formula_.get(index);
-    }
-
-    private void initFields() {
-      id_ = 0;
-      status_ = 0;
-      level_ = 0;
-      condition_ = java.util.Collections.emptyList();
-      maxLevel_ = 0;
-      pointPer_ = 0;
-      formula_ = java.util.Collections.emptyList();
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(1, id_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt32(2, status_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeInt32(3, level_);
-      }
-      for (int i = 0; i < condition_.size(); i++) {
-        output.writeInt32(4, condition_.get(i));
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeInt32(5, maxLevel_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeInt32(6, pointPer_);
-      }
-      for (int i = 0; i < formula_.size(); i++) {
-        output.writeFloat(7, formula_.get(i));
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, id_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, status_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, level_);
-      }
-      {
-        int dataSize = 0;
-        for (int i = 0; i < condition_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(condition_.get(i));
-        }
-        size += dataSize;
-        size += 1 * getConditionList().size();
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(5, maxLevel_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(6, pointPer_);
-      }
-      {
-        int dataSize = 0;
-        dataSize = 4 * getFormulaList().size();
-        size += dataSize;
-        size += 1 * getFormulaList().size();
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static protocol.Pbmethod.PbStat parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbStat parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbStat parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbStat parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbStat parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbStat parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbStat parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static protocol.Pbmethod.PbStat parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbStat parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbStat parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(protocol.Pbmethod.PbStat prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code pbdson.PbStat}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements protocol.Pbmethod.PbStatOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return protocol.Pbmethod.internal_static_pbdson_PbStat_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return protocol.Pbmethod.internal_static_pbdson_PbStat_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                protocol.Pbmethod.PbStat.class, protocol.Pbmethod.PbStat.Builder.class);
-      }
-
-      // Construct using protocol.Pbmethod.PbStat.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        id_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        status_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        level_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000004);
-        condition_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000008);
-        maxLevel_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000010);
-        pointPer_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000020);
-        formula_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000040);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return protocol.Pbmethod.internal_static_pbdson_PbStat_descriptor;
-      }
-
-      public protocol.Pbmethod.PbStat getDefaultInstanceForType() {
-        return protocol.Pbmethod.PbStat.getDefaultInstance();
-      }
-
-      public protocol.Pbmethod.PbStat build() {
-        protocol.Pbmethod.PbStat result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public protocol.Pbmethod.PbStat buildPartial() {
-        protocol.Pbmethod.PbStat result = new protocol.Pbmethod.PbStat(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.id_ = id_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.status_ = status_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.level_ = level_;
-        if (((bitField0_ & 0x00000008) == 0x00000008)) {
-          condition_ = java.util.Collections.unmodifiableList(condition_);
-          bitField0_ = (bitField0_ & ~0x00000008);
-        }
-        result.condition_ = condition_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.maxLevel_ = maxLevel_;
-        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        result.pointPer_ = pointPer_;
-        if (((bitField0_ & 0x00000040) == 0x00000040)) {
-          formula_ = java.util.Collections.unmodifiableList(formula_);
-          bitField0_ = (bitField0_ & ~0x00000040);
-        }
-        result.formula_ = formula_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof protocol.Pbmethod.PbStat) {
-          return mergeFrom((protocol.Pbmethod.PbStat)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(protocol.Pbmethod.PbStat other) {
-        if (other == protocol.Pbmethod.PbStat.getDefaultInstance()) return this;
-        if (other.hasId()) {
-          setId(other.getId());
-        }
-        if (other.hasStatus()) {
-          setStatus(other.getStatus());
-        }
-        if (other.hasLevel()) {
-          setLevel(other.getLevel());
-        }
-        if (!other.condition_.isEmpty()) {
-          if (condition_.isEmpty()) {
-            condition_ = other.condition_;
-            bitField0_ = (bitField0_ & ~0x00000008);
-          } else {
-            ensureConditionIsMutable();
-            condition_.addAll(other.condition_);
-          }
-          onChanged();
-        }
-        if (other.hasMaxLevel()) {
-          setMaxLevel(other.getMaxLevel());
-        }
-        if (other.hasPointPer()) {
-          setPointPer(other.getPointPer());
-        }
-        if (!other.formula_.isEmpty()) {
-          if (formula_.isEmpty()) {
-            formula_ = other.formula_;
-            bitField0_ = (bitField0_ & ~0x00000040);
-          } else {
-            ensureFormulaIsMutable();
-            formula_.addAll(other.formula_);
-          }
-          onChanged();
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        protocol.Pbmethod.PbStat parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (protocol.Pbmethod.PbStat) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // optional int32 id = 1;
-      private int id_ ;
-      /**
-       * <code>optional int32 id = 1;</code>
-       */
-      public boolean hasId() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>optional int32 id = 1;</code>
-       */
-      public int getId() {
-        return id_;
-      }
-      /**
-       * <code>optional int32 id = 1;</code>
-       */
-      public Builder setId(int value) {
-        bitField0_ |= 0x00000001;
-        id_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 id = 1;</code>
-       */
-      public Builder clearId() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        id_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 status = 2;
-      private int status_ ;
-      /**
-       * <code>optional int32 status = 2;</code>
-       */
-      public boolean hasStatus() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>optional int32 status = 2;</code>
-       */
-      public int getStatus() {
-        return status_;
-      }
-      /**
-       * <code>optional int32 status = 2;</code>
-       */
-      public Builder setStatus(int value) {
-        bitField0_ |= 0x00000002;
-        status_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 status = 2;</code>
-       */
-      public Builder clearStatus() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        status_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 level = 3;
-      private int level_ ;
-      /**
-       * <code>optional int32 level = 3;</code>
-       */
-      public boolean hasLevel() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional int32 level = 3;</code>
-       */
-      public int getLevel() {
-        return level_;
-      }
-      /**
-       * <code>optional int32 level = 3;</code>
-       */
-      public Builder setLevel(int value) {
-        bitField0_ |= 0x00000004;
-        level_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 level = 3;</code>
-       */
-      public Builder clearLevel() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        level_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // repeated int32 condition = 4;
-      private java.util.List<java.lang.Integer> condition_ = java.util.Collections.emptyList();
-      private void ensureConditionIsMutable() {
-        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
-          condition_ = new java.util.ArrayList<java.lang.Integer>(condition_);
-          bitField0_ |= 0x00000008;
-         }
-      }
-      /**
-       * <code>repeated int32 condition = 4;</code>
-       */
-      public java.util.List<java.lang.Integer>
-          getConditionList() {
-        return java.util.Collections.unmodifiableList(condition_);
-      }
-      /**
-       * <code>repeated int32 condition = 4;</code>
-       */
-      public int getConditionCount() {
-        return condition_.size();
-      }
-      /**
-       * <code>repeated int32 condition = 4;</code>
-       */
-      public int getCondition(int index) {
-        return condition_.get(index);
-      }
-      /**
-       * <code>repeated int32 condition = 4;</code>
-       */
-      public Builder setCondition(
-          int index, int value) {
-        ensureConditionIsMutable();
-        condition_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 condition = 4;</code>
-       */
-      public Builder addCondition(int value) {
-        ensureConditionIsMutable();
-        condition_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 condition = 4;</code>
-       */
-      public Builder addAllCondition(
-          java.lang.Iterable<? extends java.lang.Integer> values) {
-        ensureConditionIsMutable();
-        super.addAll(values, condition_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 condition = 4;</code>
-       */
-      public Builder clearCondition() {
-        condition_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000008);
-        onChanged();
-        return this;
-      }
-
-      // optional int32 maxLevel = 5;
-      private int maxLevel_ ;
-      /**
-       * <code>optional int32 maxLevel = 5;</code>
-       */
-      public boolean hasMaxLevel() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      /**
-       * <code>optional int32 maxLevel = 5;</code>
-       */
-      public int getMaxLevel() {
-        return maxLevel_;
-      }
-      /**
-       * <code>optional int32 maxLevel = 5;</code>
-       */
-      public Builder setMaxLevel(int value) {
-        bitField0_ |= 0x00000010;
-        maxLevel_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 maxLevel = 5;</code>
-       */
-      public Builder clearMaxLevel() {
-        bitField0_ = (bitField0_ & ~0x00000010);
-        maxLevel_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 pointPer = 6;
-      private int pointPer_ ;
-      /**
-       * <code>optional int32 pointPer = 6;</code>
-       */
-      public boolean hasPointPer() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
-      }
-      /**
-       * <code>optional int32 pointPer = 6;</code>
-       */
-      public int getPointPer() {
-        return pointPer_;
-      }
-      /**
-       * <code>optional int32 pointPer = 6;</code>
-       */
-      public Builder setPointPer(int value) {
-        bitField0_ |= 0x00000020;
-        pointPer_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 pointPer = 6;</code>
-       */
-      public Builder clearPointPer() {
-        bitField0_ = (bitField0_ & ~0x00000020);
-        pointPer_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // repeated float formula = 7;
-      private java.util.List<java.lang.Float> formula_ = java.util.Collections.emptyList();
-      private void ensureFormulaIsMutable() {
-        if (!((bitField0_ & 0x00000040) == 0x00000040)) {
-          formula_ = new java.util.ArrayList<java.lang.Float>(formula_);
-          bitField0_ |= 0x00000040;
-         }
-      }
-      /**
-       * <code>repeated float formula = 7;</code>
-       */
-      public java.util.List<java.lang.Float>
-          getFormulaList() {
-        return java.util.Collections.unmodifiableList(formula_);
-      }
-      /**
-       * <code>repeated float formula = 7;</code>
-       */
-      public int getFormulaCount() {
-        return formula_.size();
-      }
-      /**
-       * <code>repeated float formula = 7;</code>
-       */
-      public float getFormula(int index) {
-        return formula_.get(index);
-      }
-      /**
-       * <code>repeated float formula = 7;</code>
-       */
-      public Builder setFormula(
-          int index, float value) {
-        ensureFormulaIsMutable();
-        formula_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated float formula = 7;</code>
-       */
-      public Builder addFormula(float value) {
-        ensureFormulaIsMutable();
-        formula_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated float formula = 7;</code>
-       */
-      public Builder addAllFormula(
-          java.lang.Iterable<? extends java.lang.Float> values) {
-        ensureFormulaIsMutable();
-        super.addAll(values, formula_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated float formula = 7;</code>
-       */
-      public Builder clearFormula() {
-        formula_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000040);
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:pbdson.PbStat)
-    }
-
-    static {
-      defaultInstance = new PbStat(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:pbdson.PbStat)
-  }
-
-  public interface PbListUserWeaponOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // repeated .pbdson.PbUserWeapon weapons = 1;
-    /**
-     * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-     */
-    java.util.List<protocol.Pbmethod.PbUserWeapon> 
-        getWeaponsList();
-    /**
-     * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-     */
-    protocol.Pbmethod.PbUserWeapon getWeapons(int index);
-    /**
-     * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-     */
-    int getWeaponsCount();
-    /**
-     * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-     */
-    java.util.List<? extends protocol.Pbmethod.PbUserWeaponOrBuilder> 
-        getWeaponsOrBuilderList();
-    /**
-     * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-     */
-    protocol.Pbmethod.PbUserWeaponOrBuilder getWeaponsOrBuilder(
-        int index);
-  }
-  /**
-   * Protobuf type {@code pbdson.PbListUserWeapon}
-   */
-  public static final class PbListUserWeapon extends
-      com.google.protobuf.GeneratedMessage
-      implements PbListUserWeaponOrBuilder {
-    // Use PbListUserWeapon.newBuilder() to construct.
-    private PbListUserWeapon(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private PbListUserWeapon(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final PbListUserWeapon defaultInstance;
-    public static PbListUserWeapon getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public PbListUserWeapon getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private PbListUserWeapon(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 10: {
-              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-                weapons_ = new java.util.ArrayList<protocol.Pbmethod.PbUserWeapon>();
-                mutable_bitField0_ |= 0x00000001;
-              }
-              weapons_.add(input.readMessage(protocol.Pbmethod.PbUserWeapon.PARSER, extensionRegistry));
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-          weapons_ = java.util.Collections.unmodifiableList(weapons_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return protocol.Pbmethod.internal_static_pbdson_PbListUserWeapon_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return protocol.Pbmethod.internal_static_pbdson_PbListUserWeapon_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              protocol.Pbmethod.PbListUserWeapon.class, protocol.Pbmethod.PbListUserWeapon.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<PbListUserWeapon> PARSER =
-        new com.google.protobuf.AbstractParser<PbListUserWeapon>() {
-      public PbListUserWeapon parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PbListUserWeapon(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<PbListUserWeapon> getParserForType() {
-      return PARSER;
-    }
-
-    // repeated .pbdson.PbUserWeapon weapons = 1;
-    public static final int WEAPONS_FIELD_NUMBER = 1;
-    private java.util.List<protocol.Pbmethod.PbUserWeapon> weapons_;
-    /**
-     * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-     */
-    public java.util.List<protocol.Pbmethod.PbUserWeapon> getWeaponsList() {
-      return weapons_;
-    }
-    /**
-     * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-     */
-    public java.util.List<? extends protocol.Pbmethod.PbUserWeaponOrBuilder> 
-        getWeaponsOrBuilderList() {
-      return weapons_;
-    }
-    /**
-     * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-     */
-    public int getWeaponsCount() {
-      return weapons_.size();
-    }
-    /**
-     * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-     */
-    public protocol.Pbmethod.PbUserWeapon getWeapons(int index) {
-      return weapons_.get(index);
-    }
-    /**
-     * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-     */
-    public protocol.Pbmethod.PbUserWeaponOrBuilder getWeaponsOrBuilder(
-        int index) {
-      return weapons_.get(index);
-    }
-
-    private void initFields() {
-      weapons_ = java.util.Collections.emptyList();
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      for (int i = 0; i < weapons_.size(); i++) {
-        output.writeMessage(1, weapons_.get(i));
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      for (int i = 0; i < weapons_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, weapons_.get(i));
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static protocol.Pbmethod.PbListUserWeapon parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbListUserWeapon parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbListUserWeapon parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbListUserWeapon parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbListUserWeapon parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbListUserWeapon parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbListUserWeapon parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static protocol.Pbmethod.PbListUserWeapon parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbListUserWeapon parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbListUserWeapon parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(protocol.Pbmethod.PbListUserWeapon prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code pbdson.PbListUserWeapon}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements protocol.Pbmethod.PbListUserWeaponOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return protocol.Pbmethod.internal_static_pbdson_PbListUserWeapon_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return protocol.Pbmethod.internal_static_pbdson_PbListUserWeapon_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                protocol.Pbmethod.PbListUserWeapon.class, protocol.Pbmethod.PbListUserWeapon.Builder.class);
-      }
-
-      // Construct using protocol.Pbmethod.PbListUserWeapon.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getWeaponsFieldBuilder();
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        if (weaponsBuilder_ == null) {
-          weapons_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
-        } else {
-          weaponsBuilder_.clear();
-        }
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return protocol.Pbmethod.internal_static_pbdson_PbListUserWeapon_descriptor;
-      }
-
-      public protocol.Pbmethod.PbListUserWeapon getDefaultInstanceForType() {
-        return protocol.Pbmethod.PbListUserWeapon.getDefaultInstance();
-      }
-
-      public protocol.Pbmethod.PbListUserWeapon build() {
-        protocol.Pbmethod.PbListUserWeapon result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public protocol.Pbmethod.PbListUserWeapon buildPartial() {
-        protocol.Pbmethod.PbListUserWeapon result = new protocol.Pbmethod.PbListUserWeapon(this);
-        int from_bitField0_ = bitField0_;
-        if (weaponsBuilder_ == null) {
-          if (((bitField0_ & 0x00000001) == 0x00000001)) {
-            weapons_ = java.util.Collections.unmodifiableList(weapons_);
-            bitField0_ = (bitField0_ & ~0x00000001);
-          }
-          result.weapons_ = weapons_;
-        } else {
-          result.weapons_ = weaponsBuilder_.build();
-        }
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof protocol.Pbmethod.PbListUserWeapon) {
-          return mergeFrom((protocol.Pbmethod.PbListUserWeapon)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(protocol.Pbmethod.PbListUserWeapon other) {
-        if (other == protocol.Pbmethod.PbListUserWeapon.getDefaultInstance()) return this;
-        if (weaponsBuilder_ == null) {
-          if (!other.weapons_.isEmpty()) {
-            if (weapons_.isEmpty()) {
-              weapons_ = other.weapons_;
-              bitField0_ = (bitField0_ & ~0x00000001);
-            } else {
-              ensureWeaponsIsMutable();
-              weapons_.addAll(other.weapons_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.weapons_.isEmpty()) {
-            if (weaponsBuilder_.isEmpty()) {
-              weaponsBuilder_.dispose();
-              weaponsBuilder_ = null;
-              weapons_ = other.weapons_;
-              bitField0_ = (bitField0_ & ~0x00000001);
-              weaponsBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getWeaponsFieldBuilder() : null;
-            } else {
-              weaponsBuilder_.addAllMessages(other.weapons_);
-            }
-          }
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        protocol.Pbmethod.PbListUserWeapon parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (protocol.Pbmethod.PbListUserWeapon) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // repeated .pbdson.PbUserWeapon weapons = 1;
-      private java.util.List<protocol.Pbmethod.PbUserWeapon> weapons_ =
-        java.util.Collections.emptyList();
-      private void ensureWeaponsIsMutable() {
-        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          weapons_ = new java.util.ArrayList<protocol.Pbmethod.PbUserWeapon>(weapons_);
-          bitField0_ |= 0x00000001;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbUserWeapon, protocol.Pbmethod.PbUserWeapon.Builder, protocol.Pbmethod.PbUserWeaponOrBuilder> weaponsBuilder_;
-
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbUserWeapon> getWeaponsList() {
-        if (weaponsBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(weapons_);
-        } else {
-          return weaponsBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-       */
-      public int getWeaponsCount() {
-        if (weaponsBuilder_ == null) {
-          return weapons_.size();
-        } else {
-          return weaponsBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-       */
-      public protocol.Pbmethod.PbUserWeapon getWeapons(int index) {
-        if (weaponsBuilder_ == null) {
-          return weapons_.get(index);
-        } else {
-          return weaponsBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-       */
-      public Builder setWeapons(
-          int index, protocol.Pbmethod.PbUserWeapon value) {
-        if (weaponsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureWeaponsIsMutable();
-          weapons_.set(index, value);
-          onChanged();
-        } else {
-          weaponsBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-       */
-      public Builder setWeapons(
-          int index, protocol.Pbmethod.PbUserWeapon.Builder builderForValue) {
-        if (weaponsBuilder_ == null) {
-          ensureWeaponsIsMutable();
-          weapons_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          weaponsBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-       */
-      public Builder addWeapons(protocol.Pbmethod.PbUserWeapon value) {
-        if (weaponsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureWeaponsIsMutable();
-          weapons_.add(value);
-          onChanged();
-        } else {
-          weaponsBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-       */
-      public Builder addWeapons(
-          int index, protocol.Pbmethod.PbUserWeapon value) {
-        if (weaponsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureWeaponsIsMutable();
-          weapons_.add(index, value);
-          onChanged();
-        } else {
-          weaponsBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-       */
-      public Builder addWeapons(
-          protocol.Pbmethod.PbUserWeapon.Builder builderForValue) {
-        if (weaponsBuilder_ == null) {
-          ensureWeaponsIsMutable();
-          weapons_.add(builderForValue.build());
-          onChanged();
-        } else {
-          weaponsBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-       */
-      public Builder addWeapons(
-          int index, protocol.Pbmethod.PbUserWeapon.Builder builderForValue) {
-        if (weaponsBuilder_ == null) {
-          ensureWeaponsIsMutable();
-          weapons_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          weaponsBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-       */
-      public Builder addAllWeapons(
-          java.lang.Iterable<? extends protocol.Pbmethod.PbUserWeapon> values) {
-        if (weaponsBuilder_ == null) {
-          ensureWeaponsIsMutable();
-          super.addAll(values, weapons_);
-          onChanged();
-        } else {
-          weaponsBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-       */
-      public Builder clearWeapons() {
-        if (weaponsBuilder_ == null) {
-          weapons_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
-          onChanged();
-        } else {
-          weaponsBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-       */
-      public Builder removeWeapons(int index) {
-        if (weaponsBuilder_ == null) {
-          ensureWeaponsIsMutable();
-          weapons_.remove(index);
-          onChanged();
-        } else {
-          weaponsBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-       */
-      public protocol.Pbmethod.PbUserWeapon.Builder getWeaponsBuilder(
-          int index) {
-        return getWeaponsFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-       */
-      public protocol.Pbmethod.PbUserWeaponOrBuilder getWeaponsOrBuilder(
-          int index) {
-        if (weaponsBuilder_ == null) {
-          return weapons_.get(index);  } else {
-          return weaponsBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-       */
-      public java.util.List<? extends protocol.Pbmethod.PbUserWeaponOrBuilder> 
-           getWeaponsOrBuilderList() {
-        if (weaponsBuilder_ != null) {
-          return weaponsBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(weapons_);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-       */
-      public protocol.Pbmethod.PbUserWeapon.Builder addWeaponsBuilder() {
-        return getWeaponsFieldBuilder().addBuilder(
-            protocol.Pbmethod.PbUserWeapon.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-       */
-      public protocol.Pbmethod.PbUserWeapon.Builder addWeaponsBuilder(
-          int index) {
-        return getWeaponsFieldBuilder().addBuilder(
-            index, protocol.Pbmethod.PbUserWeapon.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbUserWeapon weapons = 1;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbUserWeapon.Builder> 
-           getWeaponsBuilderList() {
-        return getWeaponsFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbUserWeapon, protocol.Pbmethod.PbUserWeapon.Builder, protocol.Pbmethod.PbUserWeaponOrBuilder> 
-          getWeaponsFieldBuilder() {
-        if (weaponsBuilder_ == null) {
-          weaponsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              protocol.Pbmethod.PbUserWeapon, protocol.Pbmethod.PbUserWeapon.Builder, protocol.Pbmethod.PbUserWeaponOrBuilder>(
-                  weapons_,
-                  ((bitField0_ & 0x00000001) == 0x00000001),
-                  getParentForChildren(),
-                  isClean());
-          weapons_ = null;
-        }
-        return weaponsBuilder_;
-      }
-
-      // @@protoc_insertion_point(builder_scope:pbdson.PbListUserWeapon)
-    }
-
-    static {
-      defaultInstance = new PbListUserWeapon(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:pbdson.PbListUserWeapon)
-  }
-
-  public interface PbUserWeaponOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // optional int32 id = 1;
-    /**
-     * <code>optional int32 id = 1;</code>
-     */
-    boolean hasId();
-    /**
-     * <code>optional int32 id = 1;</code>
-     */
-    int getId();
-
-    // optional int32 level = 2;
-    /**
-     * <code>optional int32 level = 2;</code>
-     */
-    boolean hasLevel();
-    /**
-     * <code>optional int32 level = 2;</code>
-     */
-    int getLevel();
-
-    // optional int32 number = 3;
-    /**
-     * <code>optional int32 number = 3;</code>
-     */
-    boolean hasNumber();
-    /**
-     * <code>optional int32 number = 3;</code>
-     */
-    int getNumber();
-
-    // optional int32 isEquid = 4;
-    /**
-     * <code>optional int32 isEquid = 4;</code>
-     */
-    boolean hasIsEquid();
-    /**
-     * <code>optional int32 isEquid = 4;</code>
-     */
-    int getIsEquid();
-
-    // optional float timeCd = 5;
-    /**
-     * <code>optional float timeCd = 5;</code>
-     */
-    boolean hasTimeCd();
-    /**
-     * <code>optional float timeCd = 5;</code>
-     */
-    float getTimeCd();
-
-    // optional int32 bless = 6;
-    /**
-     * <code>optional int32 bless = 6;</code>
-     */
-    boolean hasBless();
-    /**
-     * <code>optional int32 bless = 6;</code>
-     */
-    int getBless();
-  }
-  /**
-   * Protobuf type {@code pbdson.PbUserWeapon}
-   */
-  public static final class PbUserWeapon extends
-      com.google.protobuf.GeneratedMessage
-      implements PbUserWeaponOrBuilder {
-    // Use PbUserWeapon.newBuilder() to construct.
-    private PbUserWeapon(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private PbUserWeapon(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final PbUserWeapon defaultInstance;
-    public static PbUserWeapon getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public PbUserWeapon getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private PbUserWeapon(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-              bitField0_ |= 0x00000001;
-              id_ = input.readInt32();
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              level_ = input.readInt32();
-              break;
-            }
-            case 24: {
-              bitField0_ |= 0x00000004;
-              number_ = input.readInt32();
-              break;
-            }
-            case 32: {
-              bitField0_ |= 0x00000008;
-              isEquid_ = input.readInt32();
-              break;
-            }
-            case 45: {
-              bitField0_ |= 0x00000010;
-              timeCd_ = input.readFloat();
-              break;
-            }
-            case 48: {
-              bitField0_ |= 0x00000020;
-              bless_ = input.readInt32();
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return protocol.Pbmethod.internal_static_pbdson_PbUserWeapon_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return protocol.Pbmethod.internal_static_pbdson_PbUserWeapon_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              protocol.Pbmethod.PbUserWeapon.class, protocol.Pbmethod.PbUserWeapon.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<PbUserWeapon> PARSER =
-        new com.google.protobuf.AbstractParser<PbUserWeapon>() {
-      public PbUserWeapon parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PbUserWeapon(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<PbUserWeapon> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    // optional int32 id = 1;
-    public static final int ID_FIELD_NUMBER = 1;
-    private int id_;
-    /**
-     * <code>optional int32 id = 1;</code>
-     */
-    public boolean hasId() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>optional int32 id = 1;</code>
-     */
-    public int getId() {
-      return id_;
-    }
-
-    // optional int32 level = 2;
-    public static final int LEVEL_FIELD_NUMBER = 2;
-    private int level_;
-    /**
-     * <code>optional int32 level = 2;</code>
-     */
-    public boolean hasLevel() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>optional int32 level = 2;</code>
-     */
-    public int getLevel() {
-      return level_;
-    }
-
-    // optional int32 number = 3;
-    public static final int NUMBER_FIELD_NUMBER = 3;
-    private int number_;
-    /**
-     * <code>optional int32 number = 3;</code>
-     */
-    public boolean hasNumber() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>optional int32 number = 3;</code>
-     */
-    public int getNumber() {
-      return number_;
-    }
-
-    // optional int32 isEquid = 4;
-    public static final int ISEQUID_FIELD_NUMBER = 4;
-    private int isEquid_;
-    /**
-     * <code>optional int32 isEquid = 4;</code>
-     */
-    public boolean hasIsEquid() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>optional int32 isEquid = 4;</code>
-     */
-    public int getIsEquid() {
-      return isEquid_;
-    }
-
-    // optional float timeCd = 5;
-    public static final int TIMECD_FIELD_NUMBER = 5;
-    private float timeCd_;
-    /**
-     * <code>optional float timeCd = 5;</code>
-     */
-    public boolean hasTimeCd() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    /**
-     * <code>optional float timeCd = 5;</code>
-     */
-    public float getTimeCd() {
-      return timeCd_;
-    }
-
-    // optional int32 bless = 6;
-    public static final int BLESS_FIELD_NUMBER = 6;
-    private int bless_;
-    /**
-     * <code>optional int32 bless = 6;</code>
-     */
-    public boolean hasBless() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
-    }
-    /**
-     * <code>optional int32 bless = 6;</code>
-     */
-    public int getBless() {
-      return bless_;
-    }
-
-    private void initFields() {
-      id_ = 0;
-      level_ = 0;
-      number_ = 0;
-      isEquid_ = 0;
-      timeCd_ = 0F;
-      bless_ = 0;
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(1, id_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt32(2, level_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeInt32(3, number_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeInt32(4, isEquid_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeFloat(5, timeCd_);
-      }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeInt32(6, bless_);
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, id_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, level_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, number_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(4, isEquid_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeFloatSize(5, timeCd_);
-      }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(6, bless_);
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static protocol.Pbmethod.PbUserWeapon parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbUserWeapon parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbUserWeapon parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbUserWeapon parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbUserWeapon parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbUserWeapon parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbUserWeapon parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static protocol.Pbmethod.PbUserWeapon parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbUserWeapon parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbUserWeapon parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(protocol.Pbmethod.PbUserWeapon prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code pbdson.PbUserWeapon}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements protocol.Pbmethod.PbUserWeaponOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return protocol.Pbmethod.internal_static_pbdson_PbUserWeapon_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return protocol.Pbmethod.internal_static_pbdson_PbUserWeapon_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                protocol.Pbmethod.PbUserWeapon.class, protocol.Pbmethod.PbUserWeapon.Builder.class);
-      }
-
-      // Construct using protocol.Pbmethod.PbUserWeapon.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        id_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        level_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        number_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000004);
-        isEquid_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000008);
-        timeCd_ = 0F;
-        bitField0_ = (bitField0_ & ~0x00000010);
-        bless_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000020);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return protocol.Pbmethod.internal_static_pbdson_PbUserWeapon_descriptor;
-      }
-
-      public protocol.Pbmethod.PbUserWeapon getDefaultInstanceForType() {
-        return protocol.Pbmethod.PbUserWeapon.getDefaultInstance();
-      }
-
-      public protocol.Pbmethod.PbUserWeapon build() {
-        protocol.Pbmethod.PbUserWeapon result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public protocol.Pbmethod.PbUserWeapon buildPartial() {
-        protocol.Pbmethod.PbUserWeapon result = new protocol.Pbmethod.PbUserWeapon(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.id_ = id_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.level_ = level_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.number_ = number_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.isEquid_ = isEquid_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        result.timeCd_ = timeCd_;
-        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
-          to_bitField0_ |= 0x00000020;
-        }
-        result.bless_ = bless_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof protocol.Pbmethod.PbUserWeapon) {
-          return mergeFrom((protocol.Pbmethod.PbUserWeapon)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(protocol.Pbmethod.PbUserWeapon other) {
-        if (other == protocol.Pbmethod.PbUserWeapon.getDefaultInstance()) return this;
-        if (other.hasId()) {
-          setId(other.getId());
-        }
-        if (other.hasLevel()) {
-          setLevel(other.getLevel());
-        }
-        if (other.hasNumber()) {
-          setNumber(other.getNumber());
-        }
-        if (other.hasIsEquid()) {
-          setIsEquid(other.getIsEquid());
-        }
-        if (other.hasTimeCd()) {
-          setTimeCd(other.getTimeCd());
-        }
-        if (other.hasBless()) {
-          setBless(other.getBless());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        protocol.Pbmethod.PbUserWeapon parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (protocol.Pbmethod.PbUserWeapon) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // optional int32 id = 1;
-      private int id_ ;
-      /**
-       * <code>optional int32 id = 1;</code>
-       */
-      public boolean hasId() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>optional int32 id = 1;</code>
-       */
-      public int getId() {
-        return id_;
-      }
-      /**
-       * <code>optional int32 id = 1;</code>
-       */
-      public Builder setId(int value) {
-        bitField0_ |= 0x00000001;
-        id_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 id = 1;</code>
-       */
-      public Builder clearId() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        id_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 level = 2;
-      private int level_ ;
-      /**
-       * <code>optional int32 level = 2;</code>
-       */
-      public boolean hasLevel() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>optional int32 level = 2;</code>
-       */
-      public int getLevel() {
-        return level_;
-      }
-      /**
-       * <code>optional int32 level = 2;</code>
-       */
-      public Builder setLevel(int value) {
-        bitField0_ |= 0x00000002;
-        level_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 level = 2;</code>
-       */
-      public Builder clearLevel() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        level_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 number = 3;
-      private int number_ ;
-      /**
-       * <code>optional int32 number = 3;</code>
-       */
-      public boolean hasNumber() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional int32 number = 3;</code>
-       */
-      public int getNumber() {
-        return number_;
-      }
-      /**
-       * <code>optional int32 number = 3;</code>
-       */
-      public Builder setNumber(int value) {
-        bitField0_ |= 0x00000004;
-        number_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 number = 3;</code>
-       */
-      public Builder clearNumber() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        number_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 isEquid = 4;
-      private int isEquid_ ;
-      /**
-       * <code>optional int32 isEquid = 4;</code>
-       */
-      public boolean hasIsEquid() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      /**
-       * <code>optional int32 isEquid = 4;</code>
-       */
-      public int getIsEquid() {
-        return isEquid_;
-      }
-      /**
-       * <code>optional int32 isEquid = 4;</code>
-       */
-      public Builder setIsEquid(int value) {
-        bitField0_ |= 0x00000008;
-        isEquid_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 isEquid = 4;</code>
-       */
-      public Builder clearIsEquid() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        isEquid_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional float timeCd = 5;
-      private float timeCd_ ;
-      /**
-       * <code>optional float timeCd = 5;</code>
-       */
-      public boolean hasTimeCd() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      /**
-       * <code>optional float timeCd = 5;</code>
-       */
-      public float getTimeCd() {
-        return timeCd_;
-      }
-      /**
-       * <code>optional float timeCd = 5;</code>
-       */
-      public Builder setTimeCd(float value) {
-        bitField0_ |= 0x00000010;
-        timeCd_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional float timeCd = 5;</code>
-       */
-      public Builder clearTimeCd() {
-        bitField0_ = (bitField0_ & ~0x00000010);
-        timeCd_ = 0F;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 bless = 6;
-      private int bless_ ;
-      /**
-       * <code>optional int32 bless = 6;</code>
-       */
-      public boolean hasBless() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
-      }
-      /**
-       * <code>optional int32 bless = 6;</code>
-       */
-      public int getBless() {
-        return bless_;
-      }
-      /**
-       * <code>optional int32 bless = 6;</code>
-       */
-      public Builder setBless(int value) {
-        bitField0_ |= 0x00000020;
-        bless_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 bless = 6;</code>
-       */
-      public Builder clearBless() {
-        bitField0_ = (bitField0_ & ~0x00000020);
-        bless_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:pbdson.PbUserWeapon)
-    }
-
-    static {
-      defaultInstance = new PbUserWeapon(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:pbdson.PbUserWeapon)
   }
 
   public interface ListActionOrBuilder
@@ -58587,19 +42212,19 @@ public final class Pbmethod {
      */
     int getAItem(int index);
 
-    // repeated int32 point = 6;
+    // repeated int64 point = 6;
     /**
-     * <code>repeated int32 point = 6;</code>
+     * <code>repeated int64 point = 6;</code>
      */
-    java.util.List<java.lang.Integer> getPointList();
+    java.util.List<java.lang.Long> getPointList();
     /**
-     * <code>repeated int32 point = 6;</code>
+     * <code>repeated int64 point = 6;</code>
      */
     int getPointCount();
     /**
-     * <code>repeated int32 point = 6;</code>
+     * <code>repeated int64 point = 6;</code>
      */
-    int getPoint(int index);
+    long getPoint(int index);
   }
   /**
    * Protobuf type {@code pbdson.PbCharacterInfo}
@@ -58711,21 +42336,21 @@ public final class Pbmethod {
             }
             case 48: {
               if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
-                point_ = new java.util.ArrayList<java.lang.Integer>();
+                point_ = new java.util.ArrayList<java.lang.Long>();
                 mutable_bitField0_ |= 0x00000020;
               }
-              point_.add(input.readInt32());
+              point_.add(input.readInt64());
               break;
             }
             case 50: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
               if (!((mutable_bitField0_ & 0x00000020) == 0x00000020) && input.getBytesUntilLimit() > 0) {
-                point_ = new java.util.ArrayList<java.lang.Integer>();
+                point_ = new java.util.ArrayList<java.lang.Long>();
                 mutable_bitField0_ |= 0x00000020;
               }
               while (input.getBytesUntilLimit() > 0) {
-                point_.add(input.readInt32());
+                point_.add(input.readInt64());
               }
               input.popLimit(limit);
               break;
@@ -58900,26 +42525,26 @@ public final class Pbmethod {
       return aItem_.get(index);
     }
 
-    // repeated int32 point = 6;
+    // repeated int64 point = 6;
     public static final int POINT_FIELD_NUMBER = 6;
-    private java.util.List<java.lang.Integer> point_;
+    private java.util.List<java.lang.Long> point_;
     /**
-     * <code>repeated int32 point = 6;</code>
+     * <code>repeated int64 point = 6;</code>
      */
-    public java.util.List<java.lang.Integer>
+    public java.util.List<java.lang.Long>
         getPointList() {
       return point_;
     }
     /**
-     * <code>repeated int32 point = 6;</code>
+     * <code>repeated int64 point = 6;</code>
      */
     public int getPointCount() {
       return point_.size();
     }
     /**
-     * <code>repeated int32 point = 6;</code>
+     * <code>repeated int64 point = 6;</code>
      */
-    public int getPoint(int index) {
+    public long getPoint(int index) {
       return point_.get(index);
     }
 
@@ -58959,7 +42584,7 @@ public final class Pbmethod {
         output.writeInt32(5, aItem_.get(i));
       }
       for (int i = 0; i < point_.size(); i++) {
-        output.writeInt32(6, point_.get(i));
+        output.writeInt64(6, point_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -59004,7 +42629,7 @@ public final class Pbmethod {
         int dataSize = 0;
         for (int i = 0; i < point_.size(); i++) {
           dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(point_.get(i));
+            .computeInt64SizeNoTag(point_.get(i));
         }
         size += dataSize;
         size += 1 * getPointList().size();
@@ -59548,64 +43173,64 @@ public final class Pbmethod {
         return this;
       }
 
-      // repeated int32 point = 6;
-      private java.util.List<java.lang.Integer> point_ = java.util.Collections.emptyList();
+      // repeated int64 point = 6;
+      private java.util.List<java.lang.Long> point_ = java.util.Collections.emptyList();
       private void ensurePointIsMutable() {
         if (!((bitField0_ & 0x00000020) == 0x00000020)) {
-          point_ = new java.util.ArrayList<java.lang.Integer>(point_);
+          point_ = new java.util.ArrayList<java.lang.Long>(point_);
           bitField0_ |= 0x00000020;
          }
       }
       /**
-       * <code>repeated int32 point = 6;</code>
+       * <code>repeated int64 point = 6;</code>
        */
-      public java.util.List<java.lang.Integer>
+      public java.util.List<java.lang.Long>
           getPointList() {
         return java.util.Collections.unmodifiableList(point_);
       }
       /**
-       * <code>repeated int32 point = 6;</code>
+       * <code>repeated int64 point = 6;</code>
        */
       public int getPointCount() {
         return point_.size();
       }
       /**
-       * <code>repeated int32 point = 6;</code>
+       * <code>repeated int64 point = 6;</code>
        */
-      public int getPoint(int index) {
+      public long getPoint(int index) {
         return point_.get(index);
       }
       /**
-       * <code>repeated int32 point = 6;</code>
+       * <code>repeated int64 point = 6;</code>
        */
       public Builder setPoint(
-          int index, int value) {
+          int index, long value) {
         ensurePointIsMutable();
         point_.set(index, value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 point = 6;</code>
+       * <code>repeated int64 point = 6;</code>
        */
-      public Builder addPoint(int value) {
+      public Builder addPoint(long value) {
         ensurePointIsMutable();
         point_.add(value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 point = 6;</code>
+       * <code>repeated int64 point = 6;</code>
        */
       public Builder addAllPoint(
-          java.lang.Iterable<? extends java.lang.Integer> values) {
+          java.lang.Iterable<? extends java.lang.Long> values) {
         ensurePointIsMutable();
         super.addAll(values, point_);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 point = 6;</code>
+       * <code>repeated int64 point = 6;</code>
        */
       public Builder clearPoint() {
         point_ = java.util.Collections.emptyList();
@@ -86603,15 +70228,15 @@ public final class Pbmethod {
     com.google.protobuf.ByteString
         getNameBytes();
 
-    // optional int32 point = 3;
+    // optional int64 point = 3;
     /**
-     * <code>optional int32 point = 3;</code>
+     * <code>optional int64 point = 3;</code>
      */
     boolean hasPoint();
     /**
-     * <code>optional int32 point = 3;</code>
+     * <code>optional int64 point = 3;</code>
      */
-    int getPoint();
+    long getPoint();
 
     // repeated int64 bonus = 4;
     /**
@@ -86700,7 +70325,7 @@ public final class Pbmethod {
             }
             case 24: {
               bitField0_ |= 0x00000004;
-              point_ = input.readInt32();
+              point_ = input.readInt64();
               break;
             }
             case 32: {
@@ -86831,19 +70456,19 @@ public final class Pbmethod {
       }
     }
 
-    // optional int32 point = 3;
+    // optional int64 point = 3;
     public static final int POINT_FIELD_NUMBER = 3;
-    private int point_;
+    private long point_;
     /**
-     * <code>optional int32 point = 3;</code>
+     * <code>optional int64 point = 3;</code>
      */
     public boolean hasPoint() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>optional int32 point = 3;</code>
+     * <code>optional int64 point = 3;</code>
      */
-    public int getPoint() {
+    public long getPoint() {
       return point_;
     }
 
@@ -86889,7 +70514,7 @@ public final class Pbmethod {
     private void initFields() {
       id_ = 0;
       name_ = "";
-      point_ = 0;
+      point_ = 0L;
       bonus_ = java.util.Collections.emptyList();
       status_ = 0;
     }
@@ -86912,7 +70537,7 @@ public final class Pbmethod {
         output.writeBytes(2, getNameBytes());
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeInt32(3, point_);
+        output.writeInt64(3, point_);
       }
       for (int i = 0; i < bonus_.size(); i++) {
         output.writeInt64(4, bonus_.get(i));
@@ -86939,7 +70564,7 @@ public final class Pbmethod {
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, point_);
+          .computeInt64Size(3, point_);
       }
       {
         int dataSize = 0;
@@ -87074,7 +70699,7 @@ public final class Pbmethod {
         bitField0_ = (bitField0_ & ~0x00000001);
         name_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
-        point_ = 0;
+        point_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000004);
         bonus_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000008);
@@ -87303,35 +70928,35 @@ public final class Pbmethod {
         return this;
       }
 
-      // optional int32 point = 3;
-      private int point_ ;
+      // optional int64 point = 3;
+      private long point_ ;
       /**
-       * <code>optional int32 point = 3;</code>
+       * <code>optional int64 point = 3;</code>
        */
       public boolean hasPoint() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>optional int32 point = 3;</code>
+       * <code>optional int64 point = 3;</code>
        */
-      public int getPoint() {
+      public long getPoint() {
         return point_;
       }
       /**
-       * <code>optional int32 point = 3;</code>
+       * <code>optional int64 point = 3;</code>
        */
-      public Builder setPoint(int value) {
+      public Builder setPoint(long value) {
         bitField0_ |= 0x00000004;
         point_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int32 point = 3;</code>
+       * <code>optional int64 point = 3;</code>
        */
       public Builder clearPoint() {
         bitField0_ = (bitField0_ & ~0x00000004);
-        point_ = 0;
+        point_ = 0L;
         onChanged();
         return this;
       }
@@ -93509,5326 +77134,6 @@ public final class Pbmethod {
     // @@protoc_insertion_point(class_scope:pbdson.PpIAP)
   }
 
-  public interface PbBattleArenaOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // repeated int32 mapInfo = 1;
-    /**
-     * <code>repeated int32 mapInfo = 1;</code>
-     */
-    java.util.List<java.lang.Integer> getMapInfoList();
-    /**
-     * <code>repeated int32 mapInfo = 1;</code>
-     */
-    int getMapInfoCount();
-    /**
-     * <code>repeated int32 mapInfo = 1;</code>
-     */
-    int getMapInfo(int index);
-
-    // optional .pbdson.PbBattleArenaUserInfo myInfo = 2;
-    /**
-     * <code>optional .pbdson.PbBattleArenaUserInfo myInfo = 2;</code>
-     */
-    boolean hasMyInfo();
-    /**
-     * <code>optional .pbdson.PbBattleArenaUserInfo myInfo = 2;</code>
-     */
-    protocol.Pbmethod.PbBattleArenaUserInfo getMyInfo();
-    /**
-     * <code>optional .pbdson.PbBattleArenaUserInfo myInfo = 2;</code>
-     */
-    protocol.Pbmethod.PbBattleArenaUserInfoOrBuilder getMyInfoOrBuilder();
-
-    // optional .pbdson.PbBattleArenaUserInfo oppInfo = 3;
-    /**
-     * <code>optional .pbdson.PbBattleArenaUserInfo oppInfo = 3;</code>
-     */
-    boolean hasOppInfo();
-    /**
-     * <code>optional .pbdson.PbBattleArenaUserInfo oppInfo = 3;</code>
-     */
-    protocol.Pbmethod.PbBattleArenaUserInfo getOppInfo();
-    /**
-     * <code>optional .pbdson.PbBattleArenaUserInfo oppInfo = 3;</code>
-     */
-    protocol.Pbmethod.PbBattleArenaUserInfoOrBuilder getOppInfoOrBuilder();
-
-    // optional .pbdson.PbBattleListArenaHero myTeam = 4;
-    /**
-     * <code>optional .pbdson.PbBattleListArenaHero myTeam = 4;</code>
-     */
-    boolean hasMyTeam();
-    /**
-     * <code>optional .pbdson.PbBattleListArenaHero myTeam = 4;</code>
-     */
-    protocol.Pbmethod.PbBattleListArenaHero getMyTeam();
-    /**
-     * <code>optional .pbdson.PbBattleListArenaHero myTeam = 4;</code>
-     */
-    protocol.Pbmethod.PbBattleListArenaHeroOrBuilder getMyTeamOrBuilder();
-
-    // optional .pbdson.PbBattleListArenaHero oppTeam = 5;
-    /**
-     * <code>optional .pbdson.PbBattleListArenaHero oppTeam = 5;</code>
-     */
-    boolean hasOppTeam();
-    /**
-     * <code>optional .pbdson.PbBattleListArenaHero oppTeam = 5;</code>
-     */
-    protocol.Pbmethod.PbBattleListArenaHero getOppTeam();
-    /**
-     * <code>optional .pbdson.PbBattleListArenaHero oppTeam = 5;</code>
-     */
-    protocol.Pbmethod.PbBattleListArenaHeroOrBuilder getOppTeamOrBuilder();
-
-    // optional int32 time = 6;
-    /**
-     * <code>optional int32 time = 6;</code>
-     */
-    boolean hasTime();
-    /**
-     * <code>optional int32 time = 6;</code>
-     */
-    int getTime();
-  }
-  /**
-   * Protobuf type {@code pbdson.PbBattleArena}
-   */
-  public static final class PbBattleArena extends
-      com.google.protobuf.GeneratedMessage
-      implements PbBattleArenaOrBuilder {
-    // Use PbBattleArena.newBuilder() to construct.
-    private PbBattleArena(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private PbBattleArena(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final PbBattleArena defaultInstance;
-    public static PbBattleArena getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public PbBattleArena getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private PbBattleArena(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-                mapInfo_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000001;
-              }
-              mapInfo_.add(input.readInt32());
-              break;
-            }
-            case 10: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001) && input.getBytesUntilLimit() > 0) {
-                mapInfo_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000001;
-              }
-              while (input.getBytesUntilLimit() > 0) {
-                mapInfo_.add(input.readInt32());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 18: {
-              protocol.Pbmethod.PbBattleArenaUserInfo.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000001) == 0x00000001)) {
-                subBuilder = myInfo_.toBuilder();
-              }
-              myInfo_ = input.readMessage(protocol.Pbmethod.PbBattleArenaUserInfo.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(myInfo_);
-                myInfo_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000001;
-              break;
-            }
-            case 26: {
-              protocol.Pbmethod.PbBattleArenaUserInfo.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000002) == 0x00000002)) {
-                subBuilder = oppInfo_.toBuilder();
-              }
-              oppInfo_ = input.readMessage(protocol.Pbmethod.PbBattleArenaUserInfo.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(oppInfo_);
-                oppInfo_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000002;
-              break;
-            }
-            case 34: {
-              protocol.Pbmethod.PbBattleListArenaHero.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000004) == 0x00000004)) {
-                subBuilder = myTeam_.toBuilder();
-              }
-              myTeam_ = input.readMessage(protocol.Pbmethod.PbBattleListArenaHero.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(myTeam_);
-                myTeam_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000004;
-              break;
-            }
-            case 42: {
-              protocol.Pbmethod.PbBattleListArenaHero.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000008) == 0x00000008)) {
-                subBuilder = oppTeam_.toBuilder();
-              }
-              oppTeam_ = input.readMessage(protocol.Pbmethod.PbBattleListArenaHero.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(oppTeam_);
-                oppTeam_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000008;
-              break;
-            }
-            case 48: {
-              bitField0_ |= 0x00000010;
-              time_ = input.readInt32();
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-          mapInfo_ = java.util.Collections.unmodifiableList(mapInfo_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return protocol.Pbmethod.internal_static_pbdson_PbBattleArena_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return protocol.Pbmethod.internal_static_pbdson_PbBattleArena_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              protocol.Pbmethod.PbBattleArena.class, protocol.Pbmethod.PbBattleArena.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<PbBattleArena> PARSER =
-        new com.google.protobuf.AbstractParser<PbBattleArena>() {
-      public PbBattleArena parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PbBattleArena(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<PbBattleArena> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    // repeated int32 mapInfo = 1;
-    public static final int MAPINFO_FIELD_NUMBER = 1;
-    private java.util.List<java.lang.Integer> mapInfo_;
-    /**
-     * <code>repeated int32 mapInfo = 1;</code>
-     */
-    public java.util.List<java.lang.Integer>
-        getMapInfoList() {
-      return mapInfo_;
-    }
-    /**
-     * <code>repeated int32 mapInfo = 1;</code>
-     */
-    public int getMapInfoCount() {
-      return mapInfo_.size();
-    }
-    /**
-     * <code>repeated int32 mapInfo = 1;</code>
-     */
-    public int getMapInfo(int index) {
-      return mapInfo_.get(index);
-    }
-
-    // optional .pbdson.PbBattleArenaUserInfo myInfo = 2;
-    public static final int MYINFO_FIELD_NUMBER = 2;
-    private protocol.Pbmethod.PbBattleArenaUserInfo myInfo_;
-    /**
-     * <code>optional .pbdson.PbBattleArenaUserInfo myInfo = 2;</code>
-     */
-    public boolean hasMyInfo() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>optional .pbdson.PbBattleArenaUserInfo myInfo = 2;</code>
-     */
-    public protocol.Pbmethod.PbBattleArenaUserInfo getMyInfo() {
-      return myInfo_;
-    }
-    /**
-     * <code>optional .pbdson.PbBattleArenaUserInfo myInfo = 2;</code>
-     */
-    public protocol.Pbmethod.PbBattleArenaUserInfoOrBuilder getMyInfoOrBuilder() {
-      return myInfo_;
-    }
-
-    // optional .pbdson.PbBattleArenaUserInfo oppInfo = 3;
-    public static final int OPPINFO_FIELD_NUMBER = 3;
-    private protocol.Pbmethod.PbBattleArenaUserInfo oppInfo_;
-    /**
-     * <code>optional .pbdson.PbBattleArenaUserInfo oppInfo = 3;</code>
-     */
-    public boolean hasOppInfo() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>optional .pbdson.PbBattleArenaUserInfo oppInfo = 3;</code>
-     */
-    public protocol.Pbmethod.PbBattleArenaUserInfo getOppInfo() {
-      return oppInfo_;
-    }
-    /**
-     * <code>optional .pbdson.PbBattleArenaUserInfo oppInfo = 3;</code>
-     */
-    public protocol.Pbmethod.PbBattleArenaUserInfoOrBuilder getOppInfoOrBuilder() {
-      return oppInfo_;
-    }
-
-    // optional .pbdson.PbBattleListArenaHero myTeam = 4;
-    public static final int MYTEAM_FIELD_NUMBER = 4;
-    private protocol.Pbmethod.PbBattleListArenaHero myTeam_;
-    /**
-     * <code>optional .pbdson.PbBattleListArenaHero myTeam = 4;</code>
-     */
-    public boolean hasMyTeam() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>optional .pbdson.PbBattleListArenaHero myTeam = 4;</code>
-     */
-    public protocol.Pbmethod.PbBattleListArenaHero getMyTeam() {
-      return myTeam_;
-    }
-    /**
-     * <code>optional .pbdson.PbBattleListArenaHero myTeam = 4;</code>
-     */
-    public protocol.Pbmethod.PbBattleListArenaHeroOrBuilder getMyTeamOrBuilder() {
-      return myTeam_;
-    }
-
-    // optional .pbdson.PbBattleListArenaHero oppTeam = 5;
-    public static final int OPPTEAM_FIELD_NUMBER = 5;
-    private protocol.Pbmethod.PbBattleListArenaHero oppTeam_;
-    /**
-     * <code>optional .pbdson.PbBattleListArenaHero oppTeam = 5;</code>
-     */
-    public boolean hasOppTeam() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>optional .pbdson.PbBattleListArenaHero oppTeam = 5;</code>
-     */
-    public protocol.Pbmethod.PbBattleListArenaHero getOppTeam() {
-      return oppTeam_;
-    }
-    /**
-     * <code>optional .pbdson.PbBattleListArenaHero oppTeam = 5;</code>
-     */
-    public protocol.Pbmethod.PbBattleListArenaHeroOrBuilder getOppTeamOrBuilder() {
-      return oppTeam_;
-    }
-
-    // optional int32 time = 6;
-    public static final int TIME_FIELD_NUMBER = 6;
-    private int time_;
-    /**
-     * <code>optional int32 time = 6;</code>
-     */
-    public boolean hasTime() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    /**
-     * <code>optional int32 time = 6;</code>
-     */
-    public int getTime() {
-      return time_;
-    }
-
-    private void initFields() {
-      mapInfo_ = java.util.Collections.emptyList();
-      myInfo_ = protocol.Pbmethod.PbBattleArenaUserInfo.getDefaultInstance();
-      oppInfo_ = protocol.Pbmethod.PbBattleArenaUserInfo.getDefaultInstance();
-      myTeam_ = protocol.Pbmethod.PbBattleListArenaHero.getDefaultInstance();
-      oppTeam_ = protocol.Pbmethod.PbBattleListArenaHero.getDefaultInstance();
-      time_ = 0;
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      for (int i = 0; i < mapInfo_.size(); i++) {
-        output.writeInt32(1, mapInfo_.get(i));
-      }
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeMessage(2, myInfo_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeMessage(3, oppInfo_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeMessage(4, myTeam_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeMessage(5, oppTeam_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeInt32(6, time_);
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      {
-        int dataSize = 0;
-        for (int i = 0; i < mapInfo_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(mapInfo_.get(i));
-        }
-        size += dataSize;
-        size += 1 * getMapInfoList().size();
-      }
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(2, myInfo_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(3, oppInfo_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(4, myTeam_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(5, oppTeam_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(6, time_);
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static protocol.Pbmethod.PbBattleArena parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbBattleArena parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbBattleArena parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbBattleArena parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbBattleArena parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbBattleArena parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbBattleArena parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static protocol.Pbmethod.PbBattleArena parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbBattleArena parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbBattleArena parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(protocol.Pbmethod.PbBattleArena prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code pbdson.PbBattleArena}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements protocol.Pbmethod.PbBattleArenaOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return protocol.Pbmethod.internal_static_pbdson_PbBattleArena_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return protocol.Pbmethod.internal_static_pbdson_PbBattleArena_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                protocol.Pbmethod.PbBattleArena.class, protocol.Pbmethod.PbBattleArena.Builder.class);
-      }
-
-      // Construct using protocol.Pbmethod.PbBattleArena.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getMyInfoFieldBuilder();
-          getOppInfoFieldBuilder();
-          getMyTeamFieldBuilder();
-          getOppTeamFieldBuilder();
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        mapInfo_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000001);
-        if (myInfoBuilder_ == null) {
-          myInfo_ = protocol.Pbmethod.PbBattleArenaUserInfo.getDefaultInstance();
-        } else {
-          myInfoBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000002);
-        if (oppInfoBuilder_ == null) {
-          oppInfo_ = protocol.Pbmethod.PbBattleArenaUserInfo.getDefaultInstance();
-        } else {
-          oppInfoBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000004);
-        if (myTeamBuilder_ == null) {
-          myTeam_ = protocol.Pbmethod.PbBattleListArenaHero.getDefaultInstance();
-        } else {
-          myTeamBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000008);
-        if (oppTeamBuilder_ == null) {
-          oppTeam_ = protocol.Pbmethod.PbBattleListArenaHero.getDefaultInstance();
-        } else {
-          oppTeamBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000010);
-        time_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000020);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return protocol.Pbmethod.internal_static_pbdson_PbBattleArena_descriptor;
-      }
-
-      public protocol.Pbmethod.PbBattleArena getDefaultInstanceForType() {
-        return protocol.Pbmethod.PbBattleArena.getDefaultInstance();
-      }
-
-      public protocol.Pbmethod.PbBattleArena build() {
-        protocol.Pbmethod.PbBattleArena result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public protocol.Pbmethod.PbBattleArena buildPartial() {
-        protocol.Pbmethod.PbBattleArena result = new protocol.Pbmethod.PbBattleArena(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((bitField0_ & 0x00000001) == 0x00000001)) {
-          mapInfo_ = java.util.Collections.unmodifiableList(mapInfo_);
-          bitField0_ = (bitField0_ & ~0x00000001);
-        }
-        result.mapInfo_ = mapInfo_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        if (myInfoBuilder_ == null) {
-          result.myInfo_ = myInfo_;
-        } else {
-          result.myInfo_ = myInfoBuilder_.build();
-        }
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        if (oppInfoBuilder_ == null) {
-          result.oppInfo_ = oppInfo_;
-        } else {
-          result.oppInfo_ = oppInfoBuilder_.build();
-        }
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        if (myTeamBuilder_ == null) {
-          result.myTeam_ = myTeam_;
-        } else {
-          result.myTeam_ = myTeamBuilder_.build();
-        }
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        if (oppTeamBuilder_ == null) {
-          result.oppTeam_ = oppTeam_;
-        } else {
-          result.oppTeam_ = oppTeamBuilder_.build();
-        }
-        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        result.time_ = time_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof protocol.Pbmethod.PbBattleArena) {
-          return mergeFrom((protocol.Pbmethod.PbBattleArena)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(protocol.Pbmethod.PbBattleArena other) {
-        if (other == protocol.Pbmethod.PbBattleArena.getDefaultInstance()) return this;
-        if (!other.mapInfo_.isEmpty()) {
-          if (mapInfo_.isEmpty()) {
-            mapInfo_ = other.mapInfo_;
-            bitField0_ = (bitField0_ & ~0x00000001);
-          } else {
-            ensureMapInfoIsMutable();
-            mapInfo_.addAll(other.mapInfo_);
-          }
-          onChanged();
-        }
-        if (other.hasMyInfo()) {
-          mergeMyInfo(other.getMyInfo());
-        }
-        if (other.hasOppInfo()) {
-          mergeOppInfo(other.getOppInfo());
-        }
-        if (other.hasMyTeam()) {
-          mergeMyTeam(other.getMyTeam());
-        }
-        if (other.hasOppTeam()) {
-          mergeOppTeam(other.getOppTeam());
-        }
-        if (other.hasTime()) {
-          setTime(other.getTime());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        protocol.Pbmethod.PbBattleArena parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (protocol.Pbmethod.PbBattleArena) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // repeated int32 mapInfo = 1;
-      private java.util.List<java.lang.Integer> mapInfo_ = java.util.Collections.emptyList();
-      private void ensureMapInfoIsMutable() {
-        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          mapInfo_ = new java.util.ArrayList<java.lang.Integer>(mapInfo_);
-          bitField0_ |= 0x00000001;
-         }
-      }
-      /**
-       * <code>repeated int32 mapInfo = 1;</code>
-       */
-      public java.util.List<java.lang.Integer>
-          getMapInfoList() {
-        return java.util.Collections.unmodifiableList(mapInfo_);
-      }
-      /**
-       * <code>repeated int32 mapInfo = 1;</code>
-       */
-      public int getMapInfoCount() {
-        return mapInfo_.size();
-      }
-      /**
-       * <code>repeated int32 mapInfo = 1;</code>
-       */
-      public int getMapInfo(int index) {
-        return mapInfo_.get(index);
-      }
-      /**
-       * <code>repeated int32 mapInfo = 1;</code>
-       */
-      public Builder setMapInfo(
-          int index, int value) {
-        ensureMapInfoIsMutable();
-        mapInfo_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 mapInfo = 1;</code>
-       */
-      public Builder addMapInfo(int value) {
-        ensureMapInfoIsMutable();
-        mapInfo_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 mapInfo = 1;</code>
-       */
-      public Builder addAllMapInfo(
-          java.lang.Iterable<? extends java.lang.Integer> values) {
-        ensureMapInfoIsMutable();
-        super.addAll(values, mapInfo_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 mapInfo = 1;</code>
-       */
-      public Builder clearMapInfo() {
-        mapInfo_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000001);
-        onChanged();
-        return this;
-      }
-
-      // optional .pbdson.PbBattleArenaUserInfo myInfo = 2;
-      private protocol.Pbmethod.PbBattleArenaUserInfo myInfo_ = protocol.Pbmethod.PbBattleArenaUserInfo.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
-          protocol.Pbmethod.PbBattleArenaUserInfo, protocol.Pbmethod.PbBattleArenaUserInfo.Builder, protocol.Pbmethod.PbBattleArenaUserInfoOrBuilder> myInfoBuilder_;
-      /**
-       * <code>optional .pbdson.PbBattleArenaUserInfo myInfo = 2;</code>
-       */
-      public boolean hasMyInfo() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>optional .pbdson.PbBattleArenaUserInfo myInfo = 2;</code>
-       */
-      public protocol.Pbmethod.PbBattleArenaUserInfo getMyInfo() {
-        if (myInfoBuilder_ == null) {
-          return myInfo_;
-        } else {
-          return myInfoBuilder_.getMessage();
-        }
-      }
-      /**
-       * <code>optional .pbdson.PbBattleArenaUserInfo myInfo = 2;</code>
-       */
-      public Builder setMyInfo(protocol.Pbmethod.PbBattleArenaUserInfo value) {
-        if (myInfoBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          myInfo_ = value;
-          onChanged();
-        } else {
-          myInfoBuilder_.setMessage(value);
-        }
-        bitField0_ |= 0x00000002;
-        return this;
-      }
-      /**
-       * <code>optional .pbdson.PbBattleArenaUserInfo myInfo = 2;</code>
-       */
-      public Builder setMyInfo(
-          protocol.Pbmethod.PbBattleArenaUserInfo.Builder builderForValue) {
-        if (myInfoBuilder_ == null) {
-          myInfo_ = builderForValue.build();
-          onChanged();
-        } else {
-          myInfoBuilder_.setMessage(builderForValue.build());
-        }
-        bitField0_ |= 0x00000002;
-        return this;
-      }
-      /**
-       * <code>optional .pbdson.PbBattleArenaUserInfo myInfo = 2;</code>
-       */
-      public Builder mergeMyInfo(protocol.Pbmethod.PbBattleArenaUserInfo value) {
-        if (myInfoBuilder_ == null) {
-          if (((bitField0_ & 0x00000002) == 0x00000002) &&
-              myInfo_ != protocol.Pbmethod.PbBattleArenaUserInfo.getDefaultInstance()) {
-            myInfo_ =
-              protocol.Pbmethod.PbBattleArenaUserInfo.newBuilder(myInfo_).mergeFrom(value).buildPartial();
-          } else {
-            myInfo_ = value;
-          }
-          onChanged();
-        } else {
-          myInfoBuilder_.mergeFrom(value);
-        }
-        bitField0_ |= 0x00000002;
-        return this;
-      }
-      /**
-       * <code>optional .pbdson.PbBattleArenaUserInfo myInfo = 2;</code>
-       */
-      public Builder clearMyInfo() {
-        if (myInfoBuilder_ == null) {
-          myInfo_ = protocol.Pbmethod.PbBattleArenaUserInfo.getDefaultInstance();
-          onChanged();
-        } else {
-          myInfoBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000002);
-        return this;
-      }
-      /**
-       * <code>optional .pbdson.PbBattleArenaUserInfo myInfo = 2;</code>
-       */
-      public protocol.Pbmethod.PbBattleArenaUserInfo.Builder getMyInfoBuilder() {
-        bitField0_ |= 0x00000002;
-        onChanged();
-        return getMyInfoFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>optional .pbdson.PbBattleArenaUserInfo myInfo = 2;</code>
-       */
-      public protocol.Pbmethod.PbBattleArenaUserInfoOrBuilder getMyInfoOrBuilder() {
-        if (myInfoBuilder_ != null) {
-          return myInfoBuilder_.getMessageOrBuilder();
-        } else {
-          return myInfo_;
-        }
-      }
-      /**
-       * <code>optional .pbdson.PbBattleArenaUserInfo myInfo = 2;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilder<
-          protocol.Pbmethod.PbBattleArenaUserInfo, protocol.Pbmethod.PbBattleArenaUserInfo.Builder, protocol.Pbmethod.PbBattleArenaUserInfoOrBuilder> 
-          getMyInfoFieldBuilder() {
-        if (myInfoBuilder_ == null) {
-          myInfoBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              protocol.Pbmethod.PbBattleArenaUserInfo, protocol.Pbmethod.PbBattleArenaUserInfo.Builder, protocol.Pbmethod.PbBattleArenaUserInfoOrBuilder>(
-                  myInfo_,
-                  getParentForChildren(),
-                  isClean());
-          myInfo_ = null;
-        }
-        return myInfoBuilder_;
-      }
-
-      // optional .pbdson.PbBattleArenaUserInfo oppInfo = 3;
-      private protocol.Pbmethod.PbBattleArenaUserInfo oppInfo_ = protocol.Pbmethod.PbBattleArenaUserInfo.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
-          protocol.Pbmethod.PbBattleArenaUserInfo, protocol.Pbmethod.PbBattleArenaUserInfo.Builder, protocol.Pbmethod.PbBattleArenaUserInfoOrBuilder> oppInfoBuilder_;
-      /**
-       * <code>optional .pbdson.PbBattleArenaUserInfo oppInfo = 3;</code>
-       */
-      public boolean hasOppInfo() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional .pbdson.PbBattleArenaUserInfo oppInfo = 3;</code>
-       */
-      public protocol.Pbmethod.PbBattleArenaUserInfo getOppInfo() {
-        if (oppInfoBuilder_ == null) {
-          return oppInfo_;
-        } else {
-          return oppInfoBuilder_.getMessage();
-        }
-      }
-      /**
-       * <code>optional .pbdson.PbBattleArenaUserInfo oppInfo = 3;</code>
-       */
-      public Builder setOppInfo(protocol.Pbmethod.PbBattleArenaUserInfo value) {
-        if (oppInfoBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          oppInfo_ = value;
-          onChanged();
-        } else {
-          oppInfoBuilder_.setMessage(value);
-        }
-        bitField0_ |= 0x00000004;
-        return this;
-      }
-      /**
-       * <code>optional .pbdson.PbBattleArenaUserInfo oppInfo = 3;</code>
-       */
-      public Builder setOppInfo(
-          protocol.Pbmethod.PbBattleArenaUserInfo.Builder builderForValue) {
-        if (oppInfoBuilder_ == null) {
-          oppInfo_ = builderForValue.build();
-          onChanged();
-        } else {
-          oppInfoBuilder_.setMessage(builderForValue.build());
-        }
-        bitField0_ |= 0x00000004;
-        return this;
-      }
-      /**
-       * <code>optional .pbdson.PbBattleArenaUserInfo oppInfo = 3;</code>
-       */
-      public Builder mergeOppInfo(protocol.Pbmethod.PbBattleArenaUserInfo value) {
-        if (oppInfoBuilder_ == null) {
-          if (((bitField0_ & 0x00000004) == 0x00000004) &&
-              oppInfo_ != protocol.Pbmethod.PbBattleArenaUserInfo.getDefaultInstance()) {
-            oppInfo_ =
-              protocol.Pbmethod.PbBattleArenaUserInfo.newBuilder(oppInfo_).mergeFrom(value).buildPartial();
-          } else {
-            oppInfo_ = value;
-          }
-          onChanged();
-        } else {
-          oppInfoBuilder_.mergeFrom(value);
-        }
-        bitField0_ |= 0x00000004;
-        return this;
-      }
-      /**
-       * <code>optional .pbdson.PbBattleArenaUserInfo oppInfo = 3;</code>
-       */
-      public Builder clearOppInfo() {
-        if (oppInfoBuilder_ == null) {
-          oppInfo_ = protocol.Pbmethod.PbBattleArenaUserInfo.getDefaultInstance();
-          onChanged();
-        } else {
-          oppInfoBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000004);
-        return this;
-      }
-      /**
-       * <code>optional .pbdson.PbBattleArenaUserInfo oppInfo = 3;</code>
-       */
-      public protocol.Pbmethod.PbBattleArenaUserInfo.Builder getOppInfoBuilder() {
-        bitField0_ |= 0x00000004;
-        onChanged();
-        return getOppInfoFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>optional .pbdson.PbBattleArenaUserInfo oppInfo = 3;</code>
-       */
-      public protocol.Pbmethod.PbBattleArenaUserInfoOrBuilder getOppInfoOrBuilder() {
-        if (oppInfoBuilder_ != null) {
-          return oppInfoBuilder_.getMessageOrBuilder();
-        } else {
-          return oppInfo_;
-        }
-      }
-      /**
-       * <code>optional .pbdson.PbBattleArenaUserInfo oppInfo = 3;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilder<
-          protocol.Pbmethod.PbBattleArenaUserInfo, protocol.Pbmethod.PbBattleArenaUserInfo.Builder, protocol.Pbmethod.PbBattleArenaUserInfoOrBuilder> 
-          getOppInfoFieldBuilder() {
-        if (oppInfoBuilder_ == null) {
-          oppInfoBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              protocol.Pbmethod.PbBattleArenaUserInfo, protocol.Pbmethod.PbBattleArenaUserInfo.Builder, protocol.Pbmethod.PbBattleArenaUserInfoOrBuilder>(
-                  oppInfo_,
-                  getParentForChildren(),
-                  isClean());
-          oppInfo_ = null;
-        }
-        return oppInfoBuilder_;
-      }
-
-      // optional .pbdson.PbBattleListArenaHero myTeam = 4;
-      private protocol.Pbmethod.PbBattleListArenaHero myTeam_ = protocol.Pbmethod.PbBattleListArenaHero.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
-          protocol.Pbmethod.PbBattleListArenaHero, protocol.Pbmethod.PbBattleListArenaHero.Builder, protocol.Pbmethod.PbBattleListArenaHeroOrBuilder> myTeamBuilder_;
-      /**
-       * <code>optional .pbdson.PbBattleListArenaHero myTeam = 4;</code>
-       */
-      public boolean hasMyTeam() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      /**
-       * <code>optional .pbdson.PbBattleListArenaHero myTeam = 4;</code>
-       */
-      public protocol.Pbmethod.PbBattleListArenaHero getMyTeam() {
-        if (myTeamBuilder_ == null) {
-          return myTeam_;
-        } else {
-          return myTeamBuilder_.getMessage();
-        }
-      }
-      /**
-       * <code>optional .pbdson.PbBattleListArenaHero myTeam = 4;</code>
-       */
-      public Builder setMyTeam(protocol.Pbmethod.PbBattleListArenaHero value) {
-        if (myTeamBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          myTeam_ = value;
-          onChanged();
-        } else {
-          myTeamBuilder_.setMessage(value);
-        }
-        bitField0_ |= 0x00000008;
-        return this;
-      }
-      /**
-       * <code>optional .pbdson.PbBattleListArenaHero myTeam = 4;</code>
-       */
-      public Builder setMyTeam(
-          protocol.Pbmethod.PbBattleListArenaHero.Builder builderForValue) {
-        if (myTeamBuilder_ == null) {
-          myTeam_ = builderForValue.build();
-          onChanged();
-        } else {
-          myTeamBuilder_.setMessage(builderForValue.build());
-        }
-        bitField0_ |= 0x00000008;
-        return this;
-      }
-      /**
-       * <code>optional .pbdson.PbBattleListArenaHero myTeam = 4;</code>
-       */
-      public Builder mergeMyTeam(protocol.Pbmethod.PbBattleListArenaHero value) {
-        if (myTeamBuilder_ == null) {
-          if (((bitField0_ & 0x00000008) == 0x00000008) &&
-              myTeam_ != protocol.Pbmethod.PbBattleListArenaHero.getDefaultInstance()) {
-            myTeam_ =
-              protocol.Pbmethod.PbBattleListArenaHero.newBuilder(myTeam_).mergeFrom(value).buildPartial();
-          } else {
-            myTeam_ = value;
-          }
-          onChanged();
-        } else {
-          myTeamBuilder_.mergeFrom(value);
-        }
-        bitField0_ |= 0x00000008;
-        return this;
-      }
-      /**
-       * <code>optional .pbdson.PbBattleListArenaHero myTeam = 4;</code>
-       */
-      public Builder clearMyTeam() {
-        if (myTeamBuilder_ == null) {
-          myTeam_ = protocol.Pbmethod.PbBattleListArenaHero.getDefaultInstance();
-          onChanged();
-        } else {
-          myTeamBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000008);
-        return this;
-      }
-      /**
-       * <code>optional .pbdson.PbBattleListArenaHero myTeam = 4;</code>
-       */
-      public protocol.Pbmethod.PbBattleListArenaHero.Builder getMyTeamBuilder() {
-        bitField0_ |= 0x00000008;
-        onChanged();
-        return getMyTeamFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>optional .pbdson.PbBattleListArenaHero myTeam = 4;</code>
-       */
-      public protocol.Pbmethod.PbBattleListArenaHeroOrBuilder getMyTeamOrBuilder() {
-        if (myTeamBuilder_ != null) {
-          return myTeamBuilder_.getMessageOrBuilder();
-        } else {
-          return myTeam_;
-        }
-      }
-      /**
-       * <code>optional .pbdson.PbBattleListArenaHero myTeam = 4;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilder<
-          protocol.Pbmethod.PbBattleListArenaHero, protocol.Pbmethod.PbBattleListArenaHero.Builder, protocol.Pbmethod.PbBattleListArenaHeroOrBuilder> 
-          getMyTeamFieldBuilder() {
-        if (myTeamBuilder_ == null) {
-          myTeamBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              protocol.Pbmethod.PbBattleListArenaHero, protocol.Pbmethod.PbBattleListArenaHero.Builder, protocol.Pbmethod.PbBattleListArenaHeroOrBuilder>(
-                  myTeam_,
-                  getParentForChildren(),
-                  isClean());
-          myTeam_ = null;
-        }
-        return myTeamBuilder_;
-      }
-
-      // optional .pbdson.PbBattleListArenaHero oppTeam = 5;
-      private protocol.Pbmethod.PbBattleListArenaHero oppTeam_ = protocol.Pbmethod.PbBattleListArenaHero.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
-          protocol.Pbmethod.PbBattleListArenaHero, protocol.Pbmethod.PbBattleListArenaHero.Builder, protocol.Pbmethod.PbBattleListArenaHeroOrBuilder> oppTeamBuilder_;
-      /**
-       * <code>optional .pbdson.PbBattleListArenaHero oppTeam = 5;</code>
-       */
-      public boolean hasOppTeam() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      /**
-       * <code>optional .pbdson.PbBattleListArenaHero oppTeam = 5;</code>
-       */
-      public protocol.Pbmethod.PbBattleListArenaHero getOppTeam() {
-        if (oppTeamBuilder_ == null) {
-          return oppTeam_;
-        } else {
-          return oppTeamBuilder_.getMessage();
-        }
-      }
-      /**
-       * <code>optional .pbdson.PbBattleListArenaHero oppTeam = 5;</code>
-       */
-      public Builder setOppTeam(protocol.Pbmethod.PbBattleListArenaHero value) {
-        if (oppTeamBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          oppTeam_ = value;
-          onChanged();
-        } else {
-          oppTeamBuilder_.setMessage(value);
-        }
-        bitField0_ |= 0x00000010;
-        return this;
-      }
-      /**
-       * <code>optional .pbdson.PbBattleListArenaHero oppTeam = 5;</code>
-       */
-      public Builder setOppTeam(
-          protocol.Pbmethod.PbBattleListArenaHero.Builder builderForValue) {
-        if (oppTeamBuilder_ == null) {
-          oppTeam_ = builderForValue.build();
-          onChanged();
-        } else {
-          oppTeamBuilder_.setMessage(builderForValue.build());
-        }
-        bitField0_ |= 0x00000010;
-        return this;
-      }
-      /**
-       * <code>optional .pbdson.PbBattleListArenaHero oppTeam = 5;</code>
-       */
-      public Builder mergeOppTeam(protocol.Pbmethod.PbBattleListArenaHero value) {
-        if (oppTeamBuilder_ == null) {
-          if (((bitField0_ & 0x00000010) == 0x00000010) &&
-              oppTeam_ != protocol.Pbmethod.PbBattleListArenaHero.getDefaultInstance()) {
-            oppTeam_ =
-              protocol.Pbmethod.PbBattleListArenaHero.newBuilder(oppTeam_).mergeFrom(value).buildPartial();
-          } else {
-            oppTeam_ = value;
-          }
-          onChanged();
-        } else {
-          oppTeamBuilder_.mergeFrom(value);
-        }
-        bitField0_ |= 0x00000010;
-        return this;
-      }
-      /**
-       * <code>optional .pbdson.PbBattleListArenaHero oppTeam = 5;</code>
-       */
-      public Builder clearOppTeam() {
-        if (oppTeamBuilder_ == null) {
-          oppTeam_ = protocol.Pbmethod.PbBattleListArenaHero.getDefaultInstance();
-          onChanged();
-        } else {
-          oppTeamBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000010);
-        return this;
-      }
-      /**
-       * <code>optional .pbdson.PbBattleListArenaHero oppTeam = 5;</code>
-       */
-      public protocol.Pbmethod.PbBattleListArenaHero.Builder getOppTeamBuilder() {
-        bitField0_ |= 0x00000010;
-        onChanged();
-        return getOppTeamFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>optional .pbdson.PbBattleListArenaHero oppTeam = 5;</code>
-       */
-      public protocol.Pbmethod.PbBattleListArenaHeroOrBuilder getOppTeamOrBuilder() {
-        if (oppTeamBuilder_ != null) {
-          return oppTeamBuilder_.getMessageOrBuilder();
-        } else {
-          return oppTeam_;
-        }
-      }
-      /**
-       * <code>optional .pbdson.PbBattleListArenaHero oppTeam = 5;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilder<
-          protocol.Pbmethod.PbBattleListArenaHero, protocol.Pbmethod.PbBattleListArenaHero.Builder, protocol.Pbmethod.PbBattleListArenaHeroOrBuilder> 
-          getOppTeamFieldBuilder() {
-        if (oppTeamBuilder_ == null) {
-          oppTeamBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              protocol.Pbmethod.PbBattleListArenaHero, protocol.Pbmethod.PbBattleListArenaHero.Builder, protocol.Pbmethod.PbBattleListArenaHeroOrBuilder>(
-                  oppTeam_,
-                  getParentForChildren(),
-                  isClean());
-          oppTeam_ = null;
-        }
-        return oppTeamBuilder_;
-      }
-
-      // optional int32 time = 6;
-      private int time_ ;
-      /**
-       * <code>optional int32 time = 6;</code>
-       */
-      public boolean hasTime() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
-      }
-      /**
-       * <code>optional int32 time = 6;</code>
-       */
-      public int getTime() {
-        return time_;
-      }
-      /**
-       * <code>optional int32 time = 6;</code>
-       */
-      public Builder setTime(int value) {
-        bitField0_ |= 0x00000020;
-        time_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 time = 6;</code>
-       */
-      public Builder clearTime() {
-        bitField0_ = (bitField0_ & ~0x00000020);
-        time_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:pbdson.PbBattleArena)
-    }
-
-    static {
-      defaultInstance = new PbBattleArena(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:pbdson.PbBattleArena)
-  }
-
-  public interface PbBattleListArenaHeroOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // repeated .pbdson.PbBattleArenaHero team = 1;
-    /**
-     * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-     */
-    java.util.List<protocol.Pbmethod.PbBattleArenaHero> 
-        getTeamList();
-    /**
-     * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-     */
-    protocol.Pbmethod.PbBattleArenaHero getTeam(int index);
-    /**
-     * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-     */
-    int getTeamCount();
-    /**
-     * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-     */
-    java.util.List<? extends protocol.Pbmethod.PbBattleArenaHeroOrBuilder> 
-        getTeamOrBuilderList();
-    /**
-     * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-     */
-    protocol.Pbmethod.PbBattleArenaHeroOrBuilder getTeamOrBuilder(
-        int index);
-  }
-  /**
-   * Protobuf type {@code pbdson.PbBattleListArenaHero}
-   */
-  public static final class PbBattleListArenaHero extends
-      com.google.protobuf.GeneratedMessage
-      implements PbBattleListArenaHeroOrBuilder {
-    // Use PbBattleListArenaHero.newBuilder() to construct.
-    private PbBattleListArenaHero(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private PbBattleListArenaHero(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final PbBattleListArenaHero defaultInstance;
-    public static PbBattleListArenaHero getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public PbBattleListArenaHero getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private PbBattleListArenaHero(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 10: {
-              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-                team_ = new java.util.ArrayList<protocol.Pbmethod.PbBattleArenaHero>();
-                mutable_bitField0_ |= 0x00000001;
-              }
-              team_.add(input.readMessage(protocol.Pbmethod.PbBattleArenaHero.PARSER, extensionRegistry));
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-          team_ = java.util.Collections.unmodifiableList(team_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return protocol.Pbmethod.internal_static_pbdson_PbBattleListArenaHero_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return protocol.Pbmethod.internal_static_pbdson_PbBattleListArenaHero_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              protocol.Pbmethod.PbBattleListArenaHero.class, protocol.Pbmethod.PbBattleListArenaHero.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<PbBattleListArenaHero> PARSER =
-        new com.google.protobuf.AbstractParser<PbBattleListArenaHero>() {
-      public PbBattleListArenaHero parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PbBattleListArenaHero(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<PbBattleListArenaHero> getParserForType() {
-      return PARSER;
-    }
-
-    // repeated .pbdson.PbBattleArenaHero team = 1;
-    public static final int TEAM_FIELD_NUMBER = 1;
-    private java.util.List<protocol.Pbmethod.PbBattleArenaHero> team_;
-    /**
-     * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-     */
-    public java.util.List<protocol.Pbmethod.PbBattleArenaHero> getTeamList() {
-      return team_;
-    }
-    /**
-     * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-     */
-    public java.util.List<? extends protocol.Pbmethod.PbBattleArenaHeroOrBuilder> 
-        getTeamOrBuilderList() {
-      return team_;
-    }
-    /**
-     * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-     */
-    public int getTeamCount() {
-      return team_.size();
-    }
-    /**
-     * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-     */
-    public protocol.Pbmethod.PbBattleArenaHero getTeam(int index) {
-      return team_.get(index);
-    }
-    /**
-     * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-     */
-    public protocol.Pbmethod.PbBattleArenaHeroOrBuilder getTeamOrBuilder(
-        int index) {
-      return team_.get(index);
-    }
-
-    private void initFields() {
-      team_ = java.util.Collections.emptyList();
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      for (int i = 0; i < team_.size(); i++) {
-        output.writeMessage(1, team_.get(i));
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      for (int i = 0; i < team_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, team_.get(i));
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static protocol.Pbmethod.PbBattleListArenaHero parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbBattleListArenaHero parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbBattleListArenaHero parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbBattleListArenaHero parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbBattleListArenaHero parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbBattleListArenaHero parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbBattleListArenaHero parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static protocol.Pbmethod.PbBattleListArenaHero parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbBattleListArenaHero parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbBattleListArenaHero parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(protocol.Pbmethod.PbBattleListArenaHero prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code pbdson.PbBattleListArenaHero}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements protocol.Pbmethod.PbBattleListArenaHeroOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return protocol.Pbmethod.internal_static_pbdson_PbBattleListArenaHero_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return protocol.Pbmethod.internal_static_pbdson_PbBattleListArenaHero_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                protocol.Pbmethod.PbBattleListArenaHero.class, protocol.Pbmethod.PbBattleListArenaHero.Builder.class);
-      }
-
-      // Construct using protocol.Pbmethod.PbBattleListArenaHero.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getTeamFieldBuilder();
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        if (teamBuilder_ == null) {
-          team_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
-        } else {
-          teamBuilder_.clear();
-        }
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return protocol.Pbmethod.internal_static_pbdson_PbBattleListArenaHero_descriptor;
-      }
-
-      public protocol.Pbmethod.PbBattleListArenaHero getDefaultInstanceForType() {
-        return protocol.Pbmethod.PbBattleListArenaHero.getDefaultInstance();
-      }
-
-      public protocol.Pbmethod.PbBattleListArenaHero build() {
-        protocol.Pbmethod.PbBattleListArenaHero result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public protocol.Pbmethod.PbBattleListArenaHero buildPartial() {
-        protocol.Pbmethod.PbBattleListArenaHero result = new protocol.Pbmethod.PbBattleListArenaHero(this);
-        int from_bitField0_ = bitField0_;
-        if (teamBuilder_ == null) {
-          if (((bitField0_ & 0x00000001) == 0x00000001)) {
-            team_ = java.util.Collections.unmodifiableList(team_);
-            bitField0_ = (bitField0_ & ~0x00000001);
-          }
-          result.team_ = team_;
-        } else {
-          result.team_ = teamBuilder_.build();
-        }
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof protocol.Pbmethod.PbBattleListArenaHero) {
-          return mergeFrom((protocol.Pbmethod.PbBattleListArenaHero)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(protocol.Pbmethod.PbBattleListArenaHero other) {
-        if (other == protocol.Pbmethod.PbBattleListArenaHero.getDefaultInstance()) return this;
-        if (teamBuilder_ == null) {
-          if (!other.team_.isEmpty()) {
-            if (team_.isEmpty()) {
-              team_ = other.team_;
-              bitField0_ = (bitField0_ & ~0x00000001);
-            } else {
-              ensureTeamIsMutable();
-              team_.addAll(other.team_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.team_.isEmpty()) {
-            if (teamBuilder_.isEmpty()) {
-              teamBuilder_.dispose();
-              teamBuilder_ = null;
-              team_ = other.team_;
-              bitField0_ = (bitField0_ & ~0x00000001);
-              teamBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getTeamFieldBuilder() : null;
-            } else {
-              teamBuilder_.addAllMessages(other.team_);
-            }
-          }
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        protocol.Pbmethod.PbBattleListArenaHero parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (protocol.Pbmethod.PbBattleListArenaHero) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // repeated .pbdson.PbBattleArenaHero team = 1;
-      private java.util.List<protocol.Pbmethod.PbBattleArenaHero> team_ =
-        java.util.Collections.emptyList();
-      private void ensureTeamIsMutable() {
-        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          team_ = new java.util.ArrayList<protocol.Pbmethod.PbBattleArenaHero>(team_);
-          bitField0_ |= 0x00000001;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbBattleArenaHero, protocol.Pbmethod.PbBattleArenaHero.Builder, protocol.Pbmethod.PbBattleArenaHeroOrBuilder> teamBuilder_;
-
-      /**
-       * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbBattleArenaHero> getTeamList() {
-        if (teamBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(team_);
-        } else {
-          return teamBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-       */
-      public int getTeamCount() {
-        if (teamBuilder_ == null) {
-          return team_.size();
-        } else {
-          return teamBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-       */
-      public protocol.Pbmethod.PbBattleArenaHero getTeam(int index) {
-        if (teamBuilder_ == null) {
-          return team_.get(index);
-        } else {
-          return teamBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-       */
-      public Builder setTeam(
-          int index, protocol.Pbmethod.PbBattleArenaHero value) {
-        if (teamBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureTeamIsMutable();
-          team_.set(index, value);
-          onChanged();
-        } else {
-          teamBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-       */
-      public Builder setTeam(
-          int index, protocol.Pbmethod.PbBattleArenaHero.Builder builderForValue) {
-        if (teamBuilder_ == null) {
-          ensureTeamIsMutable();
-          team_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          teamBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-       */
-      public Builder addTeam(protocol.Pbmethod.PbBattleArenaHero value) {
-        if (teamBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureTeamIsMutable();
-          team_.add(value);
-          onChanged();
-        } else {
-          teamBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-       */
-      public Builder addTeam(
-          int index, protocol.Pbmethod.PbBattleArenaHero value) {
-        if (teamBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureTeamIsMutable();
-          team_.add(index, value);
-          onChanged();
-        } else {
-          teamBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-       */
-      public Builder addTeam(
-          protocol.Pbmethod.PbBattleArenaHero.Builder builderForValue) {
-        if (teamBuilder_ == null) {
-          ensureTeamIsMutable();
-          team_.add(builderForValue.build());
-          onChanged();
-        } else {
-          teamBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-       */
-      public Builder addTeam(
-          int index, protocol.Pbmethod.PbBattleArenaHero.Builder builderForValue) {
-        if (teamBuilder_ == null) {
-          ensureTeamIsMutable();
-          team_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          teamBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-       */
-      public Builder addAllTeam(
-          java.lang.Iterable<? extends protocol.Pbmethod.PbBattleArenaHero> values) {
-        if (teamBuilder_ == null) {
-          ensureTeamIsMutable();
-          super.addAll(values, team_);
-          onChanged();
-        } else {
-          teamBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-       */
-      public Builder clearTeam() {
-        if (teamBuilder_ == null) {
-          team_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000001);
-          onChanged();
-        } else {
-          teamBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-       */
-      public Builder removeTeam(int index) {
-        if (teamBuilder_ == null) {
-          ensureTeamIsMutable();
-          team_.remove(index);
-          onChanged();
-        } else {
-          teamBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-       */
-      public protocol.Pbmethod.PbBattleArenaHero.Builder getTeamBuilder(
-          int index) {
-        return getTeamFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-       */
-      public protocol.Pbmethod.PbBattleArenaHeroOrBuilder getTeamOrBuilder(
-          int index) {
-        if (teamBuilder_ == null) {
-          return team_.get(index);  } else {
-          return teamBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-       */
-      public java.util.List<? extends protocol.Pbmethod.PbBattleArenaHeroOrBuilder> 
-           getTeamOrBuilderList() {
-        if (teamBuilder_ != null) {
-          return teamBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(team_);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-       */
-      public protocol.Pbmethod.PbBattleArenaHero.Builder addTeamBuilder() {
-        return getTeamFieldBuilder().addBuilder(
-            protocol.Pbmethod.PbBattleArenaHero.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-       */
-      public protocol.Pbmethod.PbBattleArenaHero.Builder addTeamBuilder(
-          int index) {
-        return getTeamFieldBuilder().addBuilder(
-            index, protocol.Pbmethod.PbBattleArenaHero.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaHero team = 1;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbBattleArenaHero.Builder> 
-           getTeamBuilderList() {
-        return getTeamFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbBattleArenaHero, protocol.Pbmethod.PbBattleArenaHero.Builder, protocol.Pbmethod.PbBattleArenaHeroOrBuilder> 
-          getTeamFieldBuilder() {
-        if (teamBuilder_ == null) {
-          teamBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              protocol.Pbmethod.PbBattleArenaHero, protocol.Pbmethod.PbBattleArenaHero.Builder, protocol.Pbmethod.PbBattleArenaHeroOrBuilder>(
-                  team_,
-                  ((bitField0_ & 0x00000001) == 0x00000001),
-                  getParentForChildren(),
-                  isClean());
-          team_ = null;
-        }
-        return teamBuilder_;
-      }
-
-      // @@protoc_insertion_point(builder_scope:pbdson.PbBattleListArenaHero)
-    }
-
-    static {
-      defaultInstance = new PbBattleListArenaHero(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:pbdson.PbBattleListArenaHero)
-  }
-
-  public interface PbBattleArenaUserInfoOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // repeated int32 avatar = 1;
-    /**
-     * <code>repeated int32 avatar = 1;</code>
-     */
-    java.util.List<java.lang.Integer> getAvatarList();
-    /**
-     * <code>repeated int32 avatar = 1;</code>
-     */
-    int getAvatarCount();
-    /**
-     * <code>repeated int32 avatar = 1;</code>
-     */
-    int getAvatar(int index);
-
-    // optional int32 level = 2;
-    /**
-     * <code>optional int32 level = 2;</code>
-     */
-    boolean hasLevel();
-    /**
-     * <code>optional int32 level = 2;</code>
-     */
-    int getLevel();
-
-    // optional int32 vip = 3;
-    /**
-     * <code>optional int32 vip = 3;</code>
-     */
-    boolean hasVip();
-    /**
-     * <code>optional int32 vip = 3;</code>
-     */
-    int getVip();
-
-    // optional string name = 4;
-    /**
-     * <code>optional string name = 4;</code>
-     */
-    boolean hasName();
-    /**
-     * <code>optional string name = 4;</code>
-     */
-    java.lang.String getName();
-    /**
-     * <code>optional string name = 4;</code>
-     */
-    com.google.protobuf.ByteString
-        getNameBytes();
-
-    // optional int32 rankPoint = 5;
-    /**
-     * <code>optional int32 rankPoint = 5;</code>
-     */
-    boolean hasRankPoint();
-    /**
-     * <code>optional int32 rankPoint = 5;</code>
-     */
-    int getRankPoint();
-  }
-  /**
-   * Protobuf type {@code pbdson.PbBattleArenaUserInfo}
-   */
-  public static final class PbBattleArenaUserInfo extends
-      com.google.protobuf.GeneratedMessage
-      implements PbBattleArenaUserInfoOrBuilder {
-    // Use PbBattleArenaUserInfo.newBuilder() to construct.
-    private PbBattleArenaUserInfo(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private PbBattleArenaUserInfo(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final PbBattleArenaUserInfo defaultInstance;
-    public static PbBattleArenaUserInfo getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public PbBattleArenaUserInfo getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private PbBattleArenaUserInfo(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-                avatar_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000001;
-              }
-              avatar_.add(input.readInt32());
-              break;
-            }
-            case 10: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000001) == 0x00000001) && input.getBytesUntilLimit() > 0) {
-                avatar_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000001;
-              }
-              while (input.getBytesUntilLimit() > 0) {
-                avatar_.add(input.readInt32());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000001;
-              level_ = input.readInt32();
-              break;
-            }
-            case 24: {
-              bitField0_ |= 0x00000002;
-              vip_ = input.readInt32();
-              break;
-            }
-            case 34: {
-              bitField0_ |= 0x00000004;
-              name_ = input.readBytes();
-              break;
-            }
-            case 40: {
-              bitField0_ |= 0x00000008;
-              rankPoint_ = input.readInt32();
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
-          avatar_ = java.util.Collections.unmodifiableList(avatar_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return protocol.Pbmethod.internal_static_pbdson_PbBattleArenaUserInfo_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return protocol.Pbmethod.internal_static_pbdson_PbBattleArenaUserInfo_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              protocol.Pbmethod.PbBattleArenaUserInfo.class, protocol.Pbmethod.PbBattleArenaUserInfo.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<PbBattleArenaUserInfo> PARSER =
-        new com.google.protobuf.AbstractParser<PbBattleArenaUserInfo>() {
-      public PbBattleArenaUserInfo parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PbBattleArenaUserInfo(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<PbBattleArenaUserInfo> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    // repeated int32 avatar = 1;
-    public static final int AVATAR_FIELD_NUMBER = 1;
-    private java.util.List<java.lang.Integer> avatar_;
-    /**
-     * <code>repeated int32 avatar = 1;</code>
-     */
-    public java.util.List<java.lang.Integer>
-        getAvatarList() {
-      return avatar_;
-    }
-    /**
-     * <code>repeated int32 avatar = 1;</code>
-     */
-    public int getAvatarCount() {
-      return avatar_.size();
-    }
-    /**
-     * <code>repeated int32 avatar = 1;</code>
-     */
-    public int getAvatar(int index) {
-      return avatar_.get(index);
-    }
-
-    // optional int32 level = 2;
-    public static final int LEVEL_FIELD_NUMBER = 2;
-    private int level_;
-    /**
-     * <code>optional int32 level = 2;</code>
-     */
-    public boolean hasLevel() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>optional int32 level = 2;</code>
-     */
-    public int getLevel() {
-      return level_;
-    }
-
-    // optional int32 vip = 3;
-    public static final int VIP_FIELD_NUMBER = 3;
-    private int vip_;
-    /**
-     * <code>optional int32 vip = 3;</code>
-     */
-    public boolean hasVip() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>optional int32 vip = 3;</code>
-     */
-    public int getVip() {
-      return vip_;
-    }
-
-    // optional string name = 4;
-    public static final int NAME_FIELD_NUMBER = 4;
-    private java.lang.Object name_;
-    /**
-     * <code>optional string name = 4;</code>
-     */
-    public boolean hasName() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>optional string name = 4;</code>
-     */
-    public java.lang.String getName() {
-      java.lang.Object ref = name_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          name_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string name = 4;</code>
-     */
-    public com.google.protobuf.ByteString
-        getNameBytes() {
-      java.lang.Object ref = name_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        name_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // optional int32 rankPoint = 5;
-    public static final int RANKPOINT_FIELD_NUMBER = 5;
-    private int rankPoint_;
-    /**
-     * <code>optional int32 rankPoint = 5;</code>
-     */
-    public boolean hasRankPoint() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>optional int32 rankPoint = 5;</code>
-     */
-    public int getRankPoint() {
-      return rankPoint_;
-    }
-
-    private void initFields() {
-      avatar_ = java.util.Collections.emptyList();
-      level_ = 0;
-      vip_ = 0;
-      name_ = "";
-      rankPoint_ = 0;
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      for (int i = 0; i < avatar_.size(); i++) {
-        output.writeInt32(1, avatar_.get(i));
-      }
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(2, level_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt32(3, vip_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeBytes(4, getNameBytes());
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeInt32(5, rankPoint_);
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      {
-        int dataSize = 0;
-        for (int i = 0; i < avatar_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(avatar_.get(i));
-        }
-        size += dataSize;
-        size += 1 * getAvatarList().size();
-      }
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, level_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, vip_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, getNameBytes());
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(5, rankPoint_);
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static protocol.Pbmethod.PbBattleArenaUserInfo parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbBattleArenaUserInfo parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbBattleArenaUserInfo parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbBattleArenaUserInfo parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbBattleArenaUserInfo parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbBattleArenaUserInfo parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbBattleArenaUserInfo parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static protocol.Pbmethod.PbBattleArenaUserInfo parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbBattleArenaUserInfo parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbBattleArenaUserInfo parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(protocol.Pbmethod.PbBattleArenaUserInfo prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code pbdson.PbBattleArenaUserInfo}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements protocol.Pbmethod.PbBattleArenaUserInfoOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return protocol.Pbmethod.internal_static_pbdson_PbBattleArenaUserInfo_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return protocol.Pbmethod.internal_static_pbdson_PbBattleArenaUserInfo_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                protocol.Pbmethod.PbBattleArenaUserInfo.class, protocol.Pbmethod.PbBattleArenaUserInfo.Builder.class);
-      }
-
-      // Construct using protocol.Pbmethod.PbBattleArenaUserInfo.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        avatar_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000001);
-        level_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        vip_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000004);
-        name_ = "";
-        bitField0_ = (bitField0_ & ~0x00000008);
-        rankPoint_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000010);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return protocol.Pbmethod.internal_static_pbdson_PbBattleArenaUserInfo_descriptor;
-      }
-
-      public protocol.Pbmethod.PbBattleArenaUserInfo getDefaultInstanceForType() {
-        return protocol.Pbmethod.PbBattleArenaUserInfo.getDefaultInstance();
-      }
-
-      public protocol.Pbmethod.PbBattleArenaUserInfo build() {
-        protocol.Pbmethod.PbBattleArenaUserInfo result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public protocol.Pbmethod.PbBattleArenaUserInfo buildPartial() {
-        protocol.Pbmethod.PbBattleArenaUserInfo result = new protocol.Pbmethod.PbBattleArenaUserInfo(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((bitField0_ & 0x00000001) == 0x00000001)) {
-          avatar_ = java.util.Collections.unmodifiableList(avatar_);
-          bitField0_ = (bitField0_ & ~0x00000001);
-        }
-        result.avatar_ = avatar_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.level_ = level_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.vip_ = vip_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.name_ = name_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.rankPoint_ = rankPoint_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof protocol.Pbmethod.PbBattleArenaUserInfo) {
-          return mergeFrom((protocol.Pbmethod.PbBattleArenaUserInfo)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(protocol.Pbmethod.PbBattleArenaUserInfo other) {
-        if (other == protocol.Pbmethod.PbBattleArenaUserInfo.getDefaultInstance()) return this;
-        if (!other.avatar_.isEmpty()) {
-          if (avatar_.isEmpty()) {
-            avatar_ = other.avatar_;
-            bitField0_ = (bitField0_ & ~0x00000001);
-          } else {
-            ensureAvatarIsMutable();
-            avatar_.addAll(other.avatar_);
-          }
-          onChanged();
-        }
-        if (other.hasLevel()) {
-          setLevel(other.getLevel());
-        }
-        if (other.hasVip()) {
-          setVip(other.getVip());
-        }
-        if (other.hasName()) {
-          bitField0_ |= 0x00000008;
-          name_ = other.name_;
-          onChanged();
-        }
-        if (other.hasRankPoint()) {
-          setRankPoint(other.getRankPoint());
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        protocol.Pbmethod.PbBattleArenaUserInfo parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (protocol.Pbmethod.PbBattleArenaUserInfo) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // repeated int32 avatar = 1;
-      private java.util.List<java.lang.Integer> avatar_ = java.util.Collections.emptyList();
-      private void ensureAvatarIsMutable() {
-        if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          avatar_ = new java.util.ArrayList<java.lang.Integer>(avatar_);
-          bitField0_ |= 0x00000001;
-         }
-      }
-      /**
-       * <code>repeated int32 avatar = 1;</code>
-       */
-      public java.util.List<java.lang.Integer>
-          getAvatarList() {
-        return java.util.Collections.unmodifiableList(avatar_);
-      }
-      /**
-       * <code>repeated int32 avatar = 1;</code>
-       */
-      public int getAvatarCount() {
-        return avatar_.size();
-      }
-      /**
-       * <code>repeated int32 avatar = 1;</code>
-       */
-      public int getAvatar(int index) {
-        return avatar_.get(index);
-      }
-      /**
-       * <code>repeated int32 avatar = 1;</code>
-       */
-      public Builder setAvatar(
-          int index, int value) {
-        ensureAvatarIsMutable();
-        avatar_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 avatar = 1;</code>
-       */
-      public Builder addAvatar(int value) {
-        ensureAvatarIsMutable();
-        avatar_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 avatar = 1;</code>
-       */
-      public Builder addAllAvatar(
-          java.lang.Iterable<? extends java.lang.Integer> values) {
-        ensureAvatarIsMutable();
-        super.addAll(values, avatar_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 avatar = 1;</code>
-       */
-      public Builder clearAvatar() {
-        avatar_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000001);
-        onChanged();
-        return this;
-      }
-
-      // optional int32 level = 2;
-      private int level_ ;
-      /**
-       * <code>optional int32 level = 2;</code>
-       */
-      public boolean hasLevel() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>optional int32 level = 2;</code>
-       */
-      public int getLevel() {
-        return level_;
-      }
-      /**
-       * <code>optional int32 level = 2;</code>
-       */
-      public Builder setLevel(int value) {
-        bitField0_ |= 0x00000002;
-        level_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 level = 2;</code>
-       */
-      public Builder clearLevel() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        level_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 vip = 3;
-      private int vip_ ;
-      /**
-       * <code>optional int32 vip = 3;</code>
-       */
-      public boolean hasVip() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional int32 vip = 3;</code>
-       */
-      public int getVip() {
-        return vip_;
-      }
-      /**
-       * <code>optional int32 vip = 3;</code>
-       */
-      public Builder setVip(int value) {
-        bitField0_ |= 0x00000004;
-        vip_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 vip = 3;</code>
-       */
-      public Builder clearVip() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        vip_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional string name = 4;
-      private java.lang.Object name_ = "";
-      /**
-       * <code>optional string name = 4;</code>
-       */
-      public boolean hasName() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      /**
-       * <code>optional string name = 4;</code>
-       */
-      public java.lang.String getName() {
-        java.lang.Object ref = name_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          name_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
-      }
-      /**
-       * <code>optional string name = 4;</code>
-       */
-      public com.google.protobuf.ByteString
-          getNameBytes() {
-        java.lang.Object ref = name_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          name_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string name = 4;</code>
-       */
-      public Builder setName(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
-        name_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string name = 4;</code>
-       */
-      public Builder clearName() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        name_ = getDefaultInstance().getName();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string name = 4;</code>
-       */
-      public Builder setNameBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000008;
-        name_ = value;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 rankPoint = 5;
-      private int rankPoint_ ;
-      /**
-       * <code>optional int32 rankPoint = 5;</code>
-       */
-      public boolean hasRankPoint() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      /**
-       * <code>optional int32 rankPoint = 5;</code>
-       */
-      public int getRankPoint() {
-        return rankPoint_;
-      }
-      /**
-       * <code>optional int32 rankPoint = 5;</code>
-       */
-      public Builder setRankPoint(int value) {
-        bitField0_ |= 0x00000010;
-        rankPoint_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 rankPoint = 5;</code>
-       */
-      public Builder clearRankPoint() {
-        bitField0_ = (bitField0_ & ~0x00000010);
-        rankPoint_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:pbdson.PbBattleArenaUserInfo)
-    }
-
-    static {
-      defaultInstance = new PbBattleArenaUserInfo(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:pbdson.PbBattleArenaUserInfo)
-  }
-
-  public interface PbBattleArenaHeroOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // optional int32 id = 1;
-    /**
-     * <code>optional int32 id = 1;</code>
-     */
-    boolean hasId();
-    /**
-     * <code>optional int32 id = 1;</code>
-     */
-    int getId();
-
-    // optional int32 avatar = 2;
-    /**
-     * <code>optional int32 avatar = 2;</code>
-     */
-    boolean hasAvatar();
-    /**
-     * <code>optional int32 avatar = 2;</code>
-     */
-    int getAvatar();
-
-    // optional int32 heroType = 3;
-    /**
-     * <code>optional int32 heroType = 3;</code>
-     */
-    boolean hasHeroType();
-    /**
-     * <code>optional int32 heroType = 3;</code>
-     */
-    int getHeroType();
-
-    // optional int32 slot = 4;
-    /**
-     * <code>optional int32 slot = 4;</code>
-     */
-    boolean hasSlot();
-    /**
-     * <code>optional int32 slot = 4;</code>
-     */
-    int getSlot();
-
-    // optional int32 level = 5;
-    /**
-     * <code>optional int32 level = 5;</code>
-     */
-    boolean hasLevel();
-    /**
-     * <code>optional int32 level = 5;</code>
-     */
-    int getLevel();
-
-    // repeated int32 point = 6;
-    /**
-     * <code>repeated int32 point = 6;</code>
-     */
-    java.util.List<java.lang.Integer> getPointList();
-    /**
-     * <code>repeated int32 point = 6;</code>
-     */
-    int getPointCount();
-    /**
-     * <code>repeated int32 point = 6;</code>
-     */
-    int getPoint(int index);
-
-    // repeated float pos = 7;
-    /**
-     * <code>repeated float pos = 7;</code>
-     */
-    java.util.List<java.lang.Float> getPosList();
-    /**
-     * <code>repeated float pos = 7;</code>
-     */
-    int getPosCount();
-    /**
-     * <code>repeated float pos = 7;</code>
-     */
-    float getPos(int index);
-
-    // repeated float direction = 8;
-    /**
-     * <code>repeated float direction = 8;</code>
-     */
-    java.util.List<java.lang.Float> getDirectionList();
-    /**
-     * <code>repeated float direction = 8;</code>
-     */
-    int getDirectionCount();
-    /**
-     * <code>repeated float direction = 8;</code>
-     */
-    float getDirection(int index);
-
-    // optional .pbdson.CommonVector info = 9;
-    /**
-     * <code>optional .pbdson.CommonVector info = 9;</code>
-     */
-    boolean hasInfo();
-    /**
-     * <code>optional .pbdson.CommonVector info = 9;</code>
-     */
-    protocol.Pbmethod.CommonVector getInfo();
-    /**
-     * <code>optional .pbdson.CommonVector info = 9;</code>
-     */
-    protocol.Pbmethod.CommonVectorOrBuilder getInfoOrBuilder();
-
-    // repeated .pbdson.PbBattleArenaWeapon weapons = 10;
-    /**
-     * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-     */
-    java.util.List<protocol.Pbmethod.PbBattleArenaWeapon> 
-        getWeaponsList();
-    /**
-     * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-     */
-    protocol.Pbmethod.PbBattleArenaWeapon getWeapons(int index);
-    /**
-     * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-     */
-    int getWeaponsCount();
-    /**
-     * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-     */
-    java.util.List<? extends protocol.Pbmethod.PbBattleArenaWeaponOrBuilder> 
-        getWeaponsOrBuilderList();
-    /**
-     * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-     */
-    protocol.Pbmethod.PbBattleArenaWeaponOrBuilder getWeaponsOrBuilder(
-        int index);
-  }
-  /**
-   * Protobuf type {@code pbdson.PbBattleArenaHero}
-   */
-  public static final class PbBattleArenaHero extends
-      com.google.protobuf.GeneratedMessage
-      implements PbBattleArenaHeroOrBuilder {
-    // Use PbBattleArenaHero.newBuilder() to construct.
-    private PbBattleArenaHero(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private PbBattleArenaHero(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final PbBattleArenaHero defaultInstance;
-    public static PbBattleArenaHero getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public PbBattleArenaHero getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private PbBattleArenaHero(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-              bitField0_ |= 0x00000001;
-              id_ = input.readInt32();
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              avatar_ = input.readInt32();
-              break;
-            }
-            case 24: {
-              bitField0_ |= 0x00000004;
-              heroType_ = input.readInt32();
-              break;
-            }
-            case 32: {
-              bitField0_ |= 0x00000008;
-              slot_ = input.readInt32();
-              break;
-            }
-            case 40: {
-              bitField0_ |= 0x00000010;
-              level_ = input.readInt32();
-              break;
-            }
-            case 48: {
-              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
-                point_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000020;
-              }
-              point_.add(input.readInt32());
-              break;
-            }
-            case 50: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020) && input.getBytesUntilLimit() > 0) {
-                point_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000020;
-              }
-              while (input.getBytesUntilLimit() > 0) {
-                point_.add(input.readInt32());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 61: {
-              if (!((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
-                pos_ = new java.util.ArrayList<java.lang.Float>();
-                mutable_bitField0_ |= 0x00000040;
-              }
-              pos_.add(input.readFloat());
-              break;
-            }
-            case 58: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000040) == 0x00000040) && input.getBytesUntilLimit() > 0) {
-                pos_ = new java.util.ArrayList<java.lang.Float>();
-                mutable_bitField0_ |= 0x00000040;
-              }
-              while (input.getBytesUntilLimit() > 0) {
-                pos_.add(input.readFloat());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 69: {
-              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
-                direction_ = new java.util.ArrayList<java.lang.Float>();
-                mutable_bitField0_ |= 0x00000080;
-              }
-              direction_.add(input.readFloat());
-              break;
-            }
-            case 66: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080) && input.getBytesUntilLimit() > 0) {
-                direction_ = new java.util.ArrayList<java.lang.Float>();
-                mutable_bitField0_ |= 0x00000080;
-              }
-              while (input.getBytesUntilLimit() > 0) {
-                direction_.add(input.readFloat());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 74: {
-              protocol.Pbmethod.CommonVector.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000020) == 0x00000020)) {
-                subBuilder = info_.toBuilder();
-              }
-              info_ = input.readMessage(protocol.Pbmethod.CommonVector.PARSER, extensionRegistry);
-              if (subBuilder != null) {
-                subBuilder.mergeFrom(info_);
-                info_ = subBuilder.buildPartial();
-              }
-              bitField0_ |= 0x00000020;
-              break;
-            }
-            case 82: {
-              if (!((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
-                weapons_ = new java.util.ArrayList<protocol.Pbmethod.PbBattleArenaWeapon>();
-                mutable_bitField0_ |= 0x00000200;
-              }
-              weapons_.add(input.readMessage(protocol.Pbmethod.PbBattleArenaWeapon.PARSER, extensionRegistry));
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
-          point_ = java.util.Collections.unmodifiableList(point_);
-        }
-        if (((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
-          pos_ = java.util.Collections.unmodifiableList(pos_);
-        }
-        if (((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
-          direction_ = java.util.Collections.unmodifiableList(direction_);
-        }
-        if (((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
-          weapons_ = java.util.Collections.unmodifiableList(weapons_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return protocol.Pbmethod.internal_static_pbdson_PbBattleArenaHero_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return protocol.Pbmethod.internal_static_pbdson_PbBattleArenaHero_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              protocol.Pbmethod.PbBattleArenaHero.class, protocol.Pbmethod.PbBattleArenaHero.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<PbBattleArenaHero> PARSER =
-        new com.google.protobuf.AbstractParser<PbBattleArenaHero>() {
-      public PbBattleArenaHero parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PbBattleArenaHero(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<PbBattleArenaHero> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    // optional int32 id = 1;
-    public static final int ID_FIELD_NUMBER = 1;
-    private int id_;
-    /**
-     * <code>optional int32 id = 1;</code>
-     */
-    public boolean hasId() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>optional int32 id = 1;</code>
-     */
-    public int getId() {
-      return id_;
-    }
-
-    // optional int32 avatar = 2;
-    public static final int AVATAR_FIELD_NUMBER = 2;
-    private int avatar_;
-    /**
-     * <code>optional int32 avatar = 2;</code>
-     */
-    public boolean hasAvatar() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>optional int32 avatar = 2;</code>
-     */
-    public int getAvatar() {
-      return avatar_;
-    }
-
-    // optional int32 heroType = 3;
-    public static final int HEROTYPE_FIELD_NUMBER = 3;
-    private int heroType_;
-    /**
-     * <code>optional int32 heroType = 3;</code>
-     */
-    public boolean hasHeroType() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>optional int32 heroType = 3;</code>
-     */
-    public int getHeroType() {
-      return heroType_;
-    }
-
-    // optional int32 slot = 4;
-    public static final int SLOT_FIELD_NUMBER = 4;
-    private int slot_;
-    /**
-     * <code>optional int32 slot = 4;</code>
-     */
-    public boolean hasSlot() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
-    }
-    /**
-     * <code>optional int32 slot = 4;</code>
-     */
-    public int getSlot() {
-      return slot_;
-    }
-
-    // optional int32 level = 5;
-    public static final int LEVEL_FIELD_NUMBER = 5;
-    private int level_;
-    /**
-     * <code>optional int32 level = 5;</code>
-     */
-    public boolean hasLevel() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    /**
-     * <code>optional int32 level = 5;</code>
-     */
-    public int getLevel() {
-      return level_;
-    }
-
-    // repeated int32 point = 6;
-    public static final int POINT_FIELD_NUMBER = 6;
-    private java.util.List<java.lang.Integer> point_;
-    /**
-     * <code>repeated int32 point = 6;</code>
-     */
-    public java.util.List<java.lang.Integer>
-        getPointList() {
-      return point_;
-    }
-    /**
-     * <code>repeated int32 point = 6;</code>
-     */
-    public int getPointCount() {
-      return point_.size();
-    }
-    /**
-     * <code>repeated int32 point = 6;</code>
-     */
-    public int getPoint(int index) {
-      return point_.get(index);
-    }
-
-    // repeated float pos = 7;
-    public static final int POS_FIELD_NUMBER = 7;
-    private java.util.List<java.lang.Float> pos_;
-    /**
-     * <code>repeated float pos = 7;</code>
-     */
-    public java.util.List<java.lang.Float>
-        getPosList() {
-      return pos_;
-    }
-    /**
-     * <code>repeated float pos = 7;</code>
-     */
-    public int getPosCount() {
-      return pos_.size();
-    }
-    /**
-     * <code>repeated float pos = 7;</code>
-     */
-    public float getPos(int index) {
-      return pos_.get(index);
-    }
-
-    // repeated float direction = 8;
-    public static final int DIRECTION_FIELD_NUMBER = 8;
-    private java.util.List<java.lang.Float> direction_;
-    /**
-     * <code>repeated float direction = 8;</code>
-     */
-    public java.util.List<java.lang.Float>
-        getDirectionList() {
-      return direction_;
-    }
-    /**
-     * <code>repeated float direction = 8;</code>
-     */
-    public int getDirectionCount() {
-      return direction_.size();
-    }
-    /**
-     * <code>repeated float direction = 8;</code>
-     */
-    public float getDirection(int index) {
-      return direction_.get(index);
-    }
-
-    // optional .pbdson.CommonVector info = 9;
-    public static final int INFO_FIELD_NUMBER = 9;
-    private protocol.Pbmethod.CommonVector info_;
-    /**
-     * <code>optional .pbdson.CommonVector info = 9;</code>
-     */
-    public boolean hasInfo() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
-    }
-    /**
-     * <code>optional .pbdson.CommonVector info = 9;</code>
-     */
-    public protocol.Pbmethod.CommonVector getInfo() {
-      return info_;
-    }
-    /**
-     * <code>optional .pbdson.CommonVector info = 9;</code>
-     */
-    public protocol.Pbmethod.CommonVectorOrBuilder getInfoOrBuilder() {
-      return info_;
-    }
-
-    // repeated .pbdson.PbBattleArenaWeapon weapons = 10;
-    public static final int WEAPONS_FIELD_NUMBER = 10;
-    private java.util.List<protocol.Pbmethod.PbBattleArenaWeapon> weapons_;
-    /**
-     * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-     */
-    public java.util.List<protocol.Pbmethod.PbBattleArenaWeapon> getWeaponsList() {
-      return weapons_;
-    }
-    /**
-     * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-     */
-    public java.util.List<? extends protocol.Pbmethod.PbBattleArenaWeaponOrBuilder> 
-        getWeaponsOrBuilderList() {
-      return weapons_;
-    }
-    /**
-     * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-     */
-    public int getWeaponsCount() {
-      return weapons_.size();
-    }
-    /**
-     * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-     */
-    public protocol.Pbmethod.PbBattleArenaWeapon getWeapons(int index) {
-      return weapons_.get(index);
-    }
-    /**
-     * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-     */
-    public protocol.Pbmethod.PbBattleArenaWeaponOrBuilder getWeaponsOrBuilder(
-        int index) {
-      return weapons_.get(index);
-    }
-
-    private void initFields() {
-      id_ = 0;
-      avatar_ = 0;
-      heroType_ = 0;
-      slot_ = 0;
-      level_ = 0;
-      point_ = java.util.Collections.emptyList();
-      pos_ = java.util.Collections.emptyList();
-      direction_ = java.util.Collections.emptyList();
-      info_ = protocol.Pbmethod.CommonVector.getDefaultInstance();
-      weapons_ = java.util.Collections.emptyList();
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(1, id_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt32(2, avatar_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeInt32(3, heroType_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeInt32(4, slot_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeInt32(5, level_);
-      }
-      for (int i = 0; i < point_.size(); i++) {
-        output.writeInt32(6, point_.get(i));
-      }
-      for (int i = 0; i < pos_.size(); i++) {
-        output.writeFloat(7, pos_.get(i));
-      }
-      for (int i = 0; i < direction_.size(); i++) {
-        output.writeFloat(8, direction_.get(i));
-      }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeMessage(9, info_);
-      }
-      for (int i = 0; i < weapons_.size(); i++) {
-        output.writeMessage(10, weapons_.get(i));
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, id_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, avatar_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, heroType_);
-      }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(4, slot_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(5, level_);
-      }
-      {
-        int dataSize = 0;
-        for (int i = 0; i < point_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(point_.get(i));
-        }
-        size += dataSize;
-        size += 1 * getPointList().size();
-      }
-      {
-        int dataSize = 0;
-        dataSize = 4 * getPosList().size();
-        size += dataSize;
-        size += 1 * getPosList().size();
-      }
-      {
-        int dataSize = 0;
-        dataSize = 4 * getDirectionList().size();
-        size += dataSize;
-        size += 1 * getDirectionList().size();
-      }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(9, info_);
-      }
-      for (int i = 0; i < weapons_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(10, weapons_.get(i));
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static protocol.Pbmethod.PbBattleArenaHero parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbBattleArenaHero parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbBattleArenaHero parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbBattleArenaHero parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbBattleArenaHero parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbBattleArenaHero parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbBattleArenaHero parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static protocol.Pbmethod.PbBattleArenaHero parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbBattleArenaHero parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbBattleArenaHero parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(protocol.Pbmethod.PbBattleArenaHero prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code pbdson.PbBattleArenaHero}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements protocol.Pbmethod.PbBattleArenaHeroOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return protocol.Pbmethod.internal_static_pbdson_PbBattleArenaHero_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return protocol.Pbmethod.internal_static_pbdson_PbBattleArenaHero_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                protocol.Pbmethod.PbBattleArenaHero.class, protocol.Pbmethod.PbBattleArenaHero.Builder.class);
-      }
-
-      // Construct using protocol.Pbmethod.PbBattleArenaHero.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-          getInfoFieldBuilder();
-          getWeaponsFieldBuilder();
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        id_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        avatar_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        heroType_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000004);
-        slot_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000008);
-        level_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000010);
-        point_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000020);
-        pos_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000040);
-        direction_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000080);
-        if (infoBuilder_ == null) {
-          info_ = protocol.Pbmethod.CommonVector.getDefaultInstance();
-        } else {
-          infoBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000100);
-        if (weaponsBuilder_ == null) {
-          weapons_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000200);
-        } else {
-          weaponsBuilder_.clear();
-        }
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return protocol.Pbmethod.internal_static_pbdson_PbBattleArenaHero_descriptor;
-      }
-
-      public protocol.Pbmethod.PbBattleArenaHero getDefaultInstanceForType() {
-        return protocol.Pbmethod.PbBattleArenaHero.getDefaultInstance();
-      }
-
-      public protocol.Pbmethod.PbBattleArenaHero build() {
-        protocol.Pbmethod.PbBattleArenaHero result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public protocol.Pbmethod.PbBattleArenaHero buildPartial() {
-        protocol.Pbmethod.PbBattleArenaHero result = new protocol.Pbmethod.PbBattleArenaHero(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.id_ = id_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.avatar_ = avatar_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.heroType_ = heroType_;
-        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-          to_bitField0_ |= 0x00000008;
-        }
-        result.slot_ = slot_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        result.level_ = level_;
-        if (((bitField0_ & 0x00000020) == 0x00000020)) {
-          point_ = java.util.Collections.unmodifiableList(point_);
-          bitField0_ = (bitField0_ & ~0x00000020);
-        }
-        result.point_ = point_;
-        if (((bitField0_ & 0x00000040) == 0x00000040)) {
-          pos_ = java.util.Collections.unmodifiableList(pos_);
-          bitField0_ = (bitField0_ & ~0x00000040);
-        }
-        result.pos_ = pos_;
-        if (((bitField0_ & 0x00000080) == 0x00000080)) {
-          direction_ = java.util.Collections.unmodifiableList(direction_);
-          bitField0_ = (bitField0_ & ~0x00000080);
-        }
-        result.direction_ = direction_;
-        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
-          to_bitField0_ |= 0x00000020;
-        }
-        if (infoBuilder_ == null) {
-          result.info_ = info_;
-        } else {
-          result.info_ = infoBuilder_.build();
-        }
-        if (weaponsBuilder_ == null) {
-          if (((bitField0_ & 0x00000200) == 0x00000200)) {
-            weapons_ = java.util.Collections.unmodifiableList(weapons_);
-            bitField0_ = (bitField0_ & ~0x00000200);
-          }
-          result.weapons_ = weapons_;
-        } else {
-          result.weapons_ = weaponsBuilder_.build();
-        }
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof protocol.Pbmethod.PbBattleArenaHero) {
-          return mergeFrom((protocol.Pbmethod.PbBattleArenaHero)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(protocol.Pbmethod.PbBattleArenaHero other) {
-        if (other == protocol.Pbmethod.PbBattleArenaHero.getDefaultInstance()) return this;
-        if (other.hasId()) {
-          setId(other.getId());
-        }
-        if (other.hasAvatar()) {
-          setAvatar(other.getAvatar());
-        }
-        if (other.hasHeroType()) {
-          setHeroType(other.getHeroType());
-        }
-        if (other.hasSlot()) {
-          setSlot(other.getSlot());
-        }
-        if (other.hasLevel()) {
-          setLevel(other.getLevel());
-        }
-        if (!other.point_.isEmpty()) {
-          if (point_.isEmpty()) {
-            point_ = other.point_;
-            bitField0_ = (bitField0_ & ~0x00000020);
-          } else {
-            ensurePointIsMutable();
-            point_.addAll(other.point_);
-          }
-          onChanged();
-        }
-        if (!other.pos_.isEmpty()) {
-          if (pos_.isEmpty()) {
-            pos_ = other.pos_;
-            bitField0_ = (bitField0_ & ~0x00000040);
-          } else {
-            ensurePosIsMutable();
-            pos_.addAll(other.pos_);
-          }
-          onChanged();
-        }
-        if (!other.direction_.isEmpty()) {
-          if (direction_.isEmpty()) {
-            direction_ = other.direction_;
-            bitField0_ = (bitField0_ & ~0x00000080);
-          } else {
-            ensureDirectionIsMutable();
-            direction_.addAll(other.direction_);
-          }
-          onChanged();
-        }
-        if (other.hasInfo()) {
-          mergeInfo(other.getInfo());
-        }
-        if (weaponsBuilder_ == null) {
-          if (!other.weapons_.isEmpty()) {
-            if (weapons_.isEmpty()) {
-              weapons_ = other.weapons_;
-              bitField0_ = (bitField0_ & ~0x00000200);
-            } else {
-              ensureWeaponsIsMutable();
-              weapons_.addAll(other.weapons_);
-            }
-            onChanged();
-          }
-        } else {
-          if (!other.weapons_.isEmpty()) {
-            if (weaponsBuilder_.isEmpty()) {
-              weaponsBuilder_.dispose();
-              weaponsBuilder_ = null;
-              weapons_ = other.weapons_;
-              bitField0_ = (bitField0_ & ~0x00000200);
-              weaponsBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getWeaponsFieldBuilder() : null;
-            } else {
-              weaponsBuilder_.addAllMessages(other.weapons_);
-            }
-          }
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        protocol.Pbmethod.PbBattleArenaHero parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (protocol.Pbmethod.PbBattleArenaHero) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // optional int32 id = 1;
-      private int id_ ;
-      /**
-       * <code>optional int32 id = 1;</code>
-       */
-      public boolean hasId() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>optional int32 id = 1;</code>
-       */
-      public int getId() {
-        return id_;
-      }
-      /**
-       * <code>optional int32 id = 1;</code>
-       */
-      public Builder setId(int value) {
-        bitField0_ |= 0x00000001;
-        id_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 id = 1;</code>
-       */
-      public Builder clearId() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        id_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 avatar = 2;
-      private int avatar_ ;
-      /**
-       * <code>optional int32 avatar = 2;</code>
-       */
-      public boolean hasAvatar() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>optional int32 avatar = 2;</code>
-       */
-      public int getAvatar() {
-        return avatar_;
-      }
-      /**
-       * <code>optional int32 avatar = 2;</code>
-       */
-      public Builder setAvatar(int value) {
-        bitField0_ |= 0x00000002;
-        avatar_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 avatar = 2;</code>
-       */
-      public Builder clearAvatar() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        avatar_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 heroType = 3;
-      private int heroType_ ;
-      /**
-       * <code>optional int32 heroType = 3;</code>
-       */
-      public boolean hasHeroType() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional int32 heroType = 3;</code>
-       */
-      public int getHeroType() {
-        return heroType_;
-      }
-      /**
-       * <code>optional int32 heroType = 3;</code>
-       */
-      public Builder setHeroType(int value) {
-        bitField0_ |= 0x00000004;
-        heroType_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 heroType = 3;</code>
-       */
-      public Builder clearHeroType() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        heroType_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 slot = 4;
-      private int slot_ ;
-      /**
-       * <code>optional int32 slot = 4;</code>
-       */
-      public boolean hasSlot() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
-      }
-      /**
-       * <code>optional int32 slot = 4;</code>
-       */
-      public int getSlot() {
-        return slot_;
-      }
-      /**
-       * <code>optional int32 slot = 4;</code>
-       */
-      public Builder setSlot(int value) {
-        bitField0_ |= 0x00000008;
-        slot_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 slot = 4;</code>
-       */
-      public Builder clearSlot() {
-        bitField0_ = (bitField0_ & ~0x00000008);
-        slot_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 level = 5;
-      private int level_ ;
-      /**
-       * <code>optional int32 level = 5;</code>
-       */
-      public boolean hasLevel() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      /**
-       * <code>optional int32 level = 5;</code>
-       */
-      public int getLevel() {
-        return level_;
-      }
-      /**
-       * <code>optional int32 level = 5;</code>
-       */
-      public Builder setLevel(int value) {
-        bitField0_ |= 0x00000010;
-        level_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 level = 5;</code>
-       */
-      public Builder clearLevel() {
-        bitField0_ = (bitField0_ & ~0x00000010);
-        level_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // repeated int32 point = 6;
-      private java.util.List<java.lang.Integer> point_ = java.util.Collections.emptyList();
-      private void ensurePointIsMutable() {
-        if (!((bitField0_ & 0x00000020) == 0x00000020)) {
-          point_ = new java.util.ArrayList<java.lang.Integer>(point_);
-          bitField0_ |= 0x00000020;
-         }
-      }
-      /**
-       * <code>repeated int32 point = 6;</code>
-       */
-      public java.util.List<java.lang.Integer>
-          getPointList() {
-        return java.util.Collections.unmodifiableList(point_);
-      }
-      /**
-       * <code>repeated int32 point = 6;</code>
-       */
-      public int getPointCount() {
-        return point_.size();
-      }
-      /**
-       * <code>repeated int32 point = 6;</code>
-       */
-      public int getPoint(int index) {
-        return point_.get(index);
-      }
-      /**
-       * <code>repeated int32 point = 6;</code>
-       */
-      public Builder setPoint(
-          int index, int value) {
-        ensurePointIsMutable();
-        point_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 point = 6;</code>
-       */
-      public Builder addPoint(int value) {
-        ensurePointIsMutable();
-        point_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 point = 6;</code>
-       */
-      public Builder addAllPoint(
-          java.lang.Iterable<? extends java.lang.Integer> values) {
-        ensurePointIsMutable();
-        super.addAll(values, point_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 point = 6;</code>
-       */
-      public Builder clearPoint() {
-        point_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000020);
-        onChanged();
-        return this;
-      }
-
-      // repeated float pos = 7;
-      private java.util.List<java.lang.Float> pos_ = java.util.Collections.emptyList();
-      private void ensurePosIsMutable() {
-        if (!((bitField0_ & 0x00000040) == 0x00000040)) {
-          pos_ = new java.util.ArrayList<java.lang.Float>(pos_);
-          bitField0_ |= 0x00000040;
-         }
-      }
-      /**
-       * <code>repeated float pos = 7;</code>
-       */
-      public java.util.List<java.lang.Float>
-          getPosList() {
-        return java.util.Collections.unmodifiableList(pos_);
-      }
-      /**
-       * <code>repeated float pos = 7;</code>
-       */
-      public int getPosCount() {
-        return pos_.size();
-      }
-      /**
-       * <code>repeated float pos = 7;</code>
-       */
-      public float getPos(int index) {
-        return pos_.get(index);
-      }
-      /**
-       * <code>repeated float pos = 7;</code>
-       */
-      public Builder setPos(
-          int index, float value) {
-        ensurePosIsMutable();
-        pos_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated float pos = 7;</code>
-       */
-      public Builder addPos(float value) {
-        ensurePosIsMutable();
-        pos_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated float pos = 7;</code>
-       */
-      public Builder addAllPos(
-          java.lang.Iterable<? extends java.lang.Float> values) {
-        ensurePosIsMutable();
-        super.addAll(values, pos_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated float pos = 7;</code>
-       */
-      public Builder clearPos() {
-        pos_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000040);
-        onChanged();
-        return this;
-      }
-
-      // repeated float direction = 8;
-      private java.util.List<java.lang.Float> direction_ = java.util.Collections.emptyList();
-      private void ensureDirectionIsMutable() {
-        if (!((bitField0_ & 0x00000080) == 0x00000080)) {
-          direction_ = new java.util.ArrayList<java.lang.Float>(direction_);
-          bitField0_ |= 0x00000080;
-         }
-      }
-      /**
-       * <code>repeated float direction = 8;</code>
-       */
-      public java.util.List<java.lang.Float>
-          getDirectionList() {
-        return java.util.Collections.unmodifiableList(direction_);
-      }
-      /**
-       * <code>repeated float direction = 8;</code>
-       */
-      public int getDirectionCount() {
-        return direction_.size();
-      }
-      /**
-       * <code>repeated float direction = 8;</code>
-       */
-      public float getDirection(int index) {
-        return direction_.get(index);
-      }
-      /**
-       * <code>repeated float direction = 8;</code>
-       */
-      public Builder setDirection(
-          int index, float value) {
-        ensureDirectionIsMutable();
-        direction_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated float direction = 8;</code>
-       */
-      public Builder addDirection(float value) {
-        ensureDirectionIsMutable();
-        direction_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated float direction = 8;</code>
-       */
-      public Builder addAllDirection(
-          java.lang.Iterable<? extends java.lang.Float> values) {
-        ensureDirectionIsMutable();
-        super.addAll(values, direction_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated float direction = 8;</code>
-       */
-      public Builder clearDirection() {
-        direction_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000080);
-        onChanged();
-        return this;
-      }
-
-      // optional .pbdson.CommonVector info = 9;
-      private protocol.Pbmethod.CommonVector info_ = protocol.Pbmethod.CommonVector.getDefaultInstance();
-      private com.google.protobuf.SingleFieldBuilder<
-          protocol.Pbmethod.CommonVector, protocol.Pbmethod.CommonVector.Builder, protocol.Pbmethod.CommonVectorOrBuilder> infoBuilder_;
-      /**
-       * <code>optional .pbdson.CommonVector info = 9;</code>
-       */
-      public boolean hasInfo() {
-        return ((bitField0_ & 0x00000100) == 0x00000100);
-      }
-      /**
-       * <code>optional .pbdson.CommonVector info = 9;</code>
-       */
-      public protocol.Pbmethod.CommonVector getInfo() {
-        if (infoBuilder_ == null) {
-          return info_;
-        } else {
-          return infoBuilder_.getMessage();
-        }
-      }
-      /**
-       * <code>optional .pbdson.CommonVector info = 9;</code>
-       */
-      public Builder setInfo(protocol.Pbmethod.CommonVector value) {
-        if (infoBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          info_ = value;
-          onChanged();
-        } else {
-          infoBuilder_.setMessage(value);
-        }
-        bitField0_ |= 0x00000100;
-        return this;
-      }
-      /**
-       * <code>optional .pbdson.CommonVector info = 9;</code>
-       */
-      public Builder setInfo(
-          protocol.Pbmethod.CommonVector.Builder builderForValue) {
-        if (infoBuilder_ == null) {
-          info_ = builderForValue.build();
-          onChanged();
-        } else {
-          infoBuilder_.setMessage(builderForValue.build());
-        }
-        bitField0_ |= 0x00000100;
-        return this;
-      }
-      /**
-       * <code>optional .pbdson.CommonVector info = 9;</code>
-       */
-      public Builder mergeInfo(protocol.Pbmethod.CommonVector value) {
-        if (infoBuilder_ == null) {
-          if (((bitField0_ & 0x00000100) == 0x00000100) &&
-              info_ != protocol.Pbmethod.CommonVector.getDefaultInstance()) {
-            info_ =
-              protocol.Pbmethod.CommonVector.newBuilder(info_).mergeFrom(value).buildPartial();
-          } else {
-            info_ = value;
-          }
-          onChanged();
-        } else {
-          infoBuilder_.mergeFrom(value);
-        }
-        bitField0_ |= 0x00000100;
-        return this;
-      }
-      /**
-       * <code>optional .pbdson.CommonVector info = 9;</code>
-       */
-      public Builder clearInfo() {
-        if (infoBuilder_ == null) {
-          info_ = protocol.Pbmethod.CommonVector.getDefaultInstance();
-          onChanged();
-        } else {
-          infoBuilder_.clear();
-        }
-        bitField0_ = (bitField0_ & ~0x00000100);
-        return this;
-      }
-      /**
-       * <code>optional .pbdson.CommonVector info = 9;</code>
-       */
-      public protocol.Pbmethod.CommonVector.Builder getInfoBuilder() {
-        bitField0_ |= 0x00000100;
-        onChanged();
-        return getInfoFieldBuilder().getBuilder();
-      }
-      /**
-       * <code>optional .pbdson.CommonVector info = 9;</code>
-       */
-      public protocol.Pbmethod.CommonVectorOrBuilder getInfoOrBuilder() {
-        if (infoBuilder_ != null) {
-          return infoBuilder_.getMessageOrBuilder();
-        } else {
-          return info_;
-        }
-      }
-      /**
-       * <code>optional .pbdson.CommonVector info = 9;</code>
-       */
-      private com.google.protobuf.SingleFieldBuilder<
-          protocol.Pbmethod.CommonVector, protocol.Pbmethod.CommonVector.Builder, protocol.Pbmethod.CommonVectorOrBuilder> 
-          getInfoFieldBuilder() {
-        if (infoBuilder_ == null) {
-          infoBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              protocol.Pbmethod.CommonVector, protocol.Pbmethod.CommonVector.Builder, protocol.Pbmethod.CommonVectorOrBuilder>(
-                  info_,
-                  getParentForChildren(),
-                  isClean());
-          info_ = null;
-        }
-        return infoBuilder_;
-      }
-
-      // repeated .pbdson.PbBattleArenaWeapon weapons = 10;
-      private java.util.List<protocol.Pbmethod.PbBattleArenaWeapon> weapons_ =
-        java.util.Collections.emptyList();
-      private void ensureWeaponsIsMutable() {
-        if (!((bitField0_ & 0x00000200) == 0x00000200)) {
-          weapons_ = new java.util.ArrayList<protocol.Pbmethod.PbBattleArenaWeapon>(weapons_);
-          bitField0_ |= 0x00000200;
-         }
-      }
-
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbBattleArenaWeapon, protocol.Pbmethod.PbBattleArenaWeapon.Builder, protocol.Pbmethod.PbBattleArenaWeaponOrBuilder> weaponsBuilder_;
-
-      /**
-       * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbBattleArenaWeapon> getWeaponsList() {
-        if (weaponsBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(weapons_);
-        } else {
-          return weaponsBuilder_.getMessageList();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-       */
-      public int getWeaponsCount() {
-        if (weaponsBuilder_ == null) {
-          return weapons_.size();
-        } else {
-          return weaponsBuilder_.getCount();
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-       */
-      public protocol.Pbmethod.PbBattleArenaWeapon getWeapons(int index) {
-        if (weaponsBuilder_ == null) {
-          return weapons_.get(index);
-        } else {
-          return weaponsBuilder_.getMessage(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-       */
-      public Builder setWeapons(
-          int index, protocol.Pbmethod.PbBattleArenaWeapon value) {
-        if (weaponsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureWeaponsIsMutable();
-          weapons_.set(index, value);
-          onChanged();
-        } else {
-          weaponsBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-       */
-      public Builder setWeapons(
-          int index, protocol.Pbmethod.PbBattleArenaWeapon.Builder builderForValue) {
-        if (weaponsBuilder_ == null) {
-          ensureWeaponsIsMutable();
-          weapons_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          weaponsBuilder_.setMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-       */
-      public Builder addWeapons(protocol.Pbmethod.PbBattleArenaWeapon value) {
-        if (weaponsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureWeaponsIsMutable();
-          weapons_.add(value);
-          onChanged();
-        } else {
-          weaponsBuilder_.addMessage(value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-       */
-      public Builder addWeapons(
-          int index, protocol.Pbmethod.PbBattleArenaWeapon value) {
-        if (weaponsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureWeaponsIsMutable();
-          weapons_.add(index, value);
-          onChanged();
-        } else {
-          weaponsBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-       */
-      public Builder addWeapons(
-          protocol.Pbmethod.PbBattleArenaWeapon.Builder builderForValue) {
-        if (weaponsBuilder_ == null) {
-          ensureWeaponsIsMutable();
-          weapons_.add(builderForValue.build());
-          onChanged();
-        } else {
-          weaponsBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-       */
-      public Builder addWeapons(
-          int index, protocol.Pbmethod.PbBattleArenaWeapon.Builder builderForValue) {
-        if (weaponsBuilder_ == null) {
-          ensureWeaponsIsMutable();
-          weapons_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          weaponsBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-       */
-      public Builder addAllWeapons(
-          java.lang.Iterable<? extends protocol.Pbmethod.PbBattleArenaWeapon> values) {
-        if (weaponsBuilder_ == null) {
-          ensureWeaponsIsMutable();
-          super.addAll(values, weapons_);
-          onChanged();
-        } else {
-          weaponsBuilder_.addAllMessages(values);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-       */
-      public Builder clearWeapons() {
-        if (weaponsBuilder_ == null) {
-          weapons_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000200);
-          onChanged();
-        } else {
-          weaponsBuilder_.clear();
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-       */
-      public Builder removeWeapons(int index) {
-        if (weaponsBuilder_ == null) {
-          ensureWeaponsIsMutable();
-          weapons_.remove(index);
-          onChanged();
-        } else {
-          weaponsBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-       */
-      public protocol.Pbmethod.PbBattleArenaWeapon.Builder getWeaponsBuilder(
-          int index) {
-        return getWeaponsFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-       */
-      public protocol.Pbmethod.PbBattleArenaWeaponOrBuilder getWeaponsOrBuilder(
-          int index) {
-        if (weaponsBuilder_ == null) {
-          return weapons_.get(index);  } else {
-          return weaponsBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-       */
-      public java.util.List<? extends protocol.Pbmethod.PbBattleArenaWeaponOrBuilder> 
-           getWeaponsOrBuilderList() {
-        if (weaponsBuilder_ != null) {
-          return weaponsBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(weapons_);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-       */
-      public protocol.Pbmethod.PbBattleArenaWeapon.Builder addWeaponsBuilder() {
-        return getWeaponsFieldBuilder().addBuilder(
-            protocol.Pbmethod.PbBattleArenaWeapon.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-       */
-      public protocol.Pbmethod.PbBattleArenaWeapon.Builder addWeaponsBuilder(
-          int index) {
-        return getWeaponsFieldBuilder().addBuilder(
-            index, protocol.Pbmethod.PbBattleArenaWeapon.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbBattleArenaWeapon weapons = 10;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbBattleArenaWeapon.Builder> 
-           getWeaponsBuilderList() {
-        return getWeaponsFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbBattleArenaWeapon, protocol.Pbmethod.PbBattleArenaWeapon.Builder, protocol.Pbmethod.PbBattleArenaWeaponOrBuilder> 
-          getWeaponsFieldBuilder() {
-        if (weaponsBuilder_ == null) {
-          weaponsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              protocol.Pbmethod.PbBattleArenaWeapon, protocol.Pbmethod.PbBattleArenaWeapon.Builder, protocol.Pbmethod.PbBattleArenaWeaponOrBuilder>(
-                  weapons_,
-                  ((bitField0_ & 0x00000200) == 0x00000200),
-                  getParentForChildren(),
-                  isClean());
-          weapons_ = null;
-        }
-        return weaponsBuilder_;
-      }
-
-      // @@protoc_insertion_point(builder_scope:pbdson.PbBattleArenaHero)
-    }
-
-    static {
-      defaultInstance = new PbBattleArenaHero(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:pbdson.PbBattleArenaHero)
-  }
-
-  public interface PbBattleArenaWeaponOrBuilder
-      extends com.google.protobuf.MessageOrBuilder {
-
-    // optional int32 id = 1;
-    /**
-     * <code>optional int32 id = 1;</code>
-     */
-    boolean hasId();
-    /**
-     * <code>optional int32 id = 1;</code>
-     */
-    int getId();
-
-    // optional int32 slot = 2;
-    /**
-     * <code>optional int32 slot = 2;</code>
-     */
-    boolean hasSlot();
-    /**
-     * <code>optional int32 slot = 2;</code>
-     */
-    int getSlot();
-
-    // optional int32 level = 3;
-    /**
-     * <code>optional int32 level = 3;</code>
-     */
-    boolean hasLevel();
-    /**
-     * <code>optional int32 level = 3;</code>
-     */
-    int getLevel();
-
-    // repeated int32 shots = 4;
-    /**
-     * <code>repeated int32 shots = 4;</code>
-     */
-    java.util.List<java.lang.Integer> getShotsList();
-    /**
-     * <code>repeated int32 shots = 4;</code>
-     */
-    int getShotsCount();
-    /**
-     * <code>repeated int32 shots = 4;</code>
-     */
-    int getShots(int index);
-  }
-  /**
-   * Protobuf type {@code pbdson.PbBattleArenaWeapon}
-   */
-  public static final class PbBattleArenaWeapon extends
-      com.google.protobuf.GeneratedMessage
-      implements PbBattleArenaWeaponOrBuilder {
-    // Use PbBattleArenaWeapon.newBuilder() to construct.
-    private PbBattleArenaWeapon(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
-      super(builder);
-      this.unknownFields = builder.getUnknownFields();
-    }
-    private PbBattleArenaWeapon(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
-
-    private static final PbBattleArenaWeapon defaultInstance;
-    public static PbBattleArenaWeapon getDefaultInstance() {
-      return defaultInstance;
-    }
-
-    public PbBattleArenaWeapon getDefaultInstanceForType() {
-      return defaultInstance;
-    }
-
-    private final com.google.protobuf.UnknownFieldSet unknownFields;
-    @java.lang.Override
-    public final com.google.protobuf.UnknownFieldSet
-        getUnknownFields() {
-      return this.unknownFields;
-    }
-    private PbBattleArenaWeapon(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      initFields();
-      int mutable_bitField0_ = 0;
-      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
-          com.google.protobuf.UnknownFieldSet.newBuilder();
-      try {
-        boolean done = false;
-        while (!done) {
-          int tag = input.readTag();
-          switch (tag) {
-            case 0:
-              done = true;
-              break;
-            default: {
-              if (!parseUnknownField(input, unknownFields,
-                                     extensionRegistry, tag)) {
-                done = true;
-              }
-              break;
-            }
-            case 8: {
-              bitField0_ |= 0x00000001;
-              id_ = input.readInt32();
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              slot_ = input.readInt32();
-              break;
-            }
-            case 24: {
-              bitField0_ |= 0x00000004;
-              level_ = input.readInt32();
-              break;
-            }
-            case 32: {
-              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
-                shots_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000008;
-              }
-              shots_.add(input.readInt32());
-              break;
-            }
-            case 34: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000008) == 0x00000008) && input.getBytesUntilLimit() > 0) {
-                shots_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000008;
-              }
-              while (input.getBytesUntilLimit() > 0) {
-                shots_.add(input.readInt32());
-              }
-              input.popLimit(limit);
-              break;
-            }
-          }
-        }
-      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-        throw e.setUnfinishedMessage(this);
-      } catch (java.io.IOException e) {
-        throw new com.google.protobuf.InvalidProtocolBufferException(
-            e.getMessage()).setUnfinishedMessage(this);
-      } finally {
-        if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
-          shots_ = java.util.Collections.unmodifiableList(shots_);
-        }
-        this.unknownFields = unknownFields.build();
-        makeExtensionsImmutable();
-      }
-    }
-    public static final com.google.protobuf.Descriptors.Descriptor
-        getDescriptor() {
-      return protocol.Pbmethod.internal_static_pbdson_PbBattleArenaWeapon_descriptor;
-    }
-
-    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-        internalGetFieldAccessorTable() {
-      return protocol.Pbmethod.internal_static_pbdson_PbBattleArenaWeapon_fieldAccessorTable
-          .ensureFieldAccessorsInitialized(
-              protocol.Pbmethod.PbBattleArenaWeapon.class, protocol.Pbmethod.PbBattleArenaWeapon.Builder.class);
-    }
-
-    public static com.google.protobuf.Parser<PbBattleArenaWeapon> PARSER =
-        new com.google.protobuf.AbstractParser<PbBattleArenaWeapon>() {
-      public PbBattleArenaWeapon parsePartialFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws com.google.protobuf.InvalidProtocolBufferException {
-        return new PbBattleArenaWeapon(input, extensionRegistry);
-      }
-    };
-
-    @java.lang.Override
-    public com.google.protobuf.Parser<PbBattleArenaWeapon> getParserForType() {
-      return PARSER;
-    }
-
-    private int bitField0_;
-    // optional int32 id = 1;
-    public static final int ID_FIELD_NUMBER = 1;
-    private int id_;
-    /**
-     * <code>optional int32 id = 1;</code>
-     */
-    public boolean hasId() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>optional int32 id = 1;</code>
-     */
-    public int getId() {
-      return id_;
-    }
-
-    // optional int32 slot = 2;
-    public static final int SLOT_FIELD_NUMBER = 2;
-    private int slot_;
-    /**
-     * <code>optional int32 slot = 2;</code>
-     */
-    public boolean hasSlot() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>optional int32 slot = 2;</code>
-     */
-    public int getSlot() {
-      return slot_;
-    }
-
-    // optional int32 level = 3;
-    public static final int LEVEL_FIELD_NUMBER = 3;
-    private int level_;
-    /**
-     * <code>optional int32 level = 3;</code>
-     */
-    public boolean hasLevel() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
-    }
-    /**
-     * <code>optional int32 level = 3;</code>
-     */
-    public int getLevel() {
-      return level_;
-    }
-
-    // repeated int32 shots = 4;
-    public static final int SHOTS_FIELD_NUMBER = 4;
-    private java.util.List<java.lang.Integer> shots_;
-    /**
-     * <code>repeated int32 shots = 4;</code>
-     */
-    public java.util.List<java.lang.Integer>
-        getShotsList() {
-      return shots_;
-    }
-    /**
-     * <code>repeated int32 shots = 4;</code>
-     */
-    public int getShotsCount() {
-      return shots_.size();
-    }
-    /**
-     * <code>repeated int32 shots = 4;</code>
-     */
-    public int getShots(int index) {
-      return shots_.get(index);
-    }
-
-    private void initFields() {
-      id_ = 0;
-      slot_ = 0;
-      level_ = 0;
-      shots_ = java.util.Collections.emptyList();
-    }
-    private byte memoizedIsInitialized = -1;
-    public final boolean isInitialized() {
-      byte isInitialized = memoizedIsInitialized;
-      if (isInitialized != -1) return isInitialized == 1;
-
-      memoizedIsInitialized = 1;
-      return true;
-    }
-
-    public void writeTo(com.google.protobuf.CodedOutputStream output)
-                        throws java.io.IOException {
-      getSerializedSize();
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(1, id_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt32(2, slot_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeInt32(3, level_);
-      }
-      for (int i = 0; i < shots_.size(); i++) {
-        output.writeInt32(4, shots_.get(i));
-      }
-      getUnknownFields().writeTo(output);
-    }
-
-    private int memoizedSerializedSize = -1;
-    public int getSerializedSize() {
-      int size = memoizedSerializedSize;
-      if (size != -1) return size;
-
-      size = 0;
-      if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, id_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, slot_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, level_);
-      }
-      {
-        int dataSize = 0;
-        for (int i = 0; i < shots_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(shots_.get(i));
-        }
-        size += dataSize;
-        size += 1 * getShotsList().size();
-      }
-      size += getUnknownFields().getSerializedSize();
-      memoizedSerializedSize = size;
-      return size;
-    }
-
-    private static final long serialVersionUID = 0L;
-    @java.lang.Override
-    protected java.lang.Object writeReplace()
-        throws java.io.ObjectStreamException {
-      return super.writeReplace();
-    }
-
-    public static protocol.Pbmethod.PbBattleArenaWeapon parseFrom(
-        com.google.protobuf.ByteString data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbBattleArenaWeapon parseFrom(
-        com.google.protobuf.ByteString data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbBattleArenaWeapon parseFrom(byte[] data)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data);
-    }
-    public static protocol.Pbmethod.PbBattleArenaWeapon parseFrom(
-        byte[] data,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws com.google.protobuf.InvalidProtocolBufferException {
-      return PARSER.parseFrom(data, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbBattleArenaWeapon parseFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbBattleArenaWeapon parseFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbBattleArenaWeapon parseDelimitedFrom(java.io.InputStream input)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input);
-    }
-    public static protocol.Pbmethod.PbBattleArenaWeapon parseDelimitedFrom(
-        java.io.InputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseDelimitedFrom(input, extensionRegistry);
-    }
-    public static protocol.Pbmethod.PbBattleArenaWeapon parseFrom(
-        com.google.protobuf.CodedInputStream input)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input);
-    }
-    public static protocol.Pbmethod.PbBattleArenaWeapon parseFrom(
-        com.google.protobuf.CodedInputStream input,
-        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-        throws java.io.IOException {
-      return PARSER.parseFrom(input, extensionRegistry);
-    }
-
-    public static Builder newBuilder() { return Builder.create(); }
-    public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(protocol.Pbmethod.PbBattleArenaWeapon prototype) {
-      return newBuilder().mergeFrom(prototype);
-    }
-    public Builder toBuilder() { return newBuilder(this); }
-
-    @java.lang.Override
-    protected Builder newBuilderForType(
-        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-      Builder builder = new Builder(parent);
-      return builder;
-    }
-    /**
-     * Protobuf type {@code pbdson.PbBattleArenaWeapon}
-     */
-    public static final class Builder extends
-        com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements protocol.Pbmethod.PbBattleArenaWeaponOrBuilder {
-      public static final com.google.protobuf.Descriptors.Descriptor
-          getDescriptor() {
-        return protocol.Pbmethod.internal_static_pbdson_PbBattleArenaWeapon_descriptor;
-      }
-
-      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
-          internalGetFieldAccessorTable() {
-        return protocol.Pbmethod.internal_static_pbdson_PbBattleArenaWeapon_fieldAccessorTable
-            .ensureFieldAccessorsInitialized(
-                protocol.Pbmethod.PbBattleArenaWeapon.class, protocol.Pbmethod.PbBattleArenaWeapon.Builder.class);
-      }
-
-      // Construct using protocol.Pbmethod.PbBattleArenaWeapon.newBuilder()
-      private Builder() {
-        maybeForceBuilderInitialization();
-      }
-
-      private Builder(
-          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
-        super(parent);
-        maybeForceBuilderInitialization();
-      }
-      private void maybeForceBuilderInitialization() {
-        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
-        }
-      }
-      private static Builder create() {
-        return new Builder();
-      }
-
-      public Builder clear() {
-        super.clear();
-        id_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        slot_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
-        level_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000004);
-        shots_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000008);
-        return this;
-      }
-
-      public Builder clone() {
-        return create().mergeFrom(buildPartial());
-      }
-
-      public com.google.protobuf.Descriptors.Descriptor
-          getDescriptorForType() {
-        return protocol.Pbmethod.internal_static_pbdson_PbBattleArenaWeapon_descriptor;
-      }
-
-      public protocol.Pbmethod.PbBattleArenaWeapon getDefaultInstanceForType() {
-        return protocol.Pbmethod.PbBattleArenaWeapon.getDefaultInstance();
-      }
-
-      public protocol.Pbmethod.PbBattleArenaWeapon build() {
-        protocol.Pbmethod.PbBattleArenaWeapon result = buildPartial();
-        if (!result.isInitialized()) {
-          throw newUninitializedMessageException(result);
-        }
-        return result;
-      }
-
-      public protocol.Pbmethod.PbBattleArenaWeapon buildPartial() {
-        protocol.Pbmethod.PbBattleArenaWeapon result = new protocol.Pbmethod.PbBattleArenaWeapon(this);
-        int from_bitField0_ = bitField0_;
-        int to_bitField0_ = 0;
-        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
-          to_bitField0_ |= 0x00000001;
-        }
-        result.id_ = id_;
-        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
-          to_bitField0_ |= 0x00000002;
-        }
-        result.slot_ = slot_;
-        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-          to_bitField0_ |= 0x00000004;
-        }
-        result.level_ = level_;
-        if (((bitField0_ & 0x00000008) == 0x00000008)) {
-          shots_ = java.util.Collections.unmodifiableList(shots_);
-          bitField0_ = (bitField0_ & ~0x00000008);
-        }
-        result.shots_ = shots_;
-        result.bitField0_ = to_bitField0_;
-        onBuilt();
-        return result;
-      }
-
-      public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof protocol.Pbmethod.PbBattleArenaWeapon) {
-          return mergeFrom((protocol.Pbmethod.PbBattleArenaWeapon)other);
-        } else {
-          super.mergeFrom(other);
-          return this;
-        }
-      }
-
-      public Builder mergeFrom(protocol.Pbmethod.PbBattleArenaWeapon other) {
-        if (other == protocol.Pbmethod.PbBattleArenaWeapon.getDefaultInstance()) return this;
-        if (other.hasId()) {
-          setId(other.getId());
-        }
-        if (other.hasSlot()) {
-          setSlot(other.getSlot());
-        }
-        if (other.hasLevel()) {
-          setLevel(other.getLevel());
-        }
-        if (!other.shots_.isEmpty()) {
-          if (shots_.isEmpty()) {
-            shots_ = other.shots_;
-            bitField0_ = (bitField0_ & ~0x00000008);
-          } else {
-            ensureShotsIsMutable();
-            shots_.addAll(other.shots_);
-          }
-          onChanged();
-        }
-        this.mergeUnknownFields(other.getUnknownFields());
-        return this;
-      }
-
-      public final boolean isInitialized() {
-        return true;
-      }
-
-      public Builder mergeFrom(
-          com.google.protobuf.CodedInputStream input,
-          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
-          throws java.io.IOException {
-        protocol.Pbmethod.PbBattleArenaWeapon parsedMessage = null;
-        try {
-          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
-        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
-          parsedMessage = (protocol.Pbmethod.PbBattleArenaWeapon) e.getUnfinishedMessage();
-          throw e;
-        } finally {
-          if (parsedMessage != null) {
-            mergeFrom(parsedMessage);
-          }
-        }
-        return this;
-      }
-      private int bitField0_;
-
-      // optional int32 id = 1;
-      private int id_ ;
-      /**
-       * <code>optional int32 id = 1;</code>
-       */
-      public boolean hasId() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>optional int32 id = 1;</code>
-       */
-      public int getId() {
-        return id_;
-      }
-      /**
-       * <code>optional int32 id = 1;</code>
-       */
-      public Builder setId(int value) {
-        bitField0_ |= 0x00000001;
-        id_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 id = 1;</code>
-       */
-      public Builder clearId() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        id_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 slot = 2;
-      private int slot_ ;
-      /**
-       * <code>optional int32 slot = 2;</code>
-       */
-      public boolean hasSlot() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>optional int32 slot = 2;</code>
-       */
-      public int getSlot() {
-        return slot_;
-      }
-      /**
-       * <code>optional int32 slot = 2;</code>
-       */
-      public Builder setSlot(int value) {
-        bitField0_ |= 0x00000002;
-        slot_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 slot = 2;</code>
-       */
-      public Builder clearSlot() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        slot_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 level = 3;
-      private int level_ ;
-      /**
-       * <code>optional int32 level = 3;</code>
-       */
-      public boolean hasLevel() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
-      }
-      /**
-       * <code>optional int32 level = 3;</code>
-       */
-      public int getLevel() {
-        return level_;
-      }
-      /**
-       * <code>optional int32 level = 3;</code>
-       */
-      public Builder setLevel(int value) {
-        bitField0_ |= 0x00000004;
-        level_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 level = 3;</code>
-       */
-      public Builder clearLevel() {
-        bitField0_ = (bitField0_ & ~0x00000004);
-        level_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // repeated int32 shots = 4;
-      private java.util.List<java.lang.Integer> shots_ = java.util.Collections.emptyList();
-      private void ensureShotsIsMutable() {
-        if (!((bitField0_ & 0x00000008) == 0x00000008)) {
-          shots_ = new java.util.ArrayList<java.lang.Integer>(shots_);
-          bitField0_ |= 0x00000008;
-         }
-      }
-      /**
-       * <code>repeated int32 shots = 4;</code>
-       */
-      public java.util.List<java.lang.Integer>
-          getShotsList() {
-        return java.util.Collections.unmodifiableList(shots_);
-      }
-      /**
-       * <code>repeated int32 shots = 4;</code>
-       */
-      public int getShotsCount() {
-        return shots_.size();
-      }
-      /**
-       * <code>repeated int32 shots = 4;</code>
-       */
-      public int getShots(int index) {
-        return shots_.get(index);
-      }
-      /**
-       * <code>repeated int32 shots = 4;</code>
-       */
-      public Builder setShots(
-          int index, int value) {
-        ensureShotsIsMutable();
-        shots_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 shots = 4;</code>
-       */
-      public Builder addShots(int value) {
-        ensureShotsIsMutable();
-        shots_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 shots = 4;</code>
-       */
-      public Builder addAllShots(
-          java.lang.Iterable<? extends java.lang.Integer> values) {
-        ensureShotsIsMutable();
-        super.addAll(values, shots_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 shots = 4;</code>
-       */
-      public Builder clearShots() {
-        shots_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000008);
-        onChanged();
-        return this;
-      }
-
-      // @@protoc_insertion_point(builder_scope:pbdson.PbBattleArenaWeapon)
-    }
-
-    static {
-      defaultInstance = new PbBattleArenaWeapon(true);
-      defaultInstance.initFields();
-    }
-
-    // @@protoc_insertion_point(class_scope:pbdson.PbBattleArenaWeapon)
-  }
-
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_pbdson_RequestData_descriptor;
   private static
@@ -98915,45 +77220,10 @@ public final class Pbmethod {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_pbdson_PbListClan_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_pbdson_PbListHistory_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_pbdson_PbListHistory_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_pbdson_PbHistory_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_pbdson_PbHistory_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_pbdson_PbArena_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_pbdson_PbArena_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_pbdson_PbUser_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_pbdson_PbUser_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_pbdson_PbArenaTeamInfo_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_pbdson_PbArenaTeamInfo_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_pbdson_PbArenaHeroInfo_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_pbdson_PbArenaHeroInfo_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_pbdson_PbArenaPetInfo_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_pbdson_PbArenaPetInfo_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_pbdson_PbArenaWeapon_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_pbdson_PbArenaWeapon_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_pbdson_PbUserData_descriptor;
   private static
@@ -98975,11 +77245,6 @@ public final class Pbmethod {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_pbdson_PbPet_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_pbdson_PbListItemFarm_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_pbdson_PbListItemFarm_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_pbdson_PbListItemPoint_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -98994,26 +77259,6 @@ public final class Pbmethod {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_pbdson_PbListChat_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_pbdson_PbListHero_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_pbdson_PbListHero_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_pbdson_PbListLand_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_pbdson_PbListLand_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_pbdson_PbLand_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_pbdson_PbLand_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_pbdson_PbHero_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_pbdson_PbHero_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_pbdson_PbChat_descriptor;
   private static
@@ -99045,16 +77290,6 @@ public final class Pbmethod {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_pbdson_PbItem_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_pbdson_PbItemFarm_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_pbdson_PbItemFarm_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_pbdson_PbPiece_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_pbdson_PbPiece_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_pbdson_PbItemPoint_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -99064,26 +77299,6 @@ public final class Pbmethod {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_pbdson_PbItemEquipment_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_pbdson_PbListStat_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_pbdson_PbListStat_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_pbdson_PbStat_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_pbdson_PbStat_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_pbdson_PbListUserWeapon_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_pbdson_PbListUserWeapon_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_pbdson_PbUserWeapon_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_pbdson_PbUserWeapon_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
     internal_static_pbdson_ListAction_descriptor;
   private static
@@ -99259,31 +77474,6 @@ public final class Pbmethod {
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_pbdson_PpIAP_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_pbdson_PbBattleArena_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_pbdson_PbBattleArena_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_pbdson_PbBattleListArenaHero_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_pbdson_PbBattleListArenaHero_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_pbdson_PbBattleArenaUserInfo_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_pbdson_PbBattleArenaUserInfo_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_pbdson_PbBattleArenaHero_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_pbdson_PbBattleArenaHero_fieldAccessorTable;
-  private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_pbdson_PbBattleArenaWeapon_descriptor;
-  private static
-    com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_pbdson_PbBattleArenaWeapon_fieldAccessorTable;
 
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -99311,7 +77501,7 @@ public final class Pbmethod {
       ".PbPos\022\r\n\005speed\030\n \001(\005\022\014\n\004info\030\013 \003(\005\022\023\n\013r" +
       "angeAttack\030\014 \001(\002\022\014\n\004name\030\r \001(\t\022\r\n\005alive\030" +
       "\016 \001(\010\022\024\n\014lastInputSeq\030\017 \001(\003\022\r\n\005point\030\020 \003" +
-      "(\005\022\016\n\006userId\030\021 \001(\005\"B\n\006PbCell\022\n\n\002id\030\001 \001(\005" +
+      "(\003\022\016\n\006userId\030\021 \001(\005\"B\n\006PbCell\022\n\n\002id\030\001 \001(\005" +
       "\022 \n\005state\030\002 \001(\0162\021.pbdson.CellState\022\n\n\002hp",
       "\030\003 \001(\005\".\n\013PbListChunk\022\037\n\006aChunk\030\001 \003(\0132\017." +
       "pbdson.PbChunk\"_\n\007PbChunk\022\n\n\002id\030\001 \001(\005\022\r\n" +
@@ -99326,7 +77516,7 @@ public final class Pbmethod {
       "date\022#\n\nchunkState\030\005 \003(\0132\017.pbdson.PbChun" +
       "k\":\n\017PbListUnitState\022\'\n\naUnitState\030\001 \003(\013" +
       "2\023.pbdson.PbUnitState\"8\n\013PbUnitState\022\n\n\002" +
-      "id\030\001 \001(\003\022\016\n\006status\030\002 \003(\005\022\r\n\005point\030\003 \003(\005\"" +
+      "id\030\001 \001(\003\022\016\n\006status\030\002 \003(\005\022\r\n\005point\030\003 \003(\003\"" +
       "\351\002\n\006PbClan\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\016\n\006" +
       "server\030\003 \001(\005\022\020\n\010masterId\030\004 \001(\005\022\022\n\nmaster" +
       "Name\030\005 \001(\t\022\024\n\014numberMember\030\006 \001(\005\022\021\n\tmaxM" +
@@ -99347,237 +77537,175 @@ public final class Pbmethod {
       "\n\nrankTrophy\030\013 \001(\005\022\016\n\006avatar\030\014 \003(\005\022\022\n\ncu" +
       "rDonated\030\r \001(\005\022\016\n\006online\030\016 \001(\010\"J\n\nPbList" +
       "Clan\022\034\n\004clan\030\001 \003(\0132\016.pbdson.PbClan\022\036\n\006my" +
-      "Clan\030\002 \001(\0132\016.pbdson.PbClan\"3\n\rPbListHist" +
-      "ory\022\"\n\007history\030\001 \003(\0132\021.pbdson.PbHistory\"" +
-      "\260\001\n\tPbHistory\022\020\n\010isAttack\030\001 \001(\010\022\020\n\010targe" +
-      "tId\030\002 \001(\005\022\016\n\006status\030\003 \001(\005\022\022\n\ntimeAttack\030" +
-      "\004 \001(\005\022\016\n\006point1\030\005 \001(\005\022\016\n\006point2\030\006 \001(\005\022\014\n" +
-      "\004time\030\007 \001(\003\022\034\n\004user\030\010 \001(\0132\016.pbdson.PbUse",
-      "r\022\017\n\007myPoint\030\t \001(\005\"\311\001\n\007PbArena\022\022\n\ntimeRe" +
-      "main\030\001 \001(\003\022\016\n\006myRank\030\002 \001(\005\022\017\n\007myPoint\030\003 " +
-      "\001(\005\022!\n\topponents\030\004 \003(\0132\016.pbdson.PbUser\022\021" +
-      "\n\tfeeTicket\030\005 \001(\005\022\024\n\014curBuyTicket\030\006 \001(\005\022" +
-      "\024\n\014maxBuyTicket\030\007 \001(\005\022\022\n\nhasDefense\030\010 \001(" +
-      "\010\022\023\n\013defenseTeam\030\t \003(\005\"\237\004\n\006PbUser\022\n\n\002id\030" +
-      "\001 \001(\005\022\020\n\010username\030\002 \001(\t\022\014\n\004name\030\003 \001(\t\022\014\n" +
-      "\004gold\030\004 \001(\003\022\013\n\003gem\030\005 \001(\003\022\013\n\003exp\030\006 \001(\003\022\r\n" +
-      "\005level\030\007 \001(\005\022\016\n\006avatar\030\010 \003(\005\022\013\n\003vip\030\t \003(" +
-      "\005\022&\n\010clanInfo\030\n \001(\0132\024.pbdson.CommonVecto",
-      "r\022\"\n\004info\030\013 \001(\0132\024.pbdson.CommonVector\022\r\n" +
-      "\005petId\030\014 \003(\005\022\020\n\010facebook\030\r \001(\t\022&\n\010userIn" +
-      "fo\030\016 \001(\0132\024.pbdson.CommonVector\022%\n\007weapon" +
-      "s\030\017 \003(\0132\024.pbdson.PbUserWeapon\022\014\n\004rank\030\020 " +
-      "\001(\005\022\014\n\004desc\030\021 \001(\t\022\023\n\013weaponEquip\030\022 \003(\005\022\r" +
-      "\n\005point\030\023 \003(\005\022\026\n\016timeLastAction\030\024 \001(\003\022\r\n" +
-      "\005honor\030\025 \001(\005\022\r\n\005power\030\026 \001(\003\022\021\n\titemEquip" +
-      "\030\027 \003(\005\022\017\n\007channel\030\030 \003(\005\022\021\n\tpointRank\030\031 \001" +
-      "(\003\022\021\n\tarenaRank\030\032 \001(\005\022\014\n\004ruby\030\033 \001(\003\022\013\n\003p" +
-      "et\030\034 \003(\005\"n\n\017PbArenaTeamInfo\022\014\n\004team\030\001 \001(",
-      "\005\022\'\n\006heroes\030\002 \003(\0132\027.pbdson.PbArenaHeroIn" +
-      "fo\022$\n\004pets\030\003 \003(\0132\026.pbdson.PbArenaPetInfo" +
-      "\"I\n\017PbArenaHeroInfo\022\016\n\006avatar\030\001 \001(\005\022&\n\007w" +
-      "eapons\030\002 \003(\0132\025.pbdson.PbArenaWeapon\".\n\016P" +
-      "bArenaPetInfo\022\016\n\006avatar\030\001 \001(\005\022\014\n\004star\030\002 " +
-      "\001(\005\"8\n\rPbArenaWeapon\022\n\n\002id\030\001 \001(\005\022\014\n\004slot" +
-      "\030\002 \001(\005\022\r\n\005level\030\003 \001(\005\"\355\004\n\nPbUserData\022\025\n\r" +
-      "lvGachaWeapon\030\001 \001(\005\022\022\n\nlvGachaPet\030\002 \001(\005\022" +
-      "\022\n\nlvTraining\030\004 \001(\005\022\025\n\rmaxlvTraining\030\005 \001" +
-      "(\005\022\025\n\rnumPointLevel\030\006 \001(\005\022\r\n\005stone\030\007 \001(\005",
-      "\022\020\n\010stoneVip\030\010 \001(\005\022!\n\005items\030\t \001(\0132\022.pbds" +
-      "on.PbListItem\0223\n\016itemEquipments\030\n \001(\0132\033." +
-      "pbdson.PbListItemEquipment\022+\n\naItemEquip" +
-      "\030\013 \003(\0132\027.pbdson.PbItemEquipment\022\'\n\naItem" +
-      "Point\030\014 \003(\0132\023.pbdson.PbItemPoint\022%\n\taIte" +
-      "mFarm\030\r \003(\0132\022.pbdson.PbItemFarm\022#\n\naItem" +
-      "Piece\030\016 \003(\0132\017.pbdson.PbPiece\022\033\n\004aPet\030\017 \003" +
-      "(\0132\r.pbdson.PbPet\022\035\n\005aHero\030\020 \003(\0132\016.pbdso" +
-      "n.PbHero\022\020\n\010tutorial\030\021 \001(\005\022\021\n\tdameSkins\030" +
-      "\022 \003(\005\022\025\n\rdameSkinEquip\030\023 \001(\005\022\017\n\007bossGod\030",
-      "\024 \003(\005\022\022\n\nchatFrames\030\025 \003(\005\022\026\n\016chatFrameEq" +
-      "uip\030\026 \001(\005\022\016\n\006trials\030\027 \003(\005\022\022\n\ntrialEquip\030" +
-      "\030 \001(\005\"*\n\nPbListItem\022\034\n\004item\030\001 \003(\0132\016.pbds" +
-      "on.PbItem\"(\n\tPbListPet\022\033\n\004pets\030\001 \003(\0132\r.p" +
-      "bdson.PbPet\"^\n\005PbPet\022\n\n\002id\030\001 \001(\005\022\014\n\004star" +
-      "\030\002 \001(\005\022\n\n\002hp\030\004 \001(\005\022\r\n\005maxHp\030\005 \001(\005\022\r\n\005pow" +
-      "er\030\006 \001(\003\022\021\n\tbonusStar\030\007 \003(\005\"7\n\016PbListIte" +
-      "mFarm\022%\n\titemFarms\030\001 \003(\0132\022.pbdson.PbItem" +
-      "Farm\":\n\017PbListItemPoint\022\'\n\nitemPoints\030\001 " +
-      "\003(\0132\023.pbdson.PbItemPoint\"A\n\023PbListItemEq",
-      "uipment\022*\n\titemEquip\030\001 \003(\0132\027.pbdson.PbIt" +
-      "emEquipment\"+\n\nPbListChat\022\035\n\005aChat\030\001 \003(\013" +
-      "2\016.pbdson.PbChat\"+\n\nPbListHero\022\035\n\005aHero\030" +
-      "\001 \003(\0132\016.pbdson.PbHero\"\225\001\n\nPbListLand\022\035\n\005" +
-      "aLand\030\001 \003(\0132\016.pbdson.PbLand\022\016\n\006aBonus\030\002 " +
-      "\003(\003\022\022\n\ntreeStatus\030\003 \003(\003\022\014\n\004deco\030\004 \003(\005\022\021\n" +
-      "\tbonusTime\030\005 \001(\005\022\021\n\tbonusItem\030\006 \001(\005\022\020\n\010b" +
-      "onusExp\030\007 \001(\005\"\225\001\n\006PbLand\022\016\n\006landId\030\001 \001(\005" +
-      "\022\016\n\006treeId\030\002 \001(\005\022\021\n\ttimePlant\030\003 \001(\003\022\023\n\013t" +
-      "imeHarvest\030\004 \001(\003\022\020\n\010hasWater\030\005 \001(\005\022\021\n\tfe",
-      "rtilize\030\006 \001(\005\022\017\n\007ferTime\030\007 \001(\005\022\r\n\005bonus\030" +
-      "\010 \003(\003\"<\n\006PbHero\022\016\n\006heroId\030\001 \001(\005\022\r\n\005skins" +
-      "\030\002 \003(\005\022\023\n\013itemEquipId\030\003 \003(\005\"\211\001\n\006PbChat\022\017" +
-      "\n\007reqTime\030\001 \001(\003\022\017\n\007message\030\002 \001(\t\022\014\n\004type" +
-      "\030\003 \001(\005\022\034\n\004user\030\004 \001(\0132\016.pbdson.PbUser\022\"\n\004" +
-      "info\030\005 \001(\0132\024.pbdson.CommonVector\022\r\n\005poin" +
-      "t\030\006 \003(\005\"7\n\020PbListChatFriend\022#\n\005chats\030\001 \003" +
-      "(\0132\024.pbdson.PbChatFriend\"j\n\014PbChatFriend" +
-      "\022\016\n\006userId\030\001 \001(\005\022\017\n\007message\030\002 \001(\t\022\016\n\006ava" +
-      "tar\030\003 \003(\005\022\014\n\004name\030\004 \001(\t\022\014\n\004time\030\005 \001(\003\022\r\n",
-      "\005level\030\006 \001(\005\"v\n\006PbShop\022\"\n\006tabSet\030\001 \003(\0132\022" +
-      ".pbdson.PbItemShop\022#\n\007tabDeal\030\002 \003(\0132\022.pb" +
-      "dson.PbItemShop\022#\n\007tabMisc\030\003 \003(\0132\022.pbdso" +
-      "n.PbItemShop\"\245\001\n\nPbItemShop\022\n\n\002id\030\001 \001(\005\022" +
-      "\013\n\003tab\030\002 \001(\005\022\014\n\004name\030\003 \001(\t\022\014\n\004desc\030\004 \001(\t" +
-      "\022\014\n\004item\030\005 \003(\003\022\r\n\005price\030\006 \003(\003\022\r\n\005image\030\007" +
-      " \001(\t\022\016\n\006status\030\010 \001(\005\022\022\n\ndescStatus\030\t \001(\t" +
-      "\022\022\n\ntimeRemain\030\n \001(\003\"@\n\006PbItem\022\n\n\002id\030\001 \001" +
-      "(\005\022\014\n\004type\030\002 \001(\005\022\016\n\006number\030\003 \001(\005\022\014\n\004data" +
-      "\030\004 \001(\t\"6\n\nPbItemFarm\022\014\n\004type\030\001 \001(\005\022\n\n\002id",
-      "\030\002 \001(\005\022\016\n\006number\030\003 \001(\005\"3\n\007PbPiece\022\014\n\004typ" +
-      "e\030\001 \001(\005\022\n\n\002id\030\002 \001(\005\022\016\n\006number\030\003 \001(\005\".\n\013P" +
-      "bItemPoint\022\017\n\007itemKey\030\001 \001(\005\022\016\n\006number\030\002 " +
-      "\001(\003\"\216\001\n\017PbItemEquipment\022\n\n\002id\030\001 \001(\003\022\017\n\007i" +
-      "temKey\030\002 \001(\005\022\r\n\005level\030\003 \001(\005\022\014\n\004lock\030\004 \001(" +
-      "\010\022\r\n\005point\030\005 \003(\005\022\016\n\006expire\030\006 \001(\003\022\023\n\013lock" +
-      "Destroy\030\007 \001(\010\022\r\n\005bless\030\010 \001(\005\"+\n\nPbListSt" +
-      "at\022\035\n\005aStat\030\001 \003(\0132\016.pbdson.PbStat\"{\n\006PbS" +
-      "tat\022\n\n\002id\030\001 \001(\005\022\016\n\006status\030\002 \001(\005\022\r\n\005level" +
-      "\030\003 \001(\005\022\021\n\tcondition\030\004 \003(\005\022\020\n\010maxLevel\030\005 ",
-      "\001(\005\022\020\n\010pointPer\030\006 \001(\005\022\017\n\007formula\030\007 \003(\002\"9" +
-      "\n\020PbListUserWeapon\022%\n\007weapons\030\001 \003(\0132\024.pb" +
-      "dson.PbUserWeapon\"i\n\014PbUserWeapon\022\n\n\002id\030" +
-      "\001 \001(\005\022\r\n\005level\030\002 \001(\005\022\016\n\006number\030\003 \001(\005\022\017\n\007" +
-      "isEquid\030\004 \001(\005\022\016\n\006timeCd\030\005 \001(\002\022\r\n\005bless\030\006" +
-      " \001(\005\"/\n\nListAction\022!\n\007aAction\030\001 \003(\0132\020.pb" +
-      "dson.PbAction\"*\n\010PbAction\022\020\n\010actionId\030\001 " +
-      "\001(\005\022\014\n\004data\030\002 \001(\014\".\n\014CommonVector\022\r\n\005aLo" +
-      "ng\030\001 \003(\003\022\017\n\007aString\030\002 \003(\t\"9\n\020ListCommonV" +
-      "ector\022%\n\007aVector\030\001 \003(\0132\024.pbdson.CommonVe",
-      "ctor\"g\n\017PbCharacterInfo\022\n\n\002id\030\001 \001(\005\022\014\n\004n" +
-      "ame\030\002 \001(\t\022\014\n\004team\030\003 \001(\005\022\016\n\006avatar\030\004 \003(\005\022" +
-      "\r\n\005aItem\030\005 \003(\005\022\r\n\005point\030\006 \003(\005\"+\n\nPbListM" +
-      "ail\022\035\n\005aMail\030\001 \003(\0132\016.pbdson.PbMail\"\210\001\n\006P" +
-      "bMail\022\n\n\002id\030\001 \001(\005\022\r\n\005title\030\002 \001(\t\022\017\n\007mess" +
-      "age\030\003 \001(\t\022\r\n\005bonus\030\004 \003(\005\022\017\n\007receive\030\005 \001(" +
-      "\005\022\014\n\004time\030\006 \001(\003\022\020\n\010senderId\030\007 \001(\005\022\022\n\nsen" +
-      "derName\030\010 \001(\t\"\257\001\n\tPbEndGame\022\017\n\007popupId\030\001" +
-      " \001(\005\022\021\n\tbattleKey\030\002 \001(\t\022\r\n\005isWin\030\003 \001(\010\022\017" +
-      "\n\007message\030\004 \001(\t\022\r\n\005bonus\030\005 \003(\003\022\014\n\004time\030\006",
-      " \001(\005\022\017\n\007perDame\030\007 \001(\005\022\014\n\004star\030\010 \001(\005\022\"\n\004i" +
-      "nfo\030\t \001(\0132\024.pbdson.CommonVector\"{\n\nPbRoo" +
-      "mInfo\022\020\n\010roomType\030\001 \001(\005\022\017\n\007service\030\002 \001(\005" +
-      "\022!\n\003cmm\030\003 \001(\0132\024.pbdson.CommonVector\022\'\n\005l" +
-      "stCm\030\004 \001(\0132\030.pbdson.ListCommonVector\"Z\n\017" +
-      "PbListMiniLotte\022\020\n\010allBonus\030\001 \003(\003\022\020\n\010luc" +
-      "kyNum\030\002 \003(\005\022#\n\006aLotte\030\003 \003(\0132\023.pbdson.PbM" +
-      "iniLotte\"C\n\013PbMiniLotte\022\021\n\tnumChoose\030\001 \003" +
-      "(\005\022\022\n\nprizeIndex\030\002 \001(\005\022\r\n\005bonus\030\003 \003(\005\"B\n" +
-      "\024PbListLotteryHistory\022*\n\010aLottery\030\001 \003(\0132",
-      "\030.pbdson.PbLotteryHistory\"\247\001\n\020PbLotteryH" +
-      "istory\022\017\n\007eventId\030\001 \001(\005\022\014\n\004type\030\002 \001(\005\022\020\n" +
-      "\010luckyNum\030\003 \001(\005\022\016\n\006number\030\004 \003(\005\022\014\n\004time\030" +
-      "\005 \001(\003\022\r\n\005bonus\030\006 \003(\003\022\016\n\006status\030\007 \001(\005\022\021\n\t" +
-      "listBonus\030\010 \003(\003\022\022\n\nlistResult\030\t \003(\005\"*\n\014P" +
-      "bUnitUpdate\022\014\n\004type\030\001 \001(\005\022\014\n\004data\030\002 \001(\014\"" +
-      "\213\001\n\tPbUnitPos\022\n\n\002id\030\001 \001(\003\022\r\n\005speed\030\002 \001(\005" +
-      "\022\024\n\014lastInputSeq\030\003 \001(\003\022\032\n\003pos\030\004 \001(\0132\r.pb" +
-      "dson.PbPos\022 \n\tdirection\030\005 \001(\0132\r.pbdson.P" +
-      "bPos\022\017\n\007chunkId\030\006 \001(\005\"1\n\014PbListBullet\022!\n",
-      "\007bullets\030\001 \003(\0132\020.pbdson.PbBullet\"@\n\010PbBu" +
-      "llet\022\n\n\002id\030\001 \001(\005\022\032\n\003pos\030\002 \001(\0132\r.pbdson.P" +
-      "bPos\022\014\n\004info\030\003 \003(\005\"(\n\tPbListTab\022\033\n\004tabs\030" +
-      "\001 \003(\0132\r.pbdson.PbTab\"Z\n\005PbTab\022\r\n\005tabId\030\001" +
-      " \001(\005\022\025\n\reventTemplate\030\002 \001(\005\022\r\n\005image\030\003 \001" +
-      "(\t\022\014\n\004name\030\004 \001(\t\022\016\n\006notify\030\005 \001(\010\"\255\002\n\017PbE" +
-      "ventBuyMonth\022\021\n\teventName\030\001 \001(\t\022\023\n\013image" +
-      "Banner\030\002 \001(\t\022\022\n\ntextBanner\030\003 \001(\t\022\r\n\005leve" +
-      "l\030\004 \001(\005\022\020\n\010curPoint\030\005 \001(\005\022\020\n\010maxPoint\030\006 " +
-      "\001(\005\022\025\n\rbuttonAddGoto\030\007 \001(\005\022\017\n\007keyHelp\030\010 ",
-      "\001(\t\022\016\n\006timeCD\030\t \001(\003\022\021\n\tstatusBuy\030\n \001(\005\022\r" +
-      "\n\005price\030\013 \003(\003\022\022\n\nnormalName\030\014 \001(\t\022\017\n\007vip" +
-      "Name\030\r \001(\t\022,\n\005cells\030\016 \003(\0132\035.pbdson.PbCel" +
-      "lPanelEventMonth\"\315\001\n\014PbEventTimer\022\n\n\002id\030" +
-      "\001 \001(\005\022\016\n\006status\030\002 \001(\005\022\022\n\ntimeRemain\030\003 \001(" +
-      "\003\022\r\n\005bonus\030\004 \003(\003\022\r\n\005price\030\005 \003(\003\022\020\n\010oldPr" +
-      "ice\030\006 \003(\003\022\014\n\004name\030\007 \001(\t\022\014\n\004desc\030\010 \001(\t\022\014\n" +
-      "\004sale\030\t \001(\t\022\017\n\007bgrPath\030\n \001(\t\022\"\n\004info\030\013 \001" +
-      "(\0132\024.pbdson.CommonVector\"w\n\025PbCellPanelE" +
-      "ventMonth\022\r\n\005level\030\001 \001(\005\022\013\n\003exp\030\002 \001(\005\022\016\n",
-      "\006status\030\003 \001(\005\022\021\n\tstatusVip\030\004 \001(\005\022\r\n\005bonu" +
-      "s\030\005 \003(\003\022\020\n\010bonusVip\030\006 \003(\003\"\221\001\n\023PbPanelEve" +
-      "ntTabCell\022\021\n\teventName\030\001 \001(\t\022\023\n\013imageBan" +
-      "ner\030\002 \001(\t\022\022\n\ntextBanner\030\003 \001(\t\022\016\n\006timeCD\030" +
-      "\t \001(\003\022.\n\005cells\030\016 \003(\0132\037.pbdson.PbCellPane" +
-      "lEventTabCell\"i\n\027PbCellPanelEventTabCell" +
-      "\022\n\n\002id\030\001 \001(\005\022\020\n\010cellName\030\002 \001(\t\022\r\n\005bonus\030" +
-      "\003 \003(\003\022\013\n\003per\030\004 \001(\t\022\024\n\014buttonStatus\030\005 \001(\005" +
-      "\"\237\001\n\tPbWelfare\022\017\n\007eventId\030\001 \001(\005\022\016\n\006notif" +
-      "y\030\002 \001(\010\022%\n\006banner\030\003 \001(\0132\025.pbdson.PbBanne",
-      "rEvent\022&\n\010tabEvent\030\004 \003(\0132\024.pbdson.PbTabW" +
-      "elfare\022\017\n\007keyHelp\030\005 \001(\t\022\021\n\tcountdown\030\006 \001" +
-      "(\003\"b\n\014PbTabWelfare\022\r\n\005tabId\030\001 \001(\005\022\017\n\007tab" +
-      "Name\030\002 \001(\t\022\"\n\005cells\030\003 \003(\0132\023.pbdson.PbCel" +
-      "lEvent\022\016\n\006notify\030\004 \001(\010\"\263\001\n\rPbBannerEvent" +
-      "\022\022\n\npathBanner\030\001 \001(\t\022\014\n\004text\030\002 \001(\t\022\022\n\nbo" +
-      "nusImage\030\003 \001(\t\022\021\n\tboxStatus\030\004 \001(\005\022\020\n\010bon" +
-      "usBox\030\005 \003(\005\022\014\n\004desc\030\006 \001(\t\022\021\n\tpathTitle\030\007" +
-      " \001(\t\022&\n\004info\030\010 \001(\0132\030.pbdson.ListCommonVe" +
-      "ctor\"\353\001\n\013PbCellEvent\022\n\n\002id\030\001 \001(\005\022\r\n\005imag",
-      "e\030\002 \001(\t\022\r\n\005bonus\030\003 \003(\005\022\020\n\010nameCell\030\004 \001(\t" +
-      "\022\020\n\010textCell\030\005 \001(\t\022\020\n\010textDesc\030\006 \001(\t\022\016\n\006" +
-      "numBuy\030\007 \001(\005\022\r\n\005limit\030\010 \001(\005\022\r\n\005price\030\t \003" +
-      "(\003\022\024\n\014buttonStatus\030\n \001(\005\022\020\n\010bonusDay\030\013 \003" +
-      "(\005\022\022\n\ntimeRemain\030\014 \001(\003\022\022\n\ntimeExpire\030\r \001" +
-      "(\003\"\225\001\n\013PbEvent7Day\022&\n\004days\030\001 \003(\0132\030.pbdso" +
-      "n.PbPanelEvent7Day\022\022\n\ntimeRemain\030\002 \001(\003\022\020" +
-      "\n\010curValue\030\003 \001(\005\022\020\n\010maxValue\030\004 \001(\005\022&\n\tpo" +
-      "sReward\030\005 \003(\0132\023.pbdson.PbPosReward\"U\n\013Pb" +
-      "PosReward\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\r\n\005p",
-      "oint\030\003 \001(\005\022\r\n\005bonus\030\004 \003(\003\022\016\n\006status\030\005 \001(" +
-      "\005\"R\n\016PbTabEvent7Day\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030" +
-      "\002 \001(\t\022&\n\005cells\030\003 \003(\0132\027.pbdson.PbCellEven" +
-      "t7Day\"\272\001\n\020PbPanelEvent7Day\022$\n\004tab1\030\001 \001(\013" +
-      "2\026.pbdson.PbTabEvent7Day\022$\n\004tab2\030\002 \001(\0132\026" +
-      ".pbdson.PbTabEvent7Day\022$\n\004tab3\030\003 \001(\0132\026.p" +
-      "bdson.PbTabEvent7Day\022$\n\004tab4\030\004 \001(\0132\026.pbd" +
-      "son.PbTabEvent7Day\022\016\n\006isLock\030\005 \001(\010\"\306\001\n\017P" +
-      "bCellEvent7Day\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t" +
-      "\022\014\n\004desc\030\003 \001(\t\022\020\n\010curValue\030\004 \001(\005\022\020\n\010maxV",
-      "alue\030\005 \001(\005\022\r\n\005bonus\030\006 \003(\003\022\024\n\014buttonStatu" +
-      "s\030\007 \001(\005\022\022\n\nbuttonGoto\030\010 \001(\005\022\020\n\010oldPrice\030" +
-      "\t \003(\003\022\020\n\010newPrice\030\n \003(\003\022\n\n\002xu\030\013 \001(\005\"\'\n\tP" +
-      "bListIAP\022\032\n\003iap\030\001 \003(\0132\r.pbdson.PpIAP\"\264\001\n" +
-      "\005PpIAP\022\n\n\002id\030\001 \001(\005\022\030\n\020productIdAndroid\030\002" +
-      " \001(\t\022\024\n\014productIdIos\030\003 \001(\t\022\014\n\004name\030\004 \001(\t" +
-      "\022\r\n\005price\030\005 \001(\t\022\r\n\005bonus\030\006 \003(\003\022\020\n\010addBon" +
-      "us\030\007 \003(\003\022\020\n\010addTitle\030\010 \001(\t\022\016\n\006vipExp\030\t \001" +
-      "(\005\022\017\n\007priceQr\030\n \001(\t\"\354\001\n\rPbBattleArena\022\017\n" +
-      "\007mapInfo\030\001 \003(\005\022-\n\006myInfo\030\002 \001(\0132\035.pbdson.",
-      "PbBattleArenaUserInfo\022.\n\007oppInfo\030\003 \001(\0132\035" +
-      ".pbdson.PbBattleArenaUserInfo\022-\n\006myTeam\030" +
-      "\004 \001(\0132\035.pbdson.PbBattleListArenaHero\022.\n\007" +
-      "oppTeam\030\005 \001(\0132\035.pbdson.PbBattleListArena" +
-      "Hero\022\014\n\004time\030\006 \001(\005\"@\n\025PbBattleListArenaH" +
-      "ero\022\'\n\004team\030\001 \003(\0132\031.pbdson.PbBattleArena" +
-      "Hero\"d\n\025PbBattleArenaUserInfo\022\016\n\006avatar\030" +
-      "\001 \003(\005\022\r\n\005level\030\002 \001(\005\022\013\n\003vip\030\003 \001(\005\022\014\n\004nam" +
-      "e\030\004 \001(\t\022\021\n\trankPoint\030\005 \001(\005\"\337\001\n\021PbBattleA" +
-      "renaHero\022\n\n\002id\030\001 \001(\005\022\016\n\006avatar\030\002 \001(\005\022\020\n\010",
-      "heroType\030\003 \001(\005\022\014\n\004slot\030\004 \001(\005\022\r\n\005level\030\005 " +
-      "\001(\005\022\r\n\005point\030\006 \003(\005\022\013\n\003pos\030\007 \003(\002\022\021\n\tdirec" +
-      "tion\030\010 \003(\002\022\"\n\004info\030\t \001(\0132\024.pbdson.Common" +
-      "Vector\022,\n\007weapons\030\n \003(\0132\033.pbdson.PbBattl" +
-      "eArenaWeapon\"M\n\023PbBattleArenaWeapon\022\n\n\002i" +
-      "d\030\001 \001(\005\022\014\n\004slot\030\002 \001(\005\022\r\n\005level\030\003 \001(\005\022\r\n\005" +
-      "shots\030\004 \003(\005*!\n\tCellState\022\n\n\006ACTIVE\020\001\022\010\n\004" +
-      "HIDE\020\002*Y\n\tStateType\022\023\n\017TYPE_ADD_REMOVE\020\001" +
-      "\022\014\n\010TYPE_POS\020\002\022\023\n\017TYPE_UNIT_STATE\020\003\022\024\n\020T" +
-      "YPE_CHUNK_STATE\020\004*y\n\016CellObjectType\022\010\n\004R",
-      "OCK\020\001\022\010\n\004SIGN\020\002\022\n\n\006CACTUS\020\003\022\n\n\006FLOWER\020\004\022" +
-      "\t\n\005SKULL\020\005\022\t\n\005CHEST\020\006\022\t\n\005BONES\020\007\022\016\n\nGRAV" +
-      "ESTONE\020\010\022\n\n\006HELMET\020\t*;\n\014TargetAttack\022\n\n\006" +
-      "OBJECT\020\000\022\t\n\005ENEMY\020\001\022\010\n\004BOSS\020\002\022\n\n\006PLAYER\020" +
-      "\003B\024\n\010protocolB\010Pbmethod"
+      "Clan\030\002 \001(\0132\016.pbdson.PbClan\"\370\003\n\006PbUser\022\n\n" +
+      "\002id\030\001 \001(\005\022\020\n\010username\030\002 \001(\t\022\014\n\004name\030\003 \001(" +
+      "\t\022\014\n\004gold\030\004 \001(\003\022\013\n\003gem\030\005 \001(\003\022\013\n\003exp\030\006 \001(" +
+      "\003\022\r\n\005level\030\007 \001(\005\022\016\n\006avatar\030\010 \003(\005\022\013\n\003vip\030" +
+      "\t \003(\005\022&\n\010clanInfo\030\n \001(\0132\024.pbdson.CommonV" +
+      "ector\022\"\n\004info\030\013 \001(\0132\024.pbdson.CommonVecto",
+      "r\022\r\n\005petId\030\014 \003(\005\022\020\n\010facebook\030\r \001(\t\022&\n\010us" +
+      "erInfo\030\016 \001(\0132\024.pbdson.CommonVector\022\014\n\004ra" +
+      "nk\030\020 \001(\005\022\014\n\004desc\030\021 \001(\t\022\023\n\013weaponEquip\030\022 " +
+      "\003(\005\022\r\n\005point\030\023 \003(\003\022\026\n\016timeLastAction\030\024 \001" +
+      "(\003\022\r\n\005honor\030\025 \001(\005\022\r\n\005power\030\026 \001(\003\022\021\n\titem" +
+      "Equip\030\027 \003(\005\022\017\n\007channel\030\030 \003(\005\022\021\n\tpointRan" +
+      "k\030\031 \001(\003\022\021\n\tarenaRank\030\032 \001(\005\022\014\n\004ruby\030\033 \001(\003" +
+      "\022\013\n\003pet\030\034 \003(\005\"\202\004\n\nPbUserData\022\025\n\rlvGachaW" +
+      "eapon\030\001 \001(\005\022\022\n\nlvGachaPet\030\002 \001(\005\022\022\n\nlvTra" +
+      "ining\030\004 \001(\005\022\025\n\rmaxlvTraining\030\005 \001(\005\022\025\n\rnu",
+      "mPointLevel\030\006 \001(\005\022\r\n\005stone\030\007 \001(\005\022\020\n\010ston" +
+      "eVip\030\010 \001(\005\022!\n\005items\030\t \001(\0132\022.pbdson.PbLis" +
+      "tItem\0223\n\016itemEquipments\030\n \001(\0132\033.pbdson.P" +
+      "bListItemEquipment\022+\n\naItemEquip\030\013 \003(\0132\027" +
+      ".pbdson.PbItemEquipment\022\'\n\naItemPoint\030\014 " +
+      "\003(\0132\023.pbdson.PbItemPoint\022\033\n\004aPet\030\017 \003(\0132\r" +
+      ".pbdson.PbPet\022\020\n\010tutorial\030\021 \001(\005\022\021\n\tdameS" +
+      "kins\030\022 \003(\005\022\025\n\rdameSkinEquip\030\023 \001(\005\022\017\n\007bos" +
+      "sGod\030\024 \003(\005\022\022\n\nchatFrames\030\025 \003(\005\022\026\n\016chatFr" +
+      "ameEquip\030\026 \001(\005\022\016\n\006trials\030\027 \003(\005\022\022\n\ntrialE",
+      "quip\030\030 \001(\005\"*\n\nPbListItem\022\034\n\004item\030\001 \003(\0132\016" +
+      ".pbdson.PbItem\"(\n\tPbListPet\022\033\n\004pets\030\001 \003(" +
+      "\0132\r.pbdson.PbPet\"^\n\005PbPet\022\n\n\002id\030\001 \001(\005\022\014\n" +
+      "\004star\030\002 \001(\005\022\n\n\002hp\030\004 \001(\005\022\r\n\005maxHp\030\005 \001(\005\022\r" +
+      "\n\005power\030\006 \001(\003\022\021\n\tbonusStar\030\007 \003(\005\":\n\017PbLi" +
+      "stItemPoint\022\'\n\nitemPoints\030\001 \003(\0132\023.pbdson" +
+      ".PbItemPoint\"A\n\023PbListItemEquipment\022*\n\ti" +
+      "temEquip\030\001 \003(\0132\027.pbdson.PbItemEquipment\"" +
+      "+\n\nPbListChat\022\035\n\005aChat\030\001 \003(\0132\016.pbdson.Pb" +
+      "Chat\"\211\001\n\006PbChat\022\017\n\007reqTime\030\001 \001(\003\022\017\n\007mess",
+      "age\030\002 \001(\t\022\014\n\004type\030\003 \001(\005\022\034\n\004user\030\004 \001(\0132\016." +
+      "pbdson.PbUser\022\"\n\004info\030\005 \001(\0132\024.pbdson.Com" +
+      "monVector\022\r\n\005point\030\006 \003(\003\"7\n\020PbListChatFr" +
+      "iend\022#\n\005chats\030\001 \003(\0132\024.pbdson.PbChatFrien" +
+      "d\"j\n\014PbChatFriend\022\016\n\006userId\030\001 \001(\005\022\017\n\007mes" +
+      "sage\030\002 \001(\t\022\016\n\006avatar\030\003 \003(\005\022\014\n\004name\030\004 \001(\t" +
+      "\022\014\n\004time\030\005 \001(\003\022\r\n\005level\030\006 \001(\005\"v\n\006PbShop\022" +
+      "\"\n\006tabSet\030\001 \003(\0132\022.pbdson.PbItemShop\022#\n\007t" +
+      "abDeal\030\002 \003(\0132\022.pbdson.PbItemShop\022#\n\007tabM" +
+      "isc\030\003 \003(\0132\022.pbdson.PbItemShop\"\245\001\n\nPbItem",
+      "Shop\022\n\n\002id\030\001 \001(\005\022\013\n\003tab\030\002 \001(\005\022\014\n\004name\030\003 " +
+      "\001(\t\022\014\n\004desc\030\004 \001(\t\022\014\n\004item\030\005 \003(\003\022\r\n\005price" +
+      "\030\006 \003(\003\022\r\n\005image\030\007 \001(\t\022\016\n\006status\030\010 \001(\005\022\022\n" +
+      "\ndescStatus\030\t \001(\t\022\022\n\ntimeRemain\030\n \001(\003\"@\n" +
+      "\006PbItem\022\n\n\002id\030\001 \001(\005\022\014\n\004type\030\002 \001(\005\022\016\n\006num" +
+      "ber\030\003 \001(\005\022\014\n\004data\030\004 \001(\t\".\n\013PbItemPoint\022\017" +
+      "\n\007itemKey\030\001 \001(\005\022\016\n\006number\030\002 \001(\003\"\216\001\n\017PbIt" +
+      "emEquipment\022\n\n\002id\030\001 \001(\003\022\017\n\007itemKey\030\002 \001(\005" +
+      "\022\r\n\005level\030\003 \001(\005\022\014\n\004lock\030\004 \001(\010\022\r\n\005point\030\005" +
+      " \003(\003\022\016\n\006expire\030\006 \001(\003\022\023\n\013lockDestroy\030\007 \001(",
+      "\010\022\r\n\005bless\030\010 \001(\005\"/\n\nListAction\022!\n\007aActio" +
+      "n\030\001 \003(\0132\020.pbdson.PbAction\"*\n\010PbAction\022\020\n" +
+      "\010actionId\030\001 \001(\005\022\014\n\004data\030\002 \001(\014\".\n\014CommonV" +
+      "ector\022\r\n\005aLong\030\001 \003(\003\022\017\n\007aString\030\002 \003(\t\"9\n" +
+      "\020ListCommonVector\022%\n\007aVector\030\001 \003(\0132\024.pbd" +
+      "son.CommonVector\"g\n\017PbCharacterInfo\022\n\n\002i" +
+      "d\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\014\n\004team\030\003 \001(\005\022\016\n\006a" +
+      "vatar\030\004 \003(\005\022\r\n\005aItem\030\005 \003(\005\022\r\n\005point\030\006 \003(" +
+      "\003\"+\n\nPbListMail\022\035\n\005aMail\030\001 \003(\0132\016.pbdson." +
+      "PbMail\"\210\001\n\006PbMail\022\n\n\002id\030\001 \001(\005\022\r\n\005title\030\002",
+      " \001(\t\022\017\n\007message\030\003 \001(\t\022\r\n\005bonus\030\004 \003(\005\022\017\n\007" +
+      "receive\030\005 \001(\005\022\014\n\004time\030\006 \001(\003\022\020\n\010senderId\030" +
+      "\007 \001(\005\022\022\n\nsenderName\030\010 \001(\t\"\257\001\n\tPbEndGame\022" +
+      "\017\n\007popupId\030\001 \001(\005\022\021\n\tbattleKey\030\002 \001(\t\022\r\n\005i" +
+      "sWin\030\003 \001(\010\022\017\n\007message\030\004 \001(\t\022\r\n\005bonus\030\005 \003" +
+      "(\003\022\014\n\004time\030\006 \001(\005\022\017\n\007perDame\030\007 \001(\005\022\014\n\004sta" +
+      "r\030\010 \001(\005\022\"\n\004info\030\t \001(\0132\024.pbdson.CommonVec" +
+      "tor\"{\n\nPbRoomInfo\022\020\n\010roomType\030\001 \001(\005\022\017\n\007s" +
+      "ervice\030\002 \001(\005\022!\n\003cmm\030\003 \001(\0132\024.pbdson.Commo" +
+      "nVector\022\'\n\005lstCm\030\004 \001(\0132\030.pbdson.ListComm",
+      "onVector\"Z\n\017PbListMiniLotte\022\020\n\010allBonus\030" +
+      "\001 \003(\003\022\020\n\010luckyNum\030\002 \003(\005\022#\n\006aLotte\030\003 \003(\0132" +
+      "\023.pbdson.PbMiniLotte\"C\n\013PbMiniLotte\022\021\n\tn" +
+      "umChoose\030\001 \003(\005\022\022\n\nprizeIndex\030\002 \001(\005\022\r\n\005bo" +
+      "nus\030\003 \003(\005\"B\n\024PbListLotteryHistory\022*\n\010aLo" +
+      "ttery\030\001 \003(\0132\030.pbdson.PbLotteryHistory\"\247\001" +
+      "\n\020PbLotteryHistory\022\017\n\007eventId\030\001 \001(\005\022\014\n\004t" +
+      "ype\030\002 \001(\005\022\020\n\010luckyNum\030\003 \001(\005\022\016\n\006number\030\004 " +
+      "\003(\005\022\014\n\004time\030\005 \001(\003\022\r\n\005bonus\030\006 \003(\003\022\016\n\006stat" +
+      "us\030\007 \001(\005\022\021\n\tlistBonus\030\010 \003(\003\022\022\n\nlistResul",
+      "t\030\t \003(\005\"*\n\014PbUnitUpdate\022\014\n\004type\030\001 \001(\005\022\014\n" +
+      "\004data\030\002 \001(\014\"\213\001\n\tPbUnitPos\022\n\n\002id\030\001 \001(\003\022\r\n" +
+      "\005speed\030\002 \001(\005\022\024\n\014lastInputSeq\030\003 \001(\003\022\032\n\003po" +
+      "s\030\004 \001(\0132\r.pbdson.PbPos\022 \n\tdirection\030\005 \001(" +
+      "\0132\r.pbdson.PbPos\022\017\n\007chunkId\030\006 \001(\005\"1\n\014PbL" +
+      "istBullet\022!\n\007bullets\030\001 \003(\0132\020.pbdson.PbBu" +
+      "llet\"@\n\010PbBullet\022\n\n\002id\030\001 \001(\005\022\032\n\003pos\030\002 \001(" +
+      "\0132\r.pbdson.PbPos\022\014\n\004info\030\003 \003(\005\"(\n\tPbList" +
+      "Tab\022\033\n\004tabs\030\001 \003(\0132\r.pbdson.PbTab\"Z\n\005PbTa" +
+      "b\022\r\n\005tabId\030\001 \001(\005\022\025\n\reventTemplate\030\002 \001(\005\022",
+      "\r\n\005image\030\003 \001(\t\022\014\n\004name\030\004 \001(\t\022\016\n\006notify\030\005" +
+      " \001(\010\"\255\002\n\017PbEventBuyMonth\022\021\n\teventName\030\001 " +
+      "\001(\t\022\023\n\013imageBanner\030\002 \001(\t\022\022\n\ntextBanner\030\003" +
+      " \001(\t\022\r\n\005level\030\004 \001(\005\022\020\n\010curPoint\030\005 \001(\005\022\020\n" +
+      "\010maxPoint\030\006 \001(\005\022\025\n\rbuttonAddGoto\030\007 \001(\005\022\017" +
+      "\n\007keyHelp\030\010 \001(\t\022\016\n\006timeCD\030\t \001(\003\022\021\n\tstatu" +
+      "sBuy\030\n \001(\005\022\r\n\005price\030\013 \003(\003\022\022\n\nnormalName\030" +
+      "\014 \001(\t\022\017\n\007vipName\030\r \001(\t\022,\n\005cells\030\016 \003(\0132\035." +
+      "pbdson.PbCellPanelEventMonth\"\315\001\n\014PbEvent" +
+      "Timer\022\n\n\002id\030\001 \001(\005\022\016\n\006status\030\002 \001(\005\022\022\n\ntim",
+      "eRemain\030\003 \001(\003\022\r\n\005bonus\030\004 \003(\003\022\r\n\005price\030\005 " +
+      "\003(\003\022\020\n\010oldPrice\030\006 \003(\003\022\014\n\004name\030\007 \001(\t\022\014\n\004d" +
+      "esc\030\010 \001(\t\022\014\n\004sale\030\t \001(\t\022\017\n\007bgrPath\030\n \001(\t" +
+      "\022\"\n\004info\030\013 \001(\0132\024.pbdson.CommonVector\"w\n\025" +
+      "PbCellPanelEventMonth\022\r\n\005level\030\001 \001(\005\022\013\n\003" +
+      "exp\030\002 \001(\005\022\016\n\006status\030\003 \001(\005\022\021\n\tstatusVip\030\004" +
+      " \001(\005\022\r\n\005bonus\030\005 \003(\003\022\020\n\010bonusVip\030\006 \003(\003\"\221\001" +
+      "\n\023PbPanelEventTabCell\022\021\n\teventName\030\001 \001(\t" +
+      "\022\023\n\013imageBanner\030\002 \001(\t\022\022\n\ntextBanner\030\003 \001(" +
+      "\t\022\016\n\006timeCD\030\t \001(\003\022.\n\005cells\030\016 \003(\0132\037.pbdso",
+      "n.PbCellPanelEventTabCell\"i\n\027PbCellPanel" +
+      "EventTabCell\022\n\n\002id\030\001 \001(\005\022\020\n\010cellName\030\002 \001" +
+      "(\t\022\r\n\005bonus\030\003 \003(\003\022\013\n\003per\030\004 \001(\t\022\024\n\014button" +
+      "Status\030\005 \001(\005\"\237\001\n\tPbWelfare\022\017\n\007eventId\030\001 " +
+      "\001(\005\022\016\n\006notify\030\002 \001(\010\022%\n\006banner\030\003 \001(\0132\025.pb" +
+      "dson.PbBannerEvent\022&\n\010tabEvent\030\004 \003(\0132\024.p" +
+      "bdson.PbTabWelfare\022\017\n\007keyHelp\030\005 \001(\t\022\021\n\tc" +
+      "ountdown\030\006 \001(\003\"b\n\014PbTabWelfare\022\r\n\005tabId\030" +
+      "\001 \001(\005\022\017\n\007tabName\030\002 \001(\t\022\"\n\005cells\030\003 \003(\0132\023." +
+      "pbdson.PbCellEvent\022\016\n\006notify\030\004 \001(\010\"\263\001\n\rP",
+      "bBannerEvent\022\022\n\npathBanner\030\001 \001(\t\022\014\n\004text" +
+      "\030\002 \001(\t\022\022\n\nbonusImage\030\003 \001(\t\022\021\n\tboxStatus\030" +
+      "\004 \001(\005\022\020\n\010bonusBox\030\005 \003(\005\022\014\n\004desc\030\006 \001(\t\022\021\n" +
+      "\tpathTitle\030\007 \001(\t\022&\n\004info\030\010 \001(\0132\030.pbdson." +
+      "ListCommonVector\"\353\001\n\013PbCellEvent\022\n\n\002id\030\001" +
+      " \001(\005\022\r\n\005image\030\002 \001(\t\022\r\n\005bonus\030\003 \003(\005\022\020\n\010na" +
+      "meCell\030\004 \001(\t\022\020\n\010textCell\030\005 \001(\t\022\020\n\010textDe" +
+      "sc\030\006 \001(\t\022\016\n\006numBuy\030\007 \001(\005\022\r\n\005limit\030\010 \001(\005\022" +
+      "\r\n\005price\030\t \003(\003\022\024\n\014buttonStatus\030\n \001(\005\022\020\n\010" +
+      "bonusDay\030\013 \003(\005\022\022\n\ntimeRemain\030\014 \001(\003\022\022\n\nti",
+      "meExpire\030\r \001(\003\"\225\001\n\013PbEvent7Day\022&\n\004days\030\001" +
+      " \003(\0132\030.pbdson.PbPanelEvent7Day\022\022\n\ntimeRe" +
+      "main\030\002 \001(\003\022\020\n\010curValue\030\003 \001(\005\022\020\n\010maxValue" +
+      "\030\004 \001(\005\022&\n\tposReward\030\005 \003(\0132\023.pbdson.PbPos" +
+      "Reward\"U\n\013PbPosReward\022\n\n\002id\030\001 \001(\005\022\014\n\004nam" +
+      "e\030\002 \001(\t\022\r\n\005point\030\003 \001(\003\022\r\n\005bonus\030\004 \003(\003\022\016\n" +
+      "\006status\030\005 \001(\005\"R\n\016PbTabEvent7Day\022\n\n\002id\030\001 " +
+      "\001(\005\022\014\n\004name\030\002 \001(\t\022&\n\005cells\030\003 \003(\0132\027.pbdso" +
+      "n.PbCellEvent7Day\"\272\001\n\020PbPanelEvent7Day\022$" +
+      "\n\004tab1\030\001 \001(\0132\026.pbdson.PbTabEvent7Day\022$\n\004",
+      "tab2\030\002 \001(\0132\026.pbdson.PbTabEvent7Day\022$\n\004ta" +
+      "b3\030\003 \001(\0132\026.pbdson.PbTabEvent7Day\022$\n\004tab4" +
+      "\030\004 \001(\0132\026.pbdson.PbTabEvent7Day\022\016\n\006isLock" +
+      "\030\005 \001(\010\"\306\001\n\017PbCellEvent7Day\022\n\n\002id\030\001 \001(\005\022\014" +
+      "\n\004name\030\002 \001(\t\022\014\n\004desc\030\003 \001(\t\022\020\n\010curValue\030\004" +
+      " \001(\005\022\020\n\010maxValue\030\005 \001(\005\022\r\n\005bonus\030\006 \003(\003\022\024\n" +
+      "\014buttonStatus\030\007 \001(\005\022\022\n\nbuttonGoto\030\010 \001(\005\022" +
+      "\020\n\010oldPrice\030\t \003(\003\022\020\n\010newPrice\030\n \003(\003\022\n\n\002x" +
+      "u\030\013 \001(\005\"\'\n\tPbListIAP\022\032\n\003iap\030\001 \003(\0132\r.pbds" +
+      "on.PpIAP\"\264\001\n\005PpIAP\022\n\n\002id\030\001 \001(\005\022\030\n\020produc",
+      "tIdAndroid\030\002 \001(\t\022\024\n\014productIdIos\030\003 \001(\t\022\014" +
+      "\n\004name\030\004 \001(\t\022\r\n\005price\030\005 \001(\t\022\r\n\005bonus\030\006 \003" +
+      "(\003\022\020\n\010addBonus\030\007 \003(\003\022\020\n\010addTitle\030\010 \001(\t\022\016" +
+      "\n\006vipExp\030\t \001(\005\022\017\n\007priceQr\030\n \001(\t*!\n\tCellS" +
+      "tate\022\n\n\006ACTIVE\020\001\022\010\n\004HIDE\020\002*Y\n\tStateType\022" +
+      "\023\n\017TYPE_ADD_REMOVE\020\001\022\014\n\010TYPE_POS\020\002\022\023\n\017TY" +
+      "PE_UNIT_STATE\020\003\022\024\n\020TYPE_CHUNK_STATE\020\004*y\n" +
+      "\016CellObjectType\022\010\n\004ROCK\020\001\022\010\n\004SIGN\020\002\022\n\n\006C" +
+      "ACTUS\020\003\022\n\n\006FLOWER\020\004\022\t\n\005SKULL\020\005\022\t\n\005CHEST\020" +
+      "\006\022\t\n\005BONES\020\007\022\016\n\nGRAVESTONE\020\010\022\n\n\006HELMET\020\t",
+      "*;\n\014TargetAttack\022\n\n\006OBJECT\020\000\022\t\n\005ENEMY\020\001\022" +
+      "\010\n\004BOSS\020\002\022\n\n\006PLAYER\020\003B\024\n\010protocolB\010Pbmet" +
+      "hod"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -99686,450 +77814,312 @@ public final class Pbmethod {
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListClan_descriptor,
               new java.lang.String[] { "Clan", "MyClan", });
-          internal_static_pbdson_PbListHistory_descriptor =
-            getDescriptor().getMessageTypes().get(17);
-          internal_static_pbdson_PbListHistory_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_pbdson_PbListHistory_descriptor,
-              new java.lang.String[] { "History", });
-          internal_static_pbdson_PbHistory_descriptor =
-            getDescriptor().getMessageTypes().get(18);
-          internal_static_pbdson_PbHistory_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_pbdson_PbHistory_descriptor,
-              new java.lang.String[] { "IsAttack", "TargetId", "Status", "TimeAttack", "Point1", "Point2", "Time", "User", "MyPoint", });
-          internal_static_pbdson_PbArena_descriptor =
-            getDescriptor().getMessageTypes().get(19);
-          internal_static_pbdson_PbArena_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_pbdson_PbArena_descriptor,
-              new java.lang.String[] { "TimeRemain", "MyRank", "MyPoint", "Opponents", "FeeTicket", "CurBuyTicket", "MaxBuyTicket", "HasDefense", "DefenseTeam", });
           internal_static_pbdson_PbUser_descriptor =
-            getDescriptor().getMessageTypes().get(20);
+            getDescriptor().getMessageTypes().get(17);
           internal_static_pbdson_PbUser_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbUser_descriptor,
-              new java.lang.String[] { "Id", "Username", "Name", "Gold", "Gem", "Exp", "Level", "Avatar", "Vip", "ClanInfo", "Info", "PetId", "Facebook", "UserInfo", "Weapons", "Rank", "Desc", "WeaponEquip", "Point", "TimeLastAction", "Honor", "Power", "ItemEquip", "Channel", "PointRank", "ArenaRank", "Ruby", "Pet", });
-          internal_static_pbdson_PbArenaTeamInfo_descriptor =
-            getDescriptor().getMessageTypes().get(21);
-          internal_static_pbdson_PbArenaTeamInfo_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_pbdson_PbArenaTeamInfo_descriptor,
-              new java.lang.String[] { "Team", "Heroes", "Pets", });
-          internal_static_pbdson_PbArenaHeroInfo_descriptor =
-            getDescriptor().getMessageTypes().get(22);
-          internal_static_pbdson_PbArenaHeroInfo_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_pbdson_PbArenaHeroInfo_descriptor,
-              new java.lang.String[] { "Avatar", "Weapons", });
-          internal_static_pbdson_PbArenaPetInfo_descriptor =
-            getDescriptor().getMessageTypes().get(23);
-          internal_static_pbdson_PbArenaPetInfo_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_pbdson_PbArenaPetInfo_descriptor,
-              new java.lang.String[] { "Avatar", "Star", });
-          internal_static_pbdson_PbArenaWeapon_descriptor =
-            getDescriptor().getMessageTypes().get(24);
-          internal_static_pbdson_PbArenaWeapon_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_pbdson_PbArenaWeapon_descriptor,
-              new java.lang.String[] { "Id", "Slot", "Level", });
+              new java.lang.String[] { "Id", "Username", "Name", "Gold", "Gem", "Exp", "Level", "Avatar", "Vip", "ClanInfo", "Info", "PetId", "Facebook", "UserInfo", "Rank", "Desc", "WeaponEquip", "Point", "TimeLastAction", "Honor", "Power", "ItemEquip", "Channel", "PointRank", "ArenaRank", "Ruby", "Pet", });
           internal_static_pbdson_PbUserData_descriptor =
-            getDescriptor().getMessageTypes().get(25);
+            getDescriptor().getMessageTypes().get(18);
           internal_static_pbdson_PbUserData_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbUserData_descriptor,
-              new java.lang.String[] { "LvGachaWeapon", "LvGachaPet", "LvTraining", "MaxlvTraining", "NumPointLevel", "Stone", "StoneVip", "Items", "ItemEquipments", "AItemEquip", "AItemPoint", "AItemFarm", "AItemPiece", "APet", "AHero", "Tutorial", "DameSkins", "DameSkinEquip", "BossGod", "ChatFrames", "ChatFrameEquip", "Trials", "TrialEquip", });
+              new java.lang.String[] { "LvGachaWeapon", "LvGachaPet", "LvTraining", "MaxlvTraining", "NumPointLevel", "Stone", "StoneVip", "Items", "ItemEquipments", "AItemEquip", "AItemPoint", "APet", "Tutorial", "DameSkins", "DameSkinEquip", "BossGod", "ChatFrames", "ChatFrameEquip", "Trials", "TrialEquip", });
           internal_static_pbdson_PbListItem_descriptor =
-            getDescriptor().getMessageTypes().get(26);
+            getDescriptor().getMessageTypes().get(19);
           internal_static_pbdson_PbListItem_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListItem_descriptor,
               new java.lang.String[] { "Item", });
           internal_static_pbdson_PbListPet_descriptor =
-            getDescriptor().getMessageTypes().get(27);
+            getDescriptor().getMessageTypes().get(20);
           internal_static_pbdson_PbListPet_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListPet_descriptor,
               new java.lang.String[] { "Pets", });
           internal_static_pbdson_PbPet_descriptor =
-            getDescriptor().getMessageTypes().get(28);
+            getDescriptor().getMessageTypes().get(21);
           internal_static_pbdson_PbPet_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbPet_descriptor,
               new java.lang.String[] { "Id", "Star", "Hp", "MaxHp", "Power", "BonusStar", });
-          internal_static_pbdson_PbListItemFarm_descriptor =
-            getDescriptor().getMessageTypes().get(29);
-          internal_static_pbdson_PbListItemFarm_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_pbdson_PbListItemFarm_descriptor,
-              new java.lang.String[] { "ItemFarms", });
           internal_static_pbdson_PbListItemPoint_descriptor =
-            getDescriptor().getMessageTypes().get(30);
+            getDescriptor().getMessageTypes().get(22);
           internal_static_pbdson_PbListItemPoint_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListItemPoint_descriptor,
               new java.lang.String[] { "ItemPoints", });
           internal_static_pbdson_PbListItemEquipment_descriptor =
-            getDescriptor().getMessageTypes().get(31);
+            getDescriptor().getMessageTypes().get(23);
           internal_static_pbdson_PbListItemEquipment_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListItemEquipment_descriptor,
               new java.lang.String[] { "ItemEquip", });
           internal_static_pbdson_PbListChat_descriptor =
-            getDescriptor().getMessageTypes().get(32);
+            getDescriptor().getMessageTypes().get(24);
           internal_static_pbdson_PbListChat_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListChat_descriptor,
               new java.lang.String[] { "AChat", });
-          internal_static_pbdson_PbListHero_descriptor =
-            getDescriptor().getMessageTypes().get(33);
-          internal_static_pbdson_PbListHero_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_pbdson_PbListHero_descriptor,
-              new java.lang.String[] { "AHero", });
-          internal_static_pbdson_PbListLand_descriptor =
-            getDescriptor().getMessageTypes().get(34);
-          internal_static_pbdson_PbListLand_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_pbdson_PbListLand_descriptor,
-              new java.lang.String[] { "ALand", "ABonus", "TreeStatus", "Deco", "BonusTime", "BonusItem", "BonusExp", });
-          internal_static_pbdson_PbLand_descriptor =
-            getDescriptor().getMessageTypes().get(35);
-          internal_static_pbdson_PbLand_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_pbdson_PbLand_descriptor,
-              new java.lang.String[] { "LandId", "TreeId", "TimePlant", "TimeHarvest", "HasWater", "Fertilize", "FerTime", "Bonus", });
-          internal_static_pbdson_PbHero_descriptor =
-            getDescriptor().getMessageTypes().get(36);
-          internal_static_pbdson_PbHero_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_pbdson_PbHero_descriptor,
-              new java.lang.String[] { "HeroId", "Skins", "ItemEquipId", });
           internal_static_pbdson_PbChat_descriptor =
-            getDescriptor().getMessageTypes().get(37);
+            getDescriptor().getMessageTypes().get(25);
           internal_static_pbdson_PbChat_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbChat_descriptor,
               new java.lang.String[] { "ReqTime", "Message", "Type", "User", "Info", "Point", });
           internal_static_pbdson_PbListChatFriend_descriptor =
-            getDescriptor().getMessageTypes().get(38);
+            getDescriptor().getMessageTypes().get(26);
           internal_static_pbdson_PbListChatFriend_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListChatFriend_descriptor,
               new java.lang.String[] { "Chats", });
           internal_static_pbdson_PbChatFriend_descriptor =
-            getDescriptor().getMessageTypes().get(39);
+            getDescriptor().getMessageTypes().get(27);
           internal_static_pbdson_PbChatFriend_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbChatFriend_descriptor,
               new java.lang.String[] { "UserId", "Message", "Avatar", "Name", "Time", "Level", });
           internal_static_pbdson_PbShop_descriptor =
-            getDescriptor().getMessageTypes().get(40);
+            getDescriptor().getMessageTypes().get(28);
           internal_static_pbdson_PbShop_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbShop_descriptor,
               new java.lang.String[] { "TabSet", "TabDeal", "TabMisc", });
           internal_static_pbdson_PbItemShop_descriptor =
-            getDescriptor().getMessageTypes().get(41);
+            getDescriptor().getMessageTypes().get(29);
           internal_static_pbdson_PbItemShop_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbItemShop_descriptor,
               new java.lang.String[] { "Id", "Tab", "Name", "Desc", "Item", "Price", "Image", "Status", "DescStatus", "TimeRemain", });
           internal_static_pbdson_PbItem_descriptor =
-            getDescriptor().getMessageTypes().get(42);
+            getDescriptor().getMessageTypes().get(30);
           internal_static_pbdson_PbItem_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbItem_descriptor,
               new java.lang.String[] { "Id", "Type", "Number", "Data", });
-          internal_static_pbdson_PbItemFarm_descriptor =
-            getDescriptor().getMessageTypes().get(43);
-          internal_static_pbdson_PbItemFarm_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_pbdson_PbItemFarm_descriptor,
-              new java.lang.String[] { "Type", "Id", "Number", });
-          internal_static_pbdson_PbPiece_descriptor =
-            getDescriptor().getMessageTypes().get(44);
-          internal_static_pbdson_PbPiece_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_pbdson_PbPiece_descriptor,
-              new java.lang.String[] { "Type", "Id", "Number", });
           internal_static_pbdson_PbItemPoint_descriptor =
-            getDescriptor().getMessageTypes().get(45);
+            getDescriptor().getMessageTypes().get(31);
           internal_static_pbdson_PbItemPoint_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbItemPoint_descriptor,
               new java.lang.String[] { "ItemKey", "Number", });
           internal_static_pbdson_PbItemEquipment_descriptor =
-            getDescriptor().getMessageTypes().get(46);
+            getDescriptor().getMessageTypes().get(32);
           internal_static_pbdson_PbItemEquipment_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbItemEquipment_descriptor,
               new java.lang.String[] { "Id", "ItemKey", "Level", "Lock", "Point", "Expire", "LockDestroy", "Bless", });
-          internal_static_pbdson_PbListStat_descriptor =
-            getDescriptor().getMessageTypes().get(47);
-          internal_static_pbdson_PbListStat_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_pbdson_PbListStat_descriptor,
-              new java.lang.String[] { "AStat", });
-          internal_static_pbdson_PbStat_descriptor =
-            getDescriptor().getMessageTypes().get(48);
-          internal_static_pbdson_PbStat_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_pbdson_PbStat_descriptor,
-              new java.lang.String[] { "Id", "Status", "Level", "Condition", "MaxLevel", "PointPer", "Formula", });
-          internal_static_pbdson_PbListUserWeapon_descriptor =
-            getDescriptor().getMessageTypes().get(49);
-          internal_static_pbdson_PbListUserWeapon_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_pbdson_PbListUserWeapon_descriptor,
-              new java.lang.String[] { "Weapons", });
-          internal_static_pbdson_PbUserWeapon_descriptor =
-            getDescriptor().getMessageTypes().get(50);
-          internal_static_pbdson_PbUserWeapon_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_pbdson_PbUserWeapon_descriptor,
-              new java.lang.String[] { "Id", "Level", "Number", "IsEquid", "TimeCd", "Bless", });
           internal_static_pbdson_ListAction_descriptor =
-            getDescriptor().getMessageTypes().get(51);
+            getDescriptor().getMessageTypes().get(33);
           internal_static_pbdson_ListAction_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_ListAction_descriptor,
               new java.lang.String[] { "AAction", });
           internal_static_pbdson_PbAction_descriptor =
-            getDescriptor().getMessageTypes().get(52);
+            getDescriptor().getMessageTypes().get(34);
           internal_static_pbdson_PbAction_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbAction_descriptor,
               new java.lang.String[] { "ActionId", "Data", });
           internal_static_pbdson_CommonVector_descriptor =
-            getDescriptor().getMessageTypes().get(53);
+            getDescriptor().getMessageTypes().get(35);
           internal_static_pbdson_CommonVector_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_CommonVector_descriptor,
               new java.lang.String[] { "ALong", "AString", });
           internal_static_pbdson_ListCommonVector_descriptor =
-            getDescriptor().getMessageTypes().get(54);
+            getDescriptor().getMessageTypes().get(36);
           internal_static_pbdson_ListCommonVector_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_ListCommonVector_descriptor,
               new java.lang.String[] { "AVector", });
           internal_static_pbdson_PbCharacterInfo_descriptor =
-            getDescriptor().getMessageTypes().get(55);
+            getDescriptor().getMessageTypes().get(37);
           internal_static_pbdson_PbCharacterInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbCharacterInfo_descriptor,
               new java.lang.String[] { "Id", "Name", "Team", "Avatar", "AItem", "Point", });
           internal_static_pbdson_PbListMail_descriptor =
-            getDescriptor().getMessageTypes().get(56);
+            getDescriptor().getMessageTypes().get(38);
           internal_static_pbdson_PbListMail_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListMail_descriptor,
               new java.lang.String[] { "AMail", });
           internal_static_pbdson_PbMail_descriptor =
-            getDescriptor().getMessageTypes().get(57);
+            getDescriptor().getMessageTypes().get(39);
           internal_static_pbdson_PbMail_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbMail_descriptor,
               new java.lang.String[] { "Id", "Title", "Message", "Bonus", "Receive", "Time", "SenderId", "SenderName", });
           internal_static_pbdson_PbEndGame_descriptor =
-            getDescriptor().getMessageTypes().get(58);
+            getDescriptor().getMessageTypes().get(40);
           internal_static_pbdson_PbEndGame_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbEndGame_descriptor,
               new java.lang.String[] { "PopupId", "BattleKey", "IsWin", "Message", "Bonus", "Time", "PerDame", "Star", "Info", });
           internal_static_pbdson_PbRoomInfo_descriptor =
-            getDescriptor().getMessageTypes().get(59);
+            getDescriptor().getMessageTypes().get(41);
           internal_static_pbdson_PbRoomInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbRoomInfo_descriptor,
               new java.lang.String[] { "RoomType", "Service", "Cmm", "LstCm", });
           internal_static_pbdson_PbListMiniLotte_descriptor =
-            getDescriptor().getMessageTypes().get(60);
+            getDescriptor().getMessageTypes().get(42);
           internal_static_pbdson_PbListMiniLotte_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListMiniLotte_descriptor,
               new java.lang.String[] { "AllBonus", "LuckyNum", "ALotte", });
           internal_static_pbdson_PbMiniLotte_descriptor =
-            getDescriptor().getMessageTypes().get(61);
+            getDescriptor().getMessageTypes().get(43);
           internal_static_pbdson_PbMiniLotte_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbMiniLotte_descriptor,
               new java.lang.String[] { "NumChoose", "PrizeIndex", "Bonus", });
           internal_static_pbdson_PbListLotteryHistory_descriptor =
-            getDescriptor().getMessageTypes().get(62);
+            getDescriptor().getMessageTypes().get(44);
           internal_static_pbdson_PbListLotteryHistory_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListLotteryHistory_descriptor,
               new java.lang.String[] { "ALottery", });
           internal_static_pbdson_PbLotteryHistory_descriptor =
-            getDescriptor().getMessageTypes().get(63);
+            getDescriptor().getMessageTypes().get(45);
           internal_static_pbdson_PbLotteryHistory_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbLotteryHistory_descriptor,
               new java.lang.String[] { "EventId", "Type", "LuckyNum", "Number", "Time", "Bonus", "Status", "ListBonus", "ListResult", });
           internal_static_pbdson_PbUnitUpdate_descriptor =
-            getDescriptor().getMessageTypes().get(64);
+            getDescriptor().getMessageTypes().get(46);
           internal_static_pbdson_PbUnitUpdate_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbUnitUpdate_descriptor,
               new java.lang.String[] { "Type", "Data", });
           internal_static_pbdson_PbUnitPos_descriptor =
-            getDescriptor().getMessageTypes().get(65);
+            getDescriptor().getMessageTypes().get(47);
           internal_static_pbdson_PbUnitPos_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbUnitPos_descriptor,
               new java.lang.String[] { "Id", "Speed", "LastInputSeq", "Pos", "Direction", "ChunkId", });
           internal_static_pbdson_PbListBullet_descriptor =
-            getDescriptor().getMessageTypes().get(66);
+            getDescriptor().getMessageTypes().get(48);
           internal_static_pbdson_PbListBullet_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListBullet_descriptor,
               new java.lang.String[] { "Bullets", });
           internal_static_pbdson_PbBullet_descriptor =
-            getDescriptor().getMessageTypes().get(67);
+            getDescriptor().getMessageTypes().get(49);
           internal_static_pbdson_PbBullet_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbBullet_descriptor,
               new java.lang.String[] { "Id", "Pos", "Info", });
           internal_static_pbdson_PbListTab_descriptor =
-            getDescriptor().getMessageTypes().get(68);
+            getDescriptor().getMessageTypes().get(50);
           internal_static_pbdson_PbListTab_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListTab_descriptor,
               new java.lang.String[] { "Tabs", });
           internal_static_pbdson_PbTab_descriptor =
-            getDescriptor().getMessageTypes().get(69);
+            getDescriptor().getMessageTypes().get(51);
           internal_static_pbdson_PbTab_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbTab_descriptor,
               new java.lang.String[] { "TabId", "EventTemplate", "Image", "Name", "Notify", });
           internal_static_pbdson_PbEventBuyMonth_descriptor =
-            getDescriptor().getMessageTypes().get(70);
+            getDescriptor().getMessageTypes().get(52);
           internal_static_pbdson_PbEventBuyMonth_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbEventBuyMonth_descriptor,
               new java.lang.String[] { "EventName", "ImageBanner", "TextBanner", "Level", "CurPoint", "MaxPoint", "ButtonAddGoto", "KeyHelp", "TimeCD", "StatusBuy", "Price", "NormalName", "VipName", "Cells", });
           internal_static_pbdson_PbEventTimer_descriptor =
-            getDescriptor().getMessageTypes().get(71);
+            getDescriptor().getMessageTypes().get(53);
           internal_static_pbdson_PbEventTimer_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbEventTimer_descriptor,
               new java.lang.String[] { "Id", "Status", "TimeRemain", "Bonus", "Price", "OldPrice", "Name", "Desc", "Sale", "BgrPath", "Info", });
           internal_static_pbdson_PbCellPanelEventMonth_descriptor =
-            getDescriptor().getMessageTypes().get(72);
+            getDescriptor().getMessageTypes().get(54);
           internal_static_pbdson_PbCellPanelEventMonth_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbCellPanelEventMonth_descriptor,
               new java.lang.String[] { "Level", "Exp", "Status", "StatusVip", "Bonus", "BonusVip", });
           internal_static_pbdson_PbPanelEventTabCell_descriptor =
-            getDescriptor().getMessageTypes().get(73);
+            getDescriptor().getMessageTypes().get(55);
           internal_static_pbdson_PbPanelEventTabCell_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbPanelEventTabCell_descriptor,
               new java.lang.String[] { "EventName", "ImageBanner", "TextBanner", "TimeCD", "Cells", });
           internal_static_pbdson_PbCellPanelEventTabCell_descriptor =
-            getDescriptor().getMessageTypes().get(74);
+            getDescriptor().getMessageTypes().get(56);
           internal_static_pbdson_PbCellPanelEventTabCell_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbCellPanelEventTabCell_descriptor,
               new java.lang.String[] { "Id", "CellName", "Bonus", "Per", "ButtonStatus", });
           internal_static_pbdson_PbWelfare_descriptor =
-            getDescriptor().getMessageTypes().get(75);
+            getDescriptor().getMessageTypes().get(57);
           internal_static_pbdson_PbWelfare_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbWelfare_descriptor,
               new java.lang.String[] { "EventId", "Notify", "Banner", "TabEvent", "KeyHelp", "Countdown", });
           internal_static_pbdson_PbTabWelfare_descriptor =
-            getDescriptor().getMessageTypes().get(76);
+            getDescriptor().getMessageTypes().get(58);
           internal_static_pbdson_PbTabWelfare_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbTabWelfare_descriptor,
               new java.lang.String[] { "TabId", "TabName", "Cells", "Notify", });
           internal_static_pbdson_PbBannerEvent_descriptor =
-            getDescriptor().getMessageTypes().get(77);
+            getDescriptor().getMessageTypes().get(59);
           internal_static_pbdson_PbBannerEvent_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbBannerEvent_descriptor,
               new java.lang.String[] { "PathBanner", "Text", "BonusImage", "BoxStatus", "BonusBox", "Desc", "PathTitle", "Info", });
           internal_static_pbdson_PbCellEvent_descriptor =
-            getDescriptor().getMessageTypes().get(78);
+            getDescriptor().getMessageTypes().get(60);
           internal_static_pbdson_PbCellEvent_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbCellEvent_descriptor,
               new java.lang.String[] { "Id", "Image", "Bonus", "NameCell", "TextCell", "TextDesc", "NumBuy", "Limit", "Price", "ButtonStatus", "BonusDay", "TimeRemain", "TimeExpire", });
           internal_static_pbdson_PbEvent7Day_descriptor =
-            getDescriptor().getMessageTypes().get(79);
+            getDescriptor().getMessageTypes().get(61);
           internal_static_pbdson_PbEvent7Day_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbEvent7Day_descriptor,
               new java.lang.String[] { "Days", "TimeRemain", "CurValue", "MaxValue", "PosReward", });
           internal_static_pbdson_PbPosReward_descriptor =
-            getDescriptor().getMessageTypes().get(80);
+            getDescriptor().getMessageTypes().get(62);
           internal_static_pbdson_PbPosReward_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbPosReward_descriptor,
               new java.lang.String[] { "Id", "Name", "Point", "Bonus", "Status", });
           internal_static_pbdson_PbTabEvent7Day_descriptor =
-            getDescriptor().getMessageTypes().get(81);
+            getDescriptor().getMessageTypes().get(63);
           internal_static_pbdson_PbTabEvent7Day_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbTabEvent7Day_descriptor,
               new java.lang.String[] { "Id", "Name", "Cells", });
           internal_static_pbdson_PbPanelEvent7Day_descriptor =
-            getDescriptor().getMessageTypes().get(82);
+            getDescriptor().getMessageTypes().get(64);
           internal_static_pbdson_PbPanelEvent7Day_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbPanelEvent7Day_descriptor,
               new java.lang.String[] { "Tab1", "Tab2", "Tab3", "Tab4", "IsLock", });
           internal_static_pbdson_PbCellEvent7Day_descriptor =
-            getDescriptor().getMessageTypes().get(83);
+            getDescriptor().getMessageTypes().get(65);
           internal_static_pbdson_PbCellEvent7Day_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbCellEvent7Day_descriptor,
               new java.lang.String[] { "Id", "Name", "Desc", "CurValue", "MaxValue", "Bonus", "ButtonStatus", "ButtonGoto", "OldPrice", "NewPrice", "Xu", });
           internal_static_pbdson_PbListIAP_descriptor =
-            getDescriptor().getMessageTypes().get(84);
+            getDescriptor().getMessageTypes().get(66);
           internal_static_pbdson_PbListIAP_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListIAP_descriptor,
               new java.lang.String[] { "Iap", });
           internal_static_pbdson_PpIAP_descriptor =
-            getDescriptor().getMessageTypes().get(85);
+            getDescriptor().getMessageTypes().get(67);
           internal_static_pbdson_PpIAP_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PpIAP_descriptor,
               new java.lang.String[] { "Id", "ProductIdAndroid", "ProductIdIos", "Name", "Price", "Bonus", "AddBonus", "AddTitle", "VipExp", "PriceQr", });
-          internal_static_pbdson_PbBattleArena_descriptor =
-            getDescriptor().getMessageTypes().get(86);
-          internal_static_pbdson_PbBattleArena_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_pbdson_PbBattleArena_descriptor,
-              new java.lang.String[] { "MapInfo", "MyInfo", "OppInfo", "MyTeam", "OppTeam", "Time", });
-          internal_static_pbdson_PbBattleListArenaHero_descriptor =
-            getDescriptor().getMessageTypes().get(87);
-          internal_static_pbdson_PbBattleListArenaHero_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_pbdson_PbBattleListArenaHero_descriptor,
-              new java.lang.String[] { "Team", });
-          internal_static_pbdson_PbBattleArenaUserInfo_descriptor =
-            getDescriptor().getMessageTypes().get(88);
-          internal_static_pbdson_PbBattleArenaUserInfo_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_pbdson_PbBattleArenaUserInfo_descriptor,
-              new java.lang.String[] { "Avatar", "Level", "Vip", "Name", "RankPoint", });
-          internal_static_pbdson_PbBattleArenaHero_descriptor =
-            getDescriptor().getMessageTypes().get(89);
-          internal_static_pbdson_PbBattleArenaHero_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_pbdson_PbBattleArenaHero_descriptor,
-              new java.lang.String[] { "Id", "Avatar", "HeroType", "Slot", "Level", "Point", "Pos", "Direction", "Info", "Weapons", });
-          internal_static_pbdson_PbBattleArenaWeapon_descriptor =
-            getDescriptor().getMessageTypes().get(90);
-          internal_static_pbdson_PbBattleArenaWeapon_fieldAccessorTable = new
-            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_pbdson_PbBattleArenaWeapon_descriptor,
-              new java.lang.String[] { "Id", "Slot", "Level", "Shots", });
           return null;
         }
       };

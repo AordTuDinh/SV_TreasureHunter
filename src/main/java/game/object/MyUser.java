@@ -205,7 +205,7 @@ public class MyUser implements Serializable {
     }
 
     public void reCalculatePoint() {
-        if (player != null) player.protoStatus(StateType.SET_ALL_POINT, user.reCalculatePoint(this).toProto());
+        if (player != null) player.protoStatus(StateType.UPDATE_MULTI_POINT, user.reCalculatePoint(this).toProto());
     }
 
     public List<FriendChatObject> getChatHistory(int userId) {

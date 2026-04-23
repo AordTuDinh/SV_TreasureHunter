@@ -72,39 +72,6 @@ public class UserPartyEntity {
         return channelAttackBoss;
     }
 
-    public void shareBonusParty(MyUser userShare, BonusKillEnemy bonusShare) {
-        if (channels == null) checkChannel();
-
-        if (userShare == null ||
-                userShare.getPlayer() == null ||
-                userShare.getPlayer().getRoom() == null)
-            return;
-
-
-        List<MyUser> shared = channels.stream()
-                .filter(c ->
-                        c.getUser().getId() != userShare.getUser().getId() &&
-                                c != null &&
-                                c.getPlayer() != null &&
-                                c.getPlayer().getRoom() != null &&
-                                userShare.getPlayer().getRoom().getBattleId() == c.getPlayer().getRoom().getBattleId())
-                .toList();
-
-        if (shared.isEmpty()) return;
-
-        int numShare = shared.size();
-        long addGold = Math.max(1, (long) (bonusShare.getGold() * 0.35f / numShare));
-        List<Long> bonusX = Bonus.viewGold(addGold);
-
-        for (MyUser u : shared) {
-            List<Long> bm = Bonus.receiveListItem(u, "ShareExpParty", bonusX);
-            u.getPlayer().protoStatus(StateType.BONUS_SHARE_PARTY, bm.size(), GsonUtil.toListInt(bm));
-        }
-
-        // set lại 75% cho người chính sau khi chia 35%
-        bonusShare.set75();
-    }
-
     private void checkChannel() {
         channels = new ArrayList<>();
         List<Integer> lst = getMembersAndLeader();

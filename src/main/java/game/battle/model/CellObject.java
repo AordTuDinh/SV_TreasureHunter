@@ -49,7 +49,7 @@ public class CellObject {
         return BonusConfig.getRandomOneBonus(bonusConfig);
     }
 
-    public synchronized boolean attack(int damage) {
+    public synchronized boolean attack(long damage) {
         timeBeAttack = System.currentTimeMillis();
         this.curHp -= damage;
         curHp = Math.max(curHp, 0);

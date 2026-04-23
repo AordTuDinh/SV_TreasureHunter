@@ -162,18 +162,18 @@ public class Player extends Unit implements Serializable {
     // todo : edit to use item in slot
     public void useItem(int slot) {
         int itemId = itemsBuf.get(slot * 2 + 1);
-        UserItemEntity uItem = mUser.getResources().getItem(itemId);
+        UserItemEntity uItem = mUser.getResources().getItem( itemId);
         if (uItem == null || uItem.getNumber() <= 0) return;
         if (uItem.getType() != ItemType.ITEM_USE) return;
         List<Long> bonus = Bonus.viewItem(itemId, -1);
         sendBonus(bonus, DetailActionType.SU_DUNG_ITEM.getKey(mUser.getUserId()));
         List<PointBuff> buffs = uItem.getRes().getBuffs();
         mUser.getPlayer().protoBuffPoint(buffs);
-        protoStatus(StateType.USE_ITEM_SLOT,  slot);
+        protoStatus(StateType.USE_ITEM_SLOT, (long) slot);
         if (uItem.getNumber() <= 0) {
             mUser.getUSetting().saveSlot(mUser, slot, 0);
             itemsBuf.set(slot * 2 + 1, 0);
-            protoStatus(StateType.UPDATE_ITEM_SLOT, itemsBuf);
+            protoStatus(StateType.UPDATE_ITEM_SLOT, GsonUtil.toListLong(itemsBuf));
         }
     }
 
@@ -228,10 +228,10 @@ public class Player extends Unit implements Serializable {
     public void revive() {
         timeRevive = System.currentTimeMillis();
         this.sendDie = false;
-        protoStatus(StateType.REVIVE, (int) (pos.x * 1000), (int) (pos.y * 1000));
+        protoStatus(StateType.REVIVE, (long) (pos.x * 1000), (long) (pos.y * 1000));
         this.alive = true;
         point.resetHpMp();
-        protoStatus(StateType.SET_ALL_POINT, point.toProto());
+        protoStatus(StateType.UPDATE_MULTI_POINT, point.toProto());
         sendDie = true;
     }
 
@@ -270,23 +270,23 @@ public class Player extends Unit implements Serializable {
 
     public void sendBonus(List<Long> bonus, String title) {
         List<Long> bm = Bonus.receiveListItem(mUser, title, bonus);
-        protoStatus(StateType.ADD_BONUS, bm.size(), GsonUtil.toListInt(bm));
+        protoStatus(StateType.ADD_BONUS, bm.size(), bm);
     }
 
 
     // bonus bắn ra từ điểm
     public void sendForceBonus(BonusKillEnemy bonus, String title, Pos posInstance) {
         // tính vào exp party
-        UserPartyEntity uParty = mUser.getUser().getParty();
-        if (uParty != null) {
-            uParty.shareBonusParty(mUser, bonus);
-        }
-        List<Long> bonusReal = bonus.getBonus();
-        if (bonus.getGold() > 0) bonusReal.addAll(Bonus.viewGold(bonus.getGold()));
-        List<Long> bm = Bonus.receiveListItem(mUser, title, bonusReal);
-        bm.add(0, (long) (posInstance.x * 1000));
-        bm.add(1, (long) (posInstance.y * 1000));
-        protoStatus(StateType.BONUS_ADD_FORCE, bm.size(), GsonUtil.toListInt(bm));
+//        UserPartyEntity uParty = mUser.getUser().getParty();
+//        if (uParty != null) {
+//            uParty.shareBonusParty(mUser, bonus);
+//        }
+//        List<Long> bonusReal = bonus.getBonus();
+//        if (bonus.getGold() > 0) bonusReal.addAll(Bonus.viewGold(bonus.getGold()));
+//        List<Long> bm = Bonus.receiveListItem(mUser, title, bonusReal);
+//        bm.add(0, (long) (posInstance.x * 1000));
+//        bm.add(1, (long) (posInstance.y * 1000));
+      //  protoStatus(StateType.BONUS_ADD_FORCE, bm.size(), GsonUtil.toListInt(bm));
 
     }
 

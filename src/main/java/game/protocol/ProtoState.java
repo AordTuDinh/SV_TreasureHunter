@@ -52,7 +52,6 @@ public class ProtoState {
                 // type - size [ id  - isadd - x - y -size [type - chunkId - x - y - statetype]]
                 buffer.writeByte(StateType.TYPE_CHUNK_STATE_VALUE);
                 buffer.writeByte(chunkStateList.size());
-
                 for (int i = 0; i < chunkStateList.size(); i++) {
                     Pbmethod.PbChunk tmp = chunkStateList.get(i);
                     buffer.writeShort(tmp.getId());
@@ -113,7 +112,7 @@ public class ProtoState {
                         // point
                         buffer.writeByte(tmp.getPointCount());
                         for (int j = 0; j < tmp.getPointCount(); j++) {
-                            buffer.writeInt(tmp.getPoint(j));
+                            buffer.writeLong(tmp.getPoint(j));
                         }
                         buffer.writeInt(tmp.getUserId());
                     }
@@ -186,7 +185,7 @@ public class ProtoState {
                 // data
                 buffer.writeByte(tmp.getPointCount());
                 for (int j = 0; j < tmp.getPointCount(); j++) {
-                    buffer.writeInt(tmp.getPoint(j));
+                    buffer.writeLong(tmp.getPoint(j));
                 }
             }
         }
