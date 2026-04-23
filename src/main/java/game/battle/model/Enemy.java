@@ -109,12 +109,10 @@ public class Enemy extends Unit implements Serializable {
         return new Pos(x, y);
     }
 
-    public boolean hasAttackLongRange() {
-        return inRankAttack(AttackType.LONG_RANGE) && hasActionAttack() && !isMove() && alive && targetAttack != null && targetAttack.isAlive();
-    }
 
     public boolean hasAttackMelee() {
-        return inRankAttack(AttackType.MELEE) && hasActionAttack() && alive && targetAttack != null && targetAttack.isAlive();
+        // return inRankAttack(AttackType.MELEE) && hasActionAttack() && alive && targetAttack != null && targetAttack.isAlive();
+        return true;
     }
 
     public boolean isAttackDone() {
@@ -127,14 +125,14 @@ public class Enemy extends Unit implements Serializable {
     }
 
 
-    public boolean inRankAttack(AttackType attackType) {
-        if (targetAttack == null) return false;
-        if (attackType == AttackType.LONG_RANGE) {
-            return pos.distance(targetAttack.pos) < rangeAttack;
-        } else {
-            return pos.distance(targetAttack.pos) < rangeAttack && Math.abs(pos.y - targetAttack.getPos().y) < BattleConfig.E_RangeYAttack;
-        }
-    }
+//    public boolean inRankAttack(AttackType attackType) {
+//        if (targetAttack == null) return false;
+//        if (attackType == AttackType.LONG_RANGE) {
+//            return pos.distance(targetAttack.pos) < rangeAttack;
+//        } else {
+//            return pos.distance(targetAttack.pos) < rangeAttack && Math.abs(pos.y - targetAttack.getPos().y) < BattleConfig.E_RangeYAttack;
+//        }
+//    }
 
     public boolean hasActiveMove() {
         return DateTime.isAfterTime(timeActionAttack, BattleConfig.E_timeDelayAttackToMove);
@@ -148,179 +146,101 @@ public class Enemy extends Unit implements Serializable {
     @Override
     public void Update() {
         if (room.getRoomState() != RoomState.ACTIVE) return;
-        enemyProcess();
+        //enemyProcess();
     }
 
-    private void enemyProcess() {
-        if (!beBlock()) {
-
-            if (targetAttack == null || !targetAttack.isAlive() || !targetAttack.isReady()) { //
-                unTarget();
-            }
-            // check target attack
-            if (autoAttack && (targetAttack == null || !inRankAttack(attackType))) {
-                targetAttack = findTargetForEnemy(rangeAttack);
-            }
-            if (attackType == AttackType.LONG_RANGE) {
-                E_attackLongRange();
-            } else if (attackType == AttackType.COLLIDE) {
-                E_attackCollider();
-            } else {
-                E_attackMelee();
-            }
-        }
-    }
-
-    public void E_attackMelee() {
-        if (autoAttack) {
-            if (targetAttack == null && isReady()) {
-                Unit target = findTargetForEnemy(10000f);
-                if (target != null) {
-                    target.addTargetSelf(this);
-                    targetAttack = target;
-                }
-            }
-            isBeAttack = targetAttack != null;
-        }
-        if (isBeAttack) {
-            if (moveToTargetDone() && hasAttackMelee()) {
-                setTimeAttack();
-
-                room.addCoroutine(new Coroutine(delayAnimAttack, () -> {
-                    if (targetAttack != null) targetAttack.beAttackMelee(this);
-                }));
-            }
-            if (!inRankAttack(attackType) && isAttackDone()) {
-                enemyMove();
-            } else { // trong tầm đánh thì k move
-                setMove(false);
-            }
-        } else {
-            genRandomMove(); // move idle
-            if (!moveToTargetDone()) {
-                enemyMove();
-            } else {
-                setTargetMove(null);
-                setMove(false);
-            }
-        }
-    }
-
-    public void E_attackLongRange() {
-        // bi danh thi danh lai, k du range thi di chuyen den target
-        if (autoAttack) {
-            if (targetAttack == null && isReady()) {
-                Unit target = findTargetForEnemy(rangeView);
-                if (target != null) {
-                    target.addTargetSelf(this);
-                    targetAttack = target;
-                }
-            }
-            isBeAttack = targetAttack != null;
-        }
-        //System.out.println("isBeAttacktack = " + isBeAttack);
-        if (isBeAttack) {
-            boolean isMove = moveToTargetDone();
-            if (isMove && hasAttackLongRange()) {
-                setDirection(getFutureDirection(10, 20));
-                activeSkill(skillNormal);
-                room.addCoroutine(new Coroutine(delayAnimAttack, () -> {
-                    //   getBattleRoom().addBullet(this, skillNormal, enemyAttackLongRange());
-                }));
-            }
-            if (!inRankAttack(attackType) && isAttackDone()) {
-                enemyMove();
-            } else { // trong tầm đánh thì k move
-                setMove(false);
-            }
-        } else {
-            genRandomMove(); // move idle
-            if (!moveToTargetDone()) {
-                enemyMove();
-            } else {
-                setTargetMove(null);
-                setMove(false);
-            }
-        }
-
-        // mode hard  ->  find target, tim thay thi duoi theo danh, yeu cau phai o trong 1 khoang view
-//        if (room.getCacheBattle().getMode() == RoomMode.CAMPAIGN_HARD) {
-//            //luc nay chua co target nen phai tim
-//            if (!isBeAttack()) {
-//                Character target = findTargetForEnemy();
-//                if (target != null) {
-//                    setTargetAttack(target);
-//                    setBeAttack(true);
-//                }
+//    private void enemyProcess() {
+//        if (!beBlock()) {
+//            // check target attack
+//            if (autoAttack && (targetAttack == null || !inRankAttack(attackType))) {
+//                targetAttack = findTargetForEnemy(rangeAttack);
+//            }
+//            if (attackType == AttackType.LONG_RANGE) {
+//                E_attackLongRange();
+//            } else if (attackType == AttackType.COLLIDE) {
+//                E_attackCollider();
+//            } else {
+//                E_attackMelee();
 //            }
 //        }
+//    }
 
-        // gio se check truong hop k bi danh cung k co target -> cho no idle -> move linh tinh
+//    public void E_attackLongRange() {
+//        // bi danh thi danh lai, k du range thi di chuyen den target
+//        if (autoAttack) {
+//            if (targetAttack == null && isReady()) {
+//                Unit target = findTargetForEnemy(rangeView);
+//                if (target != null) {
+//                    target.addTargetSelf(this);
+//                    targetAttack = target;
+//                }
+//            }
+//            isBeAttack = targetAttack != null;
+//        }
+//        //System.out.println("isBeAttacktack = " + isBeAttack);
+//        if (isBeAttack) {
+//            boolean isMove = moveToTargetDone();
+//            if (isMove && hasAttackLongRange()) {
+//                setDirection(getFutureDirection(10, 20));
+//                activeSkill(skillNormal);
+//                room.addCoroutine(new Coroutine(delayAnimAttack, () -> {
+//                    //   getBattleRoom().addBullet(this, skillNormal, enemyAttackLongRange());
+//                }));
+//            }
+//            if (!inRankAttack(attackType) && isAttackDone()) {
+//                enemyMove();
+//            } else { // trong tầm đánh thì k move
+//                setMove(false);
+//            }
+//        } else {
+//            genRandomMove(); // move idle
+//            if (!moveToTargetDone()) {
+//                enemyMove();
+//            } else {
+//                setTargetMove(null);
+//                setMove(false);
+//            }
+//        }
+//
+//        // mode hard  ->  find target, tim thay thi duoi theo danh, yeu cau phai o trong 1 khoang view
 
-    }
-
+    /// /        if (room.getCacheBattle().getMode() == RoomMode.CAMPAIGN_HARD) {
+    /// /            //luc nay chua co target nen phai tim
+    /// /            if (!isBeAttack()) {
+    /// /                Character target = findTargetForEnemy();
+    /// /                if (target != null) {
+    /// /                    setTargetAttack(target);
+    /// /                    setBeAttack(true);
+    /// /                }
+    /// /            }
+    /// /        }
+//
+//        // gio se check truong hop k bi danh cung k co target -> cho no idle -> move linh tinh
+//
+//    }
     @Override
     public boolean beBlock() {
         return super.beBlock() || System.currentTimeMillis() < timeActive;
     }
 
-    // chạy qua chạy lại chỗ player va vào làm player mất máu
-    public void E_attackCollider() {
-        // mode hard  ->  find target, tim thay thi duoi theo danh, yeu cau phai o trong 1 khoang view
-        if (point.getMoveSpeed() == 0) return;
-        if (autoAttack) {
-            if (targetAttack == null && isReady()) {
-                Unit target = findTargetForEnemy(1000f);
-                if (target != null) {
-                    target.addTargetSelf(this);
-                    targetAttack = target;
-                }
-            }
-            isBeAttack = targetAttack != null;
-        }
-
-        if (isBeAttack) {
-            if (targetAttack != null && targetAttack.canBeAttack(getClanId())) {
-                activeSkill(skillNormal);
-                if (hasAttackLongRange()) {
-                    //getBattleRoom().addBullet(this, skillNormal, enemyAttackLongRange());
-                }
-                if (canMove && !inRankAttack(attackType)) {
-                    enemyMove();
-                } else { // trong tầm đánh thì k move
-                    setMove(false);
-                }
-            }
-        } else {
-            genRandomMove(); // move idle
-            if (!moveToTargetDone()) {
-                enemyMove();
-            } else {
-                setTargetMove(null);
-                setMove(false);
-            }
-        }
-    }
-
-
     //Fixme DATE: 8/18/2022 LƯU Ý ---> sắp xếp thứ tự ưu tiên
     // move attack(move target) -> move Idle(targetmove !=null)
     // target move đã đc xác định rồi, chỉ move thôi
-    public void enemyMove() {
-        Pos targetMove;
-        if (isBeAttack() && targetAttack != null) targetMove = getPosTargetMove(targetAttack);
-        else targetMove = getTargetMove();
-        if (targetMove == null || beBlock()) return;
-        if (Math.abs(targetMove.x - pos.x) > 1f) {
-            Pos direction = pos.getDirectionTo(targetMove);
-            setDirection(direction);
-        }
-        Pos nd = Pos.moveFromDirection(direction, getCurSpeed());
-        move(nd);
-        if (!nd.equals(Pos.zero())) {
-            setDirection(nd.normalized());
-        }
-    }
+//    public void enemyMove() {
+//        Pos targetMove;
+//        if (isBeAttack() && targetAttack != null) targetMove = getPosTargetMove(targetAttack);
+//        else targetMove = getTargetMove();
+//        if (targetMove == null || beBlock()) return;
+//        if (Math.abs(targetMove.x - pos.x) > 1f) {
+//            Pos direction = pos.getDirectionTo(targetMove);
+//            setDirection(direction);
+//        }
+//        Pos nd = Pos.moveFromDirection(direction, getCurSpeed());
+//        move(nd);
+//        if (!nd.equals(Pos.zero())) {
+//            setDirection(nd.normalized());
+//        }
+//    }
 
     private Pos getPosTargetMove(Unit target) {
         return new Pos(target.pos.x + NumberUtil.getRandom(-1, 1), target.pos.y + NumberUtil.getRandom(-1, 1));
@@ -433,12 +353,7 @@ public class Enemy extends Unit implements Serializable {
 
     @Override
     public float getCurSpeed() {
-        if (!isBeAttack) {
-            float idleSpeed = BattleConfig.M_speedMoveIdle / BattleConfig.C_SCALE_SPEED;
-            return idleSpeed < 1f ? 1f : idleSpeed;
-        } else {
-            return point.getMoveSpeed() / BattleConfig.C_SCALE_SPEED;
-        }
+        return point.getMoveSpeed() / BattleConfig.C_SCALE_SPEED;
     }
 
 

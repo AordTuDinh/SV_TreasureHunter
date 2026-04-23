@@ -73,7 +73,6 @@ public class Player extends Unit implements Serializable {
         this.attackType = AttackType.LONG_RANGE;
         this.direction = Pos.right();
         this.isMove = false;
-        this.attackerInfo = new HashMap<>();
         this.skillSlotNext = 0;
         timeBuff = new ArrayList<>();
     }
@@ -117,7 +116,6 @@ public class Player extends Unit implements Serializable {
         timeBeHit = 0;
         beDameInfo = new HashMap<>();
         targetMove = Pos.zero();
-        attackerInfo = new HashMap<>();
         if (petUse != null) {
             petUse.setPos(Pos.randomPos(this.pos, 1f, 1f));
         }
@@ -142,8 +140,6 @@ public class Player extends Unit implements Serializable {
     // set time join, va clear data old map
     public void setJoinMap(BaseRoom room) {
         timeJoinRoom = System.currentTimeMillis();
-        // clear old data
-        targetAttack = null;
         //timeBeAttack = 0;
         targetMove = null;
         this.ready = true;
@@ -199,8 +195,9 @@ public class Player extends Unit implements Serializable {
 
 
     public boolean targetInSizeAttack() {
-        if (targetAttack == null) return false;
-        return pos.distance(targetAttack.pos) < rangeAttack;
+//        if (targetAttack == null) return false;
+//        return pos.distance(targetAttack.pos) < rangeAttack;
+        return true;
     }
 
     @Override

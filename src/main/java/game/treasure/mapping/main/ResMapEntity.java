@@ -110,6 +110,10 @@ public class ResMapEntity extends BaseEntity implements Serializable {
         }
     }
 
+    public List<Integer> getChunkNoAttack(){
+        return  new ArrayList<>(mapData.chunkNoAttack);
+    }
+
     public Map<Integer, ChunkObject> getDataMap() {
         return new HashMap<>(mChunk);
     }

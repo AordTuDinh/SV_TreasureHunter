@@ -51,11 +51,13 @@ public abstract class BaseRoom extends MonoRoom {
     @Setter
     ResMapEntity mapInfo;
     int idNext;
+    public List<Integer> chunkNoAttack = new ArrayList<>();
 
     public BaseRoom(ResMapEntity mapInfo, Map<Integer, ChunkObject> mChunk, String keyRoom) {
         super(keyRoom);
         this.mapInfo = mapInfo;
         this.mChunk = mChunk;
+        chunkNoAttack = mapInfo.getChunkNoAttack();
         // gen chunk default
         for (Integer key : mChunk.keySet()) {
             chunkCharacter.put(key, new HashSet<>());
@@ -311,15 +313,23 @@ public abstract class BaseRoom extends MonoRoom {
             Util.sendProtoData(player.getMUser().getChannel(), null, IAction.PING_GAME);
         } else if (input.typeId == NInput.ATTACK) {
             int globalCellId = MapService.worldPosToGlobalCellId(mapInfo, player.getPos());
-            CellObject cellObject = getCellObject(globalCellId, player.getChunkId());
-            if (cellObject != null && cellObject.canAttack() && player.hasAttack()) {
-                addCellProcess(cellObject);
-                boolean cellDie = cellObject.attack(player.getPoint().getAttackDamage());
-                player.setTimeAttack();
-                if (cellDie) {
-                    addCellDie(cellObject);
-                    player.sendBonus(cellObject.getBonusKillMe(), DetailActionType.SU_DUNG_ITEM.getKey(player.getMUser().getUserId()));
+            if (player.canAttack()) return;
+            if (input.targetAttack == Pbmethod.TargetAttack.OBJECT) {
+                CellObject cellObject = getCellObject(globalCellId, player.getChunkId());
+                if (cellObject != null && cellObject.canAttack() && player.hasAttack()) {
+                    addCellProcess(cellObject);
+                    boolean cellDie = cellObject.attack(player.getPoint().getAttackDamage());
+                    player.setTimeAttack();
+                    if (cellDie) {
+                        addCellDie(cellObject);
+                        player.sendBonus(cellObject.getBonusKillMe(), DetailActionType.SU_DUNG_ITEM.getKey(player.getMUser().getUserId()));
+                    }
                 }
+            } else { // Đánh unit
+                Unit unit = mUnit.get(input.idAttack);
+                if (unit == null) return;
+                if (player.getClanId() != 0 && player.getClanId() == unit.getClanId()) return;
+                unit.attackUnit(player);
             }
         }
     }

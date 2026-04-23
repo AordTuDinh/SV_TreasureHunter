@@ -107,18 +107,6 @@ public class Util {
 
     }
 
-    public static void sendProtoInGame(Channel channel, AbstractMessage data, int service) {
-        Pbmethod.ResponseData.Builder builder = Pbmethod.ResponseData.newBuilder();
-        Pbmethod.PbAction.Builder action = Pbmethod.PbAction.newBuilder();
-        action.setActionId(service);
-        if (data != null) {
-            action.setData(data.toByteString());
-        }
-        builder.addAAction(action);
-        sendGameData(channel, builder.build().toByteArray());
-    }
-
-
 //    public static void sendAllPlayer(int service, AbstractMessage data, List<Player> aPlayer) {
 //        for (Player player : aPlayer) {
 //            if (player != null && player.channel != null) {

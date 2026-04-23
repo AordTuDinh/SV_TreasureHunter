@@ -92,7 +92,7 @@ public abstract class BaseBattleRoom extends BaseRoom {
         coroutines.remove(coroutine);
     }
 
-    public void ChangeCharacterHp(Unit attacker, Unit beDamage, long atk, long mAtk) {
+    public void ChangeCharacterHp(Unit attacker, Unit beDamage, long atk) {
 
     }
 }

@@ -18,6 +18,7 @@ public class NInput {
     public int typeId, skillIndex;
     public Pos playerPos;
     public Pos playerDirection;
+    // attack
     public Pbmethod.TargetAttack targetAttack;
     public long idAttack;
 

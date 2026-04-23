@@ -383,28 +383,21 @@ public class IMath {
             critPer = attacker.getPoint().getCritDamage() - target.getPoint().getCritDamageReduce();
             critPer = critPer / 100f <= 1.5f ? 1.5f : 1 + critPer / 100f;
         }
-        int[] dame = calculateDamageBase(atkDame,  target, critPer, null, attacker);
-        return new int[]{status, dame[0], dame[1]};
+        int dame = calculateDamageBase(atkDame,  target, critPer, null, attacker);
+        return new int[]{status, dame};
     }
 
     // Hàm gốc - tất cả đều tính qua hàm này
-    public static int[] calculateDamageBase(int atkDame, Unit beAttacker, float critPer, PointBuff buff, Unit attacker) {
-        int atk = 0, def = 0;
+    public static int calculateDamageBase(int atkDame, Unit beAttacker, float critPer, PointBuff buff, Unit attacker) {
+        int atk = 0;
         int doge = beAttacker.getPoint().getDoge();//miss
-//        if (beAttacker.getType() == UnitType.BOSS) {
-//            long dameToBoss = attacker.getPoint().getDameToBoss();
-//            if (dameToBoss > 0) {
-//                atkDame += (long) (atkDame * (float) dameToBoss / 100f);
-//                magicDame += (long) (magicDame * (float) dameToBoss / 100f);
-//            }
-//        }
         if (doge > 0 && NumberUtil.getRandom(100) < doge) { // né
-            return new int[]{atk};
+            return atk;
         }
         // Lưu ý : Sát thương chuẩn sẽ mạnh hơn giảm dame trực tiếp
         float changeDame = beAttacker.getPoint().getChangeDame();
 
-        def = beAttacker.getPoint().getDefense();
+        int def = beAttacker.getPoint().getDefense();
         if (buff != null && buff.getPointId() == Point.DEFENSE) {
             def += buff.getValue();
         }
@@ -412,14 +405,9 @@ public class IMath {
         // tinh dame
         atk = (int) (atkDame * 1000 * critPer / (1140f + 3.5 * def));
         // Đoạn này nhân với giảm dame trực tiếp
-        atk *= (long) changeDame;
+        atk *= (int) changeDame;
         if (atk == 0) atk = 1;
-        return new int[]{atk};
-    }
-
-
-    public static Pos calculatePushPos(Pos direction, float forcePush) {
-        return new Pos(direction.x * forcePush, direction.y * forcePush);
+        return atk;
     }
 
 

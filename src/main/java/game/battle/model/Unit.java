@@ -43,7 +43,6 @@ public abstract class Unit {
     ResMapEntity panelMap;//bot left + top right
     long timeDie, timeRevive;
     boolean hasBonusKillMe;
-    Unit targetAttack;
     long timeBeHit = 0;
     long killById;
 
@@ -52,7 +51,6 @@ public abstract class Unit {
     // todo test move
     boolean isMove = false; // dang di chuyen
     long timeActionMove;  // thời gian thay đổi action move
-    boolean isBeAttack; // bi danh
     Pos targetMove;
     boolean ready = true;
     long timeJoinRoom;
@@ -61,13 +59,6 @@ public abstract class Unit {
     long timeCheckDirectionAttack;
     //long timeBeAttack;
     Pos directionMoveAttack = Pos.zero(); // chưa có hướng move attack melee
-    // save attacker info
-    Map<Long, List<Long>> attackerInfo = new HashMap<>(); // playerID   - timeAttack,shurikenIds : dùng để check thẳng đánh mình vừa đánh lúc nào + suriken id nào
-    private static final int TIME_ATTACK = 0;
-    private static final int SLOT_MELEE = 1;
-    private static final int START_INDEX = 2;
-
-    public Map<Long, Unit> targetSelf = new HashMap<>();
     boolean sendDie = true;
 
 
@@ -80,46 +71,14 @@ public abstract class Unit {
         return type == UnitType.ENEMY;
     }
 
-    private void checkBeAttackByEffect(Unit attacker) {
-        if (room.getRoomState() != RoomState.ACTIVE) return;
-        if (point.getCurHP() > 0 && (targetAttack == null || !targetAttack.alive)) {
-            isBeAttack = true;
-            targetAttack = attacker;
-            addTargetSelf(attacker);
-        }
-    }
-
-    public void unTarget() {
-        targetAttack = null;
-        isBeAttack = false;
-    }
-
-    public void unTargetAll() {
-        targetAttack = null;
-        isBeAttack = false;
-        targetSelf.clear();
-    }
-
-    public void addTargetSelf(Unit attacker) {
-        if (!targetSelf.containsKey(attacker.getId())) {
-            this.targetSelf.put(attacker.getId(), attacker);
-        }
-    }
-
-    public void removeTargetSelf(Unit attacker) {
-        for (int i = 0; i < targetSelf.size(); i++) {
-            if (targetSelf.get(i) != null && attacker.getId() == targetSelf.get(i).getId()) {
-                targetSelf.remove(i);
-                return;
-            }
-        }
-    }
 
     public void setPosAndDirection(Pos newPos, Pos newDirection) {
         pos = newPos.round();
         direction = newDirection.normalized();
         setMove(true);
         updateChunkByPos(pos);
+
+        System.out.println("id = " + id + "  -- pos = " + pos);
     }
 
     protected void updateChunkByPos(Pos worldPos) {
@@ -131,58 +90,23 @@ public abstract class Unit {
         }
     }
 
-    public void beAttackMelee(Unit attacker) {
-        int[] damage = IMath.calculateDamage(attacker, this);
-        beAttackDamage(attacker, damage[1], damage[2]);
-        addAtkInfoMelee(attacker);
-        protoBeDame(attacker, Arrays.asList(damage[0], -damage[1], -damage[2]));
+
+    public void attackUnit(Unit target) {
+        int[] damage = IMath.calculateDamage(this, target);
+        target.beAttackDamage(this, damage[1]);
+        target.protoBeDame(this, Arrays.asList(damage[0], -damage[1]));
     }
 
-//    public void beAttackCollider(Unit attacker) {
-//        addAtkInfoMelee(attacker);
-//        int[] damage = IMath.calculateDamage(attacker, this, attacker.getFaction());
-//        damage[1] = (int) (damage[1] * BattleConfig.M_PerDameCollider);
-//        damage[2] = (int) (damage[2] * BattleConfig.M_PerDameCollider);
-//        if (damage[1] <= 0 && damage[2] <= 0) damage[1] = 1;
-//        beAttackDamage(attacker, damage[1], damage[2]);
-//        protoBeDame(attacker, Arrays.asList(damage[0], -damage[1], -damage[2]));
-//    }
-
-
-    public long getBeDameInfo(int userId) {
-        if (beDameInfo.containsKey(userId)) {
-            return beDameInfo.get(userId);
-        }
-        return 0;
-    }
-
-    public Pos getFutureDirection(int min, int max) {
-        if (targetAttack == null) return Pos.zero();
-        if (targetAttack.isMove()) {
-            int rand = NumberUtil.getRandom(min, max);
-            float distance = (float) pos.distance(targetAttack.getPos()) / rand;
-            Pos posNext = targetAttack.getPos().clone();
-            Pos dirClone = targetAttack.direction.clone();
-            dirClone.multiple(targetAttack.getCurSpeed() * distance);
-            posNext.add(dirClone);
-            return pos.getDirectionTo(posNext);
-        } else return pos.getDirectionTo(targetAttack.pos);
-    }
 
     // gửi riêng
-    public void beAttackDamage(Unit ownerDamage, int atkDame, int mAtkDame) {
-        updateHp(ownerDamage, -atkDame, -mAtkDame);
+    public void beAttackDamage(Unit ownerDamage, int atkDame) {
+        updateHp(ownerDamage, -atkDame);
         if (!alive) {
             timeDie = System.currentTimeMillis();
-            ownerDamage.unTarget();
-            ownerDamage.removeTargetSelf(this);
             protoDie(ownerDamage);
             if (checkHasBonusKill()) bonusKillMe(ownerDamage);
         } else {
             timeBeHit = System.currentTimeMillis();
-            isBeAttack = true;
-            targetAttack = ownerDamage;
-            addTargetSelf(ownerDamage);
         }
     }
 
@@ -202,23 +126,8 @@ public abstract class Unit {
         return (BaseBattleRoom) room;
     }
 
-
-    void addAtkInfoMelee(Unit enemy) {
-        if (attackerInfo.containsKey(enemy.getId())) {
-            attackerInfo.get(enemy.getId()).set(TIME_ATTACK, System.currentTimeMillis());
-            attackerInfo.get(enemy.getId()).set(SLOT_MELEE, attackerInfo.get(enemy.getId()).get(SLOT_MELEE) + 1);
-        } else {
-            attackerInfo.put(enemy.getId(), Arrays.asList(System.currentTimeMillis(), 0L));
-        }
-    }
-
-    // tránh trường hợp ăn đòn liên hoàn, sau 1 khoảng time mới ăn đòn từ thằng đó tiếp
-    public boolean hasReciveMelee(Unit attacker) {
-        return canBeAttack(attacker.clanId) && DateTime.isAfterTime(getTimeAttack(attacker.getId()), BattleConfig.C_haSReciveDamage);
-    }
-
     public boolean hasReceiveEffMelee(Unit attacker) {
-        return canBeMelee() && hasReciveMelee(attacker);
+        return canBeMelee();
     }
 
     public boolean isReviveReady() {
@@ -228,6 +137,11 @@ public abstract class Unit {
     public boolean canBeAttack(int teamId) {
         return isAlive() && isReady() && isReviveReady() && !sameTeam(teamId);
     }
+
+    public boolean canAttack() {
+        return !room.chunkNoAttack.contains(chunkId);
+    }
+
 
     public boolean canBeMelee() {
         return isAlive() && isReady() && isReviveReady();
@@ -244,15 +158,6 @@ public abstract class Unit {
     public boolean sameTeam(Unit other) {
         return other.getClanId() == this.clanId;
     }
-
-    public long getTimeAttack(long attackerId) {
-        if (attackerInfo.containsKey(attackerId)) { // chưa có thông tin gì
-            return attackerInfo.get(attackerId).get(TIME_ATTACK);
-        } else {
-            return 0;
-        }
-    }
-
 
     public void stun(float time) {
         int timStun = (int) (time * 1000);
@@ -288,26 +193,6 @@ public abstract class Unit {
         return MathLab.pointInCircle(this.pos, r, posTarget);
     }
 
-//    public boolean isHitMelee(Unit target) {
-//        if (!isAlive()) return false;
-//        return MathLab.pointInCircle(this.pos, target.getRadius() + radius, target.pos);
-//    }
-
-    public float distionTop() {
-        return Math.abs(room.getMapInfo().getTopRightP().y - pos.y);
-    }
-
-    public float distionBot() {
-        return Math.abs(room.getMapInfo().getBotLeftP().y - pos.y);
-    }
-
-    public float distionLeft() {
-        return Math.abs(room.getMapInfo().getBotLeftP().x - pos.x);
-    }
-
-    public float distionRight() {
-        return Math.abs(room.getMapInfo().getTopRightP().x - pos.x);
-    }
 
     public boolean isLikeFace(Pos newDirection) { // check lật mặt
         return direction.x * newDirection.x > 0;
@@ -317,9 +202,7 @@ public abstract class Unit {
     public Point resetData() {
         point.resetHpMp();
         alive = true;
-        attackerInfo = new HashMap<>();
         hasBonusKillMe = true;
-        unTargetAll();
         targetMove = null;
         timeBeHit = 0;
         timeActionAttack = 0;
@@ -362,16 +245,15 @@ public abstract class Unit {
     }
 
     public synchronized void protoDie(Unit killer) {
-        unTargetAll();
         this.killById = killer.getId();
         room.characterDie(this);
     }
 
-    public void updateHp(Unit attacker, int atkDame, int magDame) {
+    public void updateHp(Unit attacker, int atkDame) {
         List<PointBuff> buffs = new ArrayList<>();
-        buffs.add(new PointBuff(Point.CUR_HP, atkDame + magDame));
+        buffs.add(new PointBuff(Point.CUR_HP, atkDame));
         protoBuffPoint(buffs);
-        ((BaseBattleRoom) room).ChangeCharacterHp(attacker, this, atkDame, magDame);
+        ((BaseBattleRoom) room).ChangeCharacterHp(attacker, this, atkDame);
     }
 
     public void reHp(int addNum) {
