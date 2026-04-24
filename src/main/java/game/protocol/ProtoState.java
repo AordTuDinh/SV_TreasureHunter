@@ -190,21 +190,4 @@ public class ProtoState {
             }
         }
     }
-
-//    public static void parsePbUpdateBullet(ByteBuf buffer, List<PbWeapon> aBullet) {
-//        if (aBullet.size() > 0) {
-//            buffer.writeByte(Constans.TYPE_ADD_BULLET);
-//            buffer.writeByte(aBullet.size());
-//            for (int i = 0; i < aBullet.size(); i++) {
-//                PbWeapon tmp = aBullet.get(i);
-//                buffer.writeInt(tmp.getId());
-//                buffer.writeFloat(tmp.getPos().getX());
-//                buffer.writeFloat(tmp.getPos().getY());
-//                buffer.writeByte(tmp.getInfoCount());
-//                for (int j = 0; j < tmp.getInfoCount(); j++) {
-//                    buffer.writeInt(tmp.getInfo(j));
-//                }
-//            }
-//        }
-//    }
 }
