@@ -1,25 +1,32 @@
 package game.battle.model;
 
-import com.mysql.cj.util.TimeUtil;
 import game.battle.object.Pos;
 import game.object.BonusConfig;
 import game.treasure.BattleConfig;
-import game.treasure.mapping.main.ResMapEntity;
 import game.treasure.mapping.main.ResObjectEntity;
 import game.treasure.service.resource.ResMap;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import ozudo.base.helper.DateTime;
 import protocol.Pbmethod;
-
-import javax.persistence.Transient;
 
 import java.util.List;
 
 import static game.treasure.BattleConfig.CHUNK_SIZE;
 
 
-@Data
+/**
+ * Không dùng {@code @Data} cho equals/hashCode trên toàn bộ field: {@code curHp}/{@code state} đổi sau khi chết/revive
+ * sẽ làm thay đổi hash khi object vẫn nằm trong {@code HashSet} (vd. {@code cellObjectDie}) → một số cell không revive.
+ */
+@Getter
+@Setter
+@ToString
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class CellObject {
+    @EqualsAndHashCode.Include
     int id;
     Pos pos;
     int chunkId;

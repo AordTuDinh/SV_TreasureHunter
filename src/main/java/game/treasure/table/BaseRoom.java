@@ -126,7 +126,9 @@ public abstract class BaseRoom extends MonoRoom {
             List<Pbmethod.PbUnitPos> list = new ArrayList<>();
             for (Long unitId : entry.getValue()) {
                 Unit u = mUnit.get(unitId);
-                if (u != null && u.isAlive() && u.isMove()) {
+                // Luôn sync vị trí unit còn sống (kể cả đứng yên). Lọc theo isMove() khiến sau P_timeNoMove
+                // unit biến mất khỏi TYPE_POS → client khác không nhận pos / nội suy lệch.
+                if (u != null && u.isAlive()) {
                     list.add(u.toProtoPos());
                 }
             }
