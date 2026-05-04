@@ -147,6 +147,15 @@ public abstract class BaseRoom extends MonoRoom {
         List<Pbmethod.PbUnitState> protoUnitStateCopy = new ArrayList<>(aProtoUnitState);
         aProtoUnitState.clear();
 
+        // Snapshot cell pending theo chunk thật của cell — dùng cho mọi viewer có chunk đó trong view.
+        // (Trước đây chỉ đọc cellObjectProcess.get(chunkId viewer) nên object ở chunk khác không gửi tới player lân cận.)
+        Map<Integer, Set<Integer>> cellProcessSnapshot = new HashMap<>();
+        for (Map.Entry<Integer, Set<Integer>> e : cellObjectProcess.entrySet()) {
+            if (e.getValue() != null && !e.getValue().isEmpty()) {
+                cellProcessSnapshot.put(e.getKey(), new LinkedHashSet<>(e.getValue()));
+            }
+        }
+
         // 2. build data cho từng chunk
         for (Integer chunkId : chunkCharacter.keySet()) {
             protocol.Pbmethod.PbState.Builder builder = protocol.Pbmethod.PbState.newBuilder();
@@ -155,13 +164,15 @@ public abstract class BaseRoom extends MonoRoom {
             List<Integer> visibleChunks = visibleByChunkId.get(chunkId);
             Set<Long> added = new HashSet<>();
 
-            for (Integer vChunk : visibleChunks) {
-                List<Pbmethod.PbUnitPos> list = chunkUnitPosMap.get(vChunk);
-                if (list != null) {
-                    for (Pbmethod.PbUnitPos u : list) {
-                        if (added.add(u.getId())) {
-                            // System.out.println("u.getChunkId() = " + u.getChunkId());
-                            builder.addUnitPos(u);
+            if (visibleChunks != null) {
+                for (Integer vChunk : visibleChunks) {
+                    List<Pbmethod.PbUnitPos> list = chunkUnitPosMap.get(vChunk);
+                    if (list != null) {
+                        for (Pbmethod.PbUnitPos u : list) {
+                            if (added.add(u.getId())) {
+                                // System.out.println("u.getChunkId() = " + u.getChunkId());
+                                builder.addUnitPos(u);
+                            }
                         }
                     }
                 }
@@ -174,15 +185,22 @@ public abstract class BaseRoom extends MonoRoom {
                         ProtoState.protoListCharacterState(protoUnitStateCopy)));
             }
 
-            Set<Integer> cellObjects = cellObjectProcess.get(chunkId);
-            if (cellObjects != null && !cellObjects.isEmpty()) {
-                ChunkObject chunkObject = mChunk.get(chunkId);
-                builder.addChunkState(chunkObject.toProtoUpdate(cellObjects));
-                // clear các cell đã xử lí để tránh gửi lại mỗi tick
-                cellObjects.clear();
+            if (visibleChunks != null) {
+                for (Integer vChunk : visibleChunks) {
+                    Set<Integer> cellIds = cellProcessSnapshot.get(vChunk);
+                    if (cellIds == null || cellIds.isEmpty()) continue;
+                    ChunkObject chunkObject = mChunk.get(vChunk);
+                    if (chunkObject == null) continue;
+                    builder.addChunkState(chunkObject.toProtoUpdate(cellIds));
+                }
             }
 
             chunkViewData.put(chunkId, ProtoState.convertProtoBuffToState(builder.build()));
+        }
+
+        for (Integer key : cellProcessSnapshot.keySet()) {
+            Set<Integer> live = cellObjectProcess.get(key);
+            if (live != null) live.clear();
         }
 
         return chunkViewData;
