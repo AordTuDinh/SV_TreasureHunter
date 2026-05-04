@@ -4,7 +4,6 @@ import com.google.protobuf.AbstractMessage;
 import game.battle.model.Pet;
 import game.battle.model.Player;
 import game.battle.object.Pos;
-import game.battle.type.StateType;
 import game.config.*;
 import game.config.aEnum.*;
 import game.treasure.controller.UserHandler;
@@ -205,7 +204,7 @@ public class MyUser implements Serializable {
     }
 
     public void reCalculatePoint() {
-        if (player != null) player.protoStatus(StateType.UPDATE_MULTI_POINT, user.reCalculatePoint(this).toProto());
+        if (player != null) player.protoStatus(Pbmethod.SubStateType.UPDATE_MULTI_POINT, user.reCalculatePoint(this).toProto());
     }
 
     public List<FriendChatObject> getChatHistory(int userId) {

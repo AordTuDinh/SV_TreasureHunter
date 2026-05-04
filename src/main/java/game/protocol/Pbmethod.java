@@ -91,6 +91,251 @@ public final class Pbmethod {
   }
 
   /**
+   * Protobuf enum {@code pbdson.SubStateType}
+   */
+  public enum SubStateType
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>ADD_BONUS = 1;</code>
+     *
+     * <pre>
+     * custom size
+     * </pre>
+     */
+    ADD_BONUS(0, 1),
+    /**
+     * <code>DIE = 2;</code>
+     *
+     * <pre>
+     * faction
+     * </pre>
+     */
+    DIE(1, 2),
+    /**
+     * <code>REVIVE = 3;</code>
+     */
+    REVIVE(2, 3),
+    /**
+     * <code>PLAY_ANIM = 4;</code>
+     */
+    PLAY_ANIM(3, 4),
+    /**
+     * <code>BE_DAMAGE = 5;</code>
+     *
+     * <pre>
+     * attackerId - crit - atkDame - magDame
+     * </pre>
+     */
+    BE_DAMAGE(4, 5),
+    /**
+     * <code>EFFECT_BODY = 6;</code>
+     *
+     * <pre>
+     * effect Id, time
+     * </pre>
+     */
+    EFFECT_BODY(5, 6),
+    /**
+     * <code>RE_HP = 7;</code>
+     *
+     * <pre>
+     * recovery hp
+     * </pre>
+     */
+    RE_HP(6, 7),
+    /**
+     * <code>UPDATE_CHAT_FRAME = 8;</code>
+     */
+    UPDATE_CHAT_FRAME(7, 8),
+    /**
+     * <code>UPDATE_TRIAL = 9;</code>
+     */
+    UPDATE_TRIAL(8, 9),
+    /**
+     * <code>UPDATE_ITEM_SLOT = 10;</code>
+     *
+     * <pre>
+     * item buf in player
+     * </pre>
+     */
+    UPDATE_ITEM_SLOT(9, 10),
+    /**
+     * <code>UPDATE_TEXT_DAME = 11;</code>
+     */
+    UPDATE_TEXT_DAME(10, 11),
+    /**
+     * <code>UPDATE_MULTI_POINT = 12;</code>
+     *
+     * <pre>
+     * [point id - cur] chỉ dùng số ít point, không phải toàn bộ point
+     * </pre>
+     */
+    UPDATE_MULTI_POINT(11, 12),
+    /**
+     * <code>USE_ITEM_SLOT = 13;</code>
+     *
+     * <pre>
+     * slot
+     * </pre>
+     */
+    USE_ITEM_SLOT(12, 13),
+    ;
+
+    /**
+     * <code>ADD_BONUS = 1;</code>
+     *
+     * <pre>
+     * custom size
+     * </pre>
+     */
+    public static final int ADD_BONUS_VALUE = 1;
+    /**
+     * <code>DIE = 2;</code>
+     *
+     * <pre>
+     * faction
+     * </pre>
+     */
+    public static final int DIE_VALUE = 2;
+    /**
+     * <code>REVIVE = 3;</code>
+     */
+    public static final int REVIVE_VALUE = 3;
+    /**
+     * <code>PLAY_ANIM = 4;</code>
+     */
+    public static final int PLAY_ANIM_VALUE = 4;
+    /**
+     * <code>BE_DAMAGE = 5;</code>
+     *
+     * <pre>
+     * attackerId - crit - atkDame - magDame
+     * </pre>
+     */
+    public static final int BE_DAMAGE_VALUE = 5;
+    /**
+     * <code>EFFECT_BODY = 6;</code>
+     *
+     * <pre>
+     * effect Id, time
+     * </pre>
+     */
+    public static final int EFFECT_BODY_VALUE = 6;
+    /**
+     * <code>RE_HP = 7;</code>
+     *
+     * <pre>
+     * recovery hp
+     * </pre>
+     */
+    public static final int RE_HP_VALUE = 7;
+    /**
+     * <code>UPDATE_CHAT_FRAME = 8;</code>
+     */
+    public static final int UPDATE_CHAT_FRAME_VALUE = 8;
+    /**
+     * <code>UPDATE_TRIAL = 9;</code>
+     */
+    public static final int UPDATE_TRIAL_VALUE = 9;
+    /**
+     * <code>UPDATE_ITEM_SLOT = 10;</code>
+     *
+     * <pre>
+     * item buf in player
+     * </pre>
+     */
+    public static final int UPDATE_ITEM_SLOT_VALUE = 10;
+    /**
+     * <code>UPDATE_TEXT_DAME = 11;</code>
+     */
+    public static final int UPDATE_TEXT_DAME_VALUE = 11;
+    /**
+     * <code>UPDATE_MULTI_POINT = 12;</code>
+     *
+     * <pre>
+     * [point id - cur] chỉ dùng số ít point, không phải toàn bộ point
+     * </pre>
+     */
+    public static final int UPDATE_MULTI_POINT_VALUE = 12;
+    /**
+     * <code>USE_ITEM_SLOT = 13;</code>
+     *
+     * <pre>
+     * slot
+     * </pre>
+     */
+    public static final int USE_ITEM_SLOT_VALUE = 13;
+
+
+    public final int getNumber() { return value; }
+
+    public static SubStateType valueOf(int value) {
+      switch (value) {
+        case 1: return ADD_BONUS;
+        case 2: return DIE;
+        case 3: return REVIVE;
+        case 4: return PLAY_ANIM;
+        case 5: return BE_DAMAGE;
+        case 6: return EFFECT_BODY;
+        case 7: return RE_HP;
+        case 8: return UPDATE_CHAT_FRAME;
+        case 9: return UPDATE_TRIAL;
+        case 10: return UPDATE_ITEM_SLOT;
+        case 11: return UPDATE_TEXT_DAME;
+        case 12: return UPDATE_MULTI_POINT;
+        case 13: return USE_ITEM_SLOT;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<SubStateType>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<SubStateType>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<SubStateType>() {
+            public SubStateType findValueByNumber(int number) {
+              return SubStateType.valueOf(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return protocol.Pbmethod.getDescriptor().getEnumTypes().get(1);
+    }
+
+    private static final SubStateType[] VALUES = values();
+
+    public static SubStateType valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int index;
+    private final int value;
+
+    private SubStateType(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:pbdson.SubStateType)
+  }
+
+  /**
    * Protobuf enum {@code pbdson.StateType}
    */
   public enum StateType
@@ -165,7 +410,7 @@ public final class Pbmethod {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return protocol.Pbmethod.getDescriptor().getEnumTypes().get(1);
+      return protocol.Pbmethod.getDescriptor().getEnumTypes().get(2);
     }
 
     private static final StateType[] VALUES = values();
@@ -310,7 +555,7 @@ public final class Pbmethod {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return protocol.Pbmethod.getDescriptor().getEnumTypes().get(2);
+      return protocol.Pbmethod.getDescriptor().getEnumTypes().get(3);
     }
 
     private static final CellObjectType[] VALUES = values();
@@ -410,7 +655,7 @@ public final class Pbmethod {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return protocol.Pbmethod.getDescriptor().getEnumTypes().get(3);
+      return protocol.Pbmethod.getDescriptor().getEnumTypes().get(4);
     }
 
     private static final TargetAttack[] VALUES = values();
@@ -77697,15 +77942,21 @@ public final class Pbmethod {
       "\n\004name\030\004 \001(\t\022\r\n\005price\030\005 \001(\t\022\r\n\005bonus\030\006 \003" +
       "(\003\022\020\n\010addBonus\030\007 \003(\003\022\020\n\010addTitle\030\010 \001(\t\022\016" +
       "\n\006vipExp\030\t \001(\005\022\017\n\007priceQr\030\n \001(\t*!\n\tCellS" +
-      "tate\022\n\n\006ACTIVE\020\001\022\010\n\004HIDE\020\002*Y\n\tStateType\022" +
-      "\023\n\017TYPE_ADD_REMOVE\020\001\022\014\n\010TYPE_POS\020\002\022\023\n\017TY" +
-      "PE_UNIT_STATE\020\003\022\024\n\020TYPE_CHUNK_STATE\020\004*y\n" +
-      "\016CellObjectType\022\010\n\004ROCK\020\001\022\010\n\004SIGN\020\002\022\n\n\006C" +
-      "ACTUS\020\003\022\n\n\006FLOWER\020\004\022\t\n\005SKULL\020\005\022\t\n\005CHEST\020" +
-      "\006\022\t\n\005BONES\020\007\022\016\n\nGRAVESTONE\020\010\022\n\n\006HELMET\020\t",
-      "*;\n\014TargetAttack\022\n\n\006OBJECT\020\000\022\t\n\005ENEMY\020\001\022" +
-      "\010\n\004BOSS\020\002\022\n\n\006PLAYER\020\003B\024\n\010protocolB\010Pbmet" +
-      "hod"
+      "tate\022\n\n\006ACTIVE\020\001\022\010\n\004HIDE\020\002*\354\001\n\014SubStateT" +
+      "ype\022\r\n\tADD_BONUS\020\001\022\007\n\003DIE\020\002\022\n\n\006REVIVE\020\003\022" +
+      "\r\n\tPLAY_ANIM\020\004\022\r\n\tBE_DAMAGE\020\005\022\017\n\013EFFECT_" +
+      "BODY\020\006\022\t\n\005RE_HP\020\007\022\025\n\021UPDATE_CHAT_FRAME\020\010" +
+      "\022\020\n\014UPDATE_TRIAL\020\t\022\024\n\020UPDATE_ITEM_SLOT\020\n" +
+      "\022\024\n\020UPDATE_TEXT_DAME\020\013\022\026\n\022UPDATE_MULTI_P",
+      "OINT\020\014\022\021\n\rUSE_ITEM_SLOT\020\r*Y\n\tStateType\022\023" +
+      "\n\017TYPE_ADD_REMOVE\020\001\022\014\n\010TYPE_POS\020\002\022\023\n\017TYP" +
+      "E_UNIT_STATE\020\003\022\024\n\020TYPE_CHUNK_STATE\020\004*y\n\016" +
+      "CellObjectType\022\010\n\004ROCK\020\001\022\010\n\004SIGN\020\002\022\n\n\006CA" +
+      "CTUS\020\003\022\n\n\006FLOWER\020\004\022\t\n\005SKULL\020\005\022\t\n\005CHEST\020\006" +
+      "\022\t\n\005BONES\020\007\022\016\n\nGRAVESTONE\020\010\022\n\n\006HELMET\020\t*" +
+      ";\n\014TargetAttack\022\n\n\006OBJECT\020\000\022\t\n\005ENEMY\020\001\022\010" +
+      "\n\004BOSS\020\002\022\n\n\006PLAYER\020\003B\024\n\010protocolB\010Pbmeth" +
+      "od"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

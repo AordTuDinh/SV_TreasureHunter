@@ -42,6 +42,23 @@ enum CellState{
   HIDE = 2;
 }
 
+
+enum SubStateType {
+  ADD_BONUS = 1;          // custom size
+  DIE = 2;                // faction
+  REVIVE = 3;
+  PLAY_ANIM = 4;
+  BE_DAMAGE = 5;          // attackerId - crit - atkDame - magDame
+  EFFECT_BODY = 6;        // effect Id, time
+  RE_HP = 7;              // recovery hp
+  UPDATE_CHAT_FRAME = 8;
+  UPDATE_TRIAL = 9;
+  UPDATE_ITEM_SLOT = 10;  // item buf in player
+  UPDATE_TEXT_DAME = 11;
+  UPDATE_MULTI_POINT = 12; // [point id - cur] chỉ dùng số ít point, không phải toàn bộ point
+  USE_ITEM_SLOT = 13;     // slot
+}
+
 enum StateType {
   TYPE_ADD_REMOVE = 1;
   TYPE_POS = 2;

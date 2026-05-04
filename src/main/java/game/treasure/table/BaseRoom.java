@@ -6,7 +6,6 @@ import game.battle.model.Unit;
 import game.battle.object.*;
 import game.battle.type.AnimationType;
 import game.battle.type.RoomState;
-import game.battle.type.StateType;
 import game.config.CfgServer;
 import game.config.aEnum.DetailActionType;
 import game.config.aEnum.MapType;
@@ -144,8 +143,7 @@ public abstract class BaseRoom extends MonoRoom {
             protoChangeByUnitId.computeIfAbsent(u.getId(), k -> new ArrayList<>()).add(u);
         }
 
-        List<Pbmethod.PbUnitState> protoUnitStateCopy = new ArrayList<>(aProtoUnitState);
-        aProtoUnitState.clear();
+        List<Pbmethod.PbUnitState> protoUnitStateCopy = snapshotAndClearProtoUnitState();
 
         // Snapshot cell pending theo chunk thật của cell — dùng cho mọi viewer có chunk đó trong view.
         // (Trước đây chỉ đọc cellObjectProcess.get(chunkId viewer) nên object ở chunk khác không gửi tới player lân cận.)
@@ -341,7 +339,7 @@ public abstract class BaseRoom extends MonoRoom {
                     addCellProcess(cellObject);
                     boolean cellDie = cellObject.attack(player.getPoint().getAttackDamage());
                     player.setTimeAttack();
-                    player.protoStatus(StateType.PLAY_ANIM,(long) AnimationType.ATTACK.value);
+                    player.protoStatus(Pbmethod.SubStateType.PLAY_ANIM,(long) AnimationType.ATTACK.value);
                     if (cellDie) {
                         addCellDie(cellObject);
                         player.sendBonus(cellObject.getBonusKillMe(), DetailActionType.SU_DUNG_ITEM.getKey(player.getMUser().getUserId()));
@@ -352,7 +350,7 @@ public abstract class BaseRoom extends MonoRoom {
                 if (unit == null) return;
                 if (player.getClanId() != 0 && player.getClanId() == unit.getClanId()) return;
                 player.setTimeAttack();
-                player.protoStatus(StateType.PLAY_ANIM, (long)AnimationType.ATTACK.value);
+                player.protoStatus(Pbmethod.SubStateType.PLAY_ANIM, (long)AnimationType.ATTACK.value);
                 unit.attackUnit(player);
             }
         }

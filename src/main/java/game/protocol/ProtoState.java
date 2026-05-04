@@ -17,13 +17,19 @@ public class ProtoState {
         return builder.build();
     }
 
+    /**
+     * Không được mutate {@code characterState}: {@link game.treasure.table.BaseRoom#buildChunkViewData}
+     * gọi lại cho <strong>mọi</strong> viewer chunk; remove(0) chỉ để lại batch cho iteration đầu → các player
+     * chunk khác không có TYPE_UNIT_STATE (không thấy PLAY_ANIM khi người khác đánh).
+     */
     public static ByteString protoListCharacterState(List<PbUnitState> characterState) {
         Pbmethod.PbListUnitState.Builder builder = Pbmethod.PbListUnitState.newBuilder();
-        int size = characterState.size();
-        for (int i = 0; i < size; i++) {
-            if (characterState.get(0) != null) {
-                builder.addAUnitState(characterState.get(0));
-                characterState.remove(0);
+        if (characterState == null || characterState.isEmpty()) {
+            return builder.build().toByteString();
+        }
+        for (PbUnitState u : characterState) {
+            if (u != null) {
+                builder.addAUnitState(u);
             }
         }
         return builder.build().toByteString();

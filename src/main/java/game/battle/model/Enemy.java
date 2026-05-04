@@ -1,9 +1,7 @@
 package game.battle.model;
 
 import game.battle.object.*;
-import game.battle.type.AttackType;
 import game.battle.type.RoomState;
-import game.battle.type.StateType;
 import game.battle.type.UnitType;
 import game.config.CfgEventDrop;
 import game.config.aEnum.DetailActionType;
@@ -43,7 +41,7 @@ public class Enemy extends Unit implements Serializable {
             timeRevive = System.currentTimeMillis();
             resetData();
             pos = instancePos.clone();
-            protoStatus(StateType.REVIVE, (long) (pos.x * 1000), (long) (pos.y * 1000));
+            protoStatus(Pbmethod.SubStateType.REVIVE, (long) (pos.x * 1000), (long) (pos.y * 1000));
         }
     }
 
@@ -54,7 +52,7 @@ public class Enemy extends Unit implements Serializable {
     @Override
     public void protoDie(Unit killer) {
         super.protoDie(killer);
-        protoStatus(StateType.DIE, 1L);
+        protoStatus(Pbmethod.SubStateType.DIE, 1L);
     }
 
     @Override

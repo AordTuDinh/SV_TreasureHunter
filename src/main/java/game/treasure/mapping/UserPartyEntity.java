@@ -1,10 +1,7 @@
 package game.treasure.mapping;
 
 
-import game.battle.object.BonusKillEnemy;
-import game.battle.type.StateType;
 import game.treasure.service.resource.ResParty;
-import game.treasure.service.user.Bonus;
 import game.monitor.Online;
 import game.object.MyUser;
 import lombok.Data;

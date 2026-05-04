@@ -3,10 +3,8 @@ package game.treasure.table;
 import game.battle.object.Coroutine;
 import game.battle.object.Mono;
 import game.battle.type.RoomState;
-import game.battle.type.StateType;
 import game.config.aEnum.MapType;
 import game.object.TaskMonitor;
-import game.treasure.server.Constans;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -67,24 +65,42 @@ public abstract class MonoRoom extends Mono {
         return mapType == this.mapType;
     }
 
-
-    protocol.Pbmethod.PbUnitState.Builder protoState(int id, List<StateType> aStatus, List<Long> aInfo) {
-        protocol.Pbmethod.PbUnitState.Builder builder = protocol.Pbmethod.PbUnitState.newBuilder();
-        builder.setId(id);
-        aStatus.forEach(status -> {
-            builder.addStatus(status.id);
-            builder.addStatus(status.length);
-        });
-        if (aInfo == null) aInfo = new ArrayList<>();
-        builder.addAllPoint(aInfo);
-        return builder;
+    /**
+     * Queue unit state (PLAY_ANIM, BE_DAMAGE, …). Phải synchronized với {@link #snapshotAndClearProtoUnitState}
+     * vì {@link game.treasure.table.BaseRoom#buildChunkViewData} copy+clear list trên thread tick, còn
+     * {@link game.treasure.table.BaseRoom#doSyncAction} có thể thêm state trên thread Netty — không khóa sẽ mất state.
+     */
+    public synchronized void addProtoUnitState(PbUnitState state) {
+        if (state != null) {
+            this.aProtoUnitState.add(state);
+        }
     }
+
+    /** Copy toàn bộ state đang chờ rồi xóa list (cùng lock với {@link #addProtoUnitState}). */
+    public synchronized List<PbUnitState> snapshotAndClearProtoUnitState() {
+        List<PbUnitState> copy = new ArrayList<>(this.aProtoUnitState);
+        this.aProtoUnitState.clear();
+        return copy;
+    }
+
+
+//    protocol.Pbmethod.PbUnitState.Builder protoState(int id, List<StateType> aStatus, List<Long> aInfo) {
+//        protocol.Pbmethod.PbUnitState.Builder builder = protocol.Pbmethod.PbUnitState.newBuilder();
+//        builder.setId(id);
+//        aStatus.forEach(status -> {
+//            builder.addStatus(status.id);
+//            builder.addStatus(status.length);
+//        });
+//        if (aInfo == null) aInfo = new ArrayList<>();
+//        builder.addAllPoint(aInfo);
+//        return builder;
+//    }
 
     protocol.Pbmethod.PbUnitState.Builder protoState(int id, List<StateType> aStatus, List<Integer> size, List<Long> aInfo) {
         protocol.Pbmethod.PbUnitState.Builder builder = protocol.Pbmethod.PbUnitState.newBuilder();
         builder.setId(id);
         for (int i = 0; i < aStatus.size(); i++) {
-            builder.addStatus(aStatus.get(i).id);
+            builder.addStatus(aStatus.get(i).getNumber());
             builder.addStatus(size.get(i));
         }
         if (aInfo == null) aInfo = new ArrayList<>();
