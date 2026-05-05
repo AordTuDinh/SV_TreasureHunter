@@ -92,7 +92,7 @@ public abstract class Unit {
     public void attackUnit(Unit target) {
         long[] damage = IMath.calculateDamage(this, target);
         target.beAttackDamage(this, damage[1]);
-        target.protoBeDame(this, Arrays.asList(damage[0], -damage[1]));
+        target.protoStatus(Pbmethod.SubStateType.BE_DAMAGE, Arrays.asList(damage[0], -damage[1]));
     }
 
 
@@ -276,11 +276,11 @@ public abstract class Unit {
     }
 
     public void protoMultiPoint(List<Long> points) {  //[pointId - curValue] :  chỉ trả về, thường dùng cho add change
-        protoStatus(Pbmethod.SubStateType.UPDATE_MULTI_POINT,  points);
+        protoStatus(Pbmethod.SubStateType.UPDATE_MULTI_POINT, points);
     }
 
     public void protoUpdatePoint(Long pointId, Long value) {  //[pointId - curValue] :  chỉ trả về, thường dùng cho add change
-        protoStatus(Pbmethod.SubStateType.UPDATE_MULTI_POINT,  Arrays.asList(pointId, value));
+        protoStatus(Pbmethod.SubStateType.UPDATE_MULTI_POINT, Arrays.asList(pointId, value));
     }
 
     // buff point and send
@@ -294,12 +294,12 @@ public abstract class Unit {
                 case Point.CUR_HP -> {
                     point.add(buffs.get(i), this);
                     pointBuff.add((long) Point.CUR_HP);
-                    pointBuff.add((long) point.getCurHP());
+                    pointBuff.add(point.getCurHP());
                 }
                 default -> {
                     point.add(buffs.get(i), this);
                     pointBuff.add((long) pointId);
-                    pointBuff.add((long) point.get(pointId));
+                    pointBuff.add(point.get(pointId));
                 }
             }
         }
@@ -332,10 +332,6 @@ public abstract class Unit {
     }
 
     // region proto
-    public void protoBeDame(Unit attacker, List<Long> aInfo) {
-        protoStatus(Pbmethod.SubStateType.BE_DAMAGE, aInfo);
-    }
-
     public void protoStatus(Pbmethod.SubStateType status) {
         if (room != null) room.addProtoUnitState(protoState(status, new ArrayList<>()));
     }
@@ -349,12 +345,6 @@ public abstract class Unit {
         if (room != null) room.addProtoUnitState(protoState(status, info));
     }
 
-
-    public void protoOneStatus(Pbmethod.SubStateType status, Long... info) {
-        if (room != null)
-            room.addProtoUnitState(protoState(status, Arrays.asList(info)));
-    }
-
     Pbmethod.PbUnitState protoState(Pbmethod.SubStateType stateType, List<Long> aInfo) {
         Pbmethod.PbUnitState.Builder builder = Pbmethod.PbUnitState.newBuilder();
         builder.setId(id);
@@ -364,16 +354,16 @@ public abstract class Unit {
         return builder.build();
     }
 
-    Pbmethod.PbUnitState protoState(List<Pbmethod.SubStateType> aStatus, List<Integer> size, List<Long> aInfo) {
-        Pbmethod.PbUnitState.Builder builder = Pbmethod.PbUnitState.newBuilder();
-        builder.setId(id);
-        for (int i = 0; i < aStatus.size(); i++) {
-            builder.addStatus(aStatus.get(i).getNumber());
-            builder.addStatus(size.get(i));
-        }
-        if (aInfo == null) aInfo = new ArrayList<>();
-        builder.addAllPoint(aInfo);
-        return builder.build();
-    }
+//    Pbmethod.PbUnitState protoState(List<Pbmethod.SubStateType> aStatus, List<Integer> size, List<Long> aInfo) {
+//        Pbmethod.PbUnitState.Builder builder = Pbmethod.PbUnitState.newBuilder();
+//        builder.setId(id);
+//        for (int i = 0; i < aStatus.size(); i++) {
+//            builder.addStatus(aStatus.get(i).getNumber());
+//            builder.addStatus(size.get(i));
+//        }
+//        if (aInfo == null) aInfo = new ArrayList<>();
+//        builder.addAllPoint(aInfo);
+//        return builder.build();
+//    }
     // endregion
 }

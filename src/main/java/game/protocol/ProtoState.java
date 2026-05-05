@@ -74,7 +74,7 @@ public class ProtoState {
                             buffer.writeShort(cell.getId());
                             // cell state
                             buffer.writeByte(cell.getState().getNumber());
-                            buffer.writeByte(cell.getHp());
+                            buffer.writeInt(cell.getHp());
                         }
 
                     }

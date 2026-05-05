@@ -235,6 +235,16 @@ public class Player extends Unit implements Serializable {
         sendDie = true;
     }
 
+    /**
+     * PbUnit remove phải có userId khớp client — Unit.toProtoRemove không set userId (0),
+     * khiến client tưởng là người khác và gọi RemoveUnit nên tự hủy PlayerController.
+     */
+    @Override
+    public Pbmethod.PbUnit toProtoRemove(int chunkId) {
+        Pbmethod.PbUnit base = super.toProtoRemove(chunkId);
+        return base.toBuilder().setUserId(mUser.getUserId()).build();
+    }
+
     @Override
     public Pbmethod.PbUnit toProtoAdd(int chunkId) {
         Pbmethod.PbUnit.Builder pbAdd = Pbmethod.PbUnit.newBuilder();
