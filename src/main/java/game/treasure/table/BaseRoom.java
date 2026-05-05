@@ -348,10 +348,14 @@ public abstract class BaseRoom extends MonoRoom {
             } else { // Đánh unit
                 Unit unit = mUnit.get(input.idAttack);
                 if (unit == null) return;
+                if (!unit.isAlive()) return;
                 if (player.getClanId() != 0 && player.getClanId() == unit.getClanId()) return;
+                // giống nhánh OBJECT: chống spam theo tick bằng attackSpeed
+                if (!player.hasAttack()) return;
                 player.setTimeAttack();
                 player.protoStatus(Pbmethod.SubStateType.PLAY_ANIM, (long)AnimationType.ATTACK.value);
-                unit.attackUnit(player);
+                // attacker là player, target là unit
+                player.attackUnit(unit);
             }
         }
     }

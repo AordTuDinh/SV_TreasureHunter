@@ -114,10 +114,10 @@ public class BattleHandler extends AHandler implements Serializable {
         BaseRoom curRoom = (BaseRoom) ChUtil.get(channel, ChUtil.KEY_ROOM);
         String curKeyRoom = curRoom != null ? TaskMonitor.mBattleIdToKey.get(curRoom.getBattleId()) : "";
         String keyRoom = CfgBattle.getKeyRoom(mUser, mapType.value, chanelId);
-        if (curRoom != null && curKeyRoom.equals(keyRoom)) {
-            addErrResponse(getLang(Lang.err_in_room_already));
-            return;
-        }
+//        if (curRoom != null && curKeyRoom.equals(keyRoom)) {
+//            addErrResponse(getLang(Lang.err_in_room_already));
+//            return;
+//        }
         if (curRoom != null && !curRoom.allowChangeChanel()) {
             addErrResponse(getLang(Lang.err_unauthorized));
             return;
@@ -171,25 +171,9 @@ public class BattleHandler extends AHandler implements Serializable {
     }
 
     void revivePlayer() {
-        int type = getInputInt();
         Player player = ((MyUser) ChUtil.get(channel, ChUtil.KEY_M_USER)).getPlayer();
-        long checkTime = player.getTimeDie() + 4000;
-        int per5 = (int) (mUser.getUser().getExp() * 0.1);
-        if (type == 0 && System.currentTimeMillis() < checkTime) { // backHome
-            player.revive();
-            initMapByTypeId(MapType.HOME, mUser.getCachePos(), PopupType.NULL);
-        } else {
-            List<Long> fee = Bonus.viewItem(ItemKey.VE_HOI_SINH, -1);
-            String err = Bonus.checkMoney(mUser, fee);
-            if (err != null) {
-                player.revive();
-                initMapByTypeId(MapType.HOME, mUser.getCachePos(), PopupType.NULL);
-            } else {
-                player.revive();
-                addBonusToast(Bonus.receiveListItem(mUser, DetailActionType.REVIVE_PLAYER.getKey(), fee));
-            }
-
-        }
+        player.revive();
+        initMapByTypeId(MapType.HOME, Pos.zero(), PopupType.NULL);
     }
 
 
