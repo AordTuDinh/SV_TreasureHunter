@@ -333,10 +333,6 @@ public abstract class Unit {
 
     // region proto
     public void protoBeDame(Unit attacker, List<Long> aInfo) {
-//        if (type == UnitType.BOSS) {
-//            if (!beDameInfo.containsKey(attacker.getId())) beDameInfo.put(attacker.getId(), 0L);
-//            beDameInfo.put(attacker.getId(), beDameInfo.get(attacker.getId()) + aInfo.get(2) + aInfo.get(3));
-//        }
         protoStatus(Pbmethod.SubStateType.BE_DAMAGE, aInfo);
     }
 
