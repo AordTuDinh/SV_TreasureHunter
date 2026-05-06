@@ -360,25 +360,16 @@ public class Point {
 
     public void calculatorPower(int level, float perItemWeaponEquip) { // perItemWeaponEquip : hệ số atk
         int power = 0;
-//        System.out.println("perItemWeaponEquip = " + perItemWeaponEquip);
         power += getAttackDamage() * 0.5f;
         power += getAttackDamage() * perItemWeaponEquip;
-//        System.out.println("power2 = " + power);
         power += getMaxHp() * 0.5f;
-//        System.out.println("power3 = " + power);
         power += getAttackSpeed() * 5f;
         power += getMoveSpeed() * 2f;
-//        System.out.println("power8 = " + power);
         power += getDefense() * 2f;
-//        System.out.println("power10 = " + power);
         power += getCrit() * level * 0.02f;
-//        System.out.println("power11 = " + power);
         power += getCritDamage() * 0.02f;
-//        System.out.println("power12 = " + power);
         power += getAgility() * level * 0.02f;
-//        System.out.println("power13 = " + power);
         power += getImmunity() * level * 0.02f;
-//        System.out.println("all power = " + power);
         values[POWER] = power;
 
     }

@@ -339,7 +339,6 @@ public class LoginHandler extends AHandler {
         // for settings
         Pbmethod.CommonVector.Builder settings = Pbmethod.CommonVector.newBuilder();
         UserSettingsEntity uSet = mUser.getUSetting();
-        settings.addAllALong(GsonUtil.toListLong(uSet.getItemSlot(mUser))); // size 4 : item slot
         settings.addAllALong(uSet.getChatSetting()); // size 2 : chat setting
         lstCmm.addAVector(settings);
         // danh sách các thằng mình block chat

@@ -11,7 +11,6 @@ import java.util.List;
 
 public class UserInt {
     public static final int NUMBER_VALUE = 50;
-    public static final int PET_COLLECTION_POINT = 0;
 
     public int userId;
     public List<Integer> aInt;

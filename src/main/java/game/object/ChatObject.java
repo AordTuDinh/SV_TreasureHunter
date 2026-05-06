@@ -61,7 +61,6 @@ public class ChatObject implements Serializable {
         this.userId = user.getId();
         this.msg = formatChat(msg);
         this.exp = user.getExp();
-        this.intro = user.getIntro();
         this.timeSeconds = System.currentTimeMillis() / 1000;
         this.clanId = user.getClan();
         this.avatar = user.getAvatar();

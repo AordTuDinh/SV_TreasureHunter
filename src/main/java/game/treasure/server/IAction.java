@@ -8,7 +8,6 @@ public class IAction {
     public static final int MSG_POPUP = 2;
     public static final int MSG_SLIDE = 3;
     public static final int GAME_CONFIG = 4;
-    public static final int WARNING_AFK = 5;
     public static final int POPUP_INFO = 6;
     public static final int LOGIN_REQUIRE = 7;
     public static final int CONNECT_SOCKET_SUCCESS = 8; // for client
@@ -31,9 +30,6 @@ public class IAction {
     public static final int TABLE_STATE = 23;
     public static final int CLIENT_INPUT = 24;
     public static final int REVIVE_PLAYER = 25;
-    public static final int CHANGE_ITEM_SLOT = 27;
-    public static final int CHANGE_AUTO_SLOT = 28;
-    public static final int CHANGE_CHANEL = 29;
     public static final int COUNTDOWN_MSG = 30;
     public static final int DEBUG_LOG = 31;
     public static final int DEBUG_ERROR = 32;
@@ -68,7 +64,6 @@ public class IAction {
     public static final int POINT_DATA = 99;
     public static final int USER_DATA_INFO = 100;
     public static final int CREATE_NAME = 105;
-    public static final int CHANGE_INTRO = 106;
     public static final int CHANGE_NAME = 180;
     public static final int HELP_VALUE = 181;
     public static final int USER_INFO = 182;
@@ -90,21 +85,10 @@ public class IAction {
     public static final int MARKET_STATUS = 128;
     public static final int MARKET_BUY = 129;
     public static final int MARKET_REFRESH = 130;
-    // collection monster
-    public static final int MONSTER_COLLECTION_STATUS = 132;
-    public static final int MONSTER_COLLECTION_REWARD = 133;
-    public static final int MONSTER_COLLECTION_CARE = 134;
-    public static final int MONSTER_COLLECTION_UP_STAR = 135;
-    public static final int MONSTER_COLLECTION_GET_STAR = 136;
+
     public static final int PET_INFO = 137;
     // collection pet
     public static final int PET_SUMMON = 142;
-    public static final int PET_COLLECTION_STATUS = 143;
-    public static final int PET_COLLECTION_REWARD = 144;
-    public static final int PET_COLLECTION_CARE = 145;
-    public static final int PET_COLLECTION_UP_STAR = 146;
-    public static final int PET_COLLECTION_GET_STAR = 147;
-    public static final int PET_SELECT = 148;
     // avatar
     public static final int AVATAR_LIST = 140;
     public static final int AVATAR_CHOOSE = 141;

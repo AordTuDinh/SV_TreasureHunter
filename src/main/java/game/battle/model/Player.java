@@ -33,7 +33,6 @@ public class Player extends Unit implements Serializable {
     Pos targetDirectionAttackRun2;
     boolean isAttackRun2;
     Pos directionHitRun = Pos.zero();
-    List<Integer> itemsBuf; // trigger - itemId
     List<Long> timeBuff; // list time buff theo slot
     //ping logic
     long curTick = 0;
@@ -52,7 +51,6 @@ public class Player extends Unit implements Serializable {
         this.idDameSkin = mUser.getUData().getDameSkinEquip();
         this.idChatFrame = mUser.getUData().getChatFrameEquip();
         this.idTrial = mUser.getUData().getTrialEquip();
-        itemsBuf = mUser.getUSetting().getItemSlot(mUser);
         this.petUse = mUser.getPet(this);
     }
 
@@ -151,25 +149,6 @@ public class Player extends Unit implements Serializable {
     public synchronized void addGold(long gold) {
         mUser.getUser().addGold(gold);
     }
-
-    // todo : edit to use item in slot
-    public void useItem(int slot) {
-        int itemId = itemsBuf.get(slot * 2 + 1);
-        UserItemEntity uItem = mUser.getResources().getItem( itemId);
-        if (uItem == null || uItem.getNumber() <= 0) return;
-        if (uItem.getType() != ItemType.ITEM_USE) return;
-        List<Long> bonus = Bonus.viewItem(itemId, -1);
-        sendBonus(bonus, DetailActionType.SU_DUNG_ITEM.getKey(mUser.getUserId()));
-        List<PointBuff> buffs = uItem.getRes().getBuffs();
-        mUser.getPlayer().protoBuffPoint(buffs);
-        protoStatus(Pbmethod.SubStateType.USE_ITEM_SLOT, (long) slot);
-        if (uItem.getNumber() <= 0) {
-            mUser.getUSetting().saveSlot(mUser, slot, 0);
-            itemsBuf.set(slot * 2 + 1, 0);
-            protoStatus(Pbmethod.SubStateType.UPDATE_ITEM_SLOT, GsonUtil.toListLong(itemsBuf));
-        }
-    }
-
 
     public boolean hasAttack() {  // delay giữa 2 lần đánh
         return DateTime.isAfterTime(timeActionAttack, point.getAttackSpeed());

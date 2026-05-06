@@ -35,7 +35,7 @@ public class UserHandler extends AHandler {
         List<Integer> actions = Arrays.asList(CREATE_NAME, USER_INFO, DAME_SKIN_EQUIP, CHANGE_LANG,
                 CHAT_FRAME_EQUIP, USE_GIFT_CODE, TRIAL_EQUIP, BUFF_INFO, RANKING_STATUS, TUTORIAL_STATUS,
                 TUTORIAL_QUEST_RECEIVE, TUTORIAL_GO_TO, TUTORIAL_QUEST_STATUS, RANKING_INFO, SEND_MAIL,
-                CHANGE_INTRO, HELP_VALUE, CHANGE_NAME, AVATAR_LIST, AVATAR_CHOOSE, USER_DATA_INFO, BAG_STATUS,
+                HELP_VALUE, CHANGE_NAME, AVATAR_LIST, AVATAR_CHOOSE, USER_DATA_INFO, BAG_STATUS,
                  UPDATE_NEXT_DAY);
         actions.forEach(action -> mHandler.put(action, this));
     }
@@ -63,7 +63,6 @@ public class UserHandler extends AHandler {
             switch (actionId) {
                 case POINT_DATA -> pointData();
                 case CREATE_NAME -> createName();
-                case CHANGE_INTRO -> changeIntro();
                 case USER_DATA_INFO -> userDataInfo();
                 case BAG_STATUS -> bagStatus();
                 case AVATAR_LIST -> avatarList();
@@ -143,22 +142,6 @@ public class UserHandler extends AHandler {
         } else addErrResponse();
     }
 
-    void changeIntro() {
-        protocol.Pbmethod.CommonVector cmm = CommonProto.parseCommonVector(requestData);
-        String newIntro = cmm.getAString(0);
-        if (newIntro.isEmpty()) {
-            addErrResponse(getLang(Lang.err_intro));
-            return;
-        }
-        if (newIntro.length() > 45) {
-            addErrResponse(getLang(Lang.err_max_character));
-            return;
-        }
-        if (user.update(Arrays.asList("intro", newIntro))) {
-            user.setIntro(newIntro);
-            addResponse(cmm);
-        } else addErrResponse();
-    }
 
     void userDataInfo() {
         addResponse(IAction.USER_DATA_INFO, mUser.getUData().toProto(mUser));

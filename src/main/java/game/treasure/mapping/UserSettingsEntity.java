@@ -22,12 +22,10 @@ import java.util.List;
 public class UserSettingsEntity implements Serializable {
     @Id
     int userId;
-    String itemSlot; // trigger - itemId
     String blockChat, chatSetting; //chatSetting size 2
 
     public UserSettingsEntity(int userId) {
         this.userId = userId;
-        this.itemSlot = StringHelper.toDBString(NumberUtil.genListInt(4, 0));
         this.blockChat = "[]"; // Danh sách bị mình block chat
         this.chatSetting = StringHelper.toDBString(NumberUtil.genListInt(2, 50));
     }
@@ -60,47 +58,9 @@ public class UserSettingsEntity implements Serializable {
         return false;
     }
 
-    public boolean saveSlot(MyUser mUser, int slot, int itemId) {
-        List<Integer> items = getItemSlot(mUser);
-        items.set(slot * 2, itemId);
-        return saveSlot(items);
-    }
-
-    public boolean saveSlot(List<Integer> slots) {
-        if (update(Arrays.asList("item_slot", StringHelper.toDBString(slots)))) {
-            itemSlot = slots.toString();
-            return true;
-        }
-        return false;
-    }
 
     public List<Long> getChatSetting() {
         return GsonUtil.strToListLong(chatSetting);
-    }
-
-    public List<Integer> getItemSlot(MyUser mUser) {
-        List<Integer> items = GsonUtil.strToListInt(itemSlot);
-        boolean update = false;
-        int id1 = items.get(1);
-        if (id1 > 0) {
-            UserItemEntity item1 = mUser.getResources().getItem(id1);
-            if (item1.getNumber() <= 0) {
-                items.set(1, 0);
-                update = true;
-            }
-        }
-        int id2 = items.get(3);
-        if (id2 > 0) {
-            UserItemEntity item1 = mUser.getResources().getItem(id2);
-            if (item1.getNumber() <= 0) {
-                items.set(3, 0);
-                update = true;
-            }
-        }
-        if (update && update(Arrays.asList("item_slot", StringHelper.toDBString(items)))) {
-            itemSlot = items.toString();
-        }
-        return items;
     }
 
     public boolean update(List<Object> updateData) {

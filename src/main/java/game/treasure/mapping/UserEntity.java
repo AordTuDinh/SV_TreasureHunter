@@ -28,7 +28,7 @@ public class UserEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-    String name, username, intro, gameChannel, version, packBuy, lang;
+    String name, username,  gameChannel, version, packBuy, lang;
     int clan, clanAvatar, clanRank, mainId, clanPosition;
     String clanName, pointData;
     String itemEquipment; // id - key - level
@@ -61,7 +61,6 @@ public class UserEntity implements Serializable {
         this.power = 0;
         this.gem = 100;
         this.exp = 0;
-        this.intro = "";
         this.vip = 0;
         this.userRank = 0;
         this.lastLogin = Calendar.getInstance().getTime();
@@ -83,7 +82,6 @@ public class UserEntity implements Serializable {
         builder.setLevel(level).setExp(exp);
         builder.addAllAvatar(getAvatar());
         builder.addAllVip(getVipInfo());
-        builder.setDesc(intro);
         builder.setRank(userRank);
         builder.addAllChannel(Online.getUserChannelInfo(id));
         List<Integer> items = mUser.getUser().getAllInfoItemEquip();
@@ -191,11 +189,8 @@ public class UserEntity implements Serializable {
         return power;
     }
 
-    public protocol.Pbmethod.PbUser toProto() {
-        return toProto(0);
-    }
 
-    public protocol.Pbmethod.PbUser toProto(int arenaPoint) {
+    public protocol.Pbmethod.PbUser toProto() {
         protocol.Pbmethod.PbUser.Builder pb = protocol.Pbmethod.PbUser.newBuilder();
         pb.setId(id);
         pb.setUsername(username);
@@ -205,9 +200,7 @@ public class UserEntity implements Serializable {
         pb.setLevel(level).setExp(exp);
         pb.addAllAvatar(getAvatar());
         pb.addAllVip(getVipInfo());
-        pb.setDesc(intro);
         pb.setRank(userRank);
-        pb.setPointRank(arenaPoint);
         pb.setPower(getPower());
         pb.addAllPoint(getCachePoint().toProto());
         pb.addAllPet(GsonUtil.strToListInt(pet));

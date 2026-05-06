@@ -308,7 +308,7 @@ public class PartyHandler extends AHandler {
         if (iUser == null) { // offline
             UserEntity uMem = Online.getDbUser(userId);
             if (uMem == null) return null;
-            pb = uMem.toProto(0).toBuilder();
+            pb = uMem.toProto().toBuilder();
             pb.setInfo(getCommonVector(0, uParty.isLeader(userId) ? 1 : 0, 0)); //is online - isLeader - cùng map
         } else { // online
             pb = iUser.getUser().toProto().toBuilder();

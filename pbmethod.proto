@@ -218,14 +218,12 @@ message PbUser {
   optional string facebook = 13;
   optional CommonVector userInfo = 14;
   optional  int32  rank = 16;
-  optional  string desc = 17;
   repeated int64 point = 19;
   optional  int64  timeLastAction = 20;
   optional  int32  honor = 21;
   optional  int64 power = 22;
   repeated  int32 itemEquip = 23;
   repeated  int32 channel = 24;
-  optional int64 pointRank = 25;
   optional  int32  arenaRank = 26;
   optional  int64  ruby = 27;
   repeated  int32 pet = 28;
