@@ -385,10 +385,9 @@ public class IMath {
         dodge = Math.min(dodge, 450);
         acc = Math.min(acc, 450);
         if (dodge > 0) {
-            float dodgeChance = (acc <= 0) ? 1f : (dodge * 1f) / (dodge + acc); // acc=0 => né 100%
-            // roll 0..1
+            float dodgeChance =  (dodge * 1f) / (dodge + acc);
             if (NumberUtil.getRandom(1000) < (int) (dodgeChance * 1000f)) {
-                return new long[]{status, 0}; // miss
+                return new long[]{status, 0};
             }
         }
 
@@ -408,7 +407,6 @@ public class IMath {
     public static int calculateDamageBase(long atkDame, Unit beAttacker, float critPer, PointBuff buff, Unit attacker) {
         // Lưu ý : Sát thương chuẩn sẽ mạnh hơn giảm dame trực tiếp
         float changeDame = beAttacker.getPoint().getChangeDame();
-
         long def = beAttacker.getPoint().getDefense();
         if (buff != null && buff.getPointId() == Point.DEFENSE) {
             def += buff.getValue();
