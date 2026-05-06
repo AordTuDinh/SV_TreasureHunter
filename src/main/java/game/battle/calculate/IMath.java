@@ -419,7 +419,7 @@ public class IMath {
         float defF = (float) def;
         int dmg = (int) ((atkF * atkF) / (atkF + defF + 0.0001f)); // tránh chia 0
 
-        dmg = (int) (dmg * changeDame);
+        dmg = (int) (dmg * changeDame * critPer);
         if (dmg <= 0) dmg = 1;
         return dmg;
     }
