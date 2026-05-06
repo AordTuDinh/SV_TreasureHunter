@@ -360,10 +360,11 @@ public class IMath {
     }
 
 
-    public static boolean isCrit(long per) {
-        if (per == 0) return false;
-        // vì chỉ số crit x 100 nên random x100
-        return NumberUtil.getRandom(100000) < per;
+    public static boolean isCrit(long crit) {
+        float rawCrit = crit / 100f;
+        float finalCrit = rawCrit / (1f + rawCrit / 100f);
+        if (finalCrit == 0) return false;
+        return NumberUtil.getRandom(10000) < (int) (finalCrit * 100f);
     }
 
     public static Pos getDirection(Pos from, Pos to) {
@@ -372,28 +373,39 @@ public class IMath {
 
 
     public static long[] calculateDamage(Unit attacker, Unit target) {// crit,atk,matk
-        return calculateDamage(attacker, target,  attacker.getPoint().getAttackDamage());
+        return calculateDamage(attacker, target, attacker.getPoint().getAttackDamage());
     }
 
     public static long[] calculateDamage(Unit attacker, Unit target, long atkDame) {
         int status = 0;
+        // check doge
+        long dodge = target.getPoint().getDoge();
+        long acc = attacker != null ? attacker.getPoint().getAccuracy() : 0;
+
+        dodge = Math.min(dodge, 450);
+        acc = Math.min(acc, 450);
+        if (dodge > 0) {
+            float dodgeChance = (acc <= 0) ? 1f : (dodge * 1f) / (dodge + acc); // acc=0 => né 100%
+            // roll 0..1
+            if (NumberUtil.getRandom(1000) < (int) (dodgeChance * 1000f)) {
+                return new long[]{status, 0}; // miss
+            }
+        }
+
         float critPer = 1f;
         if (isCrit(attacker.getPoint().getCrit())) {
             status = 1;
-            critPer = attacker.getPoint().getCritDamage() - target.getPoint().getCritDamageReduce();
-            critPer = critPer / 100f <= 1.5f ? 1.5f : 1 + critPer / 100f;
+            float bonus = attacker.getPoint().getCritDamage() - 200f; // nếu critDamage đang chứa total%
+            float reduce = target.getPoint().getCritDamageReduce();   // hiểu là % giảm bonus hoặc giảm total tuỳ bạn
+            float finalCritDamagePercent = 200f + Math.max(0f, bonus - reduce);
+            critPer = finalCritDamagePercent / 100f;
         }
-        int dame = calculateDamageBase(atkDame,  target, critPer, null, attacker);
+        int dame = calculateDamageBase(atkDame, target, critPer, null, attacker);
         return new long[]{status, dame};
     }
 
     // Hàm gốc - tất cả đều tính qua hàm này
     public static int calculateDamageBase(long atkDame, Unit beAttacker, float critPer, PointBuff buff, Unit attacker) {
-        int atk = 0;
-        long doge = beAttacker.getPoint().getDoge();//miss
-        if (doge > 0 && NumberUtil.getRandom(100) < doge) { // né
-            return atk;
-        }
         // Lưu ý : Sát thương chuẩn sẽ mạnh hơn giảm dame trực tiếp
         float changeDame = beAttacker.getPoint().getChangeDame();
 
@@ -403,13 +415,14 @@ public class IMath {
         }
 
         // tinh dame
-        atk = (int) (atkDame * 1000 * critPer / (1140f + 3.5 * def));
-        // Đoạn này nhân với giảm dame trực tiếp
-        atk *= (int) changeDame;
-        if (atk == 0) atk = 1;
-        return atk;
-    }
+        float atkF = (float) atkDame;
+        float defF = (float) def;
+        int dmg = (int) ((atkF * atkF) / (atkF + defF + 0.0001f)); // tránh chia 0
 
+        dmg = (int) (dmg * changeDame);
+        if (dmg <= 0) dmg = 1;
+        return dmg;
+    }
 
     public static Point calculatePoint(MyUser mUser, boolean hasItemEquip) {
         Point pt = PlayerBasePoint.getBase();

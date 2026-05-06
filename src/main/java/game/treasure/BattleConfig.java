@@ -15,6 +15,7 @@ public class BattleConfig {
     public static final float m_LerpSpeedBar = 0.05f; // tốc độ giảm hp, càng tăng thì tốc độ giảm càng nhanh theo hàm lerp
     public static final int m_LimitUseItem = 100;
     public static final float P_timeNoMove = 0.1f;
+    public static final float P_RangerAttack = 1f;
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
     // server config - không gửi cho client config

@@ -15,7 +15,7 @@ public class ChatObject implements Serializable {
     public ChatType chatType;
     public String name, msg, username;
     int userId, id, clanId, level, clanIcon, vip, rank;
-    List<Integer> avatar, pets, weapons, itemEquips;
+    List<Integer> avatar, pets,  itemEquips;
     String intro;
     long timeSeconds, exp, power;
 
@@ -48,7 +48,6 @@ public class ChatObject implements Serializable {
         pbUser.setRank(rank);
         pbUser.setPower(getPower());
         pbUser.addAllPet(pets);
-        pbUser.addAllWeaponEquip(weapons);
         pbUser.addAllItemEquip(itemEquips);
         pbUser.addAllChannel(Online.getUserChannelInfo(id));
         return pbUser.build();
@@ -72,7 +71,6 @@ public class ChatObject implements Serializable {
         this.power = user.getPower();
         this.name = user.getName();
         this.username = user.getUsername();
-        this.weapons = GsonUtil.strToListInt(user.getWeapon());
         this.itemEquips = GsonUtil.strToListInt(user.getItemEquipment());
     }
 

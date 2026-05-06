@@ -2,7 +2,6 @@ package game.treasure.controller;
 
 import game.battle.model.Player;
 import game.battle.object.Pos;
-import game.battle.type.AutoMode;
 import game.config.CfgBattle;
 import game.config.CfgServer;
 import game.config.aEnum.*;
@@ -10,9 +9,7 @@ import game.config.lang.Lang;
 import game.treasure.mapping.UserItemEntity;
 import game.treasure.mapping.UserSettingsEntity;
 import game.treasure.mapping.main.*;
-import game.treasure.server.Constans;
 import game.treasure.service.resource.ResMap;
-import game.treasure.service.user.Bonus;
 import game.treasure.table.*;
 import game.object.MyUser;
 import game.object.TaskMonitor;
@@ -30,9 +27,8 @@ import java.util.Map;
 public class BattleHandler extends AHandler implements Serializable {
     @Override
     public void initAction(Map<Integer, AHandler> mHandler) {
-        List<Integer> actions = Arrays.asList(SERVER_INFO, INIT_MAP, CAMPAIGN_DATA, CAMPAIGN_REWARD,
-                CAMPAIGN_SMART, JOIN_MAP, BOSS_GOD_DATA, REVIVE_PLAYER, CHANGE_AUTO_MODE, CHANGE_ITEM_SLOT,
-                CHANGE_CHANEL, SMART_BOSS, CHANGE_AUTO_SLOT);
+        List<Integer> actions = Arrays.asList(SERVER_INFO, INIT_MAP, JOIN_MAP, REVIVE_PLAYER, CHANGE_ITEM_SLOT,
+                CHANGE_CHANEL, CHANGE_AUTO_SLOT);
         actions.forEach(action -> mHandler.put(action, this));
     }
 
@@ -59,13 +55,8 @@ public class BattleHandler extends AHandler implements Serializable {
                 case INIT_MAP -> initMap();
                 case JOIN_MAP -> joinMap();
                 case REVIVE_PLAYER -> revivePlayer();
-                case CHANGE_AUTO_MODE -> changeMode();
                 case CHANGE_ITEM_SLOT -> changeItemSlot();
                 case CHANGE_AUTO_SLOT -> changeAutoSlot();
-//                case CHANGE_CHANEL -> changeChanel();
-//                case SMART_BOSS -> smartBoss();
-                case BOSS_GOD_DATA -> bossGodData();
-
             }
         } catch (Exception ex) {
             Logs.error(ex);
@@ -156,10 +147,6 @@ public class BattleHandler extends AHandler implements Serializable {
     }
 
 
-    private void bossGodData() {
-        addResponse(getCommonVector(mUser.getUData().getBossGod()));
-    }
-
     void joinMap() {
         BaseRoom curRoom = (BaseRoom) ChUtil.get(channel, ChUtil.KEY_ROOM);
         if (curRoom == null) {
@@ -174,26 +161,6 @@ public class BattleHandler extends AHandler implements Serializable {
         Player player = ((MyUser) ChUtil.get(channel, ChUtil.KEY_M_USER)).getPlayer();
         player.revive();
         initMapByTypeId(MapType.HOME, Pos.zero(), PopupType.NULL);
-    }
-
-
-    void changeMode() {
-        CommonVector cmm = CommonProto.parseCommonVector(requestData);
-        AutoMode mode = AutoMode.get((int) cmm.getALong(0));
-        if (mode == null) {
-            // addErrResponse();
-            return;
-        }
-        UserSettingsEntity uSetting = mUser.getUSetting();
-        if (uSetting.getAutoMode() == mode.value) {
-            //addErrResponse();
-            return;
-        }
-        if (uSetting.changeMode(mode)) {
-            Player player = ((MyUser) ChUtil.get(channel, ChUtil.KEY_M_USER)).getPlayer();
-            player.setAutoMode(mode);
-            addResponse(getCommonVector(mode.value));
-        } else addErrResponse();
     }
 
     void changeItemSlot() {

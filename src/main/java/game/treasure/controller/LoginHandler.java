@@ -1,6 +1,5 @@
 package game.treasure.controller;
 
-import game.battle.type.AutoMode;
 import game.cache.JCache;
 import game.cache.JCachePubSub;
 import game.config.*;
@@ -334,18 +333,12 @@ public class LoginHandler extends AHandler {
         Pbmethod.ListCommonVector.Builder lstCmm = Pbmethod.ListCommonVector.newBuilder();
         // 0: list price slot bag
         Pbmethod.CommonVector.Builder cm0 = Pbmethod.CommonVector.newBuilder();
-        cm0.addALong(CfgBag.maxSlotItem());
-        cm0.addALong(CfgBag.maxSlotEquipment());
-        cm0.addALong(CfgBag.maxSlotPiece());
-        cm0.addAllALong(NumberUtil.converListIntToLong(CfgBag.config.priceSlot));
         //public key
         cm0.addAString(CfgServer.config.publicKey);
         lstCmm.addAVector(cm0);
         // for settings
         Pbmethod.CommonVector.Builder settings = Pbmethod.CommonVector.newBuilder();
         UserSettingsEntity uSet = mUser.getUSetting();
-        settings.addALong(uSet.getAutoMode()); // auto mode
-        settings.addALong(AutoMode.values().length);// number mode
         settings.addAllALong(GsonUtil.toListLong(uSet.getItemSlot(mUser))); // size 4 : item slot
         settings.addAllALong(uSet.getChatSetting()); // size 2 : chat setting
         lstCmm.addAVector(settings);
@@ -373,6 +366,7 @@ public class LoginHandler extends AHandler {
         cmm.addALong((long) (BattleConfig.m_LerpSpeedBar * 100));
         cmm.addALong((BattleConfig.m_LimitUseItem * 100));
         cmm.addALong((long) (BattleConfig.P_timeNoMove * 100));
+        cmm.addALong((long) (BattleConfig.P_RangerAttack * 100));
         //
         addResponse(IAction.BATTLE_CONFIG, cmm.build());
     }

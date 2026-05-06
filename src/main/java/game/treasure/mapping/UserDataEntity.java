@@ -1,8 +1,6 @@
 package game.treasure.mapping;
 
-import game.config.CfgBag;
 import game.config.CfgCheckin;
-import game.config.CfgUser;
 import game.config.aEnum.*;
 import game.treasure.controller.AHandler;
 import game.treasure.controller.UserHandler;
@@ -34,14 +32,11 @@ import java.util.*;
 public class UserDataEntity implements Serializable {
     @Id
     int userId;
-    int levelGachaWeapon, levelGachaPet, levelTraining, numPointLevel, numStone, numStoneVip, friendNotify, tutorial, questTutorial, questTutorialNumber;
+    int levelTraining, friendNotify, tutorial, questTutorial, questTutorialNumber;
     String numSlot, dataInt, checkIn;
-    String bossGod; // level 5 con boss mình đánh đc
-    String campaign;//[id - number]
-    String campaignReward;//[0-1] theo id
     String buff; // [time25,time50,timex2 ...] x9
-    String farmPoint, dameSkin, chatFrame, listTrial;
-    int dameSkinEquip, chatFrameEquip, trialEquip,effInit;
+    String dameSkin, chatFrame, listTrial;
+    int dameSkinEquip, chatFrameEquip, trialEquip, effInit;
 
     @Transient
     int maxLvTraining = 60;
@@ -56,20 +51,12 @@ public class UserDataEntity implements Serializable {
 
     public UserDataEntity(int userId) {
         this.userId = userId;
-        this.levelGachaPet = 1;
-        this.numStone = 0;
-        this.numStoneVip = 0;
-        this.effInit  = 0;
-        this.levelGachaWeapon = 1;
-        this.numSlot = CfgBag.genBaseSlot(); // item - item Equipment - artifact
-        this.campaign = "[1,0]";
-        this.campaignReward = "[]";
+        this.effInit = 0;
+        this.numSlot = "[10,10,10]"; // item - item Equipment - artifact
         this.dameSkin = "[0]";
         this.listTrial = "[0]";
         this.chatFrame = "[0]";
-        this.bossGod = NumberUtil.genListInt(5, 0).toString();
         this.checkIn = "[]";
-        this.farmPoint = NumberUtil.genListStringInt(3, 0);// time - per - exp
         this.tutorial = 0;
         this.questTutorialNumber = 0;
         this.questTutorial = 1;
@@ -104,16 +91,6 @@ public class UserDataEntity implements Serializable {
         return aBuff;
     }
 
-    public List<Integer> getBossGod() {
-        return GsonUtil.strToListInt(bossGod);
-    }
-
-    public List<Integer> getFarmPoint() {
-        List<Integer> ret = GsonUtil.strToListInt(farmPoint);
-        while (ret.size() < 3) ret.add(0);
-        return ret;
-    }
-
     public List<Integer> getListDameSkin() {
         List<Integer> dameSkins = GsonUtil.strToListInt(dameSkin);
         if (!dameSkins.contains(0)) dameSkins.add(0);
@@ -124,6 +101,10 @@ public class UserDataEntity implements Serializable {
         List<Integer> chatFrame = GsonUtil.strToListInt(this.chatFrame);
         if (!chatFrame.contains(0)) chatFrame.add(0);
         return chatFrame;
+    }
+
+    public int getNumSlot() {
+        return 10;
     }
 
     public List<Integer> getListIntTrial() {
@@ -168,76 +149,12 @@ public class UserDataEntity implements Serializable {
         return false;
     }
 
-    public List<Integer> addFarmPoint(List<Float> farmPoint) {
-        List<Integer> ret = getFarmPoint();
-        for (int i = 0; i < ret.size(); i++) {
-            ret.set(i, ret.get(i) + (int) (farmPoint.get(i) * 100));
-        }
-        return ret;
-    }
-
-
-
 
     public UserInt getUInt() {
         if (uInt == null) {
             uInt = new UserInt(dataInt, userId);
         }
         return uInt;
-    }
-
-    public List<Integer> getCampaign() {
-        if (dataCampaign == null) dataCampaign = GsonUtil.strToListInt(campaign);
-        return dataCampaign == null ? List.of(1, 0) : dataCampaign;
-    }
-
-//    public List<Integer> getCampaignReward() {
-//        List<Integer> data = GsonUtil.strToListInt(campaignReward);
-//        boolean update = false;
-//        while (data.size() < ResMap.maxMapCampaign) {
-//            data.add(0);
-//            update = true;
-//        }
-//        if (update) {
-//            if (update(List.of("campaign_reward", StringHelper.toDBString(data)))) {
-//                campaignReward = data.toString();
-//            }
-//        }
-//
-//        return data;
-//    }
-
-    public void addCampaignNormal(int mapId, int numAdd) {
-        List<Integer> data = getCampaign();
-        if (mapId < data.get(0)) return;
-        countNormal += numAdd;
-        if (countNormal >= numberUpdate) {
-            countNormal -= numberUpdate;
-            data.set(0, mapId);
-            data.set(1, data.get(1) + numAdd);
-            updateCampaignNormal(StringHelper.toDBString(data));
-        } else {
-            data.set(0, mapId);
-            data.set(1, data.get(1) + numAdd);
-        }
-    }
-
-    public int getNumSlotItem() {
-        return getSlot().get(0);
-    }
-
-    public List<Integer> getSlot() {
-        List<Integer> slot = GsonUtil.strToListInt(numSlot);
-        if (slot.size() < 1) {
-            slot.add(CfgBag.config.numSlotItem);
-        }
-        if (slot.size() < 2) {
-            slot.add(CfgBag.config.numSlotEquipment);
-        }
-        if (slot.size() < 3) {
-            slot.add(CfgBag.config.numSlotPiece);
-        }
-        return slot;
     }
 
     public List<Integer> getNumCheckin() {
@@ -266,24 +183,10 @@ public class UserDataEntity implements Serializable {
         return getNumCheckin().get(CfgCheckin.STATUS);
     }
 
-    public int getNumSlotItemEquip() {
-        return getSlot().get(1);
-    }
-
-    public int getNumSlotPiece() {
-        return getSlot().get(2);
-    }
-
-
     public Pbmethod.PbUserData toProto(MyUser mUser) {
         Pbmethod.PbUserData.Builder pb = Pbmethod.PbUserData.newBuilder();
-        pb.setLvGachaWeapon(levelGachaWeapon);
-        pb.setLvGachaPet(levelGachaPet);
         pb.setLvTraining(levelTraining);
-        pb.setStone(numStone);
-        pb.setStoneVip(numStoneVip);
         pb.setMaxlvTraining(maxLvTraining);
-        pb.setNumPointLevel(numPointLevel);
         pb.setTutorial(tutorial);
         pb.setDameSkinEquip(dameSkinEquip);
         pb.addAllDameSkins(getListDameSkin());
@@ -291,7 +194,6 @@ public class UserDataEntity implements Serializable {
         pb.addAllChatFrames(getListChatFrame());
         pb.setTrialEquip(trialEquip);
         pb.addAllTrials(getListIntTrial());
-        pb.addAllBossGod(getBossGod());
         // item
         Pbmethod.PbListItem.Builder lstItem = Pbmethod.PbListItem.newBuilder();
         for (Map.Entry<Integer, UserItemEntity> item : mUser.getResources().getMItem().entrySet()) {
@@ -329,16 +231,6 @@ public class UserDataEntity implements Serializable {
         return pb.build();
     }
 
-    public boolean updateSlot(int type, int number) {
-        List<Integer> slot = getSlot();
-        slot.set(type - 1, number);
-        if (DBJPA.update("user_data", Arrays.asList("num_slot", StringHelper.toDBString(slot)), Arrays.asList("user_id", userId))) {
-            numSlot = slot.toString();
-            return true;
-        }
-        return false;
-    }
-
     public boolean updateCheckIn(String checkinData) {
         if (update(Arrays.asList("check_in", checkinData))) {
             checkIn = checkinData;
@@ -349,16 +241,6 @@ public class UserDataEntity implements Serializable {
 
     public boolean update(List<Object> updateData) {
         return DBJPA.update("user_data", updateData, Arrays.asList("user_id", userId));
-    }
-
-    public boolean updateComboWeapon(String lvComboWeapon) {
-        return update(Arrays.asList("lv_combo_weapon", lvComboWeapon));
-    }
-
-    public void increNumPointUpLV(MyUser mUser, int numUp) {
-        if (update(Arrays.asList("num_point_level", numPointLevel += CfgUser.pointPerLevel * numUp))) {
-            Util.sendProtoData(mUser.getPlayer().getMUser().getChannel(), CommonProto.getCommonVector(numPointLevel), IAction.UPDATE_NUM_POINT_LEVEL);
-        }
     }
 
     public boolean updateTutorialQuest() {
@@ -373,14 +255,6 @@ public class UserDataEntity implements Serializable {
     public boolean updateTutQuestNumber(int data) {
         if (update(List.of("quest_tutorial_number", data))) {
             this.questTutorialNumber = data;
-            return true;
-        }
-        return false;
-    }
-
-    public boolean updateCampaignNormal(String data) {
-        if (update(Arrays.asList("campaign", data))) {
-            campaign = data;
             return true;
         }
         return false;

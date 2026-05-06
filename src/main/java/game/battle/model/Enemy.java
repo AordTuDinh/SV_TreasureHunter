@@ -109,7 +109,7 @@ public class Enemy extends Unit implements Serializable {
 
 
     public boolean hasAttackMelee() {
-        // return inRankAttack(AttackType.MELEE) && hasActionAttack() && alive && targetAttack != null && targetAttack.isAlive();
+       //  return inRankAttack(AttackType.MELEE) && hasActionAttack() && alive && targetAttack != null && targetAttack.isAlive();
         return true;
     }
 

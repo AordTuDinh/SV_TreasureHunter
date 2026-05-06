@@ -1,6 +1,5 @@
 package game.treasure.mapping;
 
-import game.battle.type.AutoMode;
 import game.object.MyUser;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,25 +22,16 @@ import java.util.List;
 public class UserSettingsEntity implements Serializable {
     @Id
     int userId;
-    int autoMode;
     String itemSlot; // trigger - itemId
     String blockChat, chatSetting; //chatSetting size 2
 
     public UserSettingsEntity(int userId) {
         this.userId = userId;
-        this.autoMode = AutoMode.NORMAL.value;
         this.itemSlot = StringHelper.toDBString(NumberUtil.genListInt(4, 0));
         this.blockChat = "[]"; // Danh sách bị mình block chat
         this.chatSetting = StringHelper.toDBString(NumberUtil.genListInt(2, 50));
     }
 
-    public boolean changeMode(AutoMode mode) {
-        if (update(Arrays.asList("auto_mode", mode.value))) {
-            autoMode = mode.value;
-            return true;
-        }
-        return false;
-    }
 
     public List<Integer> listBlockChat() {
         return GsonUtil.strToListInt(blockChat);

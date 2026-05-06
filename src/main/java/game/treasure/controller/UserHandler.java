@@ -36,7 +36,7 @@ public class UserHandler extends AHandler {
                 CHAT_FRAME_EQUIP, USE_GIFT_CODE, TRIAL_EQUIP, BUFF_INFO, RANKING_STATUS, TUTORIAL_STATUS,
                 TUTORIAL_QUEST_RECEIVE, TUTORIAL_GO_TO, TUTORIAL_QUEST_STATUS, RANKING_INFO, SEND_MAIL,
                 CHANGE_INTRO, HELP_VALUE, CHANGE_NAME, AVATAR_LIST, AVATAR_CHOOSE, USER_DATA_INFO, BAG_STATUS,
-                BAG_BUY_SLOT, UPDATE_NEXT_DAY);
+                 UPDATE_NEXT_DAY);
         actions.forEach(action -> mHandler.put(action, this));
     }
 
@@ -66,7 +66,6 @@ public class UserHandler extends AHandler {
                 case CHANGE_INTRO -> changeIntro();
                 case USER_DATA_INFO -> userDataInfo();
                 case BAG_STATUS -> bagStatus();
-                case BAG_BUY_SLOT -> bagBuySlot();
                 case AVATAR_LIST -> avatarList();
                 case AVATAR_CHOOSE -> avatarChoose();
                 case CHANGE_NAME -> changeName();
@@ -172,7 +171,7 @@ public class UserHandler extends AHandler {
     void bagStatus() {
         List<Long> status = new ArrayList<>();
         UserDataEntity uData = mUser.getUData();
-        status.addAll(NumberUtil.converListIntToLong(uData.getSlot())); //3
+        status.addAll(List.of(10l,10l)); //3
         status.addAll(GsonUtil.toListLong(user.getAllInfoItemEquip()));
         addResponse(getCommonVector(status));
     }
@@ -250,44 +249,6 @@ public class UserHandler extends AHandler {
         }
     }
 
-
-    void bagBuySlot() {
-        int type = (int) CommonProto.parseCommonVector(requestData).getALong(0);
-        int num = (int) CommonProto.parseCommonVector(requestData).getALong(1);
-        int curSlot = 0, maxSlot = 0;
-        if (type == 1) {
-            curSlot = mUser.getUData().getNumSlotItem();
-            maxSlot = CfgBag.maxSlotItem();
-        } else if (type == 2) {
-            curSlot = mUser.getUData().getNumSlotItemEquip();
-            maxSlot = CfgBag.maxSlotEquipment();
-        } else if (type == 3) {
-            curSlot = mUser.getUData().getNumSlotPiece();
-            maxSlot = CfgBag.maxSlotPiece();
-        }
-        if (curSlot + num > maxSlot) {
-            addErrResponse(getLang(Lang.err_max_number));
-            return;
-        }
-        List<Long> price = new ArrayList<>();
-        price.addAll(Bonus.viewGem(-CfgBag.getPriceSot(curSlot, num, type)));
-        String error = Bonus.checkMoney(mUser, price);
-        if (StringHelper.isEmpty(error)) {
-            List<Long> retBonus = Bonus.receiveListItem(mUser, DetailActionType.BUY_SLOT_BAG.getKey(type), price);
-            if (retBonus.isEmpty()) {
-                addErrResponse();
-                return;
-            }
-            if (!mUser.getUData().updateSlot(type, curSlot + num)) {
-                retBonus = Bonus.receiveListItem(mUser, DetailActionType.BUY_SLOT_BAG_FAIL.getKey(), Bonus.viewGem(CfgBag.getPriceSot(curSlot, num, type)));
-            }
-            Pbmethod.CommonVector.Builder cmm = Pbmethod.CommonVector.newBuilder();
-            cmm.addALong(type);
-            cmm.addALong(curSlot + num);
-            cmm.addAllALong(retBonus);
-            addResponse(cmm.build());
-        } else addErrResponse(error);
-    }
 
     void rankInfo() {
         int type = getInputInt();

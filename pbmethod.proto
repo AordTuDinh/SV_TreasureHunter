@@ -219,7 +219,6 @@ message PbUser {
   optional CommonVector userInfo = 14;
   optional  int32  rank = 16;
   optional  string desc = 17;
-  repeated int32 weaponEquip = 18;
   repeated int64 point = 19;
   optional  int64  timeLastAction = 20;
   optional  int32  honor = 21;
@@ -233,13 +232,9 @@ message PbUser {
 }
 
 message  PbUserData{
-  optional  int32  lvGachaWeapon = 1;
-  optional int32  lvGachaPet = 2;
   optional int32 lvTraining = 4;
   optional int32 maxlvTraining = 5;
   optional int32 numPointLevel = 6;
-  optional  int32 stone = 7;
-  optional  int32 stoneVip = 8;
   optional PbListItem items = 9;
   optional PbListItemEquipment itemEquipments = 10;
   repeated PbItemEquipment aItemEquip = 11;
@@ -248,7 +243,6 @@ message  PbUserData{
   optional  int32 tutorial = 17;
   repeated  int32 dameSkins = 18;
   optional  int32 dameSkinEquip = 19;
-  repeated  int32  bossGod = 20;
   repeated  int32 chatFrames = 21;
   optional  int32 chatFrameEquip = 22;
   repeated  int32 trials = 23;

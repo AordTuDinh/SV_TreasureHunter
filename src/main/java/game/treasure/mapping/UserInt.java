@@ -11,21 +11,7 @@ import java.util.List;
 
 public class UserInt {
     public static final int NUMBER_VALUE = 50;
-//    public static final int TIME_BUY_FIRST_PURCHASE = 0; // number day event
-    public static final int CREATE_WEAPON_RANK_2 = 1; // chế tạo vũ khí từ mảnh
-    public static final int CREATE_WEAPON_RANK_3 = 2; // chế tạo vũ khí từ mảnh
-    public static final int CREATE_WEAPON_RANK_4 = 3; // chế tạo vũ khí từ mảnh
-    public static final int CREATE_WEAPON_RANK_5 = 4; // chế tạo vũ khí từ mảnh
-    public static final int CREATE_WEAPON_RANK_6 = 5; // chế tạo vũ khí từ mảnh
-    public static final int MONSTER_COLLECTION_POINT = 6; // điểm collection monster
-    public static final int PET_COLLECTION_POINT = 7; // điểm collection pet
-    public static final int REFRESH_TAVERN = 8; // điểm collection pet
-    public static final int FIRST_SUMMON_STONE_X10 = 9; // lần đầu summon x10 dá
-    public static final int FIRST_UPGRADE_ITEM_EQUIP = 10; // lần đầu nâng item
-    public static final int FIRST_CREATE_WEAPON_RANK_2 = 11; // lần đầu chế tạo vũ khí
-    public static final int FIRST_UPGRADE_WEAPON = 12; // lần đầu chế tạo vũ khí
-    public static final int FIRST_FARM_QUEST = 13; // nhiệm vụ farm đầu tiên
-    public static final int FIRST_ATTACK_ARENA = 14;
+    public static final int PET_COLLECTION_POINT = 0;
 
     public int userId;
     public List<Integer> aInt;

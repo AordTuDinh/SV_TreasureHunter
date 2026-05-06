@@ -27,8 +27,6 @@ public class Player extends Unit implements Serializable {
     List<NInput> inputsNew = new ArrayList<>();
     long indexLastInputSeq = -1;
     long timeLastProcessInput;
-    // auto
-    AutoMode autoMode;
     int skillSlotNext;
     long timeLastAction;
     long timeRunHit, timeAttackRun2;
@@ -42,8 +40,6 @@ public class Player extends Unit implements Serializable {
     int poolSizeTick = 5;
     List<Long> buffs = Arrays.asList(0L, 0L, 0L); // size =3 drop - gold - exp : per 100
     public List<Integer> listTick = new ArrayList<>(); // size =5; // test
-    //buf
-    float cacheRangeAttack;
     // analysis
     int countUpdate;
     Pet petUse;
@@ -56,21 +52,18 @@ public class Player extends Unit implements Serializable {
         this.idDameSkin = mUser.getUData().getDameSkinEquip();
         this.idChatFrame = mUser.getUData().getChatFrameEquip();
         this.idTrial = mUser.getUData().getTrialEquip();
-        this.autoMode = AutoMode.get(mUser.getUSetting().getAutoMode());
         itemsBuf = mUser.getUSetting().getItemSlot(mUser);
         this.petUse = mUser.getPet(this);
     }
 
     private void initDefault( int clanId, Point point) {
         this.clanId = clanId;
-//        this.rangeAttack = BattleConfig.P_RangeAttack;
-//        this.cacheRangeAttack = BattleConfig.P_RangeAttack;
+        this.rangeAttack = BattleConfig.P_RangerAttack;
         this.timeLastAction = 0;
         this.indexLastInputSeq = -1;
         this.timeLastProcessInput = 0;
         this.alive = true;
         this.point = point;
-        this.attackType = AttackType.LONG_RANGE;
         this.direction = Pos.right();
         this.isMove = false;
         this.skillSlotNext = 0;
@@ -194,10 +187,8 @@ public class Player extends Unit implements Serializable {
     }
 
 
-    public boolean targetInSizeAttack() {
-//        if (targetAttack == null) return false;
-//        return pos.distance(targetAttack.pos) < rangeAttack;
-        return true;
+    public boolean targetInSizeAttack(Unit target) {
+        return pos.distance(target.pos) < rangeAttack;
     }
 
     @Override

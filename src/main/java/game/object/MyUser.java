@@ -239,8 +239,8 @@ public class MyUser implements Serializable {
                 numItem++;
             if (aBonus.get(i).get(0).intValue() == Bonus.BONUS_EQUIPMENT) numItemEquip++;
         }
-        if (numItem > 0) return resources.getNumItemBag() + numItem <= uData.getNumSlotItem();
-        if (numItemEquip > 0) return resources.getMItemEquipment().size() + numItemEquip <= uData.getNumSlotItemEquip();
+        if (numItem > 0) return resources.getNumItemBag() + numItem <= uData.getNumSlot();
+        if (numItemEquip > 0) return resources.getMItemEquipment().size() + numItemEquip <= uData.getNumSlot();
         return true;
     }
 
@@ -262,7 +262,6 @@ public class MyUser implements Serializable {
             session.createNativeQuery("update user set logout = now(), point_data='" + StringHelper.toDBString(player.getPoint().getValues()) + "' where id = " + user.getId()).executeUpdate();
             int timeAdd = (int) ((Calendar.getInstance().getTime().getTime() - getUser().getLastLogin().getTime()) / 1000);
             session.createNativeQuery("update user_daily set login_time =" + timeAdd + "+login_time, data_int= '" + StringHelper.toDBString(getUserDaily().getUDaily().aInt) + "' where user_id = " + user.getId()).executeUpdate();
-            session.createNativeQuery("update user_data set campaign ='" + StringHelper.toDBString(getUData().getCampaign()) + "'where user_id = " + user.getId()).executeUpdate();
             session.getTransaction().commit();
         } catch (Exception ex) {
             getLogger().error(GUtil.exToString(ex));

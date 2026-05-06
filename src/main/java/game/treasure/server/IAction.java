@@ -31,7 +31,6 @@ public class IAction {
     public static final int TABLE_STATE = 23;
     public static final int CLIENT_INPUT = 24;
     public static final int REVIVE_PLAYER = 25;
-    public static final int CHANGE_AUTO_MODE = 26;
     public static final int CHANGE_ITEM_SLOT = 27;
     public static final int CHANGE_AUTO_SLOT = 28;
     public static final int CHANGE_CHANEL = 29;
@@ -41,11 +40,6 @@ public class IAction {
     public static final int BONUS_TOAST = 33;
     public static final int BONUS_TOAST_POSITIVE = 34;
     public static final int UPDATE_BONUS_PRIVATE = 36;
-    //region battle
-    public static final int START_GAME = 40;
-    public static final int END_GAME = 41;
-    public static final int SMART_BOSS = 42;
-    public static final int BOSS_GOD_DATA = 43;
     // disconect by message
     public static final int DISCONNECT_MSG = 44;
     public static final int CHANGE_LANG = 45;
@@ -57,10 +51,6 @@ public class IAction {
     public static final int TRIAL_EQUIP = 53;
     public static final int USE_GIFT_CODE = 54;
 
-
-    public static final int CAMPAIGN_DATA = 61;
-    public static final int CAMPAIGN_REWARD = 62;
-    public static final int CAMPAIGN_SMART = 63;
     // chat
     public static final int CHAT_SERVER = 70;
     public static final int CHAT_MAP = 71;
@@ -79,7 +69,6 @@ public class IAction {
     public static final int USER_DATA_INFO = 100;
     public static final int CREATE_NAME = 105;
     public static final int CHANGE_INTRO = 106;
-    public static final int UPDATE_NUM_POINT_LEVEL = 121;
     public static final int CHANGE_NAME = 180;
     public static final int HELP_VALUE = 181;
     public static final int USER_INFO = 182;
@@ -90,7 +79,6 @@ public class IAction {
     public static final int MAIL_DELETE = 114;
     // bag
     public static final int BAG_STATUS = 119;
-    public static final int BAG_BUY_SLOT = 120;
     // tutorial
     public static final int TUTORIAL_STATUS = 122;
     // quest
@@ -139,8 +127,6 @@ public class IAction {
     public static final int CLAN_USER_UPDATE_STATE = 311;
     public static final int CLAN_MAIL_TO_MEMBER = 312;
     public static final int CLAN_CHANGE_NAME = 313;
-    public static final int CLAN_BOSS_STATUS = 317;
-    public static final int CLAN_BOSS_ACTIVE = 318;
     public static final int CLAN_CHANGE_AVATAR_INTRO = 319;
     public static final int CLAN_CHAT_LIST = 321;
     public static final int CLAN_CHAT = 322;

@@ -31,7 +31,6 @@ public class UserEntity implements Serializable {
     String name, username, intro, gameChannel, version, packBuy, lang;
     int clan, clanAvatar, clanRank, mainId, clanPosition;
     String clanName, pointData;
-    String weapon; // id - level
     String itemEquipment; // id - key - level
     int level, server, vip, vipExp, userRank;
     long gold, exp, gem, ruby, power;
@@ -56,8 +55,7 @@ public class UserEntity implements Serializable {
         this.version = version;
         this.level = 1;
         this.gold = 0;
-        this.avatar = "[0,1,0,0,0]";// type-  avatarId - heroId - frame - skin
-        this.weapon = "[1,1,2,1,3,1,4,1,5,1]";
+        this.avatar = "[1,0,0,0]";//  avatarId - heroId - frame - skin
         this.clan = 0;
         this.clanName = "";
         this.power = 0;
@@ -100,8 +98,6 @@ public class UserEntity implements Serializable {
         if (update) updateItemEquip(items);
         // point
         builder.addAllPoint(StringHelper.isEmpty(name) ? new Point().toProto() : mUser.getPlayer().getPoint().toProto());
-        // weapon equip
-        builder.addAllWeaponEquip(GsonUtil.strToListInt(weapon));
         builder.addAllItemEquip(getAllInfoItemEquip());
         // caculator data
         builder.setHonor(0);
@@ -136,15 +132,6 @@ public class UserEntity implements Serializable {
 
     public UserPartyEntity getParty() {
         return ResParty.getParty(party);
-    }
-
-    public List<Integer> getWeaponEquipId() {
-        List<Integer> lst = GsonUtil.strToListInt(weapon);
-        List<Integer> ret = new ArrayList<>();
-        for (int i = 0; i < lst.size(); i += 2) {
-            ret.add(lst.get(i));
-        }
-        return ret;
     }
 
     public Point reCalculatePoint(MyUser mUser) {
@@ -225,7 +212,6 @@ public class UserEntity implements Serializable {
         pb.addAllPoint(getCachePoint().toProto());
         pb.addAllPet(GsonUtil.strToListInt(pet));
         pb.setTimeLastAction(getTimeLastAction());
-        pb.addAllWeaponEquip(GsonUtil.strToListInt(weapon));
         pb.addAllItemEquip(getAllInfoItemEquip());
         pb.addAllChannel(Online.getUserChannelInfo(id));
         // caculator data
@@ -244,7 +230,6 @@ public class UserEntity implements Serializable {
         builder.addAllAvatar(getAvatar());
         builder.addAllItemEquip(getAllInfoItemEquip());
         builder.addAllPet(GsonUtil.strToListInt(pet));
-        builder.addAllWeaponEquip(GsonUtil.strToListInt(weapon));
         checkRank();
         builder.setClanInfo(protocol.Pbmethod.CommonVector.newBuilder().addAString(clanName).addALong(clan).addALong(clanPosition).addALong(clanRank).addALong(clanAvatar).build());
         return builder;
@@ -290,10 +275,6 @@ public class UserEntity implements Serializable {
 
     public long getTimeLastAction() {
         return lastAction / 1000;
-    }
-
-    public boolean isEquipWeapon(int weaponId) {
-        return getWeaponEquipId().contains(weaponId);
     }
 
     public List<Integer> getAvatar() {
@@ -356,17 +337,6 @@ public class UserEntity implements Serializable {
     public boolean updateCreateUser(String name) {
         if (update(Arrays.asList("name", name))) {
             this.name = name;
-            return true;
-        }
-        return false;
-    }
-
-    public boolean updateWeaponSlot(int slot, int id, int level) {
-        List<Integer> lst = GsonUtil.strToListInt(weapon);
-        lst.set((slot - 1) * 2, id);
-        lst.set((slot - 1) * 2 + 1, level);
-        if (update(Arrays.asList("weapon", StringHelper.toDBString(lst)))) {
-            this.weapon = lst.toString();
             return true;
         }
         return false;

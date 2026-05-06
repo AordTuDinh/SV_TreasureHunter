@@ -24,7 +24,6 @@ public abstract class Unit {
     // info
     // int id; // id in room
     int clanId;
-
     float rangeAttack;
     int idDameSkin = 0;
     int idChatFrame = 0;
@@ -32,8 +31,6 @@ public abstract class Unit {
     Pos pos = Pos.zero(), direction = Pos.right();
     Point point;
     String name;
-
-    AttackType attackType;
     boolean alive, beDot;
     BaseRoom room;
     int model;
