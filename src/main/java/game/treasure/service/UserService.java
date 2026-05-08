@@ -78,11 +78,11 @@ public class UserService {
         upets.forEach((k,v)->{
             point.addAndGet(v.getResPet().getRank() * (v.getStar() + 1));
         });
-        UserEventTopEntity uTop = Services.userDAO.getUserEventTop(mUser,TopType.PET_POINT.value);
-        if(uTop.getPoint()!=point.intValue()){
-            uTop.setPoint(point.intValue());
-            uTop.update();
-        }
+//        UserEventTopEntity uTop = Services.userDAO.getUserEventTop(mUser,TopType.PET_POINT.value);
+//        if(uTop.getPoint()!=point.intValue()){
+//            uTop.setPoint(point.intValue());
+//            uTop.update();
+//        }
     }
 
     void checkBuyQrError(MyUser mUser) {

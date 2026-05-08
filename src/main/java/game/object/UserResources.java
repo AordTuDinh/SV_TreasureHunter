@@ -151,6 +151,6 @@ public class UserResources implements Serializable {
             if (achiId > 106 && achiId < 132) CfgAchievement.addAchievement(mUser, 2, achiId, 1);
         }
         mUser.reCalculatePoint();
-        ResEventTop.checkEvent(mUser, uPet, TopType.PET_POINT);
+//        ResEventTop.checkEvent(mUser, uPet, TopType.PET_POINT);
     }
 }

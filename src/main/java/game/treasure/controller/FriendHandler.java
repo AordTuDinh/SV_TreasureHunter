@@ -70,7 +70,7 @@ public class FriendHandler extends AHandler {
         try {
             switch (actionId) {
                 case FRIEND_STATUS -> status();
-              //  case FRIEND_LIST -> getFriendList();
+                 case FRIEND_LIST -> getFriendList();
                 case FRIEND_LIST_REQ -> getFriendRequest();
                 case FRIEND_RECOMMEND -> recommendFriend();
                 case FRIEND_SEND_REQUEST -> sendFriendRequest();

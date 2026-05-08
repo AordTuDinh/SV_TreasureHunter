@@ -51,10 +51,10 @@ public class EventTopJob {
             map.merge(uPet.get(i).getUserId(), addPoint, Integer::sum);
         }
 
-        map.forEach((userId,point)->{
-            UserEventTopEntity uTop = new UserEventTopEntity(userId, TopType.PET_POINT.value, 1, point);
-            DBResource.getInstance().saveOrUpdate(uTop);
-        });
+//        map.forEach((userId,point)->{
+//            UserEventTopEntity uTop = new UserEventTopEntity(userId, TopType.PET_POINT.value, 1, point);
+//            DBResource.getInstance().saveOrUpdate(uTop);
+//        });
 
     }
 

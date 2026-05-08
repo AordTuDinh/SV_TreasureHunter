@@ -47,12 +47,6 @@ public class TopUserEntity implements Serializable {
         pb.setInfo(protocol.Pbmethod.CommonVector.newBuilder().addALong(number).build());
         // rank
         if (topType == TopType.USER_POWER) pb.setPointRank(power);
-        else if (topType == TopType.TOWER_LEVEL) pb.setPointRank(number);
-        else if (topType == TopType.ARENA) {
-            pb.setPointRank(number);
-        } else {
-            pb.setPointRank(number);
-        }
         return pb.build();
     }
 

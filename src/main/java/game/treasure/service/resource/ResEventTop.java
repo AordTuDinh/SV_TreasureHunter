@@ -34,15 +34,15 @@ public class ResEventTop {
 
     public static void checkEvent(MyUser myUser, UserPetEntity uPet, TopType topType) {
         //todo check in event
-        boolean hasEvent = aEvent.stream().anyMatch(e -> e.getEventType() == TopType.PET_POINT.value);
-        if(hasEvent){
-            UserEventTopEntity uEventTop = Services.userDAO.getUserEventTop(myUser,topType.value);
-            if(uEventTop!=null){
-                int point = uPet.getResPet().getRank();
-                uEventTop.addPoint(point);
-                uEventTop.update();
-            }
-        }
+//        boolean hasEvent = aEvent.stream().anyMatch(e -> e.getEventType() == TopType.PET_POINT.value);
+//        if(hasEvent){
+//            UserEventTopEntity uEventTop = Services.userDAO.getUserEventTop(myUser,topType.value);
+//            if(uEventTop!=null){
+//                int point = uPet.getResPet().getRank();
+//                uEventTop.addPoint(point);
+//                uEventTop.update();
+//            }
+//        }
 
 
     }
