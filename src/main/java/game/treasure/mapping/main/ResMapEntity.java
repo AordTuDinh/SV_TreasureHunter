@@ -29,12 +29,13 @@ public class ResMapEntity extends BaseEntity implements Serializable {
     @Getter
     int id;
     @Getter
-    int widthChunk, heightChunk;
-    @Getter
     int viewRadius;
-    String map, botLeft, topRight;
+    String map;
 
 
+    @Transient
+    @Getter
+    int widthChunk, heightChunk;
     @Transient
     @Getter
     MapData mapData;
@@ -54,8 +55,12 @@ public class ResMapEntity extends BaseEntity implements Serializable {
             }.getType());
             checkJson(id, map);
         }
-        botLeftP = new Pos(botLeft);
-        topRightP = new Pos(topRight);
+        widthChunk = mapData.sizeX;
+        heightChunk = mapData.sizeY;
+        int px = mapData.sizeX * CHUNK_SIZE / 2;
+        int py = mapData.sizeY * CHUNK_SIZE / 2;
+        botLeftP = new Pos(-px, -py);
+        topRightP = new Pos(px, py);
 
         minChunkX = -widthChunk / 2;
         minChunkY = -heightChunk / 2;
@@ -91,8 +96,8 @@ public class ResMapEntity extends BaseEntity implements Serializable {
             int chunkY = MapService.worldToChunkY(this, worldY);
             int chunkId = MapService.chunkPosToId(this, chunkX, chunkY);
             Pos pos = new Pos(worldX, worldY);
-            int cellId = MapService.worldCellPosToGlobalCellId(this,worldX,worldY);
-            CellObject cell = new CellObject(pos, c.type, chunkId,cellId);
+            int cellId = MapService.worldCellPosToGlobalCellId(this, worldX, worldY);
+            CellObject cell = new CellObject(pos, c.type, chunkId, cellId);
             if (chunkX < minChunkX || chunkX > maxChunkX
                     || chunkY < minChunkY || chunkY > maxChunkY) {
                 System.out.println("[MapLoad] skip out-of-bound cell: x=" + worldX + ", y=" + worldY
@@ -110,8 +115,8 @@ public class ResMapEntity extends BaseEntity implements Serializable {
         }
     }
 
-    public List<Integer> getChunkNoAttack(){
-        return  new ArrayList<>(mapData.chunkNoAttack);
+    public List<Integer> getChunkNoAttack() {
+        return new ArrayList<>(mapData.chunkNoAttack);
     }
 
     public Map<Integer, ChunkObject> getDataMap() {

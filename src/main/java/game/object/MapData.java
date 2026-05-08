@@ -6,13 +6,20 @@ import java.util.List;
 
 public class MapData implements Serializable {
     public List<CellDto> cells = new ArrayList<>();
+    public List<ChunkDto> chunks = new ArrayList<>();
     public List<Integer> chunkNoAttack = new ArrayList<>();
-
+    public  int sizeX;
+    public  int sizeY;
 
     public static class CellDto {
         public int x;
         public int y;
         public int type;
+    }
+
+    public static class ChunkDto {
+        public int id;
+        public int typeDrop;  // config từ 1 - 5 loại vật liệu
     }
 }
 
