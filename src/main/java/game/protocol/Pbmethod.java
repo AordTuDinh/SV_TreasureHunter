@@ -20598,26 +20598,6 @@ public final class Pbmethod {
      */
     long getGem();
 
-    // optional int64 exp = 6;
-    /**
-     * <code>optional int64 exp = 6;</code>
-     */
-    boolean hasExp();
-    /**
-     * <code>optional int64 exp = 6;</code>
-     */
-    long getExp();
-
-    // optional int32 level = 7;
-    /**
-     * <code>optional int32 level = 7;</code>
-     */
-    boolean hasLevel();
-    /**
-     * <code>optional int32 level = 7;</code>
-     */
-    int getLevel();
-
     // repeated int32 avatar = 8;
     /**
      * <code>repeated int32 avatar = 8;</code>
@@ -20727,34 +20707,15 @@ public final class Pbmethod {
      */
     int getRank();
 
-    // optional string desc = 17;
+    // optional int64 pointRank = 17;
     /**
-     * <code>optional string desc = 17;</code>
+     * <code>optional int64 pointRank = 17;</code>
      */
-    boolean hasDesc();
+    boolean hasPointRank();
     /**
-     * <code>optional string desc = 17;</code>
+     * <code>optional int64 pointRank = 17;</code>
      */
-    java.lang.String getDesc();
-    /**
-     * <code>optional string desc = 17;</code>
-     */
-    com.google.protobuf.ByteString
-        getDescBytes();
-
-    // repeated int32 weaponEquip = 18;
-    /**
-     * <code>repeated int32 weaponEquip = 18;</code>
-     */
-    java.util.List<java.lang.Integer> getWeaponEquipList();
-    /**
-     * <code>repeated int32 weaponEquip = 18;</code>
-     */
-    int getWeaponEquipCount();
-    /**
-     * <code>repeated int32 weaponEquip = 18;</code>
-     */
-    int getWeaponEquip(int index);
+    long getPointRank();
 
     // repeated int64 point = 19;
     /**
@@ -20827,26 +20788,6 @@ public final class Pbmethod {
      * <code>repeated int32 channel = 24;</code>
      */
     int getChannel(int index);
-
-    // optional int64 pointRank = 25;
-    /**
-     * <code>optional int64 pointRank = 25;</code>
-     */
-    boolean hasPointRank();
-    /**
-     * <code>optional int64 pointRank = 25;</code>
-     */
-    long getPointRank();
-
-    // optional int32 arenaRank = 26;
-    /**
-     * <code>optional int32 arenaRank = 26;</code>
-     */
-    boolean hasArenaRank();
-    /**
-     * <code>optional int32 arenaRank = 26;</code>
-     */
-    int getArenaRank();
 
     // optional int64 ruby = 27;
     /**
@@ -20948,20 +20889,10 @@ public final class Pbmethod {
               gem_ = input.readInt64();
               break;
             }
-            case 48: {
-              bitField0_ |= 0x00000020;
-              exp_ = input.readInt64();
-              break;
-            }
-            case 56: {
-              bitField0_ |= 0x00000040;
-              level_ = input.readInt32();
-              break;
-            }
             case 64: {
-              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
                 avatar_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000080;
+                mutable_bitField0_ |= 0x00000020;
               }
               avatar_.add(input.readInt32());
               break;
@@ -20969,9 +20900,9 @@ public final class Pbmethod {
             case 66: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080) && input.getBytesUntilLimit() > 0) {
+              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020) && input.getBytesUntilLimit() > 0) {
                 avatar_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000080;
+                mutable_bitField0_ |= 0x00000020;
               }
               while (input.getBytesUntilLimit() > 0) {
                 avatar_.add(input.readInt32());
@@ -20980,9 +20911,9 @@ public final class Pbmethod {
               break;
             }
             case 72: {
-              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+              if (!((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
                 vip_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000100;
+                mutable_bitField0_ |= 0x00000040;
               }
               vip_.add(input.readInt32());
               break;
@@ -20990,9 +20921,9 @@ public final class Pbmethod {
             case 74: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100) && input.getBytesUntilLimit() > 0) {
+              if (!((mutable_bitField0_ & 0x00000040) == 0x00000040) && input.getBytesUntilLimit() > 0) {
                 vip_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000100;
+                mutable_bitField0_ |= 0x00000040;
               }
               while (input.getBytesUntilLimit() > 0) {
                 vip_.add(input.readInt32());
@@ -21002,7 +20933,7 @@ public final class Pbmethod {
             }
             case 82: {
               protocol.Pbmethod.CommonVector.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000080) == 0x00000080)) {
+              if (((bitField0_ & 0x00000020) == 0x00000020)) {
                 subBuilder = clanInfo_.toBuilder();
               }
               clanInfo_ = input.readMessage(protocol.Pbmethod.CommonVector.PARSER, extensionRegistry);
@@ -21010,12 +20941,12 @@ public final class Pbmethod {
                 subBuilder.mergeFrom(clanInfo_);
                 clanInfo_ = subBuilder.buildPartial();
               }
-              bitField0_ |= 0x00000080;
+              bitField0_ |= 0x00000020;
               break;
             }
             case 90: {
               protocol.Pbmethod.CommonVector.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000100) == 0x00000100)) {
+              if (((bitField0_ & 0x00000040) == 0x00000040)) {
                 subBuilder = info_.toBuilder();
               }
               info_ = input.readMessage(protocol.Pbmethod.CommonVector.PARSER, extensionRegistry);
@@ -21023,13 +20954,13 @@ public final class Pbmethod {
                 subBuilder.mergeFrom(info_);
                 info_ = subBuilder.buildPartial();
               }
-              bitField0_ |= 0x00000100;
+              bitField0_ |= 0x00000040;
               break;
             }
             case 96: {
-              if (!((mutable_bitField0_ & 0x00000800) == 0x00000800)) {
+              if (!((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
                 petId_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000800;
+                mutable_bitField0_ |= 0x00000200;
               }
               petId_.add(input.readInt32());
               break;
@@ -21037,9 +20968,9 @@ public final class Pbmethod {
             case 98: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000800) == 0x00000800) && input.getBytesUntilLimit() > 0) {
+              if (!((mutable_bitField0_ & 0x00000200) == 0x00000200) && input.getBytesUntilLimit() > 0) {
                 petId_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00000800;
+                mutable_bitField0_ |= 0x00000200;
               }
               while (input.getBytesUntilLimit() > 0) {
                 petId_.add(input.readInt32());
@@ -21048,13 +20979,13 @@ public final class Pbmethod {
               break;
             }
             case 106: {
-              bitField0_ |= 0x00000200;
+              bitField0_ |= 0x00000080;
               facebook_ = input.readBytes();
               break;
             }
             case 114: {
               protocol.Pbmethod.CommonVector.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000400) == 0x00000400)) {
+              if (((bitField0_ & 0x00000100) == 0x00000100)) {
                 subBuilder = userInfo_.toBuilder();
               }
               userInfo_ = input.readMessage(protocol.Pbmethod.CommonVector.PARSER, extensionRegistry);
@@ -21062,44 +20993,23 @@ public final class Pbmethod {
                 subBuilder.mergeFrom(userInfo_);
                 userInfo_ = subBuilder.buildPartial();
               }
-              bitField0_ |= 0x00000400;
+              bitField0_ |= 0x00000100;
               break;
             }
             case 128: {
-              bitField0_ |= 0x00000800;
+              bitField0_ |= 0x00000200;
               rank_ = input.readInt32();
               break;
             }
-            case 138: {
-              bitField0_ |= 0x00001000;
-              desc_ = input.readBytes();
-              break;
-            }
-            case 144: {
-              if (!((mutable_bitField0_ & 0x00010000) == 0x00010000)) {
-                weaponEquip_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00010000;
-              }
-              weaponEquip_.add(input.readInt32());
-              break;
-            }
-            case 146: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00010000) == 0x00010000) && input.getBytesUntilLimit() > 0) {
-                weaponEquip_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00010000;
-              }
-              while (input.getBytesUntilLimit() > 0) {
-                weaponEquip_.add(input.readInt32());
-              }
-              input.popLimit(limit);
+            case 136: {
+              bitField0_ |= 0x00000400;
+              pointRank_ = input.readInt64();
               break;
             }
             case 152: {
-              if (!((mutable_bitField0_ & 0x00020000) == 0x00020000)) {
+              if (!((mutable_bitField0_ & 0x00004000) == 0x00004000)) {
                 point_ = new java.util.ArrayList<java.lang.Long>();
-                mutable_bitField0_ |= 0x00020000;
+                mutable_bitField0_ |= 0x00004000;
               }
               point_.add(input.readInt64());
               break;
@@ -21107,9 +21017,9 @@ public final class Pbmethod {
             case 154: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00020000) == 0x00020000) && input.getBytesUntilLimit() > 0) {
+              if (!((mutable_bitField0_ & 0x00004000) == 0x00004000) && input.getBytesUntilLimit() > 0) {
                 point_ = new java.util.ArrayList<java.lang.Long>();
-                mutable_bitField0_ |= 0x00020000;
+                mutable_bitField0_ |= 0x00004000;
               }
               while (input.getBytesUntilLimit() > 0) {
                 point_.add(input.readInt64());
@@ -21118,24 +21028,24 @@ public final class Pbmethod {
               break;
             }
             case 160: {
-              bitField0_ |= 0x00002000;
+              bitField0_ |= 0x00000800;
               timeLastAction_ = input.readInt64();
               break;
             }
             case 168: {
-              bitField0_ |= 0x00004000;
+              bitField0_ |= 0x00001000;
               honor_ = input.readInt32();
               break;
             }
             case 176: {
-              bitField0_ |= 0x00008000;
+              bitField0_ |= 0x00002000;
               power_ = input.readInt64();
               break;
             }
             case 184: {
-              if (!((mutable_bitField0_ & 0x00200000) == 0x00200000)) {
+              if (!((mutable_bitField0_ & 0x00040000) == 0x00040000)) {
                 itemEquip_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00200000;
+                mutable_bitField0_ |= 0x00040000;
               }
               itemEquip_.add(input.readInt32());
               break;
@@ -21143,9 +21053,9 @@ public final class Pbmethod {
             case 186: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00200000) == 0x00200000) && input.getBytesUntilLimit() > 0) {
+              if (!((mutable_bitField0_ & 0x00040000) == 0x00040000) && input.getBytesUntilLimit() > 0) {
                 itemEquip_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00200000;
+                mutable_bitField0_ |= 0x00040000;
               }
               while (input.getBytesUntilLimit() > 0) {
                 itemEquip_.add(input.readInt32());
@@ -21154,9 +21064,9 @@ public final class Pbmethod {
               break;
             }
             case 192: {
-              if (!((mutable_bitField0_ & 0x00400000) == 0x00400000)) {
+              if (!((mutable_bitField0_ & 0x00080000) == 0x00080000)) {
                 channel_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00400000;
+                mutable_bitField0_ |= 0x00080000;
               }
               channel_.add(input.readInt32());
               break;
@@ -21164,9 +21074,9 @@ public final class Pbmethod {
             case 194: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00400000) == 0x00400000) && input.getBytesUntilLimit() > 0) {
+              if (!((mutable_bitField0_ & 0x00080000) == 0x00080000) && input.getBytesUntilLimit() > 0) {
                 channel_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00400000;
+                mutable_bitField0_ |= 0x00080000;
               }
               while (input.getBytesUntilLimit() > 0) {
                 channel_.add(input.readInt32());
@@ -21174,25 +21084,15 @@ public final class Pbmethod {
               input.popLimit(limit);
               break;
             }
-            case 200: {
-              bitField0_ |= 0x00010000;
-              pointRank_ = input.readInt64();
-              break;
-            }
-            case 208: {
-              bitField0_ |= 0x00020000;
-              arenaRank_ = input.readInt32();
-              break;
-            }
             case 216: {
-              bitField0_ |= 0x00040000;
+              bitField0_ |= 0x00004000;
               ruby_ = input.readInt64();
               break;
             }
             case 224: {
-              if (!((mutable_bitField0_ & 0x04000000) == 0x04000000)) {
+              if (!((mutable_bitField0_ & 0x00200000) == 0x00200000)) {
                 pet_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x04000000;
+                mutable_bitField0_ |= 0x00200000;
               }
               pet_.add(input.readInt32());
               break;
@@ -21200,9 +21100,9 @@ public final class Pbmethod {
             case 226: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x04000000) == 0x04000000) && input.getBytesUntilLimit() > 0) {
+              if (!((mutable_bitField0_ & 0x00200000) == 0x00200000) && input.getBytesUntilLimit() > 0) {
                 pet_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x04000000;
+                mutable_bitField0_ |= 0x00200000;
               }
               while (input.getBytesUntilLimit() > 0) {
                 pet_.add(input.readInt32());
@@ -21218,28 +21118,25 @@ public final class Pbmethod {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
+        if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
           avatar_ = java.util.Collections.unmodifiableList(avatar_);
         }
-        if (((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+        if (((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
           vip_ = java.util.Collections.unmodifiableList(vip_);
         }
-        if (((mutable_bitField0_ & 0x00000800) == 0x00000800)) {
+        if (((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
           petId_ = java.util.Collections.unmodifiableList(petId_);
         }
-        if (((mutable_bitField0_ & 0x00010000) == 0x00010000)) {
-          weaponEquip_ = java.util.Collections.unmodifiableList(weaponEquip_);
-        }
-        if (((mutable_bitField0_ & 0x00020000) == 0x00020000)) {
+        if (((mutable_bitField0_ & 0x00004000) == 0x00004000)) {
           point_ = java.util.Collections.unmodifiableList(point_);
         }
-        if (((mutable_bitField0_ & 0x00200000) == 0x00200000)) {
+        if (((mutable_bitField0_ & 0x00040000) == 0x00040000)) {
           itemEquip_ = java.util.Collections.unmodifiableList(itemEquip_);
         }
-        if (((mutable_bitField0_ & 0x00400000) == 0x00400000)) {
+        if (((mutable_bitField0_ & 0x00080000) == 0x00080000)) {
           channel_ = java.util.Collections.unmodifiableList(channel_);
         }
-        if (((mutable_bitField0_ & 0x04000000) == 0x04000000)) {
+        if (((mutable_bitField0_ & 0x00200000) == 0x00200000)) {
           pet_ = java.util.Collections.unmodifiableList(pet_);
         }
         this.unknownFields = unknownFields.build();
@@ -21408,38 +21305,6 @@ public final class Pbmethod {
       return gem_;
     }
 
-    // optional int64 exp = 6;
-    public static final int EXP_FIELD_NUMBER = 6;
-    private long exp_;
-    /**
-     * <code>optional int64 exp = 6;</code>
-     */
-    public boolean hasExp() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
-    }
-    /**
-     * <code>optional int64 exp = 6;</code>
-     */
-    public long getExp() {
-      return exp_;
-    }
-
-    // optional int32 level = 7;
-    public static final int LEVEL_FIELD_NUMBER = 7;
-    private int level_;
-    /**
-     * <code>optional int32 level = 7;</code>
-     */
-    public boolean hasLevel() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
-    }
-    /**
-     * <code>optional int32 level = 7;</code>
-     */
-    public int getLevel() {
-      return level_;
-    }
-
     // repeated int32 avatar = 8;
     public static final int AVATAR_FIELD_NUMBER = 8;
     private java.util.List<java.lang.Integer> avatar_;
@@ -21493,7 +21358,7 @@ public final class Pbmethod {
      * <code>optional .pbdson.CommonVector clanInfo = 10;</code>
      */
     public boolean hasClanInfo() {
-      return ((bitField0_ & 0x00000080) == 0x00000080);
+      return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
      * <code>optional .pbdson.CommonVector clanInfo = 10;</code>
@@ -21515,7 +21380,7 @@ public final class Pbmethod {
      * <code>optional .pbdson.CommonVector info = 11;</code>
      */
     public boolean hasInfo() {
-      return ((bitField0_ & 0x00000100) == 0x00000100);
+      return ((bitField0_ & 0x00000040) == 0x00000040);
     }
     /**
      * <code>optional .pbdson.CommonVector info = 11;</code>
@@ -21560,7 +21425,7 @@ public final class Pbmethod {
      * <code>optional string facebook = 13;</code>
      */
     public boolean hasFacebook() {
-      return ((bitField0_ & 0x00000200) == 0x00000200);
+      return ((bitField0_ & 0x00000080) == 0x00000080);
     }
     /**
      * <code>optional string facebook = 13;</code>
@@ -21603,7 +21468,7 @@ public final class Pbmethod {
      * <code>optional .pbdson.CommonVector userInfo = 14;</code>
      */
     public boolean hasUserInfo() {
-      return ((bitField0_ & 0x00000400) == 0x00000400);
+      return ((bitField0_ & 0x00000100) == 0x00000100);
     }
     /**
      * <code>optional .pbdson.CommonVector userInfo = 14;</code>
@@ -21625,7 +21490,7 @@ public final class Pbmethod {
      * <code>optional int32 rank = 16;</code>
      */
     public boolean hasRank() {
-      return ((bitField0_ & 0x00000800) == 0x00000800);
+      return ((bitField0_ & 0x00000200) == 0x00000200);
     }
     /**
      * <code>optional int32 rank = 16;</code>
@@ -21634,70 +21499,20 @@ public final class Pbmethod {
       return rank_;
     }
 
-    // optional string desc = 17;
-    public static final int DESC_FIELD_NUMBER = 17;
-    private java.lang.Object desc_;
+    // optional int64 pointRank = 17;
+    public static final int POINTRANK_FIELD_NUMBER = 17;
+    private long pointRank_;
     /**
-     * <code>optional string desc = 17;</code>
+     * <code>optional int64 pointRank = 17;</code>
      */
-    public boolean hasDesc() {
-      return ((bitField0_ & 0x00001000) == 0x00001000);
+    public boolean hasPointRank() {
+      return ((bitField0_ & 0x00000400) == 0x00000400);
     }
     /**
-     * <code>optional string desc = 17;</code>
+     * <code>optional int64 pointRank = 17;</code>
      */
-    public java.lang.String getDesc() {
-      java.lang.Object ref = desc_;
-      if (ref instanceof java.lang.String) {
-        return (java.lang.String) ref;
-      } else {
-        com.google.protobuf.ByteString bs = 
-            (com.google.protobuf.ByteString) ref;
-        java.lang.String s = bs.toStringUtf8();
-        if (bs.isValidUtf8()) {
-          desc_ = s;
-        }
-        return s;
-      }
-    }
-    /**
-     * <code>optional string desc = 17;</code>
-     */
-    public com.google.protobuf.ByteString
-        getDescBytes() {
-      java.lang.Object ref = desc_;
-      if (ref instanceof java.lang.String) {
-        com.google.protobuf.ByteString b = 
-            com.google.protobuf.ByteString.copyFromUtf8(
-                (java.lang.String) ref);
-        desc_ = b;
-        return b;
-      } else {
-        return (com.google.protobuf.ByteString) ref;
-      }
-    }
-
-    // repeated int32 weaponEquip = 18;
-    public static final int WEAPONEQUIP_FIELD_NUMBER = 18;
-    private java.util.List<java.lang.Integer> weaponEquip_;
-    /**
-     * <code>repeated int32 weaponEquip = 18;</code>
-     */
-    public java.util.List<java.lang.Integer>
-        getWeaponEquipList() {
-      return weaponEquip_;
-    }
-    /**
-     * <code>repeated int32 weaponEquip = 18;</code>
-     */
-    public int getWeaponEquipCount() {
-      return weaponEquip_.size();
-    }
-    /**
-     * <code>repeated int32 weaponEquip = 18;</code>
-     */
-    public int getWeaponEquip(int index) {
-      return weaponEquip_.get(index);
+    public long getPointRank() {
+      return pointRank_;
     }
 
     // repeated int64 point = 19;
@@ -21730,7 +21545,7 @@ public final class Pbmethod {
      * <code>optional int64 timeLastAction = 20;</code>
      */
     public boolean hasTimeLastAction() {
-      return ((bitField0_ & 0x00002000) == 0x00002000);
+      return ((bitField0_ & 0x00000800) == 0x00000800);
     }
     /**
      * <code>optional int64 timeLastAction = 20;</code>
@@ -21746,7 +21561,7 @@ public final class Pbmethod {
      * <code>optional int32 honor = 21;</code>
      */
     public boolean hasHonor() {
-      return ((bitField0_ & 0x00004000) == 0x00004000);
+      return ((bitField0_ & 0x00001000) == 0x00001000);
     }
     /**
      * <code>optional int32 honor = 21;</code>
@@ -21762,7 +21577,7 @@ public final class Pbmethod {
      * <code>optional int64 power = 22;</code>
      */
     public boolean hasPower() {
-      return ((bitField0_ & 0x00008000) == 0x00008000);
+      return ((bitField0_ & 0x00002000) == 0x00002000);
     }
     /**
      * <code>optional int64 power = 22;</code>
@@ -21817,38 +21632,6 @@ public final class Pbmethod {
       return channel_.get(index);
     }
 
-    // optional int64 pointRank = 25;
-    public static final int POINTRANK_FIELD_NUMBER = 25;
-    private long pointRank_;
-    /**
-     * <code>optional int64 pointRank = 25;</code>
-     */
-    public boolean hasPointRank() {
-      return ((bitField0_ & 0x00010000) == 0x00010000);
-    }
-    /**
-     * <code>optional int64 pointRank = 25;</code>
-     */
-    public long getPointRank() {
-      return pointRank_;
-    }
-
-    // optional int32 arenaRank = 26;
-    public static final int ARENARANK_FIELD_NUMBER = 26;
-    private int arenaRank_;
-    /**
-     * <code>optional int32 arenaRank = 26;</code>
-     */
-    public boolean hasArenaRank() {
-      return ((bitField0_ & 0x00020000) == 0x00020000);
-    }
-    /**
-     * <code>optional int32 arenaRank = 26;</code>
-     */
-    public int getArenaRank() {
-      return arenaRank_;
-    }
-
     // optional int64 ruby = 27;
     public static final int RUBY_FIELD_NUMBER = 27;
     private long ruby_;
@@ -21856,7 +21639,7 @@ public final class Pbmethod {
      * <code>optional int64 ruby = 27;</code>
      */
     public boolean hasRuby() {
-      return ((bitField0_ & 0x00040000) == 0x00040000);
+      return ((bitField0_ & 0x00004000) == 0x00004000);
     }
     /**
      * <code>optional int64 ruby = 27;</code>
@@ -21894,8 +21677,6 @@ public final class Pbmethod {
       name_ = "";
       gold_ = 0L;
       gem_ = 0L;
-      exp_ = 0L;
-      level_ = 0;
       avatar_ = java.util.Collections.emptyList();
       vip_ = java.util.Collections.emptyList();
       clanInfo_ = protocol.Pbmethod.CommonVector.getDefaultInstance();
@@ -21904,16 +21685,13 @@ public final class Pbmethod {
       facebook_ = "";
       userInfo_ = protocol.Pbmethod.CommonVector.getDefaultInstance();
       rank_ = 0;
-      desc_ = "";
-      weaponEquip_ = java.util.Collections.emptyList();
+      pointRank_ = 0L;
       point_ = java.util.Collections.emptyList();
       timeLastAction_ = 0L;
       honor_ = 0;
       power_ = 0L;
       itemEquip_ = java.util.Collections.emptyList();
       channel_ = java.util.Collections.emptyList();
-      pointRank_ = 0L;
-      arenaRank_ = 0;
       ruby_ = 0L;
       pet_ = java.util.Collections.emptyList();
     }
@@ -21944,52 +21722,43 @@ public final class Pbmethod {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeInt64(5, gem_);
       }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeInt64(6, exp_);
-      }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeInt32(7, level_);
-      }
       for (int i = 0; i < avatar_.size(); i++) {
         output.writeInt32(8, avatar_.get(i));
       }
       for (int i = 0; i < vip_.size(); i++) {
         output.writeInt32(9, vip_.get(i));
       }
-      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
         output.writeMessage(10, clanInfo_);
       }
-      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
         output.writeMessage(11, info_);
       }
       for (int i = 0; i < petId_.size(); i++) {
         output.writeInt32(12, petId_.get(i));
       }
-      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
         output.writeBytes(13, getFacebookBytes());
       }
-      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
         output.writeMessage(14, userInfo_);
       }
-      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
         output.writeInt32(16, rank_);
       }
-      if (((bitField0_ & 0x00001000) == 0x00001000)) {
-        output.writeBytes(17, getDescBytes());
-      }
-      for (int i = 0; i < weaponEquip_.size(); i++) {
-        output.writeInt32(18, weaponEquip_.get(i));
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        output.writeInt64(17, pointRank_);
       }
       for (int i = 0; i < point_.size(); i++) {
         output.writeInt64(19, point_.get(i));
       }
-      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
         output.writeInt64(20, timeLastAction_);
       }
-      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
         output.writeInt32(21, honor_);
       }
-      if (((bitField0_ & 0x00008000) == 0x00008000)) {
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
         output.writeInt64(22, power_);
       }
       for (int i = 0; i < itemEquip_.size(); i++) {
@@ -21998,13 +21767,7 @@ public final class Pbmethod {
       for (int i = 0; i < channel_.size(); i++) {
         output.writeInt32(24, channel_.get(i));
       }
-      if (((bitField0_ & 0x00010000) == 0x00010000)) {
-        output.writeInt64(25, pointRank_);
-      }
-      if (((bitField0_ & 0x00020000) == 0x00020000)) {
-        output.writeInt32(26, arenaRank_);
-      }
-      if (((bitField0_ & 0x00040000) == 0x00040000)) {
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
         output.writeInt64(27, ruby_);
       }
       for (int i = 0; i < pet_.size(); i++) {
@@ -22039,14 +21802,6 @@ public final class Pbmethod {
         size += com.google.protobuf.CodedOutputStream
           .computeInt64Size(5, gem_);
       }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(6, exp_);
-      }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(7, level_);
-      }
       {
         int dataSize = 0;
         for (int i = 0; i < avatar_.size(); i++) {
@@ -22065,11 +21820,11 @@ public final class Pbmethod {
         size += dataSize;
         size += 1 * getVipList().size();
       }
-      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(10, clanInfo_);
       }
-      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(11, info_);
       }
@@ -22082,30 +21837,21 @@ public final class Pbmethod {
         size += dataSize;
         size += 1 * getPetIdList().size();
       }
-      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(13, getFacebookBytes());
       }
-      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(14, userInfo_);
       }
-      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(16, rank_);
       }
-      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(17, getDescBytes());
-      }
-      {
-        int dataSize = 0;
-        for (int i = 0; i < weaponEquip_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(weaponEquip_.get(i));
-        }
-        size += dataSize;
-        size += 2 * getWeaponEquipList().size();
+          .computeInt64Size(17, pointRank_);
       }
       {
         int dataSize = 0;
@@ -22116,15 +21862,15 @@ public final class Pbmethod {
         size += dataSize;
         size += 2 * getPointList().size();
       }
-      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt64Size(20, timeLastAction_);
       }
-      if (((bitField0_ & 0x00004000) == 0x00004000)) {
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(21, honor_);
       }
-      if (((bitField0_ & 0x00008000) == 0x00008000)) {
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt64Size(22, power_);
       }
@@ -22146,15 +21892,7 @@ public final class Pbmethod {
         size += dataSize;
         size += 2 * getChannelList().size();
       }
-      if (((bitField0_ & 0x00010000) == 0x00010000)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt64Size(25, pointRank_);
-      }
-      if (((bitField0_ & 0x00020000) == 0x00020000)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(26, arenaRank_);
-      }
-      if (((bitField0_ & 0x00040000) == 0x00040000)) {
+      if (((bitField0_ & 0x00004000) == 0x00004000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt64Size(27, ruby_);
       }
@@ -22296,62 +22034,52 @@ public final class Pbmethod {
         bitField0_ = (bitField0_ & ~0x00000008);
         gem_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000010);
-        exp_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00000020);
-        level_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000040);
         avatar_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000080);
+        bitField0_ = (bitField0_ & ~0x00000020);
         vip_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000100);
+        bitField0_ = (bitField0_ & ~0x00000040);
         if (clanInfoBuilder_ == null) {
           clanInfo_ = protocol.Pbmethod.CommonVector.getDefaultInstance();
         } else {
           clanInfoBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000200);
+        bitField0_ = (bitField0_ & ~0x00000080);
         if (infoBuilder_ == null) {
           info_ = protocol.Pbmethod.CommonVector.getDefaultInstance();
         } else {
           infoBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000400);
+        bitField0_ = (bitField0_ & ~0x00000100);
         petId_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000800);
+        bitField0_ = (bitField0_ & ~0x00000200);
         facebook_ = "";
-        bitField0_ = (bitField0_ & ~0x00001000);
+        bitField0_ = (bitField0_ & ~0x00000400);
         if (userInfoBuilder_ == null) {
           userInfo_ = protocol.Pbmethod.CommonVector.getDefaultInstance();
         } else {
           userInfoBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00002000);
+        bitField0_ = (bitField0_ & ~0x00000800);
         rank_ = 0;
-        bitField0_ = (bitField0_ & ~0x00004000);
-        desc_ = "";
-        bitField0_ = (bitField0_ & ~0x00008000);
-        weaponEquip_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00010000);
-        point_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00020000);
-        timeLastAction_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00040000);
-        honor_ = 0;
-        bitField0_ = (bitField0_ & ~0x00080000);
-        power_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00100000);
-        itemEquip_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00200000);
-        channel_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00400000);
+        bitField0_ = (bitField0_ & ~0x00001000);
         pointRank_ = 0L;
-        bitField0_ = (bitField0_ & ~0x00800000);
-        arenaRank_ = 0;
-        bitField0_ = (bitField0_ & ~0x01000000);
+        bitField0_ = (bitField0_ & ~0x00002000);
+        point_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00004000);
+        timeLastAction_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00008000);
+        honor_ = 0;
+        bitField0_ = (bitField0_ & ~0x00010000);
+        power_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00020000);
+        itemEquip_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00040000);
+        channel_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00080000);
         ruby_ = 0L;
-        bitField0_ = (bitField0_ & ~0x02000000);
+        bitField0_ = (bitField0_ & ~0x00100000);
         pet_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x04000000);
+        bitField0_ = (bitField0_ & ~0x00200000);
         return this;
       }
 
@@ -22400,112 +22128,91 @@ public final class Pbmethod {
           to_bitField0_ |= 0x00000010;
         }
         result.gem_ = gem_;
-        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
-          to_bitField0_ |= 0x00000020;
-        }
-        result.exp_ = exp_;
-        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
-          to_bitField0_ |= 0x00000040;
-        }
-        result.level_ = level_;
-        if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        if (((bitField0_ & 0x00000020) == 0x00000020)) {
           avatar_ = java.util.Collections.unmodifiableList(avatar_);
-          bitField0_ = (bitField0_ & ~0x00000080);
+          bitField0_ = (bitField0_ & ~0x00000020);
         }
         result.avatar_ = avatar_;
-        if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        if (((bitField0_ & 0x00000040) == 0x00000040)) {
           vip_ = java.util.Collections.unmodifiableList(vip_);
-          bitField0_ = (bitField0_ & ~0x00000100);
+          bitField0_ = (bitField0_ & ~0x00000040);
         }
         result.vip_ = vip_;
-        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
-          to_bitField0_ |= 0x00000080;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000020;
         }
         if (clanInfoBuilder_ == null) {
           result.clanInfo_ = clanInfo_;
         } else {
           result.clanInfo_ = clanInfoBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
-          to_bitField0_ |= 0x00000100;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000040;
         }
         if (infoBuilder_ == null) {
           result.info_ = info_;
         } else {
           result.info_ = infoBuilder_.build();
         }
-        if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        if (((bitField0_ & 0x00000200) == 0x00000200)) {
           petId_ = java.util.Collections.unmodifiableList(petId_);
-          bitField0_ = (bitField0_ & ~0x00000800);
+          bitField0_ = (bitField0_ & ~0x00000200);
         }
         result.petId_ = petId_;
-        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
-          to_bitField0_ |= 0x00000200;
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000080;
         }
         result.facebook_ = facebook_;
-        if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
-          to_bitField0_ |= 0x00000400;
+        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+          to_bitField0_ |= 0x00000100;
         }
         if (userInfoBuilder_ == null) {
           result.userInfo_ = userInfo_;
         } else {
           result.userInfo_ = userInfoBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
-          to_bitField0_ |= 0x00000800;
+        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
+          to_bitField0_ |= 0x00000200;
         }
         result.rank_ = rank_;
-        if (((from_bitField0_ & 0x00008000) == 0x00008000)) {
-          to_bitField0_ |= 0x00001000;
-        }
-        result.desc_ = desc_;
-        if (((bitField0_ & 0x00010000) == 0x00010000)) {
-          weaponEquip_ = java.util.Collections.unmodifiableList(weaponEquip_);
-          bitField0_ = (bitField0_ & ~0x00010000);
-        }
-        result.weaponEquip_ = weaponEquip_;
-        if (((bitField0_ & 0x00020000) == 0x00020000)) {
-          point_ = java.util.Collections.unmodifiableList(point_);
-          bitField0_ = (bitField0_ & ~0x00020000);
-        }
-        result.point_ = point_;
-        if (((from_bitField0_ & 0x00040000) == 0x00040000)) {
-          to_bitField0_ |= 0x00002000;
-        }
-        result.timeLastAction_ = timeLastAction_;
-        if (((from_bitField0_ & 0x00080000) == 0x00080000)) {
-          to_bitField0_ |= 0x00004000;
-        }
-        result.honor_ = honor_;
-        if (((from_bitField0_ & 0x00100000) == 0x00100000)) {
-          to_bitField0_ |= 0x00008000;
-        }
-        result.power_ = power_;
-        if (((bitField0_ & 0x00200000) == 0x00200000)) {
-          itemEquip_ = java.util.Collections.unmodifiableList(itemEquip_);
-          bitField0_ = (bitField0_ & ~0x00200000);
-        }
-        result.itemEquip_ = itemEquip_;
-        if (((bitField0_ & 0x00400000) == 0x00400000)) {
-          channel_ = java.util.Collections.unmodifiableList(channel_);
-          bitField0_ = (bitField0_ & ~0x00400000);
-        }
-        result.channel_ = channel_;
-        if (((from_bitField0_ & 0x00800000) == 0x00800000)) {
-          to_bitField0_ |= 0x00010000;
+        if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
+          to_bitField0_ |= 0x00000400;
         }
         result.pointRank_ = pointRank_;
-        if (((from_bitField0_ & 0x01000000) == 0x01000000)) {
-          to_bitField0_ |= 0x00020000;
+        if (((bitField0_ & 0x00004000) == 0x00004000)) {
+          point_ = java.util.Collections.unmodifiableList(point_);
+          bitField0_ = (bitField0_ & ~0x00004000);
         }
-        result.arenaRank_ = arenaRank_;
-        if (((from_bitField0_ & 0x02000000) == 0x02000000)) {
-          to_bitField0_ |= 0x00040000;
+        result.point_ = point_;
+        if (((from_bitField0_ & 0x00008000) == 0x00008000)) {
+          to_bitField0_ |= 0x00000800;
+        }
+        result.timeLastAction_ = timeLastAction_;
+        if (((from_bitField0_ & 0x00010000) == 0x00010000)) {
+          to_bitField0_ |= 0x00001000;
+        }
+        result.honor_ = honor_;
+        if (((from_bitField0_ & 0x00020000) == 0x00020000)) {
+          to_bitField0_ |= 0x00002000;
+        }
+        result.power_ = power_;
+        if (((bitField0_ & 0x00040000) == 0x00040000)) {
+          itemEquip_ = java.util.Collections.unmodifiableList(itemEquip_);
+          bitField0_ = (bitField0_ & ~0x00040000);
+        }
+        result.itemEquip_ = itemEquip_;
+        if (((bitField0_ & 0x00080000) == 0x00080000)) {
+          channel_ = java.util.Collections.unmodifiableList(channel_);
+          bitField0_ = (bitField0_ & ~0x00080000);
+        }
+        result.channel_ = channel_;
+        if (((from_bitField0_ & 0x00100000) == 0x00100000)) {
+          to_bitField0_ |= 0x00004000;
         }
         result.ruby_ = ruby_;
-        if (((bitField0_ & 0x04000000) == 0x04000000)) {
+        if (((bitField0_ & 0x00200000) == 0x00200000)) {
           pet_ = java.util.Collections.unmodifiableList(pet_);
-          bitField0_ = (bitField0_ & ~0x04000000);
+          bitField0_ = (bitField0_ & ~0x00200000);
         }
         result.pet_ = pet_;
         result.bitField0_ = to_bitField0_;
@@ -22543,16 +22250,10 @@ public final class Pbmethod {
         if (other.hasGem()) {
           setGem(other.getGem());
         }
-        if (other.hasExp()) {
-          setExp(other.getExp());
-        }
-        if (other.hasLevel()) {
-          setLevel(other.getLevel());
-        }
         if (!other.avatar_.isEmpty()) {
           if (avatar_.isEmpty()) {
             avatar_ = other.avatar_;
-            bitField0_ = (bitField0_ & ~0x00000080);
+            bitField0_ = (bitField0_ & ~0x00000020);
           } else {
             ensureAvatarIsMutable();
             avatar_.addAll(other.avatar_);
@@ -22562,7 +22263,7 @@ public final class Pbmethod {
         if (!other.vip_.isEmpty()) {
           if (vip_.isEmpty()) {
             vip_ = other.vip_;
-            bitField0_ = (bitField0_ & ~0x00000100);
+            bitField0_ = (bitField0_ & ~0x00000040);
           } else {
             ensureVipIsMutable();
             vip_.addAll(other.vip_);
@@ -22578,7 +22279,7 @@ public final class Pbmethod {
         if (!other.petId_.isEmpty()) {
           if (petId_.isEmpty()) {
             petId_ = other.petId_;
-            bitField0_ = (bitField0_ & ~0x00000800);
+            bitField0_ = (bitField0_ & ~0x00000200);
           } else {
             ensurePetIdIsMutable();
             petId_.addAll(other.petId_);
@@ -22586,7 +22287,7 @@ public final class Pbmethod {
           onChanged();
         }
         if (other.hasFacebook()) {
-          bitField0_ |= 0x00001000;
+          bitField0_ |= 0x00000400;
           facebook_ = other.facebook_;
           onChanged();
         }
@@ -22596,25 +22297,13 @@ public final class Pbmethod {
         if (other.hasRank()) {
           setRank(other.getRank());
         }
-        if (other.hasDesc()) {
-          bitField0_ |= 0x00008000;
-          desc_ = other.desc_;
-          onChanged();
-        }
-        if (!other.weaponEquip_.isEmpty()) {
-          if (weaponEquip_.isEmpty()) {
-            weaponEquip_ = other.weaponEquip_;
-            bitField0_ = (bitField0_ & ~0x00010000);
-          } else {
-            ensureWeaponEquipIsMutable();
-            weaponEquip_.addAll(other.weaponEquip_);
-          }
-          onChanged();
+        if (other.hasPointRank()) {
+          setPointRank(other.getPointRank());
         }
         if (!other.point_.isEmpty()) {
           if (point_.isEmpty()) {
             point_ = other.point_;
-            bitField0_ = (bitField0_ & ~0x00020000);
+            bitField0_ = (bitField0_ & ~0x00004000);
           } else {
             ensurePointIsMutable();
             point_.addAll(other.point_);
@@ -22633,7 +22322,7 @@ public final class Pbmethod {
         if (!other.itemEquip_.isEmpty()) {
           if (itemEquip_.isEmpty()) {
             itemEquip_ = other.itemEquip_;
-            bitField0_ = (bitField0_ & ~0x00200000);
+            bitField0_ = (bitField0_ & ~0x00040000);
           } else {
             ensureItemEquipIsMutable();
             itemEquip_.addAll(other.itemEquip_);
@@ -22643,18 +22332,12 @@ public final class Pbmethod {
         if (!other.channel_.isEmpty()) {
           if (channel_.isEmpty()) {
             channel_ = other.channel_;
-            bitField0_ = (bitField0_ & ~0x00400000);
+            bitField0_ = (bitField0_ & ~0x00080000);
           } else {
             ensureChannelIsMutable();
             channel_.addAll(other.channel_);
           }
           onChanged();
-        }
-        if (other.hasPointRank()) {
-          setPointRank(other.getPointRank());
-        }
-        if (other.hasArenaRank()) {
-          setArenaRank(other.getArenaRank());
         }
         if (other.hasRuby()) {
           setRuby(other.getRuby());
@@ -22662,7 +22345,7 @@ public final class Pbmethod {
         if (!other.pet_.isEmpty()) {
           if (pet_.isEmpty()) {
             pet_ = other.pet_;
-            bitField0_ = (bitField0_ & ~0x04000000);
+            bitField0_ = (bitField0_ & ~0x00200000);
           } else {
             ensurePetIsMutable();
             pet_.addAll(other.pet_);
@@ -22943,78 +22626,12 @@ public final class Pbmethod {
         return this;
       }
 
-      // optional int64 exp = 6;
-      private long exp_ ;
-      /**
-       * <code>optional int64 exp = 6;</code>
-       */
-      public boolean hasExp() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
-      }
-      /**
-       * <code>optional int64 exp = 6;</code>
-       */
-      public long getExp() {
-        return exp_;
-      }
-      /**
-       * <code>optional int64 exp = 6;</code>
-       */
-      public Builder setExp(long value) {
-        bitField0_ |= 0x00000020;
-        exp_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int64 exp = 6;</code>
-       */
-      public Builder clearExp() {
-        bitField0_ = (bitField0_ & ~0x00000020);
-        exp_ = 0L;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 level = 7;
-      private int level_ ;
-      /**
-       * <code>optional int32 level = 7;</code>
-       */
-      public boolean hasLevel() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
-      }
-      /**
-       * <code>optional int32 level = 7;</code>
-       */
-      public int getLevel() {
-        return level_;
-      }
-      /**
-       * <code>optional int32 level = 7;</code>
-       */
-      public Builder setLevel(int value) {
-        bitField0_ |= 0x00000040;
-        level_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 level = 7;</code>
-       */
-      public Builder clearLevel() {
-        bitField0_ = (bitField0_ & ~0x00000040);
-        level_ = 0;
-        onChanged();
-        return this;
-      }
-
       // repeated int32 avatar = 8;
       private java.util.List<java.lang.Integer> avatar_ = java.util.Collections.emptyList();
       private void ensureAvatarIsMutable() {
-        if (!((bitField0_ & 0x00000080) == 0x00000080)) {
+        if (!((bitField0_ & 0x00000020) == 0x00000020)) {
           avatar_ = new java.util.ArrayList<java.lang.Integer>(avatar_);
-          bitField0_ |= 0x00000080;
+          bitField0_ |= 0x00000020;
          }
       }
       /**
@@ -23070,7 +22687,7 @@ public final class Pbmethod {
        */
       public Builder clearAvatar() {
         avatar_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000080);
+        bitField0_ = (bitField0_ & ~0x00000020);
         onChanged();
         return this;
       }
@@ -23078,9 +22695,9 @@ public final class Pbmethod {
       // repeated int32 vip = 9;
       private java.util.List<java.lang.Integer> vip_ = java.util.Collections.emptyList();
       private void ensureVipIsMutable() {
-        if (!((bitField0_ & 0x00000100) == 0x00000100)) {
+        if (!((bitField0_ & 0x00000040) == 0x00000040)) {
           vip_ = new java.util.ArrayList<java.lang.Integer>(vip_);
-          bitField0_ |= 0x00000100;
+          bitField0_ |= 0x00000040;
          }
       }
       /**
@@ -23136,7 +22753,7 @@ public final class Pbmethod {
        */
       public Builder clearVip() {
         vip_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000100);
+        bitField0_ = (bitField0_ & ~0x00000040);
         onChanged();
         return this;
       }
@@ -23149,7 +22766,7 @@ public final class Pbmethod {
        * <code>optional .pbdson.CommonVector clanInfo = 10;</code>
        */
       public boolean hasClanInfo() {
-        return ((bitField0_ & 0x00000200) == 0x00000200);
+        return ((bitField0_ & 0x00000080) == 0x00000080);
       }
       /**
        * <code>optional .pbdson.CommonVector clanInfo = 10;</code>
@@ -23174,7 +22791,7 @@ public final class Pbmethod {
         } else {
           clanInfoBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000200;
+        bitField0_ |= 0x00000080;
         return this;
       }
       /**
@@ -23188,7 +22805,7 @@ public final class Pbmethod {
         } else {
           clanInfoBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000200;
+        bitField0_ |= 0x00000080;
         return this;
       }
       /**
@@ -23196,7 +22813,7 @@ public final class Pbmethod {
        */
       public Builder mergeClanInfo(protocol.Pbmethod.CommonVector value) {
         if (clanInfoBuilder_ == null) {
-          if (((bitField0_ & 0x00000200) == 0x00000200) &&
+          if (((bitField0_ & 0x00000080) == 0x00000080) &&
               clanInfo_ != protocol.Pbmethod.CommonVector.getDefaultInstance()) {
             clanInfo_ =
               protocol.Pbmethod.CommonVector.newBuilder(clanInfo_).mergeFrom(value).buildPartial();
@@ -23207,7 +22824,7 @@ public final class Pbmethod {
         } else {
           clanInfoBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00000200;
+        bitField0_ |= 0x00000080;
         return this;
       }
       /**
@@ -23220,14 +22837,14 @@ public final class Pbmethod {
         } else {
           clanInfoBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000200);
+        bitField0_ = (bitField0_ & ~0x00000080);
         return this;
       }
       /**
        * <code>optional .pbdson.CommonVector clanInfo = 10;</code>
        */
       public protocol.Pbmethod.CommonVector.Builder getClanInfoBuilder() {
-        bitField0_ |= 0x00000200;
+        bitField0_ |= 0x00000080;
         onChanged();
         return getClanInfoFieldBuilder().getBuilder();
       }
@@ -23266,7 +22883,7 @@ public final class Pbmethod {
        * <code>optional .pbdson.CommonVector info = 11;</code>
        */
       public boolean hasInfo() {
-        return ((bitField0_ & 0x00000400) == 0x00000400);
+        return ((bitField0_ & 0x00000100) == 0x00000100);
       }
       /**
        * <code>optional .pbdson.CommonVector info = 11;</code>
@@ -23291,7 +22908,7 @@ public final class Pbmethod {
         } else {
           infoBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000400;
+        bitField0_ |= 0x00000100;
         return this;
       }
       /**
@@ -23305,7 +22922,7 @@ public final class Pbmethod {
         } else {
           infoBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000400;
+        bitField0_ |= 0x00000100;
         return this;
       }
       /**
@@ -23313,7 +22930,7 @@ public final class Pbmethod {
        */
       public Builder mergeInfo(protocol.Pbmethod.CommonVector value) {
         if (infoBuilder_ == null) {
-          if (((bitField0_ & 0x00000400) == 0x00000400) &&
+          if (((bitField0_ & 0x00000100) == 0x00000100) &&
               info_ != protocol.Pbmethod.CommonVector.getDefaultInstance()) {
             info_ =
               protocol.Pbmethod.CommonVector.newBuilder(info_).mergeFrom(value).buildPartial();
@@ -23324,7 +22941,7 @@ public final class Pbmethod {
         } else {
           infoBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00000400;
+        bitField0_ |= 0x00000100;
         return this;
       }
       /**
@@ -23337,14 +22954,14 @@ public final class Pbmethod {
         } else {
           infoBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000400);
+        bitField0_ = (bitField0_ & ~0x00000100);
         return this;
       }
       /**
        * <code>optional .pbdson.CommonVector info = 11;</code>
        */
       public protocol.Pbmethod.CommonVector.Builder getInfoBuilder() {
-        bitField0_ |= 0x00000400;
+        bitField0_ |= 0x00000100;
         onChanged();
         return getInfoFieldBuilder().getBuilder();
       }
@@ -23378,9 +22995,9 @@ public final class Pbmethod {
       // repeated int32 petId = 12;
       private java.util.List<java.lang.Integer> petId_ = java.util.Collections.emptyList();
       private void ensurePetIdIsMutable() {
-        if (!((bitField0_ & 0x00000800) == 0x00000800)) {
+        if (!((bitField0_ & 0x00000200) == 0x00000200)) {
           petId_ = new java.util.ArrayList<java.lang.Integer>(petId_);
-          bitField0_ |= 0x00000800;
+          bitField0_ |= 0x00000200;
          }
       }
       /**
@@ -23436,7 +23053,7 @@ public final class Pbmethod {
        */
       public Builder clearPetId() {
         petId_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000800);
+        bitField0_ = (bitField0_ & ~0x00000200);
         onChanged();
         return this;
       }
@@ -23447,7 +23064,7 @@ public final class Pbmethod {
        * <code>optional string facebook = 13;</code>
        */
       public boolean hasFacebook() {
-        return ((bitField0_ & 0x00001000) == 0x00001000);
+        return ((bitField0_ & 0x00000400) == 0x00000400);
       }
       /**
        * <code>optional string facebook = 13;</code>
@@ -23487,7 +23104,7 @@ public final class Pbmethod {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00001000;
+  bitField0_ |= 0x00000400;
         facebook_ = value;
         onChanged();
         return this;
@@ -23496,7 +23113,7 @@ public final class Pbmethod {
        * <code>optional string facebook = 13;</code>
        */
       public Builder clearFacebook() {
-        bitField0_ = (bitField0_ & ~0x00001000);
+        bitField0_ = (bitField0_ & ~0x00000400);
         facebook_ = getDefaultInstance().getFacebook();
         onChanged();
         return this;
@@ -23509,7 +23126,7 @@ public final class Pbmethod {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00001000;
+  bitField0_ |= 0x00000400;
         facebook_ = value;
         onChanged();
         return this;
@@ -23523,7 +23140,7 @@ public final class Pbmethod {
        * <code>optional .pbdson.CommonVector userInfo = 14;</code>
        */
       public boolean hasUserInfo() {
-        return ((bitField0_ & 0x00002000) == 0x00002000);
+        return ((bitField0_ & 0x00000800) == 0x00000800);
       }
       /**
        * <code>optional .pbdson.CommonVector userInfo = 14;</code>
@@ -23548,7 +23165,7 @@ public final class Pbmethod {
         } else {
           userInfoBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00002000;
+        bitField0_ |= 0x00000800;
         return this;
       }
       /**
@@ -23562,7 +23179,7 @@ public final class Pbmethod {
         } else {
           userInfoBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00002000;
+        bitField0_ |= 0x00000800;
         return this;
       }
       /**
@@ -23570,7 +23187,7 @@ public final class Pbmethod {
        */
       public Builder mergeUserInfo(protocol.Pbmethod.CommonVector value) {
         if (userInfoBuilder_ == null) {
-          if (((bitField0_ & 0x00002000) == 0x00002000) &&
+          if (((bitField0_ & 0x00000800) == 0x00000800) &&
               userInfo_ != protocol.Pbmethod.CommonVector.getDefaultInstance()) {
             userInfo_ =
               protocol.Pbmethod.CommonVector.newBuilder(userInfo_).mergeFrom(value).buildPartial();
@@ -23581,7 +23198,7 @@ public final class Pbmethod {
         } else {
           userInfoBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00002000;
+        bitField0_ |= 0x00000800;
         return this;
       }
       /**
@@ -23594,14 +23211,14 @@ public final class Pbmethod {
         } else {
           userInfoBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00002000);
+        bitField0_ = (bitField0_ & ~0x00000800);
         return this;
       }
       /**
        * <code>optional .pbdson.CommonVector userInfo = 14;</code>
        */
       public protocol.Pbmethod.CommonVector.Builder getUserInfoBuilder() {
-        bitField0_ |= 0x00002000;
+        bitField0_ |= 0x00000800;
         onChanged();
         return getUserInfoFieldBuilder().getBuilder();
       }
@@ -23638,7 +23255,7 @@ public final class Pbmethod {
        * <code>optional int32 rank = 16;</code>
        */
       public boolean hasRank() {
-        return ((bitField0_ & 0x00004000) == 0x00004000);
+        return ((bitField0_ & 0x00001000) == 0x00001000);
       }
       /**
        * <code>optional int32 rank = 16;</code>
@@ -23650,7 +23267,7 @@ public final class Pbmethod {
        * <code>optional int32 rank = 16;</code>
        */
       public Builder setRank(int value) {
-        bitField0_ |= 0x00004000;
+        bitField0_ |= 0x00001000;
         rank_ = value;
         onChanged();
         return this;
@@ -23659,148 +23276,41 @@ public final class Pbmethod {
        * <code>optional int32 rank = 16;</code>
        */
       public Builder clearRank() {
-        bitField0_ = (bitField0_ & ~0x00004000);
+        bitField0_ = (bitField0_ & ~0x00001000);
         rank_ = 0;
         onChanged();
         return this;
       }
 
-      // optional string desc = 17;
-      private java.lang.Object desc_ = "";
+      // optional int64 pointRank = 17;
+      private long pointRank_ ;
       /**
-       * <code>optional string desc = 17;</code>
+       * <code>optional int64 pointRank = 17;</code>
        */
-      public boolean hasDesc() {
-        return ((bitField0_ & 0x00008000) == 0x00008000);
+      public boolean hasPointRank() {
+        return ((bitField0_ & 0x00002000) == 0x00002000);
       }
       /**
-       * <code>optional string desc = 17;</code>
+       * <code>optional int64 pointRank = 17;</code>
        */
-      public java.lang.String getDesc() {
-        java.lang.Object ref = desc_;
-        if (!(ref instanceof java.lang.String)) {
-          java.lang.String s = ((com.google.protobuf.ByteString) ref)
-              .toStringUtf8();
-          desc_ = s;
-          return s;
-        } else {
-          return (java.lang.String) ref;
-        }
+      public long getPointRank() {
+        return pointRank_;
       }
       /**
-       * <code>optional string desc = 17;</code>
+       * <code>optional int64 pointRank = 17;</code>
        */
-      public com.google.protobuf.ByteString
-          getDescBytes() {
-        java.lang.Object ref = desc_;
-        if (ref instanceof String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          desc_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-      /**
-       * <code>optional string desc = 17;</code>
-       */
-      public Builder setDesc(
-          java.lang.String value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00008000;
-        desc_ = value;
+      public Builder setPointRank(long value) {
+        bitField0_ |= 0x00002000;
+        pointRank_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string desc = 17;</code>
+       * <code>optional int64 pointRank = 17;</code>
        */
-      public Builder clearDesc() {
-        bitField0_ = (bitField0_ & ~0x00008000);
-        desc_ = getDefaultInstance().getDesc();
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional string desc = 17;</code>
-       */
-      public Builder setDescBytes(
-          com.google.protobuf.ByteString value) {
-        if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00008000;
-        desc_ = value;
-        onChanged();
-        return this;
-      }
-
-      // repeated int32 weaponEquip = 18;
-      private java.util.List<java.lang.Integer> weaponEquip_ = java.util.Collections.emptyList();
-      private void ensureWeaponEquipIsMutable() {
-        if (!((bitField0_ & 0x00010000) == 0x00010000)) {
-          weaponEquip_ = new java.util.ArrayList<java.lang.Integer>(weaponEquip_);
-          bitField0_ |= 0x00010000;
-         }
-      }
-      /**
-       * <code>repeated int32 weaponEquip = 18;</code>
-       */
-      public java.util.List<java.lang.Integer>
-          getWeaponEquipList() {
-        return java.util.Collections.unmodifiableList(weaponEquip_);
-      }
-      /**
-       * <code>repeated int32 weaponEquip = 18;</code>
-       */
-      public int getWeaponEquipCount() {
-        return weaponEquip_.size();
-      }
-      /**
-       * <code>repeated int32 weaponEquip = 18;</code>
-       */
-      public int getWeaponEquip(int index) {
-        return weaponEquip_.get(index);
-      }
-      /**
-       * <code>repeated int32 weaponEquip = 18;</code>
-       */
-      public Builder setWeaponEquip(
-          int index, int value) {
-        ensureWeaponEquipIsMutable();
-        weaponEquip_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 weaponEquip = 18;</code>
-       */
-      public Builder addWeaponEquip(int value) {
-        ensureWeaponEquipIsMutable();
-        weaponEquip_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 weaponEquip = 18;</code>
-       */
-      public Builder addAllWeaponEquip(
-          java.lang.Iterable<? extends java.lang.Integer> values) {
-        ensureWeaponEquipIsMutable();
-        super.addAll(values, weaponEquip_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 weaponEquip = 18;</code>
-       */
-      public Builder clearWeaponEquip() {
-        weaponEquip_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00010000);
+      public Builder clearPointRank() {
+        bitField0_ = (bitField0_ & ~0x00002000);
+        pointRank_ = 0L;
         onChanged();
         return this;
       }
@@ -23808,9 +23318,9 @@ public final class Pbmethod {
       // repeated int64 point = 19;
       private java.util.List<java.lang.Long> point_ = java.util.Collections.emptyList();
       private void ensurePointIsMutable() {
-        if (!((bitField0_ & 0x00020000) == 0x00020000)) {
+        if (!((bitField0_ & 0x00004000) == 0x00004000)) {
           point_ = new java.util.ArrayList<java.lang.Long>(point_);
-          bitField0_ |= 0x00020000;
+          bitField0_ |= 0x00004000;
          }
       }
       /**
@@ -23866,7 +23376,7 @@ public final class Pbmethod {
        */
       public Builder clearPoint() {
         point_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00020000);
+        bitField0_ = (bitField0_ & ~0x00004000);
         onChanged();
         return this;
       }
@@ -23877,7 +23387,7 @@ public final class Pbmethod {
        * <code>optional int64 timeLastAction = 20;</code>
        */
       public boolean hasTimeLastAction() {
-        return ((bitField0_ & 0x00040000) == 0x00040000);
+        return ((bitField0_ & 0x00008000) == 0x00008000);
       }
       /**
        * <code>optional int64 timeLastAction = 20;</code>
@@ -23889,7 +23399,7 @@ public final class Pbmethod {
        * <code>optional int64 timeLastAction = 20;</code>
        */
       public Builder setTimeLastAction(long value) {
-        bitField0_ |= 0x00040000;
+        bitField0_ |= 0x00008000;
         timeLastAction_ = value;
         onChanged();
         return this;
@@ -23898,7 +23408,7 @@ public final class Pbmethod {
        * <code>optional int64 timeLastAction = 20;</code>
        */
       public Builder clearTimeLastAction() {
-        bitField0_ = (bitField0_ & ~0x00040000);
+        bitField0_ = (bitField0_ & ~0x00008000);
         timeLastAction_ = 0L;
         onChanged();
         return this;
@@ -23910,7 +23420,7 @@ public final class Pbmethod {
        * <code>optional int32 honor = 21;</code>
        */
       public boolean hasHonor() {
-        return ((bitField0_ & 0x00080000) == 0x00080000);
+        return ((bitField0_ & 0x00010000) == 0x00010000);
       }
       /**
        * <code>optional int32 honor = 21;</code>
@@ -23922,7 +23432,7 @@ public final class Pbmethod {
        * <code>optional int32 honor = 21;</code>
        */
       public Builder setHonor(int value) {
-        bitField0_ |= 0x00080000;
+        bitField0_ |= 0x00010000;
         honor_ = value;
         onChanged();
         return this;
@@ -23931,7 +23441,7 @@ public final class Pbmethod {
        * <code>optional int32 honor = 21;</code>
        */
       public Builder clearHonor() {
-        bitField0_ = (bitField0_ & ~0x00080000);
+        bitField0_ = (bitField0_ & ~0x00010000);
         honor_ = 0;
         onChanged();
         return this;
@@ -23943,7 +23453,7 @@ public final class Pbmethod {
        * <code>optional int64 power = 22;</code>
        */
       public boolean hasPower() {
-        return ((bitField0_ & 0x00100000) == 0x00100000);
+        return ((bitField0_ & 0x00020000) == 0x00020000);
       }
       /**
        * <code>optional int64 power = 22;</code>
@@ -23955,7 +23465,7 @@ public final class Pbmethod {
        * <code>optional int64 power = 22;</code>
        */
       public Builder setPower(long value) {
-        bitField0_ |= 0x00100000;
+        bitField0_ |= 0x00020000;
         power_ = value;
         onChanged();
         return this;
@@ -23964,7 +23474,7 @@ public final class Pbmethod {
        * <code>optional int64 power = 22;</code>
        */
       public Builder clearPower() {
-        bitField0_ = (bitField0_ & ~0x00100000);
+        bitField0_ = (bitField0_ & ~0x00020000);
         power_ = 0L;
         onChanged();
         return this;
@@ -23973,9 +23483,9 @@ public final class Pbmethod {
       // repeated int32 itemEquip = 23;
       private java.util.List<java.lang.Integer> itemEquip_ = java.util.Collections.emptyList();
       private void ensureItemEquipIsMutable() {
-        if (!((bitField0_ & 0x00200000) == 0x00200000)) {
+        if (!((bitField0_ & 0x00040000) == 0x00040000)) {
           itemEquip_ = new java.util.ArrayList<java.lang.Integer>(itemEquip_);
-          bitField0_ |= 0x00200000;
+          bitField0_ |= 0x00040000;
          }
       }
       /**
@@ -24031,7 +23541,7 @@ public final class Pbmethod {
        */
       public Builder clearItemEquip() {
         itemEquip_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00200000);
+        bitField0_ = (bitField0_ & ~0x00040000);
         onChanged();
         return this;
       }
@@ -24039,9 +23549,9 @@ public final class Pbmethod {
       // repeated int32 channel = 24;
       private java.util.List<java.lang.Integer> channel_ = java.util.Collections.emptyList();
       private void ensureChannelIsMutable() {
-        if (!((bitField0_ & 0x00400000) == 0x00400000)) {
+        if (!((bitField0_ & 0x00080000) == 0x00080000)) {
           channel_ = new java.util.ArrayList<java.lang.Integer>(channel_);
-          bitField0_ |= 0x00400000;
+          bitField0_ |= 0x00080000;
          }
       }
       /**
@@ -24097,73 +23607,7 @@ public final class Pbmethod {
        */
       public Builder clearChannel() {
         channel_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00400000);
-        onChanged();
-        return this;
-      }
-
-      // optional int64 pointRank = 25;
-      private long pointRank_ ;
-      /**
-       * <code>optional int64 pointRank = 25;</code>
-       */
-      public boolean hasPointRank() {
-        return ((bitField0_ & 0x00800000) == 0x00800000);
-      }
-      /**
-       * <code>optional int64 pointRank = 25;</code>
-       */
-      public long getPointRank() {
-        return pointRank_;
-      }
-      /**
-       * <code>optional int64 pointRank = 25;</code>
-       */
-      public Builder setPointRank(long value) {
-        bitField0_ |= 0x00800000;
-        pointRank_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int64 pointRank = 25;</code>
-       */
-      public Builder clearPointRank() {
-        bitField0_ = (bitField0_ & ~0x00800000);
-        pointRank_ = 0L;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 arenaRank = 26;
-      private int arenaRank_ ;
-      /**
-       * <code>optional int32 arenaRank = 26;</code>
-       */
-      public boolean hasArenaRank() {
-        return ((bitField0_ & 0x01000000) == 0x01000000);
-      }
-      /**
-       * <code>optional int32 arenaRank = 26;</code>
-       */
-      public int getArenaRank() {
-        return arenaRank_;
-      }
-      /**
-       * <code>optional int32 arenaRank = 26;</code>
-       */
-      public Builder setArenaRank(int value) {
-        bitField0_ |= 0x01000000;
-        arenaRank_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 arenaRank = 26;</code>
-       */
-      public Builder clearArenaRank() {
-        bitField0_ = (bitField0_ & ~0x01000000);
-        arenaRank_ = 0;
+        bitField0_ = (bitField0_ & ~0x00080000);
         onChanged();
         return this;
       }
@@ -24174,7 +23618,7 @@ public final class Pbmethod {
        * <code>optional int64 ruby = 27;</code>
        */
       public boolean hasRuby() {
-        return ((bitField0_ & 0x02000000) == 0x02000000);
+        return ((bitField0_ & 0x00100000) == 0x00100000);
       }
       /**
        * <code>optional int64 ruby = 27;</code>
@@ -24186,7 +23630,7 @@ public final class Pbmethod {
        * <code>optional int64 ruby = 27;</code>
        */
       public Builder setRuby(long value) {
-        bitField0_ |= 0x02000000;
+        bitField0_ |= 0x00100000;
         ruby_ = value;
         onChanged();
         return this;
@@ -24195,7 +23639,7 @@ public final class Pbmethod {
        * <code>optional int64 ruby = 27;</code>
        */
       public Builder clearRuby() {
-        bitField0_ = (bitField0_ & ~0x02000000);
+        bitField0_ = (bitField0_ & ~0x00100000);
         ruby_ = 0L;
         onChanged();
         return this;
@@ -24204,9 +23648,9 @@ public final class Pbmethod {
       // repeated int32 pet = 28;
       private java.util.List<java.lang.Integer> pet_ = java.util.Collections.emptyList();
       private void ensurePetIsMutable() {
-        if (!((bitField0_ & 0x04000000) == 0x04000000)) {
+        if (!((bitField0_ & 0x00200000) == 0x00200000)) {
           pet_ = new java.util.ArrayList<java.lang.Integer>(pet_);
-          bitField0_ |= 0x04000000;
+          bitField0_ |= 0x00200000;
          }
       }
       /**
@@ -24262,7 +23706,7 @@ public final class Pbmethod {
        */
       public Builder clearPet() {
         pet_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x04000000);
+        bitField0_ = (bitField0_ & ~0x00200000);
         onChanged();
         return this;
       }
@@ -24280,26 +23724,6 @@ public final class Pbmethod {
 
   public interface PbUserDataOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
-
-    // optional int32 lvGachaWeapon = 1;
-    /**
-     * <code>optional int32 lvGachaWeapon = 1;</code>
-     */
-    boolean hasLvGachaWeapon();
-    /**
-     * <code>optional int32 lvGachaWeapon = 1;</code>
-     */
-    int getLvGachaWeapon();
-
-    // optional int32 lvGachaPet = 2;
-    /**
-     * <code>optional int32 lvGachaPet = 2;</code>
-     */
-    boolean hasLvGachaPet();
-    /**
-     * <code>optional int32 lvGachaPet = 2;</code>
-     */
-    int getLvGachaPet();
 
     // optional int32 lvTraining = 4;
     /**
@@ -24330,26 +23754,6 @@ public final class Pbmethod {
      * <code>optional int32 numPointLevel = 6;</code>
      */
     int getNumPointLevel();
-
-    // optional int32 stone = 7;
-    /**
-     * <code>optional int32 stone = 7;</code>
-     */
-    boolean hasStone();
-    /**
-     * <code>optional int32 stone = 7;</code>
-     */
-    int getStone();
-
-    // optional int32 stoneVip = 8;
-    /**
-     * <code>optional int32 stoneVip = 8;</code>
-     */
-    boolean hasStoneVip();
-    /**
-     * <code>optional int32 stoneVip = 8;</code>
-     */
-    int getStoneVip();
 
     // optional .pbdson.PbListItem items = 9;
     /**
@@ -24488,20 +23892,6 @@ public final class Pbmethod {
      */
     int getDameSkinEquip();
 
-    // repeated int32 bossGod = 20;
-    /**
-     * <code>repeated int32 bossGod = 20;</code>
-     */
-    java.util.List<java.lang.Integer> getBossGodList();
-    /**
-     * <code>repeated int32 bossGod = 20;</code>
-     */
-    int getBossGodCount();
-    /**
-     * <code>repeated int32 bossGod = 20;</code>
-     */
-    int getBossGod(int index);
-
     // repeated int32 chatFrames = 21;
     /**
      * <code>repeated int32 chatFrames = 21;</code>
@@ -24601,44 +23991,24 @@ public final class Pbmethod {
               }
               break;
             }
-            case 8: {
-              bitField0_ |= 0x00000001;
-              lvGachaWeapon_ = input.readInt32();
-              break;
-            }
-            case 16: {
-              bitField0_ |= 0x00000002;
-              lvGachaPet_ = input.readInt32();
-              break;
-            }
             case 32: {
-              bitField0_ |= 0x00000004;
+              bitField0_ |= 0x00000001;
               lvTraining_ = input.readInt32();
               break;
             }
             case 40: {
-              bitField0_ |= 0x00000008;
+              bitField0_ |= 0x00000002;
               maxlvTraining_ = input.readInt32();
               break;
             }
             case 48: {
-              bitField0_ |= 0x00000010;
+              bitField0_ |= 0x00000004;
               numPointLevel_ = input.readInt32();
-              break;
-            }
-            case 56: {
-              bitField0_ |= 0x00000020;
-              stone_ = input.readInt32();
-              break;
-            }
-            case 64: {
-              bitField0_ |= 0x00000040;
-              stoneVip_ = input.readInt32();
               break;
             }
             case 74: {
               protocol.Pbmethod.PbListItem.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000080) == 0x00000080)) {
+              if (((bitField0_ & 0x00000008) == 0x00000008)) {
                 subBuilder = items_.toBuilder();
               }
               items_ = input.readMessage(protocol.Pbmethod.PbListItem.PARSER, extensionRegistry);
@@ -24646,12 +24016,12 @@ public final class Pbmethod {
                 subBuilder.mergeFrom(items_);
                 items_ = subBuilder.buildPartial();
               }
-              bitField0_ |= 0x00000080;
+              bitField0_ |= 0x00000008;
               break;
             }
             case 82: {
               protocol.Pbmethod.PbListItemEquipment.Builder subBuilder = null;
-              if (((bitField0_ & 0x00000100) == 0x00000100)) {
+              if (((bitField0_ & 0x00000010) == 0x00000010)) {
                 subBuilder = itemEquipments_.toBuilder();
               }
               itemEquipments_ = input.readMessage(protocol.Pbmethod.PbListItemEquipment.PARSER, extensionRegistry);
@@ -24659,42 +24029,42 @@ public final class Pbmethod {
                 subBuilder.mergeFrom(itemEquipments_);
                 itemEquipments_ = subBuilder.buildPartial();
               }
-              bitField0_ |= 0x00000100;
+              bitField0_ |= 0x00000010;
               break;
             }
             case 90: {
-              if (!((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
+              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
                 aItemEquip_ = new java.util.ArrayList<protocol.Pbmethod.PbItemEquipment>();
-                mutable_bitField0_ |= 0x00000200;
+                mutable_bitField0_ |= 0x00000020;
               }
               aItemEquip_.add(input.readMessage(protocol.Pbmethod.PbItemEquipment.PARSER, extensionRegistry));
               break;
             }
             case 98: {
-              if (!((mutable_bitField0_ & 0x00000400) == 0x00000400)) {
+              if (!((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
                 aItemPoint_ = new java.util.ArrayList<protocol.Pbmethod.PbItemPoint>();
-                mutable_bitField0_ |= 0x00000400;
+                mutable_bitField0_ |= 0x00000040;
               }
               aItemPoint_.add(input.readMessage(protocol.Pbmethod.PbItemPoint.PARSER, extensionRegistry));
               break;
             }
             case 122: {
-              if (!((mutable_bitField0_ & 0x00000800) == 0x00000800)) {
+              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
                 aPet_ = new java.util.ArrayList<protocol.Pbmethod.PbPet>();
-                mutable_bitField0_ |= 0x00000800;
+                mutable_bitField0_ |= 0x00000080;
               }
               aPet_.add(input.readMessage(protocol.Pbmethod.PbPet.PARSER, extensionRegistry));
               break;
             }
             case 136: {
-              bitField0_ |= 0x00000200;
+              bitField0_ |= 0x00000020;
               tutorial_ = input.readInt32();
               break;
             }
             case 144: {
-              if (!((mutable_bitField0_ & 0x00002000) == 0x00002000)) {
+              if (!((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
                 dameSkins_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00002000;
+                mutable_bitField0_ |= 0x00000200;
               }
               dameSkins_.add(input.readInt32());
               break;
@@ -24702,9 +24072,9 @@ public final class Pbmethod {
             case 146: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00002000) == 0x00002000) && input.getBytesUntilLimit() > 0) {
+              if (!((mutable_bitField0_ & 0x00000200) == 0x00000200) && input.getBytesUntilLimit() > 0) {
                 dameSkins_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00002000;
+                mutable_bitField0_ |= 0x00000200;
               }
               while (input.getBytesUntilLimit() > 0) {
                 dameSkins_.add(input.readInt32());
@@ -24713,35 +24083,14 @@ public final class Pbmethod {
               break;
             }
             case 152: {
-              bitField0_ |= 0x00000400;
+              bitField0_ |= 0x00000040;
               dameSkinEquip_ = input.readInt32();
               break;
             }
-            case 160: {
-              if (!((mutable_bitField0_ & 0x00008000) == 0x00008000)) {
-                bossGod_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00008000;
-              }
-              bossGod_.add(input.readInt32());
-              break;
-            }
-            case 162: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00008000) == 0x00008000) && input.getBytesUntilLimit() > 0) {
-                bossGod_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00008000;
-              }
-              while (input.getBytesUntilLimit() > 0) {
-                bossGod_.add(input.readInt32());
-              }
-              input.popLimit(limit);
-              break;
-            }
             case 168: {
-              if (!((mutable_bitField0_ & 0x00010000) == 0x00010000)) {
+              if (!((mutable_bitField0_ & 0x00000800) == 0x00000800)) {
                 chatFrames_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00010000;
+                mutable_bitField0_ |= 0x00000800;
               }
               chatFrames_.add(input.readInt32());
               break;
@@ -24749,9 +24098,9 @@ public final class Pbmethod {
             case 170: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00010000) == 0x00010000) && input.getBytesUntilLimit() > 0) {
+              if (!((mutable_bitField0_ & 0x00000800) == 0x00000800) && input.getBytesUntilLimit() > 0) {
                 chatFrames_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00010000;
+                mutable_bitField0_ |= 0x00000800;
               }
               while (input.getBytesUntilLimit() > 0) {
                 chatFrames_.add(input.readInt32());
@@ -24760,14 +24109,14 @@ public final class Pbmethod {
               break;
             }
             case 176: {
-              bitField0_ |= 0x00000800;
+              bitField0_ |= 0x00000080;
               chatFrameEquip_ = input.readInt32();
               break;
             }
             case 184: {
-              if (!((mutable_bitField0_ & 0x00040000) == 0x00040000)) {
+              if (!((mutable_bitField0_ & 0x00002000) == 0x00002000)) {
                 trials_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00040000;
+                mutable_bitField0_ |= 0x00002000;
               }
               trials_.add(input.readInt32());
               break;
@@ -24775,9 +24124,9 @@ public final class Pbmethod {
             case 186: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00040000) == 0x00040000) && input.getBytesUntilLimit() > 0) {
+              if (!((mutable_bitField0_ & 0x00002000) == 0x00002000) && input.getBytesUntilLimit() > 0) {
                 trials_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00040000;
+                mutable_bitField0_ |= 0x00002000;
               }
               while (input.getBytesUntilLimit() > 0) {
                 trials_.add(input.readInt32());
@@ -24786,7 +24135,7 @@ public final class Pbmethod {
               break;
             }
             case 192: {
-              bitField0_ |= 0x00001000;
+              bitField0_ |= 0x00000100;
               trialEquip_ = input.readInt32();
               break;
             }
@@ -24798,25 +24147,22 @@ public final class Pbmethod {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
+        if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
           aItemEquip_ = java.util.Collections.unmodifiableList(aItemEquip_);
         }
-        if (((mutable_bitField0_ & 0x00000400) == 0x00000400)) {
+        if (((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
           aItemPoint_ = java.util.Collections.unmodifiableList(aItemPoint_);
         }
-        if (((mutable_bitField0_ & 0x00000800) == 0x00000800)) {
+        if (((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
           aPet_ = java.util.Collections.unmodifiableList(aPet_);
         }
-        if (((mutable_bitField0_ & 0x00002000) == 0x00002000)) {
+        if (((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
           dameSkins_ = java.util.Collections.unmodifiableList(dameSkins_);
         }
-        if (((mutable_bitField0_ & 0x00008000) == 0x00008000)) {
-          bossGod_ = java.util.Collections.unmodifiableList(bossGod_);
-        }
-        if (((mutable_bitField0_ & 0x00010000) == 0x00010000)) {
+        if (((mutable_bitField0_ & 0x00000800) == 0x00000800)) {
           chatFrames_ = java.util.Collections.unmodifiableList(chatFrames_);
         }
-        if (((mutable_bitField0_ & 0x00040000) == 0x00040000)) {
+        if (((mutable_bitField0_ & 0x00002000) == 0x00002000)) {
           trials_ = java.util.Collections.unmodifiableList(trials_);
         }
         this.unknownFields = unknownFields.build();
@@ -24851,38 +24197,6 @@ public final class Pbmethod {
     }
 
     private int bitField0_;
-    // optional int32 lvGachaWeapon = 1;
-    public static final int LVGACHAWEAPON_FIELD_NUMBER = 1;
-    private int lvGachaWeapon_;
-    /**
-     * <code>optional int32 lvGachaWeapon = 1;</code>
-     */
-    public boolean hasLvGachaWeapon() {
-      return ((bitField0_ & 0x00000001) == 0x00000001);
-    }
-    /**
-     * <code>optional int32 lvGachaWeapon = 1;</code>
-     */
-    public int getLvGachaWeapon() {
-      return lvGachaWeapon_;
-    }
-
-    // optional int32 lvGachaPet = 2;
-    public static final int LVGACHAPET_FIELD_NUMBER = 2;
-    private int lvGachaPet_;
-    /**
-     * <code>optional int32 lvGachaPet = 2;</code>
-     */
-    public boolean hasLvGachaPet() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
-    }
-    /**
-     * <code>optional int32 lvGachaPet = 2;</code>
-     */
-    public int getLvGachaPet() {
-      return lvGachaPet_;
-    }
-
     // optional int32 lvTraining = 4;
     public static final int LVTRAINING_FIELD_NUMBER = 4;
     private int lvTraining_;
@@ -24890,7 +24204,7 @@ public final class Pbmethod {
      * <code>optional int32 lvTraining = 4;</code>
      */
     public boolean hasLvTraining() {
-      return ((bitField0_ & 0x00000004) == 0x00000004);
+      return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
      * <code>optional int32 lvTraining = 4;</code>
@@ -24906,7 +24220,7 @@ public final class Pbmethod {
      * <code>optional int32 maxlvTraining = 5;</code>
      */
     public boolean hasMaxlvTraining() {
-      return ((bitField0_ & 0x00000008) == 0x00000008);
+      return ((bitField0_ & 0x00000002) == 0x00000002);
     }
     /**
      * <code>optional int32 maxlvTraining = 5;</code>
@@ -24922,45 +24236,13 @@ public final class Pbmethod {
      * <code>optional int32 numPointLevel = 6;</code>
      */
     public boolean hasNumPointLevel() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
+      return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
      * <code>optional int32 numPointLevel = 6;</code>
      */
     public int getNumPointLevel() {
       return numPointLevel_;
-    }
-
-    // optional int32 stone = 7;
-    public static final int STONE_FIELD_NUMBER = 7;
-    private int stone_;
-    /**
-     * <code>optional int32 stone = 7;</code>
-     */
-    public boolean hasStone() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
-    }
-    /**
-     * <code>optional int32 stone = 7;</code>
-     */
-    public int getStone() {
-      return stone_;
-    }
-
-    // optional int32 stoneVip = 8;
-    public static final int STONEVIP_FIELD_NUMBER = 8;
-    private int stoneVip_;
-    /**
-     * <code>optional int32 stoneVip = 8;</code>
-     */
-    public boolean hasStoneVip() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
-    }
-    /**
-     * <code>optional int32 stoneVip = 8;</code>
-     */
-    public int getStoneVip() {
-      return stoneVip_;
     }
 
     // optional .pbdson.PbListItem items = 9;
@@ -24970,7 +24252,7 @@ public final class Pbmethod {
      * <code>optional .pbdson.PbListItem items = 9;</code>
      */
     public boolean hasItems() {
-      return ((bitField0_ & 0x00000080) == 0x00000080);
+      return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
      * <code>optional .pbdson.PbListItem items = 9;</code>
@@ -24992,7 +24274,7 @@ public final class Pbmethod {
      * <code>optional .pbdson.PbListItemEquipment itemEquipments = 10;</code>
      */
     public boolean hasItemEquipments() {
-      return ((bitField0_ & 0x00000100) == 0x00000100);
+      return ((bitField0_ & 0x00000010) == 0x00000010);
     }
     /**
      * <code>optional .pbdson.PbListItemEquipment itemEquipments = 10;</code>
@@ -25122,7 +24404,7 @@ public final class Pbmethod {
      * <code>optional int32 tutorial = 17;</code>
      */
     public boolean hasTutorial() {
-      return ((bitField0_ & 0x00000200) == 0x00000200);
+      return ((bitField0_ & 0x00000020) == 0x00000020);
     }
     /**
      * <code>optional int32 tutorial = 17;</code>
@@ -25161,36 +24443,13 @@ public final class Pbmethod {
      * <code>optional int32 dameSkinEquip = 19;</code>
      */
     public boolean hasDameSkinEquip() {
-      return ((bitField0_ & 0x00000400) == 0x00000400);
+      return ((bitField0_ & 0x00000040) == 0x00000040);
     }
     /**
      * <code>optional int32 dameSkinEquip = 19;</code>
      */
     public int getDameSkinEquip() {
       return dameSkinEquip_;
-    }
-
-    // repeated int32 bossGod = 20;
-    public static final int BOSSGOD_FIELD_NUMBER = 20;
-    private java.util.List<java.lang.Integer> bossGod_;
-    /**
-     * <code>repeated int32 bossGod = 20;</code>
-     */
-    public java.util.List<java.lang.Integer>
-        getBossGodList() {
-      return bossGod_;
-    }
-    /**
-     * <code>repeated int32 bossGod = 20;</code>
-     */
-    public int getBossGodCount() {
-      return bossGod_.size();
-    }
-    /**
-     * <code>repeated int32 bossGod = 20;</code>
-     */
-    public int getBossGod(int index) {
-      return bossGod_.get(index);
     }
 
     // repeated int32 chatFrames = 21;
@@ -25223,7 +24482,7 @@ public final class Pbmethod {
      * <code>optional int32 chatFrameEquip = 22;</code>
      */
     public boolean hasChatFrameEquip() {
-      return ((bitField0_ & 0x00000800) == 0x00000800);
+      return ((bitField0_ & 0x00000080) == 0x00000080);
     }
     /**
      * <code>optional int32 chatFrameEquip = 22;</code>
@@ -25262,7 +24521,7 @@ public final class Pbmethod {
      * <code>optional int32 trialEquip = 24;</code>
      */
     public boolean hasTrialEquip() {
-      return ((bitField0_ & 0x00001000) == 0x00001000);
+      return ((bitField0_ & 0x00000100) == 0x00000100);
     }
     /**
      * <code>optional int32 trialEquip = 24;</code>
@@ -25272,13 +24531,9 @@ public final class Pbmethod {
     }
 
     private void initFields() {
-      lvGachaWeapon_ = 0;
-      lvGachaPet_ = 0;
       lvTraining_ = 0;
       maxlvTraining_ = 0;
       numPointLevel_ = 0;
-      stone_ = 0;
-      stoneVip_ = 0;
       items_ = protocol.Pbmethod.PbListItem.getDefaultInstance();
       itemEquipments_ = protocol.Pbmethod.PbListItemEquipment.getDefaultInstance();
       aItemEquip_ = java.util.Collections.emptyList();
@@ -25287,7 +24542,6 @@ public final class Pbmethod {
       tutorial_ = 0;
       dameSkins_ = java.util.Collections.emptyList();
       dameSkinEquip_ = 0;
-      bossGod_ = java.util.Collections.emptyList();
       chatFrames_ = java.util.Collections.emptyList();
       chatFrameEquip_ = 0;
       trials_ = java.util.Collections.emptyList();
@@ -25306,30 +24560,18 @@ public final class Pbmethod {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeInt32(1, lvGachaWeapon_);
-      }
-      if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeInt32(2, lvGachaPet_);
-      }
-      if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeInt32(4, lvTraining_);
       }
-      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeInt32(5, maxlvTraining_);
       }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeInt32(6, numPointLevel_);
       }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeInt32(7, stone_);
-      }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeInt32(8, stoneVip_);
-      }
-      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeMessage(9, items_);
       }
-      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeMessage(10, itemEquipments_);
       }
       for (int i = 0; i < aItemEquip_.size(); i++) {
@@ -25341,28 +24583,25 @@ public final class Pbmethod {
       for (int i = 0; i < aPet_.size(); i++) {
         output.writeMessage(15, aPet_.get(i));
       }
-      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
         output.writeInt32(17, tutorial_);
       }
       for (int i = 0; i < dameSkins_.size(); i++) {
         output.writeInt32(18, dameSkins_.get(i));
       }
-      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
         output.writeInt32(19, dameSkinEquip_);
-      }
-      for (int i = 0; i < bossGod_.size(); i++) {
-        output.writeInt32(20, bossGod_.get(i));
       }
       for (int i = 0; i < chatFrames_.size(); i++) {
         output.writeInt32(21, chatFrames_.get(i));
       }
-      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
         output.writeInt32(22, chatFrameEquip_);
       }
       for (int i = 0; i < trials_.size(); i++) {
         output.writeInt32(23, trials_.get(i));
       }
-      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
         output.writeInt32(24, trialEquip_);
       }
       getUnknownFields().writeTo(output);
@@ -25376,37 +24615,21 @@ public final class Pbmethod {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(1, lvGachaWeapon_);
+          .computeInt32Size(4, lvTraining_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(2, lvGachaPet_);
+          .computeInt32Size(5, maxlvTraining_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(4, lvTraining_);
+          .computeInt32Size(6, numPointLevel_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(5, maxlvTraining_);
-      }
-      if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(6, numPointLevel_);
-      }
-      if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(7, stone_);
-      }
-      if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(8, stoneVip_);
-      }
-      if (((bitField0_ & 0x00000080) == 0x00000080)) {
-        size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(9, items_);
       }
-      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(10, itemEquipments_);
       }
@@ -25422,7 +24645,7 @@ public final class Pbmethod {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(15, aPet_.get(i));
       }
-      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(17, tutorial_);
       }
@@ -25435,18 +24658,9 @@ public final class Pbmethod {
         size += dataSize;
         size += 2 * getDameSkinsList().size();
       }
-      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(19, dameSkinEquip_);
-      }
-      {
-        int dataSize = 0;
-        for (int i = 0; i < bossGod_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(bossGod_.get(i));
-        }
-        size += dataSize;
-        size += 2 * getBossGodList().size();
       }
       {
         int dataSize = 0;
@@ -25457,7 +24671,7 @@ public final class Pbmethod {
         size += dataSize;
         size += 2 * getChatFramesList().size();
       }
-      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(22, chatFrameEquip_);
       }
@@ -25470,7 +24684,7 @@ public final class Pbmethod {
         size += dataSize;
         size += 2 * getTrialsList().size();
       }
-      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(24, trialEquip_);
       }
@@ -25595,66 +24809,56 @@ public final class Pbmethod {
 
       public Builder clear() {
         super.clear();
-        lvGachaWeapon_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000001);
-        lvGachaPet_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000002);
         lvTraining_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000001);
         maxlvTraining_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000008);
+        bitField0_ = (bitField0_ & ~0x00000002);
         numPointLevel_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000010);
-        stone_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000020);
-        stoneVip_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000040);
+        bitField0_ = (bitField0_ & ~0x00000004);
         if (itemsBuilder_ == null) {
           items_ = protocol.Pbmethod.PbListItem.getDefaultInstance();
         } else {
           itemsBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000080);
+        bitField0_ = (bitField0_ & ~0x00000008);
         if (itemEquipmentsBuilder_ == null) {
           itemEquipments_ = protocol.Pbmethod.PbListItemEquipment.getDefaultInstance();
         } else {
           itemEquipmentsBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000100);
+        bitField0_ = (bitField0_ & ~0x00000010);
         if (aItemEquipBuilder_ == null) {
           aItemEquip_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000200);
+          bitField0_ = (bitField0_ & ~0x00000020);
         } else {
           aItemEquipBuilder_.clear();
         }
         if (aItemPointBuilder_ == null) {
           aItemPoint_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000400);
+          bitField0_ = (bitField0_ & ~0x00000040);
         } else {
           aItemPointBuilder_.clear();
         }
         if (aPetBuilder_ == null) {
           aPet_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000800);
+          bitField0_ = (bitField0_ & ~0x00000080);
         } else {
           aPetBuilder_.clear();
         }
         tutorial_ = 0;
-        bitField0_ = (bitField0_ & ~0x00001000);
+        bitField0_ = (bitField0_ & ~0x00000100);
         dameSkins_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00002000);
+        bitField0_ = (bitField0_ & ~0x00000200);
         dameSkinEquip_ = 0;
-        bitField0_ = (bitField0_ & ~0x00004000);
-        bossGod_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00008000);
+        bitField0_ = (bitField0_ & ~0x00000400);
         chatFrames_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00010000);
+        bitField0_ = (bitField0_ & ~0x00000800);
         chatFrameEquip_ = 0;
-        bitField0_ = (bitField0_ & ~0x00020000);
+        bitField0_ = (bitField0_ & ~0x00001000);
         trials_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00040000);
+        bitField0_ = (bitField0_ & ~0x00002000);
         trialEquip_ = 0;
-        bitField0_ = (bitField0_ & ~0x00080000);
+        bitField0_ = (bitField0_ & ~0x00004000);
         return this;
       }
 
@@ -25686,41 +24890,25 @@ public final class Pbmethod {
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.lvGachaWeapon_ = lvGachaWeapon_;
+        result.lvTraining_ = lvTraining_;
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
         }
-        result.lvGachaPet_ = lvGachaPet_;
+        result.maxlvTraining_ = maxlvTraining_;
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.lvTraining_ = lvTraining_;
+        result.numPointLevel_ = numPointLevel_;
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
-        }
-        result.maxlvTraining_ = maxlvTraining_;
-        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-          to_bitField0_ |= 0x00000010;
-        }
-        result.numPointLevel_ = numPointLevel_;
-        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
-          to_bitField0_ |= 0x00000020;
-        }
-        result.stone_ = stone_;
-        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
-          to_bitField0_ |= 0x00000040;
-        }
-        result.stoneVip_ = stoneVip_;
-        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
-          to_bitField0_ |= 0x00000080;
         }
         if (itemsBuilder_ == null) {
           result.items_ = items_;
         } else {
           result.items_ = itemsBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
-          to_bitField0_ |= 0x00000100;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
         }
         if (itemEquipmentsBuilder_ == null) {
           result.itemEquipments_ = itemEquipments_;
@@ -25728,66 +24916,61 @@ public final class Pbmethod {
           result.itemEquipments_ = itemEquipmentsBuilder_.build();
         }
         if (aItemEquipBuilder_ == null) {
-          if (((bitField0_ & 0x00000200) == 0x00000200)) {
+          if (((bitField0_ & 0x00000020) == 0x00000020)) {
             aItemEquip_ = java.util.Collections.unmodifiableList(aItemEquip_);
-            bitField0_ = (bitField0_ & ~0x00000200);
+            bitField0_ = (bitField0_ & ~0x00000020);
           }
           result.aItemEquip_ = aItemEquip_;
         } else {
           result.aItemEquip_ = aItemEquipBuilder_.build();
         }
         if (aItemPointBuilder_ == null) {
-          if (((bitField0_ & 0x00000400) == 0x00000400)) {
+          if (((bitField0_ & 0x00000040) == 0x00000040)) {
             aItemPoint_ = java.util.Collections.unmodifiableList(aItemPoint_);
-            bitField0_ = (bitField0_ & ~0x00000400);
+            bitField0_ = (bitField0_ & ~0x00000040);
           }
           result.aItemPoint_ = aItemPoint_;
         } else {
           result.aItemPoint_ = aItemPointBuilder_.build();
         }
         if (aPetBuilder_ == null) {
-          if (((bitField0_ & 0x00000800) == 0x00000800)) {
+          if (((bitField0_ & 0x00000080) == 0x00000080)) {
             aPet_ = java.util.Collections.unmodifiableList(aPet_);
-            bitField0_ = (bitField0_ & ~0x00000800);
+            bitField0_ = (bitField0_ & ~0x00000080);
           }
           result.aPet_ = aPet_;
         } else {
           result.aPet_ = aPetBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
-          to_bitField0_ |= 0x00000200;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000020;
         }
         result.tutorial_ = tutorial_;
-        if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        if (((bitField0_ & 0x00000200) == 0x00000200)) {
           dameSkins_ = java.util.Collections.unmodifiableList(dameSkins_);
-          bitField0_ = (bitField0_ & ~0x00002000);
+          bitField0_ = (bitField0_ & ~0x00000200);
         }
         result.dameSkins_ = dameSkins_;
-        if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
-          to_bitField0_ |= 0x00000400;
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000040;
         }
         result.dameSkinEquip_ = dameSkinEquip_;
-        if (((bitField0_ & 0x00008000) == 0x00008000)) {
-          bossGod_ = java.util.Collections.unmodifiableList(bossGod_);
-          bitField0_ = (bitField0_ & ~0x00008000);
-        }
-        result.bossGod_ = bossGod_;
-        if (((bitField0_ & 0x00010000) == 0x00010000)) {
+        if (((bitField0_ & 0x00000800) == 0x00000800)) {
           chatFrames_ = java.util.Collections.unmodifiableList(chatFrames_);
-          bitField0_ = (bitField0_ & ~0x00010000);
+          bitField0_ = (bitField0_ & ~0x00000800);
         }
         result.chatFrames_ = chatFrames_;
-        if (((from_bitField0_ & 0x00020000) == 0x00020000)) {
-          to_bitField0_ |= 0x00000800;
+        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
+          to_bitField0_ |= 0x00000080;
         }
         result.chatFrameEquip_ = chatFrameEquip_;
-        if (((bitField0_ & 0x00040000) == 0x00040000)) {
+        if (((bitField0_ & 0x00002000) == 0x00002000)) {
           trials_ = java.util.Collections.unmodifiableList(trials_);
-          bitField0_ = (bitField0_ & ~0x00040000);
+          bitField0_ = (bitField0_ & ~0x00002000);
         }
         result.trials_ = trials_;
-        if (((from_bitField0_ & 0x00080000) == 0x00080000)) {
-          to_bitField0_ |= 0x00001000;
+        if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
+          to_bitField0_ |= 0x00000100;
         }
         result.trialEquip_ = trialEquip_;
         result.bitField0_ = to_bitField0_;
@@ -25806,12 +24989,6 @@ public final class Pbmethod {
 
       public Builder mergeFrom(protocol.Pbmethod.PbUserData other) {
         if (other == protocol.Pbmethod.PbUserData.getDefaultInstance()) return this;
-        if (other.hasLvGachaWeapon()) {
-          setLvGachaWeapon(other.getLvGachaWeapon());
-        }
-        if (other.hasLvGachaPet()) {
-          setLvGachaPet(other.getLvGachaPet());
-        }
         if (other.hasLvTraining()) {
           setLvTraining(other.getLvTraining());
         }
@@ -25820,12 +24997,6 @@ public final class Pbmethod {
         }
         if (other.hasNumPointLevel()) {
           setNumPointLevel(other.getNumPointLevel());
-        }
-        if (other.hasStone()) {
-          setStone(other.getStone());
-        }
-        if (other.hasStoneVip()) {
-          setStoneVip(other.getStoneVip());
         }
         if (other.hasItems()) {
           mergeItems(other.getItems());
@@ -25837,7 +25008,7 @@ public final class Pbmethod {
           if (!other.aItemEquip_.isEmpty()) {
             if (aItemEquip_.isEmpty()) {
               aItemEquip_ = other.aItemEquip_;
-              bitField0_ = (bitField0_ & ~0x00000200);
+              bitField0_ = (bitField0_ & ~0x00000020);
             } else {
               ensureAItemEquipIsMutable();
               aItemEquip_.addAll(other.aItemEquip_);
@@ -25850,7 +25021,7 @@ public final class Pbmethod {
               aItemEquipBuilder_.dispose();
               aItemEquipBuilder_ = null;
               aItemEquip_ = other.aItemEquip_;
-              bitField0_ = (bitField0_ & ~0x00000200);
+              bitField0_ = (bitField0_ & ~0x00000020);
               aItemEquipBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getAItemEquipFieldBuilder() : null;
@@ -25863,7 +25034,7 @@ public final class Pbmethod {
           if (!other.aItemPoint_.isEmpty()) {
             if (aItemPoint_.isEmpty()) {
               aItemPoint_ = other.aItemPoint_;
-              bitField0_ = (bitField0_ & ~0x00000400);
+              bitField0_ = (bitField0_ & ~0x00000040);
             } else {
               ensureAItemPointIsMutable();
               aItemPoint_.addAll(other.aItemPoint_);
@@ -25876,7 +25047,7 @@ public final class Pbmethod {
               aItemPointBuilder_.dispose();
               aItemPointBuilder_ = null;
               aItemPoint_ = other.aItemPoint_;
-              bitField0_ = (bitField0_ & ~0x00000400);
+              bitField0_ = (bitField0_ & ~0x00000040);
               aItemPointBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getAItemPointFieldBuilder() : null;
@@ -25889,7 +25060,7 @@ public final class Pbmethod {
           if (!other.aPet_.isEmpty()) {
             if (aPet_.isEmpty()) {
               aPet_ = other.aPet_;
-              bitField0_ = (bitField0_ & ~0x00000800);
+              bitField0_ = (bitField0_ & ~0x00000080);
             } else {
               ensureAPetIsMutable();
               aPet_.addAll(other.aPet_);
@@ -25902,7 +25073,7 @@ public final class Pbmethod {
               aPetBuilder_.dispose();
               aPetBuilder_ = null;
               aPet_ = other.aPet_;
-              bitField0_ = (bitField0_ & ~0x00000800);
+              bitField0_ = (bitField0_ & ~0x00000080);
               aPetBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getAPetFieldBuilder() : null;
@@ -25917,7 +25088,7 @@ public final class Pbmethod {
         if (!other.dameSkins_.isEmpty()) {
           if (dameSkins_.isEmpty()) {
             dameSkins_ = other.dameSkins_;
-            bitField0_ = (bitField0_ & ~0x00002000);
+            bitField0_ = (bitField0_ & ~0x00000200);
           } else {
             ensureDameSkinsIsMutable();
             dameSkins_.addAll(other.dameSkins_);
@@ -25927,20 +25098,10 @@ public final class Pbmethod {
         if (other.hasDameSkinEquip()) {
           setDameSkinEquip(other.getDameSkinEquip());
         }
-        if (!other.bossGod_.isEmpty()) {
-          if (bossGod_.isEmpty()) {
-            bossGod_ = other.bossGod_;
-            bitField0_ = (bitField0_ & ~0x00008000);
-          } else {
-            ensureBossGodIsMutable();
-            bossGod_.addAll(other.bossGod_);
-          }
-          onChanged();
-        }
         if (!other.chatFrames_.isEmpty()) {
           if (chatFrames_.isEmpty()) {
             chatFrames_ = other.chatFrames_;
-            bitField0_ = (bitField0_ & ~0x00010000);
+            bitField0_ = (bitField0_ & ~0x00000800);
           } else {
             ensureChatFramesIsMutable();
             chatFrames_.addAll(other.chatFrames_);
@@ -25953,7 +25114,7 @@ public final class Pbmethod {
         if (!other.trials_.isEmpty()) {
           if (trials_.isEmpty()) {
             trials_ = other.trials_;
-            bitField0_ = (bitField0_ & ~0x00040000);
+            bitField0_ = (bitField0_ & ~0x00002000);
           } else {
             ensureTrialsIsMutable();
             trials_.addAll(other.trials_);
@@ -25990,79 +25151,13 @@ public final class Pbmethod {
       }
       private int bitField0_;
 
-      // optional int32 lvGachaWeapon = 1;
-      private int lvGachaWeapon_ ;
-      /**
-       * <code>optional int32 lvGachaWeapon = 1;</code>
-       */
-      public boolean hasLvGachaWeapon() {
-        return ((bitField0_ & 0x00000001) == 0x00000001);
-      }
-      /**
-       * <code>optional int32 lvGachaWeapon = 1;</code>
-       */
-      public int getLvGachaWeapon() {
-        return lvGachaWeapon_;
-      }
-      /**
-       * <code>optional int32 lvGachaWeapon = 1;</code>
-       */
-      public Builder setLvGachaWeapon(int value) {
-        bitField0_ |= 0x00000001;
-        lvGachaWeapon_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 lvGachaWeapon = 1;</code>
-       */
-      public Builder clearLvGachaWeapon() {
-        bitField0_ = (bitField0_ & ~0x00000001);
-        lvGachaWeapon_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 lvGachaPet = 2;
-      private int lvGachaPet_ ;
-      /**
-       * <code>optional int32 lvGachaPet = 2;</code>
-       */
-      public boolean hasLvGachaPet() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
-      }
-      /**
-       * <code>optional int32 lvGachaPet = 2;</code>
-       */
-      public int getLvGachaPet() {
-        return lvGachaPet_;
-      }
-      /**
-       * <code>optional int32 lvGachaPet = 2;</code>
-       */
-      public Builder setLvGachaPet(int value) {
-        bitField0_ |= 0x00000002;
-        lvGachaPet_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 lvGachaPet = 2;</code>
-       */
-      public Builder clearLvGachaPet() {
-        bitField0_ = (bitField0_ & ~0x00000002);
-        lvGachaPet_ = 0;
-        onChanged();
-        return this;
-      }
-
       // optional int32 lvTraining = 4;
       private int lvTraining_ ;
       /**
        * <code>optional int32 lvTraining = 4;</code>
        */
       public boolean hasLvTraining() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+        return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
        * <code>optional int32 lvTraining = 4;</code>
@@ -26074,7 +25169,7 @@ public final class Pbmethod {
        * <code>optional int32 lvTraining = 4;</code>
        */
       public Builder setLvTraining(int value) {
-        bitField0_ |= 0x00000004;
+        bitField0_ |= 0x00000001;
         lvTraining_ = value;
         onChanged();
         return this;
@@ -26083,7 +25178,7 @@ public final class Pbmethod {
        * <code>optional int32 lvTraining = 4;</code>
        */
       public Builder clearLvTraining() {
-        bitField0_ = (bitField0_ & ~0x00000004);
+        bitField0_ = (bitField0_ & ~0x00000001);
         lvTraining_ = 0;
         onChanged();
         return this;
@@ -26095,7 +25190,7 @@ public final class Pbmethod {
        * <code>optional int32 maxlvTraining = 5;</code>
        */
       public boolean hasMaxlvTraining() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
+        return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
        * <code>optional int32 maxlvTraining = 5;</code>
@@ -26107,7 +25202,7 @@ public final class Pbmethod {
        * <code>optional int32 maxlvTraining = 5;</code>
        */
       public Builder setMaxlvTraining(int value) {
-        bitField0_ |= 0x00000008;
+        bitField0_ |= 0x00000002;
         maxlvTraining_ = value;
         onChanged();
         return this;
@@ -26116,7 +25211,7 @@ public final class Pbmethod {
        * <code>optional int32 maxlvTraining = 5;</code>
        */
       public Builder clearMaxlvTraining() {
-        bitField0_ = (bitField0_ & ~0x00000008);
+        bitField0_ = (bitField0_ & ~0x00000002);
         maxlvTraining_ = 0;
         onChanged();
         return this;
@@ -26128,7 +25223,7 @@ public final class Pbmethod {
        * <code>optional int32 numPointLevel = 6;</code>
        */
       public boolean hasNumPointLevel() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
        * <code>optional int32 numPointLevel = 6;</code>
@@ -26140,7 +25235,7 @@ public final class Pbmethod {
        * <code>optional int32 numPointLevel = 6;</code>
        */
       public Builder setNumPointLevel(int value) {
-        bitField0_ |= 0x00000010;
+        bitField0_ |= 0x00000004;
         numPointLevel_ = value;
         onChanged();
         return this;
@@ -26149,74 +25244,8 @@ public final class Pbmethod {
        * <code>optional int32 numPointLevel = 6;</code>
        */
       public Builder clearNumPointLevel() {
-        bitField0_ = (bitField0_ & ~0x00000010);
+        bitField0_ = (bitField0_ & ~0x00000004);
         numPointLevel_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 stone = 7;
-      private int stone_ ;
-      /**
-       * <code>optional int32 stone = 7;</code>
-       */
-      public boolean hasStone() {
-        return ((bitField0_ & 0x00000020) == 0x00000020);
-      }
-      /**
-       * <code>optional int32 stone = 7;</code>
-       */
-      public int getStone() {
-        return stone_;
-      }
-      /**
-       * <code>optional int32 stone = 7;</code>
-       */
-      public Builder setStone(int value) {
-        bitField0_ |= 0x00000020;
-        stone_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 stone = 7;</code>
-       */
-      public Builder clearStone() {
-        bitField0_ = (bitField0_ & ~0x00000020);
-        stone_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 stoneVip = 8;
-      private int stoneVip_ ;
-      /**
-       * <code>optional int32 stoneVip = 8;</code>
-       */
-      public boolean hasStoneVip() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
-      }
-      /**
-       * <code>optional int32 stoneVip = 8;</code>
-       */
-      public int getStoneVip() {
-        return stoneVip_;
-      }
-      /**
-       * <code>optional int32 stoneVip = 8;</code>
-       */
-      public Builder setStoneVip(int value) {
-        bitField0_ |= 0x00000040;
-        stoneVip_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 stoneVip = 8;</code>
-       */
-      public Builder clearStoneVip() {
-        bitField0_ = (bitField0_ & ~0x00000040);
-        stoneVip_ = 0;
         onChanged();
         return this;
       }
@@ -26229,7 +25258,7 @@ public final class Pbmethod {
        * <code>optional .pbdson.PbListItem items = 9;</code>
        */
       public boolean hasItems() {
-        return ((bitField0_ & 0x00000080) == 0x00000080);
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
        * <code>optional .pbdson.PbListItem items = 9;</code>
@@ -26254,7 +25283,7 @@ public final class Pbmethod {
         } else {
           itemsBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000080;
+        bitField0_ |= 0x00000008;
         return this;
       }
       /**
@@ -26268,7 +25297,7 @@ public final class Pbmethod {
         } else {
           itemsBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000080;
+        bitField0_ |= 0x00000008;
         return this;
       }
       /**
@@ -26276,7 +25305,7 @@ public final class Pbmethod {
        */
       public Builder mergeItems(protocol.Pbmethod.PbListItem value) {
         if (itemsBuilder_ == null) {
-          if (((bitField0_ & 0x00000080) == 0x00000080) &&
+          if (((bitField0_ & 0x00000008) == 0x00000008) &&
               items_ != protocol.Pbmethod.PbListItem.getDefaultInstance()) {
             items_ =
               protocol.Pbmethod.PbListItem.newBuilder(items_).mergeFrom(value).buildPartial();
@@ -26287,7 +25316,7 @@ public final class Pbmethod {
         } else {
           itemsBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00000080;
+        bitField0_ |= 0x00000008;
         return this;
       }
       /**
@@ -26300,14 +25329,14 @@ public final class Pbmethod {
         } else {
           itemsBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000080);
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
       /**
        * <code>optional .pbdson.PbListItem items = 9;</code>
        */
       public protocol.Pbmethod.PbListItem.Builder getItemsBuilder() {
-        bitField0_ |= 0x00000080;
+        bitField0_ |= 0x00000008;
         onChanged();
         return getItemsFieldBuilder().getBuilder();
       }
@@ -26346,7 +25375,7 @@ public final class Pbmethod {
        * <code>optional .pbdson.PbListItemEquipment itemEquipments = 10;</code>
        */
       public boolean hasItemEquipments() {
-        return ((bitField0_ & 0x00000100) == 0x00000100);
+        return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
        * <code>optional .pbdson.PbListItemEquipment itemEquipments = 10;</code>
@@ -26371,7 +25400,7 @@ public final class Pbmethod {
         } else {
           itemEquipmentsBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000010;
         return this;
       }
       /**
@@ -26385,7 +25414,7 @@ public final class Pbmethod {
         } else {
           itemEquipmentsBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000010;
         return this;
       }
       /**
@@ -26393,7 +25422,7 @@ public final class Pbmethod {
        */
       public Builder mergeItemEquipments(protocol.Pbmethod.PbListItemEquipment value) {
         if (itemEquipmentsBuilder_ == null) {
-          if (((bitField0_ & 0x00000100) == 0x00000100) &&
+          if (((bitField0_ & 0x00000010) == 0x00000010) &&
               itemEquipments_ != protocol.Pbmethod.PbListItemEquipment.getDefaultInstance()) {
             itemEquipments_ =
               protocol.Pbmethod.PbListItemEquipment.newBuilder(itemEquipments_).mergeFrom(value).buildPartial();
@@ -26404,7 +25433,7 @@ public final class Pbmethod {
         } else {
           itemEquipmentsBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000010;
         return this;
       }
       /**
@@ -26417,14 +25446,14 @@ public final class Pbmethod {
         } else {
           itemEquipmentsBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000100);
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
       /**
        * <code>optional .pbdson.PbListItemEquipment itemEquipments = 10;</code>
        */
       public protocol.Pbmethod.PbListItemEquipment.Builder getItemEquipmentsBuilder() {
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000010;
         onChanged();
         return getItemEquipmentsFieldBuilder().getBuilder();
       }
@@ -26459,9 +25488,9 @@ public final class Pbmethod {
       private java.util.List<protocol.Pbmethod.PbItemEquipment> aItemEquip_ =
         java.util.Collections.emptyList();
       private void ensureAItemEquipIsMutable() {
-        if (!((bitField0_ & 0x00000200) == 0x00000200)) {
+        if (!((bitField0_ & 0x00000020) == 0x00000020)) {
           aItemEquip_ = new java.util.ArrayList<protocol.Pbmethod.PbItemEquipment>(aItemEquip_);
-          bitField0_ |= 0x00000200;
+          bitField0_ |= 0x00000020;
          }
       }
 
@@ -26610,7 +25639,7 @@ public final class Pbmethod {
       public Builder clearAItemEquip() {
         if (aItemEquipBuilder_ == null) {
           aItemEquip_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000200);
+          bitField0_ = (bitField0_ & ~0x00000020);
           onChanged();
         } else {
           aItemEquipBuilder_.clear();
@@ -26687,7 +25716,7 @@ public final class Pbmethod {
           aItemEquipBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               protocol.Pbmethod.PbItemEquipment, protocol.Pbmethod.PbItemEquipment.Builder, protocol.Pbmethod.PbItemEquipmentOrBuilder>(
                   aItemEquip_,
-                  ((bitField0_ & 0x00000200) == 0x00000200),
+                  ((bitField0_ & 0x00000020) == 0x00000020),
                   getParentForChildren(),
                   isClean());
           aItemEquip_ = null;
@@ -26699,9 +25728,9 @@ public final class Pbmethod {
       private java.util.List<protocol.Pbmethod.PbItemPoint> aItemPoint_ =
         java.util.Collections.emptyList();
       private void ensureAItemPointIsMutable() {
-        if (!((bitField0_ & 0x00000400) == 0x00000400)) {
+        if (!((bitField0_ & 0x00000040) == 0x00000040)) {
           aItemPoint_ = new java.util.ArrayList<protocol.Pbmethod.PbItemPoint>(aItemPoint_);
-          bitField0_ |= 0x00000400;
+          bitField0_ |= 0x00000040;
          }
       }
 
@@ -26850,7 +25879,7 @@ public final class Pbmethod {
       public Builder clearAItemPoint() {
         if (aItemPointBuilder_ == null) {
           aItemPoint_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000400);
+          bitField0_ = (bitField0_ & ~0x00000040);
           onChanged();
         } else {
           aItemPointBuilder_.clear();
@@ -26927,7 +25956,7 @@ public final class Pbmethod {
           aItemPointBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               protocol.Pbmethod.PbItemPoint, protocol.Pbmethod.PbItemPoint.Builder, protocol.Pbmethod.PbItemPointOrBuilder>(
                   aItemPoint_,
-                  ((bitField0_ & 0x00000400) == 0x00000400),
+                  ((bitField0_ & 0x00000040) == 0x00000040),
                   getParentForChildren(),
                   isClean());
           aItemPoint_ = null;
@@ -26939,9 +25968,9 @@ public final class Pbmethod {
       private java.util.List<protocol.Pbmethod.PbPet> aPet_ =
         java.util.Collections.emptyList();
       private void ensureAPetIsMutable() {
-        if (!((bitField0_ & 0x00000800) == 0x00000800)) {
+        if (!((bitField0_ & 0x00000080) == 0x00000080)) {
           aPet_ = new java.util.ArrayList<protocol.Pbmethod.PbPet>(aPet_);
-          bitField0_ |= 0x00000800;
+          bitField0_ |= 0x00000080;
          }
       }
 
@@ -27090,7 +26119,7 @@ public final class Pbmethod {
       public Builder clearAPet() {
         if (aPetBuilder_ == null) {
           aPet_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000800);
+          bitField0_ = (bitField0_ & ~0x00000080);
           onChanged();
         } else {
           aPetBuilder_.clear();
@@ -27167,7 +26196,7 @@ public final class Pbmethod {
           aPetBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               protocol.Pbmethod.PbPet, protocol.Pbmethod.PbPet.Builder, protocol.Pbmethod.PbPetOrBuilder>(
                   aPet_,
-                  ((bitField0_ & 0x00000800) == 0x00000800),
+                  ((bitField0_ & 0x00000080) == 0x00000080),
                   getParentForChildren(),
                   isClean());
           aPet_ = null;
@@ -27181,7 +26210,7 @@ public final class Pbmethod {
        * <code>optional int32 tutorial = 17;</code>
        */
       public boolean hasTutorial() {
-        return ((bitField0_ & 0x00001000) == 0x00001000);
+        return ((bitField0_ & 0x00000100) == 0x00000100);
       }
       /**
        * <code>optional int32 tutorial = 17;</code>
@@ -27193,7 +26222,7 @@ public final class Pbmethod {
        * <code>optional int32 tutorial = 17;</code>
        */
       public Builder setTutorial(int value) {
-        bitField0_ |= 0x00001000;
+        bitField0_ |= 0x00000100;
         tutorial_ = value;
         onChanged();
         return this;
@@ -27202,7 +26231,7 @@ public final class Pbmethod {
        * <code>optional int32 tutorial = 17;</code>
        */
       public Builder clearTutorial() {
-        bitField0_ = (bitField0_ & ~0x00001000);
+        bitField0_ = (bitField0_ & ~0x00000100);
         tutorial_ = 0;
         onChanged();
         return this;
@@ -27211,9 +26240,9 @@ public final class Pbmethod {
       // repeated int32 dameSkins = 18;
       private java.util.List<java.lang.Integer> dameSkins_ = java.util.Collections.emptyList();
       private void ensureDameSkinsIsMutable() {
-        if (!((bitField0_ & 0x00002000) == 0x00002000)) {
+        if (!((bitField0_ & 0x00000200) == 0x00000200)) {
           dameSkins_ = new java.util.ArrayList<java.lang.Integer>(dameSkins_);
-          bitField0_ |= 0x00002000;
+          bitField0_ |= 0x00000200;
          }
       }
       /**
@@ -27269,7 +26298,7 @@ public final class Pbmethod {
        */
       public Builder clearDameSkins() {
         dameSkins_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00002000);
+        bitField0_ = (bitField0_ & ~0x00000200);
         onChanged();
         return this;
       }
@@ -27280,7 +26309,7 @@ public final class Pbmethod {
        * <code>optional int32 dameSkinEquip = 19;</code>
        */
       public boolean hasDameSkinEquip() {
-        return ((bitField0_ & 0x00004000) == 0x00004000);
+        return ((bitField0_ & 0x00000400) == 0x00000400);
       }
       /**
        * <code>optional int32 dameSkinEquip = 19;</code>
@@ -27292,7 +26321,7 @@ public final class Pbmethod {
        * <code>optional int32 dameSkinEquip = 19;</code>
        */
       public Builder setDameSkinEquip(int value) {
-        bitField0_ |= 0x00004000;
+        bitField0_ |= 0x00000400;
         dameSkinEquip_ = value;
         onChanged();
         return this;
@@ -27301,74 +26330,8 @@ public final class Pbmethod {
        * <code>optional int32 dameSkinEquip = 19;</code>
        */
       public Builder clearDameSkinEquip() {
-        bitField0_ = (bitField0_ & ~0x00004000);
+        bitField0_ = (bitField0_ & ~0x00000400);
         dameSkinEquip_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // repeated int32 bossGod = 20;
-      private java.util.List<java.lang.Integer> bossGod_ = java.util.Collections.emptyList();
-      private void ensureBossGodIsMutable() {
-        if (!((bitField0_ & 0x00008000) == 0x00008000)) {
-          bossGod_ = new java.util.ArrayList<java.lang.Integer>(bossGod_);
-          bitField0_ |= 0x00008000;
-         }
-      }
-      /**
-       * <code>repeated int32 bossGod = 20;</code>
-       */
-      public java.util.List<java.lang.Integer>
-          getBossGodList() {
-        return java.util.Collections.unmodifiableList(bossGod_);
-      }
-      /**
-       * <code>repeated int32 bossGod = 20;</code>
-       */
-      public int getBossGodCount() {
-        return bossGod_.size();
-      }
-      /**
-       * <code>repeated int32 bossGod = 20;</code>
-       */
-      public int getBossGod(int index) {
-        return bossGod_.get(index);
-      }
-      /**
-       * <code>repeated int32 bossGod = 20;</code>
-       */
-      public Builder setBossGod(
-          int index, int value) {
-        ensureBossGodIsMutable();
-        bossGod_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 bossGod = 20;</code>
-       */
-      public Builder addBossGod(int value) {
-        ensureBossGodIsMutable();
-        bossGod_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 bossGod = 20;</code>
-       */
-      public Builder addAllBossGod(
-          java.lang.Iterable<? extends java.lang.Integer> values) {
-        ensureBossGodIsMutable();
-        super.addAll(values, bossGod_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int32 bossGod = 20;</code>
-       */
-      public Builder clearBossGod() {
-        bossGod_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00008000);
         onChanged();
         return this;
       }
@@ -27376,9 +26339,9 @@ public final class Pbmethod {
       // repeated int32 chatFrames = 21;
       private java.util.List<java.lang.Integer> chatFrames_ = java.util.Collections.emptyList();
       private void ensureChatFramesIsMutable() {
-        if (!((bitField0_ & 0x00010000) == 0x00010000)) {
+        if (!((bitField0_ & 0x00000800) == 0x00000800)) {
           chatFrames_ = new java.util.ArrayList<java.lang.Integer>(chatFrames_);
-          bitField0_ |= 0x00010000;
+          bitField0_ |= 0x00000800;
          }
       }
       /**
@@ -27434,7 +26397,7 @@ public final class Pbmethod {
        */
       public Builder clearChatFrames() {
         chatFrames_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00010000);
+        bitField0_ = (bitField0_ & ~0x00000800);
         onChanged();
         return this;
       }
@@ -27445,7 +26408,7 @@ public final class Pbmethod {
        * <code>optional int32 chatFrameEquip = 22;</code>
        */
       public boolean hasChatFrameEquip() {
-        return ((bitField0_ & 0x00020000) == 0x00020000);
+        return ((bitField0_ & 0x00001000) == 0x00001000);
       }
       /**
        * <code>optional int32 chatFrameEquip = 22;</code>
@@ -27457,7 +26420,7 @@ public final class Pbmethod {
        * <code>optional int32 chatFrameEquip = 22;</code>
        */
       public Builder setChatFrameEquip(int value) {
-        bitField0_ |= 0x00020000;
+        bitField0_ |= 0x00001000;
         chatFrameEquip_ = value;
         onChanged();
         return this;
@@ -27466,7 +26429,7 @@ public final class Pbmethod {
        * <code>optional int32 chatFrameEquip = 22;</code>
        */
       public Builder clearChatFrameEquip() {
-        bitField0_ = (bitField0_ & ~0x00020000);
+        bitField0_ = (bitField0_ & ~0x00001000);
         chatFrameEquip_ = 0;
         onChanged();
         return this;
@@ -27475,9 +26438,9 @@ public final class Pbmethod {
       // repeated int32 trials = 23;
       private java.util.List<java.lang.Integer> trials_ = java.util.Collections.emptyList();
       private void ensureTrialsIsMutable() {
-        if (!((bitField0_ & 0x00040000) == 0x00040000)) {
+        if (!((bitField0_ & 0x00002000) == 0x00002000)) {
           trials_ = new java.util.ArrayList<java.lang.Integer>(trials_);
-          bitField0_ |= 0x00040000;
+          bitField0_ |= 0x00002000;
          }
       }
       /**
@@ -27533,7 +26496,7 @@ public final class Pbmethod {
        */
       public Builder clearTrials() {
         trials_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00040000);
+        bitField0_ = (bitField0_ & ~0x00002000);
         onChanged();
         return this;
       }
@@ -27544,7 +26507,7 @@ public final class Pbmethod {
        * <code>optional int32 trialEquip = 24;</code>
        */
       public boolean hasTrialEquip() {
-        return ((bitField0_ & 0x00080000) == 0x00080000);
+        return ((bitField0_ & 0x00004000) == 0x00004000);
       }
       /**
        * <code>optional int32 trialEquip = 24;</code>
@@ -27556,7 +26519,7 @@ public final class Pbmethod {
        * <code>optional int32 trialEquip = 24;</code>
        */
       public Builder setTrialEquip(int value) {
-        bitField0_ |= 0x00080000;
+        bitField0_ |= 0x00004000;
         trialEquip_ = value;
         onChanged();
         return this;
@@ -27565,7 +26528,7 @@ public final class Pbmethod {
        * <code>optional int32 trialEquip = 24;</code>
        */
       public Builder clearTrialEquip() {
-        bitField0_ = (bitField0_ & ~0x00080000);
+        bitField0_ = (bitField0_ & ~0x00004000);
         trialEquip_ = 0;
         onChanged();
         return this;
@@ -77782,181 +76745,176 @@ public final class Pbmethod {
       "\n\nrankTrophy\030\013 \001(\005\022\016\n\006avatar\030\014 \003(\005\022\022\n\ncu" +
       "rDonated\030\r \001(\005\022\016\n\006online\030\016 \001(\010\"J\n\nPbList" +
       "Clan\022\034\n\004clan\030\001 \003(\0132\016.pbdson.PbClan\022\036\n\006my" +
-      "Clan\030\002 \001(\0132\016.pbdson.PbClan\"\370\003\n\006PbUser\022\n\n" +
+      "Clan\030\002 \001(\0132\016.pbdson.PbClan\"\246\003\n\006PbUser\022\n\n" +
       "\002id\030\001 \001(\005\022\020\n\010username\030\002 \001(\t\022\014\n\004name\030\003 \001(" +
-      "\t\022\014\n\004gold\030\004 \001(\003\022\013\n\003gem\030\005 \001(\003\022\013\n\003exp\030\006 \001(" +
-      "\003\022\r\n\005level\030\007 \001(\005\022\016\n\006avatar\030\010 \003(\005\022\013\n\003vip\030" +
-      "\t \003(\005\022&\n\010clanInfo\030\n \001(\0132\024.pbdson.CommonV" +
-      "ector\022\"\n\004info\030\013 \001(\0132\024.pbdson.CommonVecto",
-      "r\022\r\n\005petId\030\014 \003(\005\022\020\n\010facebook\030\r \001(\t\022&\n\010us" +
-      "erInfo\030\016 \001(\0132\024.pbdson.CommonVector\022\014\n\004ra" +
-      "nk\030\020 \001(\005\022\014\n\004desc\030\021 \001(\t\022\023\n\013weaponEquip\030\022 " +
-      "\003(\005\022\r\n\005point\030\023 \003(\003\022\026\n\016timeLastAction\030\024 \001" +
-      "(\003\022\r\n\005honor\030\025 \001(\005\022\r\n\005power\030\026 \001(\003\022\021\n\titem" +
-      "Equip\030\027 \003(\005\022\017\n\007channel\030\030 \003(\005\022\021\n\tpointRan" +
-      "k\030\031 \001(\003\022\021\n\tarenaRank\030\032 \001(\005\022\014\n\004ruby\030\033 \001(\003" +
-      "\022\013\n\003pet\030\034 \003(\005\"\202\004\n\nPbUserData\022\025\n\rlvGachaW" +
-      "eapon\030\001 \001(\005\022\022\n\nlvGachaPet\030\002 \001(\005\022\022\n\nlvTra" +
-      "ining\030\004 \001(\005\022\025\n\rmaxlvTraining\030\005 \001(\005\022\025\n\rnu",
-      "mPointLevel\030\006 \001(\005\022\r\n\005stone\030\007 \001(\005\022\020\n\010ston" +
-      "eVip\030\010 \001(\005\022!\n\005items\030\t \001(\0132\022.pbdson.PbLis" +
-      "tItem\0223\n\016itemEquipments\030\n \001(\0132\033.pbdson.P" +
-      "bListItemEquipment\022+\n\naItemEquip\030\013 \003(\0132\027" +
-      ".pbdson.PbItemEquipment\022\'\n\naItemPoint\030\014 " +
-      "\003(\0132\023.pbdson.PbItemPoint\022\033\n\004aPet\030\017 \003(\0132\r" +
-      ".pbdson.PbPet\022\020\n\010tutorial\030\021 \001(\005\022\021\n\tdameS" +
-      "kins\030\022 \003(\005\022\025\n\rdameSkinEquip\030\023 \001(\005\022\017\n\007bos" +
-      "sGod\030\024 \003(\005\022\022\n\nchatFrames\030\025 \003(\005\022\026\n\016chatFr" +
-      "ameEquip\030\026 \001(\005\022\016\n\006trials\030\027 \003(\005\022\022\n\ntrialE",
-      "quip\030\030 \001(\005\"*\n\nPbListItem\022\034\n\004item\030\001 \003(\0132\016" +
-      ".pbdson.PbItem\"(\n\tPbListPet\022\033\n\004pets\030\001 \003(" +
-      "\0132\r.pbdson.PbPet\"^\n\005PbPet\022\n\n\002id\030\001 \001(\005\022\014\n" +
-      "\004star\030\002 \001(\005\022\n\n\002hp\030\004 \001(\005\022\r\n\005maxHp\030\005 \001(\005\022\r" +
-      "\n\005power\030\006 \001(\003\022\021\n\tbonusStar\030\007 \003(\005\":\n\017PbLi" +
-      "stItemPoint\022\'\n\nitemPoints\030\001 \003(\0132\023.pbdson" +
-      ".PbItemPoint\"A\n\023PbListItemEquipment\022*\n\ti" +
-      "temEquip\030\001 \003(\0132\027.pbdson.PbItemEquipment\"" +
-      "+\n\nPbListChat\022\035\n\005aChat\030\001 \003(\0132\016.pbdson.Pb" +
-      "Chat\"\211\001\n\006PbChat\022\017\n\007reqTime\030\001 \001(\003\022\017\n\007mess",
-      "age\030\002 \001(\t\022\014\n\004type\030\003 \001(\005\022\034\n\004user\030\004 \001(\0132\016." +
-      "pbdson.PbUser\022\"\n\004info\030\005 \001(\0132\024.pbdson.Com" +
-      "monVector\022\r\n\005point\030\006 \003(\003\"7\n\020PbListChatFr" +
-      "iend\022#\n\005chats\030\001 \003(\0132\024.pbdson.PbChatFrien" +
-      "d\"j\n\014PbChatFriend\022\016\n\006userId\030\001 \001(\005\022\017\n\007mes" +
-      "sage\030\002 \001(\t\022\016\n\006avatar\030\003 \003(\005\022\014\n\004name\030\004 \001(\t" +
-      "\022\014\n\004time\030\005 \001(\003\022\r\n\005level\030\006 \001(\005\"v\n\006PbShop\022" +
-      "\"\n\006tabSet\030\001 \003(\0132\022.pbdson.PbItemShop\022#\n\007t" +
-      "abDeal\030\002 \003(\0132\022.pbdson.PbItemShop\022#\n\007tabM" +
-      "isc\030\003 \003(\0132\022.pbdson.PbItemShop\"\245\001\n\nPbItem",
-      "Shop\022\n\n\002id\030\001 \001(\005\022\013\n\003tab\030\002 \001(\005\022\014\n\004name\030\003 " +
-      "\001(\t\022\014\n\004desc\030\004 \001(\t\022\014\n\004item\030\005 \003(\003\022\r\n\005price" +
-      "\030\006 \003(\003\022\r\n\005image\030\007 \001(\t\022\016\n\006status\030\010 \001(\005\022\022\n" +
-      "\ndescStatus\030\t \001(\t\022\022\n\ntimeRemain\030\n \001(\003\"@\n" +
-      "\006PbItem\022\n\n\002id\030\001 \001(\005\022\014\n\004type\030\002 \001(\005\022\016\n\006num" +
-      "ber\030\003 \001(\005\022\014\n\004data\030\004 \001(\t\".\n\013PbItemPoint\022\017" +
-      "\n\007itemKey\030\001 \001(\005\022\016\n\006number\030\002 \001(\003\"\216\001\n\017PbIt" +
-      "emEquipment\022\n\n\002id\030\001 \001(\003\022\017\n\007itemKey\030\002 \001(\005" +
-      "\022\r\n\005level\030\003 \001(\005\022\014\n\004lock\030\004 \001(\010\022\r\n\005point\030\005" +
-      " \003(\003\022\016\n\006expire\030\006 \001(\003\022\023\n\013lockDestroy\030\007 \001(",
-      "\010\022\r\n\005bless\030\010 \001(\005\"/\n\nListAction\022!\n\007aActio" +
-      "n\030\001 \003(\0132\020.pbdson.PbAction\"*\n\010PbAction\022\020\n" +
-      "\010actionId\030\001 \001(\005\022\014\n\004data\030\002 \001(\014\".\n\014CommonV" +
-      "ector\022\r\n\005aLong\030\001 \003(\003\022\017\n\007aString\030\002 \003(\t\"9\n" +
-      "\020ListCommonVector\022%\n\007aVector\030\001 \003(\0132\024.pbd" +
-      "son.CommonVector\"g\n\017PbCharacterInfo\022\n\n\002i" +
-      "d\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\014\n\004team\030\003 \001(\005\022\016\n\006a" +
-      "vatar\030\004 \003(\005\022\r\n\005aItem\030\005 \003(\005\022\r\n\005point\030\006 \003(" +
-      "\003\"+\n\nPbListMail\022\035\n\005aMail\030\001 \003(\0132\016.pbdson." +
-      "PbMail\"\210\001\n\006PbMail\022\n\n\002id\030\001 \001(\005\022\r\n\005title\030\002",
-      " \001(\t\022\017\n\007message\030\003 \001(\t\022\r\n\005bonus\030\004 \003(\005\022\017\n\007" +
-      "receive\030\005 \001(\005\022\014\n\004time\030\006 \001(\003\022\020\n\010senderId\030" +
-      "\007 \001(\005\022\022\n\nsenderName\030\010 \001(\t\"\257\001\n\tPbEndGame\022" +
-      "\017\n\007popupId\030\001 \001(\005\022\021\n\tbattleKey\030\002 \001(\t\022\r\n\005i" +
-      "sWin\030\003 \001(\010\022\017\n\007message\030\004 \001(\t\022\r\n\005bonus\030\005 \003" +
-      "(\003\022\014\n\004time\030\006 \001(\005\022\017\n\007perDame\030\007 \001(\005\022\014\n\004sta" +
-      "r\030\010 \001(\005\022\"\n\004info\030\t \001(\0132\024.pbdson.CommonVec" +
-      "tor\"{\n\nPbRoomInfo\022\020\n\010roomType\030\001 \001(\005\022\017\n\007s" +
-      "ervice\030\002 \001(\005\022!\n\003cmm\030\003 \001(\0132\024.pbdson.Commo" +
-      "nVector\022\'\n\005lstCm\030\004 \001(\0132\030.pbdson.ListComm",
-      "onVector\"Z\n\017PbListMiniLotte\022\020\n\010allBonus\030" +
-      "\001 \003(\003\022\020\n\010luckyNum\030\002 \003(\005\022#\n\006aLotte\030\003 \003(\0132" +
-      "\023.pbdson.PbMiniLotte\"C\n\013PbMiniLotte\022\021\n\tn" +
-      "umChoose\030\001 \003(\005\022\022\n\nprizeIndex\030\002 \001(\005\022\r\n\005bo" +
-      "nus\030\003 \003(\005\"B\n\024PbListLotteryHistory\022*\n\010aLo" +
-      "ttery\030\001 \003(\0132\030.pbdson.PbLotteryHistory\"\247\001" +
-      "\n\020PbLotteryHistory\022\017\n\007eventId\030\001 \001(\005\022\014\n\004t" +
-      "ype\030\002 \001(\005\022\020\n\010luckyNum\030\003 \001(\005\022\016\n\006number\030\004 " +
-      "\003(\005\022\014\n\004time\030\005 \001(\003\022\r\n\005bonus\030\006 \003(\003\022\016\n\006stat" +
-      "us\030\007 \001(\005\022\021\n\tlistBonus\030\010 \003(\003\022\022\n\nlistResul",
-      "t\030\t \003(\005\"*\n\014PbUnitUpdate\022\014\n\004type\030\001 \001(\005\022\014\n" +
-      "\004data\030\002 \001(\014\"\213\001\n\tPbUnitPos\022\n\n\002id\030\001 \001(\003\022\r\n" +
-      "\005speed\030\002 \001(\005\022\024\n\014lastInputSeq\030\003 \001(\003\022\032\n\003po" +
-      "s\030\004 \001(\0132\r.pbdson.PbPos\022 \n\tdirection\030\005 \001(" +
-      "\0132\r.pbdson.PbPos\022\017\n\007chunkId\030\006 \001(\005\"1\n\014PbL" +
-      "istBullet\022!\n\007bullets\030\001 \003(\0132\020.pbdson.PbBu" +
-      "llet\"@\n\010PbBullet\022\n\n\002id\030\001 \001(\005\022\032\n\003pos\030\002 \001(" +
-      "\0132\r.pbdson.PbPos\022\014\n\004info\030\003 \003(\005\"(\n\tPbList" +
-      "Tab\022\033\n\004tabs\030\001 \003(\0132\r.pbdson.PbTab\"Z\n\005PbTa" +
-      "b\022\r\n\005tabId\030\001 \001(\005\022\025\n\reventTemplate\030\002 \001(\005\022",
-      "\r\n\005image\030\003 \001(\t\022\014\n\004name\030\004 \001(\t\022\016\n\006notify\030\005" +
-      " \001(\010\"\255\002\n\017PbEventBuyMonth\022\021\n\teventName\030\001 " +
-      "\001(\t\022\023\n\013imageBanner\030\002 \001(\t\022\022\n\ntextBanner\030\003" +
-      " \001(\t\022\r\n\005level\030\004 \001(\005\022\020\n\010curPoint\030\005 \001(\005\022\020\n" +
-      "\010maxPoint\030\006 \001(\005\022\025\n\rbuttonAddGoto\030\007 \001(\005\022\017" +
-      "\n\007keyHelp\030\010 \001(\t\022\016\n\006timeCD\030\t \001(\003\022\021\n\tstatu" +
-      "sBuy\030\n \001(\005\022\r\n\005price\030\013 \003(\003\022\022\n\nnormalName\030" +
-      "\014 \001(\t\022\017\n\007vipName\030\r \001(\t\022,\n\005cells\030\016 \003(\0132\035." +
-      "pbdson.PbCellPanelEventMonth\"\315\001\n\014PbEvent" +
-      "Timer\022\n\n\002id\030\001 \001(\005\022\016\n\006status\030\002 \001(\005\022\022\n\ntim",
-      "eRemain\030\003 \001(\003\022\r\n\005bonus\030\004 \003(\003\022\r\n\005price\030\005 " +
-      "\003(\003\022\020\n\010oldPrice\030\006 \003(\003\022\014\n\004name\030\007 \001(\t\022\014\n\004d" +
-      "esc\030\010 \001(\t\022\014\n\004sale\030\t \001(\t\022\017\n\007bgrPath\030\n \001(\t" +
-      "\022\"\n\004info\030\013 \001(\0132\024.pbdson.CommonVector\"w\n\025" +
-      "PbCellPanelEventMonth\022\r\n\005level\030\001 \001(\005\022\013\n\003" +
-      "exp\030\002 \001(\005\022\016\n\006status\030\003 \001(\005\022\021\n\tstatusVip\030\004" +
-      " \001(\005\022\r\n\005bonus\030\005 \003(\003\022\020\n\010bonusVip\030\006 \003(\003\"\221\001" +
-      "\n\023PbPanelEventTabCell\022\021\n\teventName\030\001 \001(\t" +
-      "\022\023\n\013imageBanner\030\002 \001(\t\022\022\n\ntextBanner\030\003 \001(" +
-      "\t\022\016\n\006timeCD\030\t \001(\003\022.\n\005cells\030\016 \003(\0132\037.pbdso",
-      "n.PbCellPanelEventTabCell\"i\n\027PbCellPanel" +
-      "EventTabCell\022\n\n\002id\030\001 \001(\005\022\020\n\010cellName\030\002 \001" +
-      "(\t\022\r\n\005bonus\030\003 \003(\003\022\013\n\003per\030\004 \001(\t\022\024\n\014button" +
-      "Status\030\005 \001(\005\"\237\001\n\tPbWelfare\022\017\n\007eventId\030\001 " +
-      "\001(\005\022\016\n\006notify\030\002 \001(\010\022%\n\006banner\030\003 \001(\0132\025.pb" +
-      "dson.PbBannerEvent\022&\n\010tabEvent\030\004 \003(\0132\024.p" +
-      "bdson.PbTabWelfare\022\017\n\007keyHelp\030\005 \001(\t\022\021\n\tc" +
-      "ountdown\030\006 \001(\003\"b\n\014PbTabWelfare\022\r\n\005tabId\030" +
-      "\001 \001(\005\022\017\n\007tabName\030\002 \001(\t\022\"\n\005cells\030\003 \003(\0132\023." +
-      "pbdson.PbCellEvent\022\016\n\006notify\030\004 \001(\010\"\263\001\n\rP",
-      "bBannerEvent\022\022\n\npathBanner\030\001 \001(\t\022\014\n\004text" +
-      "\030\002 \001(\t\022\022\n\nbonusImage\030\003 \001(\t\022\021\n\tboxStatus\030" +
-      "\004 \001(\005\022\020\n\010bonusBox\030\005 \003(\005\022\014\n\004desc\030\006 \001(\t\022\021\n" +
-      "\tpathTitle\030\007 \001(\t\022&\n\004info\030\010 \001(\0132\030.pbdson." +
-      "ListCommonVector\"\353\001\n\013PbCellEvent\022\n\n\002id\030\001" +
-      " \001(\005\022\r\n\005image\030\002 \001(\t\022\r\n\005bonus\030\003 \003(\005\022\020\n\010na" +
-      "meCell\030\004 \001(\t\022\020\n\010textCell\030\005 \001(\t\022\020\n\010textDe" +
-      "sc\030\006 \001(\t\022\016\n\006numBuy\030\007 \001(\005\022\r\n\005limit\030\010 \001(\005\022" +
-      "\r\n\005price\030\t \003(\003\022\024\n\014buttonStatus\030\n \001(\005\022\020\n\010" +
-      "bonusDay\030\013 \003(\005\022\022\n\ntimeRemain\030\014 \001(\003\022\022\n\nti",
-      "meExpire\030\r \001(\003\"\225\001\n\013PbEvent7Day\022&\n\004days\030\001" +
-      " \003(\0132\030.pbdson.PbPanelEvent7Day\022\022\n\ntimeRe" +
-      "main\030\002 \001(\003\022\020\n\010curValue\030\003 \001(\005\022\020\n\010maxValue" +
-      "\030\004 \001(\005\022&\n\tposReward\030\005 \003(\0132\023.pbdson.PbPos" +
-      "Reward\"U\n\013PbPosReward\022\n\n\002id\030\001 \001(\005\022\014\n\004nam" +
-      "e\030\002 \001(\t\022\r\n\005point\030\003 \001(\003\022\r\n\005bonus\030\004 \003(\003\022\016\n" +
-      "\006status\030\005 \001(\005\"R\n\016PbTabEvent7Day\022\n\n\002id\030\001 " +
-      "\001(\005\022\014\n\004name\030\002 \001(\t\022&\n\005cells\030\003 \003(\0132\027.pbdso" +
-      "n.PbCellEvent7Day\"\272\001\n\020PbPanelEvent7Day\022$" +
-      "\n\004tab1\030\001 \001(\0132\026.pbdson.PbTabEvent7Day\022$\n\004",
-      "tab2\030\002 \001(\0132\026.pbdson.PbTabEvent7Day\022$\n\004ta" +
-      "b3\030\003 \001(\0132\026.pbdson.PbTabEvent7Day\022$\n\004tab4" +
-      "\030\004 \001(\0132\026.pbdson.PbTabEvent7Day\022\016\n\006isLock" +
-      "\030\005 \001(\010\"\306\001\n\017PbCellEvent7Day\022\n\n\002id\030\001 \001(\005\022\014" +
-      "\n\004name\030\002 \001(\t\022\014\n\004desc\030\003 \001(\t\022\020\n\010curValue\030\004" +
-      " \001(\005\022\020\n\010maxValue\030\005 \001(\005\022\r\n\005bonus\030\006 \003(\003\022\024\n" +
-      "\014buttonStatus\030\007 \001(\005\022\022\n\nbuttonGoto\030\010 \001(\005\022" +
-      "\020\n\010oldPrice\030\t \003(\003\022\020\n\010newPrice\030\n \003(\003\022\n\n\002x" +
-      "u\030\013 \001(\005\"\'\n\tPbListIAP\022\032\n\003iap\030\001 \003(\0132\r.pbds" +
-      "on.PpIAP\"\264\001\n\005PpIAP\022\n\n\002id\030\001 \001(\005\022\030\n\020produc",
-      "tIdAndroid\030\002 \001(\t\022\024\n\014productIdIos\030\003 \001(\t\022\014" +
-      "\n\004name\030\004 \001(\t\022\r\n\005price\030\005 \001(\t\022\r\n\005bonus\030\006 \003" +
-      "(\003\022\020\n\010addBonus\030\007 \003(\003\022\020\n\010addTitle\030\010 \001(\t\022\016" +
-      "\n\006vipExp\030\t \001(\005\022\017\n\007priceQr\030\n \001(\t*!\n\tCellS" +
-      "tate\022\n\n\006ACTIVE\020\001\022\010\n\004HIDE\020\002*\354\001\n\014SubStateT" +
-      "ype\022\r\n\tADD_BONUS\020\001\022\007\n\003DIE\020\002\022\n\n\006REVIVE\020\003\022" +
-      "\r\n\tPLAY_ANIM\020\004\022\r\n\tBE_DAMAGE\020\005\022\017\n\013EFFECT_" +
-      "BODY\020\006\022\t\n\005RE_HP\020\007\022\025\n\021UPDATE_CHAT_FRAME\020\010" +
-      "\022\020\n\014UPDATE_TRIAL\020\t\022\024\n\020UPDATE_ITEM_SLOT\020\n" +
-      "\022\024\n\020UPDATE_TEXT_DAME\020\013\022\026\n\022UPDATE_MULTI_P",
-      "OINT\020\014\022\021\n\rUSE_ITEM_SLOT\020\r*Y\n\tStateType\022\023" +
-      "\n\017TYPE_ADD_REMOVE\020\001\022\014\n\010TYPE_POS\020\002\022\023\n\017TYP" +
-      "E_UNIT_STATE\020\003\022\024\n\020TYPE_CHUNK_STATE\020\004*y\n\016" +
-      "CellObjectType\022\010\n\004ROCK\020\001\022\010\n\004SIGN\020\002\022\n\n\006CA" +
-      "CTUS\020\003\022\n\n\006FLOWER\020\004\022\t\n\005SKULL\020\005\022\t\n\005CHEST\020\006" +
-      "\022\t\n\005BONES\020\007\022\016\n\nGRAVESTONE\020\010\022\n\n\006HELMET\020\t*" +
-      ";\n\014TargetAttack\022\n\n\006OBJECT\020\000\022\t\n\005ENEMY\020\001\022\010" +
-      "\n\004BOSS\020\002\022\n\n\006PLAYER\020\003B\024\n\010protocolB\010Pbmeth" +
-      "od"
+      "\t\022\014\n\004gold\030\004 \001(\003\022\013\n\003gem\030\005 \001(\003\022\016\n\006avatar\030\010" +
+      " \003(\005\022\013\n\003vip\030\t \003(\005\022&\n\010clanInfo\030\n \001(\0132\024.pb" +
+      "dson.CommonVector\022\"\n\004info\030\013 \001(\0132\024.pbdson" +
+      ".CommonVector\022\r\n\005petId\030\014 \003(\005\022\020\n\010facebook",
+      "\030\r \001(\t\022&\n\010userInfo\030\016 \001(\0132\024.pbdson.Common" +
+      "Vector\022\014\n\004rank\030\020 \001(\005\022\021\n\tpointRank\030\021 \001(\003\022" +
+      "\r\n\005point\030\023 \003(\003\022\026\n\016timeLastAction\030\024 \001(\003\022\r" +
+      "\n\005honor\030\025 \001(\005\022\r\n\005power\030\026 \001(\003\022\021\n\titemEqui" +
+      "p\030\027 \003(\005\022\017\n\007channel\030\030 \003(\005\022\014\n\004ruby\030\033 \001(\003\022\013" +
+      "\n\003pet\030\034 \003(\005\"\245\003\n\nPbUserData\022\022\n\nlvTraining" +
+      "\030\004 \001(\005\022\025\n\rmaxlvTraining\030\005 \001(\005\022\025\n\rnumPoin" +
+      "tLevel\030\006 \001(\005\022!\n\005items\030\t \001(\0132\022.pbdson.PbL" +
+      "istItem\0223\n\016itemEquipments\030\n \001(\0132\033.pbdson" +
+      ".PbListItemEquipment\022+\n\naItemEquip\030\013 \003(\013",
+      "2\027.pbdson.PbItemEquipment\022\'\n\naItemPoint\030" +
+      "\014 \003(\0132\023.pbdson.PbItemPoint\022\033\n\004aPet\030\017 \003(\013" +
+      "2\r.pbdson.PbPet\022\020\n\010tutorial\030\021 \001(\005\022\021\n\tdam" +
+      "eSkins\030\022 \003(\005\022\025\n\rdameSkinEquip\030\023 \001(\005\022\022\n\nc" +
+      "hatFrames\030\025 \003(\005\022\026\n\016chatFrameEquip\030\026 \001(\005\022" +
+      "\016\n\006trials\030\027 \003(\005\022\022\n\ntrialEquip\030\030 \001(\005\"*\n\nP" +
+      "bListItem\022\034\n\004item\030\001 \003(\0132\016.pbdson.PbItem\"" +
+      "(\n\tPbListPet\022\033\n\004pets\030\001 \003(\0132\r.pbdson.PbPe" +
+      "t\"^\n\005PbPet\022\n\n\002id\030\001 \001(\005\022\014\n\004star\030\002 \001(\005\022\n\n\002" +
+      "hp\030\004 \001(\005\022\r\n\005maxHp\030\005 \001(\005\022\r\n\005power\030\006 \001(\003\022\021",
+      "\n\tbonusStar\030\007 \003(\005\":\n\017PbListItemPoint\022\'\n\n" +
+      "itemPoints\030\001 \003(\0132\023.pbdson.PbItemPoint\"A\n" +
+      "\023PbListItemEquipment\022*\n\titemEquip\030\001 \003(\0132" +
+      "\027.pbdson.PbItemEquipment\"+\n\nPbListChat\022\035" +
+      "\n\005aChat\030\001 \003(\0132\016.pbdson.PbChat\"\211\001\n\006PbChat" +
+      "\022\017\n\007reqTime\030\001 \001(\003\022\017\n\007message\030\002 \001(\t\022\014\n\004ty" +
+      "pe\030\003 \001(\005\022\034\n\004user\030\004 \001(\0132\016.pbdson.PbUser\022\"" +
+      "\n\004info\030\005 \001(\0132\024.pbdson.CommonVector\022\r\n\005po" +
+      "int\030\006 \003(\003\"7\n\020PbListChatFriend\022#\n\005chats\030\001" +
+      " \003(\0132\024.pbdson.PbChatFriend\"j\n\014PbChatFrie",
+      "nd\022\016\n\006userId\030\001 \001(\005\022\017\n\007message\030\002 \001(\t\022\016\n\006a" +
+      "vatar\030\003 \003(\005\022\014\n\004name\030\004 \001(\t\022\014\n\004time\030\005 \001(\003\022" +
+      "\r\n\005level\030\006 \001(\005\"v\n\006PbShop\022\"\n\006tabSet\030\001 \003(\013" +
+      "2\022.pbdson.PbItemShop\022#\n\007tabDeal\030\002 \003(\0132\022." +
+      "pbdson.PbItemShop\022#\n\007tabMisc\030\003 \003(\0132\022.pbd" +
+      "son.PbItemShop\"\245\001\n\nPbItemShop\022\n\n\002id\030\001 \001(" +
+      "\005\022\013\n\003tab\030\002 \001(\005\022\014\n\004name\030\003 \001(\t\022\014\n\004desc\030\004 \001" +
+      "(\t\022\014\n\004item\030\005 \003(\003\022\r\n\005price\030\006 \003(\003\022\r\n\005image" +
+      "\030\007 \001(\t\022\016\n\006status\030\010 \001(\005\022\022\n\ndescStatus\030\t \001" +
+      "(\t\022\022\n\ntimeRemain\030\n \001(\003\"@\n\006PbItem\022\n\n\002id\030\001",
+      " \001(\005\022\014\n\004type\030\002 \001(\005\022\016\n\006number\030\003 \001(\005\022\014\n\004da" +
+      "ta\030\004 \001(\t\".\n\013PbItemPoint\022\017\n\007itemKey\030\001 \001(\005" +
+      "\022\016\n\006number\030\002 \001(\003\"\216\001\n\017PbItemEquipment\022\n\n\002" +
+      "id\030\001 \001(\003\022\017\n\007itemKey\030\002 \001(\005\022\r\n\005level\030\003 \001(\005" +
+      "\022\014\n\004lock\030\004 \001(\010\022\r\n\005point\030\005 \003(\003\022\016\n\006expire\030" +
+      "\006 \001(\003\022\023\n\013lockDestroy\030\007 \001(\010\022\r\n\005bless\030\010 \001(" +
+      "\005\"/\n\nListAction\022!\n\007aAction\030\001 \003(\0132\020.pbdso" +
+      "n.PbAction\"*\n\010PbAction\022\020\n\010actionId\030\001 \001(\005" +
+      "\022\014\n\004data\030\002 \001(\014\".\n\014CommonVector\022\r\n\005aLong\030" +
+      "\001 \003(\003\022\017\n\007aString\030\002 \003(\t\"9\n\020ListCommonVect",
+      "or\022%\n\007aVector\030\001 \003(\0132\024.pbdson.CommonVecto" +
+      "r\"g\n\017PbCharacterInfo\022\n\n\002id\030\001 \001(\005\022\014\n\004name" +
+      "\030\002 \001(\t\022\014\n\004team\030\003 \001(\005\022\016\n\006avatar\030\004 \003(\005\022\r\n\005" +
+      "aItem\030\005 \003(\005\022\r\n\005point\030\006 \003(\003\"+\n\nPbListMail" +
+      "\022\035\n\005aMail\030\001 \003(\0132\016.pbdson.PbMail\"\210\001\n\006PbMa" +
+      "il\022\n\n\002id\030\001 \001(\005\022\r\n\005title\030\002 \001(\t\022\017\n\007message" +
+      "\030\003 \001(\t\022\r\n\005bonus\030\004 \003(\005\022\017\n\007receive\030\005 \001(\005\022\014" +
+      "\n\004time\030\006 \001(\003\022\020\n\010senderId\030\007 \001(\005\022\022\n\nsender" +
+      "Name\030\010 \001(\t\"\257\001\n\tPbEndGame\022\017\n\007popupId\030\001 \001(" +
+      "\005\022\021\n\tbattleKey\030\002 \001(\t\022\r\n\005isWin\030\003 \001(\010\022\017\n\007m",
+      "essage\030\004 \001(\t\022\r\n\005bonus\030\005 \003(\003\022\014\n\004time\030\006 \001(" +
+      "\005\022\017\n\007perDame\030\007 \001(\005\022\014\n\004star\030\010 \001(\005\022\"\n\004info" +
+      "\030\t \001(\0132\024.pbdson.CommonVector\"{\n\nPbRoomIn" +
+      "fo\022\020\n\010roomType\030\001 \001(\005\022\017\n\007service\030\002 \001(\005\022!\n" +
+      "\003cmm\030\003 \001(\0132\024.pbdson.CommonVector\022\'\n\005lstC" +
+      "m\030\004 \001(\0132\030.pbdson.ListCommonVector\"Z\n\017PbL" +
+      "istMiniLotte\022\020\n\010allBonus\030\001 \003(\003\022\020\n\010luckyN" +
+      "um\030\002 \003(\005\022#\n\006aLotte\030\003 \003(\0132\023.pbdson.PbMini" +
+      "Lotte\"C\n\013PbMiniLotte\022\021\n\tnumChoose\030\001 \003(\005\022" +
+      "\022\n\nprizeIndex\030\002 \001(\005\022\r\n\005bonus\030\003 \003(\005\"B\n\024Pb",
+      "ListLotteryHistory\022*\n\010aLottery\030\001 \003(\0132\030.p" +
+      "bdson.PbLotteryHistory\"\247\001\n\020PbLotteryHist" +
+      "ory\022\017\n\007eventId\030\001 \001(\005\022\014\n\004type\030\002 \001(\005\022\020\n\010lu" +
+      "ckyNum\030\003 \001(\005\022\016\n\006number\030\004 \003(\005\022\014\n\004time\030\005 \001" +
+      "(\003\022\r\n\005bonus\030\006 \003(\003\022\016\n\006status\030\007 \001(\005\022\021\n\tlis" +
+      "tBonus\030\010 \003(\003\022\022\n\nlistResult\030\t \003(\005\"*\n\014PbUn" +
+      "itUpdate\022\014\n\004type\030\001 \001(\005\022\014\n\004data\030\002 \001(\014\"\213\001\n" +
+      "\tPbUnitPos\022\n\n\002id\030\001 \001(\003\022\r\n\005speed\030\002 \001(\005\022\024\n" +
+      "\014lastInputSeq\030\003 \001(\003\022\032\n\003pos\030\004 \001(\0132\r.pbdso" +
+      "n.PbPos\022 \n\tdirection\030\005 \001(\0132\r.pbdson.PbPo",
+      "s\022\017\n\007chunkId\030\006 \001(\005\"1\n\014PbListBullet\022!\n\007bu" +
+      "llets\030\001 \003(\0132\020.pbdson.PbBullet\"@\n\010PbBulle" +
+      "t\022\n\n\002id\030\001 \001(\005\022\032\n\003pos\030\002 \001(\0132\r.pbdson.PbPo" +
+      "s\022\014\n\004info\030\003 \003(\005\"(\n\tPbListTab\022\033\n\004tabs\030\001 \003" +
+      "(\0132\r.pbdson.PbTab\"Z\n\005PbTab\022\r\n\005tabId\030\001 \001(" +
+      "\005\022\025\n\reventTemplate\030\002 \001(\005\022\r\n\005image\030\003 \001(\t\022" +
+      "\014\n\004name\030\004 \001(\t\022\016\n\006notify\030\005 \001(\010\"\255\002\n\017PbEven" +
+      "tBuyMonth\022\021\n\teventName\030\001 \001(\t\022\023\n\013imageBan" +
+      "ner\030\002 \001(\t\022\022\n\ntextBanner\030\003 \001(\t\022\r\n\005level\030\004" +
+      " \001(\005\022\020\n\010curPoint\030\005 \001(\005\022\020\n\010maxPoint\030\006 \001(\005",
+      "\022\025\n\rbuttonAddGoto\030\007 \001(\005\022\017\n\007keyHelp\030\010 \001(\t" +
+      "\022\016\n\006timeCD\030\t \001(\003\022\021\n\tstatusBuy\030\n \001(\005\022\r\n\005p" +
+      "rice\030\013 \003(\003\022\022\n\nnormalName\030\014 \001(\t\022\017\n\007vipNam" +
+      "e\030\r \001(\t\022,\n\005cells\030\016 \003(\0132\035.pbdson.PbCellPa" +
+      "nelEventMonth\"\315\001\n\014PbEventTimer\022\n\n\002id\030\001 \001" +
+      "(\005\022\016\n\006status\030\002 \001(\005\022\022\n\ntimeRemain\030\003 \001(\003\022\r" +
+      "\n\005bonus\030\004 \003(\003\022\r\n\005price\030\005 \003(\003\022\020\n\010oldPrice" +
+      "\030\006 \003(\003\022\014\n\004name\030\007 \001(\t\022\014\n\004desc\030\010 \001(\t\022\014\n\004sa" +
+      "le\030\t \001(\t\022\017\n\007bgrPath\030\n \001(\t\022\"\n\004info\030\013 \001(\0132" +
+      "\024.pbdson.CommonVector\"w\n\025PbCellPanelEven",
+      "tMonth\022\r\n\005level\030\001 \001(\005\022\013\n\003exp\030\002 \001(\005\022\016\n\006st" +
+      "atus\030\003 \001(\005\022\021\n\tstatusVip\030\004 \001(\005\022\r\n\005bonus\030\005" +
+      " \003(\003\022\020\n\010bonusVip\030\006 \003(\003\"\221\001\n\023PbPanelEventT" +
+      "abCell\022\021\n\teventName\030\001 \001(\t\022\023\n\013imageBanner" +
+      "\030\002 \001(\t\022\022\n\ntextBanner\030\003 \001(\t\022\016\n\006timeCD\030\t \001" +
+      "(\003\022.\n\005cells\030\016 \003(\0132\037.pbdson.PbCellPanelEv" +
+      "entTabCell\"i\n\027PbCellPanelEventTabCell\022\n\n" +
+      "\002id\030\001 \001(\005\022\020\n\010cellName\030\002 \001(\t\022\r\n\005bonus\030\003 \003" +
+      "(\003\022\013\n\003per\030\004 \001(\t\022\024\n\014buttonStatus\030\005 \001(\005\"\237\001" +
+      "\n\tPbWelfare\022\017\n\007eventId\030\001 \001(\005\022\016\n\006notify\030\002",
+      " \001(\010\022%\n\006banner\030\003 \001(\0132\025.pbdson.PbBannerEv" +
+      "ent\022&\n\010tabEvent\030\004 \003(\0132\024.pbdson.PbTabWelf" +
+      "are\022\017\n\007keyHelp\030\005 \001(\t\022\021\n\tcountdown\030\006 \001(\003\"" +
+      "b\n\014PbTabWelfare\022\r\n\005tabId\030\001 \001(\005\022\017\n\007tabNam" +
+      "e\030\002 \001(\t\022\"\n\005cells\030\003 \003(\0132\023.pbdson.PbCellEv" +
+      "ent\022\016\n\006notify\030\004 \001(\010\"\263\001\n\rPbBannerEvent\022\022\n" +
+      "\npathBanner\030\001 \001(\t\022\014\n\004text\030\002 \001(\t\022\022\n\nbonus" +
+      "Image\030\003 \001(\t\022\021\n\tboxStatus\030\004 \001(\005\022\020\n\010bonusB" +
+      "ox\030\005 \003(\005\022\014\n\004desc\030\006 \001(\t\022\021\n\tpathTitle\030\007 \001(" +
+      "\t\022&\n\004info\030\010 \001(\0132\030.pbdson.ListCommonVecto",
+      "r\"\353\001\n\013PbCellEvent\022\n\n\002id\030\001 \001(\005\022\r\n\005image\030\002" +
+      " \001(\t\022\r\n\005bonus\030\003 \003(\005\022\020\n\010nameCell\030\004 \001(\t\022\020\n" +
+      "\010textCell\030\005 \001(\t\022\020\n\010textDesc\030\006 \001(\t\022\016\n\006num" +
+      "Buy\030\007 \001(\005\022\r\n\005limit\030\010 \001(\005\022\r\n\005price\030\t \003(\003\022" +
+      "\024\n\014buttonStatus\030\n \001(\005\022\020\n\010bonusDay\030\013 \003(\005\022" +
+      "\022\n\ntimeRemain\030\014 \001(\003\022\022\n\ntimeExpire\030\r \001(\003\"" +
+      "\225\001\n\013PbEvent7Day\022&\n\004days\030\001 \003(\0132\030.pbdson.P" +
+      "bPanelEvent7Day\022\022\n\ntimeRemain\030\002 \001(\003\022\020\n\010c" +
+      "urValue\030\003 \001(\005\022\020\n\010maxValue\030\004 \001(\005\022&\n\tposRe" +
+      "ward\030\005 \003(\0132\023.pbdson.PbPosReward\"U\n\013PbPos",
+      "Reward\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\r\n\005poin" +
+      "t\030\003 \001(\003\022\r\n\005bonus\030\004 \003(\003\022\016\n\006status\030\005 \001(\005\"R" +
+      "\n\016PbTabEvent7Day\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001" +
+      "(\t\022&\n\005cells\030\003 \003(\0132\027.pbdson.PbCellEvent7D" +
+      "ay\"\272\001\n\020PbPanelEvent7Day\022$\n\004tab1\030\001 \001(\0132\026." +
+      "pbdson.PbTabEvent7Day\022$\n\004tab2\030\002 \001(\0132\026.pb" +
+      "dson.PbTabEvent7Day\022$\n\004tab3\030\003 \001(\0132\026.pbds" +
+      "on.PbTabEvent7Day\022$\n\004tab4\030\004 \001(\0132\026.pbdson" +
+      ".PbTabEvent7Day\022\016\n\006isLock\030\005 \001(\010\"\306\001\n\017PbCe" +
+      "llEvent7Day\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\014\n",
+      "\004desc\030\003 \001(\t\022\020\n\010curValue\030\004 \001(\005\022\020\n\010maxValu" +
+      "e\030\005 \001(\005\022\r\n\005bonus\030\006 \003(\003\022\024\n\014buttonStatus\030\007" +
+      " \001(\005\022\022\n\nbuttonGoto\030\010 \001(\005\022\020\n\010oldPrice\030\t \003" +
+      "(\003\022\020\n\010newPrice\030\n \003(\003\022\n\n\002xu\030\013 \001(\005\"\'\n\tPbLi" +
+      "stIAP\022\032\n\003iap\030\001 \003(\0132\r.pbdson.PpIAP\"\264\001\n\005Pp" +
+      "IAP\022\n\n\002id\030\001 \001(\005\022\030\n\020productIdAndroid\030\002 \001(" +
+      "\t\022\024\n\014productIdIos\030\003 \001(\t\022\014\n\004name\030\004 \001(\t\022\r\n" +
+      "\005price\030\005 \001(\t\022\r\n\005bonus\030\006 \003(\003\022\020\n\010addBonus\030" +
+      "\007 \003(\003\022\020\n\010addTitle\030\010 \001(\t\022\016\n\006vipExp\030\t \001(\005\022" +
+      "\017\n\007priceQr\030\n \001(\t*!\n\tCellState\022\n\n\006ACTIVE\020",
+      "\001\022\010\n\004HIDE\020\002*\354\001\n\014SubStateType\022\r\n\tADD_BONU" +
+      "S\020\001\022\007\n\003DIE\020\002\022\n\n\006REVIVE\020\003\022\r\n\tPLAY_ANIM\020\004\022" +
+      "\r\n\tBE_DAMAGE\020\005\022\017\n\013EFFECT_BODY\020\006\022\t\n\005RE_HP" +
+      "\020\007\022\025\n\021UPDATE_CHAT_FRAME\020\010\022\020\n\014UPDATE_TRIA" +
+      "L\020\t\022\024\n\020UPDATE_ITEM_SLOT\020\n\022\024\n\020UPDATE_TEXT" +
+      "_DAME\020\013\022\026\n\022UPDATE_MULTI_POINT\020\014\022\021\n\rUSE_I" +
+      "TEM_SLOT\020\r*Y\n\tStateType\022\023\n\017TYPE_ADD_REMO" +
+      "VE\020\001\022\014\n\010TYPE_POS\020\002\022\023\n\017TYPE_UNIT_STATE\020\003\022" +
+      "\024\n\020TYPE_CHUNK_STATE\020\004*y\n\016CellObjectType\022" +
+      "\010\n\004ROCK\020\001\022\010\n\004SIGN\020\002\022\n\n\006CACTUS\020\003\022\n\n\006FLOWE",
+      "R\020\004\022\t\n\005SKULL\020\005\022\t\n\005CHEST\020\006\022\t\n\005BONES\020\007\022\016\n\n" +
+      "GRAVESTONE\020\010\022\n\n\006HELMET\020\t*;\n\014TargetAttack" +
+      "\022\n\n\006OBJECT\020\000\022\t\n\005ENEMY\020\001\022\010\n\004BOSS\020\002\022\n\n\006PLA" +
+      "YER\020\003B\024\n\010protocolB\010Pbmethod"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -78070,13 +77028,13 @@ public final class Pbmethod {
           internal_static_pbdson_PbUser_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbUser_descriptor,
-              new java.lang.String[] { "Id", "Username", "Name", "Gold", "Gem", "Exp", "Level", "Avatar", "Vip", "ClanInfo", "Info", "PetId", "Facebook", "UserInfo", "Rank", "Desc", "WeaponEquip", "Point", "TimeLastAction", "Honor", "Power", "ItemEquip", "Channel", "PointRank", "ArenaRank", "Ruby", "Pet", });
+              new java.lang.String[] { "Id", "Username", "Name", "Gold", "Gem", "Avatar", "Vip", "ClanInfo", "Info", "PetId", "Facebook", "UserInfo", "Rank", "PointRank", "Point", "TimeLastAction", "Honor", "Power", "ItemEquip", "Channel", "Ruby", "Pet", });
           internal_static_pbdson_PbUserData_descriptor =
             getDescriptor().getMessageTypes().get(18);
           internal_static_pbdson_PbUserData_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbUserData_descriptor,
-              new java.lang.String[] { "LvGachaWeapon", "LvGachaPet", "LvTraining", "MaxlvTraining", "NumPointLevel", "Stone", "StoneVip", "Items", "ItemEquipments", "AItemEquip", "AItemPoint", "APet", "Tutorial", "DameSkins", "DameSkinEquip", "BossGod", "ChatFrames", "ChatFrameEquip", "Trials", "TrialEquip", });
+              new java.lang.String[] { "LvTraining", "MaxlvTraining", "NumPointLevel", "Items", "ItemEquipments", "AItemEquip", "AItemPoint", "APet", "Tutorial", "DameSkins", "DameSkinEquip", "ChatFrames", "ChatFrameEquip", "Trials", "TrialEquip", });
           internal_static_pbdson_PbListItem_descriptor =
             getDescriptor().getMessageTypes().get(19);
           internal_static_pbdson_PbListItem_fieldAccessorTable = new

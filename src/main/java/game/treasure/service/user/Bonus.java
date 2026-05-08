@@ -385,16 +385,16 @@ public class Bonus {
     }
 
     static boolean dbAddGold(UserEntity user, long addGold) {
-        return DBJPA.update("user", Arrays.asList("gem", user.getGem(), "gold", user.getGold() + addGold, "exp", user.getExp(), "level", user.getLevel()), Arrays.asList("id", user.getId()));
+        return DBJPA.update("user", Arrays.asList("gem", user.getGem(), "gold", user.getGold() + addGold), Arrays.asList("id", user.getId()));
     }
 
     static boolean dbAddGem(UserEntity user, long addGem) {
-        return DBJPA.update("user", Arrays.asList("gem", user.getGem() + addGem, "gold", user.getGold(), "exp", user.getExp(), "level", user.getLevel()), Arrays.asList("id", user.getId()));
+        return DBJPA.update("user", Arrays.asList("gem", user.getGem() + addGem, "gold", user.getGold()), Arrays.asList("id", user.getId()));
 
     }
 
     static boolean dbAddRuby(UserEntity user, long addRuby) {
-        return DBJPA.update("user", Arrays.asList("ruby", user.getRuby() + addRuby, "exp", user.getExp(), "level", user.getLevel()), Arrays.asList("id", user.getId()));
+        return DBJPA.update("user", Arrays.asList("ruby", user.getRuby() + addRuby), Arrays.asList("id", user.getId()));
 
     }
 

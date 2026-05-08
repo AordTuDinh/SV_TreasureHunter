@@ -31,10 +31,10 @@ public class CfgFeature {
         int curNumber = 0;
         switch (FeatureBlockType.get(require.get(0))) {
             case BLOCK_NULL -> curNumber = -1;
-            case BLOCK_BY_LEVEL -> curNumber = mUser.getUser().getLevel();
+            case BLOCK_BY_LEVEL -> curNumber = 1;
             case BLOCK_BY_TUT_QUEST -> curNumber = mUser.getUData().getQuestTutorial();
         }
-        if (curNumber != -1 && mUser.getUser().getLevel() < require.get(1)) {
+        if (curNumber != -1 && 1 < require.get(1)) {
             handler.addErrResponse(String.format(Lang.instance(mUser).get(Lang.err_feature_lock), require.get(1)));
             return false;
         }

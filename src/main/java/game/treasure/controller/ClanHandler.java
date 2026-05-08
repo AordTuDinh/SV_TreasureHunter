@@ -235,7 +235,7 @@ public class ClanHandler extends AHandler {
             addErrResponse(getLang(Lang.err_intro_max_length));
             return;
         }
-        if (user.getLevel() < CfgClan.config.levelCreateClan) {
+        if (1 < CfgClan.config.levelCreateClan) {
             addErrResponse(String.format(getLang(Lang.user_function_level_required), CfgClan.config.levelCreateClan));
             return;
         }

@@ -17,6 +17,6 @@ public class UserChatInfoObject implements Serializable {
         this.id = user.getId();
         this.name = user.getName();
         this.avatar = user.getAvatar();
-        this.level = user.getLevel();
+        this.level = 1;
     }
 }

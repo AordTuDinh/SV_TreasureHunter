@@ -167,7 +167,7 @@ public class MyUser implements Serializable {
     public UserQuestEntity getUQuest() {
         if (uQuest == null) {
             uQuest = Services.userDAO.getUserQuest(this);
-            uQuest.checkData(user.getLevel());
+            uQuest.checkData(1);
         }
         return uQuest;
     }

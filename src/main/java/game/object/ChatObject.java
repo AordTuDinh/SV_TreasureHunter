@@ -16,7 +16,6 @@ public class ChatObject implements Serializable {
     public String name, msg, username;
     int userId, id, clanId, level, clanIcon, vip, rank;
     List<Integer> avatar, pets,  itemEquips;
-    String intro;
     long timeSeconds, exp, power;
 
 
@@ -42,9 +41,7 @@ public class ChatObject implements Serializable {
         pbUser.setId(id);
         if (username != null) pbUser.setUsername(username);
         pbUser.setName(getName());
-        pbUser.setLevel(level).setExp(exp);
         pbUser.addAllAvatar(getAvatar());
-        pbUser.setDesc(intro);
         pbUser.setRank(rank);
         pbUser.setPower(getPower());
         pbUser.addAllPet(pets);
@@ -57,10 +54,10 @@ public class ChatObject implements Serializable {
     void init(UserEntity user, String msg) {
         this.id = getNewId();
         this.vip = user.getVip();
-        this.level = user.getLevel();
+        this.level = 1;
         this.userId = user.getId();
         this.msg = formatChat(msg);
-        this.exp = user.getExp();
+        this.exp = 0;
         this.timeSeconds = System.currentTimeMillis() / 1000;
         this.clanId = user.getClan();
         this.avatar = user.getAvatar();

@@ -330,7 +330,7 @@ public class UserDAO {
     public UserDailyEntity getUserDaily(MyUser mUser) {
         UserDailyEntity userDaily = (UserDailyEntity) mUser.getCache().get("user_daily");
         if (userDaily == null) {
-            userDaily = getUserDaily(mUser.getUser().getId(), mUser.getUser().getLevel());
+            userDaily = getUserDaily(mUser.getUser().getId(), 1);
             if (userDaily != null) mUser.getCache().set("user_daily", userDaily);
         }
         if(userDaily!=null) userDaily.checkData();
@@ -399,7 +399,7 @@ public class UserDAO {
     public UserQuestEntity getUserQuest(MyUser mUser) {
         UserQuestEntity userQuest = (UserQuestEntity) mUser.getCache().get("user_quest");
         if (userQuest == null) {
-            userQuest = getUserQuest(mUser.getUser().getId(), mUser.getUser().getLevel());
+            userQuest = getUserQuest(mUser.getUser().getId(), 1);
             if (userQuest != null) mUser.getCache().set("user_quest", userQuest);
         }
         return userQuest;

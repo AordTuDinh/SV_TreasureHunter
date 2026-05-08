@@ -155,7 +155,7 @@ public class WelfareHandler extends AHandler {
             pb.setNameCell(getLang(Lang.has_level) + " " + requireLevel);
             pb.addAllBonus(CfgEvent.config.bonusQuyTruongThanh.get(i));
             int cacheStatus = quyTruongThanh.get(i);
-            if (cacheStatus == StatusType.PROCESSING.value && requireLevel <= user.getLevel()) {
+            if (cacheStatus == StatusType.PROCESSING.value && requireLevel <= 1) {
                 notify = true;
                 pb.setButtonStatus(StatusType.RECEIVE.value);
             } else pb.setButtonStatus(cacheStatus);
@@ -641,7 +641,7 @@ public class WelfareHandler extends AHandler {
             addErrResponse(getLang(Lang.err_can_buy_pack));
             return;
         }
-        if (CfgEvent.config.numQuyTruongThanh.get(cellId) > user.getLevel()) {
+        if (CfgEvent.config.numQuyTruongThanh.get(cellId) > 1) {
             addErrParam();
             return;
         }

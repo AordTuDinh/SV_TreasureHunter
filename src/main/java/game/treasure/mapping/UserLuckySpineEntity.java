@@ -55,7 +55,7 @@ public class UserLuckySpineEntity implements Serializable {
     public boolean updateResetNormal(UserEntity user, boolean free) {
         String status = NumberUtil.genListStringInt(CfgLuckySpine.rateRotate.size(), StatusType.PROCESSING.value);
         int curDay = DateTime.getNumberDay();
-        String bonus = StringHelper.toDBString(CfgLuckySpine.getSpineBonusShow(user.getLevel()));
+        String bonus = StringHelper.toDBString(CfgLuckySpine.getSpineBonusShow(1));
         if (free) {
             if (DBJPA.update("user_lucky_spine", Arrays.asList("bonus_normal", bonus, "event_id", curDay, "status_normal", status, "time_free_refresh",
                     Calendar.getInstance().getTimeInMillis()), Arrays.asList("user_id", userId))) {

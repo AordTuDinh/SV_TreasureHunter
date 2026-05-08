@@ -182,7 +182,7 @@ public class UserEventSevenDayEntity implements Serializable {
             }
             case 4 -> {
                 if (panel == 1) { // level
-                    return mUser.getUser().getLevel();
+                    return 1;
                 } else if (panel == 2) { // pet
                     return summonPet;
                 }

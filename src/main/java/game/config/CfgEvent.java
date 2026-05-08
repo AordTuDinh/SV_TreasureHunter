@@ -242,7 +242,7 @@ public static boolean haveLunch() {
 private static boolean isNotifyQuyTruongThanh(MyUser mUser) {
     List<Integer> quyTruongThanh = mUser.getUEvent().getQuyTruongThanh();
     for (int i = 0; i < quyTruongThanh.size(); i++) {
-        if (quyTruongThanh.get(i) == StatusType.PROCESSING.value && mUser.getUser().getLevel() >= CfgEvent.config.numQuyTruongThanh.get(i))
+        if (quyTruongThanh.get(i) == StatusType.PROCESSING.value && 1 >= CfgEvent.config.numQuyTruongThanh.get(i))
             return true;
     }
     return false;

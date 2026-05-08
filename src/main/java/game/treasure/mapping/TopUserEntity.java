@@ -19,11 +19,11 @@ import java.util.List;
 public class TopUserEntity implements Serializable {
     @Id
     int id;
-    String name, username, intro;
-    int level, vip;
+    String name, username;
+    int  vip;
     int clan, clanRank, clanPosition, clanAvatar;
     long gold, gem, number, power;
-    String avatar, clanName, weapon, itemEquipment;
+    String avatar, clanName, itemEquipment;
 
     public List<Integer> getListAvatar() {
         List<Integer> avatars = GsonUtil.strToListInt(avatar);
@@ -38,19 +38,15 @@ public class TopUserEntity implements Serializable {
         pb.setName(getName());
         pb.setGold(gold);
         pb.setGem(gem);
-        pb.setLevel(level);
         pb.addAllAvatar(getListAvatar());
         pb.addVip(vip);
         pb.setRank(rank);
-        pb.setDesc(intro);
-        pb.addAllWeaponEquip(GsonUtil.strToListInt(weapon));
         pb.addAllItemEquip(GsonUtil.strToListInt(itemEquipment));
         pb.setPower(power);
         pb.setClanInfo(protocol.Pbmethod.CommonVector.newBuilder().addAString(clanName).addALong(clan).addALong(clanPosition).addALong(clanRank).addALong(clanAvatar).build());
         pb.setInfo(protocol.Pbmethod.CommonVector.newBuilder().addALong(number).build());
         // rank
         if (topType == TopType.USER_POWER) pb.setPointRank(power);
-        else if (topType == TopType.USER_LEVEL) pb.setPointRank(level);
         else if (topType == TopType.TOWER_LEVEL) pb.setPointRank(number);
         else if (topType == TopType.ARENA) {
             pb.setPointRank(number);
@@ -59,7 +55,6 @@ public class TopUserEntity implements Serializable {
         }
         return pb.build();
     }
-
 
 
 }

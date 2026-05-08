@@ -129,7 +129,7 @@ public class ItemHandler extends AHandler {
             addErrResponse(getLang(Lang.err_item_equip_expire));
             return;
         }
-        if (user.getLevel() < iEquip.getRes().getLevelRequire()) {
+        if (1 < iEquip.getRes().getLevelRequire()) {
             addErrResponse(getLang(Lang.err_item_level));
             return;
         }

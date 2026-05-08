@@ -126,8 +126,8 @@ public class CfgQuest {
         if (res == null) return StatusType.PROCESSING.value;
         switch (res.getType()) {
             case HAS_LEVEL -> {
-                mUser.getUData().setQuestTutorialNumber(mUser.getUser().getLevel());
-                if (mUser.getUser().getLevel() >= res.getNum()) {
+                mUser.getUData().setQuestTutorialNumber(1);
+                if (1 >= res.getNum()) {
                     return StatusType.RECEIVE.value;
                 }
             }

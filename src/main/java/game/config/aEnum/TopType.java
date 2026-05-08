@@ -6,12 +6,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum TopType {
-    USER_LEVEL(1, 0, "LEVEL",
-            "SELECT *,level number FROM dson.user WHERE server=%s and level>1 ORDER BY level DESC LIMIT 50",
-            "SELECT count(*) number FROM dson.user WHERE server=%s and level > (SELECT level FROM dson.user WHERE id=%s)",
-            "SELECT *, level number FROM dson.user WHERE id=%s"),
     USER_POWER(2, 0, "POWER",
-            "SELECT *,power number FROM dson.user WHERE server=%s and level>1 order by power desc limit 50",
+            "SELECT *,power number FROM dson.user WHERE server=%s order by power desc limit 50",
             "SELECT count(*) number FROM dson.user WHERE server=%s and power > (SELECT power FROM dson.user WHERE id=%s)",
             "SELECT *, power number FROM dson.user WHERE id=%s"),
     CLAN_POWER(3, 1, "CLAN_POWER",
@@ -24,7 +20,7 @@ public enum TopType {
             "SELECT *,star number FROM dson.clan WHERE id=%s"),
     TOWER_LEVEL(5, 0, "TOWER_LEVEL",
             "SELECT u.id,u.name,u.username,u.intro,u.level,u.vip, u.clan,u.clan_rank,u.clan_position,u.clan_avatar,u.gold,u.gem,u.power,u.avatar,u.clan_name,u.weapon,u.item_equipment,t.level number" +
-                    " FROM dson.user u INNER JOIN dson.user_tower t ON u.id = t.user_id WHERE u.server=%s and u.level>1 order by t.level DESC , t.last_attack asc limit 50",
+                    " FROM dson.user u INNER JOIN dson.user_tower t ON u.id = t.user_id WHERE u.server=%s order by t.level DESC , t.last_attack asc limit 50",
             "SELECT count(*) number FROM dson.user_tower WHERE server=%s and level > (SELECT level FROM dson.user_tower WHERE user_id=%s)",
             "SELECT u.id,u.name,u.username,u.intro,u.level,u.vip, u.clan,u.clan_rank,u.clan_position,u.clan_avatar,u.gold,u.gem,u.power,u.avatar,u.clan_name,u.weapon,u.item_equipment,t.level number" +
                     " FROM dson.user u INNER JOIN dson.user_tower t ON u.id = t.user_id WHERE user_id=%s"),

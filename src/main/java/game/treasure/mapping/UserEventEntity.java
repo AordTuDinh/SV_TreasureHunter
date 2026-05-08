@@ -121,7 +121,7 @@ public class UserEventEntity implements Serializable {
             // đang làm
             if (curStatus == StatusType.PROCESSING.value || curStatus == StatusType.LOCK.value) {
                 List<Integer> require = cfg.type;
-                if (require.get(0) == CfgEventCommunity.TYPE_LEVEL && user.getLevel() >= require.get(1) || require.get(0) == CfgEventCommunity.TYPE_DAY && user.getNumDayLogin() >= require.get(1) - 1) {
+                if (require.get(0) == CfgEventCommunity.TYPE_LEVEL && 1 >= require.get(1) || require.get(0) == CfgEventCommunity.TYPE_DAY && user.getNumDayLogin() >= require.get(1) - 1) {
                     return true;
                 }
             }
@@ -145,7 +145,7 @@ public class UserEventEntity implements Serializable {
             CfgEventCommunity.EventCommunity cfg = CfgEventCommunity.config.freeDameSkin.get(i);
             if (status.get(i) == StatusType.PROCESSING.value || status.get(i) == StatusType.LOCK.value) {// đang làm
                 List<Integer> require = cfg.type;
-                if (require.get(0) == CfgEventCommunity.TYPE_LEVEL && user.getLevel() >= require.get(1) || require.get(0) == CfgEventCommunity.TYPE_DAY && user.getNumDayLogin() >= require.get(1) - 1) {
+                if (require.get(0) == CfgEventCommunity.TYPE_LEVEL && 1 >= require.get(1) || require.get(0) == CfgEventCommunity.TYPE_DAY && user.getNumDayLogin() >= require.get(1) - 1) {
                     return true;
                 }
             }
@@ -271,7 +271,7 @@ public class UserEventEntity implements Serializable {
             // đang làm
             if (curStatus == StatusType.PROCESSING.value || curStatus == StatusType.LOCK.value) {
                 List<Integer> require = cfg.type;
-                if (require.get(0) == CfgEventCommunity.TYPE_LEVEL && user.getLevel() >= require.get(1) || require.get(0) == CfgEventCommunity.TYPE_DAY && user.getNumDayLogin() >= require.get(1) - 1) {
+                if (require.get(0) == CfgEventCommunity.TYPE_LEVEL && 1 >= require.get(1) || require.get(0) == CfgEventCommunity.TYPE_DAY && user.getNumDayLogin() >= require.get(1) - 1) {
                     status.set(i, StatusType.RECEIVE.value);
                     update = true;
                 }
@@ -295,7 +295,7 @@ public class UserEventEntity implements Serializable {
             CfgEventCommunity.EventCommunity cfg = CfgEventCommunity.config.freeDameSkin.get(i);
             if (status.get(i) == StatusType.PROCESSING.value || status.get(i) == StatusType.LOCK.value) {// đang làm
                 List<Integer> require = cfg.type;
-                if (require.get(0) == CfgEventCommunity.TYPE_LEVEL && user.getLevel() >= require.get(1) || require.get(0) == CfgEventCommunity.TYPE_DAY && user.getNumDayLogin() >= require.get(1) - 1) {
+                if (require.get(0) == CfgEventCommunity.TYPE_LEVEL && 1 >= require.get(1) || require.get(0) == CfgEventCommunity.TYPE_DAY && user.getNumDayLogin() >= require.get(1) - 1) {
                     status.set(i, StatusType.RECEIVE.value);
                     update = true;
                 }

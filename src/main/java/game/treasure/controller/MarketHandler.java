@@ -139,7 +139,7 @@ public class MarketHandler extends AHandler {
         ResMarketDetailEntity rMarketDetail = ResMarket.getItem(itemId);
         // check require
         List<Integer> requires = rMarketDetail.getRequires();
-        if (requires.get(0) == 1 && user.getLevel() < requires.get(1)) {
+        if (requires.get(0) == 1 && 1 < requires.get(1)) {
             addErrResponse(String.format(getLang(Lang.err_level_buy), requires.get(1)));
             return;
         }

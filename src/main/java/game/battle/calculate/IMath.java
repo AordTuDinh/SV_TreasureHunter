@@ -147,7 +147,7 @@ public class IMath {
         float perPowerWeaponEquip = 1;
 
         // power tinh cuoi cung
-        pt.calculatorPower(mUser.getUser().getLevel(), perPowerWeaponEquip);
+        pt.calculatorPower(1, perPowerWeaponEquip);
         return pt;
     }
 

@@ -32,8 +32,8 @@ public class UserEntity implements Serializable {
     int clan, clanAvatar, clanRank, mainId, clanPosition;
     String clanName, pointData;
     String itemEquipment; // id - key - level
-    int level, server, vip, vipExp, userRank;
-    long gold, exp, gem, ruby, power;
+    int server, vip, vipExp, userRank;
+    long gold, gem, ruby, power;
     int numberFriend, rr, party;
     int blockType;
     int numDayLogin;
@@ -53,14 +53,12 @@ public class UserEntity implements Serializable {
         this.mainId = mainId;
         this.gameChannel = gameChannel;
         this.version = version;
-        this.level = 1;
         this.gold = 0;
         this.avatar = "[1,0,0,0]";//  avatarId - heroId - frame - skin
         this.clan = 0;
         this.clanName = "";
         this.power = 0;
         this.gem = 100;
-        this.exp = 0;
         this.vip = 0;
         this.userRank = 0;
         this.lastLogin = Calendar.getInstance().getTime();
@@ -79,7 +77,6 @@ public class UserEntity implements Serializable {
         builder.setGold(gold);
         builder.setRuby(ruby);
         builder.setGem(gem);
-        builder.setLevel(level).setExp(exp);
         builder.addAllAvatar(getAvatar());
         builder.addAllVip(getVipInfo());
         builder.setRank(userRank);
@@ -197,7 +194,6 @@ public class UserEntity implements Serializable {
         pb.setName(getName());
         pb.setGold(gold);
         pb.setGem(gem);
-        pb.setLevel(level).setExp(exp);
         pb.addAllAvatar(getAvatar());
         pb.addAllVip(getVipInfo());
         pb.setRank(userRank);
@@ -217,7 +213,6 @@ public class UserEntity implements Serializable {
         protocol.Pbmethod.PbUser.Builder builder = protocol.Pbmethod.PbUser.newBuilder();
         builder.setId(id);
         builder.setName(getName());
-        builder.setLevel(level);
         builder.setPower(getPower());
         builder.setRank(rank.length > 0 ? rank[0] : 0);
         builder.addAllAvatar(getAvatar());
@@ -234,7 +229,7 @@ public class UserEntity implements Serializable {
         member.setPosition(clanPosition);
         member.setId(id).setName(getName());
         member.addAllAvatar(getAvatar());
-        member.setLevel(level);
+        member.setLevel(1);
         member.setClanDonated(0);
         member.setOnline(Online.isOnline(id));
         member.setIsNew(false);
@@ -375,10 +370,6 @@ public class UserEntity implements Serializable {
         obj.add(gem);
         obj.add("gold");
         obj.add(gold);
-        obj.add("level");
-        obj.add(level);
-        obj.add("exp");
-        obj.add(exp);
         this.setLastAction(time);
         return DBJPA.update("user", obj, Arrays.asList("id", id));
     }

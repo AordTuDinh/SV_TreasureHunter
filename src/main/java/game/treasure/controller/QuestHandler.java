@@ -51,7 +51,7 @@ public class QuestHandler extends AHandler {
     public void handle(Channel channel, String session, int actionId, byte[] requestData) {
         super.handle(channel, session, actionId, requestData);
         uQuest = mUser.getUQuest();
-        uQuest.checkData(user.getLevel());
+        uQuest.checkData(1);
         try {
             switch (actionId) {
                 case IAction.QUEST_STATUS -> questStatus(QuestType.get(getInputInt()));

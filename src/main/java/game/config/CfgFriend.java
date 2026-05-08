@@ -35,9 +35,9 @@ public class CfgFriend {
     private static void cacheSuggestUser(int serverId) {
         List<UserEntity> aUser = new ArrayList<>();
         if (serverId > 0) {
-            aUser = DBJPA.getSelectQuery("select * from user where level >1 and server = "+serverId+" and number_friend<50 order by last_action desc limit 100", UserEntity.class);
+            aUser = DBJPA.getSelectQuery("select * from user where server = "+serverId+" and number_friend<50 order by last_action desc limit 100", UserEntity.class);
         } else {
-            aUser = DBJPA.getSelectQuery("select * from user where server<0 and number_friend<50 and level >1 order by last_action desc limit 100", UserEntity.class);
+            aUser = DBJPA.getSelectQuery("select * from user where server<0 and number_friend<50 order by last_action desc limit 100", UserEntity.class);
         }
         if (aUser != null && !aUser.isEmpty()) {
             if (serverId >0) aSuggestUser = aUser;
