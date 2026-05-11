@@ -1,4 +1,4 @@
-open sftp://root@aord.ddns.net:22222 -privatekey=C:\Users\AORD\.ssh\id_rsa.ppk
+open sftp://root@aord.io.vn:22222 -privatekey=C:\Users\AORD\.ssh\id_rsa.ppk
 synchronize remote target /root/game/gameserver/target
 
 put   pom.xml /root/game/gameserver/
