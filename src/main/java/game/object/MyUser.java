@@ -10,7 +10,6 @@ import game.treasure.controller.UserHandler;
 import game.treasure.mapping.*;
 import game.treasure.server.IAction;
 import game.treasure.service.Services;
-import game.treasure.service.resource.ResItem;
 import game.treasure.service.user.Bonus;
 import game.monitor.ClanManager;
 import game.protocol.CommonProto;
@@ -234,7 +233,7 @@ public class MyUser implements Serializable {
         int numItem = 0, numItemEquip = 0;
         for (int i = 0; i < aBonus.size(); i++) {
             int itemId = aBonus.get(i).get(1).intValue();
-            if (aBonus.get(i).get(0).intValue() == Bonus.BONUS_MATERIAL&&
+            if (aBonus.get(i).get(0).intValue() == Bonus.BONUS_ITEM &&
                     getResources().getItem(aBonus.get(i).get(1).intValue()) != null)
                 numItem++;
             if (aBonus.get(i).get(0).intValue() == Bonus.BONUS_EQUIPMENT) numItemEquip++;

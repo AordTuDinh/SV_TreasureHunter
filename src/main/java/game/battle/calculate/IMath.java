@@ -106,11 +106,6 @@ public class IMath {
 
     public static Point calculatePoint(MyUser mUser, boolean hasItemEquip) {
         Point pt = PlayerBasePoint.getBase();
-        // Item Equipment
-        if (hasItemEquip) {
-            List<Integer> itemIds = mUser.getUser().getListIdEquipmentEquip();
-            calPointItemEquip(mUser, itemIds, pt);
-        }
 //        System.out.println("point 8 = " + pt.toMiniString());
         // phúc lợi bang hội
         if (mUser.getUser().getClan() > 0) {
@@ -129,17 +124,6 @@ public class IMath {
         // power tinh cuoi cung
         pt.calculatorPower(1, perPowerWeaponEquip);
         return pt;
-    }
-
-    public static void calPointItemEquip(MyUser mUser, List<Integer> itemIds, Point pt) {
-        for (int i = 0; i < itemIds.size(); i++) {
-            UserItemEquipmentEntity item = mUser.getResources().getItemEquipment((long) itemIds.get(i));
-            if (item == null) continue;
-            List<Long> itemPoint = item.getPoint();
-            for (int j = 0; j < itemPoint.size(); j += 3) {
-                addPointData(pt, Math.toIntExact(itemPoint.get(j + 1)), itemPoint.get(j + 2) / 100f);
-            }
-        }
     }
 
     public static long calPowerPet(UserPetEntity pet) {

@@ -23,11 +23,13 @@ public class Bonus {
     public static final int BONUS_RUBY = 3;
     public static final int BONUS_EQUIPMENT = 4;
     public static final int BONUS_ARTIFACT = 5;
-    public static final int BONUS_MATERIAL = 6;
+    public static final int BONUS_ITEM = 6;
     public static final int BONUS_SKIN = 7; //type -id
     public static final int BONUS_VIP_EXP = 8;
     public static final int BONUS_PET = 9;
     public static final int BONUS_MOUNT = 10;
+    public static final int BONUS_MATERIAL = 11;
+
 
 
     // type length for parsing VIEW-format bonus input (type + values...)
@@ -37,14 +39,15 @@ public class Bonus {
         put(BONUS_RUBY, 1);      // addRuby
         put(BONUS_EQUIPMENT, 1);
         put(BONUS_ARTIFACT, 1);
-        put(BONUS_MATERIAL, 1);
+        put(BONUS_ITEM, 1);
         put(BONUS_SKIN, 2);      // type, skinId
         put(BONUS_VIP_EXP, 1);   // addExp
         put(BONUS_PET, 1);       // petId
         put(BONUS_MOUNT, 1);     // mountId
+        put(BONUS_MATERIAL, 1);  // materialId (+1 point mỗi entry, lặp lại để cộng nhiều điểm)
     }};
 
-    public static List<Integer> bonusSinger = Arrays.asList(BONUS_EQUIPMENT, BONUS_ARTIFACT, BONUS_MATERIAL, BONUS_PET, BONUS_MOUNT, BONUS_SKIN);
+    public static List<Integer> bonusSinger = Arrays.asList(BONUS_EQUIPMENT, BONUS_ARTIFACT, BONUS_ITEM, BONUS_PET, BONUS_MOUNT, BONUS_SKIN,BONUS_MATERIAL);
 
     public static boolean isBonusSinger(int type) {
         return bonusSinger.contains(type);
@@ -57,12 +60,12 @@ public class Bonus {
 
     public static List<Long> viewItem(int itemId, long number) {
         // new format: material is "singer" by itemKey; quantity is represented by repeating entries
-        List<Long> one = view(BONUS_MATERIAL, itemId);
+        List<Long> one = view(BONUS_ITEM, itemId);
         return viewXNumber(one, (int) number);
     }
 
     public static List<Long> viewItemMaterial(MaterialType type, long number) {
-        List<Long> one = view(BONUS_MATERIAL, type.id);
+        List<Long> one = view(BONUS_ITEM, type.id);
         return viewXNumber(one, (int) number);
     }
 
@@ -70,8 +73,14 @@ public class Bonus {
         return view(BONUS_PET,  itemId);
     }
 
+    // Preview / send: [BONUS_MATERIAL, materialId].
+    // Khi receive thành công, server tạo row mới và trả về kèm row id: [BONUS_MATERIAL, id, materialId].
+    public static List<Long> viewMaterial(int materialId) {
+        return view(BONUS_MATERIAL, materialId);
+    }
+
     public static List<Long> viewItem(ItemKey itemKey, long number) {
-        List<Long> one = view(BONUS_MATERIAL, itemKey.id);
+        List<Long> one = view(BONUS_ITEM, itemKey.id);
         return viewXNumber(one, (int) number);
     }
 
@@ -111,7 +120,7 @@ public class Bonus {
     public static int getIdItem(List<Long> bonus) {
         int type = Math.toIntExact(bonus.get(0));
         switch (type) {
-            case BONUS_MATERIAL, BONUS_EQUIPMENT, BONUS_ARTIFACT -> {
+            case BONUS_ITEM, BONUS_EQUIPMENT, BONUS_ARTIFACT -> {
                 return Math.toIntExact(bonus.get(1));
             }
             case BONUS_SKIN -> {
@@ -163,7 +172,7 @@ public class Bonus {
                 case BONUS_VIP_EXP:
                     aLong.addAll(addVipExp(mUser, aBonus, index, detailAction));
                     break;
-                case BONUS_MATERIAL:
+                case BONUS_ITEM:
                     aLong.addAll(addItemMaterial(mUser, aBonus, index, detailAction));
                     break;
                 case BONUS_SKIN:
@@ -174,6 +183,9 @@ public class Bonus {
                     break;
                 case BONUS_MOUNT:
                     aLong.addAll(addMount(mUser, aBonus, index, detailAction));
+                    break;
+                case BONUS_MATERIAL:
+                    aLong.addAll(addMaterial(mUser, aBonus, index, detailAction));
                     break;
 
             }
@@ -235,7 +247,7 @@ public class Bonus {
                         "addValue", addNumber);
             }
             // receive-format: [type, itemKey]
-            return Arrays.asList((long) BONUS_MATERIAL, (long) itemKey);
+            return Arrays.asList((long) BONUS_ITEM, (long) itemKey);
         }
         return new ArrayList<>();
     }
@@ -270,9 +282,7 @@ public class Bonus {
 
     static List<Long> addItemEquipment(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
         int itemKey = aBonus.get(index++).getAsInt();
-        long expire = -1; // default: permanent
-        int isLock = 0;
-        UserItemEquipmentEntity uItemEquip = new UserItemEquipmentEntity(mUser.getUser().getId(), itemKey, expire, isLock);
+        UserItemEquipmentEntity uItemEquip = new UserItemEquipmentEntity(mUser.getUser().getId(), itemKey);
         if (DBJPA.save(uItemEquip)) {
             mUser.getResources().addItemEquip(uItemEquip);
             if (CfgServer.isRealServer())
@@ -285,9 +295,7 @@ public class Bonus {
 
     static List<Long> addItemArtifact(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
         int itemKey = aBonus.get(index++).getAsInt();
-        long expire = -1; // default: permanent
-        int isLock = 0;
-        UserItemEquipmentEntity uItemEquip = new UserItemEquipmentEntity(mUser.getUser().getId(), itemKey, expire, isLock);
+        UserItemEquipmentEntity uItemEquip = new UserItemEquipmentEntity(mUser.getUser().getId(), itemKey);
         if (DBJPA.save(uItemEquip)) {
             mUser.getResources().addItemEquip(uItemEquip);
             if (CfgServer.isRealServer())
@@ -336,6 +344,24 @@ public class Bonus {
         return Arrays.asList((long) BONUS_MOUNT, (long) mountId);
     }
 
+    // Send-format: [BONUS_MATERIAL, materialId]
+    // Receive-format: [BONUS_MATERIAL, id, materialId]  (id là auto-increment row id sau khi insert)
+    static List<Long> addMaterial(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
+        int materialId = aBonus.get(index++).getAsInt();
+        UserMaterialEntity uMaterial = new UserMaterialEntity(mUser.getUser().getId(), materialId);
+        if (DBJPA.save(uMaterial)) {
+            mUser.getResources().addMaterial(uMaterial);
+            if (CfgServer.isRealServer()) {
+                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
+                        "type", "material",
+                        "id", uMaterial.getId(),
+                        "materialId", materialId);
+            }
+            return Arrays.asList((long) BONUS_MATERIAL, uMaterial.getId(), (long) materialId);
+        }
+        return new ArrayList<>();
+    }
+
     static List<Long> addGold(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
         long value = aBonus.get(index++).getAsLong();
         if (detailAction.equals(DetailActionType.BONUS_KILL_ENEMY)) {
@@ -380,10 +406,6 @@ public class Bonus {
     //endregion
 
     //region Database
-    static boolean dbAddMaterial(int userId, int typeId, int inventoryId, long value) {
-        return DBJPA.updateNumber("user_material", Arrays.asList("number", value), Arrays.asList("user_id", userId, "type_id", typeId, "material_id", inventoryId));
-    }
-
     static boolean dbAddGold(UserEntity user, long addGold) {
         return DBJPA.update("user", Arrays.asList("gem", user.getGem(), "gold", user.getGold() + addGold), Arrays.asList("id", user.getId()));
     }
@@ -417,7 +439,7 @@ public class Bonus {
                     if (mUser.getUser().getRuby() + aBonus.get(index++) < 0)
                         return Lang.instance(mUser).get(Lang.err_not_enough_ruby);
                     break;
-                case BONUS_MATERIAL:
+                case BONUS_ITEM:
                     int itemId = aBonus.get(index++).intValue();
                     UserItemEntity uItem = mUser.getResources().getItem(itemId);
                     ResItemEntity resItem = ResItem.getItem(itemId);

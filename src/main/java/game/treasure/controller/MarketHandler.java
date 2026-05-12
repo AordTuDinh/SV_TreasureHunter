@@ -305,7 +305,7 @@ public class MarketHandler extends AHandler {
             return;
         }
         resItem.setStock(resItem.getStock() - nums.size());
-        aBonus.add((long) Bonus.BONUS_MATERIAL);
+        aBonus.add((long) Bonus.BONUS_ITEM);
         aBonus.add((long) uItem.getItemId());
         aBonus.add((long) numAdd);
         aBonus.add((long) nums.size());
@@ -378,7 +378,7 @@ public class MarketHandler extends AHandler {
             return;
         }
         resItem.setStock(resItem.getStock() - nums.size());
-        aBonus.add((long) Bonus.BONUS_MATERIAL);
+        aBonus.add((long) Bonus.BONUS_ITEM);
         aBonus.add((long) uItem.getItemId());
         aBonus.add((long) numAdd);
         aBonus.add((long) nums.size());

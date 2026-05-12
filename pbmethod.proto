@@ -234,7 +234,7 @@ message  PbUserData{
   optional PbListItem items = 9;
   optional PbListItemEquipment itemEquipments = 10;
   repeated PbItemEquipment aItemEquip = 11;
-  repeated PbItemPoint aItemPoint = 12;
+  optional PbListMaterial aMaterial = 12;
   repeated PbPet aPet = 15;
   optional  int32 tutorial = 17;
   repeated  int32 dameSkins = 18;
@@ -243,10 +243,16 @@ message  PbUserData{
   optional  int32 chatFrameEquip = 22;
   repeated  int32 trials = 23;
   optional  int32 trialEquip = 24;
+
 }
+
+
 
 message PbListItem{
   repeated  PbItem item = 1;
+}
+message PbListMaterial{
+  repeated  PbMaterial materials = 1;
 }
 
 message PbListPet{
@@ -314,6 +320,13 @@ message PbItemShop{
   optional  int64  timeRemain = 10;
 }
 
+message PbMaterial{
+  optional  int64 id = 1;
+  optional  int32 materialId = 2;
+  optional  int32 type = 3;
+  optional string data = 4;
+}
+
 message  PbItem{
   optional  int32 id = 1;
   optional  int32 type = 2;
@@ -330,7 +343,6 @@ message PbItemEquipment{
   optional  int64  id = 1;
   optional  int32 itemKey = 2;
   optional  int32 level = 3;
-  optional  bool lock = 4;
   repeated int64 point = 5;
   optional int64 expire = 6;
   optional  bool lockDestroy = 7;

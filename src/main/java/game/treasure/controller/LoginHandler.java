@@ -451,6 +451,10 @@ public class LoginHandler extends AHandler {
 
             List<UserPackEntity> packs = session.createNativeQuery("select * from user_pack where user_id = " + userId, UserPackEntity.class).getResultList();
             mUser.getResources().setPacks(packs);
+
+            List<UserMaterialEntity> materials = session.createNativeQuery("select * from user_material where user_id = " + userId, UserMaterialEntity.class).getResultList();
+            mUser.getResources().setMaterials(materials);
+
             mUser.setInitUData(uData, mUser.getUser());
             mUser.setUSetting(uSetting);
             mUser.setUEvent(uEvent);

@@ -203,26 +203,32 @@ public class UserDataEntity implements Serializable {
             }
         }
         pb.setItems(lstItem);
+
         // item equipment
         Pbmethod.PbListItemEquipment.Builder lstItemE = Pbmethod.PbListItemEquipment.newBuilder();
         for (Map.Entry<Long, UserItemEquipmentEntity> itemEq : mUser.getResources().getMItemEquipment().entrySet()) {
             Pbmethod.PbItemEquipment.Builder itemEquip = itemEq.getValue().toProto();
-            if (itemEq.getValue().isForever() || itemEq.getValue().hasExpire()) {// hết hạn
-                lstItemE.addItemEquip(itemEquip);
-            }
+            lstItemE.addItemEquip(itemEquip);
         }
         pb.setItemEquipments(lstItemE);
-        // pet animal
+        // material
+        Pbmethod.PbListMaterial.Builder lstMat = Pbmethod.PbListMaterial.newBuilder();
+        for (Map.Entry<Long, UserMaterialEntity> mat : mUser.getResources().getMMaterial().entrySet()) {
+            Pbmethod.PbMaterial.Builder matPb = mat.getValue().toProto();
+            if (matPb != null) lstMat.addMaterials(matPb);
+        }
+        pb.setAMaterial(lstMat);
+        // pet
         for (Map.Entry<Integer, UserPetEntity> pets : mUser.getResources().getMPetAnimal().entrySet()) {
             pb.addAPet(pets.getValue().toProto());
         }
 
-        // item equipment
+        // item equipment in hero
         List<Integer> lstEquip = mUser.getUser().getListIdEquipmentEquip();
         for (int i = 0; i < lstEquip.size(); i++) {
             if (lstEquip.get(i) > 0) {
                 UserItemEquipmentEntity iEquip = mUser.getResources().getItemEquipment(lstEquip.get(i));
-                if (iEquip != null && (iEquip.hasExpire() || iEquip.isForever())) {
+                if (iEquip != null) {
                     pb.addAItemEquip(iEquip.toProto());
                 }
             }

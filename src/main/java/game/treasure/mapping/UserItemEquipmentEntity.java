@@ -20,29 +20,16 @@ public class UserItemEquipmentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
-    int userId, itemId, level, isLock, lockDestroy;
-    int bless; // phúc lành
-    long expire;
-    String point;// [mainId,point,addx100,subId,point,addx100...]
+    int userId, itemId, level,  lockDestroy;
     @Transient
     int heroIdEquip;
 
-    public UserItemEquipmentEntity(int userId, int itemId, long expire, int isLock) {
+    public UserItemEquipmentEntity(int userId, int itemId) {
         this.userId = userId;
         this.itemId = itemId;
         this.level = 0;
-        this.isLock = isLock;
-        this.bless = 0;
-        ResItemEquipmentEntity res = getRes();
-        if (expire > -1) expire = System.currentTimeMillis() / 1000 + expire;
-        this.expire = expire;
         this.lockDestroy = 0;
     }
-
-    public boolean isLock() {
-        return this.isLock == 1;
-    }
-
 
     public boolean isEquip() {
         return heroIdEquip > 0;
@@ -56,14 +43,6 @@ public class UserItemEquipmentEntity {
         setHeroIdEquip(0);
     }
 
-    public List<Long> getPoint() {
-        return GsonUtil.strToListLong(point);
-    }
-
-    public List<Long> getPointLong() {
-        return GsonUtil.strToListLong(point);
-    }
-
     public ResItemEquipmentEntity getRes() {
         return ResItem.getItemEquipment(itemId);
     }
@@ -73,38 +52,6 @@ public class UserItemEquipmentEntity {
         this.level++;
     }
 
-    public boolean isForever() {
-        return expire == -1;
-    }
-
-    public boolean hasExpire() {
-        if (expire == -1) return true;
-        return System.currentTimeMillis() / 1000 < expire;
-    }
-
-    public boolean updateUpLevel(List<Integer> point) {
-        if (update(Arrays.asList("point", StringHelper.toDBString(point), "level", level + 1, "bless", 0))) {
-            this.point = point.toString();
-            this.level++;
-            this.bless = 0;
-            return true;
-        }
-        return false;
-    }
-
-    public void addBless() {
-        if (update(List.of("bless", bless + 1))) bless++;
-    }
-
-    public boolean updateMainPoint(String point, int itemId) {
-        if (update(Arrays.asList("point", point, "level", 0, "item_id", itemId))) {
-            this.point = point;
-            this.itemId = itemId;
-            this.level = 0;
-            return true;
-        }
-        return false;
-    }
 
     public boolean updateItemId(int idItem) {
         if (update(List.of("item_id", idItem))) {
@@ -114,15 +61,6 @@ public class UserItemEquipmentEntity {
         return false;
     }
 
-    public boolean updateNextItem(int idItem, int level, String point) {
-        if (update(List.of("item_id", idItem, "level", level, "point", point))) {
-            this.level = level;
-            this.itemId = idItem;
-            this.point = point;
-            return true;
-        }
-        return false;
-    }
 
     public boolean update(List<Object> updateData) {
         return DBJPA.update("user_item_equipment", updateData, Arrays.asList("id", id));
@@ -133,11 +71,7 @@ public class UserItemEquipmentEntity {
         pb.setId(id);
         pb.setItemKey(itemId);
         pb.setLevel(level);
-        pb.setExpire(expire);
-        pb.addAllPoint(getPoint());
-        pb.setLock(this.getIsLock() == 1);
         pb.setLockDestroy(lockDestroy == 1);
-        pb.setBless(bless);
         return pb;
     }
 }

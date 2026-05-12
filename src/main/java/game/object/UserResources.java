@@ -26,6 +26,8 @@ public class UserResources implements Serializable {
     List<UserItemEquipmentEntity> itemEquipments;
     @Setter
     List<UserPackEntity> packs;
+    @Setter
+    List<UserMaterialEntity> materials;
 
     // GET VÀ SET TÚI SẼ LẤY TỪ DIC CHO DỄ QUẢN LÝ...
     @Getter
@@ -38,6 +40,8 @@ public class UserResources implements Serializable {
     Map<Integer, UserPackEntity> mPacks = new HashMap<>();
     @Getter
     Map<Integer, Integer> mWeaponByRank = new HashMap<>();
+    @Getter
+    Map<Long, UserMaterialEntity> mMaterial = new HashMap<>();
 
     public UserResources(MyUser mUser) {
         this.mUser = mUser;
@@ -58,14 +62,11 @@ public class UserResources implements Serializable {
             pets.forEach(pet -> {
                 mPetAnimal.put(pet.getPetId(), pet);
             });
-            List<Object> itemExpired = new ArrayList<>();
             itemEquipments.forEach(item -> {
-                if (item.hasExpire()) mItemEquipment.put(item.getId(), item);
-                else itemExpired.add(item.getId());
+               mItemEquipment.put(item.getId(), item);
             });
-            // xóa item hết hạn
-            if (!itemExpired.isEmpty()) {
-                DBJPA.deleteIn("user_item_equipment", "id", itemExpired);
+            if (materials != null) {
+                materials.forEach(mat -> mMaterial.put(mat.getId(), mat));
             }
             return true;
         } catch (Exception ex) {
@@ -131,7 +132,7 @@ public class UserResources implements Serializable {
 
     public void addItemEquip(UserItemEquipmentEntity uItem) {
         itemEquipments.add(uItem);
-        if (uItem.hasExpire()) mItemEquipment.put(uItem.getId(), uItem);
+        mItemEquipment.put(uItem.getId(), uItem);
         // bắt đầu id = 30 nên sẽ cộng thêm 30
         CfgAchievement.addAchievement(mUser, 2, uItem.getItemId() + 30, 1);
         mUser.getUData().checkQuestTutorial(mUser, QuestTutType.HAS_ITEM_EQUIP_ID, uItem.getRes().getId(), 1);
@@ -142,6 +143,21 @@ public class UserResources implements Serializable {
             itemEquipments.remove(items.get(i));
             mItemEquipment.remove(items.get(i).getId());
         }
+    }
+
+    public UserMaterialEntity getMaterial(long id) {
+        return mMaterial.get(id);
+    }
+
+    public void addMaterial(UserMaterialEntity uMaterial) {
+        if (materials == null) materials = new ArrayList<>();
+        materials.add(uMaterial);
+        mMaterial.put(uMaterial.getId(), uMaterial);
+    }
+
+    public void removeMaterial(long id) {
+        UserMaterialEntity rm = mMaterial.remove(id);
+        if (rm != null && materials != null) materials.remove(rm);
     }
 
     public void addPet(UserPetEntity uPet) {
