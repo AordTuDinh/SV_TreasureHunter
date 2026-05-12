@@ -23,16 +23,10 @@ public class ResItemEntity extends BaseEntity implements Serializable {
     @Id
     int id;
     @Getter
-    String name;
-    String desc; //pointBuff : point,value,time
+    String name,data;
     @Getter
-    String preview, pointBuff, data;
-    @Getter
-    int rank, enable, sellPrice, showBag;
+    int rank,  sellPrice;
     int type;
-    @Getter
-    @Transient
-    List<PointBuff> buffs;
     @Getter
     @Transient
     List<BonusConfig> itemOpen;
@@ -40,28 +34,15 @@ public class ResItemEntity extends BaseEntity implements Serializable {
     @Transient
     ItemType itemType;
 
-    public boolean isBuff() {
-        return !buffs.isEmpty();
-    }
-
 
     public void init() {
-        buffs = new ArrayList<>();
         itemType = ItemType.get(type);
-        List<Integer> buff = GsonUtil.strToListInt(getPointBuff());
-        for (int i = 0; i < buff.size(); i += 3) {
-            buffs.add(new PointBuff(buff.get(i), buff.get(i + 1), buff.get(i + 2)));
-        }
-        checkJson(id, data);
-        checkJson(id, pointBuff);
-        checkJson(id, preview);
         if (type == ItemType.ITEM_OPEN.value) {
             try {
                 itemOpen = new Gson().fromJson(data, new TypeToken<List<BonusConfig>>() {
                 }.getType());
             } catch (Exception e) {
                 e.printStackTrace();
-//                Telegram.sendNotify("ERROR PARSE res_item " + id + " -> " + e.getMessage());
             }
         }
     }

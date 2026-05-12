@@ -13,7 +13,6 @@ import java.io.Serializable;
 
 public class Pet extends Unit implements Serializable {
     Player owner;
-    float timePetActive;
 
     public Pet(UserPetEntity uPet, Player owner) {
         this.type = UnitType.PET;
@@ -25,7 +24,6 @@ public class Pet extends Unit implements Serializable {
         this.point.setMoveSpeed(100);
         this.owner = owner;
         ResPetEntity res = uPet.getResPet();
-        this.timePetActive = res.getTimeActive();
     }
 
     @Override

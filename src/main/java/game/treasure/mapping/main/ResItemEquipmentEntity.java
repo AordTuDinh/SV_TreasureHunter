@@ -17,27 +17,11 @@ import java.util.List;
 public class ResItemEquipmentEntity {
     @Id
     int id;
-    String name, desc, dataAccessory, feeAccessory;
-    int enable, rank, type, maxLevel, target,levelRequire;
+    String name, desc;
+    int  rank, type;
 
 
     public EquipSlotType getType() {
         return EquipSlotType.get(type);
-    }
-
-    public ResItemEquipmentEntity getTarget() {
-        return ResItem.getItemEquipment(target);
-    }
-
-    public int getNextId() {
-        return target;
-    }
-
-    public List<Long> getDataAccessory() {
-        return GsonUtil.strToListLong(dataAccessory);
-    }
-
-    public List<Long> getFeeUpgradeAccessory() {
-        return Bonus.reverseBonus(GsonUtil.strToListLong(feeAccessory));
     }
 }

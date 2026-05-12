@@ -68,9 +68,6 @@ public class UserItemEquipmentEntity {
         return ResItem.getItemEquipment(itemId);
     }
 
-    public boolean isMaxLevel() {
-        return level >= getRes().getMaxLevel();
-    }
 
     public void addLevel() {
         this.level++;

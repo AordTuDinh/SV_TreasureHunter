@@ -100,7 +100,7 @@ public class UserResources implements Serializable {
     }
 
     public int getNumItemBag() {
-        return (int) mItem.values().stream().filter(item -> item.getRes().getShowBag() == 1 && item.getNumber() > 0).count();
+        return (int) mItem.values().stream().filter(item -> item.getNumber() > 0).count();
     }
 
 

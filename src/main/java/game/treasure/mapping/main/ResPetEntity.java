@@ -16,16 +16,7 @@ import java.util.List;
 public class ResPetEntity implements Serializable {
     @Id
     int id;
-    String name, desc, data, skill, bonusFaction;
+    String name, desc;
     int rank, faction, showSummon; // showSummon: có thể summon ra
-    float timeActive;
 
-    public List<List<Long>> getData() {
-        return GsonUtil.strTo2ListLong(data);
-    }
-
-
-    public List<Long> getBonusFaction() {
-        return GsonUtil.strToListLong(bonusFaction);
-    }
 }

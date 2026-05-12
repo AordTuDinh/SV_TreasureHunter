@@ -111,26 +111,6 @@ public class IMath {
             List<Integer> itemIds = mUser.getUser().getListIdEquipmentEquip();
             calPointItemEquip(mUser, itemIds, pt);
         }
-        // Pet
-        int petId = mUser.getUser().getPet(mUser).get(0);
-        for (Map.Entry<Integer, UserPetEntity> pets : mUser.getResources().getMPetAnimal().entrySet()) {
-            UserPetEntity pet = pets.getValue();
-            // hết máu thì k buff
-            if (pet.getHp() <= 0) continue;
-            ResPetEntity rPet = pet.getResPet();
-            List<Long> pointAdd = ResPet.getDataEquipByLevel(rPet.getData(), pet.getStar());
-            for (int j = 0; j < pointAdd.size(); j += 2) {
-                addPointData(pt, Math.toIntExact(pointAdd.get(j)), pointAdd.get(j + 1) / 100f);
-            }
-            // Bonus Faction Pet
-            if (petId == rPet.getId()) {
-                List<Long> bonusFaction = rPet.getBonusFaction();
-                for (int i = 0; i < bonusFaction.size(); i += 2) {
-                    addPointData(pt, Math.toIntExact(bonusFaction.get(i)), bonusFaction.get(i + 1) / 100f);
-                }
-            }
-
-        }
 //        System.out.println("point 8 = " + pt.toMiniString());
         // phúc lợi bang hội
         if (mUser.getUser().getClan() > 0) {

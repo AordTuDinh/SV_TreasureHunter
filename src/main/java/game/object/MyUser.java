@@ -234,7 +234,7 @@ public class MyUser implements Serializable {
         int numItem = 0, numItemEquip = 0;
         for (int i = 0; i < aBonus.size(); i++) {
             int itemId = aBonus.get(i).get(1).intValue();
-            if (aBonus.get(i).get(0).intValue() == Bonus.BONUS_MATERIAL && ResItem.getItem(itemId).getShowBag() == 1 &&
+            if (aBonus.get(i).get(0).intValue() == Bonus.BONUS_MATERIAL&&
                     getResources().getItem(aBonus.get(i).get(1).intValue()) != null)
                 numItem++;
             if (aBonus.get(i).get(0).intValue() == Bonus.BONUS_EQUIPMENT) numItemEquip++;

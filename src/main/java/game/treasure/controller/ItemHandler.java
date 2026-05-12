@@ -53,7 +53,7 @@ public class ItemHandler extends AHandler {
         try {
             switch (actionId) {
                 case IAction.ITEM_EQUIPMENT_INFO -> listEquipment(getInputALong(), this, mUser);
-                case IAction.ITEM_EQUIPMENT_EQUIP -> equipItem();
+//                case IAction.ITEM_EQUIPMENT_EQUIP -> equipItem();
 //                case IAction.ITEM_EQUIPMENT_UN_EQUIP -> unEquipItem();
                 case IAction.ITEM_REMOVE -> removeItem();
                 case IAction.ITEM_USED -> usedItem();
@@ -61,7 +61,7 @@ public class ItemHandler extends AHandler {
                 case IAction.ITEM_INFO -> itemInfo();
                 case IAction.ITEM_EQUIPMENT_LOCK_DESTROY -> lockDestroy();
                 case IAction.ITEM_EQUIPMENT_SELECT_ACCESSORY -> selectAccessory();
-                case IAction.ITEM_EQUIPMENT_UPGRADE_ACCESSORY -> upgradeAccessory();
+//                case IAction.ITEM_EQUIPMENT_UPGRADE_ACCESSORY -> upgradeAccessory();
                 case IAction.ITEM_EQUIPMENT_VIEW_INFO -> viewInfoEquipment();
             }
         } catch (Exception ex) {
@@ -112,55 +112,55 @@ public class ItemHandler extends AHandler {
         }
     }
 
-    void equipItem() {
-        List<Long> inputs = getInputALong();
-        int heroId = inputs.get(0).intValue();
-        int itemId = inputs.get(1).intValue();
-        UserItemEquipmentEntity iEquip = mUser.getResources().getItemEquipment(itemId);
-        if (iEquip != null && iEquip.isEquip()) {
-            addErrResponse(getLang(Lang.err_use_item_equip));
-            return;
-        }
-        if (iEquip == null) {
-            addErrResponse(getLang(Lang.item_not_own));
-            return;
-        }
-        if (!iEquip.hasExpire()) {
-            addErrResponse(getLang(Lang.err_item_equip_expire));
-            return;
-        }
-        if (1 < iEquip.getRes().getLevelRequire()) {
-            addErrResponse(getLang(Lang.err_item_level));
-            return;
-        }
-             // lock item
-        if (!iEquip.isLock()) {
-            if (iEquip.update(Arrays.asList("is_lock", 1))) {
-                iEquip.setIsLock(1);
-                addResponse(ITEM_EQUIPMENT_LOCK_STATUS, getCommonVector(iEquip.getId(), 1));
-            } else {
-                addErrResponse(getLang(Lang.err_system_down));
-                return;
-            }
-        }
-        mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.USE_ITEM_EQUIP, 1);
-        // update info
-
-
-            iEquip.equip(heroId);
-            Pbmethod.ListCommonVector.Builder pb = Pbmethod.ListCommonVector.newBuilder();
-            if (heroId == mUser.getUser().getHeroMain()) {
-
-                pb.addAVector(user.reCalculatePoint(mUser).toCommonVector());
-            } else {
-                pb.addAVector(user.getCachePoint().toCommonVector());
-            }
-            addResponse(pb.build());
-            // send update ui
-//            mUser.getPlayer().protoStatus(StateType.UPDATE_ITEM_EQUIP, GsonUtil.toListLong(mUser.toListIdDBItemEquip(heroMain)));
-            UserHandler.buffInfo(mUser);
-
-    }
+//    void equipItem() {
+//        List<Long> inputs = getInputALong();
+//        int heroId = inputs.get(0).intValue();
+//        int itemId = inputs.get(1).intValue();
+//        UserItemEquipmentEntity iEquip = mUser.getResources().getItemEquipment(itemId);
+//        if (iEquip != null && iEquip.isEquip()) {
+//            addErrResponse(getLang(Lang.err_use_item_equip));
+//            return;
+//        }
+//        if (iEquip == null) {
+//            addErrResponse(getLang(Lang.item_not_own));
+//            return;
+//        }
+//        if (!iEquip.hasExpire()) {
+//            addErrResponse(getLang(Lang.err_item_equip_expire));
+//            return;
+//        }
+//        if (1 < iEquip.getRes().getLevelRequire()) {
+//            addErrResponse(getLang(Lang.err_item_level));
+//            return;
+//        }
+//             // lock item
+//        if (!iEquip.isLock()) {
+//            if (iEquip.update(Arrays.asList("is_lock", 1))) {
+//                iEquip.setIsLock(1);
+//                addResponse(ITEM_EQUIPMENT_LOCK_STATUS, getCommonVector(iEquip.getId(), 1));
+//            } else {
+//                addErrResponse(getLang(Lang.err_system_down));
+//                return;
+//            }
+//        }
+//        mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.USE_ITEM_EQUIP, 1);
+//        // update info
+//
+//
+//            iEquip.equip(heroId);
+//            Pbmethod.ListCommonVector.Builder pb = Pbmethod.ListCommonVector.newBuilder();
+//            if (heroId == mUser.getUser().getHeroMain()) {
+//
+//                pb.addAVector(user.reCalculatePoint(mUser).toCommonVector());
+//            } else {
+//                pb.addAVector(user.getCachePoint().toCommonVector());
+//            }
+//            addResponse(pb.build());
+//            // send update ui
+////            mUser.getPlayer().protoStatus(StateType.UPDATE_ITEM_EQUIP, GsonUtil.toListLong(mUser.toListIdDBItemEquip(heroMain)));
+//            UserHandler.buffInfo(mUser);
+//
+//    }
 
 //    void unEquipItem() {
 //        int id = (int) CommonProto.parseCommonVector(requestData).getALong(0);
@@ -255,17 +255,17 @@ public class ItemHandler extends AHandler {
                 addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.SU_DUNG_ITEM.getKey(id), Bonus.merge(fee))));
             }
             break;
-            case ITEM_USE:
-                if (mUser.getPlayer() == null || !mUser.getPlayer().isAlive()) return;
-                List<Long> aBonus = Bonus.receiveListItem(mUser, DetailActionType.SU_DUNG_ITEM.getKey(id), fee);
-                if (aBonus.isEmpty()) {
-                    addErrResponse();
-                    return;
-                }
-                List<PointBuff> buffs = item.getRes().getBuffs();
-                mUser.getPlayer().protoBuffPoint(buffs);
-                addResponse(getCommonVector(aBonus));
-                break;
+//            case ITEM_USE:
+//                if (mUser.getPlayer() == null || !mUser.getPlayer().isAlive()) return;
+//                List<Long> aBonus = Bonus.receiveListItem(mUser, DetailActionType.SU_DUNG_ITEM.getKey(id), fee);
+//                if (aBonus.isEmpty()) {
+//                    addErrResponse();
+//                    return;
+//                }
+//                List<PointBuff> buffs = item.getRes().getBuffs();
+//                mUser.getPlayer().protoBuffPoint(buffs);
+//                addResponse(getCommonVector(aBonus));
+//                break;
             case ITEM_USE_X1:
                 switch (ItemKey.get(item.getItemId())) {
 //                    case THE_HOAN_TRA_1 -> {
@@ -426,49 +426,49 @@ public class ItemHandler extends AHandler {
         } else addErrSystem();
     }
 
-    private void upgradeAccessory() {
-        List<Long> inputs = getInputALong();
-        UserItemEquipmentEntity uItem = mUser.getResources().getItemEquipment(inputs.get(0));
-        if (uItem == null) {
-            addErrResponse(getLang(Lang.err_item_equip_not_found));
-            return;
-        }
-        ResItemEquipmentEntity resItem = uItem.getRes();
-        // check max level
-        if (uItem.getLevel() >= resItem.getMaxLevel()) {
-            addErrResponse(getLang(Lang.err_max_level));
-            return;
-        }
-        // check fee
-        List<Long> fee = resItem.getFeeUpgradeAccessory();
-        String err = Bonus.checkMoney(mUser, fee);
-        if (err != null) {
-            addErrResponse(err);
-            return;
-        }
-        List<Long> aBonus = Bonus.receiveListItem(mUser, DetailActionType.UPGRADE_WEAPON_ACCESSORY.getKey(uItem.getItemId()), fee);
-        if (aBonus.isEmpty()) {
-            addErrSystem();
-            return;
-        }
-        // mở khóa tiến hóa
-        int idItem = uItem.getItemId();
-        int levelItem = uItem.getLevel() + 1;
-        if (levelItem >= resItem.getMaxLevel() && resItem.getTarget() != null) {
-            idItem = resItem.getNextId();
-            levelItem = 0;
-        }
-        List<Long> point = IMath.mergePointWeapon(uItem.getPointLong(), resItem.getDataAccessory());
-        if (uItem.updateNextItem(idItem, levelItem, StringHelper.toDBString(point))) {
-            Pbmethod.ListCommonVector.Builder pb = Pbmethod.ListCommonVector.newBuilder();
-            pb.addAVector(getCommonVector(aBonus));
-            pb.addAVector(getCommonVector(idItem, levelItem));
-            pb.addAVector(getCommonVector(point));
-            addResponse(pb.build());
-        } else {
-            Bonus.receiveListItem(mUser, DetailActionType.UPGRADE_WEAPON_ACCESSORY.getKey(-uItem.getItemId()), Bonus.reverseBonus(fee));
-            addErrSystem();
-        }
-    }
+//    private void upgradeAccessory() {
+//        List<Long> inputs = getInputALong();
+//        UserItemEquipmentEntity uItem = mUser.getResources().getItemEquipment(inputs.get(0));
+//        if (uItem == null) {
+//            addErrResponse(getLang(Lang.err_item_equip_not_found));
+//            return;
+//        }
+//        ResItemEquipmentEntity resItem = uItem.getRes();
+//        // check max level
+//        if (uItem.getLevel() >= resItem.getMaxLevel()) {
+//            addErrResponse(getLang(Lang.err_max_level));
+//            return;
+//        }
+//        // check fee
+//        List<Long> fee = resItem.getFeeUpgradeAccessory();
+//        String err = Bonus.checkMoney(mUser, fee);
+//        if (err != null) {
+//            addErrResponse(err);
+//            return;
+//        }
+//        List<Long> aBonus = Bonus.receiveListItem(mUser, DetailActionType.UPGRADE_WEAPON_ACCESSORY.getKey(uItem.getItemId()), fee);
+//        if (aBonus.isEmpty()) {
+//            addErrSystem();
+//            return;
+//        }
+//        // mở khóa tiến hóa
+//        int idItem = uItem.getItemId();
+//        int levelItem = uItem.getLevel() + 1;
+//        if (levelItem >= resItem.getMaxLevel() && resItem.getTarget() != null) {
+//            idItem = resItem.getNextId();
+//            levelItem = 0;
+//        }
+//        List<Long> point = IMath.mergePointWeapon(uItem.getPointLong(), resItem.getDataAccessory());
+//        if (uItem.updateNextItem(idItem, levelItem, StringHelper.toDBString(point))) {
+//            Pbmethod.ListCommonVector.Builder pb = Pbmethod.ListCommonVector.newBuilder();
+//            pb.addAVector(getCommonVector(aBonus));
+//            pb.addAVector(getCommonVector(idItem, levelItem));
+//            pb.addAVector(getCommonVector(point));
+//            addResponse(pb.build());
+//        } else {
+//            Bonus.receiveListItem(mUser, DetailActionType.UPGRADE_WEAPON_ACCESSORY.getKey(-uItem.getItemId()), Bonus.reverseBonus(fee));
+//            addErrSystem();
+//        }
+//    }
 }
 
