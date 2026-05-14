@@ -54,7 +54,6 @@ public class BonusConfig implements Serializable {
     // chọn đúng 1 config theo “rate phân phối”, trả bonus config đó
     public static List<Long> getRandomOneBonus(List<BonusConfig> aBonus) {
         int per = NumberUtil.getRandom(1000);
-
         for (int i = 0; i < aBonus.size(); i++) {
             BonusConfig bm = aBonus.get(i);
             if (bm.rate == -1) {

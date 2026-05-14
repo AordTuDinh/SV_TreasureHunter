@@ -64,7 +64,6 @@ public class CellObject {
             state = Pbmethod.CellState.HIDE;
             return true;
         }
-
         return false;
     }
 

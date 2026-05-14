@@ -4,6 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum DetailActionType {
+    KILL_CELL("kill_cell"),
+
+
+
     UPGRADE_WEAPON("upgrade_weapon_id_"), // Nâng cấp vũ khí id
     PIECE_GRAFT("piece_grap_type_"), // Ghép mảnh
     NHAN_THU("mail_"), // Nhận Mail theo id

@@ -339,10 +339,18 @@ public abstract class BaseRoom extends MonoRoom {
                     addCellProcess(cellObject);
                     boolean cellDie = cellObject.attack(player.getPoint().getAttackDamage());
                     player.setTimeAttack();
-                    player.protoStatus(Pbmethod.SubStateType.PLAY_ANIM,(long) AnimationType.ATTACK.value);
+                    player.protoStatus(Pbmethod.SubStateType.PLAY_ANIM, (long) AnimationType.ATTACK.value);
                     if (cellDie) {
                         addCellDie(cellObject);
-                        player.sendBonus(cellObject.getBonusKillMe(), DetailActionType.SU_DUNG_ITEM.getKey(player.getMUser().getUserId()));
+                        List<Long> bonus = cellObject.getBonusKillMe();
+                        long idBonus = bonus.get(0);
+                        if (idBonus > 0) player.sendBonus(bonus, DetailActionType.KILL_CELL.getKey());
+                        else if (idBonus == -1) {  // drop quái
+                            Enemy enemy = new Enemy();
+                            enemy.setEnemyKey(Math.toIntExact(bonus.get(1)));
+                            enemy.setPos(Pos.randomPos(player.getPos(), 2f, 2f));
+                            addUnit(enemy);
+                        }
                     }
                 }
             } else { // Đánh unit
@@ -354,7 +362,7 @@ public abstract class BaseRoom extends MonoRoom {
                 // giống nhánh OBJECT: chống spam theo tick bằng attackSpeed
                 if (!player.hasAttack() || !player.targetInSizeAttack(unit)) return;
                 player.setTimeAttack();
-                player.protoStatus(Pbmethod.SubStateType.PLAY_ANIM, (long)AnimationType.ATTACK.value);
+                player.protoStatus(Pbmethod.SubStateType.PLAY_ANIM, (long) AnimationType.ATTACK.value);
                 // attacker là player, target là unit
                 player.attackUnit(unit);
             }
