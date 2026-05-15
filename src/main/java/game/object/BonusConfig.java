@@ -56,14 +56,24 @@ public class BonusConfig implements Serializable {
         int per = NumberUtil.getRandom(1000);
         for (int i = 0; i < aBonus.size(); i++) {
             BonusConfig bm = aBonus.get(i);
-            if (bm.rate == -1) {
-                int num = bm.max == 1 ? 1 : NumberUtil.getRandom(bm.min, bm.max);
-                return Bonus.viewXNumber(new ArrayList<>(bm.bonus), num);
-            } else {
-                if (per < bm.rate) {
-                    int num = NumberUtil.getRandom(bm.min, bm.max);
+            if (bm.bonus.get(0) > 0) {
+                if (bm.rate == -1) {
+                    int num = bm.max == 1 ? 1 : NumberUtil.getRandom(bm.min, bm.max);
                     return Bonus.viewXNumber(new ArrayList<>(bm.bonus), num);
-                } else per -= bm.rate;
+                } else {
+                    if (per < bm.rate) {
+                        int num = NumberUtil.getRandom(bm.min, bm.max);
+                        return Bonus.viewXNumber(new ArrayList<>(bm.bonus), num);
+                    } else per -= bm.rate;
+                }
+            } else {
+                if (bm.rate == -1) {
+                    return bm.bonus;
+                } else {
+                    if (per < bm.rate) {
+                        return bm.bonus;
+                    } else per -= bm.rate;
+                }
             }
         }
         return new ArrayList<>();

@@ -158,6 +158,10 @@ public class Point {
         }
     }
 
+    public void setBaseDef(int value) {
+        values[DEFENSE] = value;
+    }
+
     public void setBaseHp(int value) {
         values[HP] = value;
     }
@@ -176,8 +180,7 @@ public class Point {
     }
 
 
-    public void resetHpMp() {
-        initDefault();
+    public void resetHp() {
         setCurHp(getMaxHp());
     }
 
@@ -370,6 +373,20 @@ public class Point {
         power += getCritDamage() * 0.02f;
         power += getAgility() * level * 0.02f;
         power += getImmunity() * level * 0.02f;
+        values[POWER] = power;
+
+    }
+
+    public void calculatorPower() { // perItemWeaponEquip : hệ số atk
+        int power = 0;
+        power += getAttackDamage() * 0.5f;
+        power += getMaxHp() * 0.5f;
+        power += getAttackSpeed() * 5f;
+        power += getMoveSpeed() * 2f;
+        power += getDefense() * 2f;
+        power += getCritDamage() * 0.02f;
+        power += getAgility() * 0.02f;
+        power += getImmunity() * 0.02f;
         values[POWER] = power;
 
     }

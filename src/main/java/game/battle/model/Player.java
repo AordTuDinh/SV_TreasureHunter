@@ -6,11 +6,9 @@ import game.config.CfgAchievement;
 import game.config.CfgQuest;
 import game.config.aEnum.*;
 import game.treasure.BattleConfig;
-import game.treasure.mapping.*;
 import game.treasure.service.resource.ResMap;
 import game.treasure.service.user.Bonus;
 import game.treasure.table.BaseRoom;
-import game.object.PointBuff;
 import game.object.DataQuest;
 import game.object.MyUser;
 import lombok.Data;
@@ -119,8 +117,8 @@ public class Player extends Unit implements Serializable {
         CfgQuest.addNumQuest(mUser, DataQuest.KILL_MONSTER, 1);
 
 //        if (beKill.type ==UnitType.BOSS) CfgQuest.addNumQuest(mUser, DataQuest.KILL_BOSS_MAP, 1);
-        CfgAchievement.addAchievement(mUser, 1, beKill.getEnemy().getEnemyKey(), 1);
-        mUser.getUData().checkQuestTutorial(mUser, QuestTutType.KILL_ENEMY, beKill.getEnemy().getEnemyKey(), 1);
+        CfgAchievement.addAchievement(mUser, 1, beKill.getEnemy().getModel(), 1);
+        mUser.getUData().checkQuestTutorial(mUser, QuestTutType.KILL_ENEMY, beKill.getEnemy().getModel(), 1);
         if (countUpdate > 100) {
             countUpdate -= 100;
             mUser.getUQuest().update(new ArrayList<>());
@@ -200,7 +198,8 @@ public class Player extends Unit implements Serializable {
         this.sendDie = false;
         protoStatus(Pbmethod.SubStateType.REVIVE, (long) (pos.x * 1000), (long) (pos.y * 1000));
         this.alive = true;
-        point.resetHpMp();
+        point.initDefault();
+        point.resetHp();
         protoStatus(Pbmethod.SubStateType.UPDATE_MULTI_POINT, point.toProto());
         sendDie = true;
     }
@@ -223,7 +222,6 @@ public class Player extends Unit implements Serializable {
         pbAdd.setChunkId(chunkId);
         pbAdd.setIsAdd(true);
         pbAdd.setPos(pos.toProto());
-        if (panelMap == null) panelMap = ResMap.getMap(MapType.HOME);
         pbAdd.setDirection(direction.toProto());
         pbAdd.setClanId(clanId);
         pbAdd.setRangeAttack(rangeAttack);
@@ -233,19 +231,12 @@ public class Player extends Unit implements Serializable {
         pbAdd.setAlive(alive);
         pbAdd.setLastInputSeq(indexLastInputSeq);
         pbAdd.addAllPoint(point.toProto());
-        pbAdd.addAllInfo(getListInfo());
+        pbAdd.addAllInfo(getListInfo(mUser.getUData().getEffInit()));
         pbAdd.setUserId(mUser.getUserId());
         return pbAdd.build();
     }
 
-    public List<Integer> getListInfo() {
-        List<Integer> lst = new ArrayList<>(); // dameSkin,idChat,trial, effectInit,
-        lst.add(idDameSkin);
-        lst.add(idChatFrame);
-        lst.add(idTrial);
-        lst.add(mUser.getUData().getEffInit());
-        return lst;
-    }
+
 
 
     public void sendBonus(List<Long> bonus, String title) {

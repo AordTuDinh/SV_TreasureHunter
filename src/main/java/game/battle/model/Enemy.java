@@ -6,9 +6,13 @@ import game.battle.type.UnitType;
 import game.config.CfgEventDrop;
 import game.config.aEnum.DetailActionType;
 import game.treasure.BattleConfig;
+import game.treasure.mapping.main.ResMobEntity;
+import game.treasure.service.resource.ResMob;
 import game.treasure.service.user.Bonus;
 import game.object.BonusConfig;
+import game.treasure.table.BaseRoom;
 import lombok.Data;
+import ozudo.base.database.DBJPA;
 import ozudo.base.helper.DateTime;
 import ozudo.base.helper.NumberUtil;
 import protocol.Pbmethod;
@@ -25,14 +29,23 @@ public class Enemy extends Unit implements Serializable {
     private boolean moveTargetDone;
     long damage;
     int skillNormal = 0;
-    int enemyKey;
     boolean autoAttack, canMove;
     long timeActive;
     float rangeView;
 
 
-    public Enemy() {
+    public Enemy(int enemyKey, Unit player,Pos pos) {
+        setRoom(player.getRoom());
+        setPanelMap(player.getPanelMap());
+        this.model = enemyKey;
         this.clanId = -1;
+        this.pos = pos;
+        ResMobEntity mob= ResMob.getMob(enemyKey);
+        this.point = mob.getPoint();
+        this.name = mob.getName();
+        setListBonus(mob.getBonus());
+        setType(UnitType.ENEMY);
+        resetData();
     }
 
     @Override
@@ -109,7 +122,7 @@ public class Enemy extends Unit implements Serializable {
 
 
     public boolean hasAttackMelee() {
-       //  return inRankAttack(AttackType.MELEE) && hasActionAttack() && alive && targetAttack != null && targetAttack.isAlive();
+        //  return inRankAttack(AttackType.MELEE) && hasActionAttack() && alive && targetAttack != null && targetAttack.isAlive();
         return true;
     }
 
@@ -361,21 +374,18 @@ public class Enemy extends Unit implements Serializable {
         Pbmethod.PbUnit.Builder pbAdd = Pbmethod.PbUnit.newBuilder();
         pbAdd.setType(UnitType.ENEMY.value);
         pbAdd.setId(id);
-        pbAdd.setAvatar(model);
         pbAdd.setChunkId(chunkId);
-        pbAdd.setClanId(clanId);
-        pbAdd.setRangeAttack(rangeAttack);
         pbAdd.setIsAdd(true);
         pbAdd.setPos(pos.toProto());
         pbAdd.setDirection(direction.toProto());
+        pbAdd.setClanId(clanId);
+        pbAdd.setRangeAttack(rangeAttack);
+        pbAdd.setAvatar(model);
         pbAdd.setSpeed((int) point.getMoveSpeed());
-        pbAdd.addInfo(type.value);// info[0]= type
-        pbAdd.addInfo(enemyKey);// info[1]= key
-        pbAdd.addInfo(idDameSkin);
-        pbAdd.addInfo(idChatFrame);
-        pbAdd.addInfo(idTrial);
+        pbAdd.setName(name);
         pbAdd.setAlive(alive);
         pbAdd.addAllPoint(point.toProto());
+        pbAdd.addAllInfo(getListInfo(0));
         return pbAdd.build();
     }
 }

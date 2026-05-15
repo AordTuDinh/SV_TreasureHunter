@@ -346,9 +346,8 @@ public abstract class BaseRoom extends MonoRoom {
                         long idBonus = bonus.get(0);
                         if (idBonus > 0) player.sendBonus(bonus, DetailActionType.KILL_CELL.getKey());
                         else if (idBonus == -1) {  // drop quái
-                            Enemy enemy = new Enemy();
-                            enemy.setEnemyKey(Math.toIntExact(bonus.get(1)));
-                            enemy.setPos(Pos.randomPos(player.getPos(), 2f, 2f));
+                            Pos posInit = Pos.randomPos(player.getPos(), 2f, 2f);
+                            Enemy enemy = new Enemy(Math.toIntExact(bonus.get(1)),player,posInit);
                             addUnit(enemy);
                         }
                     }

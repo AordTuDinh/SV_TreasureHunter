@@ -195,7 +195,7 @@ public abstract class Unit {
 
 
     public Point resetData() {
-        point.resetHpMp();
+        point.resetHp();
         alive = true;
         hasBonusKillMe = true;
         targetMove = null;
@@ -326,6 +326,15 @@ public abstract class Unit {
 
     public void setTimeRandomMove() { //  vừa randomm move xong, time này dùng để xác định thời gian cho phép random move tiếp theo
         timeActiveRandomMove = System.currentTimeMillis() + NumberUtil.getRandom((int) (BattleConfig.M_delayMove * 1000));
+    }
+
+    public List<Integer> getListInfo(int effInit) {
+        List<Integer> lst = new ArrayList<>(); // dameSkin,idChat,trial, effectInit,
+        lst.add(idDameSkin);
+        lst.add(idChatFrame);
+        lst.add(idTrial);
+        lst.add(effInit);
+        return lst;
     }
 
     // region proto
