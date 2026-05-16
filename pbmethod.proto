@@ -57,6 +57,7 @@ enum SubStateType {
   UPDATE_TEXT_DAME = 11;
   UPDATE_MULTI_POINT = 12; // [point id - cur] chỉ dùng số ít point, không phải toàn bộ point
   USE_ITEM_SLOT = 13;     // slot
+  UPDATE_DIRECTION = 14; // update direction for unit
 }
 
 enum StateType {

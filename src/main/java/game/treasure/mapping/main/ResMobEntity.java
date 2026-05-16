@@ -1,6 +1,7 @@
 package game.treasure.mapping.main;
 
 import game.battle.object.Point;
+import game.treasure.BattleConfig;
 import game.object.BonusConfig;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,7 +21,9 @@ public class ResMobEntity extends BaseEntity implements Serializable {
     @Getter
     String name;
     @Getter
-    int hp, atk, def;
+    int hp, atk, def,moveSpeed;
+    @Getter
+    float rangeAttack;
     String data;
     @Getter
     @Transient
@@ -33,7 +36,7 @@ public class ResMobEntity extends BaseEntity implements Serializable {
 
     public Point getPoint() {
         Point point = new Point();
-        point.setMoveSpeed(10);
+        point.setMoveSpeed(moveSpeed);
         point.setBaseAttack(atk);
         point.setBaseHp(hp);
         point.setBaseDef(def);

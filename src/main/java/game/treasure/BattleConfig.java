@@ -15,7 +15,7 @@ public class BattleConfig {
     public static final float m_LerpSpeedBar = 0.05f; // tốc độ giảm hp, càng tăng thì tốc độ giảm càng nhanh theo hàm lerp
     public static final int m_LimitUseItem = 100;
     public static final float P_timeNoMove = 0.1f;
-    public static final float P_RangerAttack = 1f;
+    public static final float P_RangerAttack = 1.5f;
 
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
     // server config - không gửi cho client config
@@ -23,15 +23,19 @@ public class BattleConfig {
     public static final float E_RangeYAttack = 0.4f; //  range y
     public static int M_timeRevive = 3; // seconds - thời gian enemy tự hồi sinh
     public static final float M_delayMove = 2f; //khoang thoi gian cach nhau giua 2 lan move random (move idle)
-    public static float M_rangeMove = 1f; // range move random, move trong khoang nay
+    public static float M_rangeMove = 3f; // ban kinh move idle (khong nen > M_maxLeashFromSpawn)
+    public static int M_idleMoveChance = 50; // random(100): rand < nay thi move (~50%)
+    public static float M_maxLeashFromSpawn = 10f; // xa instancePos hon muc nay thi ve spawn + clear target
     public static final float M_speedMoveIdle = 20f; // move speed lúc idle
+    public static float M_attackSpeed = 1.2f; // giay giua 2 lan danh cua mob
+    public static float M_delayAttackDamage = 0.3f; // delay anim attack roi moi gui dame
+    public static float M_directionMinDx = 0.5f; // chi doi huong nhin khi lech target theo truc x
+    public static float M_chaseMoveRefresh = 0.5f; // cap nhat diem move duoi target moi khoang nay
     public static float E_timeDelayAttackToMove = 0.6f; //Attack xong sau khoảng time này mới cho enemy move
 
     public static float C_haSReciveDamage = 1f; // sau khoảng time này thì mới nhận dame từ thằng đó tiếp (tránh đánh liên tục)
     public static float E_timeCheckDirection = 1f; // sau time này thi check lai direction 1 lan
 
-    public static final int P_Weight = -1; // hệ số lực đẩy lùi (-1 = k bị đẩy lùi)
-    public static final float P_timeRunHit = 0.6f; // time di chuyển trước khi chuyển sang attack (Hit and run)
 
     public static int timeReviveObject = 3;  // sau 3s thì revive object
 

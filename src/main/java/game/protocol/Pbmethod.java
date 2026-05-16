@@ -179,6 +179,14 @@ public final class Pbmethod {
      * </pre>
      */
     USE_ITEM_SLOT(12, 13),
+    /**
+     * <code>UPDATE_DIRECTION = 14;</code>
+     *
+     * <pre>
+     * update direction for unit
+     * </pre>
+     */
+    UPDATE_DIRECTION(13, 14),
     ;
 
     /**
@@ -265,6 +273,14 @@ public final class Pbmethod {
      * </pre>
      */
     public static final int USE_ITEM_SLOT_VALUE = 13;
+    /**
+     * <code>UPDATE_DIRECTION = 14;</code>
+     *
+     * <pre>
+     * update direction for unit
+     * </pre>
+     */
+    public static final int UPDATE_DIRECTION_VALUE = 14;
 
 
     public final int getNumber() { return value; }
@@ -284,6 +300,7 @@ public final class Pbmethod {
         case 11: return UPDATE_TEXT_DAME;
         case 12: return UPDATE_MULTI_POINT;
         case 13: return USE_ITEM_SLOT;
+        case 14: return UPDATE_DIRECTION;
         default: return null;
       }
     }
@@ -78051,20 +78068,21 @@ public final class Pbmethod {
       "price\030\005 \001(\t\022\r\n\005bonus\030\006 \003(\003\022\020\n\010addBonus\030\007" +
       " \003(\003\022\020\n\010addTitle\030\010 \001(\t\022\016\n\006vipExp\030\t \001(\005\022\017" +
       "\n\007priceQr\030\n \001(\t*!\n\tCellState\022\n\n\006ACTIVE\020\001" +
-      "\022\010\n\004HIDE\020\002*\354\001\n\014SubStateType\022\r\n\tADD_BONUS" +
+      "\022\010\n\004HIDE\020\002*\202\002\n\014SubStateType\022\r\n\tADD_BONUS" +
       "\020\001\022\007\n\003DIE\020\002\022\n\n\006REVIVE\020\003\022\r\n\tPLAY_ANIM\020\004\022\r" +
       "\n\tBE_DAMAGE\020\005\022\017\n\013EFFECT_BODY\020\006\022\t\n\005RE_HP\020" +
       "\007\022\025\n\021UPDATE_CHAT_FRAME\020\010\022\020\n\014UPDATE_TRIAL" +
       "\020\t\022\024\n\020UPDATE_ITEM_SLOT\020\n\022\024\n\020UPDATE_TEXT_" +
       "DAME\020\013\022\026\n\022UPDATE_MULTI_POINT\020\014\022\021\n\rUSE_IT" +
-      "EM_SLOT\020\r*Y\n\tStateType\022\023\n\017TYPE_ADD_REMOV",
-      "E\020\001\022\014\n\010TYPE_POS\020\002\022\023\n\017TYPE_UNIT_STATE\020\003\022\024" +
-      "\n\020TYPE_CHUNK_STATE\020\004*y\n\016CellObjectType\022\010" +
-      "\n\004ROCK\020\001\022\010\n\004SIGN\020\002\022\n\n\006CACTUS\020\003\022\n\n\006FLOWER" +
-      "\020\004\022\t\n\005SKULL\020\005\022\t\n\005CHEST\020\006\022\t\n\005BONES\020\007\022\016\n\nG" +
-      "RAVESTONE\020\010\022\n\n\006HELMET\020\t*;\n\014TargetAttack\022" +
-      "\n\n\006OBJECT\020\000\022\t\n\005ENEMY\020\001\022\010\n\004BOSS\020\002\022\n\n\006PLAY" +
-      "ER\020\003B\024\n\010protocolB\010Pbmethod"
+      "EM_SLOT\020\r\022\024\n\020UPDATE_DIRECTION\020\016*Y\n\tState",
+      "Type\022\023\n\017TYPE_ADD_REMOVE\020\001\022\014\n\010TYPE_POS\020\002\022" +
+      "\023\n\017TYPE_UNIT_STATE\020\003\022\024\n\020TYPE_CHUNK_STATE" +
+      "\020\004*y\n\016CellObjectType\022\010\n\004ROCK\020\001\022\010\n\004SIGN\020\002" +
+      "\022\n\n\006CACTUS\020\003\022\n\n\006FLOWER\020\004\022\t\n\005SKULL\020\005\022\t\n\005C" +
+      "HEST\020\006\022\t\n\005BONES\020\007\022\016\n\nGRAVESTONE\020\010\022\n\n\006HEL" +
+      "MET\020\t*;\n\014TargetAttack\022\n\n\006OBJECT\020\000\022\t\n\005ENE" +
+      "MY\020\001\022\010\n\004BOSS\020\002\022\n\n\006PLAYER\020\003B\024\n\010protocolB\010" +
+      "Pbmethod"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

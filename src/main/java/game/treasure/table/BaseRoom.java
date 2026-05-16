@@ -360,6 +360,7 @@ public abstract class BaseRoom extends MonoRoom {
 
                 // giống nhánh OBJECT: chống spam theo tick bằng attackSpeed
                 if (!player.hasAttack() || !player.targetInSizeAttack(unit)) return;
+                player.faceToward(unit);
                 player.setTimeAttack();
                 player.protoStatus(Pbmethod.SubStateType.PLAY_ANIM, (long) AnimationType.ATTACK.value);
                 // attacker là player, target là unit

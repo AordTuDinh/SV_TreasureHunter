@@ -193,6 +193,17 @@ public abstract class Unit {
         return direction.x * newDirection.x > 0;
     }
 
+    /** Huong nhin ve target; gui UPDATE_DIRECTION neu can lat mat. */
+    public void faceToward(Unit target) {
+        if (target == null) return;
+        Pos faceDir = pos.getDirectionTo(target.getPos());
+        if (faceDir.equals(Pos.zero()) || Math.abs(faceDir.x) < 0.01f) return;
+        if (Math.abs(direction.x) < 0.01f || !isLikeFace(faceDir)) {
+            setDirection(faceDir);
+            protoStatus(Pbmethod.SubStateType.UPDATE_DIRECTION, (long) (faceDir.x * 1000), (long) (faceDir.y * 1000));
+        }
+    }
+
 
     public Point resetData() {
         point.resetHp();

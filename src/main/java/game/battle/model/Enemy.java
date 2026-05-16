@@ -1,6 +1,7 @@
 package game.battle.model;
 
 import game.battle.object.*;
+import game.battle.type.AnimationType;
 import game.battle.type.RoomState;
 import game.battle.type.UnitType;
 import game.config.CfgEventDrop;
@@ -10,9 +11,7 @@ import game.treasure.mapping.main.ResMobEntity;
 import game.treasure.service.resource.ResMob;
 import game.treasure.service.user.Bonus;
 import game.object.BonusConfig;
-import game.treasure.table.BaseRoom;
 import lombok.Data;
-import ozudo.base.database.DBJPA;
 import ozudo.base.helper.DateTime;
 import ozudo.base.helper.NumberUtil;
 import protocol.Pbmethod;
@@ -26,26 +25,33 @@ public class Enemy extends Unit implements Serializable {
     public List<BonusConfig> listBonus;
     public float delayAnimAttack;
     public int forcePush;
-    private boolean moveTargetDone;
     long damage;
     int skillNormal = 0;
-    boolean autoAttack, canMove;
-    long timeActive;
-    float rangeView;
+    boolean autoAttack;
+    Unit targetAttack;
 
-
-    public Enemy(int enemyKey, Unit player,Pos pos) {
+    public Enemy(int enemyKey, Unit player, Pos pos) {
         setRoom(player.getRoom());
         setPanelMap(player.getPanelMap());
         this.model = enemyKey;
         this.clanId = -1;
         this.pos = pos;
-        ResMobEntity mob= ResMob.getMob(enemyKey);
+        this.instancePos = pos.clone();
+        ResMobEntity mob = ResMob.getMob(enemyKey);
         this.point = mob.getPoint();
         this.name = mob.getName();
+        this.rangeAttack = mob.getRangeAttack();
         setListBonus(mob.getBonus());
         setType(UnitType.ENEMY);
+        this.autoAttack = false;
+        this.delayAnimAttack = BattleConfig.M_delayAttackDamage;
         resetData();
+    }
+
+    @Override
+    public Point resetData() {
+        targetAttack = null;
+        return super.resetData();
     }
 
     @Override
@@ -66,6 +72,15 @@ public class Enemy extends Unit implements Serializable {
     public void protoDie(Unit killer) {
         super.protoDie(killer);
         protoStatus(Pbmethod.SubStateType.DIE, 1L);
+    }
+
+    @Override
+    public synchronized void beAttackDamage(Unit ownerDamage, long atkDame) {
+        if (ownerDamage != null && ownerDamage.isPlayer() && targetAttack == null) {
+            targetAttack = ownerDamage;
+            targetMove = null;
+        }
+        super.beAttackDamage(ownerDamage, atkDame);
     }
 
     @Override
@@ -98,11 +113,10 @@ public class Enemy extends Unit implements Serializable {
     }
 
     public void genRandomMove() { // move idle
-        // 1 /3 co hoi move -> move xong cho 1s roi random move tiep
         if (!hasActionMove() || !isReady()) return;
         if (targetMove != null) return;
-        int rand = NumberUtil.getRandom(3);
-        if (rand == 0) { // move
+        int rand = NumberUtil.getRandom(100);
+        if (rand < BattleConfig.M_idleMoveChance) {
             setMove(true);
             targetMove = Pos.v_add(panelMap, instancePos, randomMove());
         }
@@ -115,260 +129,151 @@ public class Enemy extends Unit implements Serializable {
     }
 
     private Pos randomMove() {
-        float x = NumberUtil.randomRange(BattleConfig.M_rangeMove);
-        float y = NumberUtil.randomRange(BattleConfig.M_rangeMove);
-        return new Pos(x, y);
+        float dist = NumberUtil.getRandom(BattleConfig.M_rangeMove * 0.5f, BattleConfig.M_rangeMove);
+        double rad = Math.toRadians(NumberUtil.getRandom(360));
+        return new Pos((float) (Math.cos(rad) * dist), (float) (Math.sin(rad) * dist));
     }
 
+    public boolean inRankAttackMelee() {
+        if (targetAttack == null || !targetAttack.isAlive()) return false;
+        return pos.distance(targetAttack.pos) < rangeAttack
+                && Math.abs(pos.y - targetAttack.getPos().y) < BattleConfig.E_RangeYAttack;
+    }
 
     public boolean hasAttackMelee() {
-        //  return inRankAttack(AttackType.MELEE) && hasActionAttack() && alive && targetAttack != null && targetAttack.isAlive();
-        return true;
+        return inRankAttackMelee() && hasActionAttack() && alive && targetAttack.isAlive();
     }
 
     public boolean isAttackDone() {
         return DateTime.isAfterTime(timeActionAttack, 1f);
     }
 
-
-    public void activeSkill(int skillId) {
-        setTimeAttack();
-    }
-
-
-//    public boolean inRankAttack(AttackType attackType) {
-//        if (targetAttack == null) return false;
-//        if (attackType == AttackType.LONG_RANGE) {
-//            return pos.distance(targetAttack.pos) < rangeAttack;
-//        } else {
-//            return pos.distance(targetAttack.pos) < rangeAttack && Math.abs(pos.y - targetAttack.getPos().y) < BattleConfig.E_RangeYAttack;
-//        }
-//    }
-
-    public boolean hasActiveMove() {
-        return DateTime.isAfterTime(timeActionAttack, BattleConfig.E_timeDelayAttackToMove);
-    }
-
     private boolean hasActionAttack() {
-//        System.out.println("point.getAttackSpeed() = " + point.getAttackSpeed());
-        return DateTime.isAfterTime(timeActionAttack, point.getAttackSpeed()) && !isMove && DateTime.isAfterTime(timeActionMove, 0.3f);
+        return DateTime.isAfterTime(timeActionAttack, BattleConfig.M_attackSpeed) && !isMove()
+                && DateTime.isAfterTime(timeActionMove, 0.3f);
+    }
+
+    private void setDirectionChase(Pos lookAt) {
+        if (lookAt == null) return;
+        Pos faceDir = pos.getDirectionTo(lookAt);
+        if (faceDir.equals(Pos.zero()) || Math.abs(faceDir.x) < 0.01f) return;
+        setDirection(faceDir);
+    }
+
+    private boolean isBeyondLeash() {
+        return instancePos != null && pos.distance(instancePos) > BattleConfig.M_maxLeashFromSpawn;
     }
 
     @Override
     public void Update() {
         if (room.getRoomState() != RoomState.ACTIVE) return;
-        //enemyProcess();
+        enemyProcess();
     }
 
-//    private void enemyProcess() {
-//        if (!beBlock()) {
-//            // check target attack
-//            if (autoAttack && (targetAttack == null || !inRankAttack(attackType))) {
-//                targetAttack = findTargetForEnemy(rangeAttack);
-//            }
-//            if (attackType == AttackType.LONG_RANGE) {
-//                E_attackLongRange();
-//            } else if (attackType == AttackType.COLLIDE) {
-//                E_attackCollider();
-//            } else {
-//                E_attackMelee();
-//            }
-//        }
-//    }
+    private void enemyProcess() {
+        if (!isAlive() || beBlock()) return;
 
-//    public void E_attackLongRange() {
-//        // bi danh thi danh lai, k du range thi di chuyen den target
-//        if (autoAttack) {
-//            if (targetAttack == null && isReady()) {
-//                Unit target = findTargetForEnemy(rangeView);
-//                if (target != null) {
-//                    target.addTargetSelf(this);
-//                    targetAttack = target;
-//                }
-//            }
-//            isBeAttack = targetAttack != null;
-//        }
-//        //System.out.println("isBeAttacktack = " + isBeAttack);
-//        if (isBeAttack) {
-//            boolean isMove = moveToTargetDone();
-//            if (isMove && hasAttackLongRange()) {
-//                setDirection(getFutureDirection(10, 20));
-//                activeSkill(skillNormal);
-//                room.addCoroutine(new Coroutine(delayAnimAttack, () -> {
-//                    //   getBattleRoom().addBullet(this, skillNormal, enemyAttackLongRange());
-//                }));
-//            }
-//            if (!inRankAttack(attackType) && isAttackDone()) {
-//                enemyMove();
-//            } else { // trong tầm đánh thì k move
-//                setMove(false);
-//            }
-//        } else {
-//            genRandomMove(); // move idle
-//            if (!moveToTargetDone()) {
-//                enemyMove();
-//            } else {
-//                setTargetMove(null);
-//                setMove(false);
-//            }
-//        }
-//
-//        // mode hard  ->  find target, tim thay thi duoi theo danh, yeu cau phai o trong 1 khoang view
+        if (targetAttack != null && !targetAttack.isAlive()) {
+            targetAttack = null;
+            moveToInstancePos();
+            return;
+        }
 
-    /// /        if (room.getCacheBattle().getMode() == RoomMode.CAMPAIGN_HARD) {
-    /// /            //luc nay chua co target nen phai tim
-    /// /            if (!isBeAttack()) {
-    /// /                Character target = findTargetForEnemy();
-    /// /                if (target != null) {
-    /// /                    setTargetAttack(target);
-    /// /                    setBeAttack(true);
-    /// /                }
-    /// /            }
-    /// /        }
-//
-//        // gio se check truong hop k bi danh cung k co target -> cho no idle -> move linh tinh
-//
-//    }
-    @Override
-    public boolean beBlock() {
-        return super.beBlock() || System.currentTimeMillis() < timeActive;
+        if (isBeyondLeash()) {
+            targetAttack = null;
+            moveToInstancePos();
+            return;
+        }
+
+        if (targetAttack != null) {
+            chaseAndAttack();
+            return;
+        }
+
+        // Dang di den targetMove (idle hoac ve spawn) — khong cat vi lech instancePos
+        if (targetMove != null) {
+            if (!moveToTargetDone()) {
+                enemyMove();
+            } else {
+                targetMove = null;
+                setMove(false);
+            }
+            return;
+        }
+
+        idleWander();
     }
 
-    //Fixme DATE: 8/18/2022 LƯU Ý ---> sắp xếp thứ tự ưu tiên
-    // move attack(move target) -> move Idle(targetmove !=null)
-    // target move đã đc xác định rồi, chỉ move thôi
-//    public void enemyMove() {
-//        Pos targetMove;
-//        if (isBeAttack() && targetAttack != null) targetMove = getPosTargetMove(targetAttack);
-//        else targetMove = getTargetMove();
-//        if (targetMove == null || beBlock()) return;
-//        if (Math.abs(targetMove.x - pos.x) > 1f) {
-//            Pos direction = pos.getDirectionTo(targetMove);
-//            setDirection(direction);
-//        }
-//        Pos nd = Pos.moveFromDirection(direction, getCurSpeed());
-//        move(nd);
-//        if (!nd.equals(Pos.zero())) {
-//            setDirection(nd.normalized());
-//        }
-//    }
-
-    private Pos getPosTargetMove(Unit target) {
-        return new Pos(target.pos.x + NumberUtil.getRandom(-1, 1), target.pos.y + NumberUtil.getRandom(-1, 1));
+    private void moveToInstancePos() {
+        targetMove = instancePos.clone();
+        if (!moveToTargetDone()) {
+            enemyMove();
+        } else {
+            targetMove = null;
+            setMove(false);
+        }
     }
 
-    //public void enemyMoveAttackMelee() {
-    //    // đã check null và dead ở trên rồi
-    //    Pos atkPos = targetAttack.getPos();
-    //    // check trường hợp player move thì direction sẽ thay đổi liên tuc
-    //    // dùng biến để check move attack
-    //    directionMoveAttack = MathLab.getDirection(pos, atkPos);
-    //    if (directionMoveAttack.equals(Pos.zero()) || targetAttack.isMove || checkTimeAttack()) {
-    //        // cong nghe moi
-    //        if (targetAttack.isMove) { // đang di chuyển thì tách nhau ra
-    //            for (Map.Entry<Integer, Character> character : targetAttack.targetSelf.entrySet()) {
-    //                Character enemy = character.getValue();
-    //                if (id != enemy.getId()) {
-    //                    float distance = (float) enemy.getPos().distance(pos);
-    //                    if (distance < BattleConfig.E_distance_attack) {
-    //                        int randAngle = NumberUtil.getRandom(-50, 50);
-    //                        directionMoveAttack = MathLab.angle2Direction(randAngle, directionMoveAttack);
-    //                    } else directionMoveAttack = Pos.zero();
-    //                }
-    //            }
-    //        } else { // đứng yên
-    //            Pos randMove = new Pos(atkPos.x + NumberUtil.randomRange(0.2f), atkPos.y + NumberUtil.randomRange(0.2f));
-    //            directionMoveAttack = pos.getDirectionTo(randMove);
-    //            setTargetMove(randMove);
-    //            moveTargetDone = false;
-    //        }
-    //        timeCheckDirectionAttack = System.currentTimeMillis();
-    //    }
-    //    if (directionMoveAttack.equals(Pos.zero())) return;
-    //    Pos nd = Pos.moveFromDirection(directionMoveAttack, getCurSpeed());
-    //    move(nd);
-    //    if (!nd.equals(Pos.zero()) && targetAttack != null && targetAttack.direction.x != 0) {
-    //        setDirection(directionMoveAttack);
-    //    }
-    //    // move qua lại quanh player
-    //    if (moveToTargetDone()) moveTargetDone = true;
-    //    if (targetMove != null && moveTargetDone && getPos().distance(targetMove) > BattleConfig.M_rangeMoveAttack) {
-    //        directionMoveAttack = Pos.zero();
-    //    }
-    //}
-
-
-//    public void enemyMoveAttackMelee() {
-//        // đã check null và dead ở trên rồi
-//        Pos atkPos = targetAttack.getPos();
-//        // check trường hợp player move thì direction sẽ thay đổi liên tuc
-//        // dùng biến để check move attack
-//        directionMoveAttack = MathLab.getDirection(pos, atkPos);
-//        if (directionMoveAttack.equals(Pos.zero()) || targetAttack.isMove || checkTimeAttack()) {
-//            // cong nghe moi
-
-    /// /            System.out.println("targetAttack.isMove = " + targetAttack.isMove());
-//            if (targetAttack.isMove()) { // đang di chuyển thì tách nhau ra
-//                for (Map.Entry<Integer, Character> character : targetAttack.targetSelf.entrySet()) {
-//                    Character enemy = character.getValue();
-//                    if (id != enemy.getId()) {
-//                        float distance = (float) enemy.getPos().distance(pos);
-//                        if (distance < BattleConfig.E_distance_attack) {
-//                            int randAngle = NumberUtil.getRandom(-50, 50);
-//                            directionMoveAttack = MathLab.angle2Direction(randAngle, directionMoveAttack);
-//                        }
-//                        //else directionMoveAttack = Pos.zero();
-//                    }
-//                }
-//            } else { // đứng yên
-//                Pos randMove = new Pos(atkPos.x + NumberUtil.randomRange(0.2f), atkPos.y + NumberUtil.randomRange(0.2f));
-//                directionMoveAttack = pos.getDirectionTo(randMove);
-//                setTargetMove(randMove);
-//                moveTargetDone = false;
-//            }
-//            timeCheckDirectionAttack = System.currentTimeMillis();
-//        }
-//        if (directionMoveAttack.equals(Pos.zero())) return;
-//        Pos nd = Pos.moveFromDirection(directionMoveAttack, getCurSpeed());
-//        move(nd);
-//        if (!nd.equals(Pos.zero()) && targetAttack != null && targetAttack.direction.x != 0) {
-//            setDirection(directionMoveAttack);
-//        }
-//        // move qua lại quanh player
-//        if (moveToTargetDone()) moveTargetDone = true;
-//        if (targetMove != null && moveTargetDone && getPos().distance(targetMove) > BattleConfig.M_rangeMoveAttack) {
-//            directionMoveAttack = Pos.zero();
-//        }
-//    }
-
-
-    Unit findTargetForEnemy(float rangeView) {// BattleConfig.M_rangeViewTarget
-        int index = 0;
-        double min = 99999f;
-//        for (int i = 0; i < room.getAPlayer().size(); i++) {
-//            if (room.getAPlayer().get(i).isAlive()) {
-//                double dis = room.getAPlayer().get(i).getPos().distance(getPos());
-//                if (dis < min) {
-//                    min = dis;
-//                    index = i;
-//                }
-//            }
-//        }
-//        if (min <= rangeView) return room.getAPlayer().get(index);
-        return null;
+    private void chaseAndAttack() {
+        if (inRankAttackMelee() && hasActionAttack()) {
+            setMove(false);
+            setDirectionChase(targetAttack.getPos());
+            setTimeAttack();
+            protoStatus(Pbmethod.SubStateType.PLAY_ANIM, (long) AnimationType.ATTACK.value);
+            scheduleAttackDamage(targetAttack);
+        } else if (!inRankAttackMelee() && isAttackDone()) {
+            targetMove = getChasePos(targetAttack);
+            enemyMove();
+        } else if (inRankAttackMelee()) {
+            setMove(false);
+            setDirectionChase(targetAttack.getPos());
+        }
     }
 
-    private boolean checkTimeAttack() {
-        return DateTime.isAfterTime(timeCheckDirectionAttack, BattleConfig.E_timeCheckDirection);
+    private void idleWander() {
+        genRandomMove();
+        if (!moveToTargetDone()) {
+            enemyMove();
+        } else {
+            targetMove = null;
+            setMove(false);
+        }
+    }
+
+    public void enemyMove() {
+        if (targetMove == null || beBlock()) return;
+        Pos moveDir = pos.getDirectionTo(targetMove);
+        if (moveDir.equals(Pos.zero())) return;
+        setDirectionChase(targetAttack != null ? targetAttack.getPos() : targetMove);
+        Pos nd = Pos.moveFromDirection(moveDir, getCurSpeed());
+        move(nd);
+        if (moveToTargetDone() && targetAttack == null) {
+            targetMove = null;
+            setMove(false);
+        }
+    }
+
+    private void scheduleAttackDamage(Unit target) {
+        if (target == null || room == null) return;
+        float delay = delayAnimAttack > 0 ? delayAnimAttack : BattleConfig.M_delayAttackDamage;
+        getBattleRoom().addCoroutine(new Coroutine(delay, () -> applyAttackDamage(target)));
+    }
+
+    private void applyAttackDamage(Unit target) {
+        if (!isAlive() || target == null || !target.isAlive()) return;
+        if (targetAttack != target) return;
+        if (!inRankAttackMelee()) return;
+        attackUnit(target);
+    }
+
+    private Pos getChasePos(Unit target) {
+        return Pos.capPos(target.getPos(), panelMap.getBotLeftP(), panelMap.getTopRightP(), BattleConfig.P_Width / 2);
     }
 
     @Override
     public float getCurSpeed() {
         return point.getMoveSpeed() / BattleConfig.C_SCALE_SPEED;
     }
-
-
-    // region proto
 
     public Pbmethod.PbUnit toProtoAdd(int chunkId) {
         Pbmethod.PbUnit.Builder pbAdd = Pbmethod.PbUnit.newBuilder();
