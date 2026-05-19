@@ -1,5 +1,6 @@
 package game.treasure.mapping;
 
+import game.config.CfgMaterial;
 import game.treasure.mapping.main.ResMaterialEntity;
 import game.treasure.service.resource.ResItem;
 import game.treasure.service.user.Bonus;
@@ -21,34 +22,35 @@ public class UserMaterialEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
     int userId, materialId;
-    String data;
+    int rank, level;
+    float value;
 
-    public UserMaterialEntity(int userId, int materialId) {
+    public UserMaterialEntity(int userId, int materialId, int rank) {
         this.userId = userId;
         this.materialId = materialId;
-        this.data = "[]";
+        this.rank = rank;
+        this.level = 1;
+        ResMaterialEntity res = getRes();
+        this.value = res != null ? CfgMaterial.rollValue(res, rank) : 0f;
     }
 
     public ResMaterialEntity getRes() {
         return ResItem.getMaterial(materialId);
     }
 
-    public int getRank() {
+    public int getTier() {
         ResMaterialEntity res = getRes();
-        return res == null ? 0 : res.getRank();
+        return res == null ? 0 : res.getTier();
     }
 
     public protocol.Pbmethod.PbMaterial.Builder toProto() {
         protocol.Pbmethod.PbMaterial.Builder pb = protocol.Pbmethod.PbMaterial.newBuilder();
         pb.setId(id);
         pb.setMaterialId(materialId);
-        pb.setType(getRank());
-        pb.setData(data == null ? "[]" : data);
+        pb.setRank(rank);
+        pb.setValue(value);
+        pb.setLevel(level);
         return pb;
-    }
-
-    public List<Long> viewBonus() {
-        return Bonus.viewMaterial(materialId);
     }
 
     public boolean update(List<Object> updateData) {

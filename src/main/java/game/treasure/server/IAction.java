@@ -177,6 +177,7 @@ public class IAction {
     public static final int ITEM_USED = 452;
     public static final int ITEM_INFO = 453;
     public static final int ITEM_USE_FOR_ITEM = 457;
+    public static final int MATERIAL_UPGRADE = 458;
 
     // Event
     public static final int RPS_SEND_RQ = 600;

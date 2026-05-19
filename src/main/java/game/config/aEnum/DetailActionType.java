@@ -44,6 +44,7 @@ public enum DetailActionType {
     CHE_TAO_TRANG_BI("create_item_equipment"),
     PHA_HUY_TRANG_BI("decay_item_equipment"),
     NANG_CAP_TRANG_BI("upgrade_item_equipment"),
+    UPGRADE_MATERIAL("upgrade_material_"),
     NANG_KI_NANG2("stat_2_upgrade"),
     NANG_KI_NANG1("stat_1_upgrade"),
     SUMMON_STONE("summon_stone_"),

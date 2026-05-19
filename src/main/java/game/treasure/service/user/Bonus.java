@@ -3,6 +3,7 @@ package game.treasure.service.user;
 import com.google.gson.JsonArray;
 import game.config.CfgAchievement;
 import game.config.CfgLottery;
+import game.config.CfgMaterial;
 import game.config.CfgServer;
 import game.config.aEnum.*;
 import game.config.lang.Lang;
@@ -44,7 +45,7 @@ public class Bonus {
         put(BONUS_VIP_EXP, 1);   // addExp
         put(BONUS_PET, 1);       // petId
         put(BONUS_MOUNT, 1);     // mountId
-        put(BONUS_MATERIAL, 1);  // materialId (+1 point mỗi entry, lặp lại để cộng nhiều điểm)
+        put(BONUS_MATERIAL, 2);  // materialId, rank (1=Common..4=Legend)
     }};
 
     public static List<Integer> bonusSinger = Arrays.asList(BONUS_EQUIPMENT, BONUS_ARTIFACT, BONUS_ITEM, BONUS_PET, BONUS_MOUNT, BONUS_SKIN,BONUS_MATERIAL);
@@ -73,10 +74,14 @@ public class Bonus {
         return view(BONUS_PET,  itemId);
     }
 
-    // Preview / send: [BONUS_MATERIAL, materialId].
-    // Khi receive thành công, server tạo row mới và trả về kèm row id: [BONUS_MATERIAL, id, materialId].
+    // Preview / send: [BONUS_MATERIAL, materialId, rank].
+    // Receive: [BONUS_MATERIAL, rowId, materialId, rank].
+    public static List<Long> viewMaterial(int materialId, int rank) {
+        return view(BONUS_MATERIAL, materialId, rank);
+    }
+
     public static List<Long> viewMaterial(int materialId) {
-        return view(BONUS_MATERIAL, materialId);
+        return viewMaterial(materialId, 1);
     }
 
     public static List<Long> viewItem(ItemKey itemKey, long number) {
@@ -344,20 +349,28 @@ public class Bonus {
         return Arrays.asList((long) BONUS_MOUNT, (long) mountId);
     }
 
-    // Send-format: [BONUS_MATERIAL, materialId]
-    // Receive-format: [BONUS_MATERIAL, id, materialId]  (id là auto-increment row id sau khi insert)
+    // Send-format: [BONUS_MATERIAL, materialId, rank]
+    // Receive-format: [BONUS_MATERIAL, id, materialId, rank]
     static List<Long> addMaterial(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
         int materialId = aBonus.get(index++).getAsInt();
-        UserMaterialEntity uMaterial = new UserMaterialEntity(mUser.getUser().getId(), materialId);
+        int rank = aBonus.get(index++).getAsInt();
+        game.treasure.mapping.main.ResMaterialEntity res = CfgMaterial.get(materialId);
+        if (res == null) {
+            return new ArrayList<>();
+        }
+        UserMaterialEntity uMaterial = new UserMaterialEntity(mUser.getUser().getId(), materialId, rank);
         if (DBJPA.save(uMaterial)) {
             mUser.getResources().addMaterial(uMaterial);
             if (CfgServer.isRealServer()) {
                 Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
                         "type", "material",
                         "id", uMaterial.getId(),
-                        "materialId", materialId);
+                        "materialId", materialId,
+                        "rank", rank,
+                        "level", uMaterial.getLevel(),
+                        "value", uMaterial.getValue());
             }
-            return Arrays.asList((long) BONUS_MATERIAL, uMaterial.getId(), (long) materialId);
+            return Arrays.asList((long) BONUS_MATERIAL, uMaterial.getId(), (long) materialId, (long) rank);
         }
         return new ArrayList<>();
     }

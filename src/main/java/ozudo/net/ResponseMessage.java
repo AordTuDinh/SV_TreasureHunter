@@ -52,6 +52,7 @@ public class ResponseMessage {
         MailHandler.getInstance().initAction(mHandler);
         FriendHandler.getInstance().initAction(mHandler);
         MarketHandler.getInstance().initAction(mHandler);
+        MaterialHandler.getInstance().initAction(mHandler);
 //        FarmHandler.getInstance().initAction(mHandler);
     }
 
