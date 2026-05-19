@@ -178,6 +178,9 @@ public class IAction {
     public static final int ITEM_INFO = 453;
     public static final int ITEM_USE_FOR_ITEM = 457;
     public static final int MATERIAL_UPGRADE = 458;
+    public static final int CRAFT_EXECUTE = 459;
+    public static final int CRAFT_UPDATE = 460;
+    public static final int MATERIAL_MERGE = 461;
 
     // Event
     public static final int RPS_SEND_RQ = 600;

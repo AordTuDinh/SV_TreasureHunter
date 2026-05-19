@@ -6,9 +6,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ozudo.base.database.DBJPA;
 import ozudo.base.helper.GsonUtil;
-import ozudo.base.helper.StringHelper;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,7 +20,8 @@ public class UserItemEquipmentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
-    int userId, itemId, level,  lockDestroy;
+    int userId, itemId, level, lockDestroy;
+    String point;
     @Transient
     int heroIdEquip;
 
@@ -29,13 +30,14 @@ public class UserItemEquipmentEntity {
         this.itemId = itemId;
         this.level = 0;
         this.lockDestroy = 0;
+        this.point = "[]";
     }
 
     public boolean isEquip() {
         return heroIdEquip > 0;
     }
 
-    public void equip( int heroIdEquip) {
+    public void equip(int heroIdEquip) {
         this.heroIdEquip = heroIdEquip;
     }
 
@@ -47,11 +49,20 @@ public class UserItemEquipmentEntity {
         return ResItem.getItemEquipment(itemId);
     }
 
+    public List<Long> getPointList() {
+        if (point == null || point.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return new ArrayList<>(GsonUtil.strToListLong(point));
+    }
+
+    public void setPointList(List<Long> points) {
+        this.point = GsonUtil.toJson(points);
+    }
 
     public void addLevel() {
         this.level++;
     }
-
 
     public boolean updateItemId(int idItem) {
         if (update(List.of("item_id", idItem))) {
@@ -61,9 +72,12 @@ public class UserItemEquipmentEntity {
         return false;
     }
 
-
     public boolean update(List<Object> updateData) {
         return DBJPA.update("user_item_equipment", updateData, Arrays.asList("id", id));
+    }
+
+    public boolean deleteFromDb() {
+        return DBJPA.delete("user_item_equipment", "id", id, "user_id", userId);
     }
 
     public protocol.Pbmethod.PbItemEquipment.Builder toProto() {
@@ -72,6 +86,7 @@ public class UserItemEquipmentEntity {
         pb.setItemKey(itemId);
         pb.setLevel(level);
         pb.setLockDestroy(lockDestroy == 1);
+        pb.addAllPoint(getPointList());
         return pb;
     }
 }

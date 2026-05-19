@@ -36,7 +36,7 @@ public class UserDataEntity implements Serializable {
     String numSlot, dataInt, checkIn;
     String buff; // [time25,time50,timex2 ...] x9
     String dameSkin, chatFrame, listTrial;
-    int dameSkinEquip, chatFrameEquip, trialEquip, effInit;
+    int dameSkinEquip, chatFrameEquip, trialEquip, effInit,craftLevel,craftExp;
 
     @Transient
     int maxLvTraining = 60;
@@ -62,7 +62,9 @@ public class UserDataEntity implements Serializable {
         this.questTutorial = 1;
         this.chatFrameEquip = 0;
         this.dameSkinEquip = 0;
+        this.craftLevel = 1;
         this.trialEquip = 0;
+        this.craftExp = 0;
         this.buff = NumberUtil.genListStringInt(9, 0);
     }
 
@@ -193,6 +195,8 @@ public class UserDataEntity implements Serializable {
         pb.setChatFrameEquip(chatFrameEquip);
         pb.addAllChatFrames(getListChatFrame());
         pb.setTrialEquip(trialEquip);
+        pb.setCraftLevel(craftLevel);
+        pb.setCraftExp(craftExp);
         pb.addAllTrials(getListIntTrial());
         // item
         Pbmethod.PbListItem.Builder lstItem = Pbmethod.PbListItem.newBuilder();

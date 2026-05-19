@@ -53,6 +53,7 @@ public class ResponseMessage {
         FriendHandler.getInstance().initAction(mHandler);
         MarketHandler.getInstance().initAction(mHandler);
         MaterialHandler.getInstance().initAction(mHandler);
+        CraftHandler.getInstance().initAction(mHandler);
 //        FarmHandler.getInstance().initAction(mHandler);
     }
 

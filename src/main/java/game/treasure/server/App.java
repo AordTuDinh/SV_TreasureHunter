@@ -148,6 +148,11 @@ public class App {
                 if (key.contains(":")) key = key.substring(key.indexOf(":") + 1);
                 String cfg = key;
                 cfg = cfg.substring(cfg.indexOf("_") + 1);
+                if ("material_merge".equals(cfg)) {
+                    Logs.info("------> Init config.CfgMaterial.loadMergeConfig");
+                    game.config.CfgMaterial.loadMergeConfig(value);
+                    return;
+                }
                 cfg = cfg.substring(0, 1).toUpperCase() + cfg.substring(1);
                 try {
                     Logs.info("------> Init " + "config.Cfg" + cfg);

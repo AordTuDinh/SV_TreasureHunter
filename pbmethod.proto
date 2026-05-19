@@ -244,7 +244,8 @@ message  PbUserData{
   optional  int32 chatFrameEquip = 22;
   repeated  int32 trials = 23;
   optional  int32 trialEquip = 24;
-
+  optional  int32 craftLevel = 25;
+  optional  int32 craftExp = 26;
 }
 
 
@@ -327,6 +328,7 @@ message PbMaterial{
   optional  int32 rank = 3;
   optional  int32 level = 4;
   optional float value = 5;
+  optional float socketRate = 6;
 }
 
 message  PbItem{
