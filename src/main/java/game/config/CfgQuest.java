@@ -104,15 +104,15 @@ public class CfgQuest {
     }
 
     public static void addNumQuestB(MyUser mUser, int index, int number) {
-        UserItemEntity uItem = mUser.getResources().getItem(ItemKey.QUEST_B);
-        if (uItem == null || uItem.getNumber() == 0 || uItem.expired()) return;
-        List<Integer> data = uItem.getDataListInt();
-        int indexState = index * 2 + 1;// 0: day, [state - number] nên phải +2
-        if (data.get(indexState) == StatusType.PROCESSING.value) {
-            data.set(indexState + 1, data.get(indexState + 1) + number);
-            uItem.setData(data.toString());
-            uItem.update(List.of("data", StringHelper.toDBString(data)));
-        }
+//        UserItemEntity uItem = mUser.getResources().getItem(ItemKey.QUEST_B);
+//        if (uItem == null || uItem.getNumber() == 0 || uItem.expired()) return;
+//        List<Integer> data = uItem.getDataListInt();
+//        int indexState = index * 2 + 1;// 0: day, [state - number] nên phải +2
+//        if (data.get(indexState) == StatusType.PROCESSING.value) {
+//            data.set(indexState + 1, data.get(indexState + 1) + number);
+//            uItem.setData(data.toString());
+//            uItem.update(List.of("data", StringHelper.toDBString(data)));
+//        }
     }
 
     public static StatusType getStatus(int cur, int max) {

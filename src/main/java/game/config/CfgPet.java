@@ -1,7 +1,6 @@
 package game.config;
 
 import com.google.gson.Gson;
-import game.config.aEnum.ItemKey;
 import game.treasure.mapping.main.ResPetEntity;
 import game.treasure.service.resource.ResPet;
 import game.treasure.service.user.Bonus;
@@ -51,54 +50,7 @@ public class CfgPet {
 
     public static List<Long> getBonusStone(int number) {
         List<Long> bonus = new ArrayList<>();
-        for (int j = 0; j < number; j++) {
-            int rand = NumberUtil.getRandom(1000);
-            for (int i = 0; i < rateStonePet.size(); i++) {
-                if (rand < rateStonePet.get(i)) {
-
-                    bonus.addAll(Bonus.viewItem(getItemUpPetByRank(i ), 1));
-                    break;
-                }
-            }
-        }
         return bonus;
-    }
-
-    public static List<Long> getBonusMonsterPoint() {
-        return new ArrayList<>(BONUS_MONSTER_POINT);
-    }
-
-    public static List<Long> getBonusPetPoint() {
-        return new ArrayList<>(BONUS_PET_POINT);
-    }
-
-//    public static List<Long> getFeeUpStarMonster(UserPetEntity uPet) {
-//        FeeUpStar fee = feeStarMonster.get(uPet.getResMonster().getRank()).get(uPet.getStar());
-//        List<Long> bonus = new ArrayList<>();
-//        bonus.addAll(Bonus.viewGold(-fee.gold));
-//        return bonus;
-//    }
-//
-//    public static List<Long> getFeeUpStarPet(UserPetEntity uPet) {
-//        FeeUpStar fee = feeStarPet.get(uPet.getResMonster().getRank()).get(uPet.getStar());
-//        List<Long> bonus = new ArrayList<>();
-//        bonus.addAll(Bonus.viewItem(getItemUpPetByRank(uPet.getStar()), -fee.piece));
-//        bonus.addAll(Bonus.viewGold(-fee.gold));
-//        return bonus;
-//    }
-
-    public static ItemKey getItemUpPetByRank(int star) {
-        switch (star) {
-            case 0 -> {
-                return ItemKey.DA_TIEN_HOA_CAP_1;
-            }
-            case 1 -> {
-                return ItemKey.DA_TIEN_HOA_CAP_2;
-            }
-            default -> {
-                return ItemKey.DA_TIEN_HOA_CAP_3;
-            }
-        }
     }
 
     public static void loadConfig(String value) {

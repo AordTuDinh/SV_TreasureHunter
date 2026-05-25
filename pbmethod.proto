@@ -79,6 +79,23 @@ enum CellObjectType{
   HELMET = 9;
 }
 
+// item id trong DB / bonus consumable (đồng bộ server + client)
+enum ItemKey {
+  BINH_MAU_1 = 1;
+  BINH_MAU_2 = 2;
+  BINH_MAU_3 = 3;
+  BINH_MAU_4 = 4;
+  GOLD = 5;
+  GEM = 6;
+  RUBY = 7;
+  TICKER_MINI = 8;
+  TICKER_NORMAL = 9;
+  TICKER_SPECIAL = 10;
+  CHIP = 11;
+  BONG_LINH_THU = 12;
+  BONG_SIEU_THU = 13;
+}
+
 message PbUnit{
   // chung cả add + remove
   optional int32 type = 1;

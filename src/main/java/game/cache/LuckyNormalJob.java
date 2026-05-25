@@ -2,8 +2,8 @@ package game.cache;
 
 import game.config.CfgLottery;
 import game.config.CfgServer;
-import game.config.aEnum.ItemKey;
 import game.config.aEnum.StatusType;
+import protocol.Pbmethod;
 import game.treasure.mapping.UserItemEntity;
 import game.treasure.server.App;
 import game.treasure.server.AppInit;
@@ -40,7 +40,7 @@ public class LuckyNormalJob {
     private void processConvertDB() {
         int luckyNum = NumberUtil.getRandom(100000, 999999);
         int event = DateTime.getNumberDay() + 1;
-        List<UserItemEntity> uLot = DBResource.getInstance().getList(CfgServer.DB_DSON + "user_item", Arrays.asList("item_id", ItemKey.TICKER_NORMAL.id), "", UserItemEntity.class);
+        List<UserItemEntity> uLot = DBResource.getInstance().getList(CfgServer.DB_DSON + "user_item", Arrays.asList("item_id", Pbmethod.ItemKey.TICKER_NORMAL.getNumber()), "", UserItemEntity.class);
         if (uLot == null || uLot.size() <= 0) return;
         List<Integer> luckyId = new ArrayList<>();
         String sql = "";

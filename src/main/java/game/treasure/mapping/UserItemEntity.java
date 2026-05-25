@@ -1,7 +1,7 @@
 package game.treasure.mapping;
 
-import game.config.aEnum.ItemKey;
 import game.config.aEnum.ItemType;
+import protocol.Pbmethod;
 import game.treasure.mapping.main.ResItemEntity;
 import game.treasure.service.resource.ResItem;
 import game.treasure.service.user.Bonus;
@@ -38,8 +38,8 @@ public class UserItemEntity implements Serializable {
         genDataItem(userId, itemId, number);
     }
 
-    public UserItemEntity(int userId, ItemKey itemKey, int number) {
-        genDataItem(userId, itemKey.id, number);
+    public UserItemEntity(int userId, Pbmethod.ItemKey itemKey, int number) {
+        genDataItem(userId, itemKey.getNumber(), number);
     }
 
     public void genDataItem(int userId, int itemId, int number) {

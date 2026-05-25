@@ -550,10 +550,6 @@ public class EventHandler extends AHandler {
         List<Long> bonus = new ArrayList<>();
         // check nhận thêm bonus ví dụ quest b đc nhận x2 bonus thì phải bù bonus đã nhận cho nó
         if (!pack.hasHSD()) return bonus;
-        if (pack.getPackId() == PackType.QUEST_B.value) {
-            List<Integer> questStatus = mUser.getResources().getItem(ItemKey.QUEST_B).getDataListInt();
-            questStatus.remove(0);
-        }
         return bonus;
     }
 

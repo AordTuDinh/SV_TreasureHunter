@@ -2,8 +2,8 @@ package game.treasure.controller;
 
 import game.config.CfgLottery;
 import game.config.aEnum.DetailActionType;
-import game.config.aEnum.ItemKey;
 import game.config.aEnum.ItemType;
+import protocol.Pbmethod;
 import game.config.aEnum.StatusType;
 import game.config.lang.Lang;
 import game.treasure.mapping.UserItemEntity;
@@ -96,7 +96,7 @@ public class LotteryHandler extends AHandler {
             }
         }
 
-        List<Long> bonus = Bonus.viewItem(ItemKey.TICKER_MINI, -numTicker);
+        List<Long> bonus = Bonus.viewItem(Pbmethod.ItemKey.TICKER_MINI, -numTicker);
         String err = Bonus.checkMoney(mUser, bonus);
         if (err != null) {
             addErrResponse(err);

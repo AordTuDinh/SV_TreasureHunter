@@ -15,6 +15,7 @@ import game.object.BonusConfig;
 import game.object.MyUser;
 import game.object.PointBuff;
 import game.protocol.CommonProto;
+import protocol.Pbmethod;
 import io.netty.channel.Channel;
 import ozudo.base.database.DBJPA;
 import ozudo.base.helper.*;
@@ -267,7 +268,7 @@ public class ItemHandler extends AHandler {
 //                addResponse(getCommonVector(aBonus));
 //                break;
             case ITEM_USE_X1:
-                switch (ItemKey.get(item.getItemId())) {
+                switch (Pbmethod.ItemKey.valueOf(item.getItemId())) {
 //                    case THE_HOAN_TRA_1 -> {
 //                        if (mUser.getUData().resetLevelStat(mUser)) {
 //                            addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.SU_DUNG_ITEM.getKey(id), Bonus.merge(fee))));

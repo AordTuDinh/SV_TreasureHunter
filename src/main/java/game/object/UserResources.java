@@ -3,6 +3,7 @@ package game.object;
 import game.config.CfgAchievement;
 import game.config.aEnum.*;
 import game.treasure.mapping.*;
+import protocol.Pbmethod;
 import game.treasure.service.resource.ResEventTop;
 import lombok.Getter;
 import lombok.Setter;
@@ -84,8 +85,8 @@ public class UserResources implements Serializable {
         return mItem.get(itemId);
     }
 
-    public UserItemEntity getItem(ItemKey key) {
-        return getItem(key.id);
+    public UserItemEntity getItem(Pbmethod.ItemKey key) {
+        return getItem(key.getNumber());
     }
 
     public UserPackEntity getPack(PackType type) {

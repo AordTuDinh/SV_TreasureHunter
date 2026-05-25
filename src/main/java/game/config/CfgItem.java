@@ -4,11 +4,22 @@ import game.config.lang.Lang;
 import game.treasure.mapping.UserPetEntity;
 import game.treasure.service.user.Bonus;
 import game.object.MyUser;
+import protocol.Pbmethod;
 
 import java.util.List;
 
 public class CfgItem {
 
+    static final List<Integer> ITEM_MEDICINE_IDS = List.of(
+            Pbmethod.ItemKey.BINH_MAU_1.getNumber(),
+            Pbmethod.ItemKey.BINH_MAU_2.getNumber(),
+            Pbmethod.ItemKey.BINH_MAU_3.getNumber(),
+            Pbmethod.ItemKey.BINH_MAU_4.getNumber()
+    );
+
+    public static boolean isItemMedicine(int itemId) {
+        return ITEM_MEDICINE_IDS.contains(itemId);
+    }
 
     // check các item đc phép mua không, vd 1 vài item chỉ đc sở hữu 1 lần
     public static String canBuyItem(MyUser mUser, List<Long> items, int number) {

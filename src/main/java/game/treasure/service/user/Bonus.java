@@ -7,6 +7,7 @@ import game.config.CfgMaterial;
 import game.config.CfgServer;
 import game.config.aEnum.*;
 import game.config.lang.Lang;
+import protocol.Pbmethod;
 import game.treasure.mapping.*;
 import game.treasure.mapping.main.ResItemEntity;
 import game.treasure.service.resource.ResItem;
@@ -84,8 +85,8 @@ public class Bonus {
         return viewMaterial(materialId, 1);
     }
 
-    public static List<Long> viewItem(ItemKey itemKey, long number) {
-        List<Long> one = view(BONUS_ITEM, itemKey.id);
+    public static List<Long> viewItem(Pbmethod.ItemKey itemKey, long number) {
+        List<Long> one = view(BONUS_ITEM, itemKey.getNumber());
         return viewXNumber(one, (int) number);
     }
 
@@ -234,7 +235,7 @@ public class Bonus {
         int itemKey = aBonus.get(index++).getAsInt();
         int addNumber = 1;
         UserItemEntity uItem;
-        if (itemKey == ItemKey.TICKER_NORMAL.id) uItem = checkGenItemData(mUser, addNumber);
+        if (itemKey == Pbmethod.ItemKey.TICKER_NORMAL.getNumber()) uItem = checkGenItemData(mUser, addNumber);
         else {
             uItem = mUser.getResources().getItem(itemKey);
             if (uItem == null) uItem = new UserItemEntity(mUser.getUser().getId(), itemKey, addNumber);
@@ -258,14 +259,14 @@ public class Bonus {
     }
 
     static UserItemEntity checkGenItemData(MyUser mUser, int numItem) {
-        UserItemEntity uItem = mUser.getResources().getItem(ItemKey.TICKER_NORMAL.id);
+        UserItemEntity uItem = mUser.getResources().getItem(Pbmethod.ItemKey.TICKER_NORMAL.getNumber());
         long eventDay = CfgLottery.getEventIdBuy();
         List<Long> nums = new ArrayList<>();
         for (int i = 0; i < numItem; i++) {
             nums.add(NumberUtil.getRandomLong(100000, 999999));
         }
         if (uItem == null) {
-            uItem = new UserItemEntity(mUser.getUser().getId(), ItemKey.TICKER_NORMAL, numItem);
+            uItem = new UserItemEntity(mUser.getUser().getId(), Pbmethod.ItemKey.TICKER_NORMAL, numItem);
             nums.add(0, eventDay);
             uItem.setData(StringHelper.toDBString(nums));
         } else {

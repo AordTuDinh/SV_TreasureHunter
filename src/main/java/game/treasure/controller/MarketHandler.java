@@ -191,8 +191,7 @@ public class MarketHandler extends AHandler {
     }
 
     private void checkQuest(int itemId, int number) {
-        if (ItemKey.isItemMedicine(itemId)) CfgQuest.addNumQuest(mUser, DataQuest.BUY_MEDICINE, number);
-        if (itemId==ItemKey.NANG_LUONG.id) CfgQuest.addNumQuest(mUser, DataQuest.BUY_ENERGY, number);
+        if (CfgItem.isItemMedicine(itemId)) CfgQuest.addNumQuest(mUser, DataQuest.BUY_MEDICINE, number);
         CfgQuest.addNumQuest(mUser, DataQuest.BUY_ITEM_SHOP, number);
         mUser.getDataDaily().update();
     }
@@ -210,8 +209,8 @@ public class MarketHandler extends AHandler {
                 return;
             }
             int idItem = Bonus.getIdItem(rMarketDetail.getItems());
-            if (idItem == ItemKey.TICKER_NORMAL.id) buyTicketNormal(nums, resItem, market, aItem);
-            else if (idItem == ItemKey.TICKER_SPECIAL.id) buyTicketSpecial(nums, resItem, market, aItem);
+            if (idItem == protocol.Pbmethod.ItemKey.TICKER_NORMAL.getNumber()) buyTicketNormal(nums, resItem, market, aItem);
+            else if (idItem == protocol.Pbmethod.ItemKey.TICKER_SPECIAL.getNumber()) buyTicketSpecial(nums, resItem, market, aItem);
             else {
                 // mua vật phẩm bình thường
                 String errBuy = CfgItem.canBuyItem(mUser, resItem.getItems(), 1);
@@ -278,9 +277,9 @@ public class MarketHandler extends AHandler {
         }
         int numAdd = 0;
         long eventDay = CfgLottery.getEventIdBuy();
-        UserItemEntity uItem = mUser.getResources().getItem(ItemKey.TICKER_SPECIAL.id);
+        UserItemEntity uItem = mUser.getResources().getItem(protocol.Pbmethod.ItemKey.TICKER_SPECIAL.getNumber());
         if (uItem == null) {
-            uItem = new UserItemEntity(user.getId(), ItemKey.TICKER_SPECIAL, nums.size());
+            uItem = new UserItemEntity(user.getId(), protocol.Pbmethod.ItemKey.TICKER_SPECIAL, nums.size());
             List<Long> numNew = new ArrayList<>(nums);
             numNew.add(0, eventDay);
             uItem.setData(StringHelper.toDBString(numNew));
@@ -337,7 +336,7 @@ public class MarketHandler extends AHandler {
                 return;
             }
         }
-        UserItemEntity uItem = mUser.getResources().getItem(ItemKey.TICKER_NORMAL.id);
+        UserItemEntity uItem = mUser.getResources().getItem(protocol.Pbmethod.ItemKey.TICKER_NORMAL.getNumber());
         List<Long> bonus = CfgLottery.getFeeBuyNormal(nums.size());
         String err = Bonus.checkMoney(mUser, bonus);
         if (err != null) {
@@ -352,7 +351,7 @@ public class MarketHandler extends AHandler {
         int numAdd = 0;
         long eventDay = CfgLottery.getEventIdBuy();
         if (uItem == null) {
-            uItem = new UserItemEntity(user.getId(), ItemKey.TICKER_NORMAL, nums.size());
+            uItem = new UserItemEntity(user.getId(), protocol.Pbmethod.ItemKey.TICKER_NORMAL, nums.size());
             List<Long> aNum = new ArrayList(nums);
             aNum.add(0, eventDay);
             uItem.setData(StringHelper.toDBString(aNum));

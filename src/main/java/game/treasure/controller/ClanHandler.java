@@ -102,7 +102,7 @@ public class ClanHandler extends AHandler {
                         case IAction.CLAN_UP_LEVEL -> upLevel();
                         case IAction.CLAN_HONOR_STATUS -> honorStatus();
                         case IAction.CLAN_HONOR_GET_BONUS -> honorGetBonus();
-                        case IAction.CLAN_HONOR -> honor();
+//                        case IAction.CLAN_HONOR -> honor();
                     }
                 }
 
@@ -167,44 +167,44 @@ public class ClanHandler extends AHandler {
         }
     }
 
-    void honor() {
-        int num = getInputInt();
-        if (num < 10) {
-            addErrResponse(getLang(Lang.err_min_10_gem));
-            return;
-        }
-        UserClanEntity uClan = Services.userDAO.getUserClan(mUser);
-        if (uClan == null) {
-            addErrParam();
-            return;
-        }
-
-        UserDailyEntity uDaily = mUser.getUDaily();
-        if (uDaily == null) {
-            addErrSystem();
-            return;
-        }
-        int numHonorCur = uDaily.getUDaily().getValue(DataDaily.NUM_HONOR);
-        if (numHonorCur+num > CfgClan.config.maxNumHonor) {
-            addErrResponse(getLang(Lang.err_max_num_honor));
-            return;
-        }
-        num = Math.min(num, CfgClan.config.maxNumHonor - numHonorCur);
-        int numHH = num / 5;
-        List<Long> fee = Bonus.viewGem(-num);
-        String err = Bonus.checkMoney(mUser, fee);
-        if (err != null) {
-            addErrResponse(err);
-            return;
-        }
-        fee.addAll(Bonus.viewItem(ItemKey.HUY_HIEU_BANG, numHH));
-        ClanEntity clan = clanManager.getClan();
-        if (clan.addHonor(num) && uClan.addHonor(num) && uDaily.getUDaily().setValueAndUpdate(DataDaily.NUM_HONOR, numHonorCur+ num)) {
-            addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.CLAN_HONOR.getKey(), fee)));
-            honorStatus();
-            clan.addClanLog(Lang.clan_message_14,user.getName(),num+"");
-        } else addErrSystem();
-    }
+//    void honor() {
+//        int num = getInputInt();
+//        if (num < 10) {
+//            addErrResponse(getLang(Lang.err_min_10_gem));
+//            return;
+//        }
+//        UserClanEntity uClan = Services.userDAO.getUserClan(mUser);
+//        if (uClan == null) {
+//            addErrParam();
+//            return;
+//        }
+//
+//        UserDailyEntity uDaily = mUser.getUDaily();
+//        if (uDaily == null) {
+//            addErrSystem();
+//            return;
+//        }
+//        int numHonorCur = uDaily.getUDaily().getValue(DataDaily.NUM_HONOR);
+//        if (numHonorCur+num > CfgClan.config.maxNumHonor) {
+//            addErrResponse(getLang(Lang.err_max_num_honor));
+//            return;
+//        }
+//        num = Math.min(num, CfgClan.config.maxNumHonor - numHonorCur);
+//        int numHH = num / 5;
+//        List<Long> fee = Bonus.viewGem(-num);
+//        String err = Bonus.checkMoney(mUser, fee);
+//        if (err != null) {
+//            addErrResponse(err);
+//            return;
+//        }
+//        fee.addAll(Bonus.viewItem(ItemKey.HUY_HIEU_BANG, numHH));
+//        ClanEntity clan = clanManager.getClan();
+//        if (clan.addHonor(num) && uClan.addHonor(num) && uDaily.getUDaily().setValueAndUpdate(DataDaily.NUM_HONOR, numHonorCur+ num)) {
+//            addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.CLAN_HONOR.getKey(), fee)));
+//            honorStatus();
+//            clan.addClanLog(Lang.clan_message_14,user.getName(),num+"");
+//        } else addErrSystem();
+//    }
 
 
     void create() {
