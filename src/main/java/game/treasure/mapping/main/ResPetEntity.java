@@ -16,7 +16,7 @@ import java.util.List;
 public class ResPetEntity implements Serializable {
     @Id
     int id;
-    String name, desc;
-    int rank, faction, showSummon; // showSummon: có thể summon ra
+    String name;
+    int rank,  showSummon; // showSummon: có thể summon ra
 
 }

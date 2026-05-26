@@ -57,13 +57,14 @@ public class PetHandler extends AHandler {
 
     private void petInfo() {
         List<Long> ids = getInputALong();
-        if (ids.isEmpty() || ids.size() < 2) {
+        if (ids.isEmpty()) {
             addErrParam();
             return;
         }
         Pbmethod.PbListPet.Builder pbPets = Pbmethod.PbListPet.newBuilder();
-        for (int i = 0; i < ids.size(); i += 2) {
-            UserPetEntity uPet = mUser.getResources().getMPetAnimal().get(Math.toIntExact(ids.get(i + 1)));
+        for (int i = 0; i < ids.size(); i++) {
+            int petId = Math.toIntExact(ids.get(i));
+            UserPetEntity uPet = mUser.getResources().getPet(petId);
             if (uPet != null) pbPets.addPets(uPet.toProto());
         }
         addResponse(pbPets.build());
@@ -79,7 +80,7 @@ public class PetHandler extends AHandler {
             addErrParam();
             return;
         }
-        if (rPet != null && rPet.getShowSummon() == 0) {
+        if (rPet == null || rPet.getShowSummon() == 0) {
             addErrParam();
             return;
         }
