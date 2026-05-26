@@ -453,6 +453,9 @@ public class LoginHandler extends AHandler {
             List<UserPetEntity> pets = session.createNativeQuery("select * from user_pet where user_id = " + userId, UserPetEntity.class).getResultList();
             mUser.getResources().setPets(pets);
 
+            List<UserMountEntity> mounts = session.createNativeQuery("select * from user_mount where user_id = " + userId, UserMountEntity.class).getResultList();
+            mUser.getResources().setMounts(mounts);
+
             List<UserPackEntity> packs = session.createNativeQuery("select * from user_pack where user_id = " + userId, UserPackEntity.class).getResultList();
             mUser.getResources().setPacks(packs);
 

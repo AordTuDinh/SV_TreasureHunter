@@ -11,6 +11,7 @@ import protocol.Pbmethod;
 import game.treasure.mapping.*;
 import game.treasure.mapping.main.ResItemEntity;
 import game.treasure.service.resource.ResItem;
+import game.treasure.service.resource.ResMount;
 import game.object.MyUser;
 import ozudo.base.database.DBJPA;
 import ozudo.base.helper.GsonUtil;
@@ -346,12 +347,17 @@ public class Bonus {
 
     static List<Long> addMount(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
         int mountId = aBonus.get(index++).getAsInt();
-        // NOTE: Mount persistence is not implemented elsewhere in this server codebase.
-        // We still return receive-format so client can show the bonus.
-        if (CfgServer.isRealServer()) {
-            Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "mount", "mountId", mountId);
+        if (ResMount.get(mountId) == null) return new ArrayList<>();
+        if (mUser.getResources().getMount(mountId) != null) return new ArrayList<>();
+        UserMountEntity uMount = new UserMountEntity(mUser.getUser().getId(), mountId);
+        if (DBJPA.save(uMount)) {
+            mUser.getResources().addMount(uMount);
+            if (CfgServer.isRealServer()) {
+                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "mount", "mountId", mountId);
+            }
+            return Arrays.asList((long) BONUS_MOUNT, (long) mountId);
         }
-        return Arrays.asList((long) BONUS_MOUNT, (long) mountId);
+        return new ArrayList<>();
     }
 
     // Send-format: [BONUS_MATERIAL, materialId, rank]

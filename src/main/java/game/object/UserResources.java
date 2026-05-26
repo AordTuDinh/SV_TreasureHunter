@@ -28,6 +28,8 @@ public class UserResources implements Serializable {
     @Setter
     List<UserArtifactEntity> artifacts;
     @Setter
+    List<UserMountEntity> mounts;
+    @Setter
     List<UserPackEntity> packs;
     @Setter
     List<UserMaterialEntity> materials;
@@ -41,6 +43,8 @@ public class UserResources implements Serializable {
     Map<Long, UserItemEquipmentEntity> mItemEquipment = new HashMap<>();
     @Getter
     Map<Integer, UserArtifactEntity> mArtifact = new HashMap<>();
+    @Getter
+    Map<Integer, UserMountEntity> mMount = new HashMap<>();
     @Getter
     Map<Integer, UserPackEntity> mPacks = new HashMap<>();
     @Getter
@@ -72,6 +76,9 @@ public class UserResources implements Serializable {
             });
             if (artifacts != null) {
                 artifacts.forEach(item -> mArtifact.put(item.getArtifactId(), item));
+            }
+            if (mounts != null) {
+                mounts.forEach(item -> mMount.put(item.getMountId(), item));
             }
             if (materials != null) {
                 materials.forEach(mat -> mMaterial.put(mat.getId(), mat));
@@ -123,6 +130,10 @@ public class UserResources implements Serializable {
 
     public UserArtifactEntity getArtifact(int artifactId) {
         return mArtifact.get(artifactId);
+    }
+
+    public UserMountEntity getMount(int mountId) {
+        return mMount.get(mountId);
     }
 
     public void addArtifact(UserArtifactEntity uArtifact) {
@@ -188,5 +199,13 @@ public class UserResources implements Serializable {
         }
         mUser.reCalculatePoint();
 //        ResEventTop.checkEvent(mUser, uPet, TopType.PET_POINT);
+    }
+
+    public void addMount(UserMountEntity uMount) {
+        if (mounts == null) mounts = new ArrayList<>();
+        if (!mMount.containsKey(uMount.getMountId())) {
+            mounts.add(uMount);
+        }
+        mMount.put(uMount.getMountId(), uMount);
     }
 }
