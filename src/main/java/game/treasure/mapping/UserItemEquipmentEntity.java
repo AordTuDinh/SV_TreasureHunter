@@ -20,7 +20,7 @@ public class UserItemEquipmentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
-    int userId, itemId, level, lockDestroy;
+    int userId, itemId, level, lockDestroy, tier;
     String point;
     @Transient
     int heroIdEquip;
@@ -30,6 +30,7 @@ public class UserItemEquipmentEntity {
         this.itemId = itemId;
         this.level = 0;
         this.lockDestroy = 0;
+        this.tier = 1;
         this.point = "[]";
     }
 

@@ -1,6 +1,6 @@
 package game.treasure.mapping.main;
 
-import game.config.aEnum.EquipSlotType;
+import game.config.aEnum.ItemEquipmentType;
 import game.treasure.service.resource.ResItem;
 import game.treasure.service.user.Bonus;
 import lombok.Data;
@@ -21,7 +21,7 @@ public class ResItemEquipmentEntity {
     int  rank, type;
 
 
-    public EquipSlotType getType() {
-        return EquipSlotType.get(type);
+    public ItemEquipmentType getEquipmentType() {
+        return ItemEquipmentType.get(type);
     }
 }

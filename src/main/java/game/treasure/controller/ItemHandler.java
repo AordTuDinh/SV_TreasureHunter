@@ -350,7 +350,7 @@ public class ItemHandler extends AHandler {
             case ITEM_USE_FOR_ITEM_5: {
                 // todo regen item và hòa trả đá
                 ResItemEquipmentEntity resItemEquip = uItemEquip.getRes();
-                if (resItemEquip.getType() != EquipSlotType.WEAPON) {
+                if (resItemEquip.getEquipmentType() != ItemEquipmentType.AXE) {
                     addErrParam();
                     return;
                 }

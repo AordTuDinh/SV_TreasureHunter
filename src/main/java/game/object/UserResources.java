@@ -26,6 +26,8 @@ public class UserResources implements Serializable {
     @Setter
     List<UserItemEquipmentEntity> itemEquipments;
     @Setter
+    List<UserArtifactEntity> artifacts;
+    @Setter
     List<UserPackEntity> packs;
     @Setter
     List<UserMaterialEntity> materials;
@@ -37,6 +39,8 @@ public class UserResources implements Serializable {
     Map<Integer, UserPetEntity> mPetAnimal = new HashMap<>();
     @Getter
     Map<Long, UserItemEquipmentEntity> mItemEquipment = new HashMap<>();
+    @Getter
+    Map<Integer, UserArtifactEntity> mArtifact = new HashMap<>();
     @Getter
     Map<Integer, UserPackEntity> mPacks = new HashMap<>();
     @Getter
@@ -66,6 +70,9 @@ public class UserResources implements Serializable {
             itemEquipments.forEach(item -> {
                mItemEquipment.put(item.getId(), item);
             });
+            if (artifacts != null) {
+                artifacts.forEach(item -> mArtifact.put(item.getArtifactId(), item));
+            }
             if (materials != null) {
                 materials.forEach(mat -> mMaterial.put(mat.getId(), mat));
             }
@@ -112,6 +119,18 @@ public class UserResources implements Serializable {
 
     public UserItemEquipmentEntity getItemEquipment(long itemId) {
         return mItemEquipment.get(itemId);
+    }
+
+    public UserArtifactEntity getArtifact(int artifactId) {
+        return mArtifact.get(artifactId);
+    }
+
+    public void addArtifact(UserArtifactEntity uArtifact) {
+        if (artifacts == null) artifacts = new ArrayList<>();
+        if (!mArtifact.containsKey(uArtifact.getArtifactId())) {
+            artifacts.add(uArtifact);
+        }
+        mArtifact.put(uArtifact.getArtifactId(), uArtifact);
     }
 
 

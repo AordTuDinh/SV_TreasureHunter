@@ -101,6 +101,10 @@ public class Bonus {
         return view(BONUS_EQUIPMENT, itemId);
     }
 
+    public static List<Long> viewItemArtifact(int artifactId) {
+        return view(BONUS_ARTIFACT, artifactId);
+    }
+
 
     public static List<Long> viewGem(int number) {
         return view(BONUS_GEM, number);
@@ -300,14 +304,14 @@ public class Bonus {
     }
 
     static List<Long> addItemArtifact(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-        int itemKey = aBonus.get(index++).getAsInt();
-        UserItemEquipmentEntity uItemEquip = new UserItemEquipmentEntity(mUser.getUser().getId(), itemKey);
-        if (DBJPA.save(uItemEquip)) {
-            mUser.getResources().addItemEquip(uItemEquip);
+        int artifactId = aBonus.get(index++).getAsInt();
+        if (mUser.getResources().getArtifact(artifactId) != null) return new ArrayList<>();
+        UserArtifactEntity uArtifact = new UserArtifactEntity(mUser.getUser().getId(), artifactId);
+        if (DBJPA.save(uArtifact)) {
+            mUser.getResources().addArtifact(uArtifact);
             if (CfgServer.isRealServer())
-                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "item_artifact", "id", uItemEquip.getId(), "itemKey", itemKey);
-            // receive-format: [type, itemKey]
-            return Arrays.asList((long) BONUS_ARTIFACT, (long) itemKey);
+                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "artifact", "artifactId", artifactId);
+            return Arrays.asList((long) BONUS_ARTIFACT, (long) artifactId);
         }
         return new ArrayList<>();
     }

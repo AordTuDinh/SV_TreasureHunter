@@ -446,6 +446,10 @@ public class LoginHandler extends AHandler {
 
             List<UserItemEquipmentEntity> itemEquips = session.createNativeQuery("select * from user_item_equipment where user_id = " + userId, UserItemEquipmentEntity.class).getResultList();
             mUser.getResources().setItemEquipments(itemEquips);
+
+            List<UserArtifactEntity> userArtifacts = session.createNativeQuery("select * from user_artifact where user_id = " + userId, UserArtifactEntity.class).getResultList();
+            mUser.getResources().setArtifacts(userArtifacts);
+
             List<UserPetEntity> pets = session.createNativeQuery("select * from user_pet where user_id = " + userId, UserPetEntity.class).getResultList();
             mUser.getResources().setPets(pets);
 
