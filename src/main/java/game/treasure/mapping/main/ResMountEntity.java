@@ -1,5 +1,7 @@
 package game.treasure.mapping.main;
 
+import game.treasure.service.resource.ResMount;
+import game.treasure.service.resource.ResPet;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

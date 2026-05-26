@@ -223,8 +223,13 @@ public class UserDataEntity implements Serializable {
         }
         pb.setAMaterial(lstMat);
         // pet
-        for (Map.Entry<Integer, UserPetEntity> pets : mUser.getResources().getMPetAnimal().entrySet()) {
+        for (Map.Entry<Integer, UserPetEntity> pets : mUser.getResources().getMPet().entrySet()) {
             pb.addAPet(pets.getValue().toProto());
+        }
+
+        // mount
+        for (Map.Entry<Integer, UserMountEntity> mounts : mUser.getResources().getMMount().entrySet()) {
+            pb.addAMount(mounts.getValue().toProto());
         }
 
         // item equipment in hero

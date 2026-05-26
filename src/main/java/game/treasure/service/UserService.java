@@ -73,16 +73,7 @@ public class UserService {
 //            }
 //        }
         // check top pet
-        AtomicInteger point = new AtomicInteger();
-        Map<Integer, UserPetEntity> upets = mUser.getResources().getMPetAnimal();
-        upets.forEach((k,v)->{
-            point.addAndGet(v.getResPet().getRank() * (v.getStar() + 1));
-        });
-//        UserEventTopEntity uTop = Services.userDAO.getUserEventTop(mUser,TopType.PET_POINT.value);
-//        if(uTop.getPoint()!=point.intValue()){
-//            uTop.setPoint(point.intValue());
-//            uTop.update();
-//        }
+
     }
 
     void checkBuyQrError(MyUser mUser) {

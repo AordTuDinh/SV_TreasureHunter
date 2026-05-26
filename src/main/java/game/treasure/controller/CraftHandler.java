@@ -235,10 +235,6 @@ public class CraftHandler extends AHandler {
             UserItemEquipmentEntity equip = mUser.getResources().getItemEquipment(targetId);
             return equip == null ? -1 : equip.getLevel();
         }
-        if (type == CraftTargetType.PET) {
-            UserPetEntity pet = mUser.getResources().getPet(Math.toIntExact(targetId));
-            return pet == null ? -1 : pet.getStar();
-        }
         return -1;
     }
 
@@ -250,17 +246,6 @@ public class CraftHandler extends AHandler {
             }
             if (equip.update(List.of("level", 1))) {
                 equip.setLevel(1);
-                return true;
-            }
-            return false;
-        }
-        if (type == CraftTargetType.PET) {
-            UserPetEntity pet = mUser.getResources().getPet(Math.toIntExact(targetId));
-            if (pet == null) {
-                return false;
-            }
-            if (pet.update(List.of("star", 1))) {
-                pet.setStar(1);
                 return true;
             }
             return false;

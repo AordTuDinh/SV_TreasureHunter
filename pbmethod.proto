@@ -254,6 +254,7 @@ message  PbUserData{
   repeated PbItemEquipment aItemEquip = 11;
   optional PbListMaterial aMaterial = 12;
   repeated PbPet aPet = 15;
+  repeated PbMount aMount = 16;
   optional  int32 tutorial = 17;
   repeated  int32 dameSkins = 18;
   optional  int32 dameSkinEquip = 19;
@@ -274,17 +275,23 @@ message PbListMaterial{
   repeated  PbMaterial materials = 1;
 }
 
+message PbListMount{
+  repeated PbMount mounts = 1;
+}
+
+message PbMount{
+  optional int32 id = 1;
+  repeated int64 point = 2;
+}
+
+
 message PbListPet{
   repeated PbPet pets = 1;
 }
 
 message PbPet{
   optional int32 id = 1;
-  optional int32 star = 2;
-  optional int32 hp = 4;
-  optional int32 maxHp = 5;
-  optional int64 power = 6;
-  repeated int32  bonusStar = 7;
+  repeated int64 point = 2;
 }
 
 message PbListItemPoint{

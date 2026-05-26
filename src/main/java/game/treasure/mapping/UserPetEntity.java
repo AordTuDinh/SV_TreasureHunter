@@ -28,10 +28,8 @@ import java.util.List;
 public class UserPetEntity implements Serializable {
     @Id
     int userId, petId;
-    int star;
+    int level;
     int server;
-    String bonusStar;
-    Date timeCare;
     @Transient
     Point point;
 
@@ -39,66 +37,23 @@ public class UserPetEntity implements Serializable {
         this.userId = user.getId();
         this.server = user.getServer();
         this.petId = petId;
-        this.star = 0;
-        this.timeCare = Calendar.getInstance().getTime();
-        this.bonusStar = "[]";
+        this.level =1;
     }
 
 
-    public List<Integer> getBonusStar() {
-        return GsonUtil.strToListInt(bonusStar);
-    }
 
     public ResPetEntity getResPet() {
         return ResPet.getPet(petId);
     }
 
 
-    public int getHp() {
-        int day = (int) ((Calendar.getInstance().getTime().getTime() - timeCare.getTime()) / DateTime.DAY_MILLI_SECOND);
-        return Math.max(CfgPet.getMaxHpByStar(star) - day * CfgPet.HP_1_DAY, 0);
-    }
-
-    public void addHp(int num) {
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -(CfgPet.getMaxHpByStar(star) / CfgPet.HP_1_DAY));
-        if (timeCare.getTime() > cal.getTimeInMillis()) cal.setTime(timeCare);
-        cal.add(Calendar.DATE, num);
-        this.timeCare = cal.getTime();
-    }
-
-    public int getNeedFood() {
-        int hp = getHp();
-        if (hp == CfgPet.getMaxHpByStar(star)) return 0;
-        return (CfgPet.getMaxHpByStar(star) - hp) / CfgPet.HP_1_DAY + 1;
-    }
 
     public protocol.Pbmethod.PbPet.Builder toProto() {
         protocol.Pbmethod.PbPet.Builder pb = protocol.Pbmethod.PbPet.newBuilder();
         pb.setId(petId);
-        pb.setStar(star);
-        pb.setHp(getHp());
-        pb.setMaxHp(CfgPet.getMaxHpByStar(star));
-        pb.setPower(IMath.calPowerPet(this));
-        pb.addAllBonusStar(getBonusStar());
         return pb;
     }
 
-    public boolean updateStar() {
-        List<Integer> bonusStar = getBonusStar();
-        bonusStar.add(CfgPet.config.bonusStar.get(star));
-        if (getHp() / 10 > 0) {
-            int oldHp = CfgPet.getMaxHpByStar(star);
-            int curHp = CfgPet.getMaxHpByStar(star + 1);
-            long time = timeCare.getTime() - DateTime.DAY_MILLI_SECOND * (curHp - oldHp) / 10;
-            timeCare = new Date(time);
-        }
-        if (update(List.of("star", star + 1, "bonus_star", StringHelper.toDBString(bonusStar), "time_care", timeCare))) {
-            this.star += 1;
-            this.bonusStar = bonusStar.toString();
-            return true;
-        } else return false;
-    }
 
     public boolean update(List<Object> lst) {
         return DBJPA.update("user_pet", lst, List.of("user_id", userId, "pet_id", petId));

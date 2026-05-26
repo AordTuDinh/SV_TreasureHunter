@@ -126,11 +126,6 @@ public class IMath {
         return pt;
     }
 
-    public static long calPowerPet(UserPetEntity pet) {
-        return 100 + pet.getStar() * 100;
-    }
-
-
     public static void addPointEffect(Point point, PointData[] aEffect) {
         for (int i = 0; i < aEffect.length; i++) {
             List<Long> aPoint = aEffect[i].getPoint();

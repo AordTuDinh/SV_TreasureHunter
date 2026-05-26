@@ -349,7 +349,7 @@ public class Bonus {
         int mountId = aBonus.get(index++).getAsInt();
         if (ResMount.get(mountId) == null) return new ArrayList<>();
         if (mUser.getResources().getMount(mountId) != null) return new ArrayList<>();
-        UserMountEntity uMount = new UserMountEntity(mUser.getUser().getId(), mountId);
+        UserMountEntity uMount = new UserMountEntity(mUser.getUser(), mountId);
         if (DBJPA.save(uMount)) {
             mUser.getResources().addMount(uMount);
             if (CfgServer.isRealServer()) {

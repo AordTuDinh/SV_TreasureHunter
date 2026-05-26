@@ -4,10 +4,8 @@ import game.config.CfgAchievement;
 import game.config.aEnum.*;
 import game.treasure.mapping.*;
 import protocol.Pbmethod;
-import game.treasure.service.resource.ResEventTop;
 import lombok.Getter;
 import lombok.Setter;
-import ozudo.base.database.DBJPA;
 import ozudo.base.log.Logs;
 
 import java.io.Serializable;
@@ -38,7 +36,7 @@ public class UserResources implements Serializable {
     @Getter
     Map<Integer, UserItemEntity> mItem = new HashMap<>();
     @Getter
-    Map<Integer, UserPetEntity> mPetAnimal = new HashMap<>();
+    Map<Integer, UserPetEntity> mPet = new HashMap<>();
     @Getter
     Map<Long, UserItemEquipmentEntity> mItemEquipment = new HashMap<>();
     @Getter
@@ -69,7 +67,7 @@ public class UserResources implements Serializable {
             });
 
             pets.forEach(pet -> {
-                mPetAnimal.put(pet.getPetId(), pet);
+                mPet.put(pet.getPetId(), pet);
             });
             itemEquipments.forEach(item -> {
                mItemEquipment.put(item.getId(), item);
@@ -121,7 +119,7 @@ public class UserResources implements Serializable {
 
 
     public UserPetEntity getPet( int petId) {
-        return  mPetAnimal.get(petId);
+        return  mPet.get(petId);
     }
 
     public UserItemEquipmentEntity getItemEquipment(long itemId) {
@@ -192,8 +190,8 @@ public class UserResources implements Serializable {
     }
 
     public void addPet(UserPetEntity uPet) {
-        if (!mPetAnimal.containsKey(uPet.getPetId())) {
-            mPetAnimal.put(uPet.getPetId(), uPet);
+        if (!mPet.containsKey(uPet.getPetId())) {
+            mPet.put(uPet.getPetId(), uPet);
             int achiId = 106 + uPet.getPetId();
             if (achiId > 106 && achiId < 132) CfgAchievement.addAchievement(mUser, 2, achiId, 1);
         }

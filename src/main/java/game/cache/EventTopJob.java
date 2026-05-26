@@ -42,20 +42,6 @@ public class EventTopJob {
             mPet.put(pet.getId(), pet);
         });
 
-        Map<Integer,Integer> map = new HashMap<>();
-        List<UserPetEntity> uPet = DBResource.getInstance().getList(CfgServer.DB_DSON + "user_pet", Arrays.asList( "type" ,2 , "server",1),"", UserPetEntity.class);
-
-        for (int i = 0; i < uPet.size(); i++) {
-            ResPetEntity res=  mPet.get(uPet.get(i).getPetId());
-            int addPoint = res.getRank() * (uPet.get(i).getStar()+1);
-            map.merge(uPet.get(i).getUserId(), addPoint, Integer::sum);
-        }
-
-//        map.forEach((userId,point)->{
-//            UserEventTopEntity uTop = new UserEventTopEntity(userId, TopType.PET_POINT.value, 1, point);
-//            DBResource.getInstance().saveOrUpdate(uTop);
-//        });
-
     }
 
     protected EntityManager getEntityManager() {
