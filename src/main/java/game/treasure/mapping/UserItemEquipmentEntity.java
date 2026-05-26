@@ -22,8 +22,9 @@ public class UserItemEquipmentEntity {
     long id;
     int userId, itemId, level, lockDestroy, tier;
     String point;
+
     @Transient
-    int heroIdEquip;
+    boolean isEquip;
 
     public UserItemEquipmentEntity(int userId, int itemId) {
         this.userId = userId;
@@ -34,16 +35,9 @@ public class UserItemEquipmentEntity {
         this.point = "[]";
     }
 
-    public boolean isEquip() {
-        return heroIdEquip > 0;
-    }
-
-    public void equip(int heroIdEquip) {
-        this.heroIdEquip = heroIdEquip;
-    }
 
     public void unEquip() {
-        setHeroIdEquip(0);
+        isEquip = false;
     }
 
     public ResItemEquipmentEntity getRes() {

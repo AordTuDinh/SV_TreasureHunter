@@ -299,7 +299,7 @@ public class Bonus {
             if (CfgServer.isRealServer())
                 Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "item_equipment", "id", uItemEquip.getId(), "itemKey", itemKey);
             // receive-format: [type, itemKey]
-            return Arrays.asList((long) BONUS_EQUIPMENT, (long) itemKey);
+            return Arrays.asList((long) BONUS_EQUIPMENT,uItemEquip.getId(), (long) itemKey);
         }
         return new ArrayList<>();
     }

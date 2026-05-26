@@ -73,6 +73,7 @@ public class ItemHandler extends AHandler {
 
     public static void listEquipment(List<Long> ids, AHandler handler, MyUser mUser) {
         Pbmethod.PbListItemEquipment.Builder lst = Pbmethod.PbListItemEquipment.newBuilder();
+        System.out.println("ids = " + ids);
         for (int i = 0; i < ids.size(); i++) {
             UserItemEquipmentEntity itemEquipment = mUser.getResources().getItemEquipment(ids.get(i));
             if (itemEquipment == null) {
