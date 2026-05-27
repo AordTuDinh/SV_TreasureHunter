@@ -21,19 +21,20 @@ public class UserMaterialEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
     int userId, materialId;
-    int rank, level;
+    int matRank;
+    int level;
     float value;
     @Column(name = "socket_rate")
     float socketRate;
 
-    public UserMaterialEntity(int userId, int materialId, int rank) {
+    public UserMaterialEntity(int userId, int materialId, int matRank) {
         this.userId = userId;
         this.materialId = materialId;
-        this.rank = rank;
+        this.matRank = matRank;
         this.level = 1;
         this.socketRate = CfgMaterial.rollSocketRate();
         ResMaterialEntity res = getRes();
-        this.value = res != null ? CfgMaterial.rollValue(res, rank) : 0f;
+        this.value = res != null ? CfgMaterial.rollValue(res, matRank) : 0f;
     }
 
     /** Giữ stat/rate khi merge fail — trả 1 viên rank cao nhất. */
@@ -41,7 +42,7 @@ public class UserMaterialEntity implements Serializable {
         UserMaterialEntity c = new UserMaterialEntity();
         c.userId = src.userId;
         c.materialId = src.materialId;
-        c.rank = src.rank;
+        c.matRank = src.matRank;
         c.level = src.level;
         c.value = src.value;
         c.socketRate = src.socketRate;
@@ -65,7 +66,7 @@ public class UserMaterialEntity implements Serializable {
         protocol.Pbmethod.PbMaterial.Builder pb = protocol.Pbmethod.PbMaterial.newBuilder();
         pb.setId(id);
         pb.setMaterialId(materialId);
-        pb.setRank(rank);
+        pb.setRank(matRank);
         pb.setValue(value);
         pb.setLevel(level);
         return pb;

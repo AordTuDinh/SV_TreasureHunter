@@ -102,10 +102,15 @@ public class MailHandler extends AHandler {
                     return;
                 }
                 String ids = uMail.stream().map(mail -> String.valueOf(mail.getId())).collect(Collectors.joining(","));
+                List<Long> received = Bonus.receiveListItem(mUser, DetailActionType.NHAN_THU.getKey(ids), bonus);
+                if (received.isEmpty() && !bonus.isEmpty()) {
+                    addErrSystem();
+                    return;
+                }
                 if (DBJPA2.rawSQL("update user_mail set receive=" + STATUS_RECEIVED + " where user_id=" + user.getId() + " and id in (" + ids + ")")) {
                     Actions.save(user, "mail", "update_receive", "ids", ids);
                     protocol.Pbmethod.ListCommonVector.Builder builder = protocol.Pbmethod.ListCommonVector.newBuilder();
-                    builder.addAVector(CommonProto.getCommonVectorProto(Bonus.receiveListItem(mUser, DetailActionType.NHAN_THU.getKey(ids), bonus)));
+                    builder.addAVector(CommonProto.getCommonVectorProto(received));
                     addResponse(builder.build());
                 }
             }
@@ -115,15 +120,31 @@ public class MailHandler extends AHandler {
                 addErrResponse(getLang(Lang.err_params));
                 return;
             }
+            if (uMail.getReceive() != STATUS_NORMAL) {
+                addErrResponse(getLang(Lang.err_params));
+                return;
+            }
             List<Long> aBonus = Bonus.merge(uMail.getListBonus());
+            if (aBonus.isEmpty()) {
+                uMail.updateStatus(STATUS_RECEIVED);
+                addResponse(protocol.Pbmethod.ListCommonVector.newBuilder().build());
+                return;
+            }
             if (!mUser.checkSlotAddBonus(aBonus)) {
                 addErrResponse(getLang(Lang.err_max_slot));
                 return;
             }
-            if (uMail.getReceive() == STATUS_NORMAL && uMail.updateStatus(STATUS_RECEIVED)) {
+            List<Long> received = Bonus.receiveListItem(mUser, DetailActionType.NHAN_THU.getKey(uMail.getId()), aBonus);
+            if (received.isEmpty()) {
+                addErrSystem();
+                return;
+            }
+            if (uMail.updateStatus(STATUS_RECEIVED)) {
                 protocol.Pbmethod.ListCommonVector.Builder builder = protocol.Pbmethod.ListCommonVector.newBuilder();
-                builder.addAVector(CommonProto.getCommonVectorProto(Bonus.receiveListItem(mUser, DetailActionType.NHAN_THU.getKey(uMail.getId()), aBonus)));
+                builder.addAVector(CommonProto.getCommonVectorProto(received));
                 addResponse(builder.build());
+            } else {
+                addErrResponse(getLang(Lang.err_params));
             }
         }
     }

@@ -185,7 +185,7 @@ public class CfgMaterial {
         long sum = 0;
         for (UserMaterialEntity g : gems) {
             if (g.getRes() != null) {
-                sum += getMergeSellPrice(g.getTier(), g.getRank(), g.getLevel());
+                sum += getMergeSellPrice(g.getTier(), g.getMatRank(), g.getLevel());
             }
         }
         return sum;
@@ -201,7 +201,7 @@ public class CfgMaterial {
         int minRank = 4;
         int maxRank = 0;
         for (UserMaterialEntity g : gems) {
-            int r = g.getRank();
+            int r = g.getMatRank();
             rankCount.merge(r, 1, Integer::sum);
             materialCount.merge(g.getMaterialId(), 1, Integer::sum);
             minRank = Math.min(minRank, r);
@@ -253,11 +253,11 @@ public class CfgMaterial {
     public static UserMaterialEntity pickMergeFailReturnGem(List<UserMaterialEntity> gems) {
         int maxRank = 0;
         for (UserMaterialEntity g : gems) {
-            maxRank = Math.max(maxRank, g.getRank());
+            maxRank = Math.max(maxRank, g.getMatRank());
         }
         UserMaterialEntity best = null;
         for (UserMaterialEntity g : gems) {
-            if (g.getRank() == maxRank) {
+            if (g.getMatRank() == maxRank) {
                 if (best == null || g.getLevel() > best.getLevel()) {
                     best = g;
                 }

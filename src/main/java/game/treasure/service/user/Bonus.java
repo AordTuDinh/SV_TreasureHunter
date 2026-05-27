@@ -50,6 +50,8 @@ public class Bonus {
         put(BONUS_MATERIAL, 2);  // materialId, rank (1=Common..4=Legend)
     }};
 
+    // Receive-format: [BONUS_PET, id, petId] / [BONUS_MOUNT, id, mountId]
+
     public static List<Integer> bonusSinger = Arrays.asList(BONUS_EQUIPMENT, BONUS_ARTIFACT, BONUS_ITEM, BONUS_PET, BONUS_MOUNT, BONUS_SKIN,BONUS_MATERIAL);
 
     public static boolean isBonusSinger(int type) {
@@ -76,6 +78,12 @@ public class Bonus {
         return view(BONUS_PET,  itemId);
     }
 
+    public static List<Long> viewMount(int mountId) {
+        return view(BONUS_MOUNT, mountId);
+    }
+
+    // Preview / send: [BONUS_PET, petId] / [BONUS_MOUNT, mountId]
+    // Receive: [BONUS_PET, id, petId] / [BONUS_MOUNT, id, mountId]
     // Preview / send: [BONUS_MATERIAL, materialId, rank].
     // Receive: [BONUS_MATERIAL, rowId, materialId, rank].
     public static List<Long> viewMaterial(int materialId, int rank) {
@@ -306,13 +314,13 @@ public class Bonus {
 
     static List<Long> addItemArtifact(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
         int artifactId = aBonus.get(index++).getAsInt();
-        if (mUser.getResources().getArtifact(artifactId) != null) return new ArrayList<>();
         UserArtifactEntity uArtifact = new UserArtifactEntity(mUser.getUser().getId(), artifactId);
         if (DBJPA.save(uArtifact)) {
             mUser.getResources().addArtifact(uArtifact);
             if (CfgServer.isRealServer())
-                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "artifact", "artifactId", artifactId);
-            return Arrays.asList((long) BONUS_ARTIFACT, (long) artifactId);
+                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "artifact", "id", uArtifact.getId(), "artifactId", artifactId);
+            // receive-format: [type, userArtifactId, artifactId]
+            return Arrays.asList((long) BONUS_ARTIFACT, uArtifact.getId(), (long) artifactId);
         }
         return new ArrayList<>();
     }
@@ -331,16 +339,14 @@ public class Bonus {
 
     static List<Long> addPet(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
         int petId = aBonus.get(index++).getAsInt();
-        // already have => ignore
-        if (mUser.getResources().getPet(petId) != null) return new ArrayList<>();
         UserPetEntity uPet = new UserPetEntity(mUser.getUser(), petId);
         if (DBJPA.save(uPet)) {
             mUser.getResources().addPet(uPet);
             if (CfgServer.isRealServer()) {
-                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "pet", "petId", petId);
+                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
+                        "type", "pet", "id", uPet.getId(), "petId", petId);
             }
-            // receive-format: [type, petId]
-            return Arrays.asList((long) BONUS_PET, (long) petId);
+            return Arrays.asList((long) BONUS_PET, uPet.getId(), (long) petId);
         }
         return new ArrayList<>();
     }
@@ -348,14 +354,14 @@ public class Bonus {
     static List<Long> addMount(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
         int mountId = aBonus.get(index++).getAsInt();
         if (ResMount.get(mountId) == null) return new ArrayList<>();
-        if (mUser.getResources().getMount(mountId) != null) return new ArrayList<>();
         UserMountEntity uMount = new UserMountEntity(mUser.getUser(), mountId);
         if (DBJPA.save(uMount)) {
             mUser.getResources().addMount(uMount);
             if (CfgServer.isRealServer()) {
-                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "mount", "mountId", mountId);
+                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
+                        "type", "mount", "id", uMount.getId(), "mountId", mountId);
             }
-            return Arrays.asList((long) BONUS_MOUNT, (long) mountId);
+            return Arrays.asList((long) BONUS_MOUNT, uMount.getId(), (long) mountId);
         }
         return new ArrayList<>();
     }
@@ -377,7 +383,7 @@ public class Bonus {
                         "type", "material",
                         "id", uMaterial.getId(),
                         "materialId", materialId,
-                        "rank", rank,
+                        "mat_rank", rank,
                         "level", uMaterial.getLevel(),
                         "value", uMaterial.getValue());
             }

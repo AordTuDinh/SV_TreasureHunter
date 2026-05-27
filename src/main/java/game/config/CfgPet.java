@@ -26,8 +26,8 @@ public class CfgPet {
     public static List<Long> summonPet(MyUser mUser, int number, boolean isVip, int petId) {
         List<Long> bonus = new ArrayList<>();
         ResPetEntity rPet = ResPet.getPet(petId);
-        boolean hasPet = mUser.getResources().getPet(petId) != null;
-        if (petId == 0 || rPet == null || hasPet || rPet.getShowSummon() == 0) {  // bắt hụt
+        boolean hasPet = false;
+        if (petId == 0 || rPet == null || rPet.getShowSummon() == 0) {  // bắt hụt
             bonus.addAll(getBonusStone(number));
         } else {
             for (int i = 0; i < number; i++) {

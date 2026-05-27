@@ -36,13 +36,13 @@ public class UserResources implements Serializable {
     @Getter
     Map<Integer, UserItemEntity> mItem = new HashMap<>();
     @Getter
-    Map<Integer, UserPetEntity> mPet = new HashMap<>();
+    Map<Long, UserPetEntity> mPet = new HashMap<>();
     @Getter
     Map<Long, UserItemEquipmentEntity> mItemEquipment = new HashMap<>();
     @Getter
-    Map<Integer, UserArtifactEntity> mArtifact = new HashMap<>();
+    Map<Long, UserArtifactEntity> mArtifact = new HashMap<>();
     @Getter
-    Map<Integer, UserMountEntity> mMount = new HashMap<>();
+    Map<Long, UserMountEntity> mMount = new HashMap<>();
     @Getter
     Map<Integer, UserPackEntity> mPacks = new HashMap<>();
     @Getter
@@ -66,17 +66,17 @@ public class UserResources implements Serializable {
                 }
             });
 
-            pets.forEach(pet -> {
-                mPet.put(pet.getPetId(), pet);
-            });
+            if (pets != null) {
+                pets.forEach(pet -> mPet.put(pet.getId(), pet));
+            }
             itemEquipments.forEach(item -> {
                mItemEquipment.put(item.getId(), item);
             });
             if (artifacts != null) {
-                artifacts.forEach(item -> mArtifact.put(item.getArtifactId(), item));
+                artifacts.forEach(item -> mArtifact.put(item.getId(), item));
             }
             if (mounts != null) {
-                mounts.forEach(item -> mMount.put(item.getMountId(), item));
+                mounts.forEach(item -> mMount.put(item.getId(), item));
             }
             if (materials != null) {
                 materials.forEach(mat -> mMaterial.put(mat.getId(), mat));
@@ -118,28 +118,44 @@ public class UserResources implements Serializable {
     }
 
 
-    public UserPetEntity getPet( int petId) {
-        return  mPet.get(petId);
+    public UserPetEntity getPet(long id) {
+        return mPet.get(id);
+    }
+
+    public UserPetEntity getPetByConfigId(int petId) {
+        for (UserPetEntity pet : mPet.values()) {
+            if (pet.getPetId() == petId) return pet;
+        }
+        return null;
+    }
+
+    public boolean hasPetConfig(int petId) {
+        return getPetByConfigId(petId) != null;
     }
 
     public UserItemEquipmentEntity getItemEquipment(long itemId) {
         return mItemEquipment.get(itemId);
     }
 
-    public UserArtifactEntity getArtifact(int artifactId) {
-        return mArtifact.get(artifactId);
-    }
-
-    public UserMountEntity getMount(int mountId) {
-        return mMount.get(mountId);
+    public UserArtifactEntity getArtifact(long id) {
+        return mArtifact.get(id);
     }
 
     public void addArtifact(UserArtifactEntity uArtifact) {
         if (artifacts == null) artifacts = new ArrayList<>();
-        if (!mArtifact.containsKey(uArtifact.getArtifactId())) {
-            artifacts.add(uArtifact);
+        artifacts.add(uArtifact);
+        mArtifact.put(uArtifact.getId(), uArtifact);
+    }
+
+    public UserMountEntity getMount(long id) {
+        return mMount.get(id);
+    }
+
+    public UserMountEntity getMountByConfigId(int mountId) {
+        for (UserMountEntity mount : mMount.values()) {
+            if (mount.getMountId() == mountId) return mount;
         }
-        mArtifact.put(uArtifact.getArtifactId(), uArtifact);
+        return null;
     }
 
 
@@ -190,20 +206,14 @@ public class UserResources implements Serializable {
     }
 
     public void addPet(UserPetEntity uPet) {
-        if (!mPet.containsKey(uPet.getPetId())) {
-            mPet.put(uPet.getPetId(), uPet);
-            int achiId = 106 + uPet.getPetId();
-            if (achiId > 106 && achiId < 132) CfgAchievement.addAchievement(mUser, 2, achiId, 1);
-        }
-        mUser.reCalculatePoint();
-//        ResEventTop.checkEvent(mUser, uPet, TopType.PET_POINT);
+        if (pets == null) pets = new ArrayList<>();
+        pets.add(uPet);
+        mPet.put(uPet.getId(), uPet);
     }
 
     public void addMount(UserMountEntity uMount) {
         if (mounts == null) mounts = new ArrayList<>();
-        if (!mMount.containsKey(uMount.getMountId())) {
-            mounts.add(uMount);
-        }
-        mMount.put(uMount.getMountId(), uMount);
+        mounts.add(uMount);
+        mMount.put(uMount.getId(), uMount);
     }
 }

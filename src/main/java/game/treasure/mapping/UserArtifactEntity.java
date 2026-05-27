@@ -6,9 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ozudo.base.database.DBJPA;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +17,10 @@ import java.util.List;
 @Table(name = "user_artifact")
 public class UserArtifactEntity implements Serializable {
     @Id
-    int userId, artifactId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    long id;
+    int userId;
+    int artifactId;
     int level;
     String data;
 
@@ -35,12 +36,6 @@ public class UserArtifactEntity implements Serializable {
     }
 
     public boolean update(List<Object> updateData) {
-        return DBJPA.update("user_artifact", updateData,
-                Arrays.asList("user_id", userId, "artifact_id", artifactId));
-    }
-
-    public boolean deleteFromDb() {
-        return DBJPA.delete("user_artifact",
-                "user_id", userId, "artifact_id", artifactId);
+        return DBJPA.update("user_artifact", updateData, Arrays.asList("id", id));
     }
 }

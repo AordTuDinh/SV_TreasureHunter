@@ -28,10 +28,6 @@ public class CfgItem {
             List<Long> bonus = bms.get(i);
             if (bonus.get(0) == Bonus.BONUS_PET) {
                 if (number > 1) return Lang.instance(mUser).get(Lang.err_can_buy_one);
-                UserPetEntity uPet = mUser.getResources().getPet(Math.toIntExact(bonus.get(1)));
-                if (uPet != null) {
-                    return Lang.instance(mUser).get(Lang.err_pet_can_not_buy);
-                }
             }
         }
         return null;

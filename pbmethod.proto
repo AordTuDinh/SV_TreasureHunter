@@ -280,8 +280,10 @@ message PbListMount{
 }
 
 message PbMount{
-  optional int32 id = 1;
+  optional int64 id = 1;
   repeated int64 point = 2;
+  optional int32 mountId = 3;
+  optional int32 level = 4;
 }
 
 
@@ -290,8 +292,10 @@ message PbListPet{
 }
 
 message PbPet{
-  optional int32 id = 1;
+  optional int64 id = 1;
   repeated int64 point = 2;
+  optional int32 petId = 3;
+  optional int32 level = 4;
 }
 
 message PbListItemPoint{

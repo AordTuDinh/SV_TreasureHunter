@@ -7,12 +7,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import ozudo.base.database.DBJPA;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.List;
 
 @Data
@@ -21,8 +17,12 @@ import java.util.List;
 @Table(name = "user_mount")
 public class UserMountEntity implements Serializable {
     @Id
-    int userId, mountId;
-    int level, server;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    long id;
+    int userId;
+    int mountId;
+    int level;
+    int server;
     String data;
     @Transient
     Point point;
@@ -31,7 +31,8 @@ public class UserMountEntity implements Serializable {
         this.userId = user.getId();
         this.mountId = mountId;
         this.server = user.getServer();
-        this.level =1;
+        this.level = 1;
+        this.data = "[]";
     }
 
     public ResMountEntity getRes() {
@@ -40,11 +41,13 @@ public class UserMountEntity implements Serializable {
 
     public protocol.Pbmethod.PbMount.Builder toProto() {
         protocol.Pbmethod.PbMount.Builder pb = protocol.Pbmethod.PbMount.newBuilder();
-        pb.setId(mountId);
+        pb.setId(id);
+        pb.setMountId(mountId);
+        pb.setLevel(level);
         return pb;
     }
 
     public boolean update(List<Object> lst) {
-        return DBJPA.update("user_mount", lst, List.of("user_id", userId, "mount_id", mountId));
+        return DBJPA.update("user_mount", lst, List.of("id", id));
     }
 }

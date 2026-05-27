@@ -185,7 +185,7 @@ public class CfgQuest {
                 mUser.getUData().setQuestTutorialNumber(mUser.getResources().getNumWeaponByRank(res.getIdInfo()));
             }
             case HAS_PET -> {
-                UserPetEntity userPet = mUser.getResources().getPet(res.getIdInfo());
+                UserPetEntity userPet = mUser.getResources().getPetByConfigId(res.getIdInfo());
                 if (userPet != null) {
                     mUser.getUData().setQuestTutorialNumber(1);
                     return StatusType.RECEIVE.value;

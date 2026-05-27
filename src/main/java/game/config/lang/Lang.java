@@ -134,6 +134,7 @@ public abstract class Lang implements Serializable {
     public static String invalid_location = "invalid_location";// Vị trí không hợp lệ !
     public static String equip_done = "equip_done";// Trang bị thành công!
     public static String err_has_weapon = "err_has_weapon";// Bạn đã sở hữu tất cả vũ khi cấp bậc này!
+    public static String err_artifact_already = "err_artifact_already"; // Bạn đã sở hữu bảo vật này rồi!
 
     // Clan
     public static String clan_skill_upgrade_error = "clan_skill_upgrade_error"; // Cường công và đa dụng không được lệnh quá 50 điểm

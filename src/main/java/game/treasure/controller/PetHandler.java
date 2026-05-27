@@ -63,8 +63,8 @@ public class PetHandler extends AHandler {
         }
         Pbmethod.PbListPet.Builder pbPets = Pbmethod.PbListPet.newBuilder();
         for (int i = 0; i < ids.size(); i++) {
-            int petId = Math.toIntExact(ids.get(i));
-            UserPetEntity uPet = mUser.getResources().getPet(petId);
+            long petRowId = ids.get(i);
+            UserPetEntity uPet = mUser.getResources().getPet(petRowId);
             if (uPet != null) pbPets.addPets(uPet.toProto());
         }
         addResponse(pbPets.build());

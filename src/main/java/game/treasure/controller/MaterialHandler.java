@@ -75,7 +75,7 @@ public class MaterialHandler extends AHandler {
             return;
         }
         int tier = gem.getTier();
-        List<Long> fee = CfgMaterial.getUpgradeFee(tier, gem.getRank(), gem.getLevel());
+        List<Long> fee = CfgMaterial.getUpgradeFee(tier, gem.getMatRank(), gem.getLevel());
         if (fee.isEmpty()) {
             addErrParam();
             return;
@@ -92,7 +92,7 @@ public class MaterialHandler extends AHandler {
             return;
         }
         int newLevel = gem.getLevel() + 1;
-        float newValue = gem.getValue() + CfgMaterial.rollValue(res, gem.getRank());
+        float newValue = gem.getValue() + CfgMaterial.rollValue(res, gem.getMatRank());
         float newSocketRate = CfgMaterial.nextSocketRate(gem.getSocketRate());
         if (gem.update(Arrays.asList("level", newLevel, "value", newValue, "socket_rate", newSocketRate))) {
             gem.setLevel(newLevel);

@@ -197,7 +197,10 @@ public class MyUser implements Serializable {
     public Pet getPet(Player player) {
         List<Integer> pets = user.getPet(this);
         if (pets.get(0) != 0 && pet == null) {
-            pet = new Pet(resources.getPet( pets.get(0)), player);
+            long petKey = pets.get(0);
+            UserPetEntity uPet = resources.getPet(petKey);
+            if (uPet == null) uPet = resources.getPetByConfigId((int) petKey);
+            if (uPet != null) pet = new Pet(uPet, player);
         }
         return pet;
     }

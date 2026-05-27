@@ -223,12 +223,12 @@ public class UserDataEntity implements Serializable {
         }
         pb.setAMaterial(lstMat);
         // pet
-        for (Map.Entry<Integer, UserPetEntity> pets : mUser.getResources().getMPet().entrySet()) {
+        for (Map.Entry<Long, UserPetEntity> pets : mUser.getResources().getMPet().entrySet()) {
             pb.addAPet(pets.getValue().toProto());
         }
 
         // mount
-        for (Map.Entry<Integer, UserMountEntity> mounts : mUser.getResources().getMMount().entrySet()) {
+        for (Map.Entry<Long, UserMountEntity> mounts : mUser.getResources().getMMount().entrySet()) {
             pb.addAMount(mounts.getValue().toProto());
         }
 
