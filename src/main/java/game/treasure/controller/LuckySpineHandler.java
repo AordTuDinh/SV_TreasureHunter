@@ -139,8 +139,7 @@ public class LuckySpineHandler extends AHandler {
             feeRotate = CfgLuckySpine.config.feeRotate[INDEX_FEE_CASINO_10_TIMES];
         }
 
-        UserItemEntity uItem = mUser.getResources().getItem(MaterialType.CHIP.id);
-        if (uItem == null || uItem.getNumber() < feeRotate) {
+        if (mUser.getResources().countByItemKey(MaterialType.CHIP.id) < feeRotate) {
             addErrResponse(getLang(Lang.not_enough_chip));
             return;
         }
@@ -204,7 +203,7 @@ public class LuckySpineHandler extends AHandler {
         }
 
         List<Long> bonus = new ArrayList<>();
-        bonus.addAll(Bonus.viewItem(MaterialType.CHIP.id, numberChip));
+        bonus.addAll(Bonus.viewItem(ItemType.EVENT.value, MaterialType.CHIP.id, numberChip));
         bonus.addAll(Bonus.viewGem(-(numberChip * CfgLuckySpine.config.priceChip)));
         //
         List<Long> retBonus = Bonus.receiveListItem(mUser, DetailActionType.MUA_CHIP_VONG_QUAY.getKey(), bonus);

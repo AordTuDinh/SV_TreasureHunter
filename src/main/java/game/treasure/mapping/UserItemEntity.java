@@ -1,8 +1,8 @@
 package game.treasure.mapping;
 
 import game.config.aEnum.ItemType;
-import protocol.Pbmethod;
 import game.treasure.mapping.main.ResItemEntity;
+import game.treasure.mapping.main.ResItemEquipmentEntity;
 import game.treasure.service.resource.ResItem;
 import game.treasure.service.user.Bonus;
 import lombok.Data;
@@ -11,12 +11,11 @@ import ozudo.base.database.DBJPA;
 import ozudo.base.helper.DateTime;
 import ozudo.base.helper.GsonUtil;
 import ozudo.base.helper.StringHelper;
+import protocol.Pbmethod;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Transient;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,102 +27,131 @@ import static game.config.aEnum.ItemType.*;
 @Table(name = "user_item")
 public class UserItemEntity implements Serializable {
     @Id
-    int userId, itemId;
-    int number;
-    String data; // eventId,lst NUm
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    long id;
+    int userId;
+    int itemId;
+    /**
+     * 1=consumable, 2=equipment, 3=currency, 4=event
+     */
+    int type;
+    int level;
+    int lockDestroy;
+    int tier;
+    String point;
+    String data;
+
+    @Transient
+    boolean isEquip;
     @Transient
     int countWin;
 
-    public UserItemEntity(int userId, int itemId, int number) {
-        genDataItem(userId, itemId, number);
-    }
-
-    public UserItemEntity(int userId, Pbmethod.ItemKey itemKey, int number) {
-        genDataItem(userId, itemKey.getNumber(), number);
-    }
-
-    public void genDataItem(int userId, int itemId, int number) {
+    public UserItemEntity(int userId, int itemId, ItemType type) {
         this.userId = userId;
         this.itemId = itemId;
-        this.number = number;
-        int type = getRes().getItemType().value;
-        switch (ItemType.get(type)) {
-            case QUEST_B -> {
-                this.number = 1;
-                int day = DateTime.getNumberDay();
-                List<Integer> data = List.of(day, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0);//[status - number]x5
-                this.data = StringHelper.toDBString(data);
-            }
+        this.type = type.value;
+        level = 0;
+        lockDestroy = 0;
+        tier = 1;
+        point = "[]";
+        genDataItem();
+    }
+
+    void genDataItem() {
+        if (type != CONSUMABLE.value) {
+            if (data == null || data.isEmpty()) data = "[]";
+            return;
+        }
+        ItemType resType = getResItemType();
+        switch (resType) {
+//            case QUEST_B -> {
+//                int day = DateTime.getNumberDay();
+//                List<Integer> questData = List.of(day, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0);
+//                this.data = StringHelper.toDBString(questData);
+//            }
+            default -> this.data = "[]";
         }
     }
+
+    public boolean isEquipment() {
+        return type == EQUIPMENT.value;
+    }
+
+    public boolean isAggregatedItem() {
+        if (type != CONSUMABLE.value) return false;
+        return itemId == Pbmethod.ItemKey.TICKER_NORMAL.getNumber() || itemId == Pbmethod.ItemKey.TICKER_SPECIAL.getNumber();
+    }
+
 
     public List<Integer> getDataListInt() {
         return GsonUtil.strToListInt(data);
     }
 
-    public boolean expired() {
-        try {
-            int type = getType().value;
-            if (type == QUEST_B.value) {
-                int day = DateTime.getNumberDay();
-                List<Integer> data = getDataListInt(); // day - [status-number] x5
-                int saveDay = data.get(0);
-                if (day != saveDay) {
-                    number = 0;
-                    return DBJPA.update(this);
-                } else return false;
-            } else if (type == LOTTE_SPECIAL.value || type == LOTTE_NORMAL.value) {
-                int day = DateTime.getNumberDay();
-                List<Integer> aData = GsonUtil.strToListInt(data);
-                if (aData.isEmpty()) return true;
-                int saveDay = aData.get(0);
-                if (day != saveDay) {
-                    number = 0;
-                    this.data = "[]";
-                    return DBJPA.update(this);
-                } else return false;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-//            Telegram.sendNotify("ERR ITEM ->" + e + " user_id = " + userId + " itemId = " + itemId);
-            return false;
-        }
-        return false;
+    public void clearAggregated() {
+        this.data = "[]";
     }
 
-
-    public protocol.Pbmethod.PbItem.Builder toProto() {
-        if (number == 0 || expired()) return null;
-        protocol.Pbmethod.PbItem.Builder pb = protocol.Pbmethod.PbItem.newBuilder();
-        pb.setId(itemId);
-        pb.setType(getType().value);
-        pb.setNumber(number);
+    public Pbmethod.PbItem.Builder toProto() {
+        Pbmethod.PbItem.Builder pb = Pbmethod.PbItem.newBuilder();
+        pb.setId(id);
+        pb.setItemKey(itemId);
+        pb.setType(type);
+        pb.setLevel(level);
         pb.setData(data == null ? "[]" : data);
+        pb.setLockDestroy(lockDestroy == 1);
+        pb.addAllPoint(getPointList());
         return pb;
     }
 
-    public ItemType getType() {
-        return getRes().getItemType();
-    }
-
-    public List<Long> viewBonus(long number) {
-        return Bonus.viewItem(itemId, number);
+    public ItemType getResItemType() {
+        ResItemEntity res = getRes();
+        return res != null ? res.getItemType() : null;
     }
 
     public ResItemEntity getRes() {
         return ResItem.getItem(itemId);
     }
 
-    public void add(int value) {
-        this.number += value;
-        if (getType() == QUEST_B) {
-            this.number = 1;
-            this.data = DateTime.getNumberDay() + "";
-        }
+    public ResItemEquipmentEntity getResEquipment() {
+        return ResItem.getItemEquipment(itemId);
     }
 
+    public List<Long> getPointList() {
+        if (point == null || point.isEmpty()) return new ArrayList<>();
+        return new ArrayList<>(GsonUtil.strToListLong(point));
+    }
+
+    public void setPointList(List<Long> points) {
+        this.point = GsonUtil.toJson(points);
+    }
+
+    public void addLevel() {
+        this.level++;
+    }
+
+    public void unEquip() {
+        isEquip = false;
+    }
+
+    public boolean updateItemId(int idItem) {
+        if (update(List.of("item_id", idItem))) {
+            this.itemId = idItem;
+            return true;
+        }
+        return false;
+    }
+
+    public List<Long> viewBonusItem(int type, long number) {
+        if (number >= 0) return Bonus.viewItem(type, itemId, number);
+        if (isAggregatedItem()) return Bonus.viewItemRemove(type, id, itemId, (int) -number);
+        return Bonus.viewItem(type, itemId, number);
+    }
+
+    public boolean deleteFromDb() {
+        return DBJPA.delete("user_item", "id", id, "user_id", userId);
+    }
 
     public boolean update(List<Object> updateData) {
-        return DBJPA.update("user_item", updateData, Arrays.asList("user_id", userId));
+        return DBJPA.update("user_item", updateData, Arrays.asList("id", id));
     }
 }

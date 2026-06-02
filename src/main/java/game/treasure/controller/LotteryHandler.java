@@ -96,7 +96,7 @@ public class LotteryHandler extends AHandler {
             }
         }
 
-        List<Long> bonus = Bonus.viewItem(Pbmethod.ItemKey.TICKER_MINI, -numTicker);
+        List<Long> bonus = Bonus.viewItem(ItemType.EVENT.value, Pbmethod.ItemKey.TICKER_MINI, -numTicker);
         String err = Bonus.checkMoney(mUser, bonus);
         if (err != null) {
             addErrResponse(err);
@@ -108,12 +108,12 @@ public class LotteryHandler extends AHandler {
     }
 
     void lotteView() {
-        UserItemEntity item = mUser.getResources().getItem(getInputInt());
+        UserItemEntity item = mUser.getResources().getItem(getInputLong());
         if (item == null) {
             addErrResponse(getLang(Lang.item_not_found));
             return;
         }
-        if (item.getType() != ItemType.LOTTE_NORMAL && item.getType() != ItemType.LOTTE_SPECIAL) {
+        if (item.getItemId() != Pbmethod.ItemKey.TICKER_NORMAL.getNumber() && item.getItemId() != Pbmethod.ItemKey.TICKER_SPECIAL_VALUE) {
             addErrResponse(getLang(Lang.err_params));
             return;
         }

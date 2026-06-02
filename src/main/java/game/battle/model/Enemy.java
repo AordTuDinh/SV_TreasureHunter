@@ -88,10 +88,10 @@ public class Enemy extends Unit implements Serializable {
         if (killer.isPlayer()) {
             hasBonusKillMe = false;
             Player player = ((Player) killer);
-            BonusKillEnemy bonus = getBonusWithPer(listBonus, player.getBuffs());
-            bonus.addBonus(CfgEventDrop.bonusDrop(CfgEventDrop.config.getRateDropCampaign(), 1));
-            player.sendForceBonus(bonus, DetailActionType.BONUS_KILL_ENEMY.getKey(), pos);
-            player.addNumKillMonster(this);
+//            BonusKillEnemy bonus = getBonusWithPer(listBonus, player.getBuffs());
+//            bonus.addBonus(CfgEventDrop.bonusDrop(Ote CfgEventDrop.config.getRateDropCampaign(), 1));
+//            player.sendForceBonus(bonus, DetailActionType.BONUS_KILL_ENEMY.getKey(), pos);
+//            player.addNumKillMonster(this);
         }
     }
 

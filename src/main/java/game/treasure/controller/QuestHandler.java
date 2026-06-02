@@ -213,21 +213,17 @@ public class QuestHandler extends AHandler {
     }
 
 
-    boolean checkItemQuestB(UserItemEntity itemQuestB) {
-        if (itemQuestB == null) {
-            addErrResponse(getLang(Lang.item_not_own));
-            return false;
-        }
-        if (itemQuestB.getType() != ItemType.QUEST_B) {
-            addErrParam();
-            return false;
-        }
-        if (itemQuestB.expired()) {
-            addErrResponse(getLang(Lang.err_item_expire));
-            return false;
-        }
-        return true;
-    }
+//    boolean checkItemQuestB(UserItemEntity itemQuestB) {
+//        if (itemQuestB == null) {
+//            addErrResponse(getLang(Lang.item_not_own));
+//            return false;
+//        }
+//        if (itemQuestB.getResItemType() != ItemType.QUEST_B) {
+//            addErrParam();
+//            return false;
+//        }
+//        return true;
+//    }
 
 
     void buyGoldStatus() {

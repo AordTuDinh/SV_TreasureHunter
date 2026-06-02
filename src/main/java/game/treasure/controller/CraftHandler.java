@@ -6,7 +6,7 @@ import game.config.aEnum.CraftTargetType;
 import game.config.aEnum.DetailActionType;
 import game.config.lang.Lang;
 import game.treasure.mapping.UserDataEntity;
-import game.treasure.mapping.UserItemEquipmentEntity;
+import game.treasure.mapping.UserItemEntity;
 import game.treasure.mapping.UserMaterialEntity;
 import game.treasure.mapping.UserPetEntity;
 import game.treasure.mapping.main.ResMaterialEntity;
@@ -200,7 +200,7 @@ public class CraftHandler extends AHandler {
 
     private void sendTargetProto(CraftTargetType targetType, long targetId) {
         if (targetType == CraftTargetType.EQUIPMENT) {
-            UserItemEquipmentEntity equip = mUser.getResources().getItemEquipment(targetId);
+            UserItemEntity equip = mUser.getResources().getItemEquipment(targetId);
             if (equip != null) {
                 addResponse(IAction.ITEM_INFO, equip.toProto().build());
             }
@@ -232,7 +232,7 @@ public class CraftHandler extends AHandler {
 
     private int resolveItemLevel(CraftTargetType type, long targetId) {
         if (type == CraftTargetType.EQUIPMENT) {
-            UserItemEquipmentEntity equip = mUser.getResources().getItemEquipment(targetId);
+            UserItemEntity equip = mUser.getResources().getItemEquipment(targetId);
             return equip == null ? -1 : equip.getLevel();
         }
         return -1;
@@ -240,7 +240,7 @@ public class CraftHandler extends AHandler {
 
     private boolean resetTargetLevel(CraftTargetType type, long targetId) {
         if (type == CraftTargetType.EQUIPMENT) {
-            UserItemEquipmentEntity equip = mUser.getResources().getItemEquipment(targetId);
+            UserItemEntity equip = mUser.getResources().getItemEquipment(targetId);
             if (equip == null) {
                 return false;
             }
@@ -254,7 +254,7 @@ public class CraftHandler extends AHandler {
     }
 
     private void destroyEquipment(long equipId) {
-        UserItemEquipmentEntity equip = mUser.getResources().getItemEquipment(equipId);
+        UserItemEntity equip = mUser.getResources().getItemEquipment(equipId);
         if (equip == null) {
             return;
         }
@@ -274,7 +274,7 @@ public class CraftHandler extends AHandler {
         if (type != CraftTargetType.EQUIPMENT) {
             return false;
         }
-        UserItemEquipmentEntity equip = mUser.getResources().getItemEquipment(targetId);
+        UserItemEntity equip = mUser.getResources().getItemEquipment(targetId);
         if (equip == null) {
             return false;
         }

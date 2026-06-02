@@ -2,7 +2,7 @@ package game.cache;
 
 import game.config.CfgLottery;
 import game.config.CfgServer;
-import game.config.aEnum.ItemType;
+import protocol.Pbmethod;
 import game.config.aEnum.StatusType;
 import game.treasure.mapping.UserItemEntity;
 import game.treasure.server.App;
@@ -44,7 +44,11 @@ public class LuckySpecialJob {
 
     private void processConverDB() {
         int event = DateTime.getNumberDay();
-        List<UserItemEntity> uLot = DBResource.getInstance().getList(CfgServer.DB_DSON + "user_item", Arrays.asList("type", ItemType.LOTTE_SPECIAL.value), "", UserItemEntity.class);
+        List<UserItemEntity> uLot = DBResource.getInstance().getList(
+                CfgServer.DB_DSON + "user_item",
+                Arrays.asList("item_id", Pbmethod.ItemKey.TICKER_SPECIAL.getNumber()),
+                "",
+                UserItemEntity.class);
         if (uLot == null || uLot.size() <= 0) return;
         long count = 0;
         long sumNumber = 0;
@@ -90,7 +94,7 @@ public class LuckySpecialJob {
                 status = StatusType.RECEIVE.value;
                 bonus = Bonus.viewGem((int) curGemWin);
             }
-            sql += "(" + uLot.get(i).getUserId() + "," + event + "," + uLot.get(i).getType().value + "," + StringHelper.toDBString(uLot.get(i).getData()) + ",'"
+            sql += "(" + uLot.get(i).getUserId() + "," + event + "," + uLot.get(i).getResItemType().value + "," + StringHelper.toDBString(uLot.get(i).getData()) + ",'"
                     + DateTime.getFullDate() + "'," + luckyNum + "," + status + ",'" + StringHelper.toDBString(bonus) + "'),";
         }
         sql = String.format("INSERT INTO user_lottery_history(user_id,event_id,type,number,time,lucky,status,bonus) VALUES %s", sql.substring(0, sql.length() - 1));

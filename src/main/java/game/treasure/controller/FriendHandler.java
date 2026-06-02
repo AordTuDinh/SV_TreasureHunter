@@ -381,7 +381,7 @@ public class FriendHandler extends AHandler {
             lstSend.add(friendId);
             mUser.getUserDaily().updateSendFriend(StringHelper.toDBString(lstSend));
             addResponse(getCommonIntVector(lstSend));
-            addBonusToastPlus(Bonus.receiveListItem(mUser, DetailActionType.BONUS_FRIEND_SEND.getKey(friendId), Bonus.viewItem(Pbmethod.ItemKey.GEM, 1)));
+            addBonusToastPlus(Bonus.receiveListItem(mUser, DetailActionType.BONUS_FRIEND_SEND.getKey(friendId), Bonus.viewItem(ItemType.CURRENCY.value,  Pbmethod.ItemKey.GEM, 1)));
             status();
             CfgQuest.addNumQuest(mUser, DataQuest.SEND_FRIEND_GIFT, 1);
             mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.SEND_FRIEND_GIFT, 1);
@@ -435,7 +435,7 @@ public class FriendHandler extends AHandler {
         }
         idSend.add(friendId);
         if (mUser.getUserDaily().updateGiftReceive(StringHelper.toDBString(idSend))) {
-            addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.BONUS_FRIEND_GET.getKey(friendId), Bonus.viewItem(Pbmethod.ItemKey.GEM, 1))));
+            addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.BONUS_FRIEND_GET.getKey(friendId), Bonus.viewItem(ItemType.CURRENCY.value, Pbmethod.ItemKey.GEM, 1))));
             status();
         } else addErrSystem();
     }
@@ -479,7 +479,7 @@ public class FriendHandler extends AHandler {
             mUser.getUserDaily().setFriendSend(lstSend.toString());
             mUser.getUserDaily().setGiftReceive(idReceive.toString());
             addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.BONUS_QUICK_SEND.getKey(), bonus)));
-            addBonusToastPlus(Bonus.receiveListItem(mUser, DetailActionType.BONUS_FRIEND_SEND.getKey(-1), Bonus.viewItem(Pbmethod.ItemKey.GEM, countSend)));
+            addBonusToastPlus(Bonus.receiveListItem(mUser, DetailActionType.BONUS_FRIEND_SEND.getKey(-1), Bonus.viewItem(ItemType.CURRENCY.value, Pbmethod.ItemKey.GEM, countSend)));
             mUser.getCache().del("user_send_gift");
             status();
             // quest tutorial

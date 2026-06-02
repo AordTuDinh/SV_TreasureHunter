@@ -1,6 +1,7 @@
 package game.config;
 
 import com.google.gson.Gson;
+import game.config.aEnum.ItemType;
 import game.treasure.service.user.Bonus;
 import ozudo.base.helper.DateTime;
 import ozudo.base.helper.GsonUtil;
@@ -52,7 +53,7 @@ public class CfgLottery {
     }
 
     public static List<Long> getTickerMini(int num) {
-        return Bonus.viewItem(Pbmethod.ItemKey.TICKER_MINI, num);
+        return Bonus.viewItem(ItemType.EVENT.value, Pbmethod.ItemKey.TICKER_MINI, num);
     }
 
 

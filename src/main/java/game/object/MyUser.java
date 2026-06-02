@@ -10,6 +10,7 @@ import game.treasure.controller.UserHandler;
 import game.treasure.mapping.*;
 import game.treasure.server.IAction;
 import game.treasure.service.Services;
+import game.treasure.service.resource.ResItem;
 import game.treasure.service.user.Bonus;
 import game.monitor.ClanManager;
 import game.protocol.CommonProto;
@@ -234,15 +235,19 @@ public class MyUser implements Serializable {
     public boolean checkSlotAddBonus(List<Long> bonus) {
         List<List<Long>> aBonus = Bonus.parse(bonus);
         int numItem = 0, numItemEquip = 0;
-        for (int i = 0; i < aBonus.size(); i++) {
-            int itemId = aBonus.get(i).get(1).intValue();
-            if (aBonus.get(i).get(0).intValue() == Bonus.BONUS_ITEM &&
-                    getResources().getItem(aBonus.get(i).get(1).intValue()) != null)
+        for (List<Long> chunk : aBonus) {
+            if (chunk.get(0).intValue() != Bonus.BONUS_ITEM) continue;
+            int itemKey = chunk.get(chunk.size() - 1).intValue();
+            if (chunk.size() >= 3 && chunk.get(1).intValue() == ItemType.EQUIPMENT.value) {
+                numItemEquip++;
+            } else if (ResItem.getItemEquipment(itemKey) != null) {
+                numItemEquip++;
+            } else {
                 numItem++;
-            if (aBonus.get(i).get(0).intValue() == Bonus.BONUS_EQUIPMENT) numItemEquip++;
+            }
         }
         if (numItem > 0) return resources.getNumItemBag() + numItem <= uData.getNumSlot();
-        if (numItemEquip > 0) return resources.getMItemEquipment().size() + numItemEquip <= uData.getNumSlot();
+        if (numItemEquip > 0) return resources.getNumEquipment() + numItemEquip <= uData.getNumSlot();
         return true;
     }
 

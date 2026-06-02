@@ -37,13 +37,13 @@ public class ResItemEntity extends BaseEntity implements Serializable {
 
     public void init() {
         itemType = ItemType.get(type);
-        if (type == ItemType.ITEM_OPEN.value) {
-            try {
-                itemOpen = new Gson().fromJson(data, new TypeToken<List<BonusConfig>>() {
-                }.getType());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+//        if (type == ItemType.ITEM_OPEN.value) {
+//            try {
+//                itemOpen = new Gson().fromJson(data, new TypeToken<List<BonusConfig>>() {
+//                }.getType());
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 }

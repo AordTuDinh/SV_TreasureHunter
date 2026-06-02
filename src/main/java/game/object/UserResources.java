@@ -13,16 +13,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class UserResources implements Serializable {
     MyUser mUser;
-    // lay luc dang nhap thoi, trong game k lay vi xu ly bang dic cho de, cap nhap thi vao dic
     @Setter
     List<UserItemEntity> items;
     @Setter
     List<UserPetEntity> pets;
-    @Setter
-    List<UserItemEquipmentEntity> itemEquipments;
     @Setter
     List<UserArtifactEntity> artifacts;
     @Setter
@@ -32,13 +30,10 @@ public class UserResources implements Serializable {
     @Setter
     List<UserMaterialEntity> materials;
 
-    // GET VÀ SET TÚI SẼ LẤY TỪ DIC CHO DỄ QUẢN LÝ...
     @Getter
-    Map<Integer, UserItemEntity> mItem = new HashMap<>();
+    Map<Long, UserItemEntity> mItem = new HashMap<>();
     @Getter
     Map<Long, UserPetEntity> mPet = new HashMap<>();
-    @Getter
-    Map<Long, UserItemEquipmentEntity> mItemEquipment = new HashMap<>();
     @Getter
     Map<Long, UserArtifactEntity> mArtifact = new HashMap<>();
     @Getter
@@ -54,24 +49,21 @@ public class UserResources implements Serializable {
         this.mUser = mUser;
     }
 
-
     public boolean isOk() {
         try {
-            items.forEach(item -> mItem.put(item.getItemId(), item));
-            packs.forEach(pack -> {
-                if (pack.hasHSD()) {
-                    if (!mPacks.containsKey(pack.getPackId())) {
+            if (items != null) {
+                items.forEach(item -> mItem.put(item.getId(), item));
+            }
+            if (packs != null) {
+                packs.forEach(pack -> {
+                    if (pack.hasHSD() && !mPacks.containsKey(pack.getPackId())) {
                         mPacks.put(pack.getPackId(), pack);
                     }
-                }
-            });
-
+                });
+            }
             if (pets != null) {
                 pets.forEach(pet -> mPet.put(pet.getId(), pet));
             }
-            itemEquipments.forEach(item -> {
-               mItemEquipment.put(item.getId(), item);
-            });
             if (artifacts != null) {
                 artifacts.forEach(item -> mArtifact.put(item.getId(), item));
             }
@@ -93,12 +85,44 @@ public class UserResources implements Serializable {
         return mWeaponByRank.get(rank);
     }
 
-    public UserItemEntity getItem(int itemId) {
-        return mItem.get(itemId);
+    public UserItemEntity getItem(long id) {
+        return mItem.get(id);
+    }
+
+    /** Trang bị (storage type = 2). */
+    public UserItemEntity getItemEquipment(long id) {
+        UserItemEntity item = mItem.get(id);
+        if (item != null && item.isEquipment()) return item;
+        return null;
+    }
+
+    public UserItemEntity getItemByItemKey(int itemId) {
+        for (UserItemEntity item : mItem.values()) {
+            if (item.getItemId() == itemId) return item;
+        }
+        return null;
     }
 
     public UserItemEntity getItem(Pbmethod.ItemKey key) {
-        return getItem(key.getNumber());
+        return getItemByItemKey(key.getNumber());
+    }
+
+    public int countByItemKey(int itemId) {
+        int total = 0;
+        for (UserItemEntity item : mItem.values()) {
+            if (item.getItemId() == itemId) total += 1;
+        }
+        return total;
+    }
+
+    public List<UserItemEntity> listByItemKey(int itemId) {
+        return mItem.values().stream()
+                .filter(item -> item.getItemId() == itemId )
+                .collect(Collectors.toList());
+    }
+
+    public List<UserItemEntity> listEquipment() {
+        return mItem.values().stream().filter(UserItemEntity::isEquipment).collect(Collectors.toList());
     }
 
     public UserPackEntity getPack(PackType type) {
@@ -114,9 +138,14 @@ public class UserResources implements Serializable {
     }
 
     public int getNumItemBag() {
-        return (int) mItem.values().stream().filter(item -> item.getNumber() > 0).count();
+        return (int) mItem.values().stream()
+                .filter(item -> !item.isEquipment())
+                .count();
     }
 
+    public int getNumEquipment() {
+        return (int) mItem.values().stream().filter(UserItemEntity::isEquipment).count();
+    }
 
     public UserPetEntity getPet(long id) {
         return mPet.get(id);
@@ -127,14 +156,6 @@ public class UserResources implements Serializable {
             if (pet.getPetId() == petId) return pet;
         }
         return null;
-    }
-
-    public boolean hasPetConfig(int petId) {
-        return getPetByConfigId(petId) != null;
-    }
-
-    public UserItemEquipmentEntity getItemEquipment(long itemId) {
-        return mItemEquipment.get(itemId);
     }
 
     public UserArtifactEntity getArtifact(long id) {
@@ -151,43 +172,59 @@ public class UserResources implements Serializable {
         return mMount.get(id);
     }
 
-    public UserMountEntity getMountByConfigId(int mountId) {
-        for (UserMountEntity mount : mMount.values()) {
-            if (mount.getMountId() == mountId) return mount;
-        }
-        return null;
-    }
-
-
     public boolean hasItem(int itemId) {
-        return mItem.containsKey(itemId);
+        return countByItemKey(itemId) > 0;
     }
-
-
 
     public void addItem(UserItemEntity uItem) {
+        if (items == null) items = new ArrayList<>();
         items.add(uItem);
-        mItem.put(uItem.getItemId(), uItem);
+        mItem.put(uItem.getId(), uItem);
+        if (uItem.isEquipment()) {
+            CfgAchievement.addAchievement(mUser, 2, uItem.getItemId() + 30, 1);
+            mUser.getUData().checkQuestTutorial(mUser, QuestTutType.HAS_ITEM_EQUIP_ID, uItem.getItemId(), 1);
+        }
     }
 
+    public void removeItem(long id) {
+        UserItemEntity rm = mItem.remove(id);
+        if (rm != null && items != null) items.remove(rm);
+    }
+
+    public void removeItemEquip(List<UserItemEntity> equipItems) {
+        for (UserItemEntity item : equipItems) {
+            if (items != null) items.remove(item);
+            mItem.remove(item.getId());
+        }
+    }
+
+    public boolean removeItemsByItemKey(int itemId, int count) {
+        if (count <= 0) return true;
+        List<UserItemEntity> rows = listByItemKey(itemId);
+        if (rows.isEmpty()) return false;
+        UserItemEntity first = rows.get(0);
+        if (first.isAggregatedItem()) {
+            List<Long> dataSticker = new ArrayList<>(ozudo.base.helper.GsonUtil.strToListLong(first.getData() == null ? "[]" : first.getData()));
+            for (int i = 0; i < count && dataSticker.size() > 1; i++) {
+                dataSticker.remove(1);
+            }
+            if (dataSticker.size() <= 1) first.clearAggregated();
+            first.setData(ozudo.base.helper.StringHelper.toDBString(dataSticker));
+            return first.update(List.of("data", first.getData()));
+        }
+        int removed = 0;
+        for (UserItemEntity row : rows) {
+            if (removed >= count) break;
+            if (row.deleteFromDb()) {
+                removeItem(row.getId());
+                removed++;
+            }
+        }
+        return removed == count;
+    }
 
     public void addPack(UserPackEntity pack) {
         if (!mPacks.containsKey(pack.getPackId())) mPacks.put(pack.getPackId(), pack);
-    }
-
-    public void addItemEquip(UserItemEquipmentEntity uItem) {
-        itemEquipments.add(uItem);
-        mItemEquipment.put(uItem.getId(), uItem);
-        // bắt đầu id = 30 nên sẽ cộng thêm 30
-        CfgAchievement.addAchievement(mUser, 2, uItem.getItemId() + 30, 1);
-        mUser.getUData().checkQuestTutorial(mUser, QuestTutType.HAS_ITEM_EQUIP_ID, uItem.getRes().getId(), 1);
-    }
-
-    public void removeItemEquip(List<UserItemEquipmentEntity> items) {
-        for (int i = 0; i < items.size(); i++) {
-            itemEquipments.remove(items.get(i));
-            mItemEquipment.remove(items.get(i).getId());
-        }
     }
 
     public UserMaterialEntity getMaterial(long id) {

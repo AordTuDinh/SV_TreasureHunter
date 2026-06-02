@@ -20,7 +20,6 @@ public class CfgClan {
     public static List<Integer> CLAN_RULE = Arrays.asList(ClanPosition.LEADER.value, ClanPosition.CO_LEADER.value);
     public static float perGoldReset = 0.8f;
     public static float perCointReset = 1f;
-    public static int HUY_HIEU_BANG = 38;
     public static List<Integer> slotClanBoss = Arrays.asList(0, 1, 2, 3, 4, 5);
 
     public static void loadConfig(String strJson) {

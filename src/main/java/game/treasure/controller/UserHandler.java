@@ -36,7 +36,7 @@ public class UserHandler extends AHandler {
                 CHAT_FRAME_EQUIP, USE_GIFT_CODE, TRIAL_EQUIP, BUFF_INFO, RANKING_STATUS, TUTORIAL_STATUS,
                 TUTORIAL_QUEST_RECEIVE, TUTORIAL_GO_TO, TUTORIAL_QUEST_STATUS, RANKING_INFO, SEND_MAIL,
                 HELP_VALUE, CHANGE_NAME, AVATAR_LIST, AVATAR_CHOOSE, USER_DATA_INFO, BAG_STATUS,
-                 UPDATE_NEXT_DAY);
+                UPDATE_NEXT_DAY);
         actions.forEach(action -> mHandler.put(action, this));
     }
 
@@ -154,7 +154,7 @@ public class UserHandler extends AHandler {
     void bagStatus() {
         List<Long> status = new ArrayList<>();
         UserDataEntity uData = mUser.getUData();
-        status.addAll(List.of(10l,10l)); //3
+        status.addAll(List.of(10l, 10l)); //3
         status.addAll(GsonUtil.toListLong(user.getAllInfoItemEquip()));
         addResponse(getCommonVector(status));
     }
@@ -337,15 +337,15 @@ public class UserHandler extends AHandler {
     }
 
     void updateNextDay() {
-        Pbmethod.ListCommonVector.Builder pb = Pbmethod.ListCommonVector.newBuilder();
-        pb.addAVector(getCommonVector(1));
-        List<UserItemEntity> uItem = mUser.getResources().getMItem().values().stream().filter(item -> item.expired()).collect(Collectors.toList());
-        List<Long> bonusExpire = new ArrayList<>();
-        for (int i = 0; i < uItem.size(); i++) {
-            bonusExpire.addAll(Bonus.viewItem(uItem.get(i).getItemId(), -uItem.get(i).getNumber()));
-        }
-        pb.addAVector(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.UPDATE_BONUS_NEXT_DAY.getKey(), bonusExpire)));
-        addResponse(pb.build());
+//        Pbmethod.ListCommonVector.Builder pb = Pbmethod.ListCommonVector.newBuilder();
+//        pb.addAVector(getCommonVector(1));
+//        List<UserItemEntity> uItem = mUser.getResources().getMItem().values().stream().toList();
+//        List<Long> bonusExpire = new ArrayList<>();
+//        for (int i = 0; i < uItem.size(); i++) {
+//            bonusExpire.addAll(Bonus.viewItem(uItem.get(i).getItemId(), -uItem.get(i).getQuantity()));
+//        }
+//        pb.addAVector(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.UPDATE_BONUS_NEXT_DAY.getKey(), bonusExpire)));
+//        addResponse(pb.build());
     }
 
     private void tutorial() {

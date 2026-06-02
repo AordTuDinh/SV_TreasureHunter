@@ -1,26 +1,21 @@
 package game.treasure.controller;
 
-import game.battle.calculate.IMath;
 import game.config.aEnum.*;
 import game.config.lang.Lang;
 import game.treasure.mapping.UserItemEntity;
-import game.treasure.mapping.UserItemEquipmentEntity;
 import game.treasure.mapping.main.ResItemEntity;
 import game.treasure.mapping.main.ResItemEquipmentEntity;
 import game.treasure.server.IAction;
-import game.treasure.service.resource.ResItem;
 import game.treasure.service.user.Bonus;
 import game.monitor.Online;
 import game.object.BonusConfig;
 import game.object.MyUser;
-import game.object.PointBuff;
 import game.protocol.CommonProto;
 import protocol.Pbmethod;
 import io.netty.channel.Channel;
 import ozudo.base.database.DBJPA;
 import ozudo.base.helper.*;
 import ozudo.base.log.Logs;
-import protocol.Pbmethod;
 
 import java.util.Arrays;
 import java.util.List;
@@ -72,15 +67,15 @@ public class ItemHandler extends AHandler {
 
 
     public static void listEquipment(List<Long> ids, AHandler handler, MyUser mUser) {
-        Pbmethod.PbListItemEquipment.Builder lst = Pbmethod.PbListItemEquipment.newBuilder();
+        Pbmethod.PbListItem.Builder lst = Pbmethod.PbListItem.newBuilder();
         System.out.println("ids = " + ids);
         for (int i = 0; i < ids.size(); i++) {
-            UserItemEquipmentEntity itemEquipment = mUser.getResources().getItemEquipment(ids.get(i));
+            UserItemEntity itemEquipment = mUser.getResources().getItemEquipment(ids.get(i));
             if (itemEquipment == null) {
                 handler.addErrResponse(getLang(mUser, Lang.err_has_item));
                 return;
             }
-            lst.addItemEquip(itemEquipment.toProto());
+            lst.addItem(itemEquipment.toProto());
         }
         handler.addResponse(IAction.ITEM_EQUIPMENT_INFO, lst.build());
     }
@@ -91,19 +86,19 @@ public class ItemHandler extends AHandler {
             int userId = ids.get(0).intValue();
             List<Long> item = ids.subList(1, ids.size());
             MyUser mUser = Online.getMUser(userId);
-            Pbmethod.PbListItemEquipment.Builder lst = Pbmethod.PbListItemEquipment.newBuilder();
+            Pbmethod.PbListItem.Builder lst = Pbmethod.PbListItem.newBuilder();
             if (mUser != null) { // có online
 
                 for (int i = 0; i < item.size(); i++) {
-                    UserItemEquipmentEntity itemEquipment = mUser.getResources().getItemEquipment(item.get(i));
-                    if (itemEquipment != null) lst.addItemEquip(itemEquipment.toProto());
+                    UserItemEntity itemEquipment = mUser.getResources().getItemEquipment(item.get(i));
+                    if (itemEquipment != null) lst.addItem(itemEquipment.toProto());
                 }
 
             } else {
-                String sql = "Select * from user_item_equipment where id in(" + NumberUtil.joiningListLong(item) + ")";
-                List<UserItemEquipmentEntity> lstUE = DBJPA.getSelectQuery(sql, UserItemEquipmentEntity.class);
+                String sql = "Select * from user_item where type=2 and id in(" + NumberUtil.joiningListLong(item) + ")";
+                List<UserItemEntity> lstUE = DBJPA.getSelectQuery(sql, UserItemEntity.class);
                 for (int i = 0; i < lstUE.size(); i++) {
-                    lst.addItemEquip(lstUE.get(i).toProto());
+                    lst.addItem(lstUE.get(i).toProto());
                 }
             }
             addResponse(lst.build());
@@ -118,7 +113,7 @@ public class ItemHandler extends AHandler {
 //        List<Long> inputs = getInputALong();
 //        int heroId = inputs.get(0).intValue();
 //        int itemId = inputs.get(1).intValue();
-//        UserItemEquipmentEntity iEquip = mUser.getResources().getItemEquipment(itemId);
+//        UserItemEntity iEquip = mUser.getResources().getItemEquipment(itemId);
 //        if (iEquip != null && iEquip.isEquip()) {
 //            addErrResponse(getLang(Lang.err_use_item_equip));
 //            return;
@@ -166,7 +161,7 @@ public class ItemHandler extends AHandler {
 
 //    void unEquipItem() {
 //        int id = (int) CommonProto.parseCommonVector(requestData).getALong(0);
-//        UserItemEquipmentEntity iEquip = mUser.getResources().getItemEquipment(id);
+//        UserItemEntity iEquip = mUser.getResources().getItemEquipment(id);
 //        UserHeroEntity heroMain = mUser.getResources().getHero(iEquip.getHeroIdEquip());
 //        if (heroMain == null || !iEquip.isEquip()) {
 //            addErrResponse(getLang(Lang.err_params));
@@ -202,14 +197,14 @@ public class ItemHandler extends AHandler {
 
 
     void removeItem() {
-        int id = (int) CommonProto.parseCommonVector(requestData).getALong(0);
+        long id = CommonProto.parseCommonVector(requestData).getALong(0);
         UserItemEntity item = mUser.getResources().getItem(id);
         if (item == null) {
             addErrResponse(getLang(Lang.item_not_own));
             return;
         }
-        if (item.update(Arrays.asList("number", 0, "item_id", id))) {
-            item.setNumber(0);
+        if (item.deleteFromDb()) {
+            mUser.getResources().removeItem(id);
             addResponseSuccess();
         } else {
             addErrResponse();
@@ -218,8 +213,9 @@ public class ItemHandler extends AHandler {
 
     void usedItem() {
         List<Long> aLong = CommonProto.parseCommonVector(requestData).getALongList();
-        int id = aLong.get(0).intValue();
+        long id = aLong.get(0);
         int number = aLong.get(1).intValue();
+        int type = aLong.get(2).intValue();
         if (number < 0 || number > 100) {
             addErrParam();
             return;
@@ -229,8 +225,7 @@ public class ItemHandler extends AHandler {
             addErrResponse(getLang(Lang.item_not_own));
             return;
         }
-        number = item.getType() == ItemType.ITEM_USE || item.getType() == ItemType.ITEM_USE_X1 ? 1 : number;
-        List<Long> fee = item.viewBonus(-number);
+        List<Long> fee = item.viewBonusItem(item.getRes().getItemType().value, -number);
         String err = Bonus.checkMoney(mUser, fee);
         if (err != null) {
             addErrResponse(err);
@@ -238,25 +233,25 @@ public class ItemHandler extends AHandler {
         }
         ResItemEntity resItem = item.getRes();
         switch (resItem.getItemType()) {
-            case ITEM_OPEN: {
-                // nếu >100 thì random 1 số rồi x10 + phần random lẻ,vd: 86 -> random 8 lần x10 + 6 lần lẻ
-//                if (number > 100) {
-//                    int nguyen = number / 10;
-//                    for (int i = 0; i < nguyen; i++) {
-//                        fee.addAll(Bonus.xBonus(BonusConfig.getRandomOneBonus(resItem.getItemOpen()), 10));
-//                    }
-//                    int du = number % 10;
-//                    for (int i = 0; i < du; i++) {
+//            case ITEM_OPEN: {
+//                // nếu >100 thì random 1 số rồi x10 + phần random lẻ,vd: 86 -> random 8 lần x10 + 6 lần lẻ
+////                if (number > 100) {
+////                    int nguyen = number / 10;
+////                    for (int i = 0; i < nguyen; i++) {
+////                        fee.addAll(Bonus.xBonus(BonusConfig.getRandomOneBonus(resItem.getItemOpen()), 10));
+////                    }
+////                    int du = number % 10;
+////                    for (int i = 0; i < du; i++) {
+////                        fee.addAll(BonusConfig.getRandomOneBonus(resItem.getItemOpen()));
+////                    }
+////                } else {
+//                    for (int i = 0; i < number; i++) {
 //                        fee.addAll(BonusConfig.getRandomOneBonus(resItem.getItemOpen()));
 //                    }
-//                } else {
-                    for (int i = 0; i < number; i++) {
-                        fee.addAll(BonusConfig.getRandomOneBonus(resItem.getItemOpen()));
-                    }
-//                }
-                addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.SU_DUNG_ITEM.getKey(id), Bonus.merge(fee))));
-            }
-            break;
+////                }
+//                addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.SU_DUNG_ITEM.getKey(id), Bonus.merge(fee))));
+//            }
+            //break;
 //            case ITEM_USE:
 //                if (mUser.getPlayer() == null || !mUser.getPlayer().isAlive()) return;
 //                List<Long> aBonus = Bonus.receiveListItem(mUser, DetailActionType.SU_DUNG_ITEM.getKey(id), fee);
@@ -268,7 +263,7 @@ public class ItemHandler extends AHandler {
 //                mUser.getPlayer().protoBuffPoint(buffs);
 //                addResponse(getCommonVector(aBonus));
 //                break;
-            case ITEM_USE_X1:
+            case CONSUMABLE:
                 switch (Pbmethod.ItemKey.valueOf(item.getItemId())) {
 //                    case THE_HOAN_TRA_1 -> {
 //                        if (mUser.getUData().resetLevelStat(mUser)) {
@@ -309,32 +304,33 @@ public class ItemHandler extends AHandler {
                     }
                 }
                 break;
-            case ITEM_OPEN_STATIC: {
-                List<Long> bonus = GsonUtil.strToListLong(resItem.getData());
-                bonus = Bonus.xBonus(bonus, number);
-                fee.addAll(bonus);
-                addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.SU_DUNG_ITEM.getKey(id), fee)));
-            }
-            break;
+//            case ITEM_OPEN_STATIC: {
+//                List<Long> bonus = GsonUtil.strToListLong(resItem.getData());
+//                bonus = Bonus.xBonus(bonus, number);
+//                fee.addAll(bonus);
+//                addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.SU_DUNG_ITEM.getKey(id), fee)));
+//            }
+            //break;
         }
     }
 
     void usedItemForItem() {
         List<Long> aLong = CommonProto.parseCommonVector(requestData).getALongList();
-        int idItem = aLong.get(0).intValue();
+        long idItem = aLong.get(0);
         long idEquip = aLong.get(1);
+        int type = Math.toIntExact(aLong.get(2));
         UserItemEntity item = mUser.getResources().getItem(idItem);
         if (item == null) {
             addErrResponse(getLang(Lang.item_not_own));
             return;
         }
-        List<Long> fee = item.viewBonus(-1);
+        List<Long> fee = item.viewBonusItem(type, -1);
         String err = Bonus.checkMoney(mUser, fee);
         if (err != null) {
             addErrResponse(err);
             return;
         }
-        UserItemEquipmentEntity uItemEquip = mUser.getResources().getItemEquipment(idEquip);
+        UserItemEntity uItemEquip = mUser.getResources().getItemEquipment(idEquip);
         if (uItemEquip == null) {
             addErrResponse(getLang(Lang.err_item_equip_not_found));
             return;
@@ -343,34 +339,34 @@ public class ItemHandler extends AHandler {
             addErrResponse(getLang(Lang.err_item_equip_cant_up));
             return;
         }
-        ResItemEntity resItem = item.getRes();
-        switch (resItem.getItemType()) {
-            case ITEM_USE_FOR_ITEM_1: {
-                addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.SU_DUNG_ITEM.getKey(idItem), Bonus.merge(fee))));
-            }
-            case ITEM_USE_FOR_ITEM_5: {
-                // todo regen item và hòa trả đá
-                ResItemEquipmentEntity resItemEquip = uItemEquip.getRes();
-                if (resItemEquip.getEquipmentType() != ItemEquipmentType.AXE) {
-                    addErrParam();
-                    return;
-                }
-                addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.SU_DUNG_ITEM.getKey(idItem), Bonus.merge(fee))));
-
-            }
-            break;
-        }
+//        ResItemEntity resItem = item.getRes();
+//        switch (resItem.getItemType()) {
+//            case ITEM_USE_FOR_ITEM_1: {
+//                addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.SU_DUNG_ITEM.getKey(idItem), Bonus.merge(fee))));
+//            }
+//            case ITEM_USE_FOR_ITEM_5: {
+//                // todo regen item và hòa trả đá
+//                ResItemEquipmentEntity resItemEquip = uItemEquip.getResEquipment();
+//                if (resItemEquip.getEquipmentType() != ItemEquipmentType.AXE) {
+//                    addErrParam();
+//                    return;
+//                }
+//                addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.SU_DUNG_ITEM.getKey(idItem), Bonus.merge(fee))));
+//
+//            }
+//            break;
+//        }
     }
 
     private void itemInfo() {
-        int id = getInputInt();
+        long id = getInputLong();
         UserItemEntity item = mUser.getResources().getItem(id);
         if (item == null) {
             addErrResponse();
             return;
         }
-        switch (item.getType()) {
-            case LOTTE_NORMAL, LOTTE_SPECIAL -> {
+        switch (item.getItemId()) {
+            case Pbmethod.ItemKey.TICKER_SPECIAL_VALUE , Pbmethod.ItemKey.TICKER_NORMAL_VALUE -> {
                 List<Integer> info = GsonUtil.strToListInt(item.getData());
                 if (info.size() > 0) {
                     info.remove(0);
@@ -395,7 +391,7 @@ public class ItemHandler extends AHandler {
     private void lockDestroy() {
         List<Long> inputs = getInputALong();
         long id = inputs.get(0);
-        UserItemEquipmentEntity itemEquipment = mUser.getResources().getItemEquipment(id);
+        UserItemEntity itemEquipment = mUser.getResources().getItemEquipment(id);
         if (itemEquipment == null) {
             addErrResponse(getLang(Lang.item_not_own));
             return;
@@ -413,7 +409,7 @@ public class ItemHandler extends AHandler {
 
     private void selectAccessory() {
         List<Long> inputs = getInputALong();
-        UserItemEquipmentEntity uItem = mUser.getResources().getItemEquipment(inputs.get(0));
+        UserItemEntity uItem = mUser.getResources().getItemEquipment(inputs.get(0));
         if (uItem == null) {
             addErrResponse(getLang(Lang.err_item_equip_not_found));
             return;
@@ -430,7 +426,7 @@ public class ItemHandler extends AHandler {
 
 //    private void upgradeAccessory() {
 //        List<Long> inputs = getInputALong();
-//        UserItemEquipmentEntity uItem = mUser.getResources().getItemEquipment(inputs.get(0));
+//        UserItemEntity uItem = mUser.getResources().getItemEquipment(inputs.get(0));
 //        if (uItem == null) {
 //            addErrResponse(getLang(Lang.err_item_equip_not_found));
 //            return;

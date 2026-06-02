@@ -63,7 +63,7 @@ public class LuckyNormalJob {
                 }
             }
             List<Long> bonus = gem > 0 ? Bonus.viewGem(gem) : new ArrayList<>();
-            sql += "(" + uLot.get(i).getUserId() + "," + event + "," + uLot.get(i).getType().value + ",'" + StringHelper.toDBString(ticker) + "','" + DateTime.getFullDate() + "'," +
+            sql += "(" + uLot.get(i).getUserId() + "," + event + "," + uLot.get(i).getResItemType().value + ",'" + StringHelper.toDBString(ticker) + "','" + DateTime.getFullDate() + "'," +
                     luckyNum + "," + status + ",'" + StringHelper.toDBString(bonus) + "','" + StringHelper.toDBString(result) + "'),";
         }
         System.out.println("Quay vé số thường xong, số may mắn của kì quay \" + event + \" là: \" + luckyNum + \". Người trúng giải đặc biệt: \" + luckyId");

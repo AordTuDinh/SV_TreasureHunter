@@ -85,7 +85,7 @@ public class PetHandler extends AHandler {
             return;
         }
         boolean isVip = inputs.get(1) == 1L;
-        List<Long> bonus = Bonus.viewItem(isVip ? Pbmethod.ItemKey.BONG_SIEU_THU : Pbmethod.ItemKey.BONG_LINH_THU, -number);
+        List<Long> bonus = Bonus.viewItem(ItemType.EVENT.value,  isVip ? Pbmethod.ItemKey.BONG_SIEU_THU : Pbmethod.ItemKey.BONG_LINH_THU, -number);
         String err = Bonus.checkMoney(mUser, bonus);
         if (err != null) {
             addErrResponse(err);

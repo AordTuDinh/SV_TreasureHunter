@@ -246,12 +246,14 @@ message PbUser {
 }
 
 message  PbUserData{
+  optional  int32 slogBagUI = 1;
+  optional  int32 slotMaterial = 2;
+  optional  int32 slotItemEvent = 3;
   optional int32 lvTraining = 4;
   optional int32 maxlvTraining = 5;
   optional int32 numPointLevel = 6;
   optional PbListItem items = 9;
-  optional PbListItemEquipment itemEquipments = 10;
-  repeated PbItemEquipment aItemEquip = 11;
+  repeated PbItem itemEquipments = 10; // dang mac
   optional PbListMaterial aMaterial = 12;
   repeated PbPet aPet = 15;
   repeated PbMount aMount = 16;
@@ -300,10 +302,6 @@ message PbPet{
 
 message PbListItemPoint{
   repeated  PbItemPoint itemPoints = 1;
-}
-
-message PbListItemEquipment{
-  repeated  PbItemEquipment itemEquip = 1;
 }
 
 message PbListChat {
@@ -360,10 +358,14 @@ message PbMaterial{
 }
 
 message  PbItem{
-  optional  int32 id = 1;
-  optional  int32 type = 2;
-  optional  int32  number = 3;
+  optional  int64 id = 1;
+  optional  int32 itemKey = 2;
+  optional  int32 type = 3;
   optional string data = 4;
+  optional  int32 level = 5;
+  repeated int64 point = 6;
+  optional  bool lockDestroy = 7;
+  optional  int32 tier = 8;
 }
 
 message  PbItemPoint{
@@ -371,15 +373,6 @@ message  PbItemPoint{
   optional int64 number = 2;
 }
 
-message PbItemEquipment{
-  optional  int64  id = 1;
-  optional  int32 itemKey = 2;
-  optional  int32 level = 3;
-  repeated int64 point = 5;
-  optional int64 expire = 6;
-  optional  bool lockDestroy = 7;
-  optional  int32 bless = 8;
-}
 
 message ListAction {
   repeated PbAction aAction = 1;

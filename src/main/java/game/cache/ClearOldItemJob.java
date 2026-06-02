@@ -30,10 +30,6 @@ public class ClearOldItemJob {
         if (deleteDone) {
             // send notify telegram
         }
-        deleteDone = DBResource.getInstance().rawSQL("DELETE FROM dson.user_item_equipment WHERE EXPIRE >0  AND  EXPIRE <" + time + ";");
-        if (deleteDone) {
-            // send notify telegram
-        }
 //        Telegram.sendNotify("--------- Clear old item done ---------");
     }
 }

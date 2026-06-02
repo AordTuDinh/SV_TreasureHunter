@@ -275,48 +275,44 @@ public class MarketHandler extends AHandler {
             addErrResponse();
             return;
         }
-        int numAdd = 0;
         long eventDay = CfgLottery.getEventIdBuy();
-        UserItemEntity uItem = mUser.getResources().getItem(protocol.Pbmethod.ItemKey.TICKER_SPECIAL.getNumber());
+        UserItemEntity uItem = mUser.getResources().getItemByItemKey(protocol.Pbmethod.ItemKey.TICKER_SPECIAL.getNumber());
+        boolean saved;
         if (uItem == null) {
-            uItem = new UserItemEntity(user.getId(), protocol.Pbmethod.ItemKey.TICKER_SPECIAL, nums.size());
+            uItem = new UserItemEntity(user.getId(), protocol.Pbmethod.ItemKey.TICKER_SPECIAL.getNumber(), ItemType.EVENT);
             List<Long> numNew = new ArrayList<>(nums);
             numNew.add(0, eventDay);
             uItem.setData(StringHelper.toDBString(numNew));
+            saved = DBJPA.save(uItem);
+            if (saved) mUser.getResources().addItem(uItem);
         } else {
-            // check vé cũ cần xóa dữ liệu đi
             List<Long> dataSticker = GsonUtil.strToListLong(uItem.getData());
-            if (dataSticker.size() <= 0 || dataSticker.get(0) != eventDay) {
+            if (dataSticker.isEmpty() || dataSticker.get(0) != eventDay) {
                 dataSticker = new ArrayList<>();
                 dataSticker.add(eventDay);
-                uItem.setNumber(0);
             }
-            uItem.add(nums.size());
-            numAdd = uItem.getNumber();
             dataSticker.addAll(nums);
             uItem.setData(dataSticker.toString());
+            saved = uItem.update(List.of("data", uItem.getData()));
         }
-        if (DBJPA.saveOrUpdate(uItem)) {
-            mUser.getResources().addItem(uItem);
-        } else {
+        if (!saved) {
             Bonus.receiveListItem(mUser, "buy_lottery_special", Bonus.reverseBonus(CfgLottery.getFeeBuySpecial(nums.size())));
             addErrSystem();
             return;
         }
         resItem.setStock(resItem.getStock() - nums.size());
         aBonus.add((long) Bonus.BONUS_ITEM);
+        aBonus.add((long) uItem.getType());
+        aBonus.add(uItem.getId());
         aBonus.add((long) uItem.getItemId());
-        aBonus.add((long) numAdd);
-        aBonus.add((long) nums.size());
 
         if (userMarket.updateShop(market, new Gson().toJson(aItem))) {
             addBonusToastPlus(aBonus);
             status(market.getId());
-            mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.BUY_SHOP, numAdd);
-            // event 7 day attack boss day 2
+            mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.BUY_SHOP, nums.size());
             UserEventSevenDayEntity uEvent = Services.userDAO.getUserSevenDay(mUser);
-            if (uEvent.hasEvent() && uEvent.hasActive(3) && uEvent.update(List.of("buy_shop", uEvent.getBuyShop() + numAdd))) {
-                uEvent.setBuyShop(uEvent.getBuyShop() + numAdd);
+            if (uEvent.hasEvent() && uEvent.hasActive(3) && uEvent.update(List.of("buy_shop", uEvent.getBuyShop() + nums.size()))) {
+                uEvent.setBuyShop(uEvent.getBuyShop() + nums.size());
             }
         } else addErrResponse();
     }
@@ -336,7 +332,7 @@ public class MarketHandler extends AHandler {
                 return;
             }
         }
-        UserItemEntity uItem = mUser.getResources().getItem(protocol.Pbmethod.ItemKey.TICKER_NORMAL.getNumber());
+        UserItemEntity uItem = mUser.getResources().getItemByItemKey(protocol.Pbmethod.ItemKey.TICKER_NORMAL.getNumber());
         List<Long> bonus = CfgLottery.getFeeBuyNormal(nums.size());
         String err = Bonus.checkMoney(mUser, bonus);
         if (err != null) {
@@ -348,47 +344,37 @@ public class MarketHandler extends AHandler {
             addErrResponse();
             return;
         }
-        int numAdd = 0;
         long eventDay = CfgLottery.getEventIdBuy();
         if (uItem == null) {
-            uItem = new UserItemEntity(user.getId(), protocol.Pbmethod.ItemKey.TICKER_NORMAL, nums.size());
-            List<Long> aNum = new ArrayList(nums);
+            uItem = new UserItemEntity(user.getId(), protocol.Pbmethod.ItemKey.TICKER_NORMAL.getNumber(), ItemType.EVENT);
+            List<Long> aNum = new ArrayList<>(nums);
             aNum.add(0, eventDay);
             uItem.setData(StringHelper.toDBString(aNum));
-        } else {
-            // check vé cũ cần xóa dữ liệu đi
-            String data =uItem.getData();
-            List<Long> dataSticker = GsonUtil.strToListLong(data==null?"[]":data);
-            if (dataSticker.size() <= 0 || dataSticker.get(0) != eventDay) {
-                dataSticker = new ArrayList<>();
-                dataSticker.add(eventDay);
-                uItem.setNumber(0);
-            }
-            uItem.add(nums.size());
-            numAdd = uItem.getNumber();
-            dataSticker.addAll(nums);
-            uItem.setData(dataSticker.toString());
-        }
-        if (DBJPA.saveOrUpdate(uItem)) {
+            DBJPA.save(uItem);
             mUser.getResources().addItem(uItem);
         } else {
-            Bonus.receiveListItem(mUser, "buy_lottery_normal", Bonus.reverseBonus(CfgLottery.getFeeBuyNormal(nums.size())));
-            addErrSystem();
-            return;
+            List<Long> dataSticker = GsonUtil.strToListLong(uItem.getData() == null ? "[]" : uItem.getData());
+            if (dataSticker.isEmpty() || dataSticker.get(0) != eventDay) {
+                dataSticker = new ArrayList<>();
+                dataSticker.add(eventDay);
+            }
+            dataSticker.addAll(nums);
+            uItem.setData(dataSticker.toString());
+            uItem.update(List.of("data", uItem.getData()));
         }
         resItem.setStock(resItem.getStock() - nums.size());
         aBonus.add((long) Bonus.BONUS_ITEM);
+        aBonus.add((long) uItem.getType());
+        aBonus.add(uItem.getId());
         aBonus.add((long) uItem.getItemId());
-        aBonus.add((long) numAdd);
-        aBonus.add((long) nums.size());
         if (userMarket.updateShop(market, new Gson().toJson(aItem))) {
             addBonusToastPlus(aBonus);
-            mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.BUY_SHOP, numAdd);
+            mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.BUY_SHOP, nums.size());
             status(market.getId());
             // event 7 day attack boss day 2
             UserEventSevenDayEntity uEvent = Services.userDAO.getUserSevenDay(mUser);
-            if (uEvent.hasEvent() && uEvent.hasActive(3) && uEvent.update(List.of("buy_shop", uEvent.getBuyShop() + numAdd))) {
-                uEvent.setBuyShop(uEvent.getBuyShop() + numAdd);
+            if (uEvent.hasEvent() && uEvent.hasActive(3) && uEvent.update(List.of("buy_shop", uEvent.getBuyShop() + nums.size()))) {
+                uEvent.setBuyShop(uEvent.getBuyShop() + nums.size());
             }
         } else addErrResponse();
     }
