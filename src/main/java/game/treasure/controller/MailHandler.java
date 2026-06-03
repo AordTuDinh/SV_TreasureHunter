@@ -114,7 +114,8 @@ public class MailHandler extends AHandler {
                     addResponse(builder.build());
                 }
             }
-        } else { // view one
+        }
+        else { // view one
             UserMailEntity uMail = dbGetMail(mailId);
             if (uMail == null) {
                 addErrResponse(getLang(Lang.err_params));

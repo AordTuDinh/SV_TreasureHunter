@@ -250,28 +250,30 @@ public class Bonus {
 
     static List<Long> addSkin(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
         int type = aBonus.get(index++).getAsInt();
+        System.out.println("type = " + type);
         int skinId = aBonus.get(index++).getAsInt();
+        System.out.println("skinId = " + skinId);
         if (type == SkinType.DAMAGE_SKIN.value) {
             if (mUser.getUData().addDameSkin(skinId) && mUser.getUData().update(List.of("dame_skin", mUser.getUData().getDameSkin()))) {
                 if (CfgServer.isRealServer())
                     Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "dameSkin", "skinId", skinId);
                 return Arrays.asList((long) BONUS_SKIN, (long) type, (long) skinId);
             }
-            return new ArrayList<>();
+            return Arrays.asList((long) BONUS_SKIN, (long) type, (long) skinId);
         } else if (type == SkinType.CHAT_FRAME.value) {
             if (mUser.getUData().addChatFrame(skinId) && mUser.getUData().update(List.of("chat_frame", mUser.getUData().getChatFrame()))) {
                 if (CfgServer.isRealServer())
                     Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "chatFrame", "frameId", skinId);
                 return Arrays.asList((long) BONUS_SKIN, (long) type, (long) skinId);
             }
-            return new ArrayList<>();
+            return Arrays.asList((long) BONUS_SKIN, (long) type, (long) skinId);
         } else if (type == SkinType.TRIAL.value) {
             if (mUser.getUData().addEffectTrial(skinId) && mUser.getUData().update(List.of("list_trial", mUser.getUData().getListTrial()))) {
                 if (CfgServer.isRealServer())
                     Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "list_trial", "trialId", skinId);
                 return Arrays.asList((long) BONUS_SKIN, (long) type, (long) skinId);
             }
-            return new ArrayList<>();
+            return Arrays.asList((long) BONUS_SKIN, (long) type, (long) skinId);
         }
         return new ArrayList<>();
     }
