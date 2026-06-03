@@ -24,7 +24,6 @@ public class Bonus {
     public static final int BONUS_GOLD = 1;
     public static final int BONUS_GEM = 2;
     public static final int BONUS_RUBY = 3;
-    /** User item: preview [4, storageType, itemKey]; receive [4, storageType, userItemId, itemKey]. storageType 1-4 = user_item.type */
     public static final int BONUS_ITEM = 4;
     public static final int BONUS_ARTIFACT = 5;
     public static final int BONUS_SKIN = 7;
@@ -250,9 +249,7 @@ public class Bonus {
 
     static List<Long> addSkin(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
         int type = aBonus.get(index++).getAsInt();
-        System.out.println("type = " + type);
         int skinId = aBonus.get(index++).getAsInt();
-        System.out.println("skinId = " + skinId);
         if (type == SkinType.DAMAGE_SKIN.value) {
             if (mUser.getUData().addDameSkin(skinId) && mUser.getUData().update(List.of("dame_skin", mUser.getUData().getDameSkin()))) {
                 if (CfgServer.isRealServer())
