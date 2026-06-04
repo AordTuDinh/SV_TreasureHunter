@@ -253,7 +253,7 @@ message  PbUserData{
   optional int32 maxlvTraining = 5;
   optional int32 numPointLevel = 6;
   optional PbListItem items = 9;
-  repeated PbItem itemEquipments = 10; // dang mac
+  repeated int64 itemEquipments = 10; // dang mac
   optional PbListMaterial aMaterial = 12;
   repeated PbPet aPet = 15;
   repeated PbMount aMount = 16;
@@ -361,11 +361,12 @@ message  PbItem{
   optional  int64 id = 1;
   optional  int32 itemKey = 2;
   optional  int32 type = 3;
-  optional string data = 4;
-  optional  int32 level = 5;
-  repeated int64 point = 6;
-  optional  bool lockDestroy = 7;
-  optional  int32 tier = 8;
+  optional  int32 level = 4;
+  optional  bool lockDestroy = 5;
+  optional  int32 tier = 6;
+  optional  int32 slot = 7;
+  /** JSON list float, vd "[12.4]" — roll data instance (type=1 consumable). */
+  optional  string data = 8;
 }
 
 message  PbItemPoint{

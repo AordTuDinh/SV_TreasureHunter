@@ -11,15 +11,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CfgClan {
-    public static final int CHECK_IN_CLAN = 1;
-      public static final int ATTACK_BOSS = 2;
     public static final int NUM_ATTACK_BOSS = 3;
-    public static final int DYNAMIC_QUEST_D_100 = 3;
     public static DataConfig config;
     public static long timeWaitLeave = 12 * DateTime.HOUR_MILLI_SECOND;
     public static List<Integer> CLAN_RULE = Arrays.asList(ClanPosition.LEADER.value, ClanPosition.CO_LEADER.value);
-    public static float perGoldReset = 0.8f;
-    public static float perCointReset = 1f;
     public static List<Integer> slotClanBoss = Arrays.asList(0, 1, 2, 3, 4, 5);
 
     public static void loadConfig(String strJson) {
@@ -97,28 +92,17 @@ public class CfgClan {
     public class DataConfig {
         public int maxMember;
         public int clanNameLength;
-        public int maxNumHonor;
         public int introLength;
         public int levelCreateClan;
         public int feeCreate;
         public int feeCreateRuby;
-        public int feeReset;
-        public int feeOpenBoss;
         public int timeAttackBoss; //minutes
         public int feeChangeName;
         public List<Integer> exp;
-        public List<Integer> gemTopDameBoss;
-        public List<Integer> coinTopDameBoss;
         public List<DataHonor> bonusHonor;
         public int checkInGuildExp, checkInGuildCoin;
-        public int masterSkill;
         public int pointCheck;
-        public int timeQuest;
-        public int contributeX1;
-        public int contributeX10;
         public List<Integer> upgradeQuest;
-        public int maxPointDynamic;
-        public int maxBoxDynamic;
         public List<Long> bonusDynamic;
         public List<BonusConfig> bonusBoxDynamic;
         public List<ClanWelfare> clanWelfare;

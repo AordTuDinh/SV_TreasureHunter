@@ -157,7 +157,12 @@ public class Bonus {
                 || v == BONUS_PET || v == BONUS_MOUNT || v == BONUS_MATERIAL;
     }
 
-    /** Preview: [4,itemType,itemKey]. Trừ theo row: [4,itemType,userItemId,itemKey]. */
+    /**
+     * Preview config: [4,itemType,itemKey] hoặc [4,itemType,userItemId,itemKey].
+     * Receive response gửi client: [4,itemType,userItemId,itemKey,slot] — luôn 4 field sau type.
+     */
+    public static final int BONUS_ITEM_RECEIVE_PAYLOAD = 4;
+
     static int itemBonusConfigLength(List<Long> bonus, int index) {
         if (index + 1 >= bonus.size()) return 0;
         int itemType = bonus.get(index).intValue();
@@ -284,16 +289,22 @@ public class Bonus {
             UserItemEntity left = mUser.getResources().getItemByItemKey(itemKey);
             long rowId = left != null ? left.getId() : 0L;
             int st = left != null ? left.getType() : itemType;
-            return Arrays.asList((long) BONUS_ITEM, (long) st, rowId, (long) itemKey);
+            int slot = left != null ? left.getSlot() : -1;
+            return Arrays.asList((long) BONUS_ITEM, (long) st, rowId, (long) itemKey, (long) slot);
         }
         UserItemEntity uItem;
         if (itemKey == Pbmethod.ItemKey.TICKER_NORMAL.getNumber()) {
             uItem = checkGenItemData(mUser, 1);
-            return Arrays.asList((long) BONUS_ITEM, (long) uItem.getType(), uItem.getId(), (long) itemKey);
+            if (uItem == null) return new ArrayList<>();
+            return Arrays.asList((long) BONUS_ITEM, (long) uItem.getType(), uItem.getId(), (long) itemKey,
+                    (long) uItem.getSlot());
         }
         ItemType type = ItemType.get(itemType);
         if (type == null) type = ItemType.CONSUMABLE;
         uItem = new UserItemEntity(mUser.getUser().getId(), itemKey, type);
+        if (!prepareNewUserItemSlot(mUser, uItem)) return new ArrayList<>();
+        if (type == ItemType.CONSUMABLE)
+            ResItem.initConsumableInstanceData(uItem);
         if (DBJPA.save(uItem)) {
             mUser.getResources().addItem(uItem);
             if (CfgServer.isRealServer()) {
@@ -302,9 +313,11 @@ public class Bonus {
                         "id", uItem.getId(),
                         "itemId", itemKey,
                         "storageType", uItem.getType(),
+                        "slot", uItem.getSlot(),
                         "addValue", 1);
             }
-            return Arrays.asList((long) BONUS_ITEM, (long) uItem.getType(), uItem.getId(), (long) itemKey);
+            return Arrays.asList((long) BONUS_ITEM, (long) uItem.getType(), uItem.getId(), (long) itemKey,
+                    (long) uItem.getSlot());
         }
         return new ArrayList<>();
     }
@@ -315,6 +328,7 @@ public class Bonus {
         int itemKey = aBonus.get(index++).getAsInt();
         UserItemEntity uItem = mUser.getResources().getItem(userItemId);
         if (uItem == null || uItem.getItemId() != itemKey) return new ArrayList<>();
+        int slot = uItem.getSlot();
         if (uItem.isAggregatedItem()) {
             if (!mUser.getResources().removeItemsByItemKey(itemKey, 1)) return new ArrayList<>();
         } else if (!uItem.deleteFromDb()) {
@@ -326,7 +340,7 @@ public class Bonus {
             Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
                     "type", "user_item_remove", "id", userItemId, "itemId", itemKey);
         }
-        return Arrays.asList((long) BONUS_ITEM, (long) storageType, userItemId, (long) itemKey);
+        return Arrays.asList((long) BONUS_ITEM, (long) storageType, userItemId, (long) itemKey, (long) slot);
     }
 
     static UserItemEntity checkGenItemData(MyUser mUser, int numItem) {
@@ -338,6 +352,7 @@ public class Bonus {
         }
         if (uItem == null) {
             uItem = new UserItemEntity(mUser.getUser().getId(), Pbmethod.ItemKey.TICKER_NORMAL.getNumber(), ItemType.EVENT);
+            if (!prepareNewUserItemSlot(mUser, uItem)) return null;
             nums.add(0, eventDay);
             uItem.setData(StringHelper.toDBString(nums));
             DBJPA.save(uItem);
@@ -413,6 +428,7 @@ public class Bonus {
         if (CfgMaterial.get(materialId) == null) {
             return new ArrayList<>();
         }
+        if (!mUser.getResources().canAddMaterial(1)) return new ArrayList<>();
         UserMaterialEntity uMaterial = new UserMaterialEntity(mUser.getUser().getId(), materialId, rank);
         if (DBJPA.save(uMaterial)) {
             mUser.getResources().addMaterial(uMaterial);
@@ -621,5 +637,32 @@ public class Bonus {
             }
         });
         return result;
+    }
+
+    public static boolean prepareNewUserItemSlot(MyUser mUser, UserItemEntity uItem) {
+        ItemType type = ItemType.get(uItem.getType());
+        if (type == null) return true;
+        switch (type) {
+            case CONSUMABLE:
+            case EQUIPMENT:
+                if (!mUser.getResources().canAddBagItem(1)) return false;
+                Integer bagSlot = mUser.getResources().allocBagSlot();
+                if (bagSlot == null) return false;
+                uItem.setSlot(bagSlot);
+                return true;
+            case EVENT:
+                if (!mUser.getResources().canAddEventItem(1)) return false;
+                Integer eventSlot = mUser.getResources().allocEventSlot();
+                if (eventSlot == null) return false;
+                uItem.setSlot(eventSlot);
+                return true;
+            default:
+                return true;
+        }
+    }
+
+    public static boolean isAggregatedEventItemKey(int itemKey) {
+        return itemKey == Pbmethod.ItemKey.TICKER_NORMAL.getNumber()
+                || itemKey == Pbmethod.ItemKey.TICKER_SPECIAL.getNumber();
     }
 }

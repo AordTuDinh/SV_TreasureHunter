@@ -37,7 +37,7 @@ public class UserDataEntity implements Serializable {
     String numSlot, dataInt, checkIn;
     String buff; // [time25,time50,timex2 ...] x9
     String dameSkin, chatFrame, listTrial;
-    int dameSkinEquip, chatFrameEquip, trialEquip, effInit,craftLevel,craftExp;
+    int dameSkinEquip, chatFrameEquip, trialEquip, effInit, craftLevel, craftExp;
 
     @Transient
     int maxLvTraining = 60;
@@ -49,7 +49,7 @@ public class UserDataEntity implements Serializable {
     public UserDataEntity(int userId) {
         this.userId = userId;
         this.effInit = 0;
-        this.numSlot = CfgUser.getSlotBagInit();    // item UI - item material - item event
+        this.numSlot = CfgUser.getSlotBagInit();    // [slotBagUI, material, event]
         this.dameSkin = "[0]";
         this.listTrial = "[0]";
         this.chatFrame = "[0]";
@@ -96,6 +96,21 @@ public class UserDataEntity implements Serializable {
         return slot;
     }
 
+    /** Số ô slotBagUI — gộp item type 1 (consumable) + type 2 (equipment chưa mặc). */
+    public int getSlotBagUI() {
+        return getSlot().get(0);
+    }
+
+    /** Số ô material. */
+    public int getSlotMaterial() {
+        return getSlot().get(1);
+    }
+
+    /** Số ô item sự kiện — user_item type 4. */
+    public int getSlotEvent() {
+        return getSlot().get(2);
+    }
+
     public List<Integer> getListDameSkin() {
         List<Integer> dameSkins = GsonUtil.strToListInt(dameSkin);
         if (!dameSkins.contains(0)) dameSkins.add(0);
@@ -108,8 +123,10 @@ public class UserDataEntity implements Serializable {
         return chatFrame;
     }
 
+    /** @deprecated dùng {@link #getSlotBagUI()} */
+    @Deprecated
     public int getNumSlot() {
-        return 10;
+        return getSlotBagUI();
     }
 
     public List<Integer> getListIntTrial() {
@@ -189,7 +206,7 @@ public class UserDataEntity implements Serializable {
     }
 
     public Pbmethod.PbUserData toProto(MyUser mUser) {
-        List<Integer> slots=  getSlot();
+        List<Integer> slots = getSlot();
         Pbmethod.PbUserData.Builder pb = Pbmethod.PbUserData.newBuilder();
         pb.setSlogBagUI(slots.get(0));
         pb.setSlotMaterial(slots.get(1));
@@ -205,6 +222,7 @@ public class UserDataEntity implements Serializable {
         pb.setCraftLevel(craftLevel);
         pb.setCraftExp(craftExp);
         pb.addAllTrials(getListIntTrial());
+
         Pbmethod.PbListItem.Builder lstItem = Pbmethod.PbListItem.newBuilder();
         for (Map.Entry<Long, UserItemEntity> item : mUser.getResources().getMItem().entrySet()) {
             UserItemEntity uItem = item.getValue();
@@ -237,7 +255,7 @@ public class UserDataEntity implements Serializable {
             if (lstEquip.get(i) > 0) {
                 UserItemEntity iEquip = mUser.getResources().getItemEquipment(lstEquip.get(i));
                 if (iEquip != null) {
-                    pb.addItemEquipments(iEquip.toProto());
+                    pb.addItemEquipments(iEquip.getId());
                 }
             }
         }

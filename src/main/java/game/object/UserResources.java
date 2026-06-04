@@ -11,8 +11,10 @@ import ozudo.base.log.Logs;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class UserResources implements Serializable {
@@ -138,13 +140,82 @@ public class UserResources implements Serializable {
     }
 
     public int getNumItemBag() {
+        Set<Integer> equippedIds = new HashSet<>(mUser.getUser().getListIdEquipmentEquip());
         return (int) mItem.values().stream()
-                .filter(item -> !item.isEquipment())
+                .filter(item -> occupiesBagSlot(item, equippedIds))
                 .count();
+    }
+
+    public int getNumItemEvent() {
+        return (int) mItem.values().stream()
+                .filter(item -> item.getType() == ItemType.EVENT.value)
+                .count();
+    }
+
+    public int getNumMaterial() {
+        return mMaterial.size();
     }
 
     public int getNumEquipment() {
         return (int) mItem.values().stream().filter(UserItemEntity::isEquipment).count();
+    }
+
+    public boolean canAddBagItem(int count) {
+        if (count <= 0) return true;
+        return getNumItemBag() + count <= mUser.getUData().getSlotBagUI();
+    }
+
+    public boolean canAddEventItem(int count) {
+        if (count <= 0) return true;
+        return getNumItemEvent() + count <= mUser.getUData().getSlotEvent();
+    }
+
+    public boolean canAddMaterial(int count) {
+        if (count <= 0) return true;
+        return getNumMaterial() + count <= mUser.getUData().getSlotMaterial();
+    }
+
+    public Integer allocBagSlot() {
+        return allocSlotIndex(collectUsedBagSlots(), mUser.getUData().getSlotBagUI());
+    }
+
+    public Integer allocEventSlot() {
+        return allocSlotIndex(collectUsedEventSlots(), mUser.getUData().getSlotEvent());
+    }
+
+    private Set<Integer> collectUsedBagSlots() {
+        Set<Integer> equippedIds = new HashSet<>(mUser.getUser().getListIdEquipmentEquip());
+        Set<Integer> used = new HashSet<>();
+        for (UserItemEntity item : mItem.values()) {
+            if (occupiesBagSlot(item, equippedIds))
+                used.add(item.getSlot());
+        }
+        return used;
+    }
+
+    private Set<Integer> collectUsedEventSlots() {
+        Set<Integer> used = new HashSet<>();
+        for (UserItemEntity item : mItem.values()) {
+            if (item.getType() == ItemType.EVENT.value)
+                used.add(item.getSlot());
+        }
+        return used;
+    }
+
+    private static Integer allocSlotIndex(Set<Integer> usedSlots, int maxSlot) {
+        for (int i = 0; i < maxSlot; i++) {
+            if (!usedSlots.contains(i))
+                return i;
+        }
+        return null;
+    }
+
+    private static boolean occupiesBagSlot(UserItemEntity item, Set<Integer> equippedIds) {
+        if (item.getType() == ItemType.CONSUMABLE.value)
+            return true;
+        if (item.getType() == ItemType.EQUIPMENT.value)
+            return !equippedIds.contains((int) item.getId());
+        return false;
     }
 
     public UserPetEntity getPet(long id) {

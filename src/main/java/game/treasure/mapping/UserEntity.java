@@ -28,7 +28,7 @@ public class UserEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-    String name, username,  gameChannel, version, packBuy, lang;
+    String name, username, gameChannel, version, packBuy, lang;
     int clan, clanAvatar, clanRank, mainId, clanPosition;
     String clanName, pointData;
     String itemEquipment; // id - key - level
@@ -85,7 +85,7 @@ public class UserEntity implements Serializable {
         boolean update = false;
         for (int i = 0; i < items.size(); i += 3) {
             UserItemEntity item = mUser.getResources().getItemEquipment(items.get(i));
-            if (item == null ) { // check hết hạn thì xóa khỏi equip
+            if (item == null) { // check hết hạn thì xóa khỏi equip
                 items.set(i, 0);
                 update = true;
             }
@@ -107,9 +107,10 @@ public class UserEntity implements Serializable {
     }
 
     public List<Integer> getListPackBuy() {
-        if(packBuy==null || packBuy.isEmpty()) packBuy="[]";
+        if (packBuy == null || packBuy.isEmpty()) packBuy = "[]";
         return GsonUtil.strToListInt(packBuy);
     }
+
 
 
     public List<Integer> getListIdEquipmentEquip() { // only id

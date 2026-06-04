@@ -283,6 +283,11 @@ public class MarketHandler extends AHandler {
             List<Long> numNew = new ArrayList<>(nums);
             numNew.add(0, eventDay);
             uItem.setData(StringHelper.toDBString(numNew));
+            if (!Bonus.prepareNewUserItemSlot(mUser, uItem)) {
+                Bonus.receiveListItem(mUser, "buy_lottery_special", Bonus.reverseBonus(CfgLottery.getFeeBuySpecial(nums.size())));
+                addErrResponse(getLang(Lang.err_max_slot));
+                return;
+            }
             saved = DBJPA.save(uItem);
             if (saved) mUser.getResources().addItem(uItem);
         } else {

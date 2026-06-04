@@ -38,7 +38,7 @@ public class UserItemEntity implements Serializable {
     int level;
     int lockDestroy;
     int tier;
-    String point;
+    int slot;
     String data;
 
     @Transient
@@ -51,26 +51,10 @@ public class UserItemEntity implements Serializable {
         this.itemId = itemId;
         this.type = type.value;
         level = 0;
+        slot = -1;
         lockDestroy = 0;
         tier = 1;
-        point = "[]";
-        genDataItem();
-    }
-
-    void genDataItem() {
-        if (type != CONSUMABLE.value) {
-            if (data == null || data.isEmpty()) data = "[]";
-            return;
-        }
-        ItemType resType = getResItemType();
-        switch (resType) {
-//            case QUEST_B -> {
-//                int day = DateTime.getNumberDay();
-//                List<Integer> questData = List.of(day, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0);
-//                this.data = StringHelper.toDBString(questData);
-//            }
-            default -> this.data = "[]";
-        }
+        data = "[]";
     }
 
     public boolean isEquipment() {
@@ -83,8 +67,8 @@ public class UserItemEntity implements Serializable {
     }
 
 
-    public List<Integer> getDataListInt() {
-        return GsonUtil.strToListInt(data);
+    public List<Long> getDataListLong() {
+        return GsonUtil.strToListLong(data);
     }
 
     public void clearAggregated() {
@@ -97,9 +81,11 @@ public class UserItemEntity implements Serializable {
         pb.setItemKey(itemId);
         pb.setType(type);
         pb.setLevel(level);
-        pb.setData(data == null ? "[]" : data);
         pb.setLockDestroy(lockDestroy == 1);
-        pb.addAllPoint(getPointList());
+        pb.setTier(tier);
+        pb.setSlot(slot);
+        if (data != null && !data.isEmpty() && !"[]".equals(data))
+            pb.setData(data);
         return pb;
     }
 
@@ -116,14 +102,6 @@ public class UserItemEntity implements Serializable {
         return ResItem.getItemEquipment(itemId);
     }
 
-    public List<Long> getPointList() {
-        if (point == null || point.isEmpty()) return new ArrayList<>();
-        return new ArrayList<>(GsonUtil.strToListLong(point));
-    }
-
-    public void setPointList(List<Long> points) {
-        this.point = GsonUtil.toJson(points);
-    }
 
     public void addLevel() {
         this.level++;

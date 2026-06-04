@@ -234,20 +234,34 @@ public class MyUser implements Serializable {
 
     public boolean checkSlotAddBonus(List<Long> bonus) {
         List<List<Long>> aBonus = Bonus.parse(bonus);
-        int numItem = 0, numItemEquip = 0;
+        int numBag = 0;
+        int numEvent = 0;
+        int numMaterial = 0;
         for (List<Long> chunk : aBonus) {
-            if (chunk.get(0).intValue() != Bonus.BONUS_ITEM) continue;
-            int itemKey = chunk.get(chunk.size() - 1).intValue();
-            if (chunk.size() >= 3 && chunk.get(1).intValue() == ItemType.EQUIPMENT.value) {
-                numItemEquip++;
-            } else if (ResItem.getItemEquipment(itemKey) != null) {
-                numItemEquip++;
-            } else {
-                numItem++;
+            if (chunk.isEmpty()) continue;
+            int bonusType = chunk.get(0).intValue();
+            if (bonusType == Bonus.BONUS_ITEM) {
+                int itemKey = chunk.get(chunk.size() - 1).intValue();
+                if (itemKey < 0) continue;
+                int storageType = chunk.size() >= 3 ? chunk.get(1).intValue() : ItemType.CONSUMABLE.value;
+                if (Bonus.isAggregatedEventItemKey(itemKey)) {
+                    if (resources.getItemByItemKey(itemKey) == null) numEvent++;
+                    continue;
+                }
+                if (storageType == ItemType.EVENT.value) {
+                    numEvent++;
+                } else if (storageType == ItemType.CONSUMABLE.value
+                        || storageType == ItemType.EQUIPMENT.value
+                        || ResItem.getItemEquipment(itemKey) != null) {
+                    numBag++;
+                }
+            } else if (bonusType == Bonus.BONUS_MATERIAL) {
+                numMaterial++;
             }
         }
-        if (numItem > 0) return resources.getNumItemBag() + numItem <= uData.getNumSlot();
-        if (numItemEquip > 0) return resources.getNumEquipment() + numItemEquip <= uData.getNumSlot();
+        if (numBag > 0 && !resources.canAddBagItem(numBag)) return false;
+        if (numEvent > 0 && !resources.canAddEventItem(numEvent)) return false;
+        if (numMaterial > 0 && !resources.canAddMaterial(numMaterial)) return false;
         return true;
     }
 

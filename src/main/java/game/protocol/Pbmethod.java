@@ -24001,30 +24001,31 @@ public final class Pbmethod {
      */
     protocol.Pbmethod.PbListItemOrBuilder getItemsOrBuilder();
 
-    // repeated .pbdson.PbItem itemEquipments = 10;
+    // repeated int64 itemEquipments = 10;
     /**
-     * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
+     * <code>repeated int64 itemEquipments = 10;</code>
+     *
+     * <pre>
+     * dang mac
+     * </pre>
      */
-    java.util.List<protocol.Pbmethod.PbItem> 
-        getItemEquipmentsList();
+    java.util.List<java.lang.Long> getItemEquipmentsList();
     /**
-     * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
-     */
-    protocol.Pbmethod.PbItem getItemEquipments(int index);
-    /**
-     * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
+     * <code>repeated int64 itemEquipments = 10;</code>
+     *
+     * <pre>
+     * dang mac
+     * </pre>
      */
     int getItemEquipmentsCount();
     /**
-     * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
+     * <code>repeated int64 itemEquipments = 10;</code>
+     *
+     * <pre>
+     * dang mac
+     * </pre>
      */
-    java.util.List<? extends protocol.Pbmethod.PbItemOrBuilder> 
-        getItemEquipmentsOrBuilderList();
-    /**
-     * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
-     */
-    protocol.Pbmethod.PbItemOrBuilder getItemEquipmentsOrBuilder(
-        int index);
+    long getItemEquipments(int index);
 
     // optional .pbdson.PbListMaterial aMaterial = 12;
     /**
@@ -24286,12 +24287,25 @@ public final class Pbmethod {
               bitField0_ |= 0x00000040;
               break;
             }
-            case 82: {
+            case 80: {
               if (!((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
-                itemEquipments_ = new java.util.ArrayList<protocol.Pbmethod.PbItem>();
+                itemEquipments_ = new java.util.ArrayList<java.lang.Long>();
                 mutable_bitField0_ |= 0x00000080;
               }
-              itemEquipments_.add(input.readMessage(protocol.Pbmethod.PbItem.PARSER, extensionRegistry));
+              itemEquipments_.add(input.readInt64());
+              break;
+            }
+            case 82: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000080) == 0x00000080) && input.getBytesUntilLimit() > 0) {
+                itemEquipments_ = new java.util.ArrayList<java.lang.Long>();
+                mutable_bitField0_ |= 0x00000080;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                itemEquipments_.add(input.readInt64());
+              }
+              input.popLimit(limit);
               break;
             }
             case 98: {
@@ -24592,39 +24606,38 @@ public final class Pbmethod {
       return items_;
     }
 
-    // repeated .pbdson.PbItem itemEquipments = 10;
+    // repeated int64 itemEquipments = 10;
     public static final int ITEMEQUIPMENTS_FIELD_NUMBER = 10;
-    private java.util.List<protocol.Pbmethod.PbItem> itemEquipments_;
+    private java.util.List<java.lang.Long> itemEquipments_;
     /**
-     * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
+     * <code>repeated int64 itemEquipments = 10;</code>
+     *
+     * <pre>
+     * dang mac
+     * </pre>
      */
-    public java.util.List<protocol.Pbmethod.PbItem> getItemEquipmentsList() {
+    public java.util.List<java.lang.Long>
+        getItemEquipmentsList() {
       return itemEquipments_;
     }
     /**
-     * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
-     */
-    public java.util.List<? extends protocol.Pbmethod.PbItemOrBuilder> 
-        getItemEquipmentsOrBuilderList() {
-      return itemEquipments_;
-    }
-    /**
-     * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
+     * <code>repeated int64 itemEquipments = 10;</code>
+     *
+     * <pre>
+     * dang mac
+     * </pre>
      */
     public int getItemEquipmentsCount() {
       return itemEquipments_.size();
     }
     /**
-     * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
+     * <code>repeated int64 itemEquipments = 10;</code>
+     *
+     * <pre>
+     * dang mac
+     * </pre>
      */
-    public protocol.Pbmethod.PbItem getItemEquipments(int index) {
-      return itemEquipments_.get(index);
-    }
-    /**
-     * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
-     */
-    public protocol.Pbmethod.PbItemOrBuilder getItemEquipmentsOrBuilder(
-        int index) {
+    public long getItemEquipments(int index) {
       return itemEquipments_.get(index);
     }
 
@@ -24943,7 +24956,7 @@ public final class Pbmethod {
         output.writeMessage(9, items_);
       }
       for (int i = 0; i < itemEquipments_.size(); i++) {
-        output.writeMessage(10, itemEquipments_.get(i));
+        output.writeInt64(10, itemEquipments_.get(i));
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         output.writeMessage(12, aMaterial_);
@@ -25018,9 +25031,14 @@ public final class Pbmethod {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(9, items_);
       }
-      for (int i = 0; i < itemEquipments_.size(); i++) {
-        size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(10, itemEquipments_.get(i));
+      {
+        int dataSize = 0;
+        for (int i = 0; i < itemEquipments_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeInt64SizeNoTag(itemEquipments_.get(i));
+        }
+        size += dataSize;
+        size += 1 * getItemEquipmentsList().size();
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
@@ -25194,7 +25212,6 @@ public final class Pbmethod {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
           getItemsFieldBuilder();
-          getItemEquipmentsFieldBuilder();
           getAMaterialFieldBuilder();
           getAPetFieldBuilder();
           getAMountFieldBuilder();
@@ -25224,12 +25241,8 @@ public final class Pbmethod {
           itemsBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x00000040);
-        if (itemEquipmentsBuilder_ == null) {
-          itemEquipments_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000080);
-        } else {
-          itemEquipmentsBuilder_.clear();
-        }
+        itemEquipments_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000080);
         if (aMaterialBuilder_ == null) {
           aMaterial_ = protocol.Pbmethod.PbListMaterial.getDefaultInstance();
         } else {
@@ -25326,15 +25339,11 @@ public final class Pbmethod {
         } else {
           result.items_ = itemsBuilder_.build();
         }
-        if (itemEquipmentsBuilder_ == null) {
-          if (((bitField0_ & 0x00000080) == 0x00000080)) {
-            itemEquipments_ = java.util.Collections.unmodifiableList(itemEquipments_);
-            bitField0_ = (bitField0_ & ~0x00000080);
-          }
-          result.itemEquipments_ = itemEquipments_;
-        } else {
-          result.itemEquipments_ = itemEquipmentsBuilder_.build();
+        if (((bitField0_ & 0x00000080) == 0x00000080)) {
+          itemEquipments_ = java.util.Collections.unmodifiableList(itemEquipments_);
+          bitField0_ = (bitField0_ & ~0x00000080);
         }
+        result.itemEquipments_ = itemEquipments_;
         if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
           to_bitField0_ |= 0x00000080;
         }
@@ -25437,31 +25446,15 @@ public final class Pbmethod {
         if (other.hasItems()) {
           mergeItems(other.getItems());
         }
-        if (itemEquipmentsBuilder_ == null) {
-          if (!other.itemEquipments_.isEmpty()) {
-            if (itemEquipments_.isEmpty()) {
-              itemEquipments_ = other.itemEquipments_;
-              bitField0_ = (bitField0_ & ~0x00000080);
-            } else {
-              ensureItemEquipmentsIsMutable();
-              itemEquipments_.addAll(other.itemEquipments_);
-            }
-            onChanged();
+        if (!other.itemEquipments_.isEmpty()) {
+          if (itemEquipments_.isEmpty()) {
+            itemEquipments_ = other.itemEquipments_;
+            bitField0_ = (bitField0_ & ~0x00000080);
+          } else {
+            ensureItemEquipmentsIsMutable();
+            itemEquipments_.addAll(other.itemEquipments_);
           }
-        } else {
-          if (!other.itemEquipments_.isEmpty()) {
-            if (itemEquipmentsBuilder_.isEmpty()) {
-              itemEquipmentsBuilder_.dispose();
-              itemEquipmentsBuilder_ = null;
-              itemEquipments_ = other.itemEquipments_;
-              bitField0_ = (bitField0_ & ~0x00000080);
-              itemEquipmentsBuilder_ = 
-                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
-                   getItemEquipmentsFieldBuilder() : null;
-            } else {
-              itemEquipmentsBuilder_.addAllMessages(other.itemEquipments_);
-            }
-          }
+          onChanged();
         }
         if (other.hasAMaterial()) {
           mergeAMaterial(other.getAMaterial());
@@ -25908,244 +25901,98 @@ public final class Pbmethod {
         return itemsBuilder_;
       }
 
-      // repeated .pbdson.PbItem itemEquipments = 10;
-      private java.util.List<protocol.Pbmethod.PbItem> itemEquipments_ =
-        java.util.Collections.emptyList();
+      // repeated int64 itemEquipments = 10;
+      private java.util.List<java.lang.Long> itemEquipments_ = java.util.Collections.emptyList();
       private void ensureItemEquipmentsIsMutable() {
         if (!((bitField0_ & 0x00000080) == 0x00000080)) {
-          itemEquipments_ = new java.util.ArrayList<protocol.Pbmethod.PbItem>(itemEquipments_);
+          itemEquipments_ = new java.util.ArrayList<java.lang.Long>(itemEquipments_);
           bitField0_ |= 0x00000080;
          }
       }
-
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbItem, protocol.Pbmethod.PbItem.Builder, protocol.Pbmethod.PbItemOrBuilder> itemEquipmentsBuilder_;
-
       /**
-       * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
+       * <code>repeated int64 itemEquipments = 10;</code>
+       *
+       * <pre>
+       * dang mac
+       * </pre>
        */
-      public java.util.List<protocol.Pbmethod.PbItem> getItemEquipmentsList() {
-        if (itemEquipmentsBuilder_ == null) {
-          return java.util.Collections.unmodifiableList(itemEquipments_);
-        } else {
-          return itemEquipmentsBuilder_.getMessageList();
-        }
+      public java.util.List<java.lang.Long>
+          getItemEquipmentsList() {
+        return java.util.Collections.unmodifiableList(itemEquipments_);
       }
       /**
-       * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
+       * <code>repeated int64 itemEquipments = 10;</code>
+       *
+       * <pre>
+       * dang mac
+       * </pre>
        */
       public int getItemEquipmentsCount() {
-        if (itemEquipmentsBuilder_ == null) {
-          return itemEquipments_.size();
-        } else {
-          return itemEquipmentsBuilder_.getCount();
-        }
+        return itemEquipments_.size();
       }
       /**
-       * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
+       * <code>repeated int64 itemEquipments = 10;</code>
+       *
+       * <pre>
+       * dang mac
+       * </pre>
        */
-      public protocol.Pbmethod.PbItem getItemEquipments(int index) {
-        if (itemEquipmentsBuilder_ == null) {
-          return itemEquipments_.get(index);
-        } else {
-          return itemEquipmentsBuilder_.getMessage(index);
-        }
+      public long getItemEquipments(int index) {
+        return itemEquipments_.get(index);
       }
       /**
-       * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
-       */
-      public Builder setItemEquipments(
-          int index, protocol.Pbmethod.PbItem value) {
-        if (itemEquipmentsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureItemEquipmentsIsMutable();
-          itemEquipments_.set(index, value);
-          onChanged();
-        } else {
-          itemEquipmentsBuilder_.setMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
+       * <code>repeated int64 itemEquipments = 10;</code>
+       *
+       * <pre>
+       * dang mac
+       * </pre>
        */
       public Builder setItemEquipments(
-          int index, protocol.Pbmethod.PbItem.Builder builderForValue) {
-        if (itemEquipmentsBuilder_ == null) {
-          ensureItemEquipmentsIsMutable();
-          itemEquipments_.set(index, builderForValue.build());
-          onChanged();
-        } else {
-          itemEquipmentsBuilder_.setMessage(index, builderForValue.build());
-        }
+          int index, long value) {
+        ensureItemEquipmentsIsMutable();
+        itemEquipments_.set(index, value);
+        onChanged();
         return this;
       }
       /**
-       * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
+       * <code>repeated int64 itemEquipments = 10;</code>
+       *
+       * <pre>
+       * dang mac
+       * </pre>
        */
-      public Builder addItemEquipments(protocol.Pbmethod.PbItem value) {
-        if (itemEquipmentsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureItemEquipmentsIsMutable();
-          itemEquipments_.add(value);
-          onChanged();
-        } else {
-          itemEquipmentsBuilder_.addMessage(value);
-        }
+      public Builder addItemEquipments(long value) {
+        ensureItemEquipmentsIsMutable();
+        itemEquipments_.add(value);
+        onChanged();
         return this;
       }
       /**
-       * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
-       */
-      public Builder addItemEquipments(
-          int index, protocol.Pbmethod.PbItem value) {
-        if (itemEquipmentsBuilder_ == null) {
-          if (value == null) {
-            throw new NullPointerException();
-          }
-          ensureItemEquipmentsIsMutable();
-          itemEquipments_.add(index, value);
-          onChanged();
-        } else {
-          itemEquipmentsBuilder_.addMessage(index, value);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
-       */
-      public Builder addItemEquipments(
-          protocol.Pbmethod.PbItem.Builder builderForValue) {
-        if (itemEquipmentsBuilder_ == null) {
-          ensureItemEquipmentsIsMutable();
-          itemEquipments_.add(builderForValue.build());
-          onChanged();
-        } else {
-          itemEquipmentsBuilder_.addMessage(builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
-       */
-      public Builder addItemEquipments(
-          int index, protocol.Pbmethod.PbItem.Builder builderForValue) {
-        if (itemEquipmentsBuilder_ == null) {
-          ensureItemEquipmentsIsMutable();
-          itemEquipments_.add(index, builderForValue.build());
-          onChanged();
-        } else {
-          itemEquipmentsBuilder_.addMessage(index, builderForValue.build());
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
+       * <code>repeated int64 itemEquipments = 10;</code>
+       *
+       * <pre>
+       * dang mac
+       * </pre>
        */
       public Builder addAllItemEquipments(
-          java.lang.Iterable<? extends protocol.Pbmethod.PbItem> values) {
-        if (itemEquipmentsBuilder_ == null) {
-          ensureItemEquipmentsIsMutable();
-          super.addAll(values, itemEquipments_);
-          onChanged();
-        } else {
-          itemEquipmentsBuilder_.addAllMessages(values);
-        }
+          java.lang.Iterable<? extends java.lang.Long> values) {
+        ensureItemEquipmentsIsMutable();
+        super.addAll(values, itemEquipments_);
+        onChanged();
         return this;
       }
       /**
-       * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
+       * <code>repeated int64 itemEquipments = 10;</code>
+       *
+       * <pre>
+       * dang mac
+       * </pre>
        */
       public Builder clearItemEquipments() {
-        if (itemEquipmentsBuilder_ == null) {
-          itemEquipments_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000080);
-          onChanged();
-        } else {
-          itemEquipmentsBuilder_.clear();
-        }
+        itemEquipments_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000080);
+        onChanged();
         return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
-       */
-      public Builder removeItemEquipments(int index) {
-        if (itemEquipmentsBuilder_ == null) {
-          ensureItemEquipmentsIsMutable();
-          itemEquipments_.remove(index);
-          onChanged();
-        } else {
-          itemEquipmentsBuilder_.remove(index);
-        }
-        return this;
-      }
-      /**
-       * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
-       */
-      public protocol.Pbmethod.PbItem.Builder getItemEquipmentsBuilder(
-          int index) {
-        return getItemEquipmentsFieldBuilder().getBuilder(index);
-      }
-      /**
-       * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
-       */
-      public protocol.Pbmethod.PbItemOrBuilder getItemEquipmentsOrBuilder(
-          int index) {
-        if (itemEquipmentsBuilder_ == null) {
-          return itemEquipments_.get(index);  } else {
-          return itemEquipmentsBuilder_.getMessageOrBuilder(index);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
-       */
-      public java.util.List<? extends protocol.Pbmethod.PbItemOrBuilder> 
-           getItemEquipmentsOrBuilderList() {
-        if (itemEquipmentsBuilder_ != null) {
-          return itemEquipmentsBuilder_.getMessageOrBuilderList();
-        } else {
-          return java.util.Collections.unmodifiableList(itemEquipments_);
-        }
-      }
-      /**
-       * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
-       */
-      public protocol.Pbmethod.PbItem.Builder addItemEquipmentsBuilder() {
-        return getItemEquipmentsFieldBuilder().addBuilder(
-            protocol.Pbmethod.PbItem.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
-       */
-      public protocol.Pbmethod.PbItem.Builder addItemEquipmentsBuilder(
-          int index) {
-        return getItemEquipmentsFieldBuilder().addBuilder(
-            index, protocol.Pbmethod.PbItem.getDefaultInstance());
-      }
-      /**
-       * <code>repeated .pbdson.PbItem itemEquipments = 10;</code>
-       */
-      public java.util.List<protocol.Pbmethod.PbItem.Builder> 
-           getItemEquipmentsBuilderList() {
-        return getItemEquipmentsFieldBuilder().getBuilderList();
-      }
-      private com.google.protobuf.RepeatedFieldBuilder<
-          protocol.Pbmethod.PbItem, protocol.Pbmethod.PbItem.Builder, protocol.Pbmethod.PbItemOrBuilder> 
-          getItemEquipmentsFieldBuilder() {
-        if (itemEquipmentsBuilder_ == null) {
-          itemEquipmentsBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              protocol.Pbmethod.PbItem, protocol.Pbmethod.PbItem.Builder, protocol.Pbmethod.PbItemOrBuilder>(
-                  itemEquipments_,
-                  ((bitField0_ & 0x00000080) == 0x00000080),
-                  getParentForChildren(),
-                  isClean());
-          itemEquipments_ = null;
-        }
-        return itemEquipmentsBuilder_;
       }
 
       // optional .pbdson.PbListMaterial aMaterial = 12;
@@ -39310,64 +39157,72 @@ public final class Pbmethod {
      */
     int getType();
 
-    // optional string data = 4;
+    // optional int32 level = 4;
     /**
-     * <code>optional string data = 4;</code>
-     */
-    boolean hasData();
-    /**
-     * <code>optional string data = 4;</code>
-     */
-    java.lang.String getData();
-    /**
-     * <code>optional string data = 4;</code>
-     */
-    com.google.protobuf.ByteString
-        getDataBytes();
-
-    // optional int32 level = 5;
-    /**
-     * <code>optional int32 level = 5;</code>
+     * <code>optional int32 level = 4;</code>
      */
     boolean hasLevel();
     /**
-     * <code>optional int32 level = 5;</code>
+     * <code>optional int32 level = 4;</code>
      */
     int getLevel();
 
-    // repeated int64 point = 6;
+    // optional bool lockDestroy = 5;
     /**
-     * <code>repeated int64 point = 6;</code>
-     */
-    java.util.List<java.lang.Long> getPointList();
-    /**
-     * <code>repeated int64 point = 6;</code>
-     */
-    int getPointCount();
-    /**
-     * <code>repeated int64 point = 6;</code>
-     */
-    long getPoint(int index);
-
-    // optional bool lockDestroy = 7;
-    /**
-     * <code>optional bool lockDestroy = 7;</code>
+     * <code>optional bool lockDestroy = 5;</code>
      */
     boolean hasLockDestroy();
     /**
-     * <code>optional bool lockDestroy = 7;</code>
+     * <code>optional bool lockDestroy = 5;</code>
      */
     boolean getLockDestroy();
 
-    // optional int32 tier = 8;
+    // optional int32 tier = 6;
     /**
-     * <code>optional int32 tier = 8;</code>
+     * <code>optional int32 tier = 6;</code>
      */
     boolean hasTier();
     /**
-     * <code>optional int32 tier = 8;</code>
+     * <code>optional int32 tier = 6;</code>
      */
     int getTier();
+
+    // optional int32 slot = 7;
+    /**
+     * <code>optional int32 slot = 7;</code>
+     */
+    boolean hasSlot();
+    /**
+     * <code>optional int32 slot = 7;</code>
+     */
+    int getSlot();
+
+    // optional string data = 8;
+    /**
+     * <code>optional string data = 8;</code>
+     *
+     * <pre>
+     ** JSON list float, vd "[12.4]" — roll data instance (type=1 consumable). 
+     * </pre>
+     */
+    boolean hasData();
+    /**
+     * <code>optional string data = 8;</code>
+     *
+     * <pre>
+     ** JSON list float, vd "[12.4]" — roll data instance (type=1 consumable). 
+     * </pre>
+     */
+    java.lang.String getData();
+    /**
+     * <code>optional string data = 8;</code>
+     *
+     * <pre>
+     ** JSON list float, vd "[12.4]" — roll data instance (type=1 consumable). 
+     * </pre>
+     */
+    com.google.protobuf.ByteString
+        getDataBytes();
   }
   /**
    * Protobuf type {@code pbdson.PbItem}
@@ -39435,45 +39290,29 @@ public final class Pbmethod {
               type_ = input.readInt32();
               break;
             }
-            case 34: {
+            case 32: {
               bitField0_ |= 0x00000008;
-              data_ = input.readBytes();
+              level_ = input.readInt32();
               break;
             }
             case 40: {
               bitField0_ |= 0x00000010;
-              level_ = input.readInt32();
-              break;
-            }
-            case 48: {
-              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
-                point_ = new java.util.ArrayList<java.lang.Long>();
-                mutable_bitField0_ |= 0x00000020;
-              }
-              point_.add(input.readInt64());
-              break;
-            }
-            case 50: {
-              int length = input.readRawVarint32();
-              int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00000020) == 0x00000020) && input.getBytesUntilLimit() > 0) {
-                point_ = new java.util.ArrayList<java.lang.Long>();
-                mutable_bitField0_ |= 0x00000020;
-              }
-              while (input.getBytesUntilLimit() > 0) {
-                point_.add(input.readInt64());
-              }
-              input.popLimit(limit);
-              break;
-            }
-            case 56: {
-              bitField0_ |= 0x00000020;
               lockDestroy_ = input.readBool();
               break;
             }
-            case 64: {
-              bitField0_ |= 0x00000040;
+            case 48: {
+              bitField0_ |= 0x00000020;
               tier_ = input.readInt32();
+              break;
+            }
+            case 56: {
+              bitField0_ |= 0x00000040;
+              slot_ = input.readInt32();
+              break;
+            }
+            case 66: {
+              bitField0_ |= 0x00000080;
+              data_ = input.readBytes();
               break;
             }
           }
@@ -39484,9 +39323,6 @@ public final class Pbmethod {
         throw new com.google.protobuf.InvalidProtocolBufferException(
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
-        if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
-          point_ = java.util.Collections.unmodifiableList(point_);
-        }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
       }
@@ -39567,17 +39403,89 @@ public final class Pbmethod {
       return type_;
     }
 
-    // optional string data = 4;
-    public static final int DATA_FIELD_NUMBER = 4;
-    private java.lang.Object data_;
+    // optional int32 level = 4;
+    public static final int LEVEL_FIELD_NUMBER = 4;
+    private int level_;
     /**
-     * <code>optional string data = 4;</code>
+     * <code>optional int32 level = 4;</code>
      */
-    public boolean hasData() {
+    public boolean hasLevel() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
     /**
-     * <code>optional string data = 4;</code>
+     * <code>optional int32 level = 4;</code>
+     */
+    public int getLevel() {
+      return level_;
+    }
+
+    // optional bool lockDestroy = 5;
+    public static final int LOCKDESTROY_FIELD_NUMBER = 5;
+    private boolean lockDestroy_;
+    /**
+     * <code>optional bool lockDestroy = 5;</code>
+     */
+    public boolean hasLockDestroy() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional bool lockDestroy = 5;</code>
+     */
+    public boolean getLockDestroy() {
+      return lockDestroy_;
+    }
+
+    // optional int32 tier = 6;
+    public static final int TIER_FIELD_NUMBER = 6;
+    private int tier_;
+    /**
+     * <code>optional int32 tier = 6;</code>
+     */
+    public boolean hasTier() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional int32 tier = 6;</code>
+     */
+    public int getTier() {
+      return tier_;
+    }
+
+    // optional int32 slot = 7;
+    public static final int SLOT_FIELD_NUMBER = 7;
+    private int slot_;
+    /**
+     * <code>optional int32 slot = 7;</code>
+     */
+    public boolean hasSlot() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional int32 slot = 7;</code>
+     */
+    public int getSlot() {
+      return slot_;
+    }
+
+    // optional string data = 8;
+    public static final int DATA_FIELD_NUMBER = 8;
+    private java.lang.Object data_;
+    /**
+     * <code>optional string data = 8;</code>
+     *
+     * <pre>
+     ** JSON list float, vd "[12.4]" — roll data instance (type=1 consumable). 
+     * </pre>
+     */
+    public boolean hasData() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>optional string data = 8;</code>
+     *
+     * <pre>
+     ** JSON list float, vd "[12.4]" — roll data instance (type=1 consumable). 
+     * </pre>
      */
     public java.lang.String getData() {
       java.lang.Object ref = data_;
@@ -39594,7 +39502,11 @@ public final class Pbmethod {
       }
     }
     /**
-     * <code>optional string data = 4;</code>
+     * <code>optional string data = 8;</code>
+     *
+     * <pre>
+     ** JSON list float, vd "[12.4]" — roll data instance (type=1 consumable). 
+     * </pre>
      */
     public com.google.protobuf.ByteString
         getDataBytes() {
@@ -39610,86 +39522,15 @@ public final class Pbmethod {
       }
     }
 
-    // optional int32 level = 5;
-    public static final int LEVEL_FIELD_NUMBER = 5;
-    private int level_;
-    /**
-     * <code>optional int32 level = 5;</code>
-     */
-    public boolean hasLevel() {
-      return ((bitField0_ & 0x00000010) == 0x00000010);
-    }
-    /**
-     * <code>optional int32 level = 5;</code>
-     */
-    public int getLevel() {
-      return level_;
-    }
-
-    // repeated int64 point = 6;
-    public static final int POINT_FIELD_NUMBER = 6;
-    private java.util.List<java.lang.Long> point_;
-    /**
-     * <code>repeated int64 point = 6;</code>
-     */
-    public java.util.List<java.lang.Long>
-        getPointList() {
-      return point_;
-    }
-    /**
-     * <code>repeated int64 point = 6;</code>
-     */
-    public int getPointCount() {
-      return point_.size();
-    }
-    /**
-     * <code>repeated int64 point = 6;</code>
-     */
-    public long getPoint(int index) {
-      return point_.get(index);
-    }
-
-    // optional bool lockDestroy = 7;
-    public static final int LOCKDESTROY_FIELD_NUMBER = 7;
-    private boolean lockDestroy_;
-    /**
-     * <code>optional bool lockDestroy = 7;</code>
-     */
-    public boolean hasLockDestroy() {
-      return ((bitField0_ & 0x00000020) == 0x00000020);
-    }
-    /**
-     * <code>optional bool lockDestroy = 7;</code>
-     */
-    public boolean getLockDestroy() {
-      return lockDestroy_;
-    }
-
-    // optional int32 tier = 8;
-    public static final int TIER_FIELD_NUMBER = 8;
-    private int tier_;
-    /**
-     * <code>optional int32 tier = 8;</code>
-     */
-    public boolean hasTier() {
-      return ((bitField0_ & 0x00000040) == 0x00000040);
-    }
-    /**
-     * <code>optional int32 tier = 8;</code>
-     */
-    public int getTier() {
-      return tier_;
-    }
-
     private void initFields() {
       id_ = 0L;
       itemKey_ = 0;
       type_ = 0;
-      data_ = "";
       level_ = 0;
-      point_ = java.util.Collections.emptyList();
       lockDestroy_ = false;
       tier_ = 0;
+      slot_ = 0;
+      data_ = "";
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -39713,19 +39554,19 @@ public final class Pbmethod {
         output.writeInt32(3, type_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
-        output.writeBytes(4, getDataBytes());
+        output.writeInt32(4, level_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
-        output.writeInt32(5, level_);
-      }
-      for (int i = 0; i < point_.size(); i++) {
-        output.writeInt64(6, point_.get(i));
+        output.writeBool(5, lockDestroy_);
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
-        output.writeBool(7, lockDestroy_);
+        output.writeInt32(6, tier_);
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
-        output.writeInt32(8, tier_);
+        output.writeInt32(7, slot_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeBytes(8, getDataBytes());
       }
       getUnknownFields().writeTo(output);
     }
@@ -39750,28 +39591,23 @@ public final class Pbmethod {
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(4, getDataBytes());
+          .computeInt32Size(4, level_);
       }
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(5, level_);
-      }
-      {
-        int dataSize = 0;
-        for (int i = 0; i < point_.size(); i++) {
-          dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt64SizeNoTag(point_.get(i));
-        }
-        size += dataSize;
-        size += 1 * getPointList().size();
+          .computeBoolSize(5, lockDestroy_);
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBoolSize(7, lockDestroy_);
+          .computeInt32Size(6, tier_);
       }
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(8, tier_);
+          .computeInt32Size(7, slot_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(8, getDataBytes());
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -39895,15 +39731,15 @@ public final class Pbmethod {
         bitField0_ = (bitField0_ & ~0x00000002);
         type_ = 0;
         bitField0_ = (bitField0_ & ~0x00000004);
-        data_ = "";
-        bitField0_ = (bitField0_ & ~0x00000008);
         level_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000010);
-        point_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000020);
+        bitField0_ = (bitField0_ & ~0x00000008);
         lockDestroy_ = false;
-        bitField0_ = (bitField0_ & ~0x00000040);
+        bitField0_ = (bitField0_ & ~0x00000010);
         tier_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000020);
+        slot_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000040);
+        data_ = "";
         bitField0_ = (bitField0_ & ~0x00000080);
         return this;
       }
@@ -39948,24 +39784,23 @@ public final class Pbmethod {
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
         }
-        result.data_ = data_;
+        result.level_ = level_;
         if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
           to_bitField0_ |= 0x00000010;
         }
-        result.level_ = level_;
-        if (((bitField0_ & 0x00000020) == 0x00000020)) {
-          point_ = java.util.Collections.unmodifiableList(point_);
-          bitField0_ = (bitField0_ & ~0x00000020);
-        }
-        result.point_ = point_;
-        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+        result.lockDestroy_ = lockDestroy_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
           to_bitField0_ |= 0x00000020;
         }
-        result.lockDestroy_ = lockDestroy_;
-        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+        result.tier_ = tier_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
           to_bitField0_ |= 0x00000040;
         }
-        result.tier_ = tier_;
+        result.slot_ = slot_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.data_ = data_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -39991,29 +39826,22 @@ public final class Pbmethod {
         if (other.hasType()) {
           setType(other.getType());
         }
-        if (other.hasData()) {
-          bitField0_ |= 0x00000008;
-          data_ = other.data_;
-          onChanged();
-        }
         if (other.hasLevel()) {
           setLevel(other.getLevel());
-        }
-        if (!other.point_.isEmpty()) {
-          if (point_.isEmpty()) {
-            point_ = other.point_;
-            bitField0_ = (bitField0_ & ~0x00000020);
-          } else {
-            ensurePointIsMutable();
-            point_.addAll(other.point_);
-          }
-          onChanged();
         }
         if (other.hasLockDestroy()) {
           setLockDestroy(other.getLockDestroy());
         }
         if (other.hasTier()) {
           setTier(other.getTier());
+        }
+        if (other.hasSlot()) {
+          setSlot(other.getSlot());
+        }
+        if (other.hasData()) {
+          bitField0_ |= 0x00000080;
+          data_ = other.data_;
+          onChanged();
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -40141,16 +39969,156 @@ public final class Pbmethod {
         return this;
       }
 
-      // optional string data = 4;
-      private java.lang.Object data_ = "";
+      // optional int32 level = 4;
+      private int level_ ;
       /**
-       * <code>optional string data = 4;</code>
+       * <code>optional int32 level = 4;</code>
        */
-      public boolean hasData() {
+      public boolean hasLevel() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>optional string data = 4;</code>
+       * <code>optional int32 level = 4;</code>
+       */
+      public int getLevel() {
+        return level_;
+      }
+      /**
+       * <code>optional int32 level = 4;</code>
+       */
+      public Builder setLevel(int value) {
+        bitField0_ |= 0x00000008;
+        level_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 level = 4;</code>
+       */
+      public Builder clearLevel() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        level_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional bool lockDestroy = 5;
+      private boolean lockDestroy_ ;
+      /**
+       * <code>optional bool lockDestroy = 5;</code>
+       */
+      public boolean hasLockDestroy() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>optional bool lockDestroy = 5;</code>
+       */
+      public boolean getLockDestroy() {
+        return lockDestroy_;
+      }
+      /**
+       * <code>optional bool lockDestroy = 5;</code>
+       */
+      public Builder setLockDestroy(boolean value) {
+        bitField0_ |= 0x00000010;
+        lockDestroy_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool lockDestroy = 5;</code>
+       */
+      public Builder clearLockDestroy() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        lockDestroy_ = false;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 tier = 6;
+      private int tier_ ;
+      /**
+       * <code>optional int32 tier = 6;</code>
+       */
+      public boolean hasTier() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional int32 tier = 6;</code>
+       */
+      public int getTier() {
+        return tier_;
+      }
+      /**
+       * <code>optional int32 tier = 6;</code>
+       */
+      public Builder setTier(int value) {
+        bitField0_ |= 0x00000020;
+        tier_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 tier = 6;</code>
+       */
+      public Builder clearTier() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        tier_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 slot = 7;
+      private int slot_ ;
+      /**
+       * <code>optional int32 slot = 7;</code>
+       */
+      public boolean hasSlot() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>optional int32 slot = 7;</code>
+       */
+      public int getSlot() {
+        return slot_;
+      }
+      /**
+       * <code>optional int32 slot = 7;</code>
+       */
+      public Builder setSlot(int value) {
+        bitField0_ |= 0x00000040;
+        slot_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 slot = 7;</code>
+       */
+      public Builder clearSlot() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        slot_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional string data = 8;
+      private java.lang.Object data_ = "";
+      /**
+       * <code>optional string data = 8;</code>
+       *
+       * <pre>
+       ** JSON list float, vd "[12.4]" — roll data instance (type=1 consumable). 
+       * </pre>
+       */
+      public boolean hasData() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      /**
+       * <code>optional string data = 8;</code>
+       *
+       * <pre>
+       ** JSON list float, vd "[12.4]" — roll data instance (type=1 consumable). 
+       * </pre>
        */
       public java.lang.String getData() {
         java.lang.Object ref = data_;
@@ -40164,7 +40132,11 @@ public final class Pbmethod {
         }
       }
       /**
-       * <code>optional string data = 4;</code>
+       * <code>optional string data = 8;</code>
+       *
+       * <pre>
+       ** JSON list float, vd "[12.4]" — roll data instance (type=1 consumable). 
+       * </pre>
        */
       public com.google.protobuf.ByteString
           getDataBytes() {
@@ -40180,202 +40152,49 @@ public final class Pbmethod {
         }
       }
       /**
-       * <code>optional string data = 4;</code>
+       * <code>optional string data = 8;</code>
+       *
+       * <pre>
+       ** JSON list float, vd "[12.4]" — roll data instance (type=1 consumable). 
+       * </pre>
        */
       public Builder setData(
           java.lang.String value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000008;
+  bitField0_ |= 0x00000080;
         data_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional string data = 4;</code>
+       * <code>optional string data = 8;</code>
+       *
+       * <pre>
+       ** JSON list float, vd "[12.4]" — roll data instance (type=1 consumable). 
+       * </pre>
        */
       public Builder clearData() {
-        bitField0_ = (bitField0_ & ~0x00000008);
+        bitField0_ = (bitField0_ & ~0x00000080);
         data_ = getDefaultInstance().getData();
         onChanged();
         return this;
       }
       /**
-       * <code>optional string data = 4;</code>
+       * <code>optional string data = 8;</code>
+       *
+       * <pre>
+       ** JSON list float, vd "[12.4]" — roll data instance (type=1 consumable). 
+       * </pre>
        */
       public Builder setDataBytes(
           com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000008;
+  bitField0_ |= 0x00000080;
         data_ = value;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 level = 5;
-      private int level_ ;
-      /**
-       * <code>optional int32 level = 5;</code>
-       */
-      public boolean hasLevel() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      /**
-       * <code>optional int32 level = 5;</code>
-       */
-      public int getLevel() {
-        return level_;
-      }
-      /**
-       * <code>optional int32 level = 5;</code>
-       */
-      public Builder setLevel(int value) {
-        bitField0_ |= 0x00000010;
-        level_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 level = 5;</code>
-       */
-      public Builder clearLevel() {
-        bitField0_ = (bitField0_ & ~0x00000010);
-        level_ = 0;
-        onChanged();
-        return this;
-      }
-
-      // repeated int64 point = 6;
-      private java.util.List<java.lang.Long> point_ = java.util.Collections.emptyList();
-      private void ensurePointIsMutable() {
-        if (!((bitField0_ & 0x00000020) == 0x00000020)) {
-          point_ = new java.util.ArrayList<java.lang.Long>(point_);
-          bitField0_ |= 0x00000020;
-         }
-      }
-      /**
-       * <code>repeated int64 point = 6;</code>
-       */
-      public java.util.List<java.lang.Long>
-          getPointList() {
-        return java.util.Collections.unmodifiableList(point_);
-      }
-      /**
-       * <code>repeated int64 point = 6;</code>
-       */
-      public int getPointCount() {
-        return point_.size();
-      }
-      /**
-       * <code>repeated int64 point = 6;</code>
-       */
-      public long getPoint(int index) {
-        return point_.get(index);
-      }
-      /**
-       * <code>repeated int64 point = 6;</code>
-       */
-      public Builder setPoint(
-          int index, long value) {
-        ensurePointIsMutable();
-        point_.set(index, value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int64 point = 6;</code>
-       */
-      public Builder addPoint(long value) {
-        ensurePointIsMutable();
-        point_.add(value);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int64 point = 6;</code>
-       */
-      public Builder addAllPoint(
-          java.lang.Iterable<? extends java.lang.Long> values) {
-        ensurePointIsMutable();
-        super.addAll(values, point_);
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>repeated int64 point = 6;</code>
-       */
-      public Builder clearPoint() {
-        point_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00000020);
-        onChanged();
-        return this;
-      }
-
-      // optional bool lockDestroy = 7;
-      private boolean lockDestroy_ ;
-      /**
-       * <code>optional bool lockDestroy = 7;</code>
-       */
-      public boolean hasLockDestroy() {
-        return ((bitField0_ & 0x00000040) == 0x00000040);
-      }
-      /**
-       * <code>optional bool lockDestroy = 7;</code>
-       */
-      public boolean getLockDestroy() {
-        return lockDestroy_;
-      }
-      /**
-       * <code>optional bool lockDestroy = 7;</code>
-       */
-      public Builder setLockDestroy(boolean value) {
-        bitField0_ |= 0x00000040;
-        lockDestroy_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional bool lockDestroy = 7;</code>
-       */
-      public Builder clearLockDestroy() {
-        bitField0_ = (bitField0_ & ~0x00000040);
-        lockDestroy_ = false;
-        onChanged();
-        return this;
-      }
-
-      // optional int32 tier = 8;
-      private int tier_ ;
-      /**
-       * <code>optional int32 tier = 8;</code>
-       */
-      public boolean hasTier() {
-        return ((bitField0_ & 0x00000080) == 0x00000080);
-      }
-      /**
-       * <code>optional int32 tier = 8;</code>
-       */
-      public int getTier() {
-        return tier_;
-      }
-      /**
-       * <code>optional int32 tier = 8;</code>
-       */
-      public Builder setTier(int value) {
-        bitField0_ |= 0x00000080;
-        tier_ = value;
-        onChanged();
-        return this;
-      }
-      /**
-       * <code>optional int32 tier = 8;</code>
-       */
-      public Builder clearTier() {
-        bitField0_ = (bitField0_ & ~0x00000080);
-        tier_ = 0;
         onChanged();
         return this;
       }
@@ -78762,176 +78581,175 @@ public final class Pbmethod {
       "\r\n\005point\030\023 \003(\003\022\026\n\016timeLastAction\030\024 \001(\003\022\r" +
       "\n\005honor\030\025 \001(\005\022\r\n\005power\030\026 \001(\003\022\021\n\titemEqui" +
       "p\030\027 \003(\005\022\017\n\007channel\030\030 \003(\005\022\014\n\004ruby\030\033 \001(\003\022\013" +
-      "\n\003pet\030\034 \003(\005\"\364\003\n\nPbUserData\022\021\n\tslogBagUI\030" +
+      "\n\003pet\030\034 \003(\005\"\344\003\n\nPbUserData\022\021\n\tslogBagUI\030" +
       "\001 \001(\005\022\024\n\014slotMaterial\030\002 \001(\005\022\025\n\rslotItemE" +
       "vent\030\003 \001(\005\022\022\n\nlvTraining\030\004 \001(\005\022\025\n\rmaxlvT" +
       "raining\030\005 \001(\005\022\025\n\rnumPointLevel\030\006 \001(\005\022!\n\005" +
-      "items\030\t \001(\0132\022.pbdson.PbListItem\022&\n\016itemE",
-      "quipments\030\n \003(\0132\016.pbdson.PbItem\022)\n\taMate" +
-      "rial\030\014 \001(\0132\026.pbdson.PbListMaterial\022\033\n\004aP" +
-      "et\030\017 \003(\0132\r.pbdson.PbPet\022\037\n\006aMount\030\020 \003(\0132" +
-      "\017.pbdson.PbMount\022\020\n\010tutorial\030\021 \001(\005\022\021\n\tda" +
-      "meSkins\030\022 \003(\005\022\025\n\rdameSkinEquip\030\023 \001(\005\022\022\n\n" +
-      "chatFrames\030\025 \003(\005\022\026\n\016chatFrameEquip\030\026 \001(\005" +
-      "\022\016\n\006trials\030\027 \003(\005\022\022\n\ntrialEquip\030\030 \001(\005\022\022\n\n" +
-      "craftLevel\030\031 \001(\005\022\020\n\010craftExp\030\032 \001(\005\"*\n\nPb" +
-      "ListItem\022\034\n\004item\030\001 \003(\0132\016.pbdson.PbItem\"7" +
-      "\n\016PbListMaterial\022%\n\tmaterials\030\001 \003(\0132\022.pb",
-      "dson.PbMaterial\".\n\013PbListMount\022\037\n\006mounts" +
-      "\030\001 \003(\0132\017.pbdson.PbMount\"D\n\007PbMount\022\n\n\002id" +
-      "\030\001 \001(\003\022\r\n\005point\030\002 \003(\003\022\017\n\007mountId\030\003 \001(\005\022\r" +
-      "\n\005level\030\004 \001(\005\"(\n\tPbListPet\022\033\n\004pets\030\001 \003(\013" +
-      "2\r.pbdson.PbPet\"@\n\005PbPet\022\n\n\002id\030\001 \001(\003\022\r\n\005" +
-      "point\030\002 \003(\003\022\r\n\005petId\030\003 \001(\005\022\r\n\005level\030\004 \001(" +
-      "\005\":\n\017PbListItemPoint\022\'\n\nitemPoints\030\001 \003(\013" +
-      "2\023.pbdson.PbItemPoint\"+\n\nPbListChat\022\035\n\005a" +
-      "Chat\030\001 \003(\0132\016.pbdson.PbChat\"\211\001\n\006PbChat\022\017\n" +
-      "\007reqTime\030\001 \001(\003\022\017\n\007message\030\002 \001(\t\022\014\n\004type\030",
-      "\003 \001(\005\022\034\n\004user\030\004 \001(\0132\016.pbdson.PbUser\022\"\n\004i" +
-      "nfo\030\005 \001(\0132\024.pbdson.CommonVector\022\r\n\005point" +
-      "\030\006 \003(\003\"7\n\020PbListChatFriend\022#\n\005chats\030\001 \003(" +
-      "\0132\024.pbdson.PbChatFriend\"j\n\014PbChatFriend\022" +
-      "\016\n\006userId\030\001 \001(\005\022\017\n\007message\030\002 \001(\t\022\016\n\006avat" +
-      "ar\030\003 \003(\005\022\014\n\004name\030\004 \001(\t\022\014\n\004time\030\005 \001(\003\022\r\n\005" +
-      "level\030\006 \001(\005\"v\n\006PbShop\022\"\n\006tabSet\030\001 \003(\0132\022." +
-      "pbdson.PbItemShop\022#\n\007tabDeal\030\002 \003(\0132\022.pbd" +
-      "son.PbItemShop\022#\n\007tabMisc\030\003 \003(\0132\022.pbdson" +
-      ".PbItemShop\"\245\001\n\nPbItemShop\022\n\n\002id\030\001 \001(\005\022\013",
-      "\n\003tab\030\002 \001(\005\022\014\n\004name\030\003 \001(\t\022\014\n\004desc\030\004 \001(\t\022" +
-      "\014\n\004item\030\005 \003(\003\022\r\n\005price\030\006 \003(\003\022\r\n\005image\030\007 " +
-      "\001(\t\022\016\n\006status\030\010 \001(\005\022\022\n\ndescStatus\030\t \001(\t\022" +
-      "\022\n\ntimeRemain\030\n \001(\003\"l\n\nPbMaterial\022\n\n\002id\030" +
-      "\001 \001(\003\022\022\n\nmaterialId\030\002 \001(\005\022\014\n\004rank\030\003 \001(\005\022" +
-      "\r\n\005level\030\004 \001(\005\022\r\n\005value\030\005 \001(\002\022\022\n\nsocketR" +
-      "ate\030\006 \001(\002\"\202\001\n\006PbItem\022\n\n\002id\030\001 \001(\003\022\017\n\007item" +
-      "Key\030\002 \001(\005\022\014\n\004type\030\003 \001(\005\022\014\n\004data\030\004 \001(\t\022\r\n" +
-      "\005level\030\005 \001(\005\022\r\n\005point\030\006 \003(\003\022\023\n\013lockDestr" +
-      "oy\030\007 \001(\010\022\014\n\004tier\030\010 \001(\005\".\n\013PbItemPoint\022\017\n",
-      "\007itemKey\030\001 \001(\005\022\016\n\006number\030\002 \001(\003\"/\n\nListAc" +
-      "tion\022!\n\007aAction\030\001 \003(\0132\020.pbdson.PbAction\"" +
-      "*\n\010PbAction\022\020\n\010actionId\030\001 \001(\005\022\014\n\004data\030\002 " +
-      "\001(\014\".\n\014CommonVector\022\r\n\005aLong\030\001 \003(\003\022\017\n\007aS" +
-      "tring\030\002 \003(\t\"9\n\020ListCommonVector\022%\n\007aVect" +
-      "or\030\001 \003(\0132\024.pbdson.CommonVector\"g\n\017PbChar" +
-      "acterInfo\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\014\n\004t" +
-      "eam\030\003 \001(\005\022\016\n\006avatar\030\004 \003(\005\022\r\n\005aItem\030\005 \003(\005" +
-      "\022\r\n\005point\030\006 \003(\003\"+\n\nPbListMail\022\035\n\005aMail\030\001" +
-      " \003(\0132\016.pbdson.PbMail\"\210\001\n\006PbMail\022\n\n\002id\030\001 ",
-      "\001(\005\022\r\n\005title\030\002 \001(\t\022\017\n\007message\030\003 \001(\t\022\r\n\005b" +
-      "onus\030\004 \003(\005\022\017\n\007receive\030\005 \001(\005\022\014\n\004time\030\006 \001(" +
-      "\003\022\020\n\010senderId\030\007 \001(\005\022\022\n\nsenderName\030\010 \001(\t\"" +
-      "\257\001\n\tPbEndGame\022\017\n\007popupId\030\001 \001(\005\022\021\n\tbattle" +
-      "Key\030\002 \001(\t\022\r\n\005isWin\030\003 \001(\010\022\017\n\007message\030\004 \001(" +
-      "\t\022\r\n\005bonus\030\005 \003(\003\022\014\n\004time\030\006 \001(\005\022\017\n\007perDam" +
-      "e\030\007 \001(\005\022\014\n\004star\030\010 \001(\005\022\"\n\004info\030\t \001(\0132\024.pb" +
-      "dson.CommonVector\"{\n\nPbRoomInfo\022\020\n\010roomT" +
-      "ype\030\001 \001(\005\022\017\n\007service\030\002 \001(\005\022!\n\003cmm\030\003 \001(\0132" +
-      "\024.pbdson.CommonVector\022\'\n\005lstCm\030\004 \001(\0132\030.p",
-      "bdson.ListCommonVector\"Z\n\017PbListMiniLott" +
-      "e\022\020\n\010allBonus\030\001 \003(\003\022\020\n\010luckyNum\030\002 \003(\005\022#\n" +
-      "\006aLotte\030\003 \003(\0132\023.pbdson.PbMiniLotte\"C\n\013Pb" +
-      "MiniLotte\022\021\n\tnumChoose\030\001 \003(\005\022\022\n\nprizeInd" +
-      "ex\030\002 \001(\005\022\r\n\005bonus\030\003 \003(\005\"B\n\024PbListLottery" +
-      "History\022*\n\010aLottery\030\001 \003(\0132\030.pbdson.PbLot" +
-      "teryHistory\"\247\001\n\020PbLotteryHistory\022\017\n\007even" +
-      "tId\030\001 \001(\005\022\014\n\004type\030\002 \001(\005\022\020\n\010luckyNum\030\003 \001(" +
-      "\005\022\016\n\006number\030\004 \003(\005\022\014\n\004time\030\005 \001(\003\022\r\n\005bonus" +
-      "\030\006 \003(\003\022\016\n\006status\030\007 \001(\005\022\021\n\tlistBonus\030\010 \003(",
-      "\003\022\022\n\nlistResult\030\t \003(\005\"*\n\014PbUnitUpdate\022\014\n" +
-      "\004type\030\001 \001(\005\022\014\n\004data\030\002 \001(\014\"\213\001\n\tPbUnitPos\022" +
-      "\n\n\002id\030\001 \001(\003\022\r\n\005speed\030\002 \001(\005\022\024\n\014lastInputS" +
-      "eq\030\003 \001(\003\022\032\n\003pos\030\004 \001(\0132\r.pbdson.PbPos\022 \n\t" +
-      "direction\030\005 \001(\0132\r.pbdson.PbPos\022\017\n\007chunkI" +
-      "d\030\006 \001(\005\"1\n\014PbListBullet\022!\n\007bullets\030\001 \003(\013" +
-      "2\020.pbdson.PbBullet\"@\n\010PbBullet\022\n\n\002id\030\001 \001" +
-      "(\005\022\032\n\003pos\030\002 \001(\0132\r.pbdson.PbPos\022\014\n\004info\030\003" +
-      " \003(\005\"(\n\tPbListTab\022\033\n\004tabs\030\001 \003(\0132\r.pbdson" +
-      ".PbTab\"Z\n\005PbTab\022\r\n\005tabId\030\001 \001(\005\022\025\n\reventT",
-      "emplate\030\002 \001(\005\022\r\n\005image\030\003 \001(\t\022\014\n\004name\030\004 \001" +
-      "(\t\022\016\n\006notify\030\005 \001(\010\"\255\002\n\017PbEventBuyMonth\022\021" +
-      "\n\teventName\030\001 \001(\t\022\023\n\013imageBanner\030\002 \001(\t\022\022" +
-      "\n\ntextBanner\030\003 \001(\t\022\r\n\005level\030\004 \001(\005\022\020\n\010cur" +
-      "Point\030\005 \001(\005\022\020\n\010maxPoint\030\006 \001(\005\022\025\n\rbuttonA" +
-      "ddGoto\030\007 \001(\005\022\017\n\007keyHelp\030\010 \001(\t\022\016\n\006timeCD\030" +
-      "\t \001(\003\022\021\n\tstatusBuy\030\n \001(\005\022\r\n\005price\030\013 \003(\003\022" +
-      "\022\n\nnormalName\030\014 \001(\t\022\017\n\007vipName\030\r \001(\t\022,\n\005" +
-      "cells\030\016 \003(\0132\035.pbdson.PbCellPanelEventMon" +
-      "th\"\315\001\n\014PbEventTimer\022\n\n\002id\030\001 \001(\005\022\016\n\006statu",
-      "s\030\002 \001(\005\022\022\n\ntimeRemain\030\003 \001(\003\022\r\n\005bonus\030\004 \003" +
-      "(\003\022\r\n\005price\030\005 \003(\003\022\020\n\010oldPrice\030\006 \003(\003\022\014\n\004n" +
-      "ame\030\007 \001(\t\022\014\n\004desc\030\010 \001(\t\022\014\n\004sale\030\t \001(\t\022\017\n" +
-      "\007bgrPath\030\n \001(\t\022\"\n\004info\030\013 \001(\0132\024.pbdson.Co" +
-      "mmonVector\"w\n\025PbCellPanelEventMonth\022\r\n\005l" +
-      "evel\030\001 \001(\005\022\013\n\003exp\030\002 \001(\005\022\016\n\006status\030\003 \001(\005\022" +
-      "\021\n\tstatusVip\030\004 \001(\005\022\r\n\005bonus\030\005 \003(\003\022\020\n\010bon" +
-      "usVip\030\006 \003(\003\"\221\001\n\023PbPanelEventTabCell\022\021\n\te" +
-      "ventName\030\001 \001(\t\022\023\n\013imageBanner\030\002 \001(\t\022\022\n\nt" +
-      "extBanner\030\003 \001(\t\022\016\n\006timeCD\030\t \001(\003\022.\n\005cells",
-      "\030\016 \003(\0132\037.pbdson.PbCellPanelEventTabCell\"" +
-      "i\n\027PbCellPanelEventTabCell\022\n\n\002id\030\001 \001(\005\022\020" +
-      "\n\010cellName\030\002 \001(\t\022\r\n\005bonus\030\003 \003(\003\022\013\n\003per\030\004" +
-      " \001(\t\022\024\n\014buttonStatus\030\005 \001(\005\"\237\001\n\tPbWelfare" +
-      "\022\017\n\007eventId\030\001 \001(\005\022\016\n\006notify\030\002 \001(\010\022%\n\006ban" +
-      "ner\030\003 \001(\0132\025.pbdson.PbBannerEvent\022&\n\010tabE" +
-      "vent\030\004 \003(\0132\024.pbdson.PbTabWelfare\022\017\n\007keyH" +
-      "elp\030\005 \001(\t\022\021\n\tcountdown\030\006 \001(\003\"b\n\014PbTabWel" +
-      "fare\022\r\n\005tabId\030\001 \001(\005\022\017\n\007tabName\030\002 \001(\t\022\"\n\005" +
-      "cells\030\003 \003(\0132\023.pbdson.PbCellEvent\022\016\n\006noti",
-      "fy\030\004 \001(\010\"\263\001\n\rPbBannerEvent\022\022\n\npathBanner" +
-      "\030\001 \001(\t\022\014\n\004text\030\002 \001(\t\022\022\n\nbonusImage\030\003 \001(\t" +
-      "\022\021\n\tboxStatus\030\004 \001(\005\022\020\n\010bonusBox\030\005 \003(\005\022\014\n" +
-      "\004desc\030\006 \001(\t\022\021\n\tpathTitle\030\007 \001(\t\022&\n\004info\030\010" +
-      " \001(\0132\030.pbdson.ListCommonVector\"\353\001\n\013PbCel" +
-      "lEvent\022\n\n\002id\030\001 \001(\005\022\r\n\005image\030\002 \001(\t\022\r\n\005bon" +
-      "us\030\003 \003(\005\022\020\n\010nameCell\030\004 \001(\t\022\020\n\010textCell\030\005" +
-      " \001(\t\022\020\n\010textDesc\030\006 \001(\t\022\016\n\006numBuy\030\007 \001(\005\022\r" +
-      "\n\005limit\030\010 \001(\005\022\r\n\005price\030\t \003(\003\022\024\n\014buttonSt" +
-      "atus\030\n \001(\005\022\020\n\010bonusDay\030\013 \003(\005\022\022\n\ntimeRema",
-      "in\030\014 \001(\003\022\022\n\ntimeExpire\030\r \001(\003\"\225\001\n\013PbEvent" +
-      "7Day\022&\n\004days\030\001 \003(\0132\030.pbdson.PbPanelEvent" +
-      "7Day\022\022\n\ntimeRemain\030\002 \001(\003\022\020\n\010curValue\030\003 \001" +
-      "(\005\022\020\n\010maxValue\030\004 \001(\005\022&\n\tposReward\030\005 \003(\0132" +
-      "\023.pbdson.PbPosReward\"U\n\013PbPosReward\022\n\n\002i" +
-      "d\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\r\n\005point\030\003 \001(\003\022\r\n\005" +
-      "bonus\030\004 \003(\003\022\016\n\006status\030\005 \001(\005\"R\n\016PbTabEven" +
-      "t7Day\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022&\n\005cells" +
-      "\030\003 \003(\0132\027.pbdson.PbCellEvent7Day\"\272\001\n\020PbPa" +
-      "nelEvent7Day\022$\n\004tab1\030\001 \001(\0132\026.pbdson.PbTa",
-      "bEvent7Day\022$\n\004tab2\030\002 \001(\0132\026.pbdson.PbTabE" +
-      "vent7Day\022$\n\004tab3\030\003 \001(\0132\026.pbdson.PbTabEve" +
-      "nt7Day\022$\n\004tab4\030\004 \001(\0132\026.pbdson.PbTabEvent" +
-      "7Day\022\016\n\006isLock\030\005 \001(\010\"\306\001\n\017PbCellEvent7Day" +
-      "\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\014\n\004desc\030\003 \001(\t" +
-      "\022\020\n\010curValue\030\004 \001(\005\022\020\n\010maxValue\030\005 \001(\005\022\r\n\005" +
-      "bonus\030\006 \003(\003\022\024\n\014buttonStatus\030\007 \001(\005\022\022\n\nbut" +
-      "tonGoto\030\010 \001(\005\022\020\n\010oldPrice\030\t \003(\003\022\020\n\010newPr" +
-      "ice\030\n \003(\003\022\n\n\002xu\030\013 \001(\005\"\'\n\tPbListIAP\022\032\n\003ia" +
-      "p\030\001 \003(\0132\r.pbdson.PpIAP\"\264\001\n\005PpIAP\022\n\n\002id\030\001",
-      " \001(\005\022\030\n\020productIdAndroid\030\002 \001(\t\022\024\n\014produc" +
-      "tIdIos\030\003 \001(\t\022\014\n\004name\030\004 \001(\t\022\r\n\005price\030\005 \001(" +
-      "\t\022\r\n\005bonus\030\006 \003(\003\022\020\n\010addBonus\030\007 \003(\003\022\020\n\010ad" +
-      "dTitle\030\010 \001(\t\022\016\n\006vipExp\030\t \001(\005\022\017\n\007priceQr\030" +
-      "\n \001(\t*!\n\tCellState\022\n\n\006ACTIVE\020\001\022\010\n\004HIDE\020\002" +
-      "*\202\002\n\014SubStateType\022\r\n\tADD_BONUS\020\001\022\007\n\003DIE\020" +
-      "\002\022\n\n\006REVIVE\020\003\022\r\n\tPLAY_ANIM\020\004\022\r\n\tBE_DAMAG" +
-      "E\020\005\022\017\n\013EFFECT_BODY\020\006\022\t\n\005RE_HP\020\007\022\025\n\021UPDAT" +
-      "E_CHAT_FRAME\020\010\022\020\n\014UPDATE_TRIAL\020\t\022\024\n\020UPDA" +
-      "TE_ITEM_SLOT\020\n\022\024\n\020UPDATE_TEXT_DAME\020\013\022\026\n\022",
-      "UPDATE_MULTI_POINT\020\014\022\021\n\rUSE_ITEM_SLOT\020\r\022" +
-      "\024\n\020UPDATE_DIRECTION\020\016*Y\n\tStateType\022\023\n\017TY" +
-      "PE_ADD_REMOVE\020\001\022\014\n\010TYPE_POS\020\002\022\023\n\017TYPE_UN" +
-      "IT_STATE\020\003\022\024\n\020TYPE_CHUNK_STATE\020\004*y\n\016Cell" +
-      "ObjectType\022\010\n\004ROCK\020\001\022\010\n\004SIGN\020\002\022\n\n\006CACTUS" +
-      "\020\003\022\n\n\006FLOWER\020\004\022\t\n\005SKULL\020\005\022\t\n\005CHEST\020\006\022\t\n\005" +
-      "BONES\020\007\022\016\n\nGRAVESTONE\020\010\022\n\n\006HELMET\020\t*\316\001\n\007" +
-      "ItemKey\022\016\n\nBINH_MAU_1\020\001\022\016\n\nBINH_MAU_2\020\002\022" +
-      "\016\n\nBINH_MAU_3\020\003\022\016\n\nBINH_MAU_4\020\004\022\010\n\004GOLD\020" +
-      "\005\022\007\n\003GEM\020\006\022\010\n\004RUBY\020\007\022\017\n\013TICKER_MINI\020\010\022\021\n",
-      "\rTICKER_NORMAL\020\t\022\022\n\016TICKER_SPECIAL\020\n\022\010\n\004" +
-      "CHIP\020\013\022\021\n\rBONG_LINH_THU\020\014\022\021\n\rBONG_SIEU_T" +
-      "HU\020\r*;\n\014TargetAttack\022\n\n\006OBJECT\020\000\022\t\n\005ENEM" +
-      "Y\020\001\022\010\n\004BOSS\020\002\022\n\n\006PLAYER\020\003B\024\n\010protocolB\010P" +
-      "bmethod"
+      "items\030\t \001(\0132\022.pbdson.PbListItem\022\026\n\016itemE",
+      "quipments\030\n \003(\003\022)\n\taMaterial\030\014 \001(\0132\026.pbd" +
+      "son.PbListMaterial\022\033\n\004aPet\030\017 \003(\0132\r.pbdso" +
+      "n.PbPet\022\037\n\006aMount\030\020 \003(\0132\017.pbdson.PbMount" +
+      "\022\020\n\010tutorial\030\021 \001(\005\022\021\n\tdameSkins\030\022 \003(\005\022\025\n" +
+      "\rdameSkinEquip\030\023 \001(\005\022\022\n\nchatFrames\030\025 \003(\005" +
+      "\022\026\n\016chatFrameEquip\030\026 \001(\005\022\016\n\006trials\030\027 \003(\005" +
+      "\022\022\n\ntrialEquip\030\030 \001(\005\022\022\n\ncraftLevel\030\031 \001(\005" +
+      "\022\020\n\010craftExp\030\032 \001(\005\"*\n\nPbListItem\022\034\n\004item" +
+      "\030\001 \003(\0132\016.pbdson.PbItem\"7\n\016PbListMaterial" +
+      "\022%\n\tmaterials\030\001 \003(\0132\022.pbdson.PbMaterial\"",
+      ".\n\013PbListMount\022\037\n\006mounts\030\001 \003(\0132\017.pbdson." +
+      "PbMount\"D\n\007PbMount\022\n\n\002id\030\001 \001(\003\022\r\n\005point\030" +
+      "\002 \003(\003\022\017\n\007mountId\030\003 \001(\005\022\r\n\005level\030\004 \001(\005\"(\n" +
+      "\tPbListPet\022\033\n\004pets\030\001 \003(\0132\r.pbdson.PbPet\"" +
+      "@\n\005PbPet\022\n\n\002id\030\001 \001(\003\022\r\n\005point\030\002 \003(\003\022\r\n\005p" +
+      "etId\030\003 \001(\005\022\r\n\005level\030\004 \001(\005\":\n\017PbListItemP" +
+      "oint\022\'\n\nitemPoints\030\001 \003(\0132\023.pbdson.PbItem" +
+      "Point\"+\n\nPbListChat\022\035\n\005aChat\030\001 \003(\0132\016.pbd" +
+      "son.PbChat\"\211\001\n\006PbChat\022\017\n\007reqTime\030\001 \001(\003\022\017" +
+      "\n\007message\030\002 \001(\t\022\014\n\004type\030\003 \001(\005\022\034\n\004user\030\004 ",
+      "\001(\0132\016.pbdson.PbUser\022\"\n\004info\030\005 \001(\0132\024.pbds" +
+      "on.CommonVector\022\r\n\005point\030\006 \003(\003\"7\n\020PbList" +
+      "ChatFriend\022#\n\005chats\030\001 \003(\0132\024.pbdson.PbCha" +
+      "tFriend\"j\n\014PbChatFriend\022\016\n\006userId\030\001 \001(\005\022" +
+      "\017\n\007message\030\002 \001(\t\022\016\n\006avatar\030\003 \003(\005\022\014\n\004name" +
+      "\030\004 \001(\t\022\014\n\004time\030\005 \001(\003\022\r\n\005level\030\006 \001(\005\"v\n\006P" +
+      "bShop\022\"\n\006tabSet\030\001 \003(\0132\022.pbdson.PbItemSho" +
+      "p\022#\n\007tabDeal\030\002 \003(\0132\022.pbdson.PbItemShop\022#" +
+      "\n\007tabMisc\030\003 \003(\0132\022.pbdson.PbItemShop\"\245\001\n\n" +
+      "PbItemShop\022\n\n\002id\030\001 \001(\005\022\013\n\003tab\030\002 \001(\005\022\014\n\004n",
+      "ame\030\003 \001(\t\022\014\n\004desc\030\004 \001(\t\022\014\n\004item\030\005 \003(\003\022\r\n" +
+      "\005price\030\006 \003(\003\022\r\n\005image\030\007 \001(\t\022\016\n\006status\030\010 " +
+      "\001(\005\022\022\n\ndescStatus\030\t \001(\t\022\022\n\ntimeRemain\030\n " +
+      "\001(\003\"l\n\nPbMaterial\022\n\n\002id\030\001 \001(\003\022\022\n\nmateria" +
+      "lId\030\002 \001(\005\022\014\n\004rank\030\003 \001(\005\022\r\n\005level\030\004 \001(\005\022\r" +
+      "\n\005value\030\005 \001(\002\022\022\n\nsocketRate\030\006 \001(\002\"\201\001\n\006Pb" +
+      "Item\022\n\n\002id\030\001 \001(\003\022\017\n\007itemKey\030\002 \001(\005\022\014\n\004typ" +
+      "e\030\003 \001(\005\022\r\n\005level\030\004 \001(\005\022\023\n\013lockDestroy\030\005 " +
+      "\001(\010\022\014\n\004tier\030\006 \001(\005\022\014\n\004slot\030\007 \001(\005\022\014\n\004data\030" +
+      "\010 \001(\t\".\n\013PbItemPoint\022\017\n\007itemKey\030\001 \001(\005\022\016\n",
+      "\006number\030\002 \001(\003\"/\n\nListAction\022!\n\007aAction\030\001" +
+      " \003(\0132\020.pbdson.PbAction\"*\n\010PbAction\022\020\n\010ac" +
+      "tionId\030\001 \001(\005\022\014\n\004data\030\002 \001(\014\".\n\014CommonVect" +
+      "or\022\r\n\005aLong\030\001 \003(\003\022\017\n\007aString\030\002 \003(\t\"9\n\020Li" +
+      "stCommonVector\022%\n\007aVector\030\001 \003(\0132\024.pbdson" +
+      ".CommonVector\"g\n\017PbCharacterInfo\022\n\n\002id\030\001" +
+      " \001(\005\022\014\n\004name\030\002 \001(\t\022\014\n\004team\030\003 \001(\005\022\016\n\006avat" +
+      "ar\030\004 \003(\005\022\r\n\005aItem\030\005 \003(\005\022\r\n\005point\030\006 \003(\003\"+" +
+      "\n\nPbListMail\022\035\n\005aMail\030\001 \003(\0132\016.pbdson.PbM" +
+      "ail\"\210\001\n\006PbMail\022\n\n\002id\030\001 \001(\005\022\r\n\005title\030\002 \001(",
+      "\t\022\017\n\007message\030\003 \001(\t\022\r\n\005bonus\030\004 \003(\005\022\017\n\007rec" +
+      "eive\030\005 \001(\005\022\014\n\004time\030\006 \001(\003\022\020\n\010senderId\030\007 \001" +
+      "(\005\022\022\n\nsenderName\030\010 \001(\t\"\257\001\n\tPbEndGame\022\017\n\007" +
+      "popupId\030\001 \001(\005\022\021\n\tbattleKey\030\002 \001(\t\022\r\n\005isWi" +
+      "n\030\003 \001(\010\022\017\n\007message\030\004 \001(\t\022\r\n\005bonus\030\005 \003(\003\022" +
+      "\014\n\004time\030\006 \001(\005\022\017\n\007perDame\030\007 \001(\005\022\014\n\004star\030\010" +
+      " \001(\005\022\"\n\004info\030\t \001(\0132\024.pbdson.CommonVector" +
+      "\"{\n\nPbRoomInfo\022\020\n\010roomType\030\001 \001(\005\022\017\n\007serv" +
+      "ice\030\002 \001(\005\022!\n\003cmm\030\003 \001(\0132\024.pbdson.CommonVe" +
+      "ctor\022\'\n\005lstCm\030\004 \001(\0132\030.pbdson.ListCommonV",
+      "ector\"Z\n\017PbListMiniLotte\022\020\n\010allBonus\030\001 \003" +
+      "(\003\022\020\n\010luckyNum\030\002 \003(\005\022#\n\006aLotte\030\003 \003(\0132\023.p" +
+      "bdson.PbMiniLotte\"C\n\013PbMiniLotte\022\021\n\tnumC" +
+      "hoose\030\001 \003(\005\022\022\n\nprizeIndex\030\002 \001(\005\022\r\n\005bonus" +
+      "\030\003 \003(\005\"B\n\024PbListLotteryHistory\022*\n\010aLotte" +
+      "ry\030\001 \003(\0132\030.pbdson.PbLotteryHistory\"\247\001\n\020P" +
+      "bLotteryHistory\022\017\n\007eventId\030\001 \001(\005\022\014\n\004type" +
+      "\030\002 \001(\005\022\020\n\010luckyNum\030\003 \001(\005\022\016\n\006number\030\004 \003(\005" +
+      "\022\014\n\004time\030\005 \001(\003\022\r\n\005bonus\030\006 \003(\003\022\016\n\006status\030" +
+      "\007 \001(\005\022\021\n\tlistBonus\030\010 \003(\003\022\022\n\nlistResult\030\t",
+      " \003(\005\"*\n\014PbUnitUpdate\022\014\n\004type\030\001 \001(\005\022\014\n\004da" +
+      "ta\030\002 \001(\014\"\213\001\n\tPbUnitPos\022\n\n\002id\030\001 \001(\003\022\r\n\005sp" +
+      "eed\030\002 \001(\005\022\024\n\014lastInputSeq\030\003 \001(\003\022\032\n\003pos\030\004" +
+      " \001(\0132\r.pbdson.PbPos\022 \n\tdirection\030\005 \001(\0132\r" +
+      ".pbdson.PbPos\022\017\n\007chunkId\030\006 \001(\005\"1\n\014PbList" +
+      "Bullet\022!\n\007bullets\030\001 \003(\0132\020.pbdson.PbBulle" +
+      "t\"@\n\010PbBullet\022\n\n\002id\030\001 \001(\005\022\032\n\003pos\030\002 \001(\0132\r" +
+      ".pbdson.PbPos\022\014\n\004info\030\003 \003(\005\"(\n\tPbListTab" +
+      "\022\033\n\004tabs\030\001 \003(\0132\r.pbdson.PbTab\"Z\n\005PbTab\022\r" +
+      "\n\005tabId\030\001 \001(\005\022\025\n\reventTemplate\030\002 \001(\005\022\r\n\005",
+      "image\030\003 \001(\t\022\014\n\004name\030\004 \001(\t\022\016\n\006notify\030\005 \001(" +
+      "\010\"\255\002\n\017PbEventBuyMonth\022\021\n\teventName\030\001 \001(\t" +
+      "\022\023\n\013imageBanner\030\002 \001(\t\022\022\n\ntextBanner\030\003 \001(" +
+      "\t\022\r\n\005level\030\004 \001(\005\022\020\n\010curPoint\030\005 \001(\005\022\020\n\010ma" +
+      "xPoint\030\006 \001(\005\022\025\n\rbuttonAddGoto\030\007 \001(\005\022\017\n\007k" +
+      "eyHelp\030\010 \001(\t\022\016\n\006timeCD\030\t \001(\003\022\021\n\tstatusBu" +
+      "y\030\n \001(\005\022\r\n\005price\030\013 \003(\003\022\022\n\nnormalName\030\014 \001" +
+      "(\t\022\017\n\007vipName\030\r \001(\t\022,\n\005cells\030\016 \003(\0132\035.pbd" +
+      "son.PbCellPanelEventMonth\"\315\001\n\014PbEventTim" +
+      "er\022\n\n\002id\030\001 \001(\005\022\016\n\006status\030\002 \001(\005\022\022\n\ntimeRe",
+      "main\030\003 \001(\003\022\r\n\005bonus\030\004 \003(\003\022\r\n\005price\030\005 \003(\003" +
+      "\022\020\n\010oldPrice\030\006 \003(\003\022\014\n\004name\030\007 \001(\t\022\014\n\004desc" +
+      "\030\010 \001(\t\022\014\n\004sale\030\t \001(\t\022\017\n\007bgrPath\030\n \001(\t\022\"\n" +
+      "\004info\030\013 \001(\0132\024.pbdson.CommonVector\"w\n\025PbC" +
+      "ellPanelEventMonth\022\r\n\005level\030\001 \001(\005\022\013\n\003exp" +
+      "\030\002 \001(\005\022\016\n\006status\030\003 \001(\005\022\021\n\tstatusVip\030\004 \001(" +
+      "\005\022\r\n\005bonus\030\005 \003(\003\022\020\n\010bonusVip\030\006 \003(\003\"\221\001\n\023P" +
+      "bPanelEventTabCell\022\021\n\teventName\030\001 \001(\t\022\023\n" +
+      "\013imageBanner\030\002 \001(\t\022\022\n\ntextBanner\030\003 \001(\t\022\016" +
+      "\n\006timeCD\030\t \001(\003\022.\n\005cells\030\016 \003(\0132\037.pbdson.P",
+      "bCellPanelEventTabCell\"i\n\027PbCellPanelEve" +
+      "ntTabCell\022\n\n\002id\030\001 \001(\005\022\020\n\010cellName\030\002 \001(\t\022" +
+      "\r\n\005bonus\030\003 \003(\003\022\013\n\003per\030\004 \001(\t\022\024\n\014buttonSta" +
+      "tus\030\005 \001(\005\"\237\001\n\tPbWelfare\022\017\n\007eventId\030\001 \001(\005" +
+      "\022\016\n\006notify\030\002 \001(\010\022%\n\006banner\030\003 \001(\0132\025.pbdso" +
+      "n.PbBannerEvent\022&\n\010tabEvent\030\004 \003(\0132\024.pbds" +
+      "on.PbTabWelfare\022\017\n\007keyHelp\030\005 \001(\t\022\021\n\tcoun" +
+      "tdown\030\006 \001(\003\"b\n\014PbTabWelfare\022\r\n\005tabId\030\001 \001" +
+      "(\005\022\017\n\007tabName\030\002 \001(\t\022\"\n\005cells\030\003 \003(\0132\023.pbd" +
+      "son.PbCellEvent\022\016\n\006notify\030\004 \001(\010\"\263\001\n\rPbBa",
+      "nnerEvent\022\022\n\npathBanner\030\001 \001(\t\022\014\n\004text\030\002 " +
+      "\001(\t\022\022\n\nbonusImage\030\003 \001(\t\022\021\n\tboxStatus\030\004 \001" +
+      "(\005\022\020\n\010bonusBox\030\005 \003(\005\022\014\n\004desc\030\006 \001(\t\022\021\n\tpa" +
+      "thTitle\030\007 \001(\t\022&\n\004info\030\010 \001(\0132\030.pbdson.Lis" +
+      "tCommonVector\"\353\001\n\013PbCellEvent\022\n\n\002id\030\001 \001(" +
+      "\005\022\r\n\005image\030\002 \001(\t\022\r\n\005bonus\030\003 \003(\005\022\020\n\010nameC" +
+      "ell\030\004 \001(\t\022\020\n\010textCell\030\005 \001(\t\022\020\n\010textDesc\030" +
+      "\006 \001(\t\022\016\n\006numBuy\030\007 \001(\005\022\r\n\005limit\030\010 \001(\005\022\r\n\005" +
+      "price\030\t \003(\003\022\024\n\014buttonStatus\030\n \001(\005\022\020\n\010bon" +
+      "usDay\030\013 \003(\005\022\022\n\ntimeRemain\030\014 \001(\003\022\022\n\ntimeE",
+      "xpire\030\r \001(\003\"\225\001\n\013PbEvent7Day\022&\n\004days\030\001 \003(" +
+      "\0132\030.pbdson.PbPanelEvent7Day\022\022\n\ntimeRemai" +
+      "n\030\002 \001(\003\022\020\n\010curValue\030\003 \001(\005\022\020\n\010maxValue\030\004 " +
+      "\001(\005\022&\n\tposReward\030\005 \003(\0132\023.pbdson.PbPosRew" +
+      "ard\"U\n\013PbPosReward\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002" +
+      " \001(\t\022\r\n\005point\030\003 \001(\003\022\r\n\005bonus\030\004 \003(\003\022\016\n\006st" +
+      "atus\030\005 \001(\005\"R\n\016PbTabEvent7Day\022\n\n\002id\030\001 \001(\005" +
+      "\022\014\n\004name\030\002 \001(\t\022&\n\005cells\030\003 \003(\0132\027.pbdson.P" +
+      "bCellEvent7Day\"\272\001\n\020PbPanelEvent7Day\022$\n\004t" +
+      "ab1\030\001 \001(\0132\026.pbdson.PbTabEvent7Day\022$\n\004tab",
+      "2\030\002 \001(\0132\026.pbdson.PbTabEvent7Day\022$\n\004tab3\030" +
+      "\003 \001(\0132\026.pbdson.PbTabEvent7Day\022$\n\004tab4\030\004 " +
+      "\001(\0132\026.pbdson.PbTabEvent7Day\022\016\n\006isLock\030\005 " +
+      "\001(\010\"\306\001\n\017PbCellEvent7Day\022\n\n\002id\030\001 \001(\005\022\014\n\004n" +
+      "ame\030\002 \001(\t\022\014\n\004desc\030\003 \001(\t\022\020\n\010curValue\030\004 \001(" +
+      "\005\022\020\n\010maxValue\030\005 \001(\005\022\r\n\005bonus\030\006 \003(\003\022\024\n\014bu" +
+      "ttonStatus\030\007 \001(\005\022\022\n\nbuttonGoto\030\010 \001(\005\022\020\n\010" +
+      "oldPrice\030\t \003(\003\022\020\n\010newPrice\030\n \003(\003\022\n\n\002xu\030\013" +
+      " \001(\005\"\'\n\tPbListIAP\022\032\n\003iap\030\001 \003(\0132\r.pbdson." +
+      "PpIAP\"\264\001\n\005PpIAP\022\n\n\002id\030\001 \001(\005\022\030\n\020productId",
+      "Android\030\002 \001(\t\022\024\n\014productIdIos\030\003 \001(\t\022\014\n\004n" +
+      "ame\030\004 \001(\t\022\r\n\005price\030\005 \001(\t\022\r\n\005bonus\030\006 \003(\003\022" +
+      "\020\n\010addBonus\030\007 \003(\003\022\020\n\010addTitle\030\010 \001(\t\022\016\n\006v" +
+      "ipExp\030\t \001(\005\022\017\n\007priceQr\030\n \001(\t*!\n\tCellStat" +
+      "e\022\n\n\006ACTIVE\020\001\022\010\n\004HIDE\020\002*\202\002\n\014SubStateType" +
+      "\022\r\n\tADD_BONUS\020\001\022\007\n\003DIE\020\002\022\n\n\006REVIVE\020\003\022\r\n\t" +
+      "PLAY_ANIM\020\004\022\r\n\tBE_DAMAGE\020\005\022\017\n\013EFFECT_BOD" +
+      "Y\020\006\022\t\n\005RE_HP\020\007\022\025\n\021UPDATE_CHAT_FRAME\020\010\022\020\n" +
+      "\014UPDATE_TRIAL\020\t\022\024\n\020UPDATE_ITEM_SLOT\020\n\022\024\n" +
+      "\020UPDATE_TEXT_DAME\020\013\022\026\n\022UPDATE_MULTI_POIN",
+      "T\020\014\022\021\n\rUSE_ITEM_SLOT\020\r\022\024\n\020UPDATE_DIRECTI" +
+      "ON\020\016*Y\n\tStateType\022\023\n\017TYPE_ADD_REMOVE\020\001\022\014" +
+      "\n\010TYPE_POS\020\002\022\023\n\017TYPE_UNIT_STATE\020\003\022\024\n\020TYP" +
+      "E_CHUNK_STATE\020\004*y\n\016CellObjectType\022\010\n\004ROC" +
+      "K\020\001\022\010\n\004SIGN\020\002\022\n\n\006CACTUS\020\003\022\n\n\006FLOWER\020\004\022\t\n" +
+      "\005SKULL\020\005\022\t\n\005CHEST\020\006\022\t\n\005BONES\020\007\022\016\n\nGRAVES" +
+      "TONE\020\010\022\n\n\006HELMET\020\t*\316\001\n\007ItemKey\022\016\n\nBINH_M" +
+      "AU_1\020\001\022\016\n\nBINH_MAU_2\020\002\022\016\n\nBINH_MAU_3\020\003\022\016" +
+      "\n\nBINH_MAU_4\020\004\022\010\n\004GOLD\020\005\022\007\n\003GEM\020\006\022\010\n\004RUB" +
+      "Y\020\007\022\017\n\013TICKER_MINI\020\010\022\021\n\rTICKER_NORMAL\020\t\022",
+      "\022\n\016TICKER_SPECIAL\020\n\022\010\n\004CHIP\020\013\022\021\n\rBONG_LI" +
+      "NH_THU\020\014\022\021\n\rBONG_SIEU_THU\020\r*;\n\014TargetAtt" +
+      "ack\022\n\n\006OBJECT\020\000\022\t\n\005ENEMY\020\001\022\010\n\004BOSS\020\002\022\n\n\006" +
+      "PLAYER\020\003B\024\n\010protocolB\010Pbmethod"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -79141,7 +78959,7 @@ public final class Pbmethod {
           internal_static_pbdson_PbItem_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbItem_descriptor,
-              new java.lang.String[] { "Id", "ItemKey", "Type", "Data", "Level", "Point", "LockDestroy", "Tier", });
+              new java.lang.String[] { "Id", "ItemKey", "Type", "Level", "LockDestroy", "Tier", "Slot", "Data", });
           internal_static_pbdson_PbItemPoint_descriptor =
             getDescriptor().getMessageTypes().get(34);
           internal_static_pbdson_PbItemPoint_fieldAccessorTable = new

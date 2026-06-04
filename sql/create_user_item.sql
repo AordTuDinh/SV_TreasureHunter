@@ -15,6 +15,7 @@ CREATE TABLE user_item (
   level         INT          NOT NULL DEFAULT 0,
   lock_destroy  TINYINT      NOT NULL DEFAULT 0,
   tier          INT          NOT NULL DEFAULT 0,
+  slot          INT          NOT NULL DEFAULT 0 COMMENT 'index ô trong túi UI',
   point         TEXT         NULL,
   data          TEXT         NULL,
   PRIMARY KEY (id),

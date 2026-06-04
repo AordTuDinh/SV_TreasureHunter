@@ -11,6 +11,7 @@ public class NInput {
     public static final int INPUT_PLAYER_MOVE = 1;
     public static final int PING_GAME = 2;
     public static final int ATTACK = 3;
+    public static final int USE_ITEM = 4;
     //endregion
     //
 
@@ -21,6 +22,8 @@ public class NInput {
     // attack
     public Pbmethod.TargetAttack targetAttack;
     public long idAttack;
+    /** CLIENT_INPUT USE_ITEM — user_item.id */
+    public long useItemId;
 
     public static NInput parse(byte[] data) {
         NInput obj = new NInput();
@@ -37,6 +40,8 @@ public class NInput {
         } else if (obj.typeId == ATTACK) {
             obj.targetAttack = Pbmethod.TargetAttack.valueOf(buffer.readByte());
             obj.idAttack = buffer.readLong();
+        } else if (obj.typeId == USE_ITEM) {
+            obj.useItemId = buffer.readLong();
         }
         return obj;
     }

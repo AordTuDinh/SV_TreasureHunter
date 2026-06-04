@@ -330,6 +330,8 @@ public abstract class BaseRoom extends MonoRoom {
             if (player.isAlive()) player.setPosAndDirection(input.playerPos, input.playerDirection);
         } else if (input.typeId == NInput.PING_GAME) {
             Util.sendProtoData(player.getMUser().getChannel(), null, IAction.PING_GAME);
+        } else if (input.typeId == NInput.USE_ITEM) {
+            game.treasure.service.resource.ResItem.useBuffItemInRoom(player, input.useItemId);
         } else if (input.typeId == NInput.ATTACK) {
             int globalCellId = MapService.worldPosToGlobalCellId(mapInfo, player.getPos());
             if (!player.canAttack()) return;

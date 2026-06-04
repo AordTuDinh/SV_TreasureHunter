@@ -280,9 +280,9 @@ public class CraftHandler extends AHandler {
         }
         long statValue = Math.round(gem.getValue() * 100);
         List<Long> add = Arrays.asList((long) res.getPointId(), statValue);
-        List<Long> points = IMath.mergePointWeapon(equip.getPointList(), add);
-        if (equip.update(Arrays.asList("point", GsonUtil.toJson(points)))) {
-            equip.setPointList(points);
+        List<Long> points = IMath.mergePointWeapon(equip.getDataListLong(), add);
+        if (equip.update(Arrays.asList("data", GsonUtil.toJson(points)))) {
+            equip.setData(points.toString());
             return true;
         }
         return false;
