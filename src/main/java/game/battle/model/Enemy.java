@@ -6,6 +6,7 @@ import game.battle.type.RoomState;
 import game.battle.type.UnitType;
 import game.config.CfgEventDrop;
 import game.config.aEnum.DetailActionType;
+import game.config.aEnum.ItemType;
 import game.treasure.BattleConfig;
 import game.treasure.mapping.main.ResMobEntity;
 import game.treasure.service.resource.ResMob;
@@ -40,12 +41,17 @@ public class Enemy extends Unit implements Serializable {
         ResMobEntity mob = ResMob.getMob(enemyKey);
         this.point = mob.getPoint();
         this.name = mob.getName();
-        this.rangeAttack = mob.getRangeAttack();
+        float mobRange = mob.getRangeAttack();
+        this.rangeAttack = mobRange > 0 ? mobRange : BattleConfig.M_rangeAttack;
         setListBonus(mob.getBonus());
         setType(UnitType.ENEMY);
         this.autoAttack = false;
         this.delayAnimAttack = BattleConfig.M_delayAttackDamage;
         resetData();
+        if (player != null && player.isPlayer()) {
+            targetAttack = player;
+            targetMove = null;
+        }
     }
 
     @Override
@@ -76,8 +82,10 @@ public class Enemy extends Unit implements Serializable {
 
     @Override
     public synchronized void beAttackDamage(Unit ownerDamage, long atkDame) {
-        if (ownerDamage != null && ownerDamage.isPlayer() && targetAttack == null) {
-            targetAttack = ownerDamage;
+        if (ownerDamage != null && ownerDamage.isPlayer()) {
+            if (targetAttack == null) {
+                targetAttack = ownerDamage;
+            }
             targetMove = null;
         }
         super.beAttackDamage(ownerDamage, atkDame);
@@ -87,9 +95,9 @@ public class Enemy extends Unit implements Serializable {
     public synchronized void bonusKillMe(Unit killer) {
         if (killer.isPlayer()) {
             hasBonusKillMe = false;
-            Player player = ((Player) killer);
+//            Player player = ((Player) killer);
 //            BonusKillEnemy bonus = getBonusWithPer(listBonus, player.getBuffs());
-//            bonus.addBonus(CfgEventDrop.bonusDrop(Ote CfgEventDrop.config.getRateDropCampaign(), 1));
+//            bonus.addBonus(CfgEventDrop.bonusDrop(ItemType.EVENT.value, CfgEventDrop.config.getRateDropCampaign(), 1));
 //            player.sendForceBonus(bonus, DetailActionType.BONUS_KILL_ENEMY.getKey(), pos);
 //            player.addNumKillMonster(this);
         }
@@ -144,10 +152,6 @@ public class Enemy extends Unit implements Serializable {
         return inRankAttackMelee() && hasActionAttack() && alive && targetAttack.isAlive();
     }
 
-    public boolean isAttackDone() {
-        return DateTime.isAfterTime(timeActionAttack, 1f);
-    }
-
     private boolean hasActionAttack() {
         return DateTime.isAfterTime(timeActionAttack, BattleConfig.M_attackSpeed) && !isMove()
                 && DateTime.isAfterTime(timeActionMove, 0.3f);
@@ -157,7 +161,10 @@ public class Enemy extends Unit implements Serializable {
         if (lookAt == null) return;
         Pos faceDir = pos.getDirectionTo(lookAt);
         if (faceDir.equals(Pos.zero()) || Math.abs(faceDir.x) < 0.01f) return;
-        setDirection(faceDir);
+        if (Math.abs(direction.x) < 0.01f || !isLikeFace(faceDir)) {
+            setDirection(faceDir);
+            protoStatus(Pbmethod.SubStateType.UPDATE_DIRECTION, (long) (faceDir.x * 1000), (long) (faceDir.y * 1000));
+        }
     }
 
     private boolean isBeyondLeash() {
@@ -221,10 +228,11 @@ public class Enemy extends Unit implements Serializable {
             setTimeAttack();
             protoStatus(Pbmethod.SubStateType.PLAY_ANIM, (long) AnimationType.ATTACK.value);
             scheduleAttackDamage(targetAttack);
-        } else if (!inRankAttackMelee() && isAttackDone()) {
+        } else if (!inRankAttackMelee()) {
             targetMove = getChasePos(targetAttack);
+            setMove(true);
             enemyMove();
-        } else if (inRankAttackMelee()) {
+        } else {
             setMove(false);
             setDirectionChase(targetAttack.getPos());
         }

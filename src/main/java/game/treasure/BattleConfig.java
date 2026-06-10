@@ -26,7 +26,8 @@ public class BattleConfig {
     public static float M_rangeMove = 3f; // ban kinh move idle (khong nen > M_maxLeashFromSpawn)
     public static int M_idleMoveChance = 50; // random(100): rand < nay thi move (~50%)
     public static float M_maxLeashFromSpawn = 10f; // xa instancePos hon muc nay thi ve spawn + clear target
-    public static final float M_speedMoveIdle = 20f; // move speed lúc idle
+    public static final float M_speedMoveIdle = 50f; // move speed mob (fallback neu DB moveSpeed = 0)
+    public static float M_rangeAttack = 1f; // tam danh melee mac dinh neu DB rangeAttack = 0
     public static float M_attackSpeed = 1.2f; // giay giua 2 lan danh cua mob
     public static float M_delayAttackDamage = 0.3f; // delay anim attack roi moi gui dame
     public static float M_directionMinDx = 0.5f; // chi doi huong nhin khi lech target theo truc x

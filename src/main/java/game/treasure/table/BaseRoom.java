@@ -284,12 +284,12 @@ public abstract class BaseRoom extends MonoRoom {
         localTime += _dt / 1000.0;
         serverTime = localTime;
         // send data
+        mUnit.forEach((k, u) -> u.Update());
         try {
             sendTableState();
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-        mUnit.forEach((k, u) -> u.Update());
     }
 
 

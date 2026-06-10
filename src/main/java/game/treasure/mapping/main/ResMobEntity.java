@@ -36,7 +36,7 @@ public class ResMobEntity extends BaseEntity implements Serializable {
 
     public Point getPoint() {
         Point point = new Point();
-        point.setMoveSpeed(moveSpeed);
+        point.setMoveSpeed(moveSpeed > 0 ? moveSpeed : (int) BattleConfig.M_speedMoveIdle);
         point.setBaseAttack(atk);
         point.setBaseHp(hp);
         point.setBaseDef(def);
