@@ -72,8 +72,6 @@ public class IAction {
     public static final int MAIL_LIST = 112;
     public static final int MAIL_RECEIVE = 113;
     public static final int MAIL_DELETE = 114;
-    // bag
-    public static final int BAG_STATUS = 119;
     // tutorial
     public static final int TUTORIAL_STATUS = 122;
     // quest

@@ -250,7 +250,7 @@ public class LoginHandler extends AHandler {
             addResponse(CLAN_INFO, myClan.toProto());
         }
         // game config
-        //loadGameConfig(mUser);
+        loadGameConfig(mUser);
         // battleConfig
         loadBattleConfig();
         // user info
@@ -339,7 +339,8 @@ public class LoginHandler extends AHandler {
         // for settings
         Pbmethod.CommonVector.Builder settings = Pbmethod.CommonVector.newBuilder();
         UserSettingsEntity uSet = mUser.getUSetting();
-        settings.addAllALong(uSet.getChatSetting()); // size 2 : chat setting
+        // size 2 : chat setting
+        settings.addAllALong(uSet.getChatSetting());
         lstCmm.addAVector(settings);
         // danh sách các thằng mình block chat
         lstCmm.addAVector(getCommonIntVector(uSet.listBlockChat()));

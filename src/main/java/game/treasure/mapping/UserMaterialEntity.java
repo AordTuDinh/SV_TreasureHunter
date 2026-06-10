@@ -65,6 +65,7 @@ public class UserMaterialEntity implements Serializable {
     public protocol.Pbmethod.PbMaterial.Builder toProto() {
         protocol.Pbmethod.PbMaterial.Builder pb = protocol.Pbmethod.PbMaterial.newBuilder();
         pb.setId(id);
+        System.out.println("materialId ====== " + materialId);
         pb.setMaterialId(materialId);
         pb.setRank(matRank);
         pb.setValue(value);

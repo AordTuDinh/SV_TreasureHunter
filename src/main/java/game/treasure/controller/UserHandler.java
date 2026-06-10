@@ -35,8 +35,7 @@ public class UserHandler extends AHandler {
         List<Integer> actions = Arrays.asList(CREATE_NAME, USER_INFO, DAME_SKIN_EQUIP, CHANGE_LANG,
                 CHAT_FRAME_EQUIP, USE_GIFT_CODE, TRIAL_EQUIP, BUFF_INFO, RANKING_STATUS, TUTORIAL_STATUS,
                 TUTORIAL_QUEST_RECEIVE, TUTORIAL_GO_TO, TUTORIAL_QUEST_STATUS, RANKING_INFO, SEND_MAIL,
-                HELP_VALUE, CHANGE_NAME, AVATAR_LIST, AVATAR_CHOOSE, USER_DATA_INFO, BAG_STATUS,
-                UPDATE_NEXT_DAY);
+                HELP_VALUE, CHANGE_NAME, AVATAR_LIST, AVATAR_CHOOSE, USER_DATA_INFO, UPDATE_NEXT_DAY);
         actions.forEach(action -> mHandler.put(action, this));
     }
 
@@ -64,7 +63,6 @@ public class UserHandler extends AHandler {
                 case POINT_DATA -> pointData();
                 case CREATE_NAME -> createName();
                 case USER_DATA_INFO -> userDataInfo();
-                case BAG_STATUS -> bagStatus();
                 case AVATAR_LIST -> avatarList();
                 case AVATAR_CHOOSE -> avatarChoose();
                 case CHANGE_NAME -> changeName();
@@ -77,7 +75,6 @@ public class UserHandler extends AHandler {
                 case TUTORIAL_STATUS -> tutorial();
                 case TUTORIAL_QUEST_STATUS -> tutorialQuestStatus(mUser, this);
                 case TUTORIAL_QUEST_RECEIVE -> tutorialQuestReceive();
-//                case TUTORIAL_GO_TO -> tutorialGoTo();
                 case DAME_SKIN_EQUIP -> dameSkinEquip();
                 case CHAT_FRAME_EQUIP -> chatFrameEquip();
                 case TRIAL_EQUIP -> trialEquip();
@@ -92,7 +89,6 @@ public class UserHandler extends AHandler {
 
     private void changeLang(String inputString) {
         String lang = inputString.toLowerCase();
-        System.out.println("lang ========== " + lang);
         if (lang.equals(user.getLang())) {
             addResponseError();
             return;
@@ -149,14 +145,6 @@ public class UserHandler extends AHandler {
 
     void pointData() {
         mUser.reCalculatePoint();
-    }
-
-    void bagStatus() {
-        List<Long> status = new ArrayList<>();
-        UserDataEntity uData = mUser.getUData();
-        status.addAll(List.of(10l, 10l)); //3
-        status.addAll(GsonUtil.toListLong(user.getAllInfoItemEquip()));
-        addResponse(getCommonVector(status));
     }
 
     void useGiftCode() {
