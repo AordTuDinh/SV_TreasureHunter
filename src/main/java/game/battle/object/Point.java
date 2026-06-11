@@ -151,7 +151,7 @@ public class Point {
     }
 
     public void addStun(long time) {
-        long newStun = time + (int) System.currentTimeMillis();
+        long newStun = time + System.currentTimeMillis();
         long curStun = get(Point.STUN);
         if (curStun < newStun) { // cái nào stun lâu hơn thì chọn cái đó
             values[STUN] = newStun;
@@ -392,7 +392,7 @@ public class Point {
     }
 
     public boolean beBlock() {
-        int now = (int) System.currentTimeMillis();
+        long now = System.currentTimeMillis();
         return values[STUN] > now || values[FREEZE] > now || values[Point.BLOCK_PARALYZE] > now;
     }
 

@@ -4,9 +4,6 @@ import game.battle.object.*;
 import game.battle.type.AnimationType;
 import game.battle.type.RoomState;
 import game.battle.type.UnitType;
-import game.config.CfgEventDrop;
-import game.config.aEnum.DetailActionType;
-import game.config.aEnum.ItemType;
 import game.treasure.BattleConfig;
 import game.treasure.mapping.main.ResMobEntity;
 import game.treasure.service.resource.ResMob;
@@ -28,7 +25,6 @@ public class Enemy extends Unit implements Serializable {
     public int forcePush;
     long damage;
     int skillNormal = 0;
-    boolean autoAttack;
     Unit targetAttack;
 
     public Enemy(int enemyKey, Unit player, Pos pos) {
@@ -45,13 +41,8 @@ public class Enemy extends Unit implements Serializable {
         this.rangeAttack = mobRange > 0 ? mobRange : BattleConfig.M_rangeAttack;
         setListBonus(mob.getBonus());
         setType(UnitType.ENEMY);
-        this.autoAttack = false;
         this.delayAnimAttack = BattleConfig.M_delayAttackDamage;
         resetData();
-        if (player != null && player.isPlayer()) {
-            targetAttack = player;
-            targetMove = null;
-        }
     }
 
     @Override
@@ -95,16 +86,11 @@ public class Enemy extends Unit implements Serializable {
     public synchronized void bonusKillMe(Unit killer) {
         if (killer.isPlayer()) {
             hasBonusKillMe = false;
-//            Player player = ((Player) killer);
-//            BonusKillEnemy bonus = getBonusWithPer(listBonus, player.getBuffs());
-//            bonus.addBonus(CfgEventDrop.bonusDrop(ItemType.EVENT.value, CfgEventDrop.config.getRateDropCampaign(), 1));
-//            player.sendForceBonus(bonus, DetailActionType.BONUS_KILL_ENEMY.getKey(), pos);
-//            player.addNumKillMonster(this);
         }
     }
 
     BonusKillEnemy getBonusWithPer(List<BonusConfig> aBonusConfig, List<Long> perBuff) {
-        BonusKillEnemy result = new BonusKillEnemy(); // gold, gem, bonus
+        BonusKillEnemy result = new BonusKillEnemy();
         for (int i = 0; i < aBonusConfig.size(); i++) {
             BonusConfig bm = aBonusConfig.get(i);
             if (bm.getBonus().get(0).intValue() == Bonus.BONUS_GOLD) {
@@ -120,7 +106,7 @@ public class Enemy extends Unit implements Serializable {
         return result;
     }
 
-    public void genRandomMove() { // move idle
+    public void genRandomMove() {
         if (!hasActionMove() || !isReady()) return;
         if (targetMove != null) return;
         int rand = NumberUtil.getRandom(100);
@@ -197,7 +183,6 @@ public class Enemy extends Unit implements Serializable {
             return;
         }
 
-        // Dang di den targetMove (idle hoac ve spawn) — khong cat vi lech instancePos
         if (targetMove != null) {
             if (!moveToTargetDone()) {
                 enemyMove();
