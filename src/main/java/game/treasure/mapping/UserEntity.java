@@ -126,6 +126,46 @@ public class UserEntity implements Serializable {
         return GsonUtil.strToListInt(itemEquipment);
     }
 
+    public static final int EQUIP_SLOT_COUNT = 8;
+    public static final int EQUIP_FIELDS_PER_SLOT = 3;
+    public static final int EQUIP_LIST_SIZE = EQUIP_SLOT_COUNT * EQUIP_FIELDS_PER_SLOT;
+
+    public static int equipSlotIndex(int equipSlotType) {
+        if (equipSlotType < 1 || equipSlotType > EQUIP_SLOT_COUNT) return -1;
+        return (equipSlotType - 1) * EQUIP_FIELDS_PER_SLOT;
+    }
+
+    public static int findEquipSlotByItemId(List<Integer> lst, int itemId) {
+        if (lst == null || itemId <= 0) return -1;
+        for (int i = 0; i < EQUIP_LIST_SIZE; i += EQUIP_FIELDS_PER_SLOT) {
+            if (i < lst.size() && lst.get(i) == itemId) return i;
+        }
+        return -1;
+    }
+
+    public List<Integer> normalizeItemEquipList() {
+        List<Integer> lst = new ArrayList<>(getAllInfoItemEquip());
+        while (lst.size() < EQUIP_LIST_SIZE) lst.add(0);
+        return lst;
+    }
+
+    /** 8 itemKey theo thứ tự EquipSlotType (WEAPON..MOUNT). */
+    public List<Integer> getListItemKeyEquip() {
+        List<Integer> lst = normalizeItemEquipList();
+        List<Integer> ret = new ArrayList<>(EQUIP_SLOT_COUNT);
+        for (int i = 0; i < EQUIP_SLOT_COUNT; i++) {
+            ret.add(lst.get(i * EQUIP_FIELDS_PER_SLOT + 1));
+        }
+        return ret;
+    }
+
+    public List<Long> getListItemKeyEquipLong() {
+        List<Integer> keys = getListItemKeyEquip();
+        List<Long> ret = new ArrayList<>(keys.size());
+        for (int key : keys) ret.add((long) key);
+        return ret;
+    }
+
     public UserPartyEntity getParty() {
         return ResParty.getParty(party);
     }
@@ -352,8 +392,9 @@ public class UserEntity implements Serializable {
     }
 
     public boolean updateItemEquip(List<Integer> items) {
-        if (update(Arrays.asList("item_equipment", StringHelper.toDBString(items)))) {
-            this.itemEquipment = items.toString();
+        String dbValue = StringHelper.toDBString(items);
+        if (update(Arrays.asList("item_equipment", dbValue))) {
+            this.itemEquipment = dbValue;
             return true;
         }
         return false;

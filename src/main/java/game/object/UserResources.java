@@ -51,6 +51,17 @@ public class UserResources implements Serializable {
         this.mUser = mUser;
     }
 
+    void syncEquipFlagsFromUser() {
+        Set<Integer> equippedIds = new HashSet<>(mUser.getUser().getListIdEquipmentEquip());
+        for (UserItemEntity item : mItem.values()) {
+            if (!item.isEquipment()) continue;
+            boolean equipped = equippedIds.contains((int) item.getId());
+            item.setEquip(equipped);
+            if (equipped && item.getSlot() >= 0)
+                item.updateSlot(-1);
+        }
+    }
+
     public boolean isOk() {
         try {
             if (items != null) {
@@ -75,6 +86,7 @@ public class UserResources implements Serializable {
             if (materials != null) {
                 materials.forEach(mat -> mMaterial.put(mat.getId(), mat));
             }
+            syncEquipFlagsFromUser();
             return true;
         } catch (Exception ex) {
             Logs.error(ex);
@@ -140,9 +152,8 @@ public class UserResources implements Serializable {
     }
 
     public int getNumItemBag() {
-        Set<Integer> equippedIds = new HashSet<>(mUser.getUser().getListIdEquipmentEquip());
         return (int) mItem.values().stream()
-                .filter(item -> occupiesBagSlot(item, equippedIds))
+                .filter(UserResources::occupiesBagSlot)
                 .count();
     }
 
@@ -184,10 +195,9 @@ public class UserResources implements Serializable {
     }
 
     private Set<Integer> collectUsedBagSlots() {
-        Set<Integer> equippedIds = new HashSet<>(mUser.getUser().getListIdEquipmentEquip());
         Set<Integer> used = new HashSet<>();
         for (UserItemEntity item : mItem.values()) {
-            if (occupiesBagSlot(item, equippedIds))
+            if (occupiesBagSlot(item) && item.getSlot() >= 0)
                 used.add(item.getSlot());
         }
         return used;
@@ -210,11 +220,11 @@ public class UserResources implements Serializable {
         return null;
     }
 
-    private static boolean occupiesBagSlot(UserItemEntity item, Set<Integer> equippedIds) {
+    private static boolean occupiesBagSlot(UserItemEntity item) {
         if (item.getType() == ItemType.CONSUMABLE.value)
             return true;
         if (item.getType() == ItemType.EQUIPMENT.value)
-            return !equippedIds.contains((int) item.getId());
+            return item.getSlot() >= 0;
         return false;
     }
 

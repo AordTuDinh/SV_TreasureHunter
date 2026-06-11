@@ -187,6 +187,14 @@ public final class Pbmethod {
      * </pre>
      */
     UPDATE_DIRECTION(13, 14),
+    /**
+     * <code>UPDATE_ITEM_EQUIP = 15;</code>
+     *
+     * <pre>
+     * 8 itemKey dang mac (theo EquipSlotType)
+     * </pre>
+     */
+    UPDATE_ITEM_EQUIP(14, 15),
     ;
 
     /**
@@ -281,6 +289,14 @@ public final class Pbmethod {
      * </pre>
      */
     public static final int UPDATE_DIRECTION_VALUE = 14;
+    /**
+     * <code>UPDATE_ITEM_EQUIP = 15;</code>
+     *
+     * <pre>
+     * 8 itemKey dang mac (theo EquipSlotType)
+     * </pre>
+     */
+    public static final int UPDATE_ITEM_EQUIP_VALUE = 15;
 
 
     public final int getNumber() { return value; }
@@ -301,6 +317,7 @@ public final class Pbmethod {
         case 12: return UPDATE_MULTI_POINT;
         case 13: return USE_ITEM_SLOT;
         case 14: return UPDATE_DIRECTION;
+        case 15: return UPDATE_ITEM_EQUIP;
         default: return null;
       }
     }
@@ -880,6 +897,151 @@ public final class Pbmethod {
     }
 
     // @@protoc_insertion_point(enum_scope:pbdson.TargetAttack)
+  }
+
+  /**
+   * Protobuf enum {@code pbdson.EquipSlotType}
+   */
+  public enum EquipSlotType
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>NULL = 0;</code>
+     */
+    NULL(0, 0),
+    /**
+     * <code>WEAPON = 1;</code>
+     */
+    WEAPON(1, 1),
+    /**
+     * <code>HAT = 2;</code>
+     */
+    HAT(2, 2),
+    /**
+     * <code>ARMOR = 3;</code>
+     */
+    ARMOR(3, 3),
+    /**
+     * <code>CLOAK = 4;</code>
+     */
+    CLOAK(4, 4),
+    /**
+     * <code>SHOES = 5;</code>
+     */
+    SHOES(5, 5),
+    /**
+     * <code>TREASURE = 6;</code>
+     */
+    TREASURE(6, 6),
+    /**
+     * <code>PET = 7;</code>
+     */
+    PET(7, 7),
+    /**
+     * <code>MOUNT = 8;</code>
+     */
+    MOUNT(8, 8),
+    ;
+
+    /**
+     * <code>NULL = 0;</code>
+     */
+    public static final int NULL_VALUE = 0;
+    /**
+     * <code>WEAPON = 1;</code>
+     */
+    public static final int WEAPON_VALUE = 1;
+    /**
+     * <code>HAT = 2;</code>
+     */
+    public static final int HAT_VALUE = 2;
+    /**
+     * <code>ARMOR = 3;</code>
+     */
+    public static final int ARMOR_VALUE = 3;
+    /**
+     * <code>CLOAK = 4;</code>
+     */
+    public static final int CLOAK_VALUE = 4;
+    /**
+     * <code>SHOES = 5;</code>
+     */
+    public static final int SHOES_VALUE = 5;
+    /**
+     * <code>TREASURE = 6;</code>
+     */
+    public static final int TREASURE_VALUE = 6;
+    /**
+     * <code>PET = 7;</code>
+     */
+    public static final int PET_VALUE = 7;
+    /**
+     * <code>MOUNT = 8;</code>
+     */
+    public static final int MOUNT_VALUE = 8;
+
+
+    public final int getNumber() { return value; }
+
+    public static EquipSlotType valueOf(int value) {
+      switch (value) {
+        case 0: return NULL;
+        case 1: return WEAPON;
+        case 2: return HAT;
+        case 3: return ARMOR;
+        case 4: return CLOAK;
+        case 5: return SHOES;
+        case 6: return TREASURE;
+        case 7: return PET;
+        case 8: return MOUNT;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<EquipSlotType>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<EquipSlotType>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<EquipSlotType>() {
+            public EquipSlotType findValueByNumber(int number) {
+              return EquipSlotType.valueOf(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return protocol.Pbmethod.getDescriptor().getEnumTypes().get(6);
+    }
+
+    private static final EquipSlotType[] VALUES = values();
+
+    public static EquipSlotType valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int index;
+    private final int value;
+
+    private EquipSlotType(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:pbdson.EquipSlotType)
   }
 
   public interface RequestDataOrBuilder
@@ -78749,7 +78911,10 @@ public final class Pbmethod {
       "\022\n\016TICKER_SPECIAL\020\n\022\010\n\004CHIP\020\013\022\021\n\rBONG_LI" +
       "NH_THU\020\014\022\021\n\rBONG_SIEU_THU\020\r*;\n\014TargetAtt" +
       "ack\022\n\n\006OBJECT\020\000\022\t\n\005ENEMY\020\001\022\010\n\004BOSS\020\002\022\n\n\006" +
-      "PLAYER\020\003B\024\n\010protocolB\010Pbmethod"
+      "PLAYER\020\003*q\n\rEquipSlotType\022\010\n\004NULL\020\000\022\n\n\006W" +
+      "EAPON\020\001\022\007\n\003HAT\020\002\022\t\n\005ARMOR\020\003\022\t\n\005CLOAK\020\004\022\t" +
+      "\n\005SHOES\020\005\022\014\n\010TREASURE\020\006\022\007\n\003PET\020\007\022\t\n\005MOUN" +
+      "T\020\010B\024\n\010protocolB\010Pbmethod"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

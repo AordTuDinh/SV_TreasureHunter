@@ -50,7 +50,7 @@ public class UserItemEntity implements Serializable {
         this.userId = userId;
         this.itemId = itemId;
         this.type = type.value;
-        level = 0;
+        level = 1;
         slot = -1;
         lockDestroy = 0;
         tier = 1;
@@ -109,6 +109,14 @@ public class UserItemEntity implements Serializable {
 
     public void unEquip() {
         isEquip = false;
+    }
+
+    public boolean updateSlot(int newSlot) {
+        if (update(List.of("slot", newSlot))) {
+            this.slot = newSlot;
+            return true;
+        }
+        return false;
     }
 
     public boolean updateItemId(int idItem) {

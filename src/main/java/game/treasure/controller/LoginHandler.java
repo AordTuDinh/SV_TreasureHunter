@@ -348,6 +348,11 @@ public class LoginHandler extends AHandler {
         Pbmethod.CommonVector.Builder cm4 = Pbmethod.CommonVector.newBuilder();
         cm4.addALong(CfgServer.maxChannelOpen);
         lstCmm.addAVector(cm4.build());
+        // fee up item
+        lstCmm.addAVector(getCommonIntVector(CfgItem.UPGRADE_FEE_BASE_T1));
+        // fee up hp
+        lstCmm.addAVector(getCommonIntVector(CfgItem.SELL_PRICE_BASE_T1));
+        // ret
         addResponse(IAction.GAME_CONFIG, lstCmm.build());
     }
 

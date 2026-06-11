@@ -74,22 +74,8 @@ public enum DetailActionType {
     EAT_DINNER("event_eat_dinner"),  // Ăn tối
     EVENT_MONTH_NORMAL("event_month_normal_slot_"),  // Sự kiện tháng thường
     EVENT_MONTH_VIP("event_month_vip_slot_"),  // Sự kiện tháng vip
-    BUY_LAND("buy_lan_slot_"),  // Mua ô đất mới
-    FARM_PLANT("farm_plant_"),  // Trồng cây ID
-    HARVEST_TREE("harvest_tree_id_"),  // Thu hoạch cây ID
-    QUICK_HARVEST_TREE("quick_harvest_tree"),  // Thu hoạch cây nhanh
-    FARM_FERTILIZE("farm_fertilize_"), // tăng trưởng cây bằng id
-    FARM_PLUCK("farm_pluck_"), //Nhổ cây id
-    FARM_FER_TIME("farm_fer_time_"),// Giảm thời gian bằng id
-    SELL_AGRI("sell_agri"), // Bán item nông sản
-    SELL_FARM_SINGLE("sell_farm_single_"), // Bán farm id
-    HARVEST_FARM("harvest_farm_"), // Thu hoạch id slot
+    SELL_ITEM("sell_item_"),  // Xoá item
     CREATE_FOOD("create_food_"), // Tạo món id
-    QUICK_PLANT("quick_harvest"), // Gieo hạt nhanh
-    QUICK_HARVEST("quick_harvest"), // Thu hoạch nhanh
-    QUICK_VIP_PLUCK("quick_vip_pluck"), // Dọn vườn nhanh
-    QUICK_FERTILIZE("quick_fertilize_"), // Kích tăng trưởng id
-    QUICK_FER_TIME("quick_fer_time_"), // Giảm thời gian thu hoạch bằng id
     RESET_SPINE_NORMAL("reset_spin_normal"), // Reset vòng quay may mắn
     ROTATE_SPINE_NORMAL("rotate_spin_normal"), // Quay vòng quay normal\
     UPDATE_BONUS_NEXT_DAY("bonus-next-day"), //Xóa các item qua ngày hêt hạn

@@ -215,6 +215,13 @@ public class Player extends Unit implements Serializable {
     }
 
     @Override
+    public List<Integer> getListInfo(int effInit) {
+        List<Integer> lst = new ArrayList<>(super.getListInfo(effInit));
+        lst.addAll(mUser.getUser().getListItemKeyEquip());
+        return lst;
+    }
+
+    @Override
     public Pbmethod.PbUnit toProtoAdd(int chunkId) {
         Pbmethod.PbUnit.Builder pbAdd = Pbmethod.PbUnit.newBuilder();
         pbAdd.setType(UnitType.PLAYER.value);

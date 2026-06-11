@@ -58,6 +58,7 @@ enum SubStateType {
   UPDATE_MULTI_POINT = 12; // [point id - cur] chỉ dùng số ít point, không phải toàn bộ point
   USE_ITEM_SLOT = 13;     // slot
   UPDATE_DIRECTION = 14; // update direction for unit
+  UPDATE_ITEM_EQUIP = 15; // 8 itemKey dang mac (theo EquipSlotType)
 }
 
 enum StateType {
@@ -474,6 +475,18 @@ enum TargetAttack {
   ENEMY = 1;
   BOSS = 2;
   PLAYER = 3;
+}
+
+enum EquipSlotType {
+  NULL = 0;
+  WEAPON = 1;
+  HAT = 2;
+  ARMOR = 3;
+  CLOAK = 4;
+  SHOES = 5;
+  TREASURE = 6;
+  PET = 7;
+  MOUNT = 8;
 }
 
 

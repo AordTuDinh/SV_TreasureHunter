@@ -155,8 +155,8 @@ public class IAction {
     public static final int ITEM_EQUIPMENT_UN_EQUIP = 402;
     public static final int ITEM_EQUIPMENT_LOCK_STATUS = 403;
     public static final int ITEM_EQUIPMENT_LOCK_DESTROY = 404;
-    public static final int ITEM_EQUIPMENT_SELECT_ACCESSORY = 405;
-    public static final int ITEM_EQUIPMENT_UPGRADE_ACCESSORY = 406;
+    public static final int ITEM_SELL = 405;
+    public static final int ITEM_EQUIPMENT_UP_LEVEL = 406;
     public static final int ITEM_EQUIPMENT_VIEW_INFO = 407;
     // buy gold
     public static final int BUY_GOLD_STATUS = 425;
@@ -171,10 +171,9 @@ public class IAction {
     public static final int RANKING_STATUS = 421;
 
     // Item
-    public static final int ITEM_REMOVE = 451;
+
     public static final int ITEM_USED = 452;
     public static final int ITEM_INFO = 453;
-    public static final int ITEM_USE_FOR_ITEM = 457;
     public static final int MATERIAL_UPGRADE = 458;
     public static final int CRAFT_EXECUTE = 459;
     public static final int CRAFT_UPDATE = 460;
