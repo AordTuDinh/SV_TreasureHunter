@@ -49,7 +49,6 @@ public class MyUser implements Serializable {
     Pet pet;
     Channel channel;
     Pos cachePos;
-    int roomChanelId = 1; // 1-1000
     Map<Integer, List<FriendChatObject>> aChatFriends = new HashMap<>();
     List<Integer> comboWeapon = NumberUtil.genListInt(6, 0);
     List<Integer> cacheSendParty = new ArrayList<>(); // [userId,timeSend, number]

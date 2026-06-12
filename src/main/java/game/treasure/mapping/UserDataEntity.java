@@ -244,6 +244,11 @@ public class UserDataEntity implements Serializable {
             pb.addAPet(pets.getValue().toProto());
         }
 
+        // character skin
+        for (Map.Entry<Long, UserSkinEntity> skin : mUser.getResources().getMSkin().entrySet()) {
+            pb.addASkin(skin.getValue().toProto());
+        }
+
         // mount
         for (Map.Entry<Long, UserMountEntity> mounts : mUser.getResources().getMMount().entrySet()) {
             pb.addAMount(mounts.getValue().toProto());

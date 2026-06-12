@@ -900,6 +900,106 @@ public final class Pbmethod {
   }
 
   /**
+   * Protobuf enum {@code pbdson.SkinType}
+   */
+  public enum SkinType
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>HAIR = 0;</code>
+     */
+    HAIR(0, 0),
+    /**
+     * <code>FACE = 1;</code>
+     */
+    FACE(1, 1),
+    /**
+     * <code>EYE = 2;</code>
+     */
+    EYE(2, 2),
+    /**
+     * <code>BODY = 3;</code>
+     */
+    BODY(3, 3),
+    ;
+
+    /**
+     * <code>HAIR = 0;</code>
+     */
+    public static final int HAIR_VALUE = 0;
+    /**
+     * <code>FACE = 1;</code>
+     */
+    public static final int FACE_VALUE = 1;
+    /**
+     * <code>EYE = 2;</code>
+     */
+    public static final int EYE_VALUE = 2;
+    /**
+     * <code>BODY = 3;</code>
+     */
+    public static final int BODY_VALUE = 3;
+
+
+    public final int getNumber() { return value; }
+
+    public static SkinType valueOf(int value) {
+      switch (value) {
+        case 0: return HAIR;
+        case 1: return FACE;
+        case 2: return EYE;
+        case 3: return BODY;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<SkinType>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<SkinType>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<SkinType>() {
+            public SkinType findValueByNumber(int number) {
+              return SkinType.valueOf(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return protocol.Pbmethod.getDescriptor().getEnumTypes().get(6);
+    }
+
+    private static final SkinType[] VALUES = values();
+
+    public static SkinType valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int index;
+    private final int value;
+
+    private SkinType(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:pbdson.SkinType)
+  }
+
+  /**
    * Protobuf enum {@code pbdson.EquipSlotType}
    */
   public enum EquipSlotType
@@ -1019,7 +1119,7 @@ public final class Pbmethod {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return protocol.Pbmethod.getDescriptor().getEnumTypes().get(6);
+      return protocol.Pbmethod.getDescriptor().getEnumTypes().get(7);
     }
 
     private static final EquipSlotType[] VALUES = values();
@@ -18265,19 +18365,19 @@ public final class Pbmethod {
      */
     int getRankTrophy();
 
-    // repeated int32 avatar = 12;
+    // repeated int32 skins = 12;
     /**
-     * <code>repeated int32 avatar = 12;</code>
+     * <code>repeated int32 skins = 12;</code>
      */
-    java.util.List<java.lang.Integer> getAvatarList();
+    java.util.List<java.lang.Integer> getSkinsList();
     /**
-     * <code>repeated int32 avatar = 12;</code>
+     * <code>repeated int32 skins = 12;</code>
      */
-    int getAvatarCount();
+    int getSkinsCount();
     /**
-     * <code>repeated int32 avatar = 12;</code>
+     * <code>repeated int32 skins = 12;</code>
      */
-    int getAvatar(int index);
+    int getSkins(int index);
 
     // optional int32 curDonated = 13;
     /**
@@ -18407,21 +18507,21 @@ public final class Pbmethod {
             }
             case 96: {
               if (!((mutable_bitField0_ & 0x00004000) == 0x00004000)) {
-                avatar_ = new java.util.ArrayList<java.lang.Integer>();
+                skins_ = new java.util.ArrayList<java.lang.Integer>();
                 mutable_bitField0_ |= 0x00004000;
               }
-              avatar_.add(input.readInt32());
+              skins_.add(input.readInt32());
               break;
             }
             case 98: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
               if (!((mutable_bitField0_ & 0x00004000) == 0x00004000) && input.getBytesUntilLimit() > 0) {
-                avatar_ = new java.util.ArrayList<java.lang.Integer>();
+                skins_ = new java.util.ArrayList<java.lang.Integer>();
                 mutable_bitField0_ |= 0x00004000;
               }
               while (input.getBytesUntilLimit() > 0) {
-                avatar_.add(input.readInt32());
+                skins_.add(input.readInt32());
               }
               input.popLimit(limit);
               break;
@@ -18460,7 +18560,7 @@ public final class Pbmethod {
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
         if (((mutable_bitField0_ & 0x00004000) == 0x00004000)) {
-          avatar_ = java.util.Collections.unmodifiableList(avatar_);
+          skins_ = java.util.Collections.unmodifiableList(skins_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -18772,27 +18872,27 @@ public final class Pbmethod {
       return rankTrophy_;
     }
 
-    // repeated int32 avatar = 12;
-    public static final int AVATAR_FIELD_NUMBER = 12;
-    private java.util.List<java.lang.Integer> avatar_;
+    // repeated int32 skins = 12;
+    public static final int SKINS_FIELD_NUMBER = 12;
+    private java.util.List<java.lang.Integer> skins_;
     /**
-     * <code>repeated int32 avatar = 12;</code>
+     * <code>repeated int32 skins = 12;</code>
      */
     public java.util.List<java.lang.Integer>
-        getAvatarList() {
-      return avatar_;
+        getSkinsList() {
+      return skins_;
     }
     /**
-     * <code>repeated int32 avatar = 12;</code>
+     * <code>repeated int32 skins = 12;</code>
      */
-    public int getAvatarCount() {
-      return avatar_.size();
+    public int getSkinsCount() {
+      return skins_.size();
     }
     /**
-     * <code>repeated int32 avatar = 12;</code>
+     * <code>repeated int32 skins = 12;</code>
      */
-    public int getAvatar(int index) {
-      return avatar_.get(index);
+    public int getSkins(int index) {
+      return skins_.get(index);
     }
 
     // optional int32 curDonated = 13;
@@ -18842,7 +18942,7 @@ public final class Pbmethod {
       lastAction_ = 0L;
       vip_ = 0;
       rankTrophy_ = 0;
-      avatar_ = java.util.Collections.emptyList();
+      skins_ = java.util.Collections.emptyList();
       curDonated_ = 0;
       online_ = false;
     }
@@ -18891,8 +18991,8 @@ public final class Pbmethod {
       if (((bitField0_ & 0x00002000) == 0x00002000)) {
         output.writeInt32(11, rankTrophy_);
       }
-      for (int i = 0; i < avatar_.size(); i++) {
-        output.writeInt32(12, avatar_.get(i));
+      for (int i = 0; i < skins_.size(); i++) {
+        output.writeInt32(12, skins_.get(i));
       }
       if (((bitField0_ & 0x00004000) == 0x00004000)) {
         output.writeInt32(13, curDonated_);
@@ -18964,12 +19064,12 @@ public final class Pbmethod {
       }
       {
         int dataSize = 0;
-        for (int i = 0; i < avatar_.size(); i++) {
+        for (int i = 0; i < skins_.size(); i++) {
           dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(avatar_.get(i));
+            .computeInt32SizeNoTag(skins_.get(i));
         }
         size += dataSize;
-        size += 1 * getAvatarList().size();
+        size += 1 * getSkinsList().size();
       }
       if (((bitField0_ & 0x00004000) == 0x00004000)) {
         size += com.google.protobuf.CodedOutputStream
@@ -19135,7 +19235,7 @@ public final class Pbmethod {
         bitField0_ = (bitField0_ & ~0x00001000);
         rankTrophy_ = 0;
         bitField0_ = (bitField0_ & ~0x00002000);
-        avatar_ = java.util.Collections.emptyList();
+        skins_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00004000);
         curDonated_ = 0;
         bitField0_ = (bitField0_ & ~0x00008000);
@@ -19226,10 +19326,10 @@ public final class Pbmethod {
         }
         result.rankTrophy_ = rankTrophy_;
         if (((bitField0_ & 0x00004000) == 0x00004000)) {
-          avatar_ = java.util.Collections.unmodifiableList(avatar_);
+          skins_ = java.util.Collections.unmodifiableList(skins_);
           bitField0_ = (bitField0_ & ~0x00004000);
         }
-        result.avatar_ = avatar_;
+        result.skins_ = skins_;
         if (((from_bitField0_ & 0x00008000) == 0x00008000)) {
           to_bitField0_ |= 0x00004000;
         }
@@ -19300,13 +19400,13 @@ public final class Pbmethod {
         if (other.hasRankTrophy()) {
           setRankTrophy(other.getRankTrophy());
         }
-        if (!other.avatar_.isEmpty()) {
-          if (avatar_.isEmpty()) {
-            avatar_ = other.avatar_;
+        if (!other.skins_.isEmpty()) {
+          if (skins_.isEmpty()) {
+            skins_ = other.skins_;
             bitField0_ = (bitField0_ & ~0x00004000);
           } else {
-            ensureAvatarIsMutable();
-            avatar_.addAll(other.avatar_);
+            ensureSkinsIsMutable();
+            skins_.addAll(other.skins_);
           }
           onChanged();
         }
@@ -19887,67 +19987,67 @@ public final class Pbmethod {
         return this;
       }
 
-      // repeated int32 avatar = 12;
-      private java.util.List<java.lang.Integer> avatar_ = java.util.Collections.emptyList();
-      private void ensureAvatarIsMutable() {
+      // repeated int32 skins = 12;
+      private java.util.List<java.lang.Integer> skins_ = java.util.Collections.emptyList();
+      private void ensureSkinsIsMutable() {
         if (!((bitField0_ & 0x00004000) == 0x00004000)) {
-          avatar_ = new java.util.ArrayList<java.lang.Integer>(avatar_);
+          skins_ = new java.util.ArrayList<java.lang.Integer>(skins_);
           bitField0_ |= 0x00004000;
          }
       }
       /**
-       * <code>repeated int32 avatar = 12;</code>
+       * <code>repeated int32 skins = 12;</code>
        */
       public java.util.List<java.lang.Integer>
-          getAvatarList() {
-        return java.util.Collections.unmodifiableList(avatar_);
+          getSkinsList() {
+        return java.util.Collections.unmodifiableList(skins_);
       }
       /**
-       * <code>repeated int32 avatar = 12;</code>
+       * <code>repeated int32 skins = 12;</code>
        */
-      public int getAvatarCount() {
-        return avatar_.size();
+      public int getSkinsCount() {
+        return skins_.size();
       }
       /**
-       * <code>repeated int32 avatar = 12;</code>
+       * <code>repeated int32 skins = 12;</code>
        */
-      public int getAvatar(int index) {
-        return avatar_.get(index);
+      public int getSkins(int index) {
+        return skins_.get(index);
       }
       /**
-       * <code>repeated int32 avatar = 12;</code>
+       * <code>repeated int32 skins = 12;</code>
        */
-      public Builder setAvatar(
+      public Builder setSkins(
           int index, int value) {
-        ensureAvatarIsMutable();
-        avatar_.set(index, value);
+        ensureSkinsIsMutable();
+        skins_.set(index, value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 avatar = 12;</code>
+       * <code>repeated int32 skins = 12;</code>
        */
-      public Builder addAvatar(int value) {
-        ensureAvatarIsMutable();
-        avatar_.add(value);
+      public Builder addSkins(int value) {
+        ensureSkinsIsMutable();
+        skins_.add(value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 avatar = 12;</code>
+       * <code>repeated int32 skins = 12;</code>
        */
-      public Builder addAllAvatar(
+      public Builder addAllSkins(
           java.lang.Iterable<? extends java.lang.Integer> values) {
-        ensureAvatarIsMutable();
-        super.addAll(values, avatar_);
+        ensureSkinsIsMutable();
+        super.addAll(values, skins_);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 avatar = 12;</code>
+       * <code>repeated int32 skins = 12;</code>
        */
-      public Builder clearAvatar() {
-        avatar_ = java.util.Collections.emptyList();
+      public Builder clearSkins() {
+        skins_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00004000);
         onChanged();
         return this;
@@ -20962,19 +21062,19 @@ public final class Pbmethod {
      */
     long getGem();
 
-    // repeated int32 avatar = 8;
+    // repeated int32 skins = 8;
     /**
-     * <code>repeated int32 avatar = 8;</code>
+     * <code>repeated int32 skins = 8;</code>
      */
-    java.util.List<java.lang.Integer> getAvatarList();
+    java.util.List<java.lang.Integer> getSkinsList();
     /**
-     * <code>repeated int32 avatar = 8;</code>
+     * <code>repeated int32 skins = 8;</code>
      */
-    int getAvatarCount();
+    int getSkinsCount();
     /**
-     * <code>repeated int32 avatar = 8;</code>
+     * <code>repeated int32 skins = 8;</code>
      */
-    int getAvatar(int index);
+    int getSkins(int index);
 
     // repeated int32 vip = 9;
     /**
@@ -21255,21 +21355,21 @@ public final class Pbmethod {
             }
             case 64: {
               if (!((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
-                avatar_ = new java.util.ArrayList<java.lang.Integer>();
+                skins_ = new java.util.ArrayList<java.lang.Integer>();
                 mutable_bitField0_ |= 0x00000020;
               }
-              avatar_.add(input.readInt32());
+              skins_.add(input.readInt32());
               break;
             }
             case 66: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
               if (!((mutable_bitField0_ & 0x00000020) == 0x00000020) && input.getBytesUntilLimit() > 0) {
-                avatar_ = new java.util.ArrayList<java.lang.Integer>();
+                skins_ = new java.util.ArrayList<java.lang.Integer>();
                 mutable_bitField0_ |= 0x00000020;
               }
               while (input.getBytesUntilLimit() > 0) {
-                avatar_.add(input.readInt32());
+                skins_.add(input.readInt32());
               }
               input.popLimit(limit);
               break;
@@ -21483,7 +21583,7 @@ public final class Pbmethod {
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
         if (((mutable_bitField0_ & 0x00000020) == 0x00000020)) {
-          avatar_ = java.util.Collections.unmodifiableList(avatar_);
+          skins_ = java.util.Collections.unmodifiableList(skins_);
         }
         if (((mutable_bitField0_ & 0x00000040) == 0x00000040)) {
           vip_ = java.util.Collections.unmodifiableList(vip_);
@@ -21669,27 +21769,27 @@ public final class Pbmethod {
       return gem_;
     }
 
-    // repeated int32 avatar = 8;
-    public static final int AVATAR_FIELD_NUMBER = 8;
-    private java.util.List<java.lang.Integer> avatar_;
+    // repeated int32 skins = 8;
+    public static final int SKINS_FIELD_NUMBER = 8;
+    private java.util.List<java.lang.Integer> skins_;
     /**
-     * <code>repeated int32 avatar = 8;</code>
+     * <code>repeated int32 skins = 8;</code>
      */
     public java.util.List<java.lang.Integer>
-        getAvatarList() {
-      return avatar_;
+        getSkinsList() {
+      return skins_;
     }
     /**
-     * <code>repeated int32 avatar = 8;</code>
+     * <code>repeated int32 skins = 8;</code>
      */
-    public int getAvatarCount() {
-      return avatar_.size();
+    public int getSkinsCount() {
+      return skins_.size();
     }
     /**
-     * <code>repeated int32 avatar = 8;</code>
+     * <code>repeated int32 skins = 8;</code>
      */
-    public int getAvatar(int index) {
-      return avatar_.get(index);
+    public int getSkins(int index) {
+      return skins_.get(index);
     }
 
     // repeated int32 vip = 9;
@@ -22041,7 +22141,7 @@ public final class Pbmethod {
       name_ = "";
       gold_ = 0L;
       gem_ = 0L;
-      avatar_ = java.util.Collections.emptyList();
+      skins_ = java.util.Collections.emptyList();
       vip_ = java.util.Collections.emptyList();
       clanInfo_ = protocol.Pbmethod.CommonVector.getDefaultInstance();
       info_ = protocol.Pbmethod.CommonVector.getDefaultInstance();
@@ -22086,8 +22186,8 @@ public final class Pbmethod {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeInt64(5, gem_);
       }
-      for (int i = 0; i < avatar_.size(); i++) {
-        output.writeInt32(8, avatar_.get(i));
+      for (int i = 0; i < skins_.size(); i++) {
+        output.writeInt32(8, skins_.get(i));
       }
       for (int i = 0; i < vip_.size(); i++) {
         output.writeInt32(9, vip_.get(i));
@@ -22168,12 +22268,12 @@ public final class Pbmethod {
       }
       {
         int dataSize = 0;
-        for (int i = 0; i < avatar_.size(); i++) {
+        for (int i = 0; i < skins_.size(); i++) {
           dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(avatar_.get(i));
+            .computeInt32SizeNoTag(skins_.get(i));
         }
         size += dataSize;
-        size += 1 * getAvatarList().size();
+        size += 1 * getSkinsList().size();
       }
       {
         int dataSize = 0;
@@ -22398,7 +22498,7 @@ public final class Pbmethod {
         bitField0_ = (bitField0_ & ~0x00000008);
         gem_ = 0L;
         bitField0_ = (bitField0_ & ~0x00000010);
-        avatar_ = java.util.Collections.emptyList();
+        skins_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000020);
         vip_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000040);
@@ -22493,10 +22593,10 @@ public final class Pbmethod {
         }
         result.gem_ = gem_;
         if (((bitField0_ & 0x00000020) == 0x00000020)) {
-          avatar_ = java.util.Collections.unmodifiableList(avatar_);
+          skins_ = java.util.Collections.unmodifiableList(skins_);
           bitField0_ = (bitField0_ & ~0x00000020);
         }
-        result.avatar_ = avatar_;
+        result.skins_ = skins_;
         if (((bitField0_ & 0x00000040) == 0x00000040)) {
           vip_ = java.util.Collections.unmodifiableList(vip_);
           bitField0_ = (bitField0_ & ~0x00000040);
@@ -22614,13 +22714,13 @@ public final class Pbmethod {
         if (other.hasGem()) {
           setGem(other.getGem());
         }
-        if (!other.avatar_.isEmpty()) {
-          if (avatar_.isEmpty()) {
-            avatar_ = other.avatar_;
+        if (!other.skins_.isEmpty()) {
+          if (skins_.isEmpty()) {
+            skins_ = other.skins_;
             bitField0_ = (bitField0_ & ~0x00000020);
           } else {
-            ensureAvatarIsMutable();
-            avatar_.addAll(other.avatar_);
+            ensureSkinsIsMutable();
+            skins_.addAll(other.skins_);
           }
           onChanged();
         }
@@ -22990,67 +23090,67 @@ public final class Pbmethod {
         return this;
       }
 
-      // repeated int32 avatar = 8;
-      private java.util.List<java.lang.Integer> avatar_ = java.util.Collections.emptyList();
-      private void ensureAvatarIsMutable() {
+      // repeated int32 skins = 8;
+      private java.util.List<java.lang.Integer> skins_ = java.util.Collections.emptyList();
+      private void ensureSkinsIsMutable() {
         if (!((bitField0_ & 0x00000020) == 0x00000020)) {
-          avatar_ = new java.util.ArrayList<java.lang.Integer>(avatar_);
+          skins_ = new java.util.ArrayList<java.lang.Integer>(skins_);
           bitField0_ |= 0x00000020;
          }
       }
       /**
-       * <code>repeated int32 avatar = 8;</code>
+       * <code>repeated int32 skins = 8;</code>
        */
       public java.util.List<java.lang.Integer>
-          getAvatarList() {
-        return java.util.Collections.unmodifiableList(avatar_);
+          getSkinsList() {
+        return java.util.Collections.unmodifiableList(skins_);
       }
       /**
-       * <code>repeated int32 avatar = 8;</code>
+       * <code>repeated int32 skins = 8;</code>
        */
-      public int getAvatarCount() {
-        return avatar_.size();
+      public int getSkinsCount() {
+        return skins_.size();
       }
       /**
-       * <code>repeated int32 avatar = 8;</code>
+       * <code>repeated int32 skins = 8;</code>
        */
-      public int getAvatar(int index) {
-        return avatar_.get(index);
+      public int getSkins(int index) {
+        return skins_.get(index);
       }
       /**
-       * <code>repeated int32 avatar = 8;</code>
+       * <code>repeated int32 skins = 8;</code>
        */
-      public Builder setAvatar(
+      public Builder setSkins(
           int index, int value) {
-        ensureAvatarIsMutable();
-        avatar_.set(index, value);
+        ensureSkinsIsMutable();
+        skins_.set(index, value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 avatar = 8;</code>
+       * <code>repeated int32 skins = 8;</code>
        */
-      public Builder addAvatar(int value) {
-        ensureAvatarIsMutable();
-        avatar_.add(value);
+      public Builder addSkins(int value) {
+        ensureSkinsIsMutable();
+        skins_.add(value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 avatar = 8;</code>
+       * <code>repeated int32 skins = 8;</code>
        */
-      public Builder addAllAvatar(
+      public Builder addAllSkins(
           java.lang.Iterable<? extends java.lang.Integer> values) {
-        ensureAvatarIsMutable();
-        super.addAll(values, avatar_);
+        ensureSkinsIsMutable();
+        super.addAll(values, skins_);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 avatar = 8;</code>
+       * <code>repeated int32 skins = 8;</code>
        */
-      public Builder clearAvatar() {
-        avatar_ = java.util.Collections.emptyList();
+      public Builder clearSkins() {
+        skins_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000020);
         onChanged();
         return this;
@@ -24189,6 +24289,31 @@ public final class Pbmethod {
      */
     long getItemEquipments(int index);
 
+    // repeated .pbdson.PbSkin aSkin = 11;
+    /**
+     * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+     */
+    java.util.List<protocol.Pbmethod.PbSkin> 
+        getASkinList();
+    /**
+     * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+     */
+    protocol.Pbmethod.PbSkin getASkin(int index);
+    /**
+     * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+     */
+    int getASkinCount();
+    /**
+     * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+     */
+    java.util.List<? extends protocol.Pbmethod.PbSkinOrBuilder> 
+        getASkinOrBuilderList();
+    /**
+     * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+     */
+    protocol.Pbmethod.PbSkinOrBuilder getASkinOrBuilder(
+        int index);
+
     // optional .pbdson.PbListMaterial aMaterial = 12;
     /**
      * <code>optional .pbdson.PbListMaterial aMaterial = 12;</code>
@@ -24470,6 +24595,14 @@ public final class Pbmethod {
               input.popLimit(limit);
               break;
             }
+            case 90: {
+              if (!((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+                aSkin_ = new java.util.ArrayList<protocol.Pbmethod.PbSkin>();
+                mutable_bitField0_ |= 0x00000100;
+              }
+              aSkin_.add(input.readMessage(protocol.Pbmethod.PbSkin.PARSER, extensionRegistry));
+              break;
+            }
             case 98: {
               protocol.Pbmethod.PbListMaterial.Builder subBuilder = null;
               if (((bitField0_ & 0x00000080) == 0x00000080)) {
@@ -24484,17 +24617,17 @@ public final class Pbmethod {
               break;
             }
             case 122: {
-              if (!((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
+              if (!((mutable_bitField0_ & 0x00000400) == 0x00000400)) {
                 aPet_ = new java.util.ArrayList<protocol.Pbmethod.PbPet>();
-                mutable_bitField0_ |= 0x00000200;
+                mutable_bitField0_ |= 0x00000400;
               }
               aPet_.add(input.readMessage(protocol.Pbmethod.PbPet.PARSER, extensionRegistry));
               break;
             }
             case 130: {
-              if (!((mutable_bitField0_ & 0x00000400) == 0x00000400)) {
+              if (!((mutable_bitField0_ & 0x00000800) == 0x00000800)) {
                 aMount_ = new java.util.ArrayList<protocol.Pbmethod.PbMount>();
-                mutable_bitField0_ |= 0x00000400;
+                mutable_bitField0_ |= 0x00000800;
               }
               aMount_.add(input.readMessage(protocol.Pbmethod.PbMount.PARSER, extensionRegistry));
               break;
@@ -24505,9 +24638,9 @@ public final class Pbmethod {
               break;
             }
             case 144: {
-              if (!((mutable_bitField0_ & 0x00001000) == 0x00001000)) {
+              if (!((mutable_bitField0_ & 0x00002000) == 0x00002000)) {
                 dameSkins_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00001000;
+                mutable_bitField0_ |= 0x00002000;
               }
               dameSkins_.add(input.readInt32());
               break;
@@ -24515,9 +24648,9 @@ public final class Pbmethod {
             case 146: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00001000) == 0x00001000) && input.getBytesUntilLimit() > 0) {
+              if (!((mutable_bitField0_ & 0x00002000) == 0x00002000) && input.getBytesUntilLimit() > 0) {
                 dameSkins_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00001000;
+                mutable_bitField0_ |= 0x00002000;
               }
               while (input.getBytesUntilLimit() > 0) {
                 dameSkins_.add(input.readInt32());
@@ -24531,9 +24664,9 @@ public final class Pbmethod {
               break;
             }
             case 168: {
-              if (!((mutable_bitField0_ & 0x00004000) == 0x00004000)) {
+              if (!((mutable_bitField0_ & 0x00008000) == 0x00008000)) {
                 chatFrames_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00004000;
+                mutable_bitField0_ |= 0x00008000;
               }
               chatFrames_.add(input.readInt32());
               break;
@@ -24541,9 +24674,9 @@ public final class Pbmethod {
             case 170: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00004000) == 0x00004000) && input.getBytesUntilLimit() > 0) {
+              if (!((mutable_bitField0_ & 0x00008000) == 0x00008000) && input.getBytesUntilLimit() > 0) {
                 chatFrames_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00004000;
+                mutable_bitField0_ |= 0x00008000;
               }
               while (input.getBytesUntilLimit() > 0) {
                 chatFrames_.add(input.readInt32());
@@ -24557,9 +24690,9 @@ public final class Pbmethod {
               break;
             }
             case 184: {
-              if (!((mutable_bitField0_ & 0x00010000) == 0x00010000)) {
+              if (!((mutable_bitField0_ & 0x00020000) == 0x00020000)) {
                 trials_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00010000;
+                mutable_bitField0_ |= 0x00020000;
               }
               trials_.add(input.readInt32());
               break;
@@ -24567,9 +24700,9 @@ public final class Pbmethod {
             case 186: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
-              if (!((mutable_bitField0_ & 0x00010000) == 0x00010000) && input.getBytesUntilLimit() > 0) {
+              if (!((mutable_bitField0_ & 0x00020000) == 0x00020000) && input.getBytesUntilLimit() > 0) {
                 trials_ = new java.util.ArrayList<java.lang.Integer>();
-                mutable_bitField0_ |= 0x00010000;
+                mutable_bitField0_ |= 0x00020000;
               }
               while (input.getBytesUntilLimit() > 0) {
                 trials_.add(input.readInt32());
@@ -24603,19 +24736,22 @@ public final class Pbmethod {
         if (((mutable_bitField0_ & 0x00000080) == 0x00000080)) {
           itemEquipments_ = java.util.Collections.unmodifiableList(itemEquipments_);
         }
-        if (((mutable_bitField0_ & 0x00000200) == 0x00000200)) {
-          aPet_ = java.util.Collections.unmodifiableList(aPet_);
+        if (((mutable_bitField0_ & 0x00000100) == 0x00000100)) {
+          aSkin_ = java.util.Collections.unmodifiableList(aSkin_);
         }
         if (((mutable_bitField0_ & 0x00000400) == 0x00000400)) {
+          aPet_ = java.util.Collections.unmodifiableList(aPet_);
+        }
+        if (((mutable_bitField0_ & 0x00000800) == 0x00000800)) {
           aMount_ = java.util.Collections.unmodifiableList(aMount_);
         }
-        if (((mutable_bitField0_ & 0x00001000) == 0x00001000)) {
+        if (((mutable_bitField0_ & 0x00002000) == 0x00002000)) {
           dameSkins_ = java.util.Collections.unmodifiableList(dameSkins_);
         }
-        if (((mutable_bitField0_ & 0x00004000) == 0x00004000)) {
+        if (((mutable_bitField0_ & 0x00008000) == 0x00008000)) {
           chatFrames_ = java.util.Collections.unmodifiableList(chatFrames_);
         }
-        if (((mutable_bitField0_ & 0x00010000) == 0x00010000)) {
+        if (((mutable_bitField0_ & 0x00020000) == 0x00020000)) {
           trials_ = java.util.Collections.unmodifiableList(trials_);
         }
         this.unknownFields = unknownFields.build();
@@ -24801,6 +24937,42 @@ public final class Pbmethod {
      */
     public long getItemEquipments(int index) {
       return itemEquipments_.get(index);
+    }
+
+    // repeated .pbdson.PbSkin aSkin = 11;
+    public static final int ASKIN_FIELD_NUMBER = 11;
+    private java.util.List<protocol.Pbmethod.PbSkin> aSkin_;
+    /**
+     * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+     */
+    public java.util.List<protocol.Pbmethod.PbSkin> getASkinList() {
+      return aSkin_;
+    }
+    /**
+     * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+     */
+    public java.util.List<? extends protocol.Pbmethod.PbSkinOrBuilder> 
+        getASkinOrBuilderList() {
+      return aSkin_;
+    }
+    /**
+     * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+     */
+    public int getASkinCount() {
+      return aSkin_.size();
+    }
+    /**
+     * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+     */
+    public protocol.Pbmethod.PbSkin getASkin(int index) {
+      return aSkin_.get(index);
+    }
+    /**
+     * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+     */
+    public protocol.Pbmethod.PbSkinOrBuilder getASkinOrBuilder(
+        int index) {
+      return aSkin_.get(index);
     }
 
     // optional .pbdson.PbListMaterial aMaterial = 12;
@@ -25071,6 +25243,7 @@ public final class Pbmethod {
       numPointLevel_ = 0;
       items_ = protocol.Pbmethod.PbListItem.getDefaultInstance();
       itemEquipments_ = java.util.Collections.emptyList();
+      aSkin_ = java.util.Collections.emptyList();
       aMaterial_ = protocol.Pbmethod.PbListMaterial.getDefaultInstance();
       aPet_ = java.util.Collections.emptyList();
       aMount_ = java.util.Collections.emptyList();
@@ -25119,6 +25292,9 @@ public final class Pbmethod {
       }
       for (int i = 0; i < itemEquipments_.size(); i++) {
         output.writeInt64(10, itemEquipments_.get(i));
+      }
+      for (int i = 0; i < aSkin_.size(); i++) {
+        output.writeMessage(11, aSkin_.get(i));
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         output.writeMessage(12, aMaterial_);
@@ -25201,6 +25377,10 @@ public final class Pbmethod {
         }
         size += dataSize;
         size += 1 * getItemEquipmentsList().size();
+      }
+      for (int i = 0; i < aSkin_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(11, aSkin_.get(i));
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
@@ -25374,6 +25554,7 @@ public final class Pbmethod {
       private void maybeForceBuilderInitialization() {
         if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
           getItemsFieldBuilder();
+          getASkinFieldBuilder();
           getAMaterialFieldBuilder();
           getAPetFieldBuilder();
           getAMountFieldBuilder();
@@ -25405,42 +25586,48 @@ public final class Pbmethod {
         bitField0_ = (bitField0_ & ~0x00000040);
         itemEquipments_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000080);
+        if (aSkinBuilder_ == null) {
+          aSkin_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000100);
+        } else {
+          aSkinBuilder_.clear();
+        }
         if (aMaterialBuilder_ == null) {
           aMaterial_ = protocol.Pbmethod.PbListMaterial.getDefaultInstance();
         } else {
           aMaterialBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000100);
+        bitField0_ = (bitField0_ & ~0x00000200);
         if (aPetBuilder_ == null) {
           aPet_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000200);
+          bitField0_ = (bitField0_ & ~0x00000400);
         } else {
           aPetBuilder_.clear();
         }
         if (aMountBuilder_ == null) {
           aMount_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000400);
+          bitField0_ = (bitField0_ & ~0x00000800);
         } else {
           aMountBuilder_.clear();
         }
         tutorial_ = 0;
-        bitField0_ = (bitField0_ & ~0x00000800);
-        dameSkins_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00001000);
-        dameSkinEquip_ = 0;
+        dameSkins_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00002000);
-        chatFrames_ = java.util.Collections.emptyList();
+        dameSkinEquip_ = 0;
         bitField0_ = (bitField0_ & ~0x00004000);
-        chatFrameEquip_ = 0;
+        chatFrames_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00008000);
-        trials_ = java.util.Collections.emptyList();
+        chatFrameEquip_ = 0;
         bitField0_ = (bitField0_ & ~0x00010000);
-        trialEquip_ = 0;
+        trials_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00020000);
-        craftLevel_ = 0;
+        trialEquip_ = 0;
         bitField0_ = (bitField0_ & ~0x00040000);
-        craftExp_ = 0;
+        craftLevel_ = 0;
         bitField0_ = (bitField0_ & ~0x00080000);
+        craftExp_ = 0;
+        bitField0_ = (bitField0_ & ~0x00100000);
         return this;
       }
 
@@ -25506,7 +25693,16 @@ public final class Pbmethod {
           bitField0_ = (bitField0_ & ~0x00000080);
         }
         result.itemEquipments_ = itemEquipments_;
-        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+        if (aSkinBuilder_ == null) {
+          if (((bitField0_ & 0x00000100) == 0x00000100)) {
+            aSkin_ = java.util.Collections.unmodifiableList(aSkin_);
+            bitField0_ = (bitField0_ & ~0x00000100);
+          }
+          result.aSkin_ = aSkin_;
+        } else {
+          result.aSkin_ = aSkinBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
           to_bitField0_ |= 0x00000080;
         }
         if (aMaterialBuilder_ == null) {
@@ -25515,59 +25711,59 @@ public final class Pbmethod {
           result.aMaterial_ = aMaterialBuilder_.build();
         }
         if (aPetBuilder_ == null) {
-          if (((bitField0_ & 0x00000200) == 0x00000200)) {
+          if (((bitField0_ & 0x00000400) == 0x00000400)) {
             aPet_ = java.util.Collections.unmodifiableList(aPet_);
-            bitField0_ = (bitField0_ & ~0x00000200);
+            bitField0_ = (bitField0_ & ~0x00000400);
           }
           result.aPet_ = aPet_;
         } else {
           result.aPet_ = aPetBuilder_.build();
         }
         if (aMountBuilder_ == null) {
-          if (((bitField0_ & 0x00000400) == 0x00000400)) {
+          if (((bitField0_ & 0x00000800) == 0x00000800)) {
             aMount_ = java.util.Collections.unmodifiableList(aMount_);
-            bitField0_ = (bitField0_ & ~0x00000400);
+            bitField0_ = (bitField0_ & ~0x00000800);
           }
           result.aMount_ = aMount_;
         } else {
           result.aMount_ = aMountBuilder_.build();
         }
-        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
           to_bitField0_ |= 0x00000100;
         }
         result.tutorial_ = tutorial_;
-        if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        if (((bitField0_ & 0x00002000) == 0x00002000)) {
           dameSkins_ = java.util.Collections.unmodifiableList(dameSkins_);
-          bitField0_ = (bitField0_ & ~0x00001000);
+          bitField0_ = (bitField0_ & ~0x00002000);
         }
         result.dameSkins_ = dameSkins_;
-        if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
+        if (((from_bitField0_ & 0x00004000) == 0x00004000)) {
           to_bitField0_ |= 0x00000200;
         }
         result.dameSkinEquip_ = dameSkinEquip_;
-        if (((bitField0_ & 0x00004000) == 0x00004000)) {
+        if (((bitField0_ & 0x00008000) == 0x00008000)) {
           chatFrames_ = java.util.Collections.unmodifiableList(chatFrames_);
-          bitField0_ = (bitField0_ & ~0x00004000);
+          bitField0_ = (bitField0_ & ~0x00008000);
         }
         result.chatFrames_ = chatFrames_;
-        if (((from_bitField0_ & 0x00008000) == 0x00008000)) {
+        if (((from_bitField0_ & 0x00010000) == 0x00010000)) {
           to_bitField0_ |= 0x00000400;
         }
         result.chatFrameEquip_ = chatFrameEquip_;
-        if (((bitField0_ & 0x00010000) == 0x00010000)) {
+        if (((bitField0_ & 0x00020000) == 0x00020000)) {
           trials_ = java.util.Collections.unmodifiableList(trials_);
-          bitField0_ = (bitField0_ & ~0x00010000);
+          bitField0_ = (bitField0_ & ~0x00020000);
         }
         result.trials_ = trials_;
-        if (((from_bitField0_ & 0x00020000) == 0x00020000)) {
+        if (((from_bitField0_ & 0x00040000) == 0x00040000)) {
           to_bitField0_ |= 0x00000800;
         }
         result.trialEquip_ = trialEquip_;
-        if (((from_bitField0_ & 0x00040000) == 0x00040000)) {
+        if (((from_bitField0_ & 0x00080000) == 0x00080000)) {
           to_bitField0_ |= 0x00001000;
         }
         result.craftLevel_ = craftLevel_;
-        if (((from_bitField0_ & 0x00080000) == 0x00080000)) {
+        if (((from_bitField0_ & 0x00100000) == 0x00100000)) {
           to_bitField0_ |= 0x00002000;
         }
         result.craftExp_ = craftExp_;
@@ -25618,6 +25814,32 @@ public final class Pbmethod {
           }
           onChanged();
         }
+        if (aSkinBuilder_ == null) {
+          if (!other.aSkin_.isEmpty()) {
+            if (aSkin_.isEmpty()) {
+              aSkin_ = other.aSkin_;
+              bitField0_ = (bitField0_ & ~0x00000100);
+            } else {
+              ensureASkinIsMutable();
+              aSkin_.addAll(other.aSkin_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.aSkin_.isEmpty()) {
+            if (aSkinBuilder_.isEmpty()) {
+              aSkinBuilder_.dispose();
+              aSkinBuilder_ = null;
+              aSkin_ = other.aSkin_;
+              bitField0_ = (bitField0_ & ~0x00000100);
+              aSkinBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getASkinFieldBuilder() : null;
+            } else {
+              aSkinBuilder_.addAllMessages(other.aSkin_);
+            }
+          }
+        }
         if (other.hasAMaterial()) {
           mergeAMaterial(other.getAMaterial());
         }
@@ -25625,7 +25847,7 @@ public final class Pbmethod {
           if (!other.aPet_.isEmpty()) {
             if (aPet_.isEmpty()) {
               aPet_ = other.aPet_;
-              bitField0_ = (bitField0_ & ~0x00000200);
+              bitField0_ = (bitField0_ & ~0x00000400);
             } else {
               ensureAPetIsMutable();
               aPet_.addAll(other.aPet_);
@@ -25638,7 +25860,7 @@ public final class Pbmethod {
               aPetBuilder_.dispose();
               aPetBuilder_ = null;
               aPet_ = other.aPet_;
-              bitField0_ = (bitField0_ & ~0x00000200);
+              bitField0_ = (bitField0_ & ~0x00000400);
               aPetBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getAPetFieldBuilder() : null;
@@ -25651,7 +25873,7 @@ public final class Pbmethod {
           if (!other.aMount_.isEmpty()) {
             if (aMount_.isEmpty()) {
               aMount_ = other.aMount_;
-              bitField0_ = (bitField0_ & ~0x00000400);
+              bitField0_ = (bitField0_ & ~0x00000800);
             } else {
               ensureAMountIsMutable();
               aMount_.addAll(other.aMount_);
@@ -25664,7 +25886,7 @@ public final class Pbmethod {
               aMountBuilder_.dispose();
               aMountBuilder_ = null;
               aMount_ = other.aMount_;
-              bitField0_ = (bitField0_ & ~0x00000400);
+              bitField0_ = (bitField0_ & ~0x00000800);
               aMountBuilder_ = 
                 com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
                    getAMountFieldBuilder() : null;
@@ -25679,7 +25901,7 @@ public final class Pbmethod {
         if (!other.dameSkins_.isEmpty()) {
           if (dameSkins_.isEmpty()) {
             dameSkins_ = other.dameSkins_;
-            bitField0_ = (bitField0_ & ~0x00001000);
+            bitField0_ = (bitField0_ & ~0x00002000);
           } else {
             ensureDameSkinsIsMutable();
             dameSkins_.addAll(other.dameSkins_);
@@ -25692,7 +25914,7 @@ public final class Pbmethod {
         if (!other.chatFrames_.isEmpty()) {
           if (chatFrames_.isEmpty()) {
             chatFrames_ = other.chatFrames_;
-            bitField0_ = (bitField0_ & ~0x00004000);
+            bitField0_ = (bitField0_ & ~0x00008000);
           } else {
             ensureChatFramesIsMutable();
             chatFrames_.addAll(other.chatFrames_);
@@ -25705,7 +25927,7 @@ public final class Pbmethod {
         if (!other.trials_.isEmpty()) {
           if (trials_.isEmpty()) {
             trials_ = other.trials_;
-            bitField0_ = (bitField0_ & ~0x00010000);
+            bitField0_ = (bitField0_ & ~0x00020000);
           } else {
             ensureTrialsIsMutable();
             trials_.addAll(other.trials_);
@@ -26157,6 +26379,246 @@ public final class Pbmethod {
         return this;
       }
 
+      // repeated .pbdson.PbSkin aSkin = 11;
+      private java.util.List<protocol.Pbmethod.PbSkin> aSkin_ =
+        java.util.Collections.emptyList();
+      private void ensureASkinIsMutable() {
+        if (!((bitField0_ & 0x00000100) == 0x00000100)) {
+          aSkin_ = new java.util.ArrayList<protocol.Pbmethod.PbSkin>(aSkin_);
+          bitField0_ |= 0x00000100;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          protocol.Pbmethod.PbSkin, protocol.Pbmethod.PbSkin.Builder, protocol.Pbmethod.PbSkinOrBuilder> aSkinBuilder_;
+
+      /**
+       * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+       */
+      public java.util.List<protocol.Pbmethod.PbSkin> getASkinList() {
+        if (aSkinBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(aSkin_);
+        } else {
+          return aSkinBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+       */
+      public int getASkinCount() {
+        if (aSkinBuilder_ == null) {
+          return aSkin_.size();
+        } else {
+          return aSkinBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+       */
+      public protocol.Pbmethod.PbSkin getASkin(int index) {
+        if (aSkinBuilder_ == null) {
+          return aSkin_.get(index);
+        } else {
+          return aSkinBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+       */
+      public Builder setASkin(
+          int index, protocol.Pbmethod.PbSkin value) {
+        if (aSkinBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureASkinIsMutable();
+          aSkin_.set(index, value);
+          onChanged();
+        } else {
+          aSkinBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+       */
+      public Builder setASkin(
+          int index, protocol.Pbmethod.PbSkin.Builder builderForValue) {
+        if (aSkinBuilder_ == null) {
+          ensureASkinIsMutable();
+          aSkin_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          aSkinBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+       */
+      public Builder addASkin(protocol.Pbmethod.PbSkin value) {
+        if (aSkinBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureASkinIsMutable();
+          aSkin_.add(value);
+          onChanged();
+        } else {
+          aSkinBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+       */
+      public Builder addASkin(
+          int index, protocol.Pbmethod.PbSkin value) {
+        if (aSkinBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureASkinIsMutable();
+          aSkin_.add(index, value);
+          onChanged();
+        } else {
+          aSkinBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+       */
+      public Builder addASkin(
+          protocol.Pbmethod.PbSkin.Builder builderForValue) {
+        if (aSkinBuilder_ == null) {
+          ensureASkinIsMutable();
+          aSkin_.add(builderForValue.build());
+          onChanged();
+        } else {
+          aSkinBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+       */
+      public Builder addASkin(
+          int index, protocol.Pbmethod.PbSkin.Builder builderForValue) {
+        if (aSkinBuilder_ == null) {
+          ensureASkinIsMutable();
+          aSkin_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          aSkinBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+       */
+      public Builder addAllASkin(
+          java.lang.Iterable<? extends protocol.Pbmethod.PbSkin> values) {
+        if (aSkinBuilder_ == null) {
+          ensureASkinIsMutable();
+          super.addAll(values, aSkin_);
+          onChanged();
+        } else {
+          aSkinBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+       */
+      public Builder clearASkin() {
+        if (aSkinBuilder_ == null) {
+          aSkin_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x00000100);
+          onChanged();
+        } else {
+          aSkinBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+       */
+      public Builder removeASkin(int index) {
+        if (aSkinBuilder_ == null) {
+          ensureASkinIsMutable();
+          aSkin_.remove(index);
+          onChanged();
+        } else {
+          aSkinBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+       */
+      public protocol.Pbmethod.PbSkin.Builder getASkinBuilder(
+          int index) {
+        return getASkinFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+       */
+      public protocol.Pbmethod.PbSkinOrBuilder getASkinOrBuilder(
+          int index) {
+        if (aSkinBuilder_ == null) {
+          return aSkin_.get(index);  } else {
+          return aSkinBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+       */
+      public java.util.List<? extends protocol.Pbmethod.PbSkinOrBuilder> 
+           getASkinOrBuilderList() {
+        if (aSkinBuilder_ != null) {
+          return aSkinBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(aSkin_);
+        }
+      }
+      /**
+       * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+       */
+      public protocol.Pbmethod.PbSkin.Builder addASkinBuilder() {
+        return getASkinFieldBuilder().addBuilder(
+            protocol.Pbmethod.PbSkin.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+       */
+      public protocol.Pbmethod.PbSkin.Builder addASkinBuilder(
+          int index) {
+        return getASkinFieldBuilder().addBuilder(
+            index, protocol.Pbmethod.PbSkin.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .pbdson.PbSkin aSkin = 11;</code>
+       */
+      public java.util.List<protocol.Pbmethod.PbSkin.Builder> 
+           getASkinBuilderList() {
+        return getASkinFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          protocol.Pbmethod.PbSkin, protocol.Pbmethod.PbSkin.Builder, protocol.Pbmethod.PbSkinOrBuilder> 
+          getASkinFieldBuilder() {
+        if (aSkinBuilder_ == null) {
+          aSkinBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              protocol.Pbmethod.PbSkin, protocol.Pbmethod.PbSkin.Builder, protocol.Pbmethod.PbSkinOrBuilder>(
+                  aSkin_,
+                  ((bitField0_ & 0x00000100) == 0x00000100),
+                  getParentForChildren(),
+                  isClean());
+          aSkin_ = null;
+        }
+        return aSkinBuilder_;
+      }
+
       // optional .pbdson.PbListMaterial aMaterial = 12;
       private protocol.Pbmethod.PbListMaterial aMaterial_ = protocol.Pbmethod.PbListMaterial.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
@@ -26165,7 +26627,7 @@ public final class Pbmethod {
        * <code>optional .pbdson.PbListMaterial aMaterial = 12;</code>
        */
       public boolean hasAMaterial() {
-        return ((bitField0_ & 0x00000100) == 0x00000100);
+        return ((bitField0_ & 0x00000200) == 0x00000200);
       }
       /**
        * <code>optional .pbdson.PbListMaterial aMaterial = 12;</code>
@@ -26190,7 +26652,7 @@ public final class Pbmethod {
         } else {
           aMaterialBuilder_.setMessage(value);
         }
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000200;
         return this;
       }
       /**
@@ -26204,7 +26666,7 @@ public final class Pbmethod {
         } else {
           aMaterialBuilder_.setMessage(builderForValue.build());
         }
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000200;
         return this;
       }
       /**
@@ -26212,7 +26674,7 @@ public final class Pbmethod {
        */
       public Builder mergeAMaterial(protocol.Pbmethod.PbListMaterial value) {
         if (aMaterialBuilder_ == null) {
-          if (((bitField0_ & 0x00000100) == 0x00000100) &&
+          if (((bitField0_ & 0x00000200) == 0x00000200) &&
               aMaterial_ != protocol.Pbmethod.PbListMaterial.getDefaultInstance()) {
             aMaterial_ =
               protocol.Pbmethod.PbListMaterial.newBuilder(aMaterial_).mergeFrom(value).buildPartial();
@@ -26223,7 +26685,7 @@ public final class Pbmethod {
         } else {
           aMaterialBuilder_.mergeFrom(value);
         }
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000200;
         return this;
       }
       /**
@@ -26236,14 +26698,14 @@ public final class Pbmethod {
         } else {
           aMaterialBuilder_.clear();
         }
-        bitField0_ = (bitField0_ & ~0x00000100);
+        bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
       /**
        * <code>optional .pbdson.PbListMaterial aMaterial = 12;</code>
        */
       public protocol.Pbmethod.PbListMaterial.Builder getAMaterialBuilder() {
-        bitField0_ |= 0x00000100;
+        bitField0_ |= 0x00000200;
         onChanged();
         return getAMaterialFieldBuilder().getBuilder();
       }
@@ -26278,9 +26740,9 @@ public final class Pbmethod {
       private java.util.List<protocol.Pbmethod.PbPet> aPet_ =
         java.util.Collections.emptyList();
       private void ensureAPetIsMutable() {
-        if (!((bitField0_ & 0x00000200) == 0x00000200)) {
+        if (!((bitField0_ & 0x00000400) == 0x00000400)) {
           aPet_ = new java.util.ArrayList<protocol.Pbmethod.PbPet>(aPet_);
-          bitField0_ |= 0x00000200;
+          bitField0_ |= 0x00000400;
          }
       }
 
@@ -26429,7 +26891,7 @@ public final class Pbmethod {
       public Builder clearAPet() {
         if (aPetBuilder_ == null) {
           aPet_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000200);
+          bitField0_ = (bitField0_ & ~0x00000400);
           onChanged();
         } else {
           aPetBuilder_.clear();
@@ -26506,7 +26968,7 @@ public final class Pbmethod {
           aPetBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               protocol.Pbmethod.PbPet, protocol.Pbmethod.PbPet.Builder, protocol.Pbmethod.PbPetOrBuilder>(
                   aPet_,
-                  ((bitField0_ & 0x00000200) == 0x00000200),
+                  ((bitField0_ & 0x00000400) == 0x00000400),
                   getParentForChildren(),
                   isClean());
           aPet_ = null;
@@ -26518,9 +26980,9 @@ public final class Pbmethod {
       private java.util.List<protocol.Pbmethod.PbMount> aMount_ =
         java.util.Collections.emptyList();
       private void ensureAMountIsMutable() {
-        if (!((bitField0_ & 0x00000400) == 0x00000400)) {
+        if (!((bitField0_ & 0x00000800) == 0x00000800)) {
           aMount_ = new java.util.ArrayList<protocol.Pbmethod.PbMount>(aMount_);
-          bitField0_ |= 0x00000400;
+          bitField0_ |= 0x00000800;
          }
       }
 
@@ -26669,7 +27131,7 @@ public final class Pbmethod {
       public Builder clearAMount() {
         if (aMountBuilder_ == null) {
           aMount_ = java.util.Collections.emptyList();
-          bitField0_ = (bitField0_ & ~0x00000400);
+          bitField0_ = (bitField0_ & ~0x00000800);
           onChanged();
         } else {
           aMountBuilder_.clear();
@@ -26746,7 +27208,7 @@ public final class Pbmethod {
           aMountBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
               protocol.Pbmethod.PbMount, protocol.Pbmethod.PbMount.Builder, protocol.Pbmethod.PbMountOrBuilder>(
                   aMount_,
-                  ((bitField0_ & 0x00000400) == 0x00000400),
+                  ((bitField0_ & 0x00000800) == 0x00000800),
                   getParentForChildren(),
                   isClean());
           aMount_ = null;
@@ -26760,7 +27222,7 @@ public final class Pbmethod {
        * <code>optional int32 tutorial = 17;</code>
        */
       public boolean hasTutorial() {
-        return ((bitField0_ & 0x00000800) == 0x00000800);
+        return ((bitField0_ & 0x00001000) == 0x00001000);
       }
       /**
        * <code>optional int32 tutorial = 17;</code>
@@ -26772,7 +27234,7 @@ public final class Pbmethod {
        * <code>optional int32 tutorial = 17;</code>
        */
       public Builder setTutorial(int value) {
-        bitField0_ |= 0x00000800;
+        bitField0_ |= 0x00001000;
         tutorial_ = value;
         onChanged();
         return this;
@@ -26781,7 +27243,7 @@ public final class Pbmethod {
        * <code>optional int32 tutorial = 17;</code>
        */
       public Builder clearTutorial() {
-        bitField0_ = (bitField0_ & ~0x00000800);
+        bitField0_ = (bitField0_ & ~0x00001000);
         tutorial_ = 0;
         onChanged();
         return this;
@@ -26790,9 +27252,9 @@ public final class Pbmethod {
       // repeated int32 dameSkins = 18;
       private java.util.List<java.lang.Integer> dameSkins_ = java.util.Collections.emptyList();
       private void ensureDameSkinsIsMutable() {
-        if (!((bitField0_ & 0x00001000) == 0x00001000)) {
+        if (!((bitField0_ & 0x00002000) == 0x00002000)) {
           dameSkins_ = new java.util.ArrayList<java.lang.Integer>(dameSkins_);
-          bitField0_ |= 0x00001000;
+          bitField0_ |= 0x00002000;
          }
       }
       /**
@@ -26848,7 +27310,7 @@ public final class Pbmethod {
        */
       public Builder clearDameSkins() {
         dameSkins_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00001000);
+        bitField0_ = (bitField0_ & ~0x00002000);
         onChanged();
         return this;
       }
@@ -26859,7 +27321,7 @@ public final class Pbmethod {
        * <code>optional int32 dameSkinEquip = 19;</code>
        */
       public boolean hasDameSkinEquip() {
-        return ((bitField0_ & 0x00002000) == 0x00002000);
+        return ((bitField0_ & 0x00004000) == 0x00004000);
       }
       /**
        * <code>optional int32 dameSkinEquip = 19;</code>
@@ -26871,7 +27333,7 @@ public final class Pbmethod {
        * <code>optional int32 dameSkinEquip = 19;</code>
        */
       public Builder setDameSkinEquip(int value) {
-        bitField0_ |= 0x00002000;
+        bitField0_ |= 0x00004000;
         dameSkinEquip_ = value;
         onChanged();
         return this;
@@ -26880,7 +27342,7 @@ public final class Pbmethod {
        * <code>optional int32 dameSkinEquip = 19;</code>
        */
       public Builder clearDameSkinEquip() {
-        bitField0_ = (bitField0_ & ~0x00002000);
+        bitField0_ = (bitField0_ & ~0x00004000);
         dameSkinEquip_ = 0;
         onChanged();
         return this;
@@ -26889,9 +27351,9 @@ public final class Pbmethod {
       // repeated int32 chatFrames = 21;
       private java.util.List<java.lang.Integer> chatFrames_ = java.util.Collections.emptyList();
       private void ensureChatFramesIsMutable() {
-        if (!((bitField0_ & 0x00004000) == 0x00004000)) {
+        if (!((bitField0_ & 0x00008000) == 0x00008000)) {
           chatFrames_ = new java.util.ArrayList<java.lang.Integer>(chatFrames_);
-          bitField0_ |= 0x00004000;
+          bitField0_ |= 0x00008000;
          }
       }
       /**
@@ -26947,7 +27409,7 @@ public final class Pbmethod {
        */
       public Builder clearChatFrames() {
         chatFrames_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00004000);
+        bitField0_ = (bitField0_ & ~0x00008000);
         onChanged();
         return this;
       }
@@ -26958,7 +27420,7 @@ public final class Pbmethod {
        * <code>optional int32 chatFrameEquip = 22;</code>
        */
       public boolean hasChatFrameEquip() {
-        return ((bitField0_ & 0x00008000) == 0x00008000);
+        return ((bitField0_ & 0x00010000) == 0x00010000);
       }
       /**
        * <code>optional int32 chatFrameEquip = 22;</code>
@@ -26970,7 +27432,7 @@ public final class Pbmethod {
        * <code>optional int32 chatFrameEquip = 22;</code>
        */
       public Builder setChatFrameEquip(int value) {
-        bitField0_ |= 0x00008000;
+        bitField0_ |= 0x00010000;
         chatFrameEquip_ = value;
         onChanged();
         return this;
@@ -26979,7 +27441,7 @@ public final class Pbmethod {
        * <code>optional int32 chatFrameEquip = 22;</code>
        */
       public Builder clearChatFrameEquip() {
-        bitField0_ = (bitField0_ & ~0x00008000);
+        bitField0_ = (bitField0_ & ~0x00010000);
         chatFrameEquip_ = 0;
         onChanged();
         return this;
@@ -26988,9 +27450,9 @@ public final class Pbmethod {
       // repeated int32 trials = 23;
       private java.util.List<java.lang.Integer> trials_ = java.util.Collections.emptyList();
       private void ensureTrialsIsMutable() {
-        if (!((bitField0_ & 0x00010000) == 0x00010000)) {
+        if (!((bitField0_ & 0x00020000) == 0x00020000)) {
           trials_ = new java.util.ArrayList<java.lang.Integer>(trials_);
-          bitField0_ |= 0x00010000;
+          bitField0_ |= 0x00020000;
          }
       }
       /**
@@ -27046,7 +27508,7 @@ public final class Pbmethod {
        */
       public Builder clearTrials() {
         trials_ = java.util.Collections.emptyList();
-        bitField0_ = (bitField0_ & ~0x00010000);
+        bitField0_ = (bitField0_ & ~0x00020000);
         onChanged();
         return this;
       }
@@ -27057,7 +27519,7 @@ public final class Pbmethod {
        * <code>optional int32 trialEquip = 24;</code>
        */
       public boolean hasTrialEquip() {
-        return ((bitField0_ & 0x00020000) == 0x00020000);
+        return ((bitField0_ & 0x00040000) == 0x00040000);
       }
       /**
        * <code>optional int32 trialEquip = 24;</code>
@@ -27069,7 +27531,7 @@ public final class Pbmethod {
        * <code>optional int32 trialEquip = 24;</code>
        */
       public Builder setTrialEquip(int value) {
-        bitField0_ |= 0x00020000;
+        bitField0_ |= 0x00040000;
         trialEquip_ = value;
         onChanged();
         return this;
@@ -27078,7 +27540,7 @@ public final class Pbmethod {
        * <code>optional int32 trialEquip = 24;</code>
        */
       public Builder clearTrialEquip() {
-        bitField0_ = (bitField0_ & ~0x00020000);
+        bitField0_ = (bitField0_ & ~0x00040000);
         trialEquip_ = 0;
         onChanged();
         return this;
@@ -27090,7 +27552,7 @@ public final class Pbmethod {
        * <code>optional int32 craftLevel = 25;</code>
        */
       public boolean hasCraftLevel() {
-        return ((bitField0_ & 0x00040000) == 0x00040000);
+        return ((bitField0_ & 0x00080000) == 0x00080000);
       }
       /**
        * <code>optional int32 craftLevel = 25;</code>
@@ -27102,7 +27564,7 @@ public final class Pbmethod {
        * <code>optional int32 craftLevel = 25;</code>
        */
       public Builder setCraftLevel(int value) {
-        bitField0_ |= 0x00040000;
+        bitField0_ |= 0x00080000;
         craftLevel_ = value;
         onChanged();
         return this;
@@ -27111,7 +27573,7 @@ public final class Pbmethod {
        * <code>optional int32 craftLevel = 25;</code>
        */
       public Builder clearCraftLevel() {
-        bitField0_ = (bitField0_ & ~0x00040000);
+        bitField0_ = (bitField0_ & ~0x00080000);
         craftLevel_ = 0;
         onChanged();
         return this;
@@ -27123,7 +27585,7 @@ public final class Pbmethod {
        * <code>optional int32 craftExp = 26;</code>
        */
       public boolean hasCraftExp() {
-        return ((bitField0_ & 0x00080000) == 0x00080000);
+        return ((bitField0_ & 0x00100000) == 0x00100000);
       }
       /**
        * <code>optional int32 craftExp = 26;</code>
@@ -27135,7 +27597,7 @@ public final class Pbmethod {
        * <code>optional int32 craftExp = 26;</code>
        */
       public Builder setCraftExp(int value) {
-        bitField0_ |= 0x00080000;
+        bitField0_ |= 0x00100000;
         craftExp_ = value;
         onChanged();
         return this;
@@ -27144,7 +27606,7 @@ public final class Pbmethod {
        * <code>optional int32 craftExp = 26;</code>
        */
       public Builder clearCraftExp() {
-        bitField0_ = (bitField0_ & ~0x00080000);
+        bitField0_ = (bitField0_ & ~0x00100000);
         craftExp_ = 0;
         onChanged();
         return this;
@@ -29181,6 +29643,802 @@ public final class Pbmethod {
     }
 
     // @@protoc_insertion_point(class_scope:pbdson.PbListMount)
+  }
+
+  public interface PbSkinOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // optional int64 id = 1;
+    /**
+     * <code>optional int64 id = 1;</code>
+     */
+    boolean hasId();
+    /**
+     * <code>optional int64 id = 1;</code>
+     */
+    long getId();
+
+    // optional int32 type = 2;
+    /**
+     * <code>optional int32 type = 2;</code>
+     */
+    boolean hasType();
+    /**
+     * <code>optional int32 type = 2;</code>
+     */
+    int getType();
+
+    // optional int32 skinId = 3;
+    /**
+     * <code>optional int32 skinId = 3;</code>
+     */
+    boolean hasSkinId();
+    /**
+     * <code>optional int32 skinId = 3;</code>
+     */
+    int getSkinId();
+
+    // optional int32 tier = 4;
+    /**
+     * <code>optional int32 tier = 4;</code>
+     */
+    boolean hasTier();
+    /**
+     * <code>optional int32 tier = 4;</code>
+     */
+    int getTier();
+
+    // repeated int64 point = 5;
+    /**
+     * <code>repeated int64 point = 5;</code>
+     */
+    java.util.List<java.lang.Long> getPointList();
+    /**
+     * <code>repeated int64 point = 5;</code>
+     */
+    int getPointCount();
+    /**
+     * <code>repeated int64 point = 5;</code>
+     */
+    long getPoint(int index);
+  }
+  /**
+   * Protobuf type {@code pbdson.PbSkin}
+   */
+  public static final class PbSkin extends
+      com.google.protobuf.GeneratedMessage
+      implements PbSkinOrBuilder {
+    // Use PbSkin.newBuilder() to construct.
+    private PbSkin(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private PbSkin(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final PbSkin defaultInstance;
+    public static PbSkin getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public PbSkin getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private PbSkin(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              id_ = input.readInt64();
+              break;
+            }
+            case 16: {
+              bitField0_ |= 0x00000002;
+              type_ = input.readInt32();
+              break;
+            }
+            case 24: {
+              bitField0_ |= 0x00000004;
+              skinId_ = input.readInt32();
+              break;
+            }
+            case 32: {
+              bitField0_ |= 0x00000008;
+              tier_ = input.readInt32();
+              break;
+            }
+            case 40: {
+              if (!((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+                point_ = new java.util.ArrayList<java.lang.Long>();
+                mutable_bitField0_ |= 0x00000010;
+              }
+              point_.add(input.readInt64());
+              break;
+            }
+            case 42: {
+              int length = input.readRawVarint32();
+              int limit = input.pushLimit(length);
+              if (!((mutable_bitField0_ & 0x00000010) == 0x00000010) && input.getBytesUntilLimit() > 0) {
+                point_ = new java.util.ArrayList<java.lang.Long>();
+                mutable_bitField0_ |= 0x00000010;
+              }
+              while (input.getBytesUntilLimit() > 0) {
+                point_.add(input.readInt64());
+              }
+              input.popLimit(limit);
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        if (((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
+          point_ = java.util.Collections.unmodifiableList(point_);
+        }
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return protocol.Pbmethod.internal_static_pbdson_PbSkin_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return protocol.Pbmethod.internal_static_pbdson_PbSkin_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              protocol.Pbmethod.PbSkin.class, protocol.Pbmethod.PbSkin.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<PbSkin> PARSER =
+        new com.google.protobuf.AbstractParser<PbSkin>() {
+      public PbSkin parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new PbSkin(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<PbSkin> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    // optional int64 id = 1;
+    public static final int ID_FIELD_NUMBER = 1;
+    private long id_;
+    /**
+     * <code>optional int64 id = 1;</code>
+     */
+    public boolean hasId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>optional int64 id = 1;</code>
+     */
+    public long getId() {
+      return id_;
+    }
+
+    // optional int32 type = 2;
+    public static final int TYPE_FIELD_NUMBER = 2;
+    private int type_;
+    /**
+     * <code>optional int32 type = 2;</code>
+     */
+    public boolean hasType() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional int32 type = 2;</code>
+     */
+    public int getType() {
+      return type_;
+    }
+
+    // optional int32 skinId = 3;
+    public static final int SKINID_FIELD_NUMBER = 3;
+    private int skinId_;
+    /**
+     * <code>optional int32 skinId = 3;</code>
+     */
+    public boolean hasSkinId() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional int32 skinId = 3;</code>
+     */
+    public int getSkinId() {
+      return skinId_;
+    }
+
+    // optional int32 tier = 4;
+    public static final int TIER_FIELD_NUMBER = 4;
+    private int tier_;
+    /**
+     * <code>optional int32 tier = 4;</code>
+     */
+    public boolean hasTier() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional int32 tier = 4;</code>
+     */
+    public int getTier() {
+      return tier_;
+    }
+
+    // repeated int64 point = 5;
+    public static final int POINT_FIELD_NUMBER = 5;
+    private java.util.List<java.lang.Long> point_;
+    /**
+     * <code>repeated int64 point = 5;</code>
+     */
+    public java.util.List<java.lang.Long>
+        getPointList() {
+      return point_;
+    }
+    /**
+     * <code>repeated int64 point = 5;</code>
+     */
+    public int getPointCount() {
+      return point_.size();
+    }
+    /**
+     * <code>repeated int64 point = 5;</code>
+     */
+    public long getPoint(int index) {
+      return point_.get(index);
+    }
+
+    private void initFields() {
+      id_ = 0L;
+      type_ = 0;
+      skinId_ = 0;
+      tier_ = 0;
+      point_ = java.util.Collections.emptyList();
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt64(1, id_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeInt32(2, type_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt32(3, skinId_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeInt32(4, tier_);
+      }
+      for (int i = 0; i < point_.size(); i++) {
+        output.writeInt64(5, point_.get(i));
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(1, id_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, type_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, skinId_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, tier_);
+      }
+      {
+        int dataSize = 0;
+        for (int i = 0; i < point_.size(); i++) {
+          dataSize += com.google.protobuf.CodedOutputStream
+            .computeInt64SizeNoTag(point_.get(i));
+        }
+        size += dataSize;
+        size += 1 * getPointList().size();
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static protocol.Pbmethod.PbSkin parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static protocol.Pbmethod.PbSkin parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static protocol.Pbmethod.PbSkin parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static protocol.Pbmethod.PbSkin parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static protocol.Pbmethod.PbSkin parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static protocol.Pbmethod.PbSkin parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static protocol.Pbmethod.PbSkin parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static protocol.Pbmethod.PbSkin parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static protocol.Pbmethod.PbSkin parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static protocol.Pbmethod.PbSkin parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(protocol.Pbmethod.PbSkin prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code pbdson.PbSkin}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements protocol.Pbmethod.PbSkinOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return protocol.Pbmethod.internal_static_pbdson_PbSkin_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return protocol.Pbmethod.internal_static_pbdson_PbSkin_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                protocol.Pbmethod.PbSkin.class, protocol.Pbmethod.PbSkin.Builder.class);
+      }
+
+      // Construct using protocol.Pbmethod.PbSkin.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        id_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        type_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        skinId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        tier_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        point_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000010);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return protocol.Pbmethod.internal_static_pbdson_PbSkin_descriptor;
+      }
+
+      public protocol.Pbmethod.PbSkin getDefaultInstanceForType() {
+        return protocol.Pbmethod.PbSkin.getDefaultInstance();
+      }
+
+      public protocol.Pbmethod.PbSkin build() {
+        protocol.Pbmethod.PbSkin result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public protocol.Pbmethod.PbSkin buildPartial() {
+        protocol.Pbmethod.PbSkin result = new protocol.Pbmethod.PbSkin(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.id_ = id_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.type_ = type_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.skinId_ = skinId_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.tier_ = tier_;
+        if (((bitField0_ & 0x00000010) == 0x00000010)) {
+          point_ = java.util.Collections.unmodifiableList(point_);
+          bitField0_ = (bitField0_ & ~0x00000010);
+        }
+        result.point_ = point_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof protocol.Pbmethod.PbSkin) {
+          return mergeFrom((protocol.Pbmethod.PbSkin)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(protocol.Pbmethod.PbSkin other) {
+        if (other == protocol.Pbmethod.PbSkin.getDefaultInstance()) return this;
+        if (other.hasId()) {
+          setId(other.getId());
+        }
+        if (other.hasType()) {
+          setType(other.getType());
+        }
+        if (other.hasSkinId()) {
+          setSkinId(other.getSkinId());
+        }
+        if (other.hasTier()) {
+          setTier(other.getTier());
+        }
+        if (!other.point_.isEmpty()) {
+          if (point_.isEmpty()) {
+            point_ = other.point_;
+            bitField0_ = (bitField0_ & ~0x00000010);
+          } else {
+            ensurePointIsMutable();
+            point_.addAll(other.point_);
+          }
+          onChanged();
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        protocol.Pbmethod.PbSkin parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (protocol.Pbmethod.PbSkin) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // optional int64 id = 1;
+      private long id_ ;
+      /**
+       * <code>optional int64 id = 1;</code>
+       */
+      public boolean hasId() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>optional int64 id = 1;</code>
+       */
+      public long getId() {
+        return id_;
+      }
+      /**
+       * <code>optional int64 id = 1;</code>
+       */
+      public Builder setId(long value) {
+        bitField0_ |= 0x00000001;
+        id_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int64 id = 1;</code>
+       */
+      public Builder clearId() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        id_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 type = 2;
+      private int type_ ;
+      /**
+       * <code>optional int32 type = 2;</code>
+       */
+      public boolean hasType() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional int32 type = 2;</code>
+       */
+      public int getType() {
+        return type_;
+      }
+      /**
+       * <code>optional int32 type = 2;</code>
+       */
+      public Builder setType(int value) {
+        bitField0_ |= 0x00000002;
+        type_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 type = 2;</code>
+       */
+      public Builder clearType() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        type_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 skinId = 3;
+      private int skinId_ ;
+      /**
+       * <code>optional int32 skinId = 3;</code>
+       */
+      public boolean hasSkinId() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional int32 skinId = 3;</code>
+       */
+      public int getSkinId() {
+        return skinId_;
+      }
+      /**
+       * <code>optional int32 skinId = 3;</code>
+       */
+      public Builder setSkinId(int value) {
+        bitField0_ |= 0x00000004;
+        skinId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 skinId = 3;</code>
+       */
+      public Builder clearSkinId() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        skinId_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 tier = 4;
+      private int tier_ ;
+      /**
+       * <code>optional int32 tier = 4;</code>
+       */
+      public boolean hasTier() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional int32 tier = 4;</code>
+       */
+      public int getTier() {
+        return tier_;
+      }
+      /**
+       * <code>optional int32 tier = 4;</code>
+       */
+      public Builder setTier(int value) {
+        bitField0_ |= 0x00000008;
+        tier_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 tier = 4;</code>
+       */
+      public Builder clearTier() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        tier_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // repeated int64 point = 5;
+      private java.util.List<java.lang.Long> point_ = java.util.Collections.emptyList();
+      private void ensurePointIsMutable() {
+        if (!((bitField0_ & 0x00000010) == 0x00000010)) {
+          point_ = new java.util.ArrayList<java.lang.Long>(point_);
+          bitField0_ |= 0x00000010;
+         }
+      }
+      /**
+       * <code>repeated int64 point = 5;</code>
+       */
+      public java.util.List<java.lang.Long>
+          getPointList() {
+        return java.util.Collections.unmodifiableList(point_);
+      }
+      /**
+       * <code>repeated int64 point = 5;</code>
+       */
+      public int getPointCount() {
+        return point_.size();
+      }
+      /**
+       * <code>repeated int64 point = 5;</code>
+       */
+      public long getPoint(int index) {
+        return point_.get(index);
+      }
+      /**
+       * <code>repeated int64 point = 5;</code>
+       */
+      public Builder setPoint(
+          int index, long value) {
+        ensurePointIsMutable();
+        point_.set(index, value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int64 point = 5;</code>
+       */
+      public Builder addPoint(long value) {
+        ensurePointIsMutable();
+        point_.add(value);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int64 point = 5;</code>
+       */
+      public Builder addAllPoint(
+          java.lang.Iterable<? extends java.lang.Long> values) {
+        ensurePointIsMutable();
+        super.addAll(values, point_);
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>repeated int64 point = 5;</code>
+       */
+      public Builder clearPoint() {
+        point_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000010);
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:pbdson.PbSkin)
+    }
+
+    static {
+      defaultInstance = new PbSkin(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:pbdson.PbSkin)
   }
 
   public interface PbMountOrBuilder
@@ -34511,19 +35769,19 @@ public final class Pbmethod {
     com.google.protobuf.ByteString
         getMessageBytes();
 
-    // repeated int32 avatar = 3;
+    // repeated int32 skins = 3;
     /**
-     * <code>repeated int32 avatar = 3;</code>
+     * <code>repeated int32 skins = 3;</code>
      */
-    java.util.List<java.lang.Integer> getAvatarList();
+    java.util.List<java.lang.Integer> getSkinsList();
     /**
-     * <code>repeated int32 avatar = 3;</code>
+     * <code>repeated int32 skins = 3;</code>
      */
-    int getAvatarCount();
+    int getSkinsCount();
     /**
-     * <code>repeated int32 avatar = 3;</code>
+     * <code>repeated int32 skins = 3;</code>
      */
-    int getAvatar(int index);
+    int getSkins(int index);
 
     // optional string name = 4;
     /**
@@ -34623,21 +35881,21 @@ public final class Pbmethod {
             }
             case 24: {
               if (!((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
-                avatar_ = new java.util.ArrayList<java.lang.Integer>();
+                skins_ = new java.util.ArrayList<java.lang.Integer>();
                 mutable_bitField0_ |= 0x00000004;
               }
-              avatar_.add(input.readInt32());
+              skins_.add(input.readInt32());
               break;
             }
             case 26: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
               if (!((mutable_bitField0_ & 0x00000004) == 0x00000004) && input.getBytesUntilLimit() > 0) {
-                avatar_ = new java.util.ArrayList<java.lang.Integer>();
+                skins_ = new java.util.ArrayList<java.lang.Integer>();
                 mutable_bitField0_ |= 0x00000004;
               }
               while (input.getBytesUntilLimit() > 0) {
-                avatar_.add(input.readInt32());
+                skins_.add(input.readInt32());
               }
               input.popLimit(limit);
               break;
@@ -34666,7 +35924,7 @@ public final class Pbmethod {
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
         if (((mutable_bitField0_ & 0x00000004) == 0x00000004)) {
-          avatar_ = java.util.Collections.unmodifiableList(avatar_);
+          skins_ = java.util.Collections.unmodifiableList(skins_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -34759,27 +36017,27 @@ public final class Pbmethod {
       }
     }
 
-    // repeated int32 avatar = 3;
-    public static final int AVATAR_FIELD_NUMBER = 3;
-    private java.util.List<java.lang.Integer> avatar_;
+    // repeated int32 skins = 3;
+    public static final int SKINS_FIELD_NUMBER = 3;
+    private java.util.List<java.lang.Integer> skins_;
     /**
-     * <code>repeated int32 avatar = 3;</code>
+     * <code>repeated int32 skins = 3;</code>
      */
     public java.util.List<java.lang.Integer>
-        getAvatarList() {
-      return avatar_;
+        getSkinsList() {
+      return skins_;
     }
     /**
-     * <code>repeated int32 avatar = 3;</code>
+     * <code>repeated int32 skins = 3;</code>
      */
-    public int getAvatarCount() {
-      return avatar_.size();
+    public int getSkinsCount() {
+      return skins_.size();
     }
     /**
-     * <code>repeated int32 avatar = 3;</code>
+     * <code>repeated int32 skins = 3;</code>
      */
-    public int getAvatar(int index) {
-      return avatar_.get(index);
+    public int getSkins(int index) {
+      return skins_.get(index);
     }
 
     // optional string name = 4;
@@ -34860,7 +36118,7 @@ public final class Pbmethod {
     private void initFields() {
       userId_ = 0;
       message_ = "";
-      avatar_ = java.util.Collections.emptyList();
+      skins_ = java.util.Collections.emptyList();
       name_ = "";
       time_ = 0L;
       level_ = 0;
@@ -34883,8 +36141,8 @@ public final class Pbmethod {
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         output.writeBytes(2, getMessageBytes());
       }
-      for (int i = 0; i < avatar_.size(); i++) {
-        output.writeInt32(3, avatar_.get(i));
+      for (int i = 0; i < skins_.size(); i++) {
+        output.writeInt32(3, skins_.get(i));
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeBytes(4, getNameBytes());
@@ -34914,12 +36172,12 @@ public final class Pbmethod {
       }
       {
         int dataSize = 0;
-        for (int i = 0; i < avatar_.size(); i++) {
+        for (int i = 0; i < skins_.size(); i++) {
           dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(avatar_.get(i));
+            .computeInt32SizeNoTag(skins_.get(i));
         }
         size += dataSize;
-        size += 1 * getAvatarList().size();
+        size += 1 * getSkinsList().size();
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
@@ -35053,7 +36311,7 @@ public final class Pbmethod {
         bitField0_ = (bitField0_ & ~0x00000001);
         message_ = "";
         bitField0_ = (bitField0_ & ~0x00000002);
-        avatar_ = java.util.Collections.emptyList();
+        skins_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000004);
         name_ = "";
         bitField0_ = (bitField0_ & ~0x00000008);
@@ -35098,10 +36356,10 @@ public final class Pbmethod {
         }
         result.message_ = message_;
         if (((bitField0_ & 0x00000004) == 0x00000004)) {
-          avatar_ = java.util.Collections.unmodifiableList(avatar_);
+          skins_ = java.util.Collections.unmodifiableList(skins_);
           bitField0_ = (bitField0_ & ~0x00000004);
         }
-        result.avatar_ = avatar_;
+        result.skins_ = skins_;
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000004;
         }
@@ -35138,13 +36396,13 @@ public final class Pbmethod {
           message_ = other.message_;
           onChanged();
         }
-        if (!other.avatar_.isEmpty()) {
-          if (avatar_.isEmpty()) {
-            avatar_ = other.avatar_;
+        if (!other.skins_.isEmpty()) {
+          if (skins_.isEmpty()) {
+            skins_ = other.skins_;
             bitField0_ = (bitField0_ & ~0x00000004);
           } else {
-            ensureAvatarIsMutable();
-            avatar_.addAll(other.avatar_);
+            ensureSkinsIsMutable();
+            skins_.addAll(other.skins_);
           }
           onChanged();
         }
@@ -35293,67 +36551,67 @@ public final class Pbmethod {
         return this;
       }
 
-      // repeated int32 avatar = 3;
-      private java.util.List<java.lang.Integer> avatar_ = java.util.Collections.emptyList();
-      private void ensureAvatarIsMutable() {
+      // repeated int32 skins = 3;
+      private java.util.List<java.lang.Integer> skins_ = java.util.Collections.emptyList();
+      private void ensureSkinsIsMutable() {
         if (!((bitField0_ & 0x00000004) == 0x00000004)) {
-          avatar_ = new java.util.ArrayList<java.lang.Integer>(avatar_);
+          skins_ = new java.util.ArrayList<java.lang.Integer>(skins_);
           bitField0_ |= 0x00000004;
          }
       }
       /**
-       * <code>repeated int32 avatar = 3;</code>
+       * <code>repeated int32 skins = 3;</code>
        */
       public java.util.List<java.lang.Integer>
-          getAvatarList() {
-        return java.util.Collections.unmodifiableList(avatar_);
+          getSkinsList() {
+        return java.util.Collections.unmodifiableList(skins_);
       }
       /**
-       * <code>repeated int32 avatar = 3;</code>
+       * <code>repeated int32 skins = 3;</code>
        */
-      public int getAvatarCount() {
-        return avatar_.size();
+      public int getSkinsCount() {
+        return skins_.size();
       }
       /**
-       * <code>repeated int32 avatar = 3;</code>
+       * <code>repeated int32 skins = 3;</code>
        */
-      public int getAvatar(int index) {
-        return avatar_.get(index);
+      public int getSkins(int index) {
+        return skins_.get(index);
       }
       /**
-       * <code>repeated int32 avatar = 3;</code>
+       * <code>repeated int32 skins = 3;</code>
        */
-      public Builder setAvatar(
+      public Builder setSkins(
           int index, int value) {
-        ensureAvatarIsMutable();
-        avatar_.set(index, value);
+        ensureSkinsIsMutable();
+        skins_.set(index, value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 avatar = 3;</code>
+       * <code>repeated int32 skins = 3;</code>
        */
-      public Builder addAvatar(int value) {
-        ensureAvatarIsMutable();
-        avatar_.add(value);
+      public Builder addSkins(int value) {
+        ensureSkinsIsMutable();
+        skins_.add(value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 avatar = 3;</code>
+       * <code>repeated int32 skins = 3;</code>
        */
-      public Builder addAllAvatar(
+      public Builder addAllSkins(
           java.lang.Iterable<? extends java.lang.Integer> values) {
-        ensureAvatarIsMutable();
-        super.addAll(values, avatar_);
+        ensureSkinsIsMutable();
+        super.addAll(values, skins_);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 avatar = 3;</code>
+       * <code>repeated int32 skins = 3;</code>
        */
-      public Builder clearAvatar() {
-        avatar_ = java.util.Collections.emptyList();
+      public Builder clearSkins() {
+        skins_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000004);
         onChanged();
         return this;
@@ -43369,19 +44627,19 @@ public final class Pbmethod {
      */
     int getTeam();
 
-    // repeated int32 avatar = 4;
+    // repeated int32 skins = 4;
     /**
-     * <code>repeated int32 avatar = 4;</code>
+     * <code>repeated int32 skins = 4;</code>
      */
-    java.util.List<java.lang.Integer> getAvatarList();
+    java.util.List<java.lang.Integer> getSkinsList();
     /**
-     * <code>repeated int32 avatar = 4;</code>
+     * <code>repeated int32 skins = 4;</code>
      */
-    int getAvatarCount();
+    int getSkinsCount();
     /**
-     * <code>repeated int32 avatar = 4;</code>
+     * <code>repeated int32 skins = 4;</code>
      */
-    int getAvatar(int index);
+    int getSkins(int index);
 
     // repeated int32 aItem = 5;
     /**
@@ -43479,21 +44737,21 @@ public final class Pbmethod {
             }
             case 32: {
               if (!((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
-                avatar_ = new java.util.ArrayList<java.lang.Integer>();
+                skins_ = new java.util.ArrayList<java.lang.Integer>();
                 mutable_bitField0_ |= 0x00000008;
               }
-              avatar_.add(input.readInt32());
+              skins_.add(input.readInt32());
               break;
             }
             case 34: {
               int length = input.readRawVarint32();
               int limit = input.pushLimit(length);
               if (!((mutable_bitField0_ & 0x00000008) == 0x00000008) && input.getBytesUntilLimit() > 0) {
-                avatar_ = new java.util.ArrayList<java.lang.Integer>();
+                skins_ = new java.util.ArrayList<java.lang.Integer>();
                 mutable_bitField0_ |= 0x00000008;
               }
               while (input.getBytesUntilLimit() > 0) {
-                avatar_.add(input.readInt32());
+                skins_.add(input.readInt32());
               }
               input.popLimit(limit);
               break;
@@ -43549,7 +44807,7 @@ public final class Pbmethod {
             e.getMessage()).setUnfinishedMessage(this);
       } finally {
         if (((mutable_bitField0_ & 0x00000008) == 0x00000008)) {
-          avatar_ = java.util.Collections.unmodifiableList(avatar_);
+          skins_ = java.util.Collections.unmodifiableList(skins_);
         }
         if (((mutable_bitField0_ & 0x00000010) == 0x00000010)) {
           aItem_ = java.util.Collections.unmodifiableList(aItem_);
@@ -43664,27 +44922,27 @@ public final class Pbmethod {
       return team_;
     }
 
-    // repeated int32 avatar = 4;
-    public static final int AVATAR_FIELD_NUMBER = 4;
-    private java.util.List<java.lang.Integer> avatar_;
+    // repeated int32 skins = 4;
+    public static final int SKINS_FIELD_NUMBER = 4;
+    private java.util.List<java.lang.Integer> skins_;
     /**
-     * <code>repeated int32 avatar = 4;</code>
+     * <code>repeated int32 skins = 4;</code>
      */
     public java.util.List<java.lang.Integer>
-        getAvatarList() {
-      return avatar_;
+        getSkinsList() {
+      return skins_;
     }
     /**
-     * <code>repeated int32 avatar = 4;</code>
+     * <code>repeated int32 skins = 4;</code>
      */
-    public int getAvatarCount() {
-      return avatar_.size();
+    public int getSkinsCount() {
+      return skins_.size();
     }
     /**
-     * <code>repeated int32 avatar = 4;</code>
+     * <code>repeated int32 skins = 4;</code>
      */
-    public int getAvatar(int index) {
-      return avatar_.get(index);
+    public int getSkins(int index) {
+      return skins_.get(index);
     }
 
     // repeated int32 aItem = 5;
@@ -43737,7 +44995,7 @@ public final class Pbmethod {
       id_ = 0;
       name_ = "";
       team_ = 0;
-      avatar_ = java.util.Collections.emptyList();
+      skins_ = java.util.Collections.emptyList();
       aItem_ = java.util.Collections.emptyList();
       point_ = java.util.Collections.emptyList();
     }
@@ -43762,8 +45020,8 @@ public final class Pbmethod {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeInt32(3, team_);
       }
-      for (int i = 0; i < avatar_.size(); i++) {
-        output.writeInt32(4, avatar_.get(i));
+      for (int i = 0; i < skins_.size(); i++) {
+        output.writeInt32(4, skins_.get(i));
       }
       for (int i = 0; i < aItem_.size(); i++) {
         output.writeInt32(5, aItem_.get(i));
@@ -43794,12 +45052,12 @@ public final class Pbmethod {
       }
       {
         int dataSize = 0;
-        for (int i = 0; i < avatar_.size(); i++) {
+        for (int i = 0; i < skins_.size(); i++) {
           dataSize += com.google.protobuf.CodedOutputStream
-            .computeInt32SizeNoTag(avatar_.get(i));
+            .computeInt32SizeNoTag(skins_.get(i));
         }
         size += dataSize;
-        size += 1 * getAvatarList().size();
+        size += 1 * getSkinsList().size();
       }
       {
         int dataSize = 0;
@@ -43941,7 +45199,7 @@ public final class Pbmethod {
         bitField0_ = (bitField0_ & ~0x00000002);
         team_ = 0;
         bitField0_ = (bitField0_ & ~0x00000004);
-        avatar_ = java.util.Collections.emptyList();
+        skins_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000008);
         aItem_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000010);
@@ -43988,10 +45246,10 @@ public final class Pbmethod {
         }
         result.team_ = team_;
         if (((bitField0_ & 0x00000008) == 0x00000008)) {
-          avatar_ = java.util.Collections.unmodifiableList(avatar_);
+          skins_ = java.util.Collections.unmodifiableList(skins_);
           bitField0_ = (bitField0_ & ~0x00000008);
         }
-        result.avatar_ = avatar_;
+        result.skins_ = skins_;
         if (((bitField0_ & 0x00000010) == 0x00000010)) {
           aItem_ = java.util.Collections.unmodifiableList(aItem_);
           bitField0_ = (bitField0_ & ~0x00000010);
@@ -44029,13 +45287,13 @@ public final class Pbmethod {
         if (other.hasTeam()) {
           setTeam(other.getTeam());
         }
-        if (!other.avatar_.isEmpty()) {
-          if (avatar_.isEmpty()) {
-            avatar_ = other.avatar_;
+        if (!other.skins_.isEmpty()) {
+          if (skins_.isEmpty()) {
+            skins_ = other.skins_;
             bitField0_ = (bitField0_ & ~0x00000008);
           } else {
-            ensureAvatarIsMutable();
-            avatar_.addAll(other.avatar_);
+            ensureSkinsIsMutable();
+            skins_.addAll(other.skins_);
           }
           onChanged();
         }
@@ -44226,67 +45484,67 @@ public final class Pbmethod {
         return this;
       }
 
-      // repeated int32 avatar = 4;
-      private java.util.List<java.lang.Integer> avatar_ = java.util.Collections.emptyList();
-      private void ensureAvatarIsMutable() {
+      // repeated int32 skins = 4;
+      private java.util.List<java.lang.Integer> skins_ = java.util.Collections.emptyList();
+      private void ensureSkinsIsMutable() {
         if (!((bitField0_ & 0x00000008) == 0x00000008)) {
-          avatar_ = new java.util.ArrayList<java.lang.Integer>(avatar_);
+          skins_ = new java.util.ArrayList<java.lang.Integer>(skins_);
           bitField0_ |= 0x00000008;
          }
       }
       /**
-       * <code>repeated int32 avatar = 4;</code>
+       * <code>repeated int32 skins = 4;</code>
        */
       public java.util.List<java.lang.Integer>
-          getAvatarList() {
-        return java.util.Collections.unmodifiableList(avatar_);
+          getSkinsList() {
+        return java.util.Collections.unmodifiableList(skins_);
       }
       /**
-       * <code>repeated int32 avatar = 4;</code>
+       * <code>repeated int32 skins = 4;</code>
        */
-      public int getAvatarCount() {
-        return avatar_.size();
+      public int getSkinsCount() {
+        return skins_.size();
       }
       /**
-       * <code>repeated int32 avatar = 4;</code>
+       * <code>repeated int32 skins = 4;</code>
        */
-      public int getAvatar(int index) {
-        return avatar_.get(index);
+      public int getSkins(int index) {
+        return skins_.get(index);
       }
       /**
-       * <code>repeated int32 avatar = 4;</code>
+       * <code>repeated int32 skins = 4;</code>
        */
-      public Builder setAvatar(
+      public Builder setSkins(
           int index, int value) {
-        ensureAvatarIsMutable();
-        avatar_.set(index, value);
+        ensureSkinsIsMutable();
+        skins_.set(index, value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 avatar = 4;</code>
+       * <code>repeated int32 skins = 4;</code>
        */
-      public Builder addAvatar(int value) {
-        ensureAvatarIsMutable();
-        avatar_.add(value);
+      public Builder addSkins(int value) {
+        ensureSkinsIsMutable();
+        skins_.add(value);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 avatar = 4;</code>
+       * <code>repeated int32 skins = 4;</code>
        */
-      public Builder addAllAvatar(
+      public Builder addAllSkins(
           java.lang.Iterable<? extends java.lang.Integer> values) {
-        ensureAvatarIsMutable();
-        super.addAll(values, avatar_);
+        ensureSkinsIsMutable();
+        super.addAll(values, skins_);
         onChanged();
         return this;
       }
       /**
-       * <code>repeated int32 avatar = 4;</code>
+       * <code>repeated int32 skins = 4;</code>
        */
-      public Builder clearAvatar() {
-        avatar_ = java.util.Collections.emptyList();
+      public Builder clearSkins() {
+        skins_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000008);
         onChanged();
         return this;
@@ -78430,6 +79688,11 @@ public final class Pbmethod {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_pbdson_PbListMount_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_pbdson_PbSkin_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_pbdson_PbSkin_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_pbdson_PbMount_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -78723,198 +79986,203 @@ public final class Pbmethod {
       "ophy\030\022 \001(\005\022\014\n\004star\030\023 \001(\005\022\021\n\tpointRank\030\024 " +
       "\001(\003\"K\n\nPbListUser\022\035\n\005aUser\030\001 \003(\0132\016.pbdso" +
       "n.PbUser\022\036\n\006myInfo\030\002 \001(\0132\016.pbdson.PbUser" +
-      "\"\263\002\n\nClanMember\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(" +
+      "\"\262\002\n\nClanMember\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(" +
       "\t\022\016\n\006trophy\030\003 \001(\005\022\020\n\010warPoint\030\004 \001(\005\022\r\n\005l" +
       "evel\030\005 \001(\005\022\024\n\014receiveTroop\030\006 \001(\005\022\021\n\tsend" +
       "Troop\030\007 \001(\005\022\r\n\005isNew\030\010 \001(\010\022\020\n\010position\030\t" +
       " \001(\005\022\023\n\013clanDonated\030\027 \001(\005\022\022\n\nkungfuClan\030",
       "\030 \001(\t\022\022\n\nlastAction\030\031 \001(\003\022\013\n\003vip\030\n \001(\005\022\022" +
-      "\n\nrankTrophy\030\013 \001(\005\022\016\n\006avatar\030\014 \003(\005\022\022\n\ncu" +
-      "rDonated\030\r \001(\005\022\016\n\006online\030\016 \001(\010\"J\n\nPbList" +
-      "Clan\022\034\n\004clan\030\001 \003(\0132\016.pbdson.PbClan\022\036\n\006my" +
-      "Clan\030\002 \001(\0132\016.pbdson.PbClan\"\246\003\n\006PbUser\022\n\n" +
-      "\002id\030\001 \001(\005\022\020\n\010username\030\002 \001(\t\022\014\n\004name\030\003 \001(" +
-      "\t\022\014\n\004gold\030\004 \001(\003\022\013\n\003gem\030\005 \001(\003\022\016\n\006avatar\030\010" +
-      " \003(\005\022\013\n\003vip\030\t \003(\005\022&\n\010clanInfo\030\n \001(\0132\024.pb" +
-      "dson.CommonVector\022\"\n\004info\030\013 \001(\0132\024.pbdson" +
-      ".CommonVector\022\r\n\005petId\030\014 \003(\005\022\020\n\010facebook",
-      "\030\r \001(\t\022&\n\010userInfo\030\016 \001(\0132\024.pbdson.Common" +
-      "Vector\022\014\n\004rank\030\020 \001(\005\022\021\n\tpointRank\030\021 \001(\003\022" +
-      "\r\n\005point\030\023 \003(\003\022\026\n\016timeLastAction\030\024 \001(\003\022\r" +
-      "\n\005honor\030\025 \001(\005\022\r\n\005power\030\026 \001(\003\022\021\n\titemEqui" +
-      "p\030\027 \003(\005\022\017\n\007channel\030\030 \003(\005\022\014\n\004ruby\030\033 \001(\003\022\013" +
-      "\n\003pet\030\034 \003(\005\"\344\003\n\nPbUserData\022\021\n\tslogBagUI\030" +
-      "\001 \001(\005\022\024\n\014slotMaterial\030\002 \001(\005\022\025\n\rslotItemE" +
-      "vent\030\003 \001(\005\022\022\n\nlvTraining\030\004 \001(\005\022\025\n\rmaxlvT" +
-      "raining\030\005 \001(\005\022\025\n\rnumPointLevel\030\006 \001(\005\022!\n\005" +
-      "items\030\t \001(\0132\022.pbdson.PbListItem\022\026\n\016itemE",
-      "quipments\030\n \003(\003\022)\n\taMaterial\030\014 \001(\0132\026.pbd" +
-      "son.PbListMaterial\022\033\n\004aPet\030\017 \003(\0132\r.pbdso" +
-      "n.PbPet\022\037\n\006aMount\030\020 \003(\0132\017.pbdson.PbMount" +
-      "\022\020\n\010tutorial\030\021 \001(\005\022\021\n\tdameSkins\030\022 \003(\005\022\025\n" +
-      "\rdameSkinEquip\030\023 \001(\005\022\022\n\nchatFrames\030\025 \003(\005" +
-      "\022\026\n\016chatFrameEquip\030\026 \001(\005\022\016\n\006trials\030\027 \003(\005" +
-      "\022\022\n\ntrialEquip\030\030 \001(\005\022\022\n\ncraftLevel\030\031 \001(\005" +
-      "\022\020\n\010craftExp\030\032 \001(\005\"*\n\nPbListItem\022\034\n\004item" +
-      "\030\001 \003(\0132\016.pbdson.PbItem\"7\n\016PbListMaterial" +
-      "\022%\n\tmaterials\030\001 \003(\0132\022.pbdson.PbMaterial\"",
-      ".\n\013PbListMount\022\037\n\006mounts\030\001 \003(\0132\017.pbdson." +
-      "PbMount\"D\n\007PbMount\022\n\n\002id\030\001 \001(\003\022\r\n\005point\030" +
-      "\002 \003(\003\022\017\n\007mountId\030\003 \001(\005\022\r\n\005level\030\004 \001(\005\"(\n" +
-      "\tPbListPet\022\033\n\004pets\030\001 \003(\0132\r.pbdson.PbPet\"" +
-      "@\n\005PbPet\022\n\n\002id\030\001 \001(\003\022\r\n\005point\030\002 \003(\003\022\r\n\005p" +
-      "etId\030\003 \001(\005\022\r\n\005level\030\004 \001(\005\":\n\017PbListItemP" +
-      "oint\022\'\n\nitemPoints\030\001 \003(\0132\023.pbdson.PbItem" +
-      "Point\"+\n\nPbListChat\022\035\n\005aChat\030\001 \003(\0132\016.pbd" +
-      "son.PbChat\"\211\001\n\006PbChat\022\017\n\007reqTime\030\001 \001(\003\022\017" +
-      "\n\007message\030\002 \001(\t\022\014\n\004type\030\003 \001(\005\022\034\n\004user\030\004 ",
-      "\001(\0132\016.pbdson.PbUser\022\"\n\004info\030\005 \001(\0132\024.pbds" +
-      "on.CommonVector\022\r\n\005point\030\006 \003(\003\"7\n\020PbList" +
-      "ChatFriend\022#\n\005chats\030\001 \003(\0132\024.pbdson.PbCha" +
-      "tFriend\"j\n\014PbChatFriend\022\016\n\006userId\030\001 \001(\005\022" +
-      "\017\n\007message\030\002 \001(\t\022\016\n\006avatar\030\003 \003(\005\022\014\n\004name" +
-      "\030\004 \001(\t\022\014\n\004time\030\005 \001(\003\022\r\n\005level\030\006 \001(\005\"v\n\006P" +
-      "bShop\022\"\n\006tabSet\030\001 \003(\0132\022.pbdson.PbItemSho" +
-      "p\022#\n\007tabDeal\030\002 \003(\0132\022.pbdson.PbItemShop\022#" +
-      "\n\007tabMisc\030\003 \003(\0132\022.pbdson.PbItemShop\"\245\001\n\n" +
-      "PbItemShop\022\n\n\002id\030\001 \001(\005\022\013\n\003tab\030\002 \001(\005\022\014\n\004n",
-      "ame\030\003 \001(\t\022\014\n\004desc\030\004 \001(\t\022\014\n\004item\030\005 \003(\003\022\r\n" +
-      "\005price\030\006 \003(\003\022\r\n\005image\030\007 \001(\t\022\016\n\006status\030\010 " +
-      "\001(\005\022\022\n\ndescStatus\030\t \001(\t\022\022\n\ntimeRemain\030\n " +
-      "\001(\003\"l\n\nPbMaterial\022\n\n\002id\030\001 \001(\003\022\022\n\nmateria" +
-      "lId\030\002 \001(\005\022\014\n\004rank\030\003 \001(\005\022\r\n\005level\030\004 \001(\005\022\r" +
-      "\n\005value\030\005 \001(\002\022\022\n\nsocketRate\030\006 \001(\002\"\201\001\n\006Pb" +
-      "Item\022\n\n\002id\030\001 \001(\003\022\017\n\007itemKey\030\002 \001(\005\022\014\n\004typ" +
-      "e\030\003 \001(\005\022\r\n\005level\030\004 \001(\005\022\023\n\013lockDestroy\030\005 " +
-      "\001(\010\022\014\n\004tier\030\006 \001(\005\022\014\n\004slot\030\007 \001(\005\022\014\n\004data\030" +
-      "\010 \001(\t\".\n\013PbItemPoint\022\017\n\007itemKey\030\001 \001(\005\022\016\n",
-      "\006number\030\002 \001(\003\"/\n\nListAction\022!\n\007aAction\030\001" +
-      " \003(\0132\020.pbdson.PbAction\"*\n\010PbAction\022\020\n\010ac" +
-      "tionId\030\001 \001(\005\022\014\n\004data\030\002 \001(\014\".\n\014CommonVect" +
-      "or\022\r\n\005aLong\030\001 \003(\003\022\017\n\007aString\030\002 \003(\t\"9\n\020Li" +
-      "stCommonVector\022%\n\007aVector\030\001 \003(\0132\024.pbdson" +
-      ".CommonVector\"g\n\017PbCharacterInfo\022\n\n\002id\030\001" +
-      " \001(\005\022\014\n\004name\030\002 \001(\t\022\014\n\004team\030\003 \001(\005\022\016\n\006avat" +
-      "ar\030\004 \003(\005\022\r\n\005aItem\030\005 \003(\005\022\r\n\005point\030\006 \003(\003\"+" +
-      "\n\nPbListMail\022\035\n\005aMail\030\001 \003(\0132\016.pbdson.PbM" +
-      "ail\"\210\001\n\006PbMail\022\n\n\002id\030\001 \001(\005\022\r\n\005title\030\002 \001(",
-      "\t\022\017\n\007message\030\003 \001(\t\022\r\n\005bonus\030\004 \003(\005\022\017\n\007rec" +
-      "eive\030\005 \001(\005\022\014\n\004time\030\006 \001(\003\022\020\n\010senderId\030\007 \001" +
-      "(\005\022\022\n\nsenderName\030\010 \001(\t\"\257\001\n\tPbEndGame\022\017\n\007" +
-      "popupId\030\001 \001(\005\022\021\n\tbattleKey\030\002 \001(\t\022\r\n\005isWi" +
-      "n\030\003 \001(\010\022\017\n\007message\030\004 \001(\t\022\r\n\005bonus\030\005 \003(\003\022" +
-      "\014\n\004time\030\006 \001(\005\022\017\n\007perDame\030\007 \001(\005\022\014\n\004star\030\010" +
-      " \001(\005\022\"\n\004info\030\t \001(\0132\024.pbdson.CommonVector" +
-      "\"{\n\nPbRoomInfo\022\020\n\010roomType\030\001 \001(\005\022\017\n\007serv" +
-      "ice\030\002 \001(\005\022!\n\003cmm\030\003 \001(\0132\024.pbdson.CommonVe" +
-      "ctor\022\'\n\005lstCm\030\004 \001(\0132\030.pbdson.ListCommonV",
-      "ector\"Z\n\017PbListMiniLotte\022\020\n\010allBonus\030\001 \003" +
-      "(\003\022\020\n\010luckyNum\030\002 \003(\005\022#\n\006aLotte\030\003 \003(\0132\023.p" +
-      "bdson.PbMiniLotte\"C\n\013PbMiniLotte\022\021\n\tnumC" +
-      "hoose\030\001 \003(\005\022\022\n\nprizeIndex\030\002 \001(\005\022\r\n\005bonus" +
-      "\030\003 \003(\005\"B\n\024PbListLotteryHistory\022*\n\010aLotte" +
-      "ry\030\001 \003(\0132\030.pbdson.PbLotteryHistory\"\247\001\n\020P" +
-      "bLotteryHistory\022\017\n\007eventId\030\001 \001(\005\022\014\n\004type" +
-      "\030\002 \001(\005\022\020\n\010luckyNum\030\003 \001(\005\022\016\n\006number\030\004 \003(\005" +
-      "\022\014\n\004time\030\005 \001(\003\022\r\n\005bonus\030\006 \003(\003\022\016\n\006status\030" +
-      "\007 \001(\005\022\021\n\tlistBonus\030\010 \003(\003\022\022\n\nlistResult\030\t",
-      " \003(\005\"*\n\014PbUnitUpdate\022\014\n\004type\030\001 \001(\005\022\014\n\004da" +
-      "ta\030\002 \001(\014\"\213\001\n\tPbUnitPos\022\n\n\002id\030\001 \001(\003\022\r\n\005sp" +
-      "eed\030\002 \001(\005\022\024\n\014lastInputSeq\030\003 \001(\003\022\032\n\003pos\030\004" +
-      " \001(\0132\r.pbdson.PbPos\022 \n\tdirection\030\005 \001(\0132\r" +
-      ".pbdson.PbPos\022\017\n\007chunkId\030\006 \001(\005\"1\n\014PbList" +
-      "Bullet\022!\n\007bullets\030\001 \003(\0132\020.pbdson.PbBulle" +
-      "t\"@\n\010PbBullet\022\n\n\002id\030\001 \001(\005\022\032\n\003pos\030\002 \001(\0132\r" +
-      ".pbdson.PbPos\022\014\n\004info\030\003 \003(\005\"(\n\tPbListTab" +
-      "\022\033\n\004tabs\030\001 \003(\0132\r.pbdson.PbTab\"Z\n\005PbTab\022\r" +
-      "\n\005tabId\030\001 \001(\005\022\025\n\reventTemplate\030\002 \001(\005\022\r\n\005",
-      "image\030\003 \001(\t\022\014\n\004name\030\004 \001(\t\022\016\n\006notify\030\005 \001(" +
-      "\010\"\255\002\n\017PbEventBuyMonth\022\021\n\teventName\030\001 \001(\t" +
-      "\022\023\n\013imageBanner\030\002 \001(\t\022\022\n\ntextBanner\030\003 \001(" +
-      "\t\022\r\n\005level\030\004 \001(\005\022\020\n\010curPoint\030\005 \001(\005\022\020\n\010ma" +
-      "xPoint\030\006 \001(\005\022\025\n\rbuttonAddGoto\030\007 \001(\005\022\017\n\007k" +
-      "eyHelp\030\010 \001(\t\022\016\n\006timeCD\030\t \001(\003\022\021\n\tstatusBu" +
-      "y\030\n \001(\005\022\r\n\005price\030\013 \003(\003\022\022\n\nnormalName\030\014 \001" +
-      "(\t\022\017\n\007vipName\030\r \001(\t\022,\n\005cells\030\016 \003(\0132\035.pbd" +
-      "son.PbCellPanelEventMonth\"\315\001\n\014PbEventTim" +
-      "er\022\n\n\002id\030\001 \001(\005\022\016\n\006status\030\002 \001(\005\022\022\n\ntimeRe",
-      "main\030\003 \001(\003\022\r\n\005bonus\030\004 \003(\003\022\r\n\005price\030\005 \003(\003" +
-      "\022\020\n\010oldPrice\030\006 \003(\003\022\014\n\004name\030\007 \001(\t\022\014\n\004desc" +
-      "\030\010 \001(\t\022\014\n\004sale\030\t \001(\t\022\017\n\007bgrPath\030\n \001(\t\022\"\n" +
-      "\004info\030\013 \001(\0132\024.pbdson.CommonVector\"w\n\025PbC" +
-      "ellPanelEventMonth\022\r\n\005level\030\001 \001(\005\022\013\n\003exp" +
-      "\030\002 \001(\005\022\016\n\006status\030\003 \001(\005\022\021\n\tstatusVip\030\004 \001(" +
-      "\005\022\r\n\005bonus\030\005 \003(\003\022\020\n\010bonusVip\030\006 \003(\003\"\221\001\n\023P" +
-      "bPanelEventTabCell\022\021\n\teventName\030\001 \001(\t\022\023\n" +
-      "\013imageBanner\030\002 \001(\t\022\022\n\ntextBanner\030\003 \001(\t\022\016" +
-      "\n\006timeCD\030\t \001(\003\022.\n\005cells\030\016 \003(\0132\037.pbdson.P",
-      "bCellPanelEventTabCell\"i\n\027PbCellPanelEve" +
-      "ntTabCell\022\n\n\002id\030\001 \001(\005\022\020\n\010cellName\030\002 \001(\t\022" +
-      "\r\n\005bonus\030\003 \003(\003\022\013\n\003per\030\004 \001(\t\022\024\n\014buttonSta" +
-      "tus\030\005 \001(\005\"\237\001\n\tPbWelfare\022\017\n\007eventId\030\001 \001(\005" +
-      "\022\016\n\006notify\030\002 \001(\010\022%\n\006banner\030\003 \001(\0132\025.pbdso" +
-      "n.PbBannerEvent\022&\n\010tabEvent\030\004 \003(\0132\024.pbds" +
-      "on.PbTabWelfare\022\017\n\007keyHelp\030\005 \001(\t\022\021\n\tcoun" +
-      "tdown\030\006 \001(\003\"b\n\014PbTabWelfare\022\r\n\005tabId\030\001 \001" +
-      "(\005\022\017\n\007tabName\030\002 \001(\t\022\"\n\005cells\030\003 \003(\0132\023.pbd" +
-      "son.PbCellEvent\022\016\n\006notify\030\004 \001(\010\"\263\001\n\rPbBa",
-      "nnerEvent\022\022\n\npathBanner\030\001 \001(\t\022\014\n\004text\030\002 " +
-      "\001(\t\022\022\n\nbonusImage\030\003 \001(\t\022\021\n\tboxStatus\030\004 \001" +
-      "(\005\022\020\n\010bonusBox\030\005 \003(\005\022\014\n\004desc\030\006 \001(\t\022\021\n\tpa" +
-      "thTitle\030\007 \001(\t\022&\n\004info\030\010 \001(\0132\030.pbdson.Lis" +
-      "tCommonVector\"\353\001\n\013PbCellEvent\022\n\n\002id\030\001 \001(" +
-      "\005\022\r\n\005image\030\002 \001(\t\022\r\n\005bonus\030\003 \003(\005\022\020\n\010nameC" +
-      "ell\030\004 \001(\t\022\020\n\010textCell\030\005 \001(\t\022\020\n\010textDesc\030" +
-      "\006 \001(\t\022\016\n\006numBuy\030\007 \001(\005\022\r\n\005limit\030\010 \001(\005\022\r\n\005" +
-      "price\030\t \003(\003\022\024\n\014buttonStatus\030\n \001(\005\022\020\n\010bon" +
-      "usDay\030\013 \003(\005\022\022\n\ntimeRemain\030\014 \001(\003\022\022\n\ntimeE",
-      "xpire\030\r \001(\003\"\225\001\n\013PbEvent7Day\022&\n\004days\030\001 \003(" +
-      "\0132\030.pbdson.PbPanelEvent7Day\022\022\n\ntimeRemai" +
-      "n\030\002 \001(\003\022\020\n\010curValue\030\003 \001(\005\022\020\n\010maxValue\030\004 " +
-      "\001(\005\022&\n\tposReward\030\005 \003(\0132\023.pbdson.PbPosRew" +
-      "ard\"U\n\013PbPosReward\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002" +
-      " \001(\t\022\r\n\005point\030\003 \001(\003\022\r\n\005bonus\030\004 \003(\003\022\016\n\006st" +
-      "atus\030\005 \001(\005\"R\n\016PbTabEvent7Day\022\n\n\002id\030\001 \001(\005" +
-      "\022\014\n\004name\030\002 \001(\t\022&\n\005cells\030\003 \003(\0132\027.pbdson.P" +
-      "bCellEvent7Day\"\272\001\n\020PbPanelEvent7Day\022$\n\004t" +
-      "ab1\030\001 \001(\0132\026.pbdson.PbTabEvent7Day\022$\n\004tab",
-      "2\030\002 \001(\0132\026.pbdson.PbTabEvent7Day\022$\n\004tab3\030" +
-      "\003 \001(\0132\026.pbdson.PbTabEvent7Day\022$\n\004tab4\030\004 " +
-      "\001(\0132\026.pbdson.PbTabEvent7Day\022\016\n\006isLock\030\005 " +
-      "\001(\010\"\306\001\n\017PbCellEvent7Day\022\n\n\002id\030\001 \001(\005\022\014\n\004n" +
-      "ame\030\002 \001(\t\022\014\n\004desc\030\003 \001(\t\022\020\n\010curValue\030\004 \001(" +
-      "\005\022\020\n\010maxValue\030\005 \001(\005\022\r\n\005bonus\030\006 \003(\003\022\024\n\014bu" +
-      "ttonStatus\030\007 \001(\005\022\022\n\nbuttonGoto\030\010 \001(\005\022\020\n\010" +
-      "oldPrice\030\t \003(\003\022\020\n\010newPrice\030\n \003(\003\022\n\n\002xu\030\013" +
-      " \001(\005\"\'\n\tPbListIAP\022\032\n\003iap\030\001 \003(\0132\r.pbdson." +
-      "PpIAP\"\264\001\n\005PpIAP\022\n\n\002id\030\001 \001(\005\022\030\n\020productId",
-      "Android\030\002 \001(\t\022\024\n\014productIdIos\030\003 \001(\t\022\014\n\004n" +
-      "ame\030\004 \001(\t\022\r\n\005price\030\005 \001(\t\022\r\n\005bonus\030\006 \003(\003\022" +
-      "\020\n\010addBonus\030\007 \003(\003\022\020\n\010addTitle\030\010 \001(\t\022\016\n\006v" +
-      "ipExp\030\t \001(\005\022\017\n\007priceQr\030\n \001(\t*!\n\tCellStat" +
-      "e\022\n\n\006ACTIVE\020\001\022\010\n\004HIDE\020\002*\202\002\n\014SubStateType" +
-      "\022\r\n\tADD_BONUS\020\001\022\007\n\003DIE\020\002\022\n\n\006REVIVE\020\003\022\r\n\t" +
-      "PLAY_ANIM\020\004\022\r\n\tBE_DAMAGE\020\005\022\017\n\013EFFECT_BOD" +
-      "Y\020\006\022\t\n\005RE_HP\020\007\022\025\n\021UPDATE_CHAT_FRAME\020\010\022\020\n" +
-      "\014UPDATE_TRIAL\020\t\022\024\n\020UPDATE_ITEM_SLOT\020\n\022\024\n" +
-      "\020UPDATE_TEXT_DAME\020\013\022\026\n\022UPDATE_MULTI_POIN",
-      "T\020\014\022\021\n\rUSE_ITEM_SLOT\020\r\022\024\n\020UPDATE_DIRECTI" +
-      "ON\020\016*Y\n\tStateType\022\023\n\017TYPE_ADD_REMOVE\020\001\022\014" +
-      "\n\010TYPE_POS\020\002\022\023\n\017TYPE_UNIT_STATE\020\003\022\024\n\020TYP" +
-      "E_CHUNK_STATE\020\004*y\n\016CellObjectType\022\010\n\004ROC" +
-      "K\020\001\022\010\n\004SIGN\020\002\022\n\n\006CACTUS\020\003\022\n\n\006FLOWER\020\004\022\t\n" +
-      "\005SKULL\020\005\022\t\n\005CHEST\020\006\022\t\n\005BONES\020\007\022\016\n\nGRAVES" +
-      "TONE\020\010\022\n\n\006HELMET\020\t*\316\001\n\007ItemKey\022\016\n\nBINH_M" +
-      "AU_1\020\001\022\016\n\nBINH_MAU_2\020\002\022\016\n\nBINH_MAU_3\020\003\022\016" +
-      "\n\nBINH_MAU_4\020\004\022\010\n\004GOLD\020\005\022\007\n\003GEM\020\006\022\010\n\004RUB" +
-      "Y\020\007\022\017\n\013TICKER_MINI\020\010\022\021\n\rTICKER_NORMAL\020\t\022",
-      "\022\n\016TICKER_SPECIAL\020\n\022\010\n\004CHIP\020\013\022\021\n\rBONG_LI" +
-      "NH_THU\020\014\022\021\n\rBONG_SIEU_THU\020\r*;\n\014TargetAtt" +
-      "ack\022\n\n\006OBJECT\020\000\022\t\n\005ENEMY\020\001\022\010\n\004BOSS\020\002\022\n\n\006" +
-      "PLAYER\020\003*q\n\rEquipSlotType\022\010\n\004NULL\020\000\022\n\n\006W" +
-      "EAPON\020\001\022\007\n\003HAT\020\002\022\t\n\005ARMOR\020\003\022\t\n\005CLOAK\020\004\022\t" +
-      "\n\005SHOES\020\005\022\014\n\010TREASURE\020\006\022\007\n\003PET\020\007\022\t\n\005MOUN" +
-      "T\020\010B\024\n\010protocolB\010Pbmethod"
+      "\n\nrankTrophy\030\013 \001(\005\022\r\n\005skins\030\014 \003(\005\022\022\n\ncur" +
+      "Donated\030\r \001(\005\022\016\n\006online\030\016 \001(\010\"J\n\nPbListC" +
+      "lan\022\034\n\004clan\030\001 \003(\0132\016.pbdson.PbClan\022\036\n\006myC" +
+      "lan\030\002 \001(\0132\016.pbdson.PbClan\"\245\003\n\006PbUser\022\n\n\002" +
+      "id\030\001 \001(\005\022\020\n\010username\030\002 \001(\t\022\014\n\004name\030\003 \001(\t" +
+      "\022\014\n\004gold\030\004 \001(\003\022\013\n\003gem\030\005 \001(\003\022\r\n\005skins\030\010 \003" +
+      "(\005\022\013\n\003vip\030\t \003(\005\022&\n\010clanInfo\030\n \001(\0132\024.pbds" +
+      "on.CommonVector\022\"\n\004info\030\013 \001(\0132\024.pbdson.C" +
+      "ommonVector\022\r\n\005petId\030\014 \003(\005\022\020\n\010facebook\030\r",
+      " \001(\t\022&\n\010userInfo\030\016 \001(\0132\024.pbdson.CommonVe" +
+      "ctor\022\014\n\004rank\030\020 \001(\005\022\021\n\tpointRank\030\021 \001(\003\022\r\n" +
+      "\005point\030\023 \003(\003\022\026\n\016timeLastAction\030\024 \001(\003\022\r\n\005" +
+      "honor\030\025 \001(\005\022\r\n\005power\030\026 \001(\003\022\021\n\titemEquip\030" +
+      "\027 \003(\005\022\017\n\007channel\030\030 \003(\005\022\014\n\004ruby\030\033 \001(\003\022\013\n\003" +
+      "pet\030\034 \003(\005\"\203\004\n\nPbUserData\022\021\n\tslogBagUI\030\001 " +
+      "\001(\005\022\024\n\014slotMaterial\030\002 \001(\005\022\025\n\rslotItemEve" +
+      "nt\030\003 \001(\005\022\022\n\nlvTraining\030\004 \001(\005\022\025\n\rmaxlvTra" +
+      "ining\030\005 \001(\005\022\025\n\rnumPointLevel\030\006 \001(\005\022!\n\005it" +
+      "ems\030\t \001(\0132\022.pbdson.PbListItem\022\026\n\016itemEqu",
+      "ipments\030\n \003(\003\022\035\n\005aSkin\030\013 \003(\0132\016.pbdson.Pb" +
+      "Skin\022)\n\taMaterial\030\014 \001(\0132\026.pbdson.PbListM" +
+      "aterial\022\033\n\004aPet\030\017 \003(\0132\r.pbdson.PbPet\022\037\n\006" +
+      "aMount\030\020 \003(\0132\017.pbdson.PbMount\022\020\n\010tutoria" +
+      "l\030\021 \001(\005\022\021\n\tdameSkins\030\022 \003(\005\022\025\n\rdameSkinEq" +
+      "uip\030\023 \001(\005\022\022\n\nchatFrames\030\025 \003(\005\022\026\n\016chatFra" +
+      "meEquip\030\026 \001(\005\022\016\n\006trials\030\027 \003(\005\022\022\n\ntrialEq" +
+      "uip\030\030 \001(\005\022\022\n\ncraftLevel\030\031 \001(\005\022\020\n\010craftEx" +
+      "p\030\032 \001(\005\"*\n\nPbListItem\022\034\n\004item\030\001 \003(\0132\016.pb" +
+      "dson.PbItem\"7\n\016PbListMaterial\022%\n\tmateria",
+      "ls\030\001 \003(\0132\022.pbdson.PbMaterial\".\n\013PbListMo" +
+      "unt\022\037\n\006mounts\030\001 \003(\0132\017.pbdson.PbMount\"O\n\006" +
+      "PbSkin\022\n\n\002id\030\001 \001(\003\022\014\n\004type\030\002 \001(\005\022\016\n\006skin" +
+      "Id\030\003 \001(\005\022\014\n\004tier\030\004 \001(\005\022\r\n\005point\030\005 \003(\003\"D\n" +
+      "\007PbMount\022\n\n\002id\030\001 \001(\003\022\r\n\005point\030\002 \003(\003\022\017\n\007m" +
+      "ountId\030\003 \001(\005\022\r\n\005level\030\004 \001(\005\"(\n\tPbListPet" +
+      "\022\033\n\004pets\030\001 \003(\0132\r.pbdson.PbPet\"@\n\005PbPet\022\n" +
+      "\n\002id\030\001 \001(\003\022\r\n\005point\030\002 \003(\003\022\r\n\005petId\030\003 \001(\005" +
+      "\022\r\n\005level\030\004 \001(\005\":\n\017PbListItemPoint\022\'\n\nit" +
+      "emPoints\030\001 \003(\0132\023.pbdson.PbItemPoint\"+\n\nP",
+      "bListChat\022\035\n\005aChat\030\001 \003(\0132\016.pbdson.PbChat" +
+      "\"\211\001\n\006PbChat\022\017\n\007reqTime\030\001 \001(\003\022\017\n\007message\030" +
+      "\002 \001(\t\022\014\n\004type\030\003 \001(\005\022\034\n\004user\030\004 \001(\0132\016.pbds" +
+      "on.PbUser\022\"\n\004info\030\005 \001(\0132\024.pbdson.CommonV" +
+      "ector\022\r\n\005point\030\006 \003(\003\"7\n\020PbListChatFriend" +
+      "\022#\n\005chats\030\001 \003(\0132\024.pbdson.PbChatFriend\"i\n" +
+      "\014PbChatFriend\022\016\n\006userId\030\001 \001(\005\022\017\n\007message" +
+      "\030\002 \001(\t\022\r\n\005skins\030\003 \003(\005\022\014\n\004name\030\004 \001(\t\022\014\n\004t" +
+      "ime\030\005 \001(\003\022\r\n\005level\030\006 \001(\005\"v\n\006PbShop\022\"\n\006ta" +
+      "bSet\030\001 \003(\0132\022.pbdson.PbItemShop\022#\n\007tabDea",
+      "l\030\002 \003(\0132\022.pbdson.PbItemShop\022#\n\007tabMisc\030\003" +
+      " \003(\0132\022.pbdson.PbItemShop\"\245\001\n\nPbItemShop\022" +
+      "\n\n\002id\030\001 \001(\005\022\013\n\003tab\030\002 \001(\005\022\014\n\004name\030\003 \001(\t\022\014" +
+      "\n\004desc\030\004 \001(\t\022\014\n\004item\030\005 \003(\003\022\r\n\005price\030\006 \003(" +
+      "\003\022\r\n\005image\030\007 \001(\t\022\016\n\006status\030\010 \001(\005\022\022\n\ndesc" +
+      "Status\030\t \001(\t\022\022\n\ntimeRemain\030\n \001(\003\"l\n\nPbMa" +
+      "terial\022\n\n\002id\030\001 \001(\003\022\022\n\nmaterialId\030\002 \001(\005\022\014" +
+      "\n\004rank\030\003 \001(\005\022\r\n\005level\030\004 \001(\005\022\r\n\005value\030\005 \001" +
+      "(\002\022\022\n\nsocketRate\030\006 \001(\002\"\201\001\n\006PbItem\022\n\n\002id\030" +
+      "\001 \001(\003\022\017\n\007itemKey\030\002 \001(\005\022\014\n\004type\030\003 \001(\005\022\r\n\005",
+      "level\030\004 \001(\005\022\023\n\013lockDestroy\030\005 \001(\010\022\014\n\004tier" +
+      "\030\006 \001(\005\022\014\n\004slot\030\007 \001(\005\022\014\n\004data\030\010 \001(\t\".\n\013Pb" +
+      "ItemPoint\022\017\n\007itemKey\030\001 \001(\005\022\016\n\006number\030\002 \001" +
+      "(\003\"/\n\nListAction\022!\n\007aAction\030\001 \003(\0132\020.pbds" +
+      "on.PbAction\"*\n\010PbAction\022\020\n\010actionId\030\001 \001(" +
+      "\005\022\014\n\004data\030\002 \001(\014\".\n\014CommonVector\022\r\n\005aLong" +
+      "\030\001 \003(\003\022\017\n\007aString\030\002 \003(\t\"9\n\020ListCommonVec" +
+      "tor\022%\n\007aVector\030\001 \003(\0132\024.pbdson.CommonVect" +
+      "or\"f\n\017PbCharacterInfo\022\n\n\002id\030\001 \001(\005\022\014\n\004nam" +
+      "e\030\002 \001(\t\022\014\n\004team\030\003 \001(\005\022\r\n\005skins\030\004 \003(\005\022\r\n\005",
+      "aItem\030\005 \003(\005\022\r\n\005point\030\006 \003(\003\"+\n\nPbListMail" +
+      "\022\035\n\005aMail\030\001 \003(\0132\016.pbdson.PbMail\"\210\001\n\006PbMa" +
+      "il\022\n\n\002id\030\001 \001(\005\022\r\n\005title\030\002 \001(\t\022\017\n\007message" +
+      "\030\003 \001(\t\022\r\n\005bonus\030\004 \003(\005\022\017\n\007receive\030\005 \001(\005\022\014" +
+      "\n\004time\030\006 \001(\003\022\020\n\010senderId\030\007 \001(\005\022\022\n\nsender" +
+      "Name\030\010 \001(\t\"\257\001\n\tPbEndGame\022\017\n\007popupId\030\001 \001(" +
+      "\005\022\021\n\tbattleKey\030\002 \001(\t\022\r\n\005isWin\030\003 \001(\010\022\017\n\007m" +
+      "essage\030\004 \001(\t\022\r\n\005bonus\030\005 \003(\003\022\014\n\004time\030\006 \001(" +
+      "\005\022\017\n\007perDame\030\007 \001(\005\022\014\n\004star\030\010 \001(\005\022\"\n\004info" +
+      "\030\t \001(\0132\024.pbdson.CommonVector\"{\n\nPbRoomIn",
+      "fo\022\020\n\010roomType\030\001 \001(\005\022\017\n\007service\030\002 \001(\005\022!\n" +
+      "\003cmm\030\003 \001(\0132\024.pbdson.CommonVector\022\'\n\005lstC" +
+      "m\030\004 \001(\0132\030.pbdson.ListCommonVector\"Z\n\017PbL" +
+      "istMiniLotte\022\020\n\010allBonus\030\001 \003(\003\022\020\n\010luckyN" +
+      "um\030\002 \003(\005\022#\n\006aLotte\030\003 \003(\0132\023.pbdson.PbMini" +
+      "Lotte\"C\n\013PbMiniLotte\022\021\n\tnumChoose\030\001 \003(\005\022" +
+      "\022\n\nprizeIndex\030\002 \001(\005\022\r\n\005bonus\030\003 \003(\005\"B\n\024Pb" +
+      "ListLotteryHistory\022*\n\010aLottery\030\001 \003(\0132\030.p" +
+      "bdson.PbLotteryHistory\"\247\001\n\020PbLotteryHist" +
+      "ory\022\017\n\007eventId\030\001 \001(\005\022\014\n\004type\030\002 \001(\005\022\020\n\010lu",
+      "ckyNum\030\003 \001(\005\022\016\n\006number\030\004 \003(\005\022\014\n\004time\030\005 \001" +
+      "(\003\022\r\n\005bonus\030\006 \003(\003\022\016\n\006status\030\007 \001(\005\022\021\n\tlis" +
+      "tBonus\030\010 \003(\003\022\022\n\nlistResult\030\t \003(\005\"*\n\014PbUn" +
+      "itUpdate\022\014\n\004type\030\001 \001(\005\022\014\n\004data\030\002 \001(\014\"\213\001\n" +
+      "\tPbUnitPos\022\n\n\002id\030\001 \001(\003\022\r\n\005speed\030\002 \001(\005\022\024\n" +
+      "\014lastInputSeq\030\003 \001(\003\022\032\n\003pos\030\004 \001(\0132\r.pbdso" +
+      "n.PbPos\022 \n\tdirection\030\005 \001(\0132\r.pbdson.PbPo" +
+      "s\022\017\n\007chunkId\030\006 \001(\005\"1\n\014PbListBullet\022!\n\007bu" +
+      "llets\030\001 \003(\0132\020.pbdson.PbBullet\"@\n\010PbBulle" +
+      "t\022\n\n\002id\030\001 \001(\005\022\032\n\003pos\030\002 \001(\0132\r.pbdson.PbPo",
+      "s\022\014\n\004info\030\003 \003(\005\"(\n\tPbListTab\022\033\n\004tabs\030\001 \003" +
+      "(\0132\r.pbdson.PbTab\"Z\n\005PbTab\022\r\n\005tabId\030\001 \001(" +
+      "\005\022\025\n\reventTemplate\030\002 \001(\005\022\r\n\005image\030\003 \001(\t\022" +
+      "\014\n\004name\030\004 \001(\t\022\016\n\006notify\030\005 \001(\010\"\255\002\n\017PbEven" +
+      "tBuyMonth\022\021\n\teventName\030\001 \001(\t\022\023\n\013imageBan" +
+      "ner\030\002 \001(\t\022\022\n\ntextBanner\030\003 \001(\t\022\r\n\005level\030\004" +
+      " \001(\005\022\020\n\010curPoint\030\005 \001(\005\022\020\n\010maxPoint\030\006 \001(\005" +
+      "\022\025\n\rbuttonAddGoto\030\007 \001(\005\022\017\n\007keyHelp\030\010 \001(\t" +
+      "\022\016\n\006timeCD\030\t \001(\003\022\021\n\tstatusBuy\030\n \001(\005\022\r\n\005p" +
+      "rice\030\013 \003(\003\022\022\n\nnormalName\030\014 \001(\t\022\017\n\007vipNam",
+      "e\030\r \001(\t\022,\n\005cells\030\016 \003(\0132\035.pbdson.PbCellPa" +
+      "nelEventMonth\"\315\001\n\014PbEventTimer\022\n\n\002id\030\001 \001" +
+      "(\005\022\016\n\006status\030\002 \001(\005\022\022\n\ntimeRemain\030\003 \001(\003\022\r" +
+      "\n\005bonus\030\004 \003(\003\022\r\n\005price\030\005 \003(\003\022\020\n\010oldPrice" +
+      "\030\006 \003(\003\022\014\n\004name\030\007 \001(\t\022\014\n\004desc\030\010 \001(\t\022\014\n\004sa" +
+      "le\030\t \001(\t\022\017\n\007bgrPath\030\n \001(\t\022\"\n\004info\030\013 \001(\0132" +
+      "\024.pbdson.CommonVector\"w\n\025PbCellPanelEven" +
+      "tMonth\022\r\n\005level\030\001 \001(\005\022\013\n\003exp\030\002 \001(\005\022\016\n\006st" +
+      "atus\030\003 \001(\005\022\021\n\tstatusVip\030\004 \001(\005\022\r\n\005bonus\030\005" +
+      " \003(\003\022\020\n\010bonusVip\030\006 \003(\003\"\221\001\n\023PbPanelEventT",
+      "abCell\022\021\n\teventName\030\001 \001(\t\022\023\n\013imageBanner" +
+      "\030\002 \001(\t\022\022\n\ntextBanner\030\003 \001(\t\022\016\n\006timeCD\030\t \001" +
+      "(\003\022.\n\005cells\030\016 \003(\0132\037.pbdson.PbCellPanelEv" +
+      "entTabCell\"i\n\027PbCellPanelEventTabCell\022\n\n" +
+      "\002id\030\001 \001(\005\022\020\n\010cellName\030\002 \001(\t\022\r\n\005bonus\030\003 \003" +
+      "(\003\022\013\n\003per\030\004 \001(\t\022\024\n\014buttonStatus\030\005 \001(\005\"\237\001" +
+      "\n\tPbWelfare\022\017\n\007eventId\030\001 \001(\005\022\016\n\006notify\030\002" +
+      " \001(\010\022%\n\006banner\030\003 \001(\0132\025.pbdson.PbBannerEv" +
+      "ent\022&\n\010tabEvent\030\004 \003(\0132\024.pbdson.PbTabWelf" +
+      "are\022\017\n\007keyHelp\030\005 \001(\t\022\021\n\tcountdown\030\006 \001(\003\"",
+      "b\n\014PbTabWelfare\022\r\n\005tabId\030\001 \001(\005\022\017\n\007tabNam" +
+      "e\030\002 \001(\t\022\"\n\005cells\030\003 \003(\0132\023.pbdson.PbCellEv" +
+      "ent\022\016\n\006notify\030\004 \001(\010\"\263\001\n\rPbBannerEvent\022\022\n" +
+      "\npathBanner\030\001 \001(\t\022\014\n\004text\030\002 \001(\t\022\022\n\nbonus" +
+      "Image\030\003 \001(\t\022\021\n\tboxStatus\030\004 \001(\005\022\020\n\010bonusB" +
+      "ox\030\005 \003(\005\022\014\n\004desc\030\006 \001(\t\022\021\n\tpathTitle\030\007 \001(" +
+      "\t\022&\n\004info\030\010 \001(\0132\030.pbdson.ListCommonVecto" +
+      "r\"\353\001\n\013PbCellEvent\022\n\n\002id\030\001 \001(\005\022\r\n\005image\030\002" +
+      " \001(\t\022\r\n\005bonus\030\003 \003(\005\022\020\n\010nameCell\030\004 \001(\t\022\020\n" +
+      "\010textCell\030\005 \001(\t\022\020\n\010textDesc\030\006 \001(\t\022\016\n\006num",
+      "Buy\030\007 \001(\005\022\r\n\005limit\030\010 \001(\005\022\r\n\005price\030\t \003(\003\022" +
+      "\024\n\014buttonStatus\030\n \001(\005\022\020\n\010bonusDay\030\013 \003(\005\022" +
+      "\022\n\ntimeRemain\030\014 \001(\003\022\022\n\ntimeExpire\030\r \001(\003\"" +
+      "\225\001\n\013PbEvent7Day\022&\n\004days\030\001 \003(\0132\030.pbdson.P" +
+      "bPanelEvent7Day\022\022\n\ntimeRemain\030\002 \001(\003\022\020\n\010c" +
+      "urValue\030\003 \001(\005\022\020\n\010maxValue\030\004 \001(\005\022&\n\tposRe" +
+      "ward\030\005 \003(\0132\023.pbdson.PbPosReward\"U\n\013PbPos" +
+      "Reward\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\r\n\005poin" +
+      "t\030\003 \001(\003\022\r\n\005bonus\030\004 \003(\003\022\016\n\006status\030\005 \001(\005\"R" +
+      "\n\016PbTabEvent7Day\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001",
+      "(\t\022&\n\005cells\030\003 \003(\0132\027.pbdson.PbCellEvent7D" +
+      "ay\"\272\001\n\020PbPanelEvent7Day\022$\n\004tab1\030\001 \001(\0132\026." +
+      "pbdson.PbTabEvent7Day\022$\n\004tab2\030\002 \001(\0132\026.pb" +
+      "dson.PbTabEvent7Day\022$\n\004tab3\030\003 \001(\0132\026.pbds" +
+      "on.PbTabEvent7Day\022$\n\004tab4\030\004 \001(\0132\026.pbdson" +
+      ".PbTabEvent7Day\022\016\n\006isLock\030\005 \001(\010\"\306\001\n\017PbCe" +
+      "llEvent7Day\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\014\n" +
+      "\004desc\030\003 \001(\t\022\020\n\010curValue\030\004 \001(\005\022\020\n\010maxValu" +
+      "e\030\005 \001(\005\022\r\n\005bonus\030\006 \003(\003\022\024\n\014buttonStatus\030\007" +
+      " \001(\005\022\022\n\nbuttonGoto\030\010 \001(\005\022\020\n\010oldPrice\030\t \003",
+      "(\003\022\020\n\010newPrice\030\n \003(\003\022\n\n\002xu\030\013 \001(\005\"\'\n\tPbLi" +
+      "stIAP\022\032\n\003iap\030\001 \003(\0132\r.pbdson.PpIAP\"\264\001\n\005Pp" +
+      "IAP\022\n\n\002id\030\001 \001(\005\022\030\n\020productIdAndroid\030\002 \001(" +
+      "\t\022\024\n\014productIdIos\030\003 \001(\t\022\014\n\004name\030\004 \001(\t\022\r\n" +
+      "\005price\030\005 \001(\t\022\r\n\005bonus\030\006 \003(\003\022\020\n\010addBonus\030" +
+      "\007 \003(\003\022\020\n\010addTitle\030\010 \001(\t\022\016\n\006vipExp\030\t \001(\005\022" +
+      "\017\n\007priceQr\030\n \001(\t*!\n\tCellState\022\n\n\006ACTIVE\020" +
+      "\001\022\010\n\004HIDE\020\002*\231\002\n\014SubStateType\022\r\n\tADD_BONU" +
+      "S\020\001\022\007\n\003DIE\020\002\022\n\n\006REVIVE\020\003\022\r\n\tPLAY_ANIM\020\004\022" +
+      "\r\n\tBE_DAMAGE\020\005\022\017\n\013EFFECT_BODY\020\006\022\t\n\005RE_HP",
+      "\020\007\022\025\n\021UPDATE_CHAT_FRAME\020\010\022\020\n\014UPDATE_TRIA" +
+      "L\020\t\022\024\n\020UPDATE_ITEM_SLOT\020\n\022\024\n\020UPDATE_TEXT" +
+      "_DAME\020\013\022\026\n\022UPDATE_MULTI_POINT\020\014\022\021\n\rUSE_I" +
+      "TEM_SLOT\020\r\022\024\n\020UPDATE_DIRECTION\020\016\022\025\n\021UPDA" +
+      "TE_ITEM_EQUIP\020\017*Y\n\tStateType\022\023\n\017TYPE_ADD" +
+      "_REMOVE\020\001\022\014\n\010TYPE_POS\020\002\022\023\n\017TYPE_UNIT_STA" +
+      "TE\020\003\022\024\n\020TYPE_CHUNK_STATE\020\004*y\n\016CellObject" +
+      "Type\022\010\n\004ROCK\020\001\022\010\n\004SIGN\020\002\022\n\n\006CACTUS\020\003\022\n\n\006" +
+      "FLOWER\020\004\022\t\n\005SKULL\020\005\022\t\n\005CHEST\020\006\022\t\n\005BONES\020" +
+      "\007\022\016\n\nGRAVESTONE\020\010\022\n\n\006HELMET\020\t*\316\001\n\007ItemKe",
+      "y\022\016\n\nBINH_MAU_1\020\001\022\016\n\nBINH_MAU_2\020\002\022\016\n\nBIN" +
+      "H_MAU_3\020\003\022\016\n\nBINH_MAU_4\020\004\022\010\n\004GOLD\020\005\022\007\n\003G" +
+      "EM\020\006\022\010\n\004RUBY\020\007\022\017\n\013TICKER_MINI\020\010\022\021\n\rTICKE" +
+      "R_NORMAL\020\t\022\022\n\016TICKER_SPECIAL\020\n\022\010\n\004CHIP\020\013" +
+      "\022\021\n\rBONG_LINH_THU\020\014\022\021\n\rBONG_SIEU_THU\020\r*;" +
+      "\n\014TargetAttack\022\n\n\006OBJECT\020\000\022\t\n\005ENEMY\020\001\022\010\n" +
+      "\004BOSS\020\002\022\n\n\006PLAYER\020\003*1\n\010SkinType\022\010\n\004HAIR\020" +
+      "\000\022\010\n\004FACE\020\001\022\007\n\003EYE\020\002\022\010\n\004BODY\020\003*q\n\rEquipS" +
+      "lotType\022\010\n\004NULL\020\000\022\n\n\006WEAPON\020\001\022\007\n\003HAT\020\002\022\t" +
+      "\n\005ARMOR\020\003\022\t\n\005CLOAK\020\004\022\t\n\005SHOES\020\005\022\014\n\010TREAS",
+      "URE\020\006\022\007\n\003PET\020\007\022\t\n\005MOUNT\020\010B\024\n\010protocolB\010P" +
+      "bmethod"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -79016,7 +80284,7 @@ public final class Pbmethod {
           internal_static_pbdson_ClanMember_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_ClanMember_descriptor,
-              new java.lang.String[] { "Id", "Name", "Trophy", "WarPoint", "Level", "ReceiveTroop", "SendTroop", "IsNew", "Position", "ClanDonated", "KungfuClan", "LastAction", "Vip", "RankTrophy", "Avatar", "CurDonated", "Online", });
+              new java.lang.String[] { "Id", "Name", "Trophy", "WarPoint", "Level", "ReceiveTroop", "SendTroop", "IsNew", "Position", "ClanDonated", "KungfuClan", "LastAction", "Vip", "RankTrophy", "Skins", "CurDonated", "Online", });
           internal_static_pbdson_PbListClan_descriptor =
             getDescriptor().getMessageTypes().get(16);
           internal_static_pbdson_PbListClan_fieldAccessorTable = new
@@ -79028,13 +80296,13 @@ public final class Pbmethod {
           internal_static_pbdson_PbUser_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbUser_descriptor,
-              new java.lang.String[] { "Id", "Username", "Name", "Gold", "Gem", "Avatar", "Vip", "ClanInfo", "Info", "PetId", "Facebook", "UserInfo", "Rank", "PointRank", "Point", "TimeLastAction", "Honor", "Power", "ItemEquip", "Channel", "Ruby", "Pet", });
+              new java.lang.String[] { "Id", "Username", "Name", "Gold", "Gem", "Skins", "Vip", "ClanInfo", "Info", "PetId", "Facebook", "UserInfo", "Rank", "PointRank", "Point", "TimeLastAction", "Honor", "Power", "ItemEquip", "Channel", "Ruby", "Pet", });
           internal_static_pbdson_PbUserData_descriptor =
             getDescriptor().getMessageTypes().get(18);
           internal_static_pbdson_PbUserData_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbUserData_descriptor,
-              new java.lang.String[] { "SlogBagUI", "SlotMaterial", "SlotItemEvent", "LvTraining", "MaxlvTraining", "NumPointLevel", "Items", "ItemEquipments", "AMaterial", "APet", "AMount", "Tutorial", "DameSkins", "DameSkinEquip", "ChatFrames", "ChatFrameEquip", "Trials", "TrialEquip", "CraftLevel", "CraftExp", });
+              new java.lang.String[] { "SlogBagUI", "SlotMaterial", "SlotItemEvent", "LvTraining", "MaxlvTraining", "NumPointLevel", "Items", "ItemEquipments", "ASkin", "AMaterial", "APet", "AMount", "Tutorial", "DameSkins", "DameSkinEquip", "ChatFrames", "ChatFrameEquip", "Trials", "TrialEquip", "CraftLevel", "CraftExp", });
           internal_static_pbdson_PbListItem_descriptor =
             getDescriptor().getMessageTypes().get(19);
           internal_static_pbdson_PbListItem_fieldAccessorTable = new
@@ -79053,290 +80321,296 @@ public final class Pbmethod {
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListMount_descriptor,
               new java.lang.String[] { "Mounts", });
-          internal_static_pbdson_PbMount_descriptor =
+          internal_static_pbdson_PbSkin_descriptor =
             getDescriptor().getMessageTypes().get(22);
+          internal_static_pbdson_PbSkin_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_pbdson_PbSkin_descriptor,
+              new java.lang.String[] { "Id", "Type", "SkinId", "Tier", "Point", });
+          internal_static_pbdson_PbMount_descriptor =
+            getDescriptor().getMessageTypes().get(23);
           internal_static_pbdson_PbMount_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbMount_descriptor,
               new java.lang.String[] { "Id", "Point", "MountId", "Level", });
           internal_static_pbdson_PbListPet_descriptor =
-            getDescriptor().getMessageTypes().get(23);
+            getDescriptor().getMessageTypes().get(24);
           internal_static_pbdson_PbListPet_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListPet_descriptor,
               new java.lang.String[] { "Pets", });
           internal_static_pbdson_PbPet_descriptor =
-            getDescriptor().getMessageTypes().get(24);
+            getDescriptor().getMessageTypes().get(25);
           internal_static_pbdson_PbPet_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbPet_descriptor,
               new java.lang.String[] { "Id", "Point", "PetId", "Level", });
           internal_static_pbdson_PbListItemPoint_descriptor =
-            getDescriptor().getMessageTypes().get(25);
+            getDescriptor().getMessageTypes().get(26);
           internal_static_pbdson_PbListItemPoint_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListItemPoint_descriptor,
               new java.lang.String[] { "ItemPoints", });
           internal_static_pbdson_PbListChat_descriptor =
-            getDescriptor().getMessageTypes().get(26);
+            getDescriptor().getMessageTypes().get(27);
           internal_static_pbdson_PbListChat_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListChat_descriptor,
               new java.lang.String[] { "AChat", });
           internal_static_pbdson_PbChat_descriptor =
-            getDescriptor().getMessageTypes().get(27);
+            getDescriptor().getMessageTypes().get(28);
           internal_static_pbdson_PbChat_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbChat_descriptor,
               new java.lang.String[] { "ReqTime", "Message", "Type", "User", "Info", "Point", });
           internal_static_pbdson_PbListChatFriend_descriptor =
-            getDescriptor().getMessageTypes().get(28);
+            getDescriptor().getMessageTypes().get(29);
           internal_static_pbdson_PbListChatFriend_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListChatFriend_descriptor,
               new java.lang.String[] { "Chats", });
           internal_static_pbdson_PbChatFriend_descriptor =
-            getDescriptor().getMessageTypes().get(29);
+            getDescriptor().getMessageTypes().get(30);
           internal_static_pbdson_PbChatFriend_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbChatFriend_descriptor,
-              new java.lang.String[] { "UserId", "Message", "Avatar", "Name", "Time", "Level", });
+              new java.lang.String[] { "UserId", "Message", "Skins", "Name", "Time", "Level", });
           internal_static_pbdson_PbShop_descriptor =
-            getDescriptor().getMessageTypes().get(30);
+            getDescriptor().getMessageTypes().get(31);
           internal_static_pbdson_PbShop_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbShop_descriptor,
               new java.lang.String[] { "TabSet", "TabDeal", "TabMisc", });
           internal_static_pbdson_PbItemShop_descriptor =
-            getDescriptor().getMessageTypes().get(31);
+            getDescriptor().getMessageTypes().get(32);
           internal_static_pbdson_PbItemShop_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbItemShop_descriptor,
               new java.lang.String[] { "Id", "Tab", "Name", "Desc", "Item", "Price", "Image", "Status", "DescStatus", "TimeRemain", });
           internal_static_pbdson_PbMaterial_descriptor =
-            getDescriptor().getMessageTypes().get(32);
+            getDescriptor().getMessageTypes().get(33);
           internal_static_pbdson_PbMaterial_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbMaterial_descriptor,
               new java.lang.String[] { "Id", "MaterialId", "Rank", "Level", "Value", "SocketRate", });
           internal_static_pbdson_PbItem_descriptor =
-            getDescriptor().getMessageTypes().get(33);
+            getDescriptor().getMessageTypes().get(34);
           internal_static_pbdson_PbItem_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbItem_descriptor,
               new java.lang.String[] { "Id", "ItemKey", "Type", "Level", "LockDestroy", "Tier", "Slot", "Data", });
           internal_static_pbdson_PbItemPoint_descriptor =
-            getDescriptor().getMessageTypes().get(34);
+            getDescriptor().getMessageTypes().get(35);
           internal_static_pbdson_PbItemPoint_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbItemPoint_descriptor,
               new java.lang.String[] { "ItemKey", "Number", });
           internal_static_pbdson_ListAction_descriptor =
-            getDescriptor().getMessageTypes().get(35);
+            getDescriptor().getMessageTypes().get(36);
           internal_static_pbdson_ListAction_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_ListAction_descriptor,
               new java.lang.String[] { "AAction", });
           internal_static_pbdson_PbAction_descriptor =
-            getDescriptor().getMessageTypes().get(36);
+            getDescriptor().getMessageTypes().get(37);
           internal_static_pbdson_PbAction_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbAction_descriptor,
               new java.lang.String[] { "ActionId", "Data", });
           internal_static_pbdson_CommonVector_descriptor =
-            getDescriptor().getMessageTypes().get(37);
+            getDescriptor().getMessageTypes().get(38);
           internal_static_pbdson_CommonVector_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_CommonVector_descriptor,
               new java.lang.String[] { "ALong", "AString", });
           internal_static_pbdson_ListCommonVector_descriptor =
-            getDescriptor().getMessageTypes().get(38);
+            getDescriptor().getMessageTypes().get(39);
           internal_static_pbdson_ListCommonVector_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_ListCommonVector_descriptor,
               new java.lang.String[] { "AVector", });
           internal_static_pbdson_PbCharacterInfo_descriptor =
-            getDescriptor().getMessageTypes().get(39);
+            getDescriptor().getMessageTypes().get(40);
           internal_static_pbdson_PbCharacterInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbCharacterInfo_descriptor,
-              new java.lang.String[] { "Id", "Name", "Team", "Avatar", "AItem", "Point", });
+              new java.lang.String[] { "Id", "Name", "Team", "Skins", "AItem", "Point", });
           internal_static_pbdson_PbListMail_descriptor =
-            getDescriptor().getMessageTypes().get(40);
+            getDescriptor().getMessageTypes().get(41);
           internal_static_pbdson_PbListMail_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListMail_descriptor,
               new java.lang.String[] { "AMail", });
           internal_static_pbdson_PbMail_descriptor =
-            getDescriptor().getMessageTypes().get(41);
+            getDescriptor().getMessageTypes().get(42);
           internal_static_pbdson_PbMail_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbMail_descriptor,
               new java.lang.String[] { "Id", "Title", "Message", "Bonus", "Receive", "Time", "SenderId", "SenderName", });
           internal_static_pbdson_PbEndGame_descriptor =
-            getDescriptor().getMessageTypes().get(42);
+            getDescriptor().getMessageTypes().get(43);
           internal_static_pbdson_PbEndGame_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbEndGame_descriptor,
               new java.lang.String[] { "PopupId", "BattleKey", "IsWin", "Message", "Bonus", "Time", "PerDame", "Star", "Info", });
           internal_static_pbdson_PbRoomInfo_descriptor =
-            getDescriptor().getMessageTypes().get(43);
+            getDescriptor().getMessageTypes().get(44);
           internal_static_pbdson_PbRoomInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbRoomInfo_descriptor,
               new java.lang.String[] { "RoomType", "Service", "Cmm", "LstCm", });
           internal_static_pbdson_PbListMiniLotte_descriptor =
-            getDescriptor().getMessageTypes().get(44);
+            getDescriptor().getMessageTypes().get(45);
           internal_static_pbdson_PbListMiniLotte_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListMiniLotte_descriptor,
               new java.lang.String[] { "AllBonus", "LuckyNum", "ALotte", });
           internal_static_pbdson_PbMiniLotte_descriptor =
-            getDescriptor().getMessageTypes().get(45);
+            getDescriptor().getMessageTypes().get(46);
           internal_static_pbdson_PbMiniLotte_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbMiniLotte_descriptor,
               new java.lang.String[] { "NumChoose", "PrizeIndex", "Bonus", });
           internal_static_pbdson_PbListLotteryHistory_descriptor =
-            getDescriptor().getMessageTypes().get(46);
+            getDescriptor().getMessageTypes().get(47);
           internal_static_pbdson_PbListLotteryHistory_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListLotteryHistory_descriptor,
               new java.lang.String[] { "ALottery", });
           internal_static_pbdson_PbLotteryHistory_descriptor =
-            getDescriptor().getMessageTypes().get(47);
+            getDescriptor().getMessageTypes().get(48);
           internal_static_pbdson_PbLotteryHistory_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbLotteryHistory_descriptor,
               new java.lang.String[] { "EventId", "Type", "LuckyNum", "Number", "Time", "Bonus", "Status", "ListBonus", "ListResult", });
           internal_static_pbdson_PbUnitUpdate_descriptor =
-            getDescriptor().getMessageTypes().get(48);
+            getDescriptor().getMessageTypes().get(49);
           internal_static_pbdson_PbUnitUpdate_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbUnitUpdate_descriptor,
               new java.lang.String[] { "Type", "Data", });
           internal_static_pbdson_PbUnitPos_descriptor =
-            getDescriptor().getMessageTypes().get(49);
+            getDescriptor().getMessageTypes().get(50);
           internal_static_pbdson_PbUnitPos_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbUnitPos_descriptor,
               new java.lang.String[] { "Id", "Speed", "LastInputSeq", "Pos", "Direction", "ChunkId", });
           internal_static_pbdson_PbListBullet_descriptor =
-            getDescriptor().getMessageTypes().get(50);
+            getDescriptor().getMessageTypes().get(51);
           internal_static_pbdson_PbListBullet_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListBullet_descriptor,
               new java.lang.String[] { "Bullets", });
           internal_static_pbdson_PbBullet_descriptor =
-            getDescriptor().getMessageTypes().get(51);
+            getDescriptor().getMessageTypes().get(52);
           internal_static_pbdson_PbBullet_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbBullet_descriptor,
               new java.lang.String[] { "Id", "Pos", "Info", });
           internal_static_pbdson_PbListTab_descriptor =
-            getDescriptor().getMessageTypes().get(52);
+            getDescriptor().getMessageTypes().get(53);
           internal_static_pbdson_PbListTab_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListTab_descriptor,
               new java.lang.String[] { "Tabs", });
           internal_static_pbdson_PbTab_descriptor =
-            getDescriptor().getMessageTypes().get(53);
+            getDescriptor().getMessageTypes().get(54);
           internal_static_pbdson_PbTab_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbTab_descriptor,
               new java.lang.String[] { "TabId", "EventTemplate", "Image", "Name", "Notify", });
           internal_static_pbdson_PbEventBuyMonth_descriptor =
-            getDescriptor().getMessageTypes().get(54);
+            getDescriptor().getMessageTypes().get(55);
           internal_static_pbdson_PbEventBuyMonth_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbEventBuyMonth_descriptor,
               new java.lang.String[] { "EventName", "ImageBanner", "TextBanner", "Level", "CurPoint", "MaxPoint", "ButtonAddGoto", "KeyHelp", "TimeCD", "StatusBuy", "Price", "NormalName", "VipName", "Cells", });
           internal_static_pbdson_PbEventTimer_descriptor =
-            getDescriptor().getMessageTypes().get(55);
+            getDescriptor().getMessageTypes().get(56);
           internal_static_pbdson_PbEventTimer_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbEventTimer_descriptor,
               new java.lang.String[] { "Id", "Status", "TimeRemain", "Bonus", "Price", "OldPrice", "Name", "Desc", "Sale", "BgrPath", "Info", });
           internal_static_pbdson_PbCellPanelEventMonth_descriptor =
-            getDescriptor().getMessageTypes().get(56);
+            getDescriptor().getMessageTypes().get(57);
           internal_static_pbdson_PbCellPanelEventMonth_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbCellPanelEventMonth_descriptor,
               new java.lang.String[] { "Level", "Exp", "Status", "StatusVip", "Bonus", "BonusVip", });
           internal_static_pbdson_PbPanelEventTabCell_descriptor =
-            getDescriptor().getMessageTypes().get(57);
+            getDescriptor().getMessageTypes().get(58);
           internal_static_pbdson_PbPanelEventTabCell_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbPanelEventTabCell_descriptor,
               new java.lang.String[] { "EventName", "ImageBanner", "TextBanner", "TimeCD", "Cells", });
           internal_static_pbdson_PbCellPanelEventTabCell_descriptor =
-            getDescriptor().getMessageTypes().get(58);
+            getDescriptor().getMessageTypes().get(59);
           internal_static_pbdson_PbCellPanelEventTabCell_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbCellPanelEventTabCell_descriptor,
               new java.lang.String[] { "Id", "CellName", "Bonus", "Per", "ButtonStatus", });
           internal_static_pbdson_PbWelfare_descriptor =
-            getDescriptor().getMessageTypes().get(59);
+            getDescriptor().getMessageTypes().get(60);
           internal_static_pbdson_PbWelfare_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbWelfare_descriptor,
               new java.lang.String[] { "EventId", "Notify", "Banner", "TabEvent", "KeyHelp", "Countdown", });
           internal_static_pbdson_PbTabWelfare_descriptor =
-            getDescriptor().getMessageTypes().get(60);
+            getDescriptor().getMessageTypes().get(61);
           internal_static_pbdson_PbTabWelfare_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbTabWelfare_descriptor,
               new java.lang.String[] { "TabId", "TabName", "Cells", "Notify", });
           internal_static_pbdson_PbBannerEvent_descriptor =
-            getDescriptor().getMessageTypes().get(61);
+            getDescriptor().getMessageTypes().get(62);
           internal_static_pbdson_PbBannerEvent_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbBannerEvent_descriptor,
               new java.lang.String[] { "PathBanner", "Text", "BonusImage", "BoxStatus", "BonusBox", "Desc", "PathTitle", "Info", });
           internal_static_pbdson_PbCellEvent_descriptor =
-            getDescriptor().getMessageTypes().get(62);
+            getDescriptor().getMessageTypes().get(63);
           internal_static_pbdson_PbCellEvent_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbCellEvent_descriptor,
               new java.lang.String[] { "Id", "Image", "Bonus", "NameCell", "TextCell", "TextDesc", "NumBuy", "Limit", "Price", "ButtonStatus", "BonusDay", "TimeRemain", "TimeExpire", });
           internal_static_pbdson_PbEvent7Day_descriptor =
-            getDescriptor().getMessageTypes().get(63);
+            getDescriptor().getMessageTypes().get(64);
           internal_static_pbdson_PbEvent7Day_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbEvent7Day_descriptor,
               new java.lang.String[] { "Days", "TimeRemain", "CurValue", "MaxValue", "PosReward", });
           internal_static_pbdson_PbPosReward_descriptor =
-            getDescriptor().getMessageTypes().get(64);
+            getDescriptor().getMessageTypes().get(65);
           internal_static_pbdson_PbPosReward_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbPosReward_descriptor,
               new java.lang.String[] { "Id", "Name", "Point", "Bonus", "Status", });
           internal_static_pbdson_PbTabEvent7Day_descriptor =
-            getDescriptor().getMessageTypes().get(65);
+            getDescriptor().getMessageTypes().get(66);
           internal_static_pbdson_PbTabEvent7Day_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbTabEvent7Day_descriptor,
               new java.lang.String[] { "Id", "Name", "Cells", });
           internal_static_pbdson_PbPanelEvent7Day_descriptor =
-            getDescriptor().getMessageTypes().get(66);
+            getDescriptor().getMessageTypes().get(67);
           internal_static_pbdson_PbPanelEvent7Day_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbPanelEvent7Day_descriptor,
               new java.lang.String[] { "Tab1", "Tab2", "Tab3", "Tab4", "IsLock", });
           internal_static_pbdson_PbCellEvent7Day_descriptor =
-            getDescriptor().getMessageTypes().get(67);
+            getDescriptor().getMessageTypes().get(68);
           internal_static_pbdson_PbCellEvent7Day_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbCellEvent7Day_descriptor,
               new java.lang.String[] { "Id", "Name", "Desc", "CurValue", "MaxValue", "Bonus", "ButtonStatus", "ButtonGoto", "OldPrice", "NewPrice", "Xu", });
           internal_static_pbdson_PbListIAP_descriptor =
-            getDescriptor().getMessageTypes().get(68);
+            getDescriptor().getMessageTypes().get(69);
           internal_static_pbdson_PbListIAP_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListIAP_descriptor,
               new java.lang.String[] { "Iap", });
           internal_static_pbdson_PpIAP_descriptor =
-            getDescriptor().getMessageTypes().get(69);
+            getDescriptor().getMessageTypes().get(70);
           internal_static_pbdson_PpIAP_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PpIAP_descriptor,

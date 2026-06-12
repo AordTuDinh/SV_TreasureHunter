@@ -10,6 +10,7 @@ import game.treasure.server.IAction;
 import game.treasure.service.resource.*;
 import game.treasure.service.user.Actions;
 import game.treasure.service.user.Bonus;
+import game.treasure.mapping.UserSkinEntity;
 import game.treasure.task.dbcache.MailCreatorCache;
 import game.monitor.Online;
 import game.monitor.TopMonitor;
@@ -35,13 +36,11 @@ public class UserHandler extends AHandler {
         List<Integer> actions = Arrays.asList(CREATE_NAME, USER_INFO, DAME_SKIN_EQUIP, CHANGE_LANG,
                 CHAT_FRAME_EQUIP, USE_GIFT_CODE, TRIAL_EQUIP, BUFF_INFO, RANKING_STATUS, TUTORIAL_STATUS,
                 TUTORIAL_QUEST_RECEIVE, TUTORIAL_GO_TO, TUTORIAL_QUEST_STATUS, RANKING_INFO, SEND_MAIL,
-                HELP_VALUE, CHANGE_NAME, AVATAR_LIST, AVATAR_CHOOSE, USER_DATA_INFO, UPDATE_NEXT_DAY);
+                HELP_VALUE, CHANGE_NAME, SKIN_EQUIP, USER_DATA_INFO, UPDATE_NEXT_DAY);
         actions.forEach(action -> mHandler.put(action, this));
     }
 
     static UserHandler instance;
-    private static final int AVATAR_HERO = 0;
-    private static final int AVATAR_SPECIAL = 1;
 
     public static UserHandler getInstance() {
         if (instance == null) {
@@ -63,9 +62,8 @@ public class UserHandler extends AHandler {
                 case POINT_DATA -> pointData();
                 case CREATE_NAME -> createName();
                 case USER_DATA_INFO -> userDataInfo();
-                case AVATAR_LIST -> avatarList();
-                case AVATAR_CHOOSE -> avatarChoose();
                 case CHANGE_NAME -> changeName();
+                case SKIN_EQUIP -> skinEquip();
                 case HELP_VALUE -> helpValue();
                 case RANKING_INFO -> rankInfo();
                 case RANKING_STATUS -> rank();
@@ -436,6 +434,33 @@ public class UserHandler extends AHandler {
 //        addResponse(INIT_MAP, CfgBattle.genInitMap(mapType.value, mUser.getRoomChanelId(), PopupType.NULL));
 //    }
 
+    private void skinEquip() {
+        protocol.Pbmethod.CommonVector cv = CommonProto.parseCommonVector(requestData);
+        if (cv.getALongCount() < 2) {
+            addErrParam();
+            return;
+        }
+        int part = (int) cv.getALong(0);
+        long userSkinId = cv.getALong(1);
+        if (part < 0 || part >= UserSkinEntity.PART_COUNT) {
+            addErrParam();
+            return;
+        }
+        Pbmethod.SkinType skinType = Pbmethod.SkinType.valueOf(part);
+        if (skinType == null) {
+            addErrParam();
+            return;
+        }
+        UserSkinEntity uSkin = mUser.getResources().getSkin(userSkinId);
+        if (uSkin == null || uSkin.getUserId() != user.getId() || uSkin.getType() != part) {
+            addErrResponse();
+            return;
+        }
+        if (user.updateSkin(skinType, userSkinId, uSkin.getSkinId())) {
+            addResponse(getCommonVector(part, userSkinId, uSkin.getSkinId()));
+        } else addErrResponse();
+    }
+
     private void dameSkinEquip() {
         int skinId = getInputInt();
         if (skinId != 0 && !mUser.getUData().getListDameSkin().contains(skinId)) {
@@ -517,60 +542,6 @@ public class UserHandler extends AHandler {
         pb.addALong(CfgCheckin.config.bonusCheckin.size());
         pb.addAString(CfgCheckin.getBonusCheckin());
         addResponse(pb.build());
-    }
-
-    void avatarList() {
-        List<ResAvatarEntity> avatars = ResAvatar.aAvatarHero;
-        List<UserAvatarEntity> uAvatar = DBJPA.getList("user_avatar", Arrays.asList("user_id", user.getId()), "", UserAvatarEntity.class);
-        List<UserAvatarEntity> heroAvatar = uAvatar.stream().filter(avatar -> avatar.getTypeId() == AVATAR_HERO).collect(Collectors.toList());
-        // Lấy id những avatar đang sở hữu.
-        List<Integer> uAvatarHero = new ArrayList<>();
-        for (int i = 0; i < heroAvatar.size(); i++) {
-            uAvatarHero.add(heroAvatar.get(i).getAvatarId());
-        }
-//        List<Integer> dbAvatarIds = mUser.getResources().getHeroes().stream().map(hero -> hero.getHeroId()).distinct().collect(Collectors.toList());
-//        dbAvatarIds.removeAll(uAvatarHero);
-//        for (int i = 0; i < dbAvatarIds.size(); i++) {
-//            if (!avatars.contains(dbAvatarIds.get(i))) { // có trong db nhưng chưa có trong túi, và đã sở hữu tướng.
-//                UserAvatarEntity tmp = new UserAvatarEntity(user.getId(), dbAvatarIds.get(i), AVATAR_HERO);
-//                if (DBJPA.saveOrUpdate(tmp)) {
-//                    uAvatar.add(tmp);
-//                }
-//            }
-//        }
-        Pbmethod.ListCommonVector.Builder builder = Pbmethod.ListCommonVector.newBuilder();
-        { // hero
-            Pbmethod.CommonVector.Builder cmm = Pbmethod.CommonVector.newBuilder();
-            uAvatar.stream().filter(avatar -> avatar.getTypeId() == AVATAR_HERO).forEach(avatar -> cmm.addALong(avatar.getAvatarId()));
-            builder.addAVector(cmm);
-        }
-        { // special
-            Pbmethod.CommonVector.Builder cmm = Pbmethod.CommonVector.newBuilder();
-            uAvatar.stream().filter(avatar -> avatar.getTypeId() == AVATAR_SPECIAL).forEach(avatar -> cmm.addALong(avatar.getAvatarId()));
-            builder.addAVector(cmm);
-        }
-        addResponse(builder.build());
-    }
-
-    void avatarChoose() {
-        int avatarType = (int) CommonProto.parseCommonVector(requestData).getALong(0);
-        int avatarId = (int) CommonProto.parseCommonVector(requestData).getALong(1);
-        List<UserAvatarEntity> uAvatar = DBJPA.getList("user_avatar", Arrays.asList("user_id", user.getId()), "", UserAvatarEntity.class);
-        boolean hasAvatar = false;
-        for (UserAvatarEntity avatar : uAvatar) {
-            if (avatar.getAvatarId() == avatarId && avatar.getTypeId() == avatarType) {
-                hasAvatar = true;
-                break;
-            }
-        }
-        if (!hasAvatar) addErrResponse(getLang(Lang.err_params));
-        List<Integer> avatars = user.getAvatar();
-        avatars.set(0, avatarType);
-        avatars.set(1, avatarId);
-        if (DBJPA.update("user", Arrays.asList("avatar", StringHelper.toDBString(avatars)), Arrays.asList("id", String.valueOf(user.getId())))) {
-            user.setAvatar(avatars.toString());
-            addResponse(getCommonVector(avatarType, avatarId));
-        } else addErrResponse();
     }
 
     void changeName() {

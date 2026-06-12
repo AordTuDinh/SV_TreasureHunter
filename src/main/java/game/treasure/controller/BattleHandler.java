@@ -96,14 +96,9 @@ public class BattleHandler extends AHandler implements Serializable {
             addErrParam();
             return;
         }
-        int chanelId = mUser.getRoomChanelId();
         BaseRoom curRoom = (BaseRoom) ChUtil.get(channel, ChUtil.KEY_ROOM);
         String curKeyRoom = curRoom != null ? TaskMonitor.mBattleIdToKey.get(curRoom.getBattleId()) : "";
-        String keyRoom = CfgBattle.getKeyRoom(mUser, mapType.value, chanelId);
-//        if (curRoom != null && curKeyRoom.equals(keyRoom)) {
-//            addErrResponse(getLang(Lang.err_in_room_already));
-//            return;
-//        }
+        String keyRoom = CfgBattle.getKeyRoom(mUser, mapType.value);
         if (curRoom != null && !curRoom.allowChangeChanel()) {
             addErrResponse(getLang(Lang.err_unauthorized));
             return;
@@ -116,8 +111,7 @@ public class BattleHandler extends AHandler implements Serializable {
         // tìm room thỏa mãn điều kiện max player room
         BaseRoom room = (BaseRoom) TaskMonitor.getInstance().getRoom(keyRoom);
         while (room != null && room.isMaxPlayer()) {
-            chanelId = NumberUtil.getRandom(1, CfgServer.maxChannelOpen);
-            keyRoom = CfgBattle.getKeyRoom(mUser, mapType.value, chanelId);
+            keyRoom = CfgBattle.getKeyRoom(mUser, mapType.value);
             if (curKeyRoom.equals(keyRoom)) continue;
             room = (BaseRoom) TaskMonitor.getInstance().getRoom(keyRoom);
         }
@@ -132,10 +126,9 @@ public class BattleHandler extends AHandler implements Serializable {
             }
             TaskMonitor.getInstance().addRoom(room);
         }
-        mUser.setRoomChanelId(chanelId);
         ChUtil.set(channel, ChUtil.KEY_ROOM, room);
         // tra ve id teleport next
-        addResponse(INIT_MAP, CfgBattle.genInitMap(mapType.value, mUser.getRoomChanelId(), popupType));
+        addResponse(INIT_MAP, CfgBattle.genInitMap(mapType.value, popupType));
         if (mapType == MapType.HOME) {
             mUser.sendNotify();
         }

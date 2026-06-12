@@ -15,7 +15,7 @@ public class ChatObject implements Serializable {
     public ChatType chatType;
     public String name, msg, username;
     int userId, id, clanId, level, clanIcon, vip, rank;
-    List<Integer> avatar, pets,  itemEquips;
+    List<Integer> skins, pets,  itemEquips;
     long timeSeconds, exp, power;
 
 
@@ -41,7 +41,7 @@ public class ChatObject implements Serializable {
         pbUser.setId(id);
         if (username != null) pbUser.setUsername(username);
         pbUser.setName(getName());
-        pbUser.addAllAvatar(getAvatar());
+        pbUser.addAllSkins(getSkins());
         pbUser.setRank(rank);
         pbUser.setPower(getPower());
         pbUser.addAllPet(pets);
@@ -60,7 +60,7 @@ public class ChatObject implements Serializable {
         this.exp = 0;
         this.timeSeconds = System.currentTimeMillis() / 1000;
         this.clanId = user.getClan();
-        this.avatar = user.getAvatar();
+        this.skins = user.getSkins();
         this.pets = GsonUtil.strToListInt(user.getPet());
         this.chatType = ChatType.MSG;
         this.rank = user.getUserRank();

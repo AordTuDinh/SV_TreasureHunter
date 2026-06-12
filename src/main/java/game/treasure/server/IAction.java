@@ -65,6 +65,7 @@ public class IAction {
     public static final int USER_DATA_INFO = 100;
     public static final int CREATE_NAME = 105;
     public static final int CHANGE_NAME = 180;
+    public static final int SKIN_EQUIP = 141;
     public static final int HELP_VALUE = 181;
     public static final int USER_INFO = 182;
     public static final int UPDATE_NEXT_DAY = 183;
@@ -87,9 +88,6 @@ public class IAction {
     public static final int PET_INFO = 137;
     // collection pet
     public static final int PET_SUMMON = 142;
-    // avatar
-    public static final int AVATAR_LIST = 140;
-    public static final int AVATAR_CHOOSE = 141;
     // quest hàng ngày
     public static final int QUEST_STATUS = 200;
     public static final int QUEST_RECEIVE = 201;

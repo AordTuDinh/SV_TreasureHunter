@@ -31,6 +31,8 @@ public class UserResources implements Serializable {
     List<UserPackEntity> packs;
     @Setter
     List<UserMaterialEntity> materials;
+    @Setter
+    List<UserSkinEntity> skins;
 
     @Getter
     Map<Long, UserItemEntity> mItem = new HashMap<>();
@@ -46,6 +48,8 @@ public class UserResources implements Serializable {
     Map<Integer, Integer> mWeaponByRank = new HashMap<>();
     @Getter
     Map<Long, UserMaterialEntity> mMaterial = new HashMap<>();
+    @Getter
+    Map<Long, UserSkinEntity> mSkin = new HashMap<>();
 
     public UserResources(MyUser mUser) {
         this.mUser = mUser;
@@ -85,6 +89,9 @@ public class UserResources implements Serializable {
             }
             if (materials != null) {
                 materials.forEach(mat -> mMaterial.put(mat.getId(), mat));
+            }
+            if (skins != null) {
+                skins.forEach(skin -> mSkin.put(skin.getId(), skin));
             }
             syncEquipFlagsFromUser();
             return true;
@@ -333,5 +340,22 @@ public class UserResources implements Serializable {
         if (mounts == null) mounts = new ArrayList<>();
         mounts.add(uMount);
         mMount.put(uMount.getId(), uMount);
+    }
+
+    public UserSkinEntity getSkin(long id) {
+        return mSkin.get(id);
+    }
+
+    public UserSkinEntity getSkinByConfigId(int skinId) {
+        for (UserSkinEntity skin : mSkin.values()) {
+            if (skin.getSkinId() == skinId) return skin;
+        }
+        return null;
+    }
+
+    public void addSkin(UserSkinEntity uSkin) {
+        if (skins == null) skins = new ArrayList<>();
+        skins.add(uSkin);
+        mSkin.put(uSkin.getId(), uSkin);
     }
 }

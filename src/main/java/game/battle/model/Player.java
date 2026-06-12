@@ -232,7 +232,7 @@ public class Player extends Unit implements Serializable {
         pbAdd.setDirection(direction.toProto());
         pbAdd.setClanId(clanId);
         pbAdd.setRangeAttack(rangeAttack);
-        pbAdd.setAvatar(mUser.getUser().getHeroMain());
+        pbAdd.setAvatar(mUser.getUser().getBodySkinId());
         pbAdd.setSpeed((int) point.getMoveSpeed());
         pbAdd.setName(name);
         pbAdd.setAlive(alive);

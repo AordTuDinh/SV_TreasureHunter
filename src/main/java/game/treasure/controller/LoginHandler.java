@@ -8,6 +8,7 @@ import game.config.aEnum.NotifyType;
 import game.config.aEnum.PopupType;
 import game.config.lang.Lang;
 import game.treasure.BattleConfig;
+import game.treasure.service.resource.ResAvatar;
 import game.treasure.mapping.*;
 import game.treasure.mapping.main.MainUserEntity;
 import game.treasure.server.Constans;
@@ -344,10 +345,6 @@ public class LoginHandler extends AHandler {
         lstCmm.addAVector(settings);
         // danh sách các thằng mình block chat
         lstCmm.addAVector(getCommonIntVector(uSet.listBlockChat()));
-        // server setting
-        Pbmethod.CommonVector.Builder cm4 = Pbmethod.CommonVector.newBuilder();
-        cm4.addALong(CfgServer.maxChannelOpen);
-        lstCmm.addAVector(cm4.build());
         // fee up item
         lstCmm.addAVector(getCommonIntVector(CfgItem.UPGRADE_FEE_BASE_T1));
         // fee up hp
@@ -464,6 +461,10 @@ public class LoginHandler extends AHandler {
 
             List<UserMaterialEntity> materials = session.createNativeQuery("select * from user_material where user_id = " + userId, UserMaterialEntity.class).getResultList();
             mUser.getResources().setMaterials(materials);
+
+            List<UserSkinEntity> userSkins = session.createNativeQuery("select * from user_skin where user_id = " + userId, UserSkinEntity.class).getResultList();
+            mUser.getResources().setSkins(userSkins);
+            ResAvatar.ensureDefaultSkins(mUser, session);
 
             mUser.setInitUData(uData, mUser.getUser());
             mUser.setUSetting(uSetting);

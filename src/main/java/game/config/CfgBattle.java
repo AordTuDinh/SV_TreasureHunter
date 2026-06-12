@@ -36,8 +36,8 @@ public class CfgBattle {
         return null;
     }
 
-    public static Pbmethod.CommonVector genInitMap(int roomType, int channelId, PopupType popupType) {
-        return CommonProto.getCommonIntVector(List.of(roomType, channelId, popupType.value));
+    public static Pbmethod.CommonVector genInitMap(int roomType,  PopupType popupType) {
+        return CommonProto.getCommonIntVector(List.of(roomType, popupType.value));
     }
 
 //    public static void removeUserToRoom(Channel channel, String keyRoom, int userId) {
@@ -52,16 +52,15 @@ public class CfgBattle {
 
     private static final ConcurrentHashMap<String, Lock> keyLocks = new ConcurrentHashMap<>();
 
-    public static String getKeyRoom(MyUser mUser, int roomType, int... channel) {
+    public static String getKeyRoom(MyUser mUser, int roomType) {
         UserEntity u = mUser.getUser();
-        int num = (channel.length > 0 ? channel[0] : 0);
         // key logic để lấy lock (nhóm phòng)
-        String lockKey = roomType + "_" + num;
+        String lockKey = roomType + "_" + 0;
         // lấy lock riêng cho nhóm này
         Lock lock = keyLocks.computeIfAbsent(lockKey, k -> new ReentrantLock());
         lock.lock();
         try {
-            return ChUtil.KEY_ROOM + "_" + roomType + "_" + num + "_" + u.getServer();
+            return ChUtil.KEY_ROOM + "_" + roomType + "_" + 0 + "_" + u.getServer();
         } finally {
             lock.unlock();
         }

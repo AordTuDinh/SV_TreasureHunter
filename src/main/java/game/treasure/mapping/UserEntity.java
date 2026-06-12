@@ -2,11 +2,11 @@ package game.treasure.mapping;
 
 import game.battle.calculate.IMath;
 import game.battle.object.Point;
-import game.config.*;
 import game.config.aEnum.*;
 import game.config.lang.Lang;
 import game.treasure.service.resource.ResEvent;
 import game.treasure.service.resource.ResParty;
+import game.treasure.mapping.UserSkinEntity;
 import game.monitor.ClanManager;
 import game.monitor.Online;
 import game.object.MyUser;
@@ -40,7 +40,7 @@ public class UserEntity implements Serializable {
     long lastAction;
     Date lastLogin, dateCreated, lockChat;
     Date clanJoin;
-    String avatar, pet; // type-  avatarId - heroId - frame - skin
+    String skins, pet; // HAIR, FACE, EYE, BODY by SkinType index
     @Transient
     long lastChatMap, lastChatServer, lastUpdateDefTeam;
     @Transient
@@ -54,7 +54,7 @@ public class UserEntity implements Serializable {
         this.gameChannel = gameChannel;
         this.version = version;
         this.gold = 0;
-        this.avatar = "[1,0,0,0]";//  avatarId - heroId - frame - skin
+        this.skins = "[0,0,0,0,0,0,0,0]";
         this.clan = 0;
         this.clanName = "";
         this.power = 0;
@@ -77,7 +77,7 @@ public class UserEntity implements Serializable {
         builder.setGold(gold);
         builder.setRuby(ruby);
         builder.setGem(gem);
-        builder.addAllAvatar(getAvatar());
+        builder.addAllSkins(getSkins());
         builder.addAllVip(getVipInfo());
         builder.setRank(userRank);
         builder.addAllChannel(Online.getUserChannelInfo(id));
@@ -233,7 +233,7 @@ public class UserEntity implements Serializable {
         pb.setName(getName());
         pb.setGold(gold);
         pb.setGem(gem);
-        pb.addAllAvatar(getAvatar());
+        pb.addAllSkins(getSkins());
         pb.addAllVip(getVipInfo());
         pb.setRank(userRank);
         pb.setPower(getPower());
@@ -254,7 +254,7 @@ public class UserEntity implements Serializable {
         builder.setName(getName());
         builder.setPower(getPower());
         builder.setRank(rank.length > 0 ? rank[0] : 0);
-        builder.addAllAvatar(getAvatar());
+        builder.addAllSkins(getSkins());
         builder.addAllItemEquip(getAllInfoItemEquip());
         builder.addAllPet(GsonUtil.strToListInt(pet));
         checkRank();
@@ -267,7 +267,7 @@ public class UserEntity implements Serializable {
         protocol.Pbmethod.ClanMember.Builder member = protocol.Pbmethod.ClanMember.newBuilder();
         member.setPosition(clanPosition);
         member.setId(id).setName(getName());
-        member.addAllAvatar(getAvatar());
+        member.addAllSkins(getSkins());
         member.setLevel(1);
         member.setClanDonated(0);
         member.setOnline(Online.isOnline(id));
@@ -304,19 +304,28 @@ public class UserEntity implements Serializable {
         return lastAction / 1000;
     }
 
-    public List<Integer> getAvatar() {
-        List<Integer> avatars = GsonUtil.strToListInt(avatar);
-        while (avatars.size() < 5) avatars.add(0);
-        return avatars;
+    public List<Integer> getSkins() {
+        return UserSkinEntity.normalize(GsonUtil.strToListInt(this.skins));
     }
 
-    public int getHeroMain() {
-        List<Integer> avatars = getAvatar();
-        return avatars.get(AvatarIndex.HERO.value);
+    public int getBodySkinId() {
+        return UserSkinEntity.getBodyId(getSkins());
     }
 
-    public String getAvatarString() {
-        return avatar;
+    public boolean updateSkins(List<Integer> skinList) {
+        List<Integer> normalized = UserSkinEntity.normalize(skinList);
+        String dbValue = StringHelper.toDBString(normalized.subList(0, UserSkinEntity.EQUIPPED_SIZE));
+        if (update(Arrays.asList("skins", dbValue))) {
+            this.skins = dbValue;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean updateSkin(protocol.Pbmethod.SkinType part, long userSkinId, int resSkinId) {
+        List<Integer> list = getSkins();
+        UserSkinEntity.setEquipped(list, part, userSkinId, resSkinId);
+        return updateSkins(list);
     }
 
 

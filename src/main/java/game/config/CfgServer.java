@@ -22,7 +22,6 @@ public class CfgServer {
     public static String DB_DSON = "dson.";
     public static int runningPort = 0, serverId;
     public static String serverType;
-    public static int maxChannelOpen = 1;
     static List<SystemMailEntity> cacheSystemMail;
     static String KEY_CACHE_SYSTEM_MAIL = "KEY_CACHE_SYSTEM_MAIL";
     public static final String SVID = "SVID";

@@ -2,6 +2,7 @@ package game.treasure.mapping;
 
 
 import game.config.aEnum.TopType;
+import game.treasure.mapping.UserSkinEntity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ozudo.base.helper.GsonUtil;
@@ -23,12 +24,10 @@ public class TopUserEntity implements Serializable {
     int  vip;
     int clan, clanRank, clanPosition, clanAvatar;
     long gold, gem, number, power;
-    String avatar, clanName, itemEquipment;
+    String skins, clanName, itemEquipment;
 
-    public List<Integer> getListAvatar() {
-        List<Integer> avatars = GsonUtil.strToListInt(avatar);
-        while (avatars.size() < 5) avatars.add(0);
-        return avatars;
+    public List<Integer> getSkinsList() {
+        return UserSkinEntity.normalize(GsonUtil.strToListInt(skins));
     }
 
     public protocol.Pbmethod.PbUser toProto(int rank, TopType topType) {
@@ -38,7 +37,7 @@ public class TopUserEntity implements Serializable {
         pb.setName(getName());
         pb.setGold(gold);
         pb.setGem(gem);
-        pb.addAllAvatar(getListAvatar());
+        pb.addAllSkins(getSkinsList());
         pb.addVip(vip);
         pb.setRank(rank);
         pb.addAllItemEquip(GsonUtil.strToListInt(itemEquipment));

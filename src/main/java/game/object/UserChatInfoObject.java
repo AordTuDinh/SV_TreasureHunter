@@ -10,13 +10,13 @@ import java.util.List;
 public class UserChatInfoObject implements Serializable {
     int id;
     String name;
-    List<Integer> avatar;
+    List<Integer> skins;
     int level;
 
     public UserChatInfoObject(UserEntity user) {
         this.id = user.getId();
         this.name = user.getName();
-        this.avatar = user.getAvatar();
+        this.skins = user.getSkins();
         this.level = 1;
     }
 }
