@@ -10,6 +10,7 @@ import game.config.lang.Lang;
 import protocol.Pbmethod;
 import game.treasure.mapping.*;
 import game.treasure.mapping.main.ResItemEntity;
+import game.treasure.service.resource.ResAvatar;
 import game.treasure.service.resource.ResItem;
 import game.treasure.service.resource.ResMount;
 import game.object.MyUser;
@@ -26,7 +27,8 @@ public class Bonus {
     public static final int BONUS_RUBY = 3;
     public static final int BONUS_ITEM = 4;
     public static final int BONUS_ARTIFACT = 5;
-    public static final int BONUS_SKIN = 7;
+    public static final int BONUS_SKIN = 6;
+    public static final int BONUS_EFFECT_SKIN = 7;
     public static final int BONUS_VIP_EXP = 8;
     public static final int BONUS_PET = 9;
     public static final int BONUS_MOUNT = 10;
@@ -38,7 +40,8 @@ public class Bonus {
         put(BONUS_RUBY, 1);
         put(BONUS_ITEM, 2); // preview mặc định: itemType (user_item.type), itemKey
         put(BONUS_ARTIFACT, 1);
-        put(BONUS_SKIN, 2);
+        put(BONUS_SKIN, 1);
+        put(BONUS_EFFECT_SKIN, 2);
         put(BONUS_VIP_EXP, 1);
         put(BONUS_PET, 1);
         put(BONUS_MOUNT, 1);
@@ -46,7 +49,7 @@ public class Bonus {
     }};
 
     public static List<Integer> bonusSinger = Arrays.asList(
-            BONUS_ITEM, BONUS_ARTIFACT, BONUS_PET, BONUS_MOUNT, BONUS_SKIN, BONUS_MATERIAL);
+            BONUS_ITEM, BONUS_ARTIFACT, BONUS_PET, BONUS_MOUNT, BONUS_SKIN, BONUS_EFFECT_SKIN, BONUS_MATERIAL);
 
     public static boolean isBonusSinger(int type) {
         return bonusSinger.contains(type);
@@ -95,13 +98,17 @@ public class Bonus {
         return viewMaterial(materialId, 1);
     }
 
+    public static List<Long> viewSkin(int skinId) {
+        return view(BONUS_SKIN, skinId);
+    }
+
     public static List<Long> viewItem(int itemType, Pbmethod.ItemKey itemKey, long number) {
         int itemId = itemKey.getNumber();
         return viewXNumber(view(BONUS_ITEM, itemType, itemId), (int) number);
     }
 
     public static List<Long> viewDameSkin(int skinId) {
-        return view(BONUS_SKIN, SkinType.DAMAGE_SKIN.value, skinId);
+        return view(BONUS_EFFECT_SKIN, SkinType.DAMAGE_SKIN.value, skinId);
     }
 
     public static List<Long> viewItemEquipment(int itemId, int lock, long time) {
@@ -141,6 +148,9 @@ public class Bonus {
                 return Math.toIntExact(bonus.get(2));
             }
             case BONUS_SKIN -> {
+                return Math.toIntExact(bonus.get(1));
+            }
+            case BONUS_EFFECT_SKIN -> {
                 return Math.toIntExact(bonus.get(2));
             }
         }
@@ -153,7 +163,7 @@ public class Bonus {
 
     static boolean isBonusWireType(int v) {
         return v == BONUS_GOLD || v == BONUS_GEM || v == BONUS_RUBY || v == BONUS_ITEM
-                || v == BONUS_ARTIFACT || v == BONUS_SKIN || v == BONUS_VIP_EXP
+                || v == BONUS_ARTIFACT || v == BONUS_SKIN || v == BONUS_EFFECT_SKIN || v == BONUS_VIP_EXP
                 || v == BONUS_PET || v == BONUS_MOUNT || v == BONUS_MATERIAL;
     }
 
@@ -231,7 +241,10 @@ public class Bonus {
                     aLong.addAll(addVipExp(mUser, aBonus, index, detailAction));
                     break;
                 case BONUS_SKIN:
-                    aLong.addAll(addSkin(mUser, aBonus, index, detailAction));
+                    aLong.addAll(addCharacterSkin(mUser, aBonus, index, detailAction));
+                    break;
+                case BONUS_EFFECT_SKIN:
+                    aLong.addAll(addEffectSkin(mUser, aBonus, index, detailAction));
                     break;
                 case BONUS_PET:
                     aLong.addAll(addPet(mUser, aBonus, index, detailAction));
@@ -252,30 +265,49 @@ public class Bonus {
         return aLong;
     }
 
-    static List<Long> addSkin(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
+    static List<Long> addCharacterSkin(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
+        int skinId = aBonus.get(index++).getAsInt();
+        if (ResAvatar.getSkin(skinId) == null) return new ArrayList<>();
+        UserSkinEntity existing = mUser.getResources().getSkinByConfigId(skinId);
+        if (existing != null) {
+            return Arrays.asList((long) BONUS_SKIN, existing.getId(), (long) skinId);
+        }
+        UserSkinEntity uSkin = new UserSkinEntity(mUser.getUser(), skinId, ResAvatar.getSkin(skinId).getType());
+        if (DBJPA.save(uSkin)) {
+            mUser.getResources().addSkin(uSkin);
+            if (CfgServer.isRealServer()) {
+                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
+                        "type", "character_skin", "id", uSkin.getId(), "skinId", skinId);
+            }
+            return Arrays.asList((long) BONUS_SKIN, uSkin.getId(), (long) skinId);
+        }
+        return new ArrayList<>();
+    }
+
+    static List<Long> addEffectSkin(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
         int type = aBonus.get(index++).getAsInt();
         int skinId = aBonus.get(index++).getAsInt();
         if (type == SkinType.DAMAGE_SKIN.value) {
             if (mUser.getUData().addDameSkin(skinId) && mUser.getUData().update(List.of("dame_skin", mUser.getUData().getDameSkin()))) {
                 if (CfgServer.isRealServer())
                     Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "dameSkin", "skinId", skinId);
-                return Arrays.asList((long) BONUS_SKIN, (long) type, (long) skinId);
+                return Arrays.asList((long) BONUS_EFFECT_SKIN, (long) type, (long) skinId);
             }
-            return Arrays.asList((long) BONUS_SKIN, (long) type, (long) skinId);
+            return Arrays.asList((long) BONUS_EFFECT_SKIN, (long) type, (long) skinId);
         } else if (type == SkinType.CHAT_FRAME.value) {
             if (mUser.getUData().addChatFrame(skinId) && mUser.getUData().update(List.of("chat_frame", mUser.getUData().getChatFrame()))) {
                 if (CfgServer.isRealServer())
                     Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "chatFrame", "frameId", skinId);
-                return Arrays.asList((long) BONUS_SKIN, (long) type, (long) skinId);
+                return Arrays.asList((long) BONUS_EFFECT_SKIN, (long) type, (long) skinId);
             }
-            return Arrays.asList((long) BONUS_SKIN, (long) type, (long) skinId);
+            return Arrays.asList((long) BONUS_EFFECT_SKIN, (long) type, (long) skinId);
         } else if (type == SkinType.TRIAL.value) {
             if (mUser.getUData().addEffectTrial(skinId) && mUser.getUData().update(List.of("list_trial", mUser.getUData().getListTrial()))) {
                 if (CfgServer.isRealServer())
                     Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "list_trial", "trialId", skinId);
-                return Arrays.asList((long) BONUS_SKIN, (long) type, (long) skinId);
+                return Arrays.asList((long) BONUS_EFFECT_SKIN, (long) type, (long) skinId);
             }
-            return Arrays.asList((long) BONUS_SKIN, (long) type, (long) skinId);
+            return Arrays.asList((long) BONUS_EFFECT_SKIN, (long) type, (long) skinId);
         }
         return new ArrayList<>();
     }
