@@ -62,6 +62,17 @@ public class ResItem {
         aMaterial.forEach(row -> mMaterial.put(row.getId(), row));
     }
 
+    public static int resolveTier(int itemType, int itemKey, int configTier) {
+        if (itemType == ItemType.EQUIPMENT.value) {
+            if (configTier < 1) return 1;
+            return Math.min(configTier, 4);
+        }
+        ResItemEntity res = getItem(itemKey);
+        if (res != null)
+            return res.getTier();
+        return configTier > 0 ? configTier : 1;
+    }
+
     /** Roll HP bonus từ res_item.data [min,max] → user_item.data "[hp]". Chỉ user_item.type=1. */
     public static void initConsumableInstanceData(UserItemEntity uItem) {
         if (uItem == null || uItem.getType() != ItemType.CONSUMABLE.value)
@@ -69,6 +80,7 @@ public class ResItem {
         ResItemEntity res = uItem.getRes();
         if (res == null)
             return;
+        uItem.setTier(res.getTier());
         float hp = rollHpFromResData(res.getData());
         if (hp <= 0f)
             return;
@@ -132,22 +144,21 @@ public class ResItem {
         return true;
     }
 
-    /** Xóa 1 row user_item và trả chunk bonus [4,type,rowId,itemKey] cho client. */
+    /** Xóa 1 row user_item và trả chunk bonus [4,type,rowId,itemKey,tier] cho client. */
     public static List<Long> removeUserItemRow(MyUser mUser, UserItemEntity uItem, String detailAction) {
         if (uItem == null || mUser == null)
             return Collections.emptyList();
         long rowId = uItem.getId();
         int storageType = uItem.getType();
         int itemKey = uItem.getItemId();
-        int slot = uItem.getSlot();
 
         if (uItem.isAggregatedItem()) {
             return Bonus.receiveListItem(mUser, detailAction,
-                    Bonus.viewItemRemove(storageType, rowId, itemKey, 1));
+                    Bonus.viewItemRemove(storageType, rowId, itemKey, uItem.getTier(), 1));
         }
         if (!uItem.deleteFromDb())
             return Collections.emptyList();
         mUser.getResources().removeItem(rowId);
-        return List.of((long) Bonus.BONUS_ITEM, (long) storageType, rowId, (long) itemKey, (long) slot);
+        return List.of((long) Bonus.BONUS_ITEM, (long) storageType, rowId, (long) itemKey, (long) uItem.getTier());
     }
 }

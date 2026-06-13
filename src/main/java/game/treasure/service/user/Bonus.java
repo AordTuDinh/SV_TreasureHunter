@@ -38,7 +38,7 @@ public class Bonus {
         put(BONUS_GOLD, 1);
         put(BONUS_GEM, 1);
         put(BONUS_RUBY, 1);
-        put(BONUS_ITEM, 2); // preview mặc định: itemType (user_item.type), itemKey
+        put(BONUS_ITEM, 3); // preview/trừ add: itemType, itemKey, tier — trừ row: itemType, userItemId, itemKey, tier
         put(BONUS_ARTIFACT, 1);
         put(BONUS_SKIN, 1);
         put(BONUS_EFFECT_SKIN, 2);
@@ -60,25 +60,27 @@ public class Bonus {
     }
 
     public static List<Long> viewItem(int itemType, int itemId, long number) {
+        int tier = ResItem.resolveTier(itemType, itemId, 1);
         if (number < 0) {
             List<Long> ret = new ArrayList<>();
             for (int i = 0; i < -number; i++) {
-                ret.addAll(view(BONUS_ITEM, itemType, -itemId));
+                ret.addAll(view(BONUS_ITEM, itemType, -itemId, tier));
             }
             return ret;
         }
-        return viewXNumber(view(BONUS_ITEM, itemType, itemId), (int) number);
+        return viewXNumber(view(BONUS_ITEM, itemType, itemId, tier), (int) number);
     }
 
-    public static List<Long> viewItemRemove(int itemType, long userItemId, int itemKey, int count) {
+    public static List<Long> viewItemRemove(int itemType, long userItemId, int itemKey, int tier, int count) {
         List<Long> ret = new ArrayList<>();
-        List<Long> one = view(BONUS_ITEM, itemType, userItemId, itemKey);
+        List<Long> one = view(BONUS_ITEM, itemType, userItemId, itemKey, tier);
         for (int i = 0; i < count; i++) ret.addAll(one);
         return ret;
     }
 
     public static List<Long> viewItemMaterial(MaterialType type, long number) {
-        List<Long> one = view(BONUS_ITEM, type.id);
+        int tier = ResItem.resolveTier(ItemType.EVENT.value, type.id, 1);
+        List<Long> one = view(BONUS_ITEM, ItemType.EVENT.value, type.id, tier);
         return viewXNumber(one, (int) number);
     }
 
@@ -104,15 +106,20 @@ public class Bonus {
 
     public static List<Long> viewItem(int itemType, Pbmethod.ItemKey itemKey, long number) {
         int itemId = itemKey.getNumber();
-        return viewXNumber(view(BONUS_ITEM, itemType, itemId), (int) number);
+        return viewItem(itemType, itemId, number);
     }
 
     public static List<Long> viewDameSkin(int skinId) {
         return view(BONUS_EFFECT_SKIN, SkinType.DAMAGE_SKIN.value, skinId);
     }
 
+    public static List<Long> viewItemEquipment(int itemId, int tier) {
+        int t = tier > 0 ? Math.min(tier, 4) : 1;
+        return view(BONUS_ITEM, ItemType.EQUIPMENT.value, itemId, t);
+    }
+
     public static List<Long> viewItemEquipment(int itemId, int lock, long time) {
-        return view(BONUS_ITEM, ItemType.EQUIPMENT.value, itemId);
+        return viewItemEquipment(itemId, 1);
     }
 
     public static List<Long> viewItemArtifact(int artifactId) {
@@ -142,7 +149,11 @@ public class Bonus {
         int type = Math.toIntExact(bonus.get(0));
         switch (type) {
             case BONUS_ITEM -> {
-                return Math.toIntExact(bonus.get(bonus.size() - 1));
+                if (bonus.size() >= 5)
+                    return Math.toIntExact(bonus.get(3));
+                if (bonus.size() >= 4)
+                    return Math.toIntExact(bonus.get(2));
+                return Math.toIntExact(bonus.get(1));
             }
             case BONUS_ARTIFACT -> {
                 return Math.toIntExact(bonus.get(2));
@@ -168,8 +179,9 @@ public class Bonus {
     }
 
     /**
-     * Preview config: [4,itemType,itemKey] hoặc [4,itemType,userItemId,itemKey].
-     * Receive response gửi client: [4,itemType,userItemId,itemKey,slot] — luôn 4 field sau type.
+     * Preview/add config: [4,itemType,itemKey,tier].
+     * Trừ row config: [4,itemType,userItemId,itemKey,tier].
+     * Receive response gửi client: [4,itemType,userItemId,itemKey,tier].
      */
     public static final int BONUS_ITEM_RECEIVE_PAYLOAD = 4;
 
@@ -177,24 +189,20 @@ public class Bonus {
         if (index + 1 >= bonus.size()) return 0;
         int itemType = bonus.get(index).intValue();
         if (!isUserItemStorageType(itemType)) return mTypeLength.get(BONUS_ITEM);
-        if (index + 2 >= bonus.size()) return 2;
+        if (index + 1 >= bonus.size()) return 3;
         long second = bonus.get(index + 1);
-        if (second > 1000 && index + 2 < bonus.size() && !isBonusWireType(bonus.get(index + 2).intValue()))
-            return 3;
-        return 2;
+        if (second > 1000) return 4;
+        return 3;
     }
 
     static int itemBonusConfigLength(JsonArray aBonus, int index) {
         if (index >= aBonus.size()) return 0;
         int itemType = aBonus.get(index).getAsInt();
         if (!isUserItemStorageType(itemType)) return mTypeLength.get(BONUS_ITEM);
-        if (index + 1 >= aBonus.size()) return 2;
-        if (index + 2 < aBonus.size()) {
-            long second = aBonus.get(index + 1).getAsLong();
-            if (second > 1000 && index + 2 < aBonus.size() && !isBonusWireType(aBonus.get(index + 2).getAsInt()))
-                return 3;
-        }
-        return 2;
+        if (index + 1 >= aBonus.size()) return 3;
+        long second = aBonus.get(index + 1).getAsLong();
+        if (second > 1000) return 4;
+        return 3;
     }
 
     public static List<Long> viewXNumber(List<Long> bonus, int xNumber) {
@@ -313,27 +321,33 @@ public class Bonus {
     }
 
     static List<Long> addUserItem(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
+        if (index + 1 < aBonus.size() && aBonus.get(index + 1).getAsLong() > 1000
+                && index + 3 < aBonus.size()) {
+            return removeUserItem(mUser, aBonus, index, detailAction);
+        }
         int itemType = aBonus.get(index++).getAsInt();
         int itemKey = aBonus.get(index++).getAsInt();
+        int configTier = aBonus.get(index++).getAsInt();
         if (itemKey < 0) {
             itemKey = -itemKey;
             if (!mUser.getResources().removeItemsByItemKey(itemKey, 1)) return new ArrayList<>();
             UserItemEntity left = mUser.getResources().getItemByItemKey(itemKey);
             long rowId = left != null ? left.getId() : 0L;
             int st = left != null ? left.getType() : itemType;
-            int slot = left != null ? left.getSlot() : -1;
-            return Arrays.asList((long) BONUS_ITEM, (long) st, rowId, (long) itemKey, (long) slot);
+            int tier = left != null ? left.getTier() : ResItem.resolveTier(itemType, itemKey, configTier);
+            return Arrays.asList((long) BONUS_ITEM, (long) st, rowId, (long) itemKey, (long) tier);
         }
         UserItemEntity uItem;
         if (itemKey == Pbmethod.ItemKey.TICKER_NORMAL.getNumber()) {
             uItem = checkGenItemData(mUser, 1);
             if (uItem == null) return new ArrayList<>();
             return Arrays.asList((long) BONUS_ITEM, (long) uItem.getType(), uItem.getId(), (long) itemKey,
-                    (long) uItem.getSlot());
+                    (long) uItem.getTier());
         }
         ItemType type = ItemType.get(itemType);
         if (type == null) type = ItemType.CONSUMABLE;
         uItem = new UserItemEntity(mUser.getUser().getId(), itemKey, type);
+        uItem.setTier(ResItem.resolveTier(itemType, itemKey, configTier));
         if (!prepareNewUserItemSlot(mUser, uItem)) return new ArrayList<>();
         if (type == ItemType.CONSUMABLE)
             ResItem.initConsumableInstanceData(uItem);
@@ -346,10 +360,11 @@ public class Bonus {
                         "itemId", itemKey,
                         "storageType", uItem.getType(),
                         "slot", uItem.getSlot(),
+                        "tier", uItem.getTier(),
                         "addValue", 1);
             }
             return Arrays.asList((long) BONUS_ITEM, (long) uItem.getType(), uItem.getId(), (long) itemKey,
-                    (long) uItem.getSlot());
+                    (long) uItem.getTier());
         }
         return new ArrayList<>();
     }
@@ -358,9 +373,10 @@ public class Bonus {
         int storageType = aBonus.get(index++).getAsInt();
         long userItemId = aBonus.get(index++).getAsLong();
         int itemKey = aBonus.get(index++).getAsInt();
+        aBonus.get(index++).getAsInt();
         UserItemEntity uItem = mUser.getResources().getItem(userItemId);
         if (uItem == null || uItem.getItemId() != itemKey) return new ArrayList<>();
-        int slot = uItem.getSlot();
+        int tier = uItem.getTier();
         if (uItem.isAggregatedItem()) {
             if (!mUser.getResources().removeItemsByItemKey(itemKey, 1)) return new ArrayList<>();
         } else if (!uItem.deleteFromDb()) {
@@ -370,9 +386,9 @@ public class Bonus {
         }
         if (CfgServer.isRealServer()) {
             Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
-                    "type", "user_item_remove", "id", userItemId, "itemId", itemKey);
+                    "type", "user_item_remove", "id", userItemId, "itemId", itemKey, "tier", tier);
         }
-        return Arrays.asList((long) BONUS_ITEM, (long) storageType, userItemId, (long) itemKey, (long) slot);
+        return Arrays.asList((long) BONUS_ITEM, (long) storageType, userItemId, (long) itemKey, (long) tier);
     }
 
     static UserItemEntity checkGenItemData(MyUser mUser, int numItem) {
@@ -384,6 +400,7 @@ public class Bonus {
         }
         if (uItem == null) {
             uItem = new UserItemEntity(mUser.getUser().getId(), Pbmethod.ItemKey.TICKER_NORMAL.getNumber(), ItemType.EVENT);
+            uItem.setTier(ResItem.resolveTier(ItemType.EVENT.value, Pbmethod.ItemKey.TICKER_NORMAL.getNumber(), 1));
             if (!prepareNewUserItemSlot(mUser, uItem)) return null;
             nums.add(0, eventDay);
             uItem.setData(StringHelper.toDBString(nums));
@@ -549,7 +566,7 @@ public class Bonus {
                         return Lang.instance(mUser).get(Lang.err_not_enough_ruby);
                     break;
                 case BONUS_ITEM:
-                    if (chunk.size() >= 4) {
+                    if (chunk.size() >= 5) {
                         long userItemId = chunk.get(2);
                         int itemKey = chunk.get(3).intValue();
                         UserItemEntity uItem = mUser.getResources().getItem(userItemId);
@@ -558,7 +575,7 @@ public class Bonus {
                                 : (ResItem.getItemEquipment(itemKey) != null ? ResItem.getItemEquipment(itemKey).getName() : "?");
                         if (uItem == null || uItem.getItemId() != itemKey)
                             return String.format(Lang.instance(mUser).get(Lang.err_not_enough_item), name);
-                    } else if (chunk.size() >= 3) {
+                    } else if (chunk.size() >= 4) {
                         int itemKey = chunk.get(2).intValue();
                         if (itemKey < 0) {
                             itemDeduct.merge(-itemKey, 1, Integer::sum);

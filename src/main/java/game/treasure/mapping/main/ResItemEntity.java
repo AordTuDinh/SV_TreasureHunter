@@ -35,6 +35,11 @@ public class ResItemEntity extends BaseEntity implements Serializable {
     ItemType itemType;
 
 
+    /** user_item.tier cho consumable/event — lấy từ cột rank. */
+    public int getTier() {
+        return rank > 0 ? rank : 1;
+    }
+
     public void init() {
         itemType = ItemType.get(type);
 //        if (type == ItemType.ITEM_OPEN.value) {

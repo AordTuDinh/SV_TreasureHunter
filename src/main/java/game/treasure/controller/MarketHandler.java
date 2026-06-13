@@ -14,6 +14,7 @@ import game.treasure.mapping.main.ResMarketDetailEntity;
 import game.treasure.mapping.main.ResMarketEntity;
 import game.treasure.service.Services;
 import game.treasure.service.resource.ResMarket;
+import game.treasure.service.resource.ResItem;
 import game.treasure.service.user.Actions;
 import game.treasure.service.user.Bonus;
 import game.object.DataQuest;
@@ -280,6 +281,7 @@ public class MarketHandler extends AHandler {
         boolean saved;
         if (uItem == null) {
             uItem = new UserItemEntity(user.getId(), protocol.Pbmethod.ItemKey.TICKER_SPECIAL.getNumber(), ItemType.EVENT);
+            uItem.setTier(ResItem.resolveTier(ItemType.EVENT.value, protocol.Pbmethod.ItemKey.TICKER_SPECIAL.getNumber(), 1));
             List<Long> numNew = new ArrayList<>(nums);
             numNew.add(0, eventDay);
             uItem.setData(StringHelper.toDBString(numNew));
@@ -310,6 +312,7 @@ public class MarketHandler extends AHandler {
         aBonus.add((long) uItem.getType());
         aBonus.add(uItem.getId());
         aBonus.add((long) uItem.getItemId());
+        aBonus.add((long) uItem.getTier());
 
         if (userMarket.updateShop(market, new Gson().toJson(aItem))) {
             addBonusToastPlus(aBonus);
@@ -352,6 +355,7 @@ public class MarketHandler extends AHandler {
         long eventDay = CfgLottery.getEventIdBuy();
         if (uItem == null) {
             uItem = new UserItemEntity(user.getId(), protocol.Pbmethod.ItemKey.TICKER_NORMAL.getNumber(), ItemType.EVENT);
+            uItem.setTier(ResItem.resolveTier(ItemType.EVENT.value, protocol.Pbmethod.ItemKey.TICKER_NORMAL.getNumber(), 1));
             List<Long> aNum = new ArrayList<>(nums);
             aNum.add(0, eventDay);
             uItem.setData(StringHelper.toDBString(aNum));
@@ -372,6 +376,7 @@ public class MarketHandler extends AHandler {
         aBonus.add((long) uItem.getType());
         aBonus.add(uItem.getId());
         aBonus.add((long) uItem.getItemId());
+        aBonus.add((long) uItem.getTier());
         if (userMarket.updateShop(market, new Gson().toJson(aItem))) {
             addBonusToastPlus(aBonus);
             mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.BUY_SHOP, nums.size());

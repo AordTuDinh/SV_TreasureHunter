@@ -240,7 +240,10 @@ public class MyUser implements Serializable {
             if (chunk.isEmpty()) continue;
             int bonusType = chunk.get(0).intValue();
             if (bonusType == Bonus.BONUS_ITEM) {
-                int itemKey = chunk.get(chunk.size() - 1).intValue();
+                long second = chunk.size() >= 2 ? chunk.get(1) : 0;
+                int itemKey = second > 1000
+                        ? (chunk.size() >= 4 ? chunk.get(3).intValue() : 0)
+                        : (chunk.size() >= 3 ? chunk.get(2).intValue() : 0);
                 if (itemKey < 0) continue;
                 int storageType = chunk.size() >= 3 ? chunk.get(1).intValue() : ItemType.CONSUMABLE.value;
                 if (Bonus.isAggregatedEventItemKey(itemKey)) {

@@ -129,7 +129,7 @@ public class UserItemEntity implements Serializable {
 
     public List<Long> viewBonusItem(int type, long number) {
         if (number >= 0) return Bonus.viewItem(type, itemId, number);
-        if (isAggregatedItem()) return Bonus.viewItemRemove(type, id, itemId, (int) -number);
+        if (isAggregatedItem()) return Bonus.viewItemRemove(type, id, itemId, tier, (int) -number);
         return Bonus.viewItem(type, itemId, number);
     }
 
