@@ -1,7 +1,6 @@
 package game.battle.model;
 
 import game.battle.object.Pos;
-import game.object.BonusConfig;
 import game.treasure.BattleConfig;
 import game.treasure.mapping.main.ResObjectEntity;
 import game.treasure.service.resource.ResMap;
@@ -12,6 +11,7 @@ import lombok.ToString;
 import ozudo.base.helper.DateTime;
 import protocol.Pbmethod;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static game.treasure.BattleConfig.CHUNK_SIZE;
@@ -36,7 +36,7 @@ public class CellObject {
     // runtime data
     int curHp;
     long timeBeAttack;
-    List<BonusConfig> bonusConfig;
+    int resObjectType;
 
 
     public CellObject(Pos pos, int type, int chunkId, int id) {
@@ -45,15 +45,17 @@ public class CellObject {
         this.state = Pbmethod.CellState.ACTIVE;
         this.objectType = Pbmethod.CellObjectType.valueOf(type);
         this.id = id;
+        this.resObjectType = type;
         ResObjectEntity resObject = ResMap.getResObject(type);
         this.curHp = resObject.getHp();
         this.baseHp = resObject.getHp();
-        this.bonusConfig = resObject.getBonus();
     }
 
 
-    public List<Long> getBonusKillMe(){
-        return BonusConfig.getRandomOneBonus(bonusConfig);
+    public List<Long> getBonusKillMe() {
+        ResObjectEntity resObject = ResMap.getResObject(resObjectType);
+        if (resObject == null) return new ArrayList<>();
+        return resObject.randomBonus();
     }
 
     public synchronized boolean attack(long damage) {

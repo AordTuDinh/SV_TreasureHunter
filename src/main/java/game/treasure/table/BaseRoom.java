@@ -344,14 +344,7 @@ public abstract class BaseRoom extends MonoRoom {
                     player.protoStatus(Pbmethod.SubStateType.PLAY_ANIM, (long) AnimationType.ATTACK.value);
                     if (cellDie) {
                         addCellDie(cellObject);
-                        List<Long> bonus = cellObject.getBonusKillMe();
-                        long idBonus = bonus.get(0);
-                        if (idBonus > 0) player.sendBonus(bonus, DetailActionType.KILL_CELL.getKey());
-                        else if (idBonus == -1) {  // drop quái
-                            Pos posInit = Pos.randomPos(player.getPos(), 2f, 2f);
-                            Enemy enemy = new Enemy(Math.toIntExact(bonus.get(1)), player, posInit);
-                            addUnit(enemy);
-                        }
+                        applyCellKillBonus(player, cellObject.getBonusKillMe());
                     }
                 }
             } else { // Đánh unit
@@ -384,6 +377,19 @@ public abstract class BaseRoom extends MonoRoom {
         if (mChunk.containsKey(chunkId) && mChunk.get(chunkId).getMCells().containsKey(globalCellId))
             return mChunk.get(chunkId).getMCells().get(globalCellId);
         return null;
+    }
+
+    /** Phá cell: cộng bonus cho player; chỉ spawn quái khi chunk {@code [-1, mobId]}. */
+    void applyCellKillBonus(Player player, List<Long> bonus) {
+        if (bonus == null || bonus.isEmpty()) return;
+        if (bonus.get(0) == -1L) {
+            if (bonus.size() < 2) return;
+            Pos posInit = Pos.randomPos(player.getPos(), 2f, 2f);
+            Enemy enemy = new Enemy(Math.toIntExact(bonus.get(1)), player, posInit);
+            addUnit(enemy);
+            return;
+        }
+        player.sendBonus(bonus, DetailActionType.KILL_CELL.getKey());
     }
 
 
