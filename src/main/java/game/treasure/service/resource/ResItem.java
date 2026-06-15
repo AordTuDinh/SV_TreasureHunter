@@ -1,5 +1,6 @@
 package game.treasure.service.resource;
 
+import game.battle.calculate.IMath;
 import game.battle.model.Player;
 import game.battle.object.Point;
 import game.config.CfgItem;
@@ -113,7 +114,7 @@ public class ResItem {
     }
 
     public static String toPointDataString(int pointId, float value) {
-        return StringHelper.toDBString(Arrays.asList((float) pointId, value));
+        return StringHelper.toDBString(Arrays.asList((float) pointId, IMath.round1(value)));
     }
 
     public static float readPointValue(UserItemEntity uItem, int pointId) {
@@ -162,9 +163,15 @@ public class ResItem {
         List<Float> list = GsonUtil.strToListFloat(data);
         if (list.isEmpty())
             return Collections.emptyList();
-        if (list.size() >= 2)
-            return new ArrayList<>(list);
-        return new ArrayList<>(Arrays.asList((float) Point.HP, list.get(0)));
+        if (list.size() >= 2) {
+            List<Float> wire = new ArrayList<>();
+            for (int i = 0; i + 1 < list.size(); i += 2) {
+                wire.add(list.get(i));
+                wire.add(IMath.round1(list.get(i + 1)));
+            }
+            return wire;
+        }
+        return new ArrayList<>(Arrays.asList((float) Point.HP, IMath.round1(list.get(0))));
     }
 
     public static Pbmethod.PbPointItemUpdate buildPointItemUpdate(UserItemEntity uItem) {
