@@ -18,7 +18,7 @@ public class ResItemEquipmentEntity {
     @Id
     int id;
     String name, desc;
-    int  rank, type;
+    int  rank,set, type;
 
 
     public ItemEquipmentType getEquipmentType() {

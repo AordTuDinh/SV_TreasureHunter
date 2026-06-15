@@ -6,14 +6,21 @@ import game.battle.model.Unit;
 import game.battle.object.*;
 import game.battle.type.AnimationType;
 import game.battle.type.RoomState;
+import game.config.CfgItem;
+import game.config.CfgMaterial;
 import game.config.CfgServer;
 import game.config.aEnum.DetailActionType;
+import game.config.aEnum.ItemType;
 import game.config.aEnum.MapType;
+import game.treasure.mapping.UserItemEntity;
+import game.treasure.mapping.UserMaterialEntity;
+import game.treasure.service.resource.ResItem;
 import game.object.TaskMonitor;
 import game.treasure.controller.AHandler;
 import game.treasure.mapping.main.ResMapEntity;
 import game.treasure.server.Constans;
 import game.treasure.server.IAction;
+import game.treasure.service.user.Bonus;
 import game.object.MyUser;
 import game.protocol.ProtoState;
 import io.netty.channel.Channel;
@@ -389,7 +396,91 @@ public abstract class BaseRoom extends MonoRoom {
             addUnit(enemy);
             return;
         }
-        player.sendBonus(bonus, DetailActionType.KILL_CELL.getKey());
+        List<Long> resolved = resolveCellKillBonus(player.getMUser(), bonus);
+        if (resolved.isEmpty()) return;
+        player.sendBonus(resolved, DetailActionType.KILL_CELL.getKey());
+    }
+
+    /**
+     * Chỉ dùng khi phá cell: túi/event/material đầy thì quy item sang vàng theo giá bán preview.
+     */
+    List<Long> resolveCellKillBonus(MyUser mUser, List<Long> bonus) {
+        List<Long> result = new ArrayList<>();
+        int pendingBag = 0;
+        int pendingEvent = 0;
+        int pendingMaterial = 0;
+
+        for (List<Long> chunk : Bonus.parse(bonus)) {
+            int[] need = countCellKillSlotNeed(mUser, chunk);
+            boolean overflow = (need[0] > 0 && !mUser.getResources().canAddBagItem(pendingBag + need[0]))
+                    || (need[1] > 0 && !mUser.getResources().canAddEventItem(pendingEvent + need[1]))
+                    || (need[2] > 0 && !mUser.getResources().canAddMaterial(pendingMaterial + need[2]));
+
+            if (overflow) {
+                long sellGold = getCellKillPreviewSellGold(mUser, chunk);
+                if (sellGold > 0) result.addAll(Bonus.viewGold(sellGold));
+                continue;
+            }
+
+            pendingBag += need[0];
+            pendingEvent += need[1];
+            pendingMaterial += need[2];
+            result.addAll(chunk);
+        }
+        return Bonus.merge(result);
+    }
+
+    /** @return [bagSlots, eventSlots, materialSlots] */
+    static int[] countCellKillSlotNeed(MyUser mUser, List<Long> chunk) {
+        int[] need = new int[3];
+        if (chunk.isEmpty()) return need;
+        int bonusType = chunk.get(0).intValue();
+        if (bonusType == Bonus.BONUS_ITEM) {
+            long second = chunk.size() >= 2 ? chunk.get(1) : 0;
+            int itemKey = second > 1000
+                    ? (chunk.size() >= 4 ? chunk.get(3).intValue() : 0)
+                    : (chunk.size() >= 3 ? chunk.get(2).intValue() : 0);
+            if (itemKey < 0) return need;
+            int storageType = chunk.size() >= 3 ? chunk.get(1).intValue() : ItemType.CONSUMABLE.value;
+            if (Bonus.isAggregatedEventItemKey(itemKey)) {
+                if (mUser.getResources().getItemByItemKey(itemKey) == null) need[1] = 1;
+                return need;
+            }
+            if (storageType == ItemType.EVENT.value) {
+                need[1] = 1;
+            } else if (storageType == ItemType.CONSUMABLE.value
+                    || storageType == ItemType.EQUIPMENT.value
+                    || ResItem.getItemEquipment(itemKey) != null) {
+                need[0] = 1;
+            }
+        } else if (bonusType == Bonus.BONUS_MATERIAL) {
+            need[2] = 1;
+        }
+        return need;
+    }
+
+    static long getCellKillPreviewSellGold(MyUser mUser, List<Long> chunk) {
+        if (chunk.isEmpty()) return 0;
+        int bonusType = chunk.get(0).intValue();
+        if (bonusType == Bonus.BONUS_ITEM) {
+            long second = chunk.size() >= 2 ? chunk.get(1) : 0;
+            if (second > 1000) return 0;
+            int itemType = chunk.get(1).intValue();
+            int itemKey = chunk.get(2).intValue();
+            int tier = chunk.size() >= 4 ? chunk.get(3).intValue() : 1;
+            ItemType type = ItemType.get(itemType);
+            if (type == null) type = ItemType.CONSUMABLE;
+            UserItemEntity preview = new UserItemEntity(mUser.getUser().getId(), itemKey, type);
+            preview.setTier(ResItem.resolveTier(itemType, itemKey, tier));
+            return CfgItem.getSellPriceGold(preview);
+        }
+        if (bonusType == Bonus.BONUS_MATERIAL && chunk.size() >= 3) {
+            int materialId = chunk.get(1).intValue();
+            int rank = chunk.get(2).intValue();
+            UserMaterialEntity preview = new UserMaterialEntity(mUser.getUser().getId(), materialId, rank);
+            return CfgMaterial.getMergeSellPrice(preview.getTier(), preview.getMatRank(), preview.getLevel());
+        }
+        return 0;
     }
 
 

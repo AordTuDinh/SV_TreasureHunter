@@ -38,6 +38,6 @@ public class BattleConfig {
     public static float E_timeCheckDirection = 1f; // sau time này thi check lai direction 1 lan
 
 
-    public static int timeReviveObject = 3;  // sau 3s thì revive object
+    public static int timeReviveObject = 5;  // sau 3s thì revive object
 
 }

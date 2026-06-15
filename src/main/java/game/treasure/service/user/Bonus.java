@@ -12,6 +12,7 @@ import protocol.Pbmethod;
 import game.treasure.mapping.*;
 import game.treasure.mapping.main.ResItemEntity;
 import game.treasure.service.resource.ResAvatar;
+import game.treasure.service.item.EquipmentStatRollService;
 import game.treasure.service.resource.ResItem;
 import game.treasure.service.resource.ResMount;
 import game.object.MyUser;
@@ -352,6 +353,8 @@ public class Bonus {
         if (!prepareNewUserItemSlot(mUser, uItem)) return new ArrayList<>();
         if (type == ItemType.CONSUMABLE)
             ResItem.initConsumableInstanceData(uItem);
+        if (type == ItemType.EQUIPMENT)
+            EquipmentStatRollService.rollStatsIfNeeded(uItem);
         if (DBJPA.save(uItem)) {
             mUser.getResources().addItem(uItem);
             if (type == ItemType.CONSUMABLE && CfgItem.isItemMedicine(itemKey))
