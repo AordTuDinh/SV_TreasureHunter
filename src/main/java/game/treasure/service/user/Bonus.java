@@ -2,6 +2,7 @@ package game.treasure.service.user;
 
 import com.google.gson.JsonArray;
 import game.config.CfgAchievement;
+import game.config.CfgItem;
 import game.config.CfgLottery;
 import game.config.CfgMaterial;
 import game.config.CfgServer;
@@ -353,6 +354,9 @@ public class Bonus {
             ResItem.initConsumableInstanceData(uItem);
         if (DBJPA.save(uItem)) {
             mUser.getResources().addItem(uItem);
+            if (type == ItemType.CONSUMABLE && CfgItem.isItemMedicine(itemKey))
+                mUser.queueItemPointUpdate(uItem);
+
             if (CfgServer.isRealServer()) {
                 Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
                         "type", "user_item",

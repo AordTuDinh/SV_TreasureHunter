@@ -1,6 +1,7 @@
 package ozudo.net;
 
 import game.config.lang.Lang;
+import game.object.MyUser;
 import game.treasure.controller.*;
 import game.treasure.server.Constans;
 import game.treasure.server.IAction;
@@ -82,6 +83,7 @@ public class ResponseMessage {
 
                     AHandler handler = mHandler.get(sv).newInstance();
                     handler.handle(channel, session, sv, actions.get(i).getData().toByteArray());
+                    handler.flushItemPointUpdates();
                     responseData.addAllAAction(handler.getResponse().getAActionList());
                 }
             }

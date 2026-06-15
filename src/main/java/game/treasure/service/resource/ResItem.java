@@ -1,6 +1,8 @@
 package game.treasure.service.resource;
 
 import game.battle.model.Player;
+import game.battle.object.Point;
+import game.config.CfgItem;
 import game.config.CfgServer;
 import game.config.aEnum.DetailActionType;
 import game.config.aEnum.ItemType;
@@ -18,6 +20,7 @@ import ozudo.base.helper.GsonUtil;
 import ozudo.base.helper.NumberUtil;
 import ozudo.base.helper.StringHelper;
 import ozudo.base.helper.Util;
+import protocol.Pbmethod;
 
 import java.util.*;
 
@@ -73,22 +76,27 @@ public class ResItem {
         return configTier > 0 ? configTier : 1;
     }
 
-    /** Roll HP bonus từ res_item.data [min,max] → user_item.data "[hp]". Chỉ user_item.type=1. */
+    /**
+     * Khởi tạo user_item.data cho medicine khi nhận vào túi.
+     * Roll base từ res_item.data [min,max] → lưu [pointId, value], pointId = {@link Point#HP}.
+     */
     public static void initConsumableInstanceData(UserItemEntity uItem) {
         if (uItem == null || uItem.getType() != ItemType.CONSUMABLE.value)
+            return;
+        if (!CfgItem.isItemMedicine(uItem.getItemId()))
             return;
         ResItemEntity res = uItem.getRes();
         if (res == null)
             return;
         uItem.setTier(res.getTier());
-        float hp = rollHpFromResData(res.getData());
-        if (hp <= 0f)
+        float value = rollFloatRange(res.getData());
+        if (value <= 0f)
             return;
-        uItem.setData(StringHelper.toDBString(Collections.singletonList(hp)));
+        uItem.setData(toPointDataString(Point.HP, value));
     }
 
-    /** Random float trong khoảng res_item.data, vd "[10,15]". */
-    public static float rollHpFromResData(String resData) {
+    /** Random float trong khoảng res_item.data, vd "[50,60]". */
+    public static float rollFloatRange(String resData) {
         if (resData == null || resData.length() < 3)
             return 0f;
         List<Float> range = GsonUtil.strToListFloat(resData);
@@ -104,13 +112,72 @@ public class ResItem {
         return NumberUtil.getRandom(min, max);
     }
 
-    public static float readHpBonus(UserItemEntity uItem) {
+    public static String toPointDataString(int pointId, float value) {
+        return StringHelper.toDBString(Arrays.asList((float) pointId, value));
+    }
+
+    public static float readPointValue(UserItemEntity uItem, int pointId) {
         if (uItem == null || uItem.getData() == null || uItem.getData().length() < 2)
             return 0f;
         List<Float> list = GsonUtil.strToListFloat(uItem.getData());
         if (list.isEmpty())
             return 0f;
-        return list.get(0);
+        if (list.size() >= 2 && Math.round(list.get(0)) == pointId)
+            return list.get(1);
+        if (list.size() == 1 && pointId == Point.HP)
+            return list.get(0);
+        return 0f;
+    }
+
+    public static float readHpBonus(UserItemEntity uItem) {
+        return readPointValue(uItem, Point.HP);
+    }
+
+    /**
+     * Nâng cấp medicine: cộng random [9%, 11%] HP hiện tại.
+     * Trả data mới dạng [pointId, value]; null nếu không hợp lệ.
+     */
+    public static String rollMedicineUpgradeData(UserItemEntity uItem) {
+        if (uItem == null || !CfgItem.isItemMedicine(uItem.getItemId()))
+            return null;
+        float currentHp = readHpBonus(uItem);
+        if (currentHp <= 0f)
+            return null;
+        float minAdd = currentHp * CfgItem.HP_UPGRADE_MIN_RATE;
+        float maxAdd = currentHp * CfgItem.HP_UPGRADE_MAX_RATE;
+        float newHp = currentHp + NumberUtil.getRandom(minAdd, maxAdd);
+        return toPointDataString(Point.HP, newHp);
+    }
+
+    public static int resolveTypeBonus(UserItemEntity uItem) {
+        if (uItem == null)
+            return Bonus.BONUS_ITEM;
+        return Bonus.BONUS_ITEM;
+    }
+
+    /** user_item.data → wire [pointId, value, ...]. */
+    public static List<Float> dataToPointWire(String data) {
+        if (data == null || data.length() < 2 || "[]".equals(data))
+            return Collections.emptyList();
+        List<Float> list = GsonUtil.strToListFloat(data);
+        if (list.isEmpty())
+            return Collections.emptyList();
+        if (list.size() >= 2)
+            return new ArrayList<>(list);
+        return new ArrayList<>(Arrays.asList((float) Point.HP, list.get(0)));
+    }
+
+    public static Pbmethod.PbPointItemUpdate buildPointItemUpdate(UserItemEntity uItem) {
+        if (uItem == null)
+            return null;
+        List<Float> points = dataToPointWire(uItem.getData());
+        if (points.isEmpty())
+            return null;
+        return Pbmethod.PbPointItemUpdate.newBuilder()
+                .setItemId(uItem.getId())
+                .setTypeBonus(resolveTypeBonus(uItem))
+                .addAllPoints(points)
+                .build();
     }
 
     /** Dùng buff consumable trong map — trừ item, hồi HP (cap max), trả ITEM_USE sync túi. */

@@ -27,6 +27,10 @@ public class CfgItem {
             Pbmethod.ItemKey.BINH_MAU_4.getNumber()
     );
 
+    /** Mỗi lần nâng cấp medicine: cộng random [min%, max%] HP hiện tại trong user_item.data. */
+    public static final float HP_UPGRADE_MIN_RATE = 0.09f;
+    public static final float HP_UPGRADE_MAX_RATE = 0.11f;
+
     public static boolean canUpLevel(UserItemEntity item) {
         if (item == null) return false;
         int type = item.getType();

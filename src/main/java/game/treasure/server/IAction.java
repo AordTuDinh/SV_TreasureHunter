@@ -30,6 +30,7 @@ public class IAction {
     public static final int TABLE_STATE = 23;
     public static final int CLIENT_INPUT = 24;
     public static final int REVIVE_PLAYER = 25;
+    public static final int UPDATE_ITEM_POINT = 26;
     public static final int COUNTDOWN_MSG = 30;
     public static final int DEBUG_LOG = 31;
     public static final int DEBUG_ERROR = 32;

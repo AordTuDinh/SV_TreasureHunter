@@ -6,7 +6,9 @@ import game.config.CfgServer;
 import game.config.aEnum.ToastType;
 import game.config.lang.Lang;
 import game.treasure.mapping.UserEntity;
+import game.treasure.mapping.UserItemEntity;
 import game.treasure.server.IAction;
+import game.treasure.service.resource.ResItem;
 import game.monitor.Online;
 import game.object.MyUser;
 import game.protocol.CommonProto;
@@ -109,6 +111,19 @@ public abstract class AHandler extends IAction {
 
     public void addBonusPrivate(List<Long> bonus) {
         addResponse(UPDATE_BONUS_PRIVATE, CommonProto.getCommonVector(bonus));
+    }
+
+    public void addItemPointUpdate(UserItemEntity uItem) {
+        Pbmethod.PbPointItemUpdate pb = ResItem.buildPointItemUpdate(uItem);
+        if (pb != null)
+            addResponse(UPDATE_ITEM_POINT, pb);
+    }
+
+    public void flushItemPointUpdates() {
+        if (mUser == null)
+            return;
+        for (Pbmethod.PbPointItemUpdate pb : mUser.drainItemPointUpdates())
+            addResponse(UPDATE_ITEM_POINT, pb);
     }
 
     public void addErrResponse() {

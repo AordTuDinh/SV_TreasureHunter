@@ -136,6 +136,12 @@ message PbChunk {
   repeated PbCell cells = 4;
 }
 
+message PbPointItemUpdate{
+  optional int64 itemId = 1;
+  optional int32 typeBonus = 2;
+  repeated float  points = 3;
+}
+
 message PbInitMap {
   optional int32 mapId = 1;
   optional int64 battleId = 2;

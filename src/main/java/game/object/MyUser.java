@@ -53,6 +53,21 @@ public class MyUser implements Serializable {
     List<Integer> comboWeapon = NumberUtil.genListInt(6, 0);
     List<Integer> cacheSendParty = new ArrayList<>(); // [userId,timeSend, number]
     List<Integer> perReceiveBoss = List.of(0, 0);  // per tăng đá - per tăng drop
+    List<Pbmethod.PbPointItemUpdate> itemPointUpdates = new ArrayList<>();
+
+    public void queueItemPointUpdate(UserItemEntity uItem) {
+        Pbmethod.PbPointItemUpdate pb = ResItem.buildPointItemUpdate(uItem);
+        if (pb != null)
+            itemPointUpdates.add(pb);
+    }
+
+    public List<Pbmethod.PbPointItemUpdate> drainItemPointUpdates() {
+        if (itemPointUpdates.isEmpty())
+            return Collections.emptyList();
+        List<Pbmethod.PbPointItemUpdate> copy = new ArrayList<>(itemPointUpdates);
+        itemPointUpdates.clear();
+        return copy;
+    }
 
     public MyUser(UserEntity user) {
         this.user = user;

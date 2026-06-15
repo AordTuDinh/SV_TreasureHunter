@@ -8,6 +8,7 @@ import game.treasure.mapping.UserItemEntity;
 import game.treasure.mapping.main.ResItemEntity;
 import game.treasure.mapping.main.ResItemEquipmentEntity;
 import game.treasure.server.IAction;
+import game.treasure.service.resource.ResItem;
 import game.treasure.service.user.Bonus;
 import game.monitor.Online;
 import game.object.MyUser;
@@ -440,12 +441,28 @@ public class ItemHandler extends AHandler {
             return;
         }
         int newLevel = item.getLevel() + 1;
-        if (!item.update(Arrays.asList("level", newLevel))) {
+        String medicineData = null;
+        if (CfgItem.isItemMedicine(item.getItemId())) {
+            medicineData = ResItem.rollMedicineUpgradeData(item);
+            if (medicineData == null) {
+                Bonus.receiveListItem(mUser, DetailActionType.UPDATE_FAIL.getKey(), Bonus.reverseBonus(fee));
+                addErrResponse();
+                return;
+            }
+        }
+
+        List<Object> updateFields = new ArrayList<>(Arrays.asList("level", newLevel));
+        if (medicineData != null)
+            updateFields.addAll(Arrays.asList("data", medicineData));
+
+        if (!item.update(updateFields)) {
             Bonus.receiveListItem(mUser, DetailActionType.UPDATE_FAIL.getKey(), Bonus.reverseBonus(fee));
             addErrResponse();
             return;
         }
         item.setLevel(newLevel);
+        if (medicineData != null)
+            item.setData(medicineData);
 
         boolean syncEquip = item.isEquipment()
                 && (item.isEquip() || mUser.getUser().getListIdEquipmentEquip().contains((int) id));
@@ -471,6 +488,8 @@ public class ItemHandler extends AHandler {
             UserHandler.buffInfo(mUser);
         } else {
             addResponse(getCommonVector(id, (long) newLevel));
+            if (CfgItem.isItemMedicine(item.getItemId()))
+                addItemPointUpdate(item);
         }
     }
 
