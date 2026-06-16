@@ -281,17 +281,23 @@ public class MarketHandler extends AHandler {
         boolean saved;
         if (uItem == null) {
             uItem = new UserItemEntity(user.getId(), protocol.Pbmethod.ItemKey.TICKER_SPECIAL.getNumber(), ItemType.EVENT);
-            uItem.setTier(ResItem.resolveTier(ItemType.EVENT.value, protocol.Pbmethod.ItemKey.TICKER_SPECIAL.getNumber(), 1));
             List<Long> numNew = new ArrayList<>(nums);
             numNew.add(0, eventDay);
             uItem.setData(StringHelper.toDBString(numNew));
-            if (!Bonus.prepareNewUserItemSlot(mUser, uItem)) {
+            if (!Bonus.prepareNewItemSlot(mUser, Bonus.BONUS_ITEM, 0, ItemType.EVENT)) {
                 Bonus.receiveListItem(mUser, "buy_lottery_special", Bonus.reverseBonus(CfgLottery.getFeeBuySpecial(nums.size())));
                 addErrResponse(getLang(Lang.err_max_slot));
                 return;
             }
             saved = DBJPA.save(uItem);
-            if (saved) mUser.getResources().addItem(uItem);
+            if (saved) {
+                if (!Bonus.prepareNewItemSlot(mUser, Bonus.BONUS_ITEM, uItem.getId(), ItemType.EVENT)) {
+                    uItem.deleteFromDb();
+                    saved = false;
+                } else {
+                    mUser.getResources().addItem(uItem);
+                }
+            }
         } else {
             List<Long> dataSticker = GsonUtil.strToListLong(uItem.getData());
             if (dataSticker.isEmpty() || dataSticker.get(0) != eventDay) {
@@ -309,10 +315,8 @@ public class MarketHandler extends AHandler {
         }
         resItem.setStock(resItem.getStock() - nums.size());
         aBonus.add((long) Bonus.BONUS_ITEM);
-        aBonus.add((long) uItem.getType());
         aBonus.add(uItem.getId());
         aBonus.add((long) uItem.getItemId());
-        aBonus.add((long) uItem.getTier());
 
         if (userMarket.updateShop(market, new Gson().toJson(aItem))) {
             addBonusToastPlus(aBonus);
@@ -355,7 +359,6 @@ public class MarketHandler extends AHandler {
         long eventDay = CfgLottery.getEventIdBuy();
         if (uItem == null) {
             uItem = new UserItemEntity(user.getId(), protocol.Pbmethod.ItemKey.TICKER_NORMAL.getNumber(), ItemType.EVENT);
-            uItem.setTier(ResItem.resolveTier(ItemType.EVENT.value, protocol.Pbmethod.ItemKey.TICKER_NORMAL.getNumber(), 1));
             List<Long> aNum = new ArrayList<>(nums);
             aNum.add(0, eventDay);
             uItem.setData(StringHelper.toDBString(aNum));
@@ -373,10 +376,8 @@ public class MarketHandler extends AHandler {
         }
         resItem.setStock(resItem.getStock() - nums.size());
         aBonus.add((long) Bonus.BONUS_ITEM);
-        aBonus.add((long) uItem.getType());
         aBonus.add(uItem.getId());
         aBonus.add((long) uItem.getItemId());
-        aBonus.add((long) uItem.getTier());
         if (userMarket.updateShop(market, new Gson().toJson(aItem))) {
             addBonusToastPlus(aBonus);
             mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.BUY_SHOP, nums.size());

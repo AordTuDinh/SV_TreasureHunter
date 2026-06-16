@@ -91,8 +91,7 @@ public class ResObjectEntity extends BaseEntity implements Serializable {
     private List<Long> randomHpBonus() {
         int itemId = pickIdByRatePairs(itemHpParsed);
         if (itemId <= 0) return new ArrayList<>();
-        int tier = ResItem.resolveTier(ItemType.CONSUMABLE.value, itemId, 1);
-        return Bonus.view(Bonus.BONUS_ITEM, ItemType.CONSUMABLE.value, itemId, tier);
+        return Bonus.viewItem(itemId, 1);
     }
 
     private List<Long> randomEquipBonus() {

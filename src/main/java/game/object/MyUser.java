@@ -255,23 +255,20 @@ public class MyUser implements Serializable {
             if (chunk.isEmpty()) continue;
             int bonusType = chunk.get(0).intValue();
             if (bonusType == Bonus.BONUS_ITEM) {
-                long second = chunk.size() >= 2 ? chunk.get(1) : 0;
-                int itemKey = second > 1000
-                        ? (chunk.size() >= 4 ? chunk.get(3).intValue() : 0)
-                        : (chunk.size() >= 3 ? chunk.get(2).intValue() : 0);
+                int itemKey = chunk.get(1).intValue();
                 if (itemKey < 0) continue;
-                int storageType = chunk.size() >= 3 ? chunk.get(1).intValue() : ItemType.CONSUMABLE.value;
+                ItemType storageType = Bonus.resolveStorageType(itemKey);
                 if (Bonus.isAggregatedEventItemKey(itemKey)) {
                     if (resources.getItemByItemKey(itemKey) == null) numEvent++;
                     continue;
                 }
-                if (storageType == ItemType.EVENT.value) {
+                if (storageType == ItemType.EVENT) {
                     numEvent++;
-                } else if (storageType == ItemType.CONSUMABLE.value
-                        || storageType == ItemType.EQUIPMENT.value
-                        || ResItem.getItemEquipment(itemKey) != null) {
+                } else if (storageType != ItemType.CURRENCY) {
                     numBag++;
                 }
+            } else if (bonusType == Bonus.BONUS_EQUIPMENT) {
+                numBag++;
             } else if (bonusType == Bonus.BONUS_MATERIAL) {
                 numMaterial++;
             }

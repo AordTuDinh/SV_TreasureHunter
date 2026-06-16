@@ -35,12 +35,13 @@ public class Bonus {
     public static final int BONUS_PET = 9;
     public static final int BONUS_MOUNT = 10;
     public static final int BONUS_MATERIAL = 11;
+    public static final int BONUS_EQUIPMENT = 12;
 
     public static final Map<Integer, Integer> mTypeLength = new HashMap<>() {{
         put(BONUS_GOLD, 1);
         put(BONUS_GEM, 1);
         put(BONUS_RUBY, 1);
-        put(BONUS_ITEM, 3); // preview/trừ add: itemType, itemKey, tier — trừ row: itemType, userItemId, itemKey, tier
+        put(BONUS_ITEM, 1);
         put(BONUS_ARTIFACT, 1);
         put(BONUS_SKIN, 1);
         put(BONUS_EFFECT_SKIN, 2);
@@ -48,10 +49,12 @@ public class Bonus {
         put(BONUS_PET, 1);
         put(BONUS_MOUNT, 1);
         put(BONUS_MATERIAL, 2);
+        put(BONUS_EQUIPMENT, 2);
     }};
 
     public static List<Integer> bonusSinger = Arrays.asList(
-            BONUS_ITEM, BONUS_ARTIFACT, BONUS_PET, BONUS_MOUNT, BONUS_SKIN, BONUS_EFFECT_SKIN, BONUS_MATERIAL);
+            BONUS_ITEM, BONUS_EQUIPMENT, BONUS_ARTIFACT, BONUS_PET, BONUS_MOUNT,
+            BONUS_SKIN, BONUS_EFFECT_SKIN, BONUS_MATERIAL);
 
     public static boolean isBonusSinger(int type) {
         return bonusSinger.contains(type);
@@ -61,29 +64,33 @@ public class Bonus {
         return view(BONUS_GOLD, number);
     }
 
-    public static List<Long> viewItem(int itemType, int itemId, long number) {
-        int tier = ResItem.resolveTier(itemType, itemId, 1);
+    /** Preview/receive item by config key (consum / currency / event). */
+    public static List<Long> viewItem(int itemKey, long number) {
         if (number < 0) {
             List<Long> ret = new ArrayList<>();
-            for (int i = 0; i < -number; i++) {
-                ret.addAll(view(BONUS_ITEM, itemType, -itemId, tier));
-            }
+            for (int i = 0; i < -number; i++)
+                ret.addAll(view(BONUS_ITEM, -itemKey));
             return ret;
         }
-        return viewXNumber(view(BONUS_ITEM, itemType, itemId, tier), (int) number);
+        return viewXNumber(view(BONUS_ITEM, itemKey), (int) number);
     }
 
-    public static List<Long> viewItemRemove(int itemType, long userItemId, int itemKey, int tier, int count) {
+    public static List<Long> viewItem(int itemType, int itemId, long number) {
+        if (ResItem.getItemEquipment(itemId) != null)
+            return viewItemEquipment(itemId, 1);
+        return viewItem(itemId, number);
+    }
+
+    public static List<Long> viewItemRemove(long userItemId, int itemKey, int count) {
         List<Long> ret = new ArrayList<>();
-        List<Long> one = view(BONUS_ITEM, itemType, userItemId, itemKey, tier);
-        for (int i = 0; i < count; i++) ret.addAll(one);
+        List<Long> one = view(BONUS_ITEM, userItemId, itemKey);
+        for (int i = 0; i < count; i++)
+            ret.addAll(one);
         return ret;
     }
 
     public static List<Long> viewItemMaterial(MaterialType type, long number) {
-        int tier = ResItem.resolveTier(ItemType.EVENT.value, type.id, 1);
-        List<Long> one = view(BONUS_ITEM, ItemType.EVENT.value, type.id, tier);
-        return viewXNumber(one, (int) number);
+        return viewXNumber(view(BONUS_ITEM, type.id), (int) number);
     }
 
     public static List<Long> viewPet(int itemId) {
@@ -107,8 +114,7 @@ public class Bonus {
     }
 
     public static List<Long> viewItem(int itemType, Pbmethod.ItemKey itemKey, long number) {
-        int itemId = itemKey.getNumber();
-        return viewItem(itemType, itemId, number);
+        return viewItem(itemKey.getNumber(), number);
     }
 
     public static List<Long> viewDameSkin(int skinId) {
@@ -117,11 +123,19 @@ public class Bonus {
 
     public static List<Long> viewItemEquipment(int itemId, int tier) {
         int t = tier > 0 ? Math.min(tier, 4) : 1;
-        return view(BONUS_ITEM, ItemType.EQUIPMENT.value, itemId, t);
+        return view(BONUS_EQUIPMENT, itemId, t);
     }
 
     public static List<Long> viewItemEquipment(int itemId, int lock, long time) {
         return viewItemEquipment(itemId, 1);
+    }
+
+    public static List<Long> viewItemEquipmentRemove(long userEquipId, int itemKey, int tier, int count) {
+        List<Long> ret = new ArrayList<>();
+        List<Long> one = view(BONUS_EQUIPMENT, userEquipId, itemKey, tier);
+        for (int i = 0; i < count; i++)
+            ret.addAll(one);
+        return ret;
     }
 
     public static List<Long> viewItemArtifact(int artifactId) {
@@ -143,7 +157,8 @@ public class Bonus {
     public static List<Long> view(int bonusType, long... values) {
         List<Long> aLong = new ArrayList<>();
         aLong.add((long) bonusType);
-        for (long value : values) aLong.add(value);
+        for (long value : values)
+            aLong.add(value);
         return aLong;
     }
 
@@ -151,8 +166,13 @@ public class Bonus {
         int type = Math.toIntExact(bonus.get(0));
         switch (type) {
             case BONUS_ITEM -> {
-                if (bonus.size() >= 5)
-                    return Math.toIntExact(bonus.get(3));
+                if (bonus.size() >= 4)
+                    return Math.toIntExact(bonus.get(2));
+                if (bonus.size() >= 3)
+                    return Math.toIntExact(bonus.get(1));
+                return Math.toIntExact(bonus.get(1));
+            }
+            case BONUS_EQUIPMENT -> {
                 if (bonus.size() >= 4)
                     return Math.toIntExact(bonus.get(2));
                 return Math.toIntExact(bonus.get(1));
@@ -170,50 +190,100 @@ public class Bonus {
         return 0;
     }
 
-    static boolean isUserItemStorageType(int v) {
-        return v >= ItemType.CONSUMABLE.value && v <= ItemType.EVENT.value;
-    }
-
     static boolean isBonusWireType(int v) {
         return v == BONUS_GOLD || v == BONUS_GEM || v == BONUS_RUBY || v == BONUS_ITEM
-                || v == BONUS_ARTIFACT || v == BONUS_SKIN || v == BONUS_EFFECT_SKIN || v == BONUS_VIP_EXP
+                || v == BONUS_EQUIPMENT || v == BONUS_ARTIFACT || v == BONUS_SKIN
+                || v == BONUS_EFFECT_SKIN || v == BONUS_VIP_EXP
                 || v == BONUS_PET || v == BONUS_MOUNT || v == BONUS_MATERIAL;
     }
 
-    /**
-     * Preview/add config: [4,itemType,itemKey,tier].
-     * Trừ row config: [4,itemType,userItemId,itemKey,tier].
-     * Receive response gửi client: [4,itemType,userItemId,itemKey,tier].
-     */
-    public static final int BONUS_ITEM_RECEIVE_PAYLOAD = 4;
+    static int itemBonusPayloadLength(List<Long> bonus, int index) {
+        if (index >= bonus.size())
+            return 0;
+        if (bonus.get(index) < 0)
+            return 1;
+        if (index + 2 >= bonus.size())
+            return 1;
+        if (isBonusWireType(bonus.get(index + 2).intValue()))
+            return 1;
+        return 2;
+    }
 
-    static int itemBonusConfigLength(List<Long> bonus, int index) {
-        if (index + 1 >= bonus.size()) return 0;
-        int itemType = bonus.get(index).intValue();
-        if (!isUserItemStorageType(itemType)) return mTypeLength.get(BONUS_ITEM);
-        if (index + 1 >= bonus.size()) return 3;
-        long second = bonus.get(index + 1);
-        if (second > 1000) return 4;
+    static int itemBonusPayloadLength(JsonArray aBonus, int index) {
+        if (index >= aBonus.size())
+            return 0;
+        if (aBonus.get(index).getAsLong() < 0)
+            return 1;
+        if (index + 2 >= aBonus.size())
+            return 1;
+        if (isBonusWireType(aBonus.get(index + 2).getAsInt()))
+            return 1;
+        return 2;
+    }
+
+    static int equipmentBonusPayloadLength(List<Long> bonus, int index) {
+        if (index >= bonus.size())
+            return 0;
+        if (index + 2 >= bonus.size())
+            return Math.max(0, bonus.size() - index);
+        if (index + 3 >= bonus.size())
+            return 2;
+        if (isBonusWireType(bonus.get(index + 3).intValue()))
+            return 2;
         return 3;
     }
 
-    static int itemBonusConfigLength(JsonArray aBonus, int index) {
-        if (index >= aBonus.size()) return 0;
-        int itemType = aBonus.get(index).getAsInt();
-        if (!isUserItemStorageType(itemType)) return mTypeLength.get(BONUS_ITEM);
-        if (index + 1 >= aBonus.size()) return 3;
-        long second = aBonus.get(index + 1).getAsLong();
-        if (second > 1000) return 4;
+    static int equipmentBonusPayloadLength(JsonArray aBonus, int index) {
+        if (index >= aBonus.size())
+            return 0;
+        if (index + 2 >= aBonus.size())
+            return Math.max(0, aBonus.size() - index);
+        if (index + 3 >= aBonus.size())
+            return 2;
+        if (isBonusWireType(aBonus.get(index + 3).getAsInt()))
+            return 2;
         return 3;
+    }
+
+    static int bonusConfigLength(List<Long> bonus, int index, int type) {
+        if (type == BONUS_ITEM)
+            return itemBonusPayloadLength(bonus, index);
+        if (type == BONUS_EQUIPMENT)
+            return equipmentBonusPayloadLength(bonus, index);
+        return mTypeLength.getOrDefault(type, 0);
+    }
+
+    static int bonusConfigLength(JsonArray aBonus, int index, int type) {
+        if (type == BONUS_ITEM)
+            return itemBonusPayloadLength(aBonus, index);
+        if (type == BONUS_EQUIPMENT)
+            return equipmentBonusPayloadLength(aBonus, index);
+        return mTypeLength.getOrDefault(type, 0);
+    }
+
+    /** Preview chunk [4, itemKey] — không phải remove/receive [4, rowId, itemKey]. */
+    static boolean isItemPreviewChunk(List<Long> chunk) {
+        return chunk.size() == 2;
+    }
+
+    /** Preview chunk [12, itemKey, tier]. */
+    static boolean isEquipmentPreviewChunk(List<Long> chunk) {
+        return chunk.size() == 3;
+    }
+
+    public static ItemType resolveStorageType(int itemKey) {
+        ResItemEntity res = ResItem.getItem(itemKey);
+        if (res != null && res.getItemType() != null)
+            return res.getItemType();
+        return ItemType.CONSUMABLE;
     }
 
     public static List<Long> viewXNumber(List<Long> bonus, int xNumber) {
         List<Long> ret = new ArrayList<>();
         if (isBonusSinger(Math.toIntExact(bonus.get(0)))) {
             int times = Math.abs(xNumber);
-            for (int i = 0; i < times; i++) {
+            for (int i = 0; i < times; i++)
                 ret.addAll(bonus);
-            }
         } else {
             int last = bonus.size() - 1;
             bonus.set(last, bonus.get(last) * xNumber);
@@ -244,6 +314,9 @@ public class Bonus {
                 case BONUS_ITEM:
                     aLong.addAll(addUserItem(mUser, aBonus, index, detailAction));
                     break;
+                case BONUS_EQUIPMENT:
+                    aLong.addAll(addUserEquipment(mUser, aBonus, index, detailAction));
+                    break;
                 case BONUS_ARTIFACT:
                     aLong.addAll(addItemArtifact(mUser, aBonus, index, detailAction));
                     break;
@@ -266,8 +339,8 @@ public class Bonus {
                     aLong.addAll(addMaterial(mUser, aBonus, index, detailAction));
                     break;
             }
-            if (type == BONUS_ITEM) {
-                index += itemBonusConfigLength(aBonus, index);
+            if (type == BONUS_ITEM || type == BONUS_EQUIPMENT) {
+                index += bonusConfigLength(aBonus, index, type);
             } else {
                 index += mTypeLength.getOrDefault(type, 0);
             }
@@ -323,69 +396,92 @@ public class Bonus {
     }
 
     static List<Long> addUserItem(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-        if (index + 1 < aBonus.size() && aBonus.get(index + 1).getAsLong() > 1000
-                && index + 3 < aBonus.size()) {
+        if (itemBonusPayloadLength(aBonus, index) == 2)
             return removeUserItem(mUser, aBonus, index, detailAction);
-        }
-        int itemType = aBonus.get(index++).getAsInt();
         int itemKey = aBonus.get(index++).getAsInt();
-        int configTier = aBonus.get(index++).getAsInt();
         if (itemKey < 0) {
             itemKey = -itemKey;
-            if (!mUser.getResources().removeItemsByItemKey(itemKey, 1)) return new ArrayList<>();
+            if (!mUser.getResources().removeItemsByItemKey(itemKey, 1))
+                return new ArrayList<>();
             UserItemEntity left = mUser.getResources().getItemByItemKey(itemKey);
             long rowId = left != null ? left.getId() : 0L;
-            int st = left != null ? left.getType() : itemType;
-            int tier = left != null ? left.getTier() : ResItem.resolveTier(itemType, itemKey, configTier);
-            return Arrays.asList((long) BONUS_ITEM, (long) st, rowId, (long) itemKey, (long) tier);
+            return Arrays.asList((long) BONUS_ITEM, rowId, (long) itemKey);
         }
         UserItemEntity uItem;
         if (itemKey == Pbmethod.ItemKey.TICKER_NORMAL.getNumber()) {
             uItem = checkGenItemData(mUser, 1);
             if (uItem == null) return new ArrayList<>();
-            return Arrays.asList((long) BONUS_ITEM, (long) uItem.getType(), uItem.getId(), (long) itemKey,
-                    (long) uItem.getTier());
+            return Arrays.asList((long) BONUS_ITEM, uItem.getId(), (long) itemKey);
         }
-        ItemType type = ItemType.get(itemType);
-        if (type == null) type = ItemType.CONSUMABLE;
+        ItemType type = resolveStorageType(itemKey);
         uItem = new UserItemEntity(mUser.getUser().getId(), itemKey, type);
-        uItem.setTier(ResItem.resolveTier(itemType, itemKey, configTier));
-        if (!prepareNewUserItemSlot(mUser, uItem)) return new ArrayList<>();
+        if (!prepareNewItemSlot(mUser, BONUS_ITEM, 0, type))
+            return new ArrayList<>();
         if (type == ItemType.CONSUMABLE)
             ResItem.initConsumableInstanceData(uItem);
-        if (type == ItemType.EQUIPMENT)
-            EquipmentStatRollService.rollStatsIfNeeded(uItem);
         if (DBJPA.save(uItem)) {
+            if (!prepareNewItemSlot(mUser, BONUS_ITEM, uItem.getId(), type)) {
+                uItem.deleteFromDb();
+                return new ArrayList<>();
+            }
             mUser.getResources().addItem(uItem);
             if (type == ItemType.CONSUMABLE && CfgItem.isItemMedicine(itemKey))
                 mUser.queueItemPointUpdate(uItem);
-
             if (CfgServer.isRealServer()) {
                 Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
                         "type", "user_item",
                         "id", uItem.getId(),
                         "itemId", itemKey,
                         "storageType", uItem.getType(),
-                        "slot", uItem.getSlot(),
                         "tier", uItem.getTier(),
                         "addValue", 1);
             }
-            return Arrays.asList((long) BONUS_ITEM, (long) uItem.getType(), uItem.getId(), (long) itemKey,
-                    (long) uItem.getTier());
+            return Arrays.asList((long) BONUS_ITEM, uItem.getId(), (long) itemKey);
+        }
+        return new ArrayList<>();
+    }
+
+    static List<Long> addUserEquipment(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
+        if (equipmentBonusPayloadLength(aBonus, index) == 3)
+            return removeUserEquipment(mUser, aBonus, index, detailAction);
+        int itemKey = aBonus.get(index++).getAsInt();
+        int configTier = aBonus.get(index++).getAsInt();
+        if (ResItem.getItemEquipment(itemKey) == null)
+            return new ArrayList<>();
+        UserEquipmentEntity uEquip = new UserEquipmentEntity(mUser.getUser().getId(), itemKey);
+        uEquip.setTier(configTier);
+        if (!prepareNewItemSlot(mUser, BONUS_EQUIPMENT, 0, ItemType.EQUIPMENT))
+            return new ArrayList<>();
+        EquipmentStatRollService.rollStatsIfNeeded(uEquip);
+        if (DBJPA.save(uEquip)) {
+            if (!prepareNewItemSlot(mUser, BONUS_EQUIPMENT, uEquip.getId(), ItemType.EQUIPMENT)) {
+                uEquip.deleteFromDb();
+                return new ArrayList<>();
+            }
+            mUser.getResources().addEquipment(uEquip);
+            if (CfgServer.isRealServer()) {
+                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
+                        "type", "user_equipment",
+                        "id", uEquip.getId(),
+                        "itemId", itemKey,
+                        "tier", uEquip.getTier(),
+                        "addValue", 1);
+            }
+            return Arrays.asList((long) BONUS_EQUIPMENT, uEquip.getId(), (long) itemKey, (long) uEquip.getTier());
         }
         return new ArrayList<>();
     }
 
     static List<Long> removeUserItem(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-        int storageType = aBonus.get(index++).getAsInt();
         long userItemId = aBonus.get(index++).getAsLong();
         int itemKey = aBonus.get(index++).getAsInt();
-        aBonus.get(index++).getAsInt();
         UserItemEntity uItem = mUser.getResources().getItem(userItemId);
-        if (uItem == null || uItem.getItemId() != itemKey) return new ArrayList<>();
-        int tier = uItem.getTier();
+        if (uItem == null || uItem.getItemId() != itemKey)
+            return new ArrayList<>();
+        clearItemFromSlot(mUser, BONUS_ITEM, userItemId);
         if (uItem.isAggregatedItem()) {
-            if (!mUser.getResources().removeItemsByItemKey(itemKey, 1)) return new ArrayList<>();
+            if (!mUser.getResources().removeItemsByItemKey(itemKey, 1))
+                return new ArrayList<>();
         } else if (!uItem.deleteFromDb()) {
             return new ArrayList<>();
         } else {
@@ -393,26 +489,45 @@ public class Bonus {
         }
         if (CfgServer.isRealServer()) {
             Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
-                    "type", "user_item_remove", "id", userItemId, "itemId", itemKey, "tier", tier);
+                    "type", "user_item_remove", "id", userItemId, "itemId", itemKey);
         }
-        return Arrays.asList((long) BONUS_ITEM, (long) storageType, userItemId, (long) itemKey, (long) tier);
+        return Arrays.asList((long) BONUS_ITEM, userItemId, (long) itemKey);
+    }
+
+    static List<Long> removeUserEquipment(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
+        long userEquipId = aBonus.get(index++).getAsLong();
+        int itemKey = aBonus.get(index++).getAsInt();
+        int tier = aBonus.get(index++).getAsInt();
+        UserEquipmentEntity uEquip = mUser.getResources().getEquipment(userEquipId);
+        if (uEquip == null || uEquip.getItemId() != itemKey)
+            return new ArrayList<>();
+        clearItemFromSlot(mUser, BONUS_EQUIPMENT, userEquipId);
+        if (!uEquip.deleteFromDb())
+            return new ArrayList<>();
+        mUser.getResources().removeEquipment(userEquipId);
+        if (CfgServer.isRealServer()) {
+            Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
+                    "type", "user_equipment_remove", "id", userEquipId, "itemId", itemKey, "tier", tier);
+        }
+        return Arrays.asList((long) BONUS_EQUIPMENT, userEquipId, (long) itemKey, (long) uEquip.getTier());
     }
 
     static UserItemEntity checkGenItemData(MyUser mUser, int numItem) {
         UserItemEntity uItem = mUser.getResources().getItemByItemKey(Pbmethod.ItemKey.TICKER_NORMAL.getNumber());
         long eventDay = CfgLottery.getEventIdBuy();
         List<Long> nums = new ArrayList<>();
-        for (int i = 0; i < numItem; i++) {
+        for (int i = 0; i < numItem; i++)
             nums.add(NumberUtil.getRandomLong(100000, 999999));
-        }
         if (uItem == null) {
             uItem = new UserItemEntity(mUser.getUser().getId(), Pbmethod.ItemKey.TICKER_NORMAL.getNumber(), ItemType.EVENT);
-            uItem.setTier(ResItem.resolveTier(ItemType.EVENT.value, Pbmethod.ItemKey.TICKER_NORMAL.getNumber(), 1));
-            if (!prepareNewUserItemSlot(mUser, uItem)) return null;
+            if (!prepareNewItemSlot(mUser, BONUS_ITEM, 0, ItemType.EVENT))
+                return null;
             nums.add(0, eventDay);
             uItem.setData(StringHelper.toDBString(nums));
-            DBJPA.save(uItem);
+            if (!DBJPA.save(uItem))
+                return null;
             mUser.getResources().addItem(uItem);
+            prepareNewItemSlot(mUser, BONUS_ITEM, uItem.getId(), ItemType.EVENT);
         } else {
             List<Long> dataSticker = new ArrayList<>(GsonUtil.strToListLong(uItem.getData() == null ? "[]" : uItem.getData()));
             if (dataSticker.isEmpty() || dataSticker.get(0) != eventDay) {
@@ -481,9 +596,8 @@ public class Bonus {
     static List<Long> addMaterial(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
         int materialId = aBonus.get(index++).getAsInt();
         int rank = aBonus.get(index++).getAsInt();
-        if (CfgMaterial.get(materialId) == null) {
+        if (CfgMaterial.get(materialId) == null)
             return new ArrayList<>();
-        }
         if (!mUser.getResources().canAddMaterial(1)) return new ArrayList<>();
         UserMaterialEntity uMaterial = new UserMaterialEntity(mUser.getUser().getId(), materialId, rank);
         if (DBJPA.save(uMaterial)) {
@@ -573,20 +687,29 @@ public class Bonus {
                         return Lang.instance(mUser).get(Lang.err_not_enough_ruby);
                     break;
                 case BONUS_ITEM:
-                    if (chunk.size() >= 5) {
-                        long userItemId = chunk.get(2);
-                        int itemKey = chunk.get(3).intValue();
+                    if (chunk.size() >= 3) {
+                        long userItemId = chunk.get(1);
+                        int itemKey = chunk.get(2).intValue();
                         UserItemEntity uItem = mUser.getResources().getItem(userItemId);
                         ResItemEntity resItem = ResItem.getItem(itemKey);
-                        String name = resItem != null ? resItem.getName()
-                                : (ResItem.getItemEquipment(itemKey) != null ? ResItem.getItemEquipment(itemKey).getName() : "?");
+                        String name = resItem != null ? resItem.getName() : "?";
                         if (uItem == null || uItem.getItemId() != itemKey)
                             return String.format(Lang.instance(mUser).get(Lang.err_not_enough_item), name);
-                    } else if (chunk.size() >= 4) {
-                        int itemKey = chunk.get(2).intValue();
-                        if (itemKey < 0) {
+                    } else if (chunk.size() >= 2) {
+                        int itemKey = chunk.get(1).intValue();
+                        if (itemKey < 0)
                             itemDeduct.merge(-itemKey, 1, Integer::sum);
-                        }
+                    }
+                    break;
+                case BONUS_EQUIPMENT:
+                    if (chunk.size() >= 4) {
+                        long userEquipId = chunk.get(1);
+                        int itemKey = chunk.get(2).intValue();
+                        UserEquipmentEntity uEquip = mUser.getResources().getEquipment(userEquipId);
+                        String name = ResItem.getItemEquipment(itemKey) != null
+                                ? ResItem.getItemEquipment(itemKey).getName() : "?";
+                        if (uEquip == null || uEquip.getItemId() != itemKey)
+                            return String.format(Lang.instance(mUser).get(Lang.err_not_enough_item), name);
                     }
                     break;
             }
@@ -640,13 +763,10 @@ public class Bonus {
             while (index < bonus.size()) {
                 List<Long> tmp = new ArrayList<>();
                 int type = bonus.get(index++).intValue();
-                int length = type == BONUS_ITEM
-                        ? itemBonusConfigLength(bonus, index)
-                        : mTypeLength.getOrDefault(type, 0);
+                int length = bonusConfigLength(bonus, index, type);
                 tmp.add((long) type);
-                for (int i = index; i < index + length; i++) {
+                for (int i = index; i < index + length; i++)
                     tmp.add(bonus.get(i));
-                }
                 result.add(tmp);
                 index += length;
             }
@@ -672,9 +792,8 @@ public class Bonus {
         List<Long> result = new ArrayList<>();
         aBonus.forEach(bo -> {
             if (bonusSinger.contains(bo.get(0).intValue())) {
-                for (int i = 0; i < times; i++) {
+                for (int i = 0; i < times; i++)
                     result.addAll(bo);
-                }
             } else {
                 result.addAll(bo);
                 result.set(result.size() - 1, result.get(result.size() - 1) * times);
@@ -695,26 +814,69 @@ public class Bonus {
         return result;
     }
 
-    public static boolean prepareNewUserItemSlot(MyUser mUser, UserItemEntity uItem) {
-        ItemType type = ItemType.get(uItem.getType());
-        if (type == null) return true;
-        switch (type) {
-            case CONSUMABLE:
-            case EQUIPMENT:
-                if (!mUser.getResources().canAddBagItem(1)) return false;
-                Integer bagSlot = mUser.getResources().allocBagSlot();
-                if (bagSlot == null) return false;
-                uItem.setSlot(bagSlot);
-                return true;
-            case EVENT:
-                if (!mUser.getResources().canAddEventItem(1)) return false;
-                Integer eventSlot = mUser.getResources().allocEventSlot();
-                if (eventSlot == null) return false;
-                uItem.setSlot(eventSlot);
-                return true;
-            default:
-                return true;
+    /** Gán slot trong user_data.item_slot. {@code bonusType} = wire bonus (4, 12, …); {@code slotZoneType} chỉ chọn vùng bag vs event. */
+    public static boolean prepareNewItemSlot(MyUser mUser, int bonusType, long rowId, ItemType slotZoneType) {
+        List<Long> slots = mUser.getUData().getItemSlotList();
+        int bagCount = mUser.getUData().getSlotBagUI();
+        int eventCount = mUser.getUData().getSlotEvent();
+        if (slotZoneType == ItemType.EVENT) {
+            if (rowId == 0)
+                return mUser.getResources().canAddEventItem(1);
+            if (!mUser.getResources().canAddEventItem(1))
+                return false;
+            Integer slot = ItemSlotHelper.findFirstEmpty(slots, bagCount, eventCount);
+            if (slot == null)
+                return false;
+            ItemSlotHelper.setPair(slots, slot, bonusType, rowId);
+        } else {
+            if (rowId == 0)
+                return mUser.getResources().canAddBagItem(1);
+            if (!mUser.getResources().canAddBagItem(1))
+                return false;
+            Integer slot = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
+            if (slot == null)
+                return false;
+            ItemSlotHelper.setPair(slots, slot, bonusType, rowId);
         }
+        return mUser.getUData().saveItemSlot(slots);
+    }
+
+    public static void clearItemFromSlot(MyUser mUser, int bonusType, long rowId) {
+        List<Long> slots = mUser.getUData().getItemSlotList();
+        int bagCount = mUser.getUData().getSlotBagUI();
+        int eventCount = mUser.getUData().getSlotEvent();
+        Integer bagSlot = ItemSlotHelper.findSlotOf(slots, 0, bagCount, bonusType, rowId);
+        if (bagSlot != null) {
+            ItemSlotHelper.clearPair(slots, bagSlot);
+            mUser.getUData().saveItemSlot(slots);
+            return;
+        }
+        Integer eventSlot = ItemSlotHelper.findSlotOf(slots, bagCount, eventCount, bonusType, rowId);
+        if (eventSlot != null) {
+            ItemSlotHelper.clearPair(slots, eventSlot);
+            mUser.getUData().saveItemSlot(slots);
+        }
+    }
+
+    public static boolean moveEquipmentToBag(MyUser mUser, UserEquipmentEntity equip) {
+        if (!mUser.getResources().canAddBagItem(1))
+            return false;
+        List<Long> slots = mUser.getUData().getItemSlotList();
+        int bagCount = mUser.getUData().getSlotBagUI();
+        Integer slot = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
+        if (slot == null)
+            return false;
+        ItemSlotHelper.setPair(slots, slot, BONUS_EQUIPMENT, equip.getId());
+        if (!mUser.getUData().saveItemSlot(slots))
+            return false;
+        equip.setBagSlot(slot);
+        return true;
+    }
+
+    public static boolean moveEquipmentOutOfBag(MyUser mUser, UserEquipmentEntity equip) {
+        clearItemFromSlot(mUser, BONUS_EQUIPMENT, equip.getId());
+        equip.setBagSlot(-1);
+        return true;
     }
 
     public static boolean isAggregatedEventItemKey(int itemKey) {

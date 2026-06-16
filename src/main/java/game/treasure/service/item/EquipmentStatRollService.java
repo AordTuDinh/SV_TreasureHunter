@@ -2,6 +2,7 @@ package game.treasure.service.item;
 
 import game.battle.object.Point;
 import game.config.CfgItem;
+import game.treasure.mapping.UserEquipmentEntity;
 import game.treasure.mapping.UserItemEntity;
 import game.treasure.mapping.main.ResItemEquipmentEntity;
 import ozudo.base.helper.NumberUtil;
@@ -26,10 +27,23 @@ public class EquipmentStatRollService {
     }
 
     public static void rollStatsIfNeeded(UserItemEntity item) {
-        if (item == null || !item.isEquipment() || hasRolledData(item.getData()))
+        if (item == null || item.isEquipment() || hasRolledData(item.getData()))
             return;
+        rollStats(item.getResEquipment(), item.getTier(), item::setData);
+    }
 
-        ResItemEquipmentEntity meta = item.getResEquipment();
+    public static void rollStatsIfNeeded(UserEquipmentEntity item) {
+        if (item == null || hasRolledData(item.getData()))
+            return;
+        rollStats(item.getResEquipment(), item.getTier(), item::setData);
+    }
+
+    @FunctionalInterface
+    interface DataSetter {
+        void set(String data);
+    }
+
+    private static void rollStats(ResItemEquipmentEntity meta, int tier, DataSetter setter) {
         if (meta == null)
             return;
 
@@ -41,9 +55,9 @@ public class EquipmentStatRollService {
         if (type < 1 || type > 5)
             return;
 
-        int tier = resolveTierRank(item, meta);
+        int tierRank = tier > 0 ? tier : 1;
         CfgItem.EquipStatRollConfig cfg = CfgItem.getEquipStatRoll();
-        CfgItem.Range anchor = cfg.getPrimaryAnchor(set, tier);
+        CfgItem.Range anchor = cfg.getPrimaryAnchor(set, tierRank);
         if (anchor == null)
             return;
 
@@ -57,7 +71,7 @@ public class EquipmentStatRollService {
         appendStat(data, primaryPointId, formatValue(primaryPointId, primaryValue));
 
         float budget = (primaryMin + primaryMax) / 2f;
-        CfgItem.SecondaryRollTierRates rates = cfg.getSecondaryRates(tier);
+        CfgItem.SecondaryRollTierRates rates = cfg.getSecondaryRates(tierRank);
         int point2Rate = rates != null ? rates.point2Rate : 0;
         int point3Rate = rates != null ? rates.point3Rate : 0;
 
@@ -75,76 +89,52 @@ public class EquipmentStatRollService {
             appendStat(data, point3Id, rollTertiaryValue(cfg, budget, point3Id));
         }
 
-        item.setData(StringHelper.toDBString(data));
+        setter.set(StringHelper.toDBString(data));
     }
 
-    static boolean hasRolledData(String data) {
-        return data != null && !data.isEmpty() && !"[]".equals(data);
+    private static boolean hasRolledData(String data) {
+        return data != null && data.length() > 2 && !"[]".equals(data);
     }
 
-    static int resolveTierRank(UserItemEntity item, ResItemEquipmentEntity meta) {
-        if (item.getTier() > 0)
-            return Math.min(item.getTier(), 4);
-        if (meta.getRank() > 0)
-            return Math.min(meta.getRank(), 4);
-        return 1;
-    }
-
-    static int primaryPointId(int set) {
+    private static int primaryPointId(int set) {
         return switch (set) {
             case SET_ATK -> Point.ATTACK;
             case SET_HP -> Point.HP;
-            case SET_SPD -> Point.MOVE_SPEED;
-            default -> -1;
+            default -> Point.MOVE_SPEED;
         };
     }
 
-    /** Hai stat còn lại (không phải primary của set). */
-    static int[] secondaryPointIds(int set) {
-        int primary = primaryPointId(set);
-        int[] out = new int[2];
-        int j = 0;
-        for (int id : STAT_POINT_IDS) {
-            if (id != primary)
-                out[j++] = id;
-        }
-        return out;
+    private static int[] secondaryPointIds(int set) {
+        return switch (set) {
+            case SET_ATK -> new int[]{Point.HP, Point.MOVE_SPEED};
+            case SET_HP -> new int[]{Point.ATTACK, Point.MOVE_SPEED};
+            default -> new int[]{Point.ATTACK, Point.HP};
+        };
     }
 
-    static float rollSecondaryValue(CfgItem.EquipStatRollConfig cfg, float budget, int pointId) {
-        float min = budget * cfg.point2RatioMin;
-        float max = budget * cfg.point2RatioMax;
-        return formatSecondaryValue(pointId, NumberUtil.getRandom(min, max));
-    }
-
-    static float rollTertiaryValue(CfgItem.EquipStatRollConfig cfg, float budget, int pointId) {
-        float min = budget * cfg.point3RatioMin;
-        float max = budget * cfg.point3RatioMax;
-        return formatSecondaryValue(pointId, NumberUtil.getRandom(min, max));
-    }
-
-    static float formatSecondaryValue(int pointId, float raw) {
-        if (pointId == Point.MOVE_SPEED) {
-            return round1(Math.max(raw, SPD_SECONDARY_MIN));
-        }
-        // ATK/HP phụ: budget set SPD nhỏ dễ round về 0 → mất dòng dù rate đã hit
-        return Math.max(1, Math.round(raw));
-    }
-
-    static float formatValue(int pointId, float raw) {
-        if (pointId == Point.MOVE_SPEED)
-            return round1(raw);
-        return Math.round(raw);
-    }
-
-    static float round1(float v) {
-        return Math.round(v * 10f) / 10f;
-    }
-
-    static void appendStat(List<Float> data, int pointId, float value) {
-        if (pointId < 0 || value <= 0f)
-            return;
+    private static void appendStat(List<Float> data, int pointId, float value) {
         data.add((float) pointId);
         data.add(value);
+    }
+
+    private static float formatValue(int pointId, float value) {
+        return CfgItem.formatPointStat(pointId, value);
+    }
+
+    private static float rollSecondaryValue(CfgItem.EquipStatRollConfig cfg, float budget, int pointId) {
+        CfgItem.Range range = cfg.getSecondaryRange(budget, pointId);
+        if (range == null)
+            return 0f;
+        return formatValue(pointId, NumberUtil.getRandom(range.min, range.max));
+    }
+
+    private static float rollTertiaryValue(CfgItem.EquipStatRollConfig cfg, float budget, int pointId) {
+        CfgItem.Range range = cfg.getTertiaryRange(budget, pointId);
+        if (range == null)
+            return 0f;
+        float v = formatValue(pointId, NumberUtil.getRandom(range.min, range.max));
+        if (pointId == Point.MOVE_SPEED && v > 0 && v < SPD_SECONDARY_MIN)
+            return SPD_SECONDARY_MIN;
+        return v;
     }
 }

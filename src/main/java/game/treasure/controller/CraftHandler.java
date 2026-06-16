@@ -6,6 +6,7 @@ import game.config.aEnum.CraftTargetType;
 import game.config.aEnum.DetailActionType;
 import game.config.lang.Lang;
 import game.treasure.mapping.UserDataEntity;
+import game.treasure.mapping.UserEquipmentEntity;
 import game.treasure.mapping.UserItemEntity;
 import game.treasure.mapping.UserMaterialEntity;
 import game.treasure.mapping.UserPetEntity;
@@ -200,7 +201,7 @@ public class CraftHandler extends AHandler {
 
     private void sendTargetProto(CraftTargetType targetType, long targetId) {
         if (targetType == CraftTargetType.EQUIPMENT) {
-            UserItemEntity equip = mUser.getResources().getItemEquipment(targetId);
+            UserEquipmentEntity equip = mUser.getResources().getItemEquipment(targetId);
             if (equip != null) {
                 addResponse(IAction.ITEM_INFO, equip.toProto().build());
             }
@@ -232,7 +233,7 @@ public class CraftHandler extends AHandler {
 
     private int resolveItemLevel(CraftTargetType type, long targetId) {
         if (type == CraftTargetType.EQUIPMENT) {
-            UserItemEntity equip = mUser.getResources().getItemEquipment(targetId);
+            UserEquipmentEntity equip = mUser.getResources().getItemEquipment(targetId);
             return equip == null ? -1 : equip.getLevel();
         }
         return -1;
@@ -240,7 +241,7 @@ public class CraftHandler extends AHandler {
 
     private boolean resetTargetLevel(CraftTargetType type, long targetId) {
         if (type == CraftTargetType.EQUIPMENT) {
-            UserItemEntity equip = mUser.getResources().getItemEquipment(targetId);
+            UserEquipmentEntity equip = mUser.getResources().getItemEquipment(targetId);
             if (equip == null) {
                 return false;
             }
@@ -254,7 +255,7 @@ public class CraftHandler extends AHandler {
     }
 
     private void destroyEquipment(long equipId) {
-        UserItemEntity equip = mUser.getResources().getItemEquipment(equipId);
+        UserEquipmentEntity equip = mUser.getResources().getItemEquipment(equipId);
         if (equip == null) {
             return;
         }
@@ -274,13 +275,13 @@ public class CraftHandler extends AHandler {
         if (type != CraftTargetType.EQUIPMENT) {
             return false;
         }
-        UserItemEntity equip = mUser.getResources().getItemEquipment(targetId);
+        UserEquipmentEntity equip = mUser.getResources().getItemEquipment(targetId);
         if (equip == null) {
             return false;
         }
         long statValue = Math.round(gem.getValue() * 100);
         List<Long> add = Arrays.asList((long) res.getPointId(), statValue);
-        List<Long> points = IMath.mergePointWeapon(equip.getDataListLong(), add);
+        List<Long> points = IMath.mergePointWeapon(equip.getPoint(), add);
         if (equip.update(Arrays.asList("data", GsonUtil.toJson(points)))) {
             equip.setData(points.toString());
             return true;

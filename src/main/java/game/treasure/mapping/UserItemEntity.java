@@ -33,44 +33,54 @@ public class UserItemEntity implements Serializable {
     long id;
     int userId;
     int itemId;
-    int type; //1=consumable, 2=equipment, 3=currency, 4=event
     int level;
     int lockDestroy;
-    int tier;
-    int slot;
     String data;
 
     @Transient
-    boolean isEquip;
+    int bagSlot = -1;
     @Transient
     int countWin;
     @Transient
     List<Long> point;
 
 
-    public UserItemEntity(int userId, int itemId, ItemType type) {
+    public UserItemEntity(int userId, int itemId) {
         this.userId = userId;
         this.itemId = itemId;
-        this.type = type.value;
         level = 1;
-        slot = -1;
         lockDestroy = 0;
-        tier = 1;
         data = "[]";
+    }
+
+    public UserItemEntity(int userId, int itemId, ItemType type) {
+        this(userId, itemId);
+    }
+
+    /** user_item.type — lấy từ res_item, không lưu tier trên row. */
+    public int getType() {
+        ResItemEntity res = getRes();
+        return res != null && res.getItemType() != null ? res.getItemType().value : 0;
+    }
+
+    /** Tier consumable/event — lấy từ res_item.rank. */
+    public int getTier() {
+        ResItemEntity res = getRes();
+        return res != null ? res.getTier() : 1;
     }
 
 
     public boolean isEquipment() {
-        return type == EQUIPMENT.value;
+        return false;
     }
 
     public boolean isAggregatedItem() {
-        if (type != CONSUMABLE.value) return false;
         return itemId == Pbmethod.ItemKey.TICKER_NORMAL.getNumber() || itemId == Pbmethod.ItemKey.TICKER_SPECIAL.getNumber();
     }
 
     public List<Long> getPoint() {
-        if (type == EVENT.value || type == CURRENCY.value)
+        ItemType type = getRes().getItemType();
+        if (type == EVENT || type == CURRENCY)
             return null;
         if (point == null)
             rebuildPointCache();
@@ -166,11 +176,8 @@ public class UserItemEntity implements Serializable {
         Pbmethod.PbItem.Builder pb = Pbmethod.PbItem.newBuilder();
         pb.setId(id);
         pb.setItemKey(itemId);
-        pb.setType(type);
         pb.setLevel(level);
         pb.setLockDestroy(lockDestroy == 1);
-        pb.setTier(tier);
-        pb.setSlot(slot);
         if (data != null && !data.isEmpty() && !"[]".equals(data))
             pb.setData(data);
         return pb;
@@ -190,22 +197,13 @@ public class UserItemEntity implements Serializable {
     }
 
 
-    public void unEquip() {
-        isEquip = false;
-    }
 
-    public boolean updateSlot(int newSlot) {
-        if (update(List.of("slot", newSlot))) {
-            this.slot = newSlot;
-            return true;
-        }
-        return false;
-    }
-
-    public List<Long> viewBonusItem(int type, long number) {
-        if (number >= 0) return Bonus.viewItem(type, itemId, number);
-        if (isAggregatedItem()) return Bonus.viewItemRemove(type, id, itemId, tier, (int) -number);
-        return Bonus.viewItem(type, itemId, number);
+    public List<Long> viewBonusItem(long number) {
+        if (number >= 0)
+            return Bonus.viewItem(itemId, number);
+        if (isAggregatedItem())
+            return Bonus.viewItemRemove(id, itemId, (int) -number);
+        return Bonus.viewItem(itemId, number);
     }
 
     public boolean deleteFromDb() {

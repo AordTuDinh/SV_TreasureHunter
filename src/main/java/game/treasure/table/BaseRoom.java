@@ -12,6 +12,7 @@ import game.config.CfgServer;
 import game.config.aEnum.DetailActionType;
 import game.config.aEnum.ItemType;
 import game.config.aEnum.MapType;
+import game.treasure.mapping.UserEquipmentEntity;
 import game.treasure.mapping.UserItemEntity;
 import game.treasure.mapping.UserMaterialEntity;
 import game.treasure.service.resource.ResItem;
@@ -436,23 +437,14 @@ public abstract class BaseRoom extends MonoRoom {
         if (chunk.isEmpty()) return need;
         int bonusType = chunk.get(0).intValue();
         if (bonusType == Bonus.BONUS_ITEM) {
-            long second = chunk.size() >= 2 ? chunk.get(1) : 0;
-            int itemKey = second > 1000
-                    ? (chunk.size() >= 4 ? chunk.get(3).intValue() : 0)
-                    : (chunk.size() >= 3 ? chunk.get(2).intValue() : 0);
+            int itemKey = chunk.get(1).intValue();
             if (itemKey < 0) return need;
-            int storageType = chunk.size() >= 3 ? chunk.get(1).intValue() : ItemType.CONSUMABLE.value;
             if (Bonus.isAggregatedEventItemKey(itemKey)) {
                 if (mUser.getResources().getItemByItemKey(itemKey) == null) need[1] = 1;
                 return need;
             }
-            if (storageType == ItemType.EVENT.value) {
-                need[1] = 1;
-            } else if (storageType == ItemType.CONSUMABLE.value
-                    || storageType == ItemType.EQUIPMENT.value
-                    || ResItem.getItemEquipment(itemKey) != null) {
-                need[0] = 1;
-            }
+        } else if (bonusType == Bonus.BONUS_EQUIPMENT) {
+            need[0] = 1;
         } else if (bonusType == Bonus.BONUS_MATERIAL) {
             need[2] = 1;
         }
@@ -463,15 +455,17 @@ public abstract class BaseRoom extends MonoRoom {
         if (chunk.isEmpty()) return 0;
         int bonusType = chunk.get(0).intValue();
         if (bonusType == Bonus.BONUS_ITEM) {
-            long second = chunk.size() >= 2 ? chunk.get(1) : 0;
-            if (second > 1000) return 0;
-            int itemType = chunk.get(1).intValue();
-            int itemKey = chunk.get(2).intValue();
-            int tier = chunk.size() >= 4 ? chunk.get(3).intValue() : 1;
-            ItemType type = ItemType.get(itemType);
-            if (type == null) type = ItemType.CONSUMABLE;
+            int itemKey = chunk.get(1).intValue();
+            if (itemKey < 0) return 0;
+            ItemType type = Bonus.resolveStorageType(itemKey);
             UserItemEntity preview = new UserItemEntity(mUser.getUser().getId(), itemKey, type);
-            preview.setTier(ResItem.resolveTier(itemType, itemKey, tier));
+            return CfgItem.getSellPriceGold(preview);
+        }
+        if (bonusType == Bonus.BONUS_EQUIPMENT ) {
+            int itemKey = chunk.get(1).intValue();
+            int tier = chunk.get(2).intValue();
+            UserEquipmentEntity preview = new UserEquipmentEntity(mUser.getUser().getId(), itemKey);
+            preview.setTier(ResItem.resolveTier(tier));
             return CfgItem.getSellPriceGold(preview);
         }
         if (bonusType == Bonus.BONUS_MATERIAL && chunk.size() >= 3) {

@@ -133,7 +133,7 @@ public class IMath {
         for (int itemId : mUser.getUser().getListIdEquipmentEquip()) {
             if (itemId <= 0)
                 continue;
-            UserItemEntity item = mUser.getResources().getItemEquipment(itemId);
+            UserEquipmentEntity item = mUser.getResources().getItemEquipment(itemId);
             if (item == null)
                 continue;
             List<Long> itemPoints = item.getPoint();

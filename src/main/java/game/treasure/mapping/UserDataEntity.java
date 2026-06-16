@@ -3,12 +3,15 @@ package game.treasure.mapping;
 import game.config.CfgCheckin;
 import game.config.CfgUser;
 import game.config.aEnum.*;
+import game.object.MyUser;
 import game.treasure.controller.AHandler;
 import game.treasure.controller.UserHandler;
 import game.treasure.mapping.main.*;
 import game.treasure.server.IAction;
-import game.treasure.service.resource.*;
-import game.object.MyUser;
+import game.treasure.service.resource.ResAvatar;
+import game.treasure.service.resource.ResQuest;
+import game.treasure.service.user.ItemSlotHelper;
+import game.treasure.service.user.Bonus;
 import game.protocol.CommonProto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,6 +38,7 @@ public class UserDataEntity implements Serializable {
     int userId;
     int levelTraining, friendNotify, tutorial, questTutorial, questTutorialNumber;
     String numSlot, dataInt, checkIn;
+    String itemSlot;
     String buff; // [time25,time50,timex2 ...] x9
     String dameSkin, chatFrame, listTrial;
     int dameSkinEquip, chatFrameEquip, trialEquip, effInit, craftLevel, craftExp;
@@ -63,6 +67,38 @@ public class UserDataEntity implements Serializable {
         this.trialEquip = 0;
         this.craftExp = 0;
         this.buff = NumberUtil.genListStringInt(9, 0);
+        this.itemSlot = buildEmptyItemSlot(CfgUser.getSlotBagInit());
+    }
+
+    static String buildEmptyItemSlot(int bagCount, int eventCount) {
+        List<Long> slots = new ArrayList<>();
+        ItemSlotHelper.ensureCapacity(slots, bagCount, eventCount);
+        return ItemSlotHelper.serialize(slots);
+    }
+
+    static String buildEmptyItemSlot(String numSlotJson) {
+        List<Integer> caps = GsonUtil.strToListInt(numSlotJson);
+        while (caps.size() < 3) caps.add(8);
+        return buildEmptyItemSlot(caps.get(0), caps.get(2));
+    }
+
+    /** Khởi tạo item_slot rỗng theo số ô bag/event hiện tại của user. */
+    public void ensureItemSlotInitialized() {
+        if (itemSlot != null && !itemSlot.isEmpty())
+            return;
+        itemSlot = buildEmptyItemSlot(getSlotBagUI(), getSlotEvent());
+    }
+
+    public List<Long> getItemSlotList() {
+        List<Long> slots = ItemSlotHelper.parse(itemSlot);
+        List<Integer> caps = getSlot();
+        ItemSlotHelper.ensureCapacity(slots, caps.get(0), caps.get(2));
+        return slots;
+    }
+
+    public boolean saveItemSlot(List<Long> slots) {
+        itemSlot = ItemSlotHelper.serialize(slots);
+        return update(Arrays.asList("item_slot", itemSlot));
     }
 
     public void checkQuestTutorial(MyUser mUser, QuestTutType type, int idInfo, int number) {
@@ -232,6 +268,15 @@ public class UserDataEntity implements Serializable {
             }
         }
         pb.setItems(lstItem);
+
+        Pbmethod.PbListEquipment.Builder lstEquip = Pbmethod.PbListEquipment.newBuilder();
+        for (Map.Entry<Long, UserEquipmentEntity> eq : mUser.getResources().getMEquipment().entrySet()) {
+            Pbmethod.PbEquipment.Builder eqPb = eq.getValue().toProto();
+            if (eqPb != null)
+                lstEquip.addEquipment(eqPb);
+        }
+        pb.setEquipments(lstEquip);
+        pb.addAllItemSlot(getItemSlotList());
         // material
         Pbmethod.PbListMaterial.Builder lstMat = Pbmethod.PbListMaterial.newBuilder();
         for (Map.Entry<Long, UserMaterialEntity> mat : mUser.getResources().getMMaterial().entrySet()) {
@@ -255,10 +300,10 @@ public class UserDataEntity implements Serializable {
         }
 
         // item equipment in hero
-        List<Integer> lstEquip = mUser.getUser().getListIdEquipmentEquip();
-        for (int i = 0; i < lstEquip.size(); i++) {
-            if (lstEquip.get(i) > 0) {
-                UserItemEntity iEquip = mUser.getResources().getItemEquipment(lstEquip.get(i));
+        List<Integer> lstEquipId = mUser.getUser().getListIdEquipmentEquip();
+        for (int i = 0; i < lstEquipId.size(); i++) {
+            if (lstEquipId.get(i) > 0) {
+                UserEquipmentEntity iEquip = mUser.getResources().getEquipment(lstEquipId.get(i));
                 if (iEquip != null) {
                     pb.addItemEquipments(iEquip.getId());
                 }

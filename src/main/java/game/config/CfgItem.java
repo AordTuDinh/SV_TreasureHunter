@@ -9,6 +9,7 @@ import game.config.aEnum.ItemType;
 
 import game.config.lang.Lang;
 
+import game.treasure.mapping.UserEquipmentEntity;
 import game.treasure.mapping.UserItemEntity;
 
 import game.object.MyUser;
@@ -87,8 +88,19 @@ public class CfgItem {
         return level >= 1 && level < MAX_UPGRADE_LEVEL;
     }
 
+    public static boolean canUpLevel(UserEquipmentEntity item) {
+        if (item == null) return false;
+        int level = item.getLevel();
+        return level >= 1 && level < MAX_UPGRADE_LEVEL;
+    }
+
 
     public static int getTierMult(UserItemEntity item) {
+        int tier = item.getTier();
+        return tier > 0 ? tier : 1;
+    }
+
+    public static int getTierMult(UserEquipmentEntity item) {
         int tier = item.getTier();
         return tier > 0 ? tier : 1;
     }
@@ -111,8 +123,22 @@ public class CfgItem {
         return fee;
     }
 
+    public static long getUpgradeFeeGold(UserEquipmentEntity item) {
+        if (!canUpLevel(item)) return 0;
+        int level = item.getLevel();
+        int idx = level - 1;
+        if (idx < 0 || idx >= UPGRADE_FEE_BASE_T1.size()) return 0;
+        return (long) getTierMult(item) * UPGRADE_FEE_BASE_T1.get(idx);
+    }
+
 
     public static List<Long> getUpgradeFee(UserItemEntity item) {
+        long fee = getUpgradeFeeGold(item);
+        if (fee <= 0) return new ArrayList<>();
+        return Bonus.viewGold(-fee);
+    }
+
+    public static List<Long> getUpgradeFee(UserEquipmentEntity item) {
         long fee = getUpgradeFeeGold(item);
         if (fee <= 0) return new ArrayList<>();
         return Bonus.viewGold(-fee);
@@ -126,8 +152,19 @@ public class CfgItem {
         return getTierMult(item) * SELL_PRICE_BASE_T1.get(idx);
     }
 
+    public static int getSellPriceGold(UserEquipmentEntity item) {
+        int level = item.getLevel();
+        if (level < 1) level = 1;
+        int idx = Math.min(level, SELL_PRICE_BASE_T1.size()) - 1;
+        return getTierMult(item) * SELL_PRICE_BASE_T1.get(idx);
+    }
+
 
     public static List<Long> getPriceSellItem(UserItemEntity uItem) {
+        return Bonus.viewGold(getSellPriceGold(uItem));
+    }
+
+    public static List<Long> getPriceSellItem(UserEquipmentEntity uItem) {
         return Bonus.viewGold(getSellPriceGold(uItem));
     }
 
@@ -283,6 +320,30 @@ public class CfgItem {
             if (secondaryRoll == null || secondaryRoll.byTier == null)
                 return null;
             return secondaryRoll.byTier.get(String.valueOf(tier));
+        }
+
+        /** Stat phụ thứ 2 — budget × point2Ratio. */
+        public Range getSecondaryRange(float budget, int pointId) {
+            return buildRatioRange(budget, point2RatioMin, point2RatioMax, pointId);
+        }
+
+        /** Stat phụ thứ 3 — budget × point3Ratio. */
+        public Range getTertiaryRange(float budget, int pointId) {
+            return buildRatioRange(budget, point3RatioMin, point3RatioMax, pointId);
+        }
+
+        private Range buildRatioRange(float budget, float ratioMin, float ratioMax, int pointId) {
+            if (budget <= 0f)
+                return null;
+            Range r = new Range();
+            r.min = CfgItem.formatPointStat(pointId, budget * ratioMin);
+            r.max = CfgItem.formatPointStat(pointId, budget * ratioMax);
+            if (r.min > r.max) {
+                float t = r.min;
+                r.min = r.max;
+                r.max = t;
+            }
+            return r;
         }
 
     }

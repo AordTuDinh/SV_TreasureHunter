@@ -162,7 +162,7 @@ public class CfgQuest {
             }
             case HAS_ITEM_EQUIP_LEVEL -> {
                 int max = 0;
-                for (UserItemEntity itemEq : mUser.getResources().listEquipment()) {
+                for (UserEquipmentEntity itemEq : mUser.getResources().listEquipment()) {
                     if (itemEq.getItemId() == res.getIdInfo() && itemEq.getLevel() > max) {
                         max = itemEq.getLevel();
                     }
@@ -174,7 +174,7 @@ public class CfgQuest {
                 mUser.getUData().setQuestTutorialNumber(dataQuest.getValue(DataQuest.CUR_POINT_D));
             }
             case HAS_ITEM_EQUIP_ID -> {
-                for (UserItemEntity itemEq : mUser.getResources().listEquipment()) {
+                for (UserEquipmentEntity itemEq : mUser.getResources().listEquipment()) {
                     if (itemEq.getItemId() == res.getIdInfo()) {
                         mUser.getUData().setQuestTutorialNumber(1);
                         break;

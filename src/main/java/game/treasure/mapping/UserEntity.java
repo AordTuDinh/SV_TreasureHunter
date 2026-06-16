@@ -84,7 +84,7 @@ public class UserEntity implements Serializable {
         List<Integer> items = mUser.getUser().getAllInfoItemEquip();
         boolean update = false;
         for (int i = 0; i < items.size(); i += 3) {
-            UserItemEntity item = mUser.getResources().getItemEquipment(items.get(i));
+            UserEquipmentEntity item = mUser.getResources().getItemEquipment(items.get(i));
             if (item == null) { // check hết hạn thì xóa khỏi equip
                 items.set(i, 0);
                 update = true;

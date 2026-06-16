@@ -9,6 +9,7 @@ import game.config.aEnum.DetailActionType;
 import game.config.aEnum.ItemType;
 import game.object.MyUser;
 import game.protocol.CommonProto;
+import game.treasure.mapping.UserEquipmentEntity;
 import game.treasure.mapping.UserItemEntity;
 import game.treasure.mapping.main.ResItemEntity;
 import game.treasure.mapping.main.ResItemEquipmentEntity;
@@ -76,15 +77,9 @@ public class ResItem {
         aMaterial.forEach(row -> mMaterial.put(row.getId(), row));
     }
 
-    public static int resolveTier(int itemType, int itemKey, int configTier) {
-        if (itemType == ItemType.EQUIPMENT.value) {
-            if (configTier < 1) return 1;
-            return Math.min(configTier, 4);
-        }
-        ResItemEntity res = getItem(itemKey);
-        if (res != null)
-            return res.getTier();
-        return configTier > 0 ? configTier : 1;
+    public static int resolveTier( int configTier) {
+        if (configTier < 1) return 1;
+        return Math.min(configTier, 4);
     }
 
     /**
@@ -99,7 +94,6 @@ public class ResItem {
         ResItemEntity res = uItem.getRes();
         if (res == null)
             return;
-        uItem.setTier(res.getTier());
         float value = rollFloatRange(res.getData());
         if (value <= 0f)
             return;
@@ -134,6 +128,12 @@ public class ResItem {
         return uItem.hasUpgradePointData();
     }
 
+    public static boolean hasUpgradePointData(UserEquipmentEntity uItem) {
+        if (uItem == null)
+            return false;
+        return uItem.hasUpgradePointData();
+    }
+
     /** user_item.data → wire [pointId, value, ...] đã nhân theo level. */
     public static List<Float> dataToPointWire(String data, int level) {
         if (data == null || data.length() < 2 || "[]".equals(data))
@@ -157,9 +157,11 @@ public class ResItem {
     }
 
     public static int resolveTypeBonus(UserItemEntity uItem) {
-        if (uItem == null)
-            return Bonus.BONUS_ITEM;
         return Bonus.BONUS_ITEM;
+    }
+
+    public static int resolveTypeBonus(UserEquipmentEntity uItem) {
+        return Bonus.BONUS_EQUIPMENT;
     }
 
     /** user_item.data → wire [pointId, value, ...]. */
@@ -211,21 +213,21 @@ public class ResItem {
         return true;
     }
 
-    /** Xóa 1 row user_item và trả chunk bonus [4,type,rowId,itemKey,tier] cho client. */
+    /** Xóa 1 row user_item và trả chunk bonus [4,rowId,itemKey] cho client. */
     public static List<Long> removeUserItemRow(MyUser mUser, UserItemEntity uItem, String detailAction) {
         if (uItem == null || mUser == null)
             return Collections.emptyList();
         long rowId = uItem.getId();
-        int storageType = uItem.getType();
         int itemKey = uItem.getItemId();
 
         if (uItem.isAggregatedItem()) {
             return Bonus.receiveListItem(mUser, detailAction,
-                    Bonus.viewItemRemove(storageType, rowId, itemKey, uItem.getTier(), 1));
+                    Bonus.viewItemRemove(rowId, itemKey, 1));
         }
+        Bonus.clearItemFromSlot(mUser, Bonus.BONUS_ITEM, rowId);
         if (!uItem.deleteFromDb())
             return Collections.emptyList();
         mUser.getResources().removeItem(rowId);
-        return List.of((long) Bonus.BONUS_ITEM, (long) storageType, rowId, (long) itemKey, (long) uItem.getTier());
+        return List.of((long) Bonus.BONUS_ITEM, rowId, (long) itemKey);
     }
 }

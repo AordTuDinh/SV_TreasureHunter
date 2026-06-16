@@ -276,12 +276,20 @@ message  PbUserData{
   optional  int32 trialEquip = 24;
   optional  int32 craftLevel = 25;
   optional  int32 craftExp = 26;
+  /** Túi UI: flat pairs [bonusType, rowId, ...]. Ô trống = [0, 0]. bonusType = wire Bonus (4=item, 9=pet, 10=mount, 12=equipment, ...). Index cặp = vị trí ô (0..slotBagUI-1 bag, tiếp theo event). */
+  repeated  int64 itemSlot = 27;
+  /** user_equipment rows, slot lấy từ itemSlot. */
+  optional  PbListEquipment equipments = 28;
 }
 
 
 
 message PbListItem{
   repeated  PbItem item = 1;
+}
+
+message PbListEquipment{
+  repeated  PbEquipment equipment = 1;
 }
 message PbListMaterial{
   repeated  PbMaterial materials = 1;
@@ -378,13 +386,18 @@ message PbMaterial{
 message  PbItem{
   optional  int64 id = 1;
   optional  int32 itemKey = 2;
-  optional  int32 type = 3;
-  optional  int32 level = 4;
-  optional  bool lockDestroy = 5;
-  optional  int32 tier = 6;
-  optional  int32 slot = 7;
-  /** JSON list float, vd "[12.4]" — roll data instance (type=1 consumable). */
-  optional  string data = 8;
+  optional  int32 level = 3;
+  optional  bool lockDestroy = 4;
+  optional  string data = 6;
+}
+
+message  PbEquipment{
+  optional  int64 id = 1;
+  optional  int32 itemKey = 2;
+  optional  int32 level = 3;
+  optional  bool lockDestroy = 4;
+  optional  int32 tier = 5;
+  optional  string data = 6;
 }
 
 message  PbItemPoint{

@@ -3,6 +3,8 @@ package game.object;
 import game.config.CfgAchievement;
 import game.config.aEnum.*;
 import game.treasure.mapping.*;
+import game.treasure.service.user.Bonus;
+import game.treasure.service.user.ItemSlotHelper;
 import protocol.Pbmethod;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,6 +24,8 @@ public class UserResources implements Serializable {
     @Setter
     List<UserItemEntity> items;
     @Setter
+    List<UserEquipmentEntity> equipments;
+    @Setter
     List<UserPetEntity> pets;
     @Setter
     List<UserArtifactEntity> artifacts;
@@ -36,6 +40,8 @@ public class UserResources implements Serializable {
 
     @Getter
     Map<Long, UserItemEntity> mItem = new HashMap<>();
+    @Getter
+    Map<Long, UserEquipmentEntity> mEquipment = new HashMap<>();
     @Getter
     Map<Long, UserPetEntity> mPet = new HashMap<>();
     @Getter
@@ -57,19 +63,82 @@ public class UserResources implements Serializable {
 
     void syncEquipFlagsFromUser() {
         Set<Integer> equippedIds = new HashSet<>(mUser.getUser().getListIdEquipmentEquip());
-        for (UserItemEntity item : mItem.values()) {
-            if (!item.isEquipment()) continue;
+        for (UserEquipmentEntity item : mEquipment.values()) {
             boolean equipped = equippedIds.contains((int) item.getId());
             item.setEquip(equipped);
-            if (equipped && item.getSlot() >= 0)
-                item.updateSlot(-1);
+            if (equipped)
+                item.setBagSlot(-1);
+        }
+    }
+
+    void rebuildItemSlotIfNeeded() {
+        List<Long> slots = mUser.getUData().getItemSlotList();
+        int bagCount = mUser.getUData().getSlotBagUI();
+        int eventCount = mUser.getUData().getSlotEvent();
+        if (ItemSlotHelper.countOccupied(slots, 0, bagCount + eventCount) > 0)
+            return;
+        boolean changed = false;
+        for (UserItemEntity item : mItem.values()) {
+            ItemType type = ItemType.get(item.getType());
+            if (type == null) continue;
+            if (type == ItemType.EVENT) {
+                Integer s = ItemSlotHelper.findFirstEmpty(slots, bagCount, eventCount);
+                if (s != null) {
+                    ItemSlotHelper.setPair(slots, s, Bonus.BONUS_ITEM, item.getId());
+                    changed = true;
+                }
+            } else if (type == ItemType.CONSUMABLE || type == ItemType.CURRENCY) {
+                Integer s = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
+                if (s != null) {
+                    ItemSlotHelper.setPair(slots, s, Bonus.BONUS_ITEM, item.getId());
+                    changed = true;
+                }
+            }
+        }
+        for (UserEquipmentEntity equip : mEquipment.values()) {
+            if (equip.isEquip()) continue;
+            Integer s = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
+            if (s != null) {
+                ItemSlotHelper.setPair(slots, s, Bonus.BONUS_EQUIPMENT, equip.getId());
+                changed = true;
+            }
+        }
+        if (changed)
+            mUser.getUData().saveItemSlot(slots);
+    }
+
+    void applyItemSlotsFromUserData() {
+        List<Long> slots = mUser.getUData().getItemSlotList();
+        int bagCount = mUser.getUData().getSlotBagUI();
+        int eventCount = mUser.getUData().getSlotEvent();
+        for (UserItemEntity item : mItem.values()) {
+            item.setBagSlot(-1);
+            Integer bagSlot = ItemSlotHelper.findSlotOf(slots, 0, bagCount, Bonus.BONUS_ITEM, item.getId());
+            if (bagSlot != null) {
+                item.setBagSlot(bagSlot);
+                continue;
+            }
+            Integer eventSlot = ItemSlotHelper.findSlotOf(slots, bagCount, eventCount, Bonus.BONUS_ITEM, item.getId());
+            if (eventSlot != null)
+                item.setBagSlot(eventSlot);
+        }
+        for (UserEquipmentEntity equip : mEquipment.values()) {
+            if (equip.isEquip()) {
+                equip.setBagSlot(-1);
+                continue;
+            }
+            Integer bagSlot = ItemSlotHelper.findSlotOf(slots, 0, bagCount, Bonus.BONUS_EQUIPMENT, equip.getId());
+            equip.setBagSlot(bagSlot != null ? bagSlot : -1);
         }
     }
 
     public boolean isOk() {
         try {
             if (items != null) {
-                items.forEach(item -> mItem.put(item.getId(), item));
+                items.stream().filter(i -> !i.isEquipment()).forEach(item -> mItem.put(item.getId(), item));
+            }
+            if (equipments != null) {
+                equipments.forEach(eq -> mEquipment.put(eq.getId(), eq));
             }
             if (packs != null) {
                 packs.forEach(pack -> {
@@ -94,6 +163,8 @@ public class UserResources implements Serializable {
                 skins.forEach(skin -> mSkin.put(skin.getId(), skin));
             }
             syncEquipFlagsFromUser();
+            rebuildItemSlotIfNeeded();
+            applyItemSlotsFromUserData();
             return true;
         } catch (Exception ex) {
             Logs.error(ex);
@@ -110,11 +181,14 @@ public class UserResources implements Serializable {
         return mItem.get(id);
     }
 
-    /** Trang bị (storage type = 2). */
-    public UserItemEntity getItemEquipment(long id) {
-        UserItemEntity item = mItem.get(id);
-        if (item != null && item.isEquipment()) return item;
-        return null;
+    public UserEquipmentEntity getEquipment(long id) {
+        return mEquipment.get(id);
+    }
+
+    /** @deprecated dùng {@link #getEquipment(long)} */
+    @Deprecated
+    public UserEquipmentEntity getItemEquipment(long id) {
+        return getEquipment(id);
     }
 
     public UserItemEntity getItemByItemKey(int itemId) {
@@ -138,12 +212,12 @@ public class UserResources implements Serializable {
 
     public List<UserItemEntity> listByItemKey(int itemId) {
         return mItem.values().stream()
-                .filter(item -> item.getItemId() == itemId )
+                .filter(item -> item.getItemId() == itemId)
                 .collect(Collectors.toList());
     }
 
-    public List<UserItemEntity> listEquipment() {
-        return mItem.values().stream().filter(UserItemEntity::isEquipment).collect(Collectors.toList());
+    public List<UserEquipmentEntity> listEquipment() {
+        return new ArrayList<>(mEquipment.values());
     }
 
     public UserPackEntity getPack(PackType type) {
@@ -159,15 +233,16 @@ public class UserResources implements Serializable {
     }
 
     public int getNumItemBag() {
-        return (int) mItem.values().stream()
-                .filter(UserResources::occupiesBagSlot)
-                .count();
+        int bagCount = mUser.getUData().getSlotBagUI();
+        List<Long> slots = mUser.getUData().getItemSlotList();
+        return ItemSlotHelper.countOccupied(slots, 0, bagCount);
     }
 
     public int getNumItemEvent() {
-        return (int) mItem.values().stream()
-                .filter(item -> item.getType() == ItemType.EVENT.value)
-                .count();
+        int bagCount = mUser.getUData().getSlotBagUI();
+        int eventCount = mUser.getUData().getSlotEvent();
+        List<Long> slots = mUser.getUData().getItemSlotList();
+        return ItemSlotHelper.countOccupied(slots, bagCount, eventCount);
     }
 
     public int getNumMaterial() {
@@ -175,7 +250,7 @@ public class UserResources implements Serializable {
     }
 
     public int getNumEquipment() {
-        return (int) mItem.values().stream().filter(UserItemEntity::isEquipment).count();
+        return mEquipment.size();
     }
 
     public boolean canAddBagItem(int count) {
@@ -191,48 +266,6 @@ public class UserResources implements Serializable {
     public boolean canAddMaterial(int count) {
         if (count <= 0) return true;
         return getNumMaterial() + count <= mUser.getUData().getSlotMaterial();
-    }
-
-    public Integer allocBagSlot() {
-        return allocSlotIndex(collectUsedBagSlots(), mUser.getUData().getSlotBagUI());
-    }
-
-    public Integer allocEventSlot() {
-        return allocSlotIndex(collectUsedEventSlots(), mUser.getUData().getSlotEvent());
-    }
-
-    private Set<Integer> collectUsedBagSlots() {
-        Set<Integer> used = new HashSet<>();
-        for (UserItemEntity item : mItem.values()) {
-            if (occupiesBagSlot(item) && item.getSlot() >= 0)
-                used.add(item.getSlot());
-        }
-        return used;
-    }
-
-    private Set<Integer> collectUsedEventSlots() {
-        Set<Integer> used = new HashSet<>();
-        for (UserItemEntity item : mItem.values()) {
-            if (item.getType() == ItemType.EVENT.value)
-                used.add(item.getSlot());
-        }
-        return used;
-    }
-
-    private static Integer allocSlotIndex(Set<Integer> usedSlots, int maxSlot) {
-        for (int i = 0; i < maxSlot; i++) {
-            if (!usedSlots.contains(i))
-                return i;
-        }
-        return null;
-    }
-
-    private static boolean occupiesBagSlot(UserItemEntity item) {
-        if (item.getType() == ItemType.CONSUMABLE.value)
-            return true;
-        if (item.getType() == ItemType.EQUIPMENT.value)
-            return item.getSlot() >= 0;
-        return false;
     }
 
     public UserPetEntity getPet(long id) {
@@ -268,10 +301,16 @@ public class UserResources implements Serializable {
         if (items == null) items = new ArrayList<>();
         items.add(uItem);
         mItem.put(uItem.getId(), uItem);
-        if (uItem.isEquipment()) {
-            CfgAchievement.addAchievement(mUser, 2, uItem.getItemId() + 30, 1);
-            mUser.getUData().checkQuestTutorial(mUser, QuestTutType.HAS_ITEM_EQUIP_ID, uItem.getItemId(), 1);
-        }
+        applyItemSlotsFromUserData();
+    }
+
+    public void addEquipment(UserEquipmentEntity uEquip) {
+        if (equipments == null) equipments = new ArrayList<>();
+        equipments.add(uEquip);
+        mEquipment.put(uEquip.getId(), uEquip);
+        CfgAchievement.addAchievement(mUser, 2, uEquip.getItemId() + 30, 1);
+        mUser.getUData().checkQuestTutorial(mUser, QuestTutType.HAS_ITEM_EQUIP_ID, uEquip.getItemId(), 1);
+        applyItemSlotsFromUserData();
     }
 
     public void removeItem(long id) {
@@ -279,10 +318,15 @@ public class UserResources implements Serializable {
         if (rm != null && items != null) items.remove(rm);
     }
 
-    public void removeItemEquip(List<UserItemEntity> equipItems) {
-        for (UserItemEntity item : equipItems) {
-            if (items != null) items.remove(item);
-            mItem.remove(item.getId());
+    public void removeEquipment(long id) {
+        UserEquipmentEntity rm = mEquipment.remove(id);
+        if (rm != null && equipments != null) equipments.remove(rm);
+    }
+
+    public void removeItemEquip(List<UserEquipmentEntity> equipItems) {
+        for (UserEquipmentEntity item : equipItems) {
+            if (equipments != null) equipments.remove(item);
+            mEquipment.remove(item.getId());
         }
     }
 
@@ -294,7 +338,7 @@ public class UserResources implements Serializable {
         if (first.isAggregatedItem()) {
             List<Long> dataSticker = new ArrayList<>(ozudo.base.helper.GsonUtil.strToListLong(first.getData() == null ? "[]" : first.getData()));
             for (int i = 0; i < count && dataSticker.size() > 1; i++) {
-                dataSticker.remove(1);
+                dataSticker.remove(dataSticker.size() - 1);
             }
             if (dataSticker.size() <= 1) first.clearAggregated();
             first.setData(ozudo.base.helper.StringHelper.toDBString(dataSticker));
@@ -303,6 +347,7 @@ public class UserResources implements Serializable {
         int removed = 0;
         for (UserItemEntity row : rows) {
             if (removed >= count) break;
+            Bonus.clearItemFromSlot(mUser, Bonus.BONUS_ITEM, row.getId());
             if (row.deleteFromDb()) {
                 removeItem(row.getId());
                 removed++;

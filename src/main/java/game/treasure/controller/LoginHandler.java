@@ -425,6 +425,9 @@ public class LoginHandler extends AHandler {
                 session.getTransaction().begin();
                 session.persist(uData);
                 session.getTransaction().commit();
+            } else if (uData.getItemSlot() == null || uData.getItemSlot().isEmpty()) {
+                uData.ensureItemSlotInitialized();
+                uData.update(List.of("item_slot", uData.getItemSlot()));
             }
             UserSettingsEntity uSetting = (UserSettingsEntity) DBJPA.getUnique(session, "user_settings", UserSettingsEntity.class, "user_id", userId);
             if (uSetting == null) {
@@ -444,9 +447,14 @@ public class LoginHandler extends AHandler {
             uEvent.checkEvent(mUser);
 
             mUser.setResources(new UserResources(mUser));
-            List<UserItemEntity> items = session.createNativeQuery("select * from user_item where user_id=" + userId, UserItemEntity.class).getResultList();
+            List<UserItemEntity> items = session.createNativeQuery("select * from user_item where user_id=" + userId + " and type <> 2", UserItemEntity.class).getResultList();
             if (items != null) {
                 mUser.getResources().setItems(items);
+            }
+
+            List<UserEquipmentEntity> equipments = session.createNativeQuery("select * from user_equipment where user_id=" + userId, UserEquipmentEntity.class).getResultList();
+            if (equipments != null) {
+                mUser.getResources().setEquipments(equipments);
             }
 
 
