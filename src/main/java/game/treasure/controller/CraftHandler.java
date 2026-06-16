@@ -107,8 +107,8 @@ public class CraftHandler extends AHandler {
                 return;
             }
             gems.add(gem);
-            gemRanks.add(gem.getMatRank());
-            maxGemRank = Math.max(maxGemRank, gem.getMatRank());
+            gemRanks.add(gem.getTier());
+            maxGemRank = Math.max(maxGemRank, gem.getTier());
         }
 
         int itemLevel = resolveItemLevel(targetType, targetId);
@@ -172,8 +172,8 @@ public class CraftHandler extends AHandler {
                 boolean canConsume = statApplied || targetType == CraftTargetType.PET;
                 if (canConsume && removeMaterial(gem)) {
                     consumed = true;
-                    if (CfgCraft.grantsCraftExp(craftLevel, gem.getMatRank())) {
-                        totalExpGain += CfgCraft.getCraftExpByRank(gem.getMatRank());
+                    if (CfgCraft.grantsCraftExp(craftLevel, gem.getTier())) {
+                        totalExpGain += CfgCraft.getCraftExpByRank(gem.getTier());
                     }
                 }
             }

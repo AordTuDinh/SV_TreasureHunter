@@ -367,7 +367,7 @@ message PbItemShop{
 message PbMaterial{
   optional  int64 id = 1;
   optional  int32 materialId = 2;
-  optional  int32 rank = 3;
+  optional  int32 tier = 3;
   optional  int32 level = 4;
   optional float value = 5;
   optional float socketRate = 6;

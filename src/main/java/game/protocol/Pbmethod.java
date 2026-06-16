@@ -40397,15 +40397,15 @@ public final class Pbmethod {
      */
     int getMaterialId();
 
-    // optional int32 rank = 3;
+    // optional int32 tier = 3;
     /**
-     * <code>optional int32 rank = 3;</code>
+     * <code>optional int32 tier = 3;</code>
      */
-    boolean hasRank();
+    boolean hasTier();
     /**
-     * <code>optional int32 rank = 3;</code>
+     * <code>optional int32 tier = 3;</code>
      */
-    int getRank();
+    int getTier();
 
     // optional int32 level = 4;
     /**
@@ -40500,7 +40500,7 @@ public final class Pbmethod {
             }
             case 24: {
               bitField0_ |= 0x00000004;
-              rank_ = input.readInt32();
+              tier_ = input.readInt32();
               break;
             }
             case 32: {
@@ -40590,20 +40590,20 @@ public final class Pbmethod {
       return materialId_;
     }
 
-    // optional int32 rank = 3;
-    public static final int RANK_FIELD_NUMBER = 3;
-    private int rank_;
+    // optional int32 tier = 3;
+    public static final int TIER_FIELD_NUMBER = 3;
+    private int tier_;
     /**
-     * <code>optional int32 rank = 3;</code>
+     * <code>optional int32 tier = 3;</code>
      */
-    public boolean hasRank() {
+    public boolean hasTier() {
       return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>optional int32 rank = 3;</code>
+     * <code>optional int32 tier = 3;</code>
      */
-    public int getRank() {
-      return rank_;
+    public int getTier() {
+      return tier_;
     }
 
     // optional int32 level = 4;
@@ -40657,7 +40657,7 @@ public final class Pbmethod {
     private void initFields() {
       id_ = 0L;
       materialId_ = 0;
-      rank_ = 0;
+      tier_ = 0;
       level_ = 0;
       value_ = 0F;
       socketRate_ = 0F;
@@ -40681,7 +40681,7 @@ public final class Pbmethod {
         output.writeInt32(2, materialId_);
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
-        output.writeInt32(3, rank_);
+        output.writeInt32(3, tier_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeInt32(4, level_);
@@ -40711,7 +40711,7 @@ public final class Pbmethod {
       }
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeInt32Size(3, rank_);
+          .computeInt32Size(3, tier_);
       }
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
@@ -40845,7 +40845,7 @@ public final class Pbmethod {
         bitField0_ = (bitField0_ & ~0x00000001);
         materialId_ = 0;
         bitField0_ = (bitField0_ & ~0x00000002);
-        rank_ = 0;
+        tier_ = 0;
         bitField0_ = (bitField0_ & ~0x00000004);
         level_ = 0;
         bitField0_ = (bitField0_ & ~0x00000008);
@@ -40892,7 +40892,7 @@ public final class Pbmethod {
         if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
           to_bitField0_ |= 0x00000004;
         }
-        result.rank_ = rank_;
+        result.tier_ = tier_;
         if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
           to_bitField0_ |= 0x00000008;
         }
@@ -40927,8 +40927,8 @@ public final class Pbmethod {
         if (other.hasMaterialId()) {
           setMaterialId(other.getMaterialId());
         }
-        if (other.hasRank()) {
-          setRank(other.getRank());
+        if (other.hasTier()) {
+          setTier(other.getTier());
         }
         if (other.hasLevel()) {
           setLevel(other.getLevel());
@@ -41032,35 +41032,35 @@ public final class Pbmethod {
         return this;
       }
 
-      // optional int32 rank = 3;
-      private int rank_ ;
+      // optional int32 tier = 3;
+      private int tier_ ;
       /**
-       * <code>optional int32 rank = 3;</code>
+       * <code>optional int32 tier = 3;</code>
        */
-      public boolean hasRank() {
+      public boolean hasTier() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>optional int32 rank = 3;</code>
+       * <code>optional int32 tier = 3;</code>
        */
-      public int getRank() {
-        return rank_;
+      public int getTier() {
+        return tier_;
       }
       /**
-       * <code>optional int32 rank = 3;</code>
+       * <code>optional int32 tier = 3;</code>
        */
-      public Builder setRank(int value) {
+      public Builder setTier(int value) {
         bitField0_ |= 0x00000004;
-        rank_ = value;
+        tier_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>optional int32 rank = 3;</code>
+       * <code>optional int32 tier = 3;</code>
        */
-      public Builder clearRank() {
+      public Builder clearTier() {
         bitField0_ = (bitField0_ & ~0x00000004);
-        rank_ = 0;
+        tier_ = 0;
         onChanged();
         return this;
       }
@@ -80685,7 +80685,7 @@ public final class Pbmethod {
       " \001(\t\022\014\n\004item\030\005 \003(\003\022\r\n\005price\030\006 \003(\003\022\r\n\005ima" +
       "ge\030\007 \001(\t\022\016\n\006status\030\010 \001(\005\022\022\n\ndescStatus\030\t" +
       " \001(\t\022\022\n\ntimeRemain\030\n \001(\003\"l\n\nPbMaterial\022\n" +
-      "\n\002id\030\001 \001(\003\022\022\n\nmaterialId\030\002 \001(\005\022\014\n\004rank\030\003" +
+      "\n\002id\030\001 \001(\003\022\022\n\nmaterialId\030\002 \001(\005\022\014\n\004tier\030\003" +
       " \001(\005\022\r\n\005level\030\004 \001(\005\022\r\n\005value\030\005 \001(\002\022\022\n\nso",
       "cketRate\030\006 \001(\002\"\201\001\n\006PbItem\022\n\n\002id\030\001 \001(\003\022\017\n" +
       "\007itemKey\030\002 \001(\005\022\014\n\004type\030\003 \001(\005\022\r\n\005level\030\004 " +
@@ -81035,7 +81035,7 @@ public final class Pbmethod {
           internal_static_pbdson_PbMaterial_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbMaterial_descriptor,
-              new java.lang.String[] { "Id", "MaterialId", "Rank", "Level", "Value", "SocketRate", });
+              new java.lang.String[] { "Id", "MaterialId", "Tier", "Level", "Value", "SocketRate", });
           internal_static_pbdson_PbItem_descriptor =
             getDescriptor().getMessageTypes().get(35);
           internal_static_pbdson_PbItem_fieldAccessorTable = new

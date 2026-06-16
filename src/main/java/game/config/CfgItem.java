@@ -3,6 +3,8 @@ package game.config;
 
 import com.google.gson.Gson;
 
+import game.battle.calculate.IMath;
+import game.battle.object.Point;
 import game.config.aEnum.ItemType;
 
 import game.config.lang.Lang;
@@ -29,24 +31,9 @@ import java.util.Map;
 
 
 public class CfgItem {
-
-
     public static final int MAX_UPGRADE_LEVEL = 10;
-
-
-    /**
-     * Phí nâng L→L+1 ở tier 1 (vàng).
-     */
-
     public static final List<Integer> UPGRADE_FEE_BASE_T1 = List.of(10, 13, 19, 27, 38, 53, 75, 105, 147);
-
-
-    /**
-     * Giá bán tại level L ở tier 1 (vàng).
-     */
-
     public static final List<Integer> SELL_PRICE_BASE_T1 = List.of(5, 10, 16, 25, 38, 57, 83, 120, 172, 246);
-
 
     static final List<Integer> ITEM_MEDICINE_IDS = List.of(
             Pbmethod.ItemKey.BINH_MAU_1.getNumber(),
@@ -55,11 +42,41 @@ public class CfgItem {
             Pbmethod.ItemKey.BINH_MAU_4.getNumber()
     );
 
-    public static final float HP_UPGRADE_MIN_RATE = 0.09f;
-    public static final float HP_UPGRADE_MAX_RATE = 0.11f;
+    /**
+     * Hệ số tăng chỉ số theo cấp: Stat_L = Stat_1 × STAT_LEVEL_MULT^(L-1).
+     * Mỗi cấp tăng 10% so với cấp trước.
+     */
+    public static final double STAT_LEVEL_MULT = 1.1;
 
     @Getter
     private static EquipStatRollConfig equipStatRoll = defaultEquipStatRoll();
+
+    /**
+     * Stat_L = Stat_1 × 1.1^(L-1).
+     */
+    public static float getStatLevelMultiplier(int level) {
+        if (level <= 1)
+            return 1f;
+        return (float) Math.pow(STAT_LEVEL_MULT, level - 1);
+    }
+
+    /**
+     * Tính chỉ số tại level từ giá trị gốc level 1 (user_item.data).
+     */
+    public static float getStatAtLevel(float statLevel1, int level) {
+        if (statLevel1 <= 0f || level < 1)
+            return 0f;
+        return statLevel1 * getStatLevelMultiplier(level);
+    }
+
+    /**
+     * Làm tròn stat theo loại point (MOVE_SPEED giữ 1 chữ số thập phân).
+     */
+    public static float formatPointStat(int pointId, float raw) {
+        if (pointId == Point.MOVE_SPEED)
+            return IMath.round1(raw);
+        return Math.round(raw);
+    }
 
 
     public static boolean canUpLevel(UserItemEntity item) {
@@ -143,7 +160,9 @@ public class CfgItem {
         equipStatRoll.normalize();
     }
 
-    /** Giữ default cho field thiếu trong JSON DB (tránh mất secondaryRoll / byTier). */
+    /**
+     * Giữ default cho field thiếu trong JSON DB (tránh mất secondaryRoll / byTier).
+     */
     static EquipStatRollConfig mergeEquipStatRoll(EquipStatRollConfig base, EquipStatRollConfig loaded) {
         if (loaded.primaryAnchor != null && !loaded.primaryAnchor.isEmpty())
             base.primaryAnchor = loaded.primaryAnchor;
@@ -224,10 +243,10 @@ public class CfgItem {
     @Data
 
     public static class EquipStatRollConfig {
-        public  Map<String, Map<String, Range>> primaryAnchor = new HashMap<>();
-        public  Map<String, Float> slotPrimaryMultiplier = new HashMap<>();
+        public Map<String, Map<String, Range>> primaryAnchor = new HashMap<>();
+        public Map<String, Float> slotPrimaryMultiplier = new HashMap<>();
         public SecondaryRollConfig secondaryRoll = new SecondaryRollConfig();
-        public  float point2RatioMin = 0.18f;
+        public float point2RatioMin = 0.18f;
         public float point2RatioMax = 0.28f;
         public float point3RatioMin = 0.07f;
         public float point3RatioMax = 0.12f;
@@ -272,7 +291,7 @@ public class CfgItem {
     @Data
 
     public static class Range {
-       public float min;
+        public float min;
         public float max;
     }
 
@@ -280,9 +299,9 @@ public class CfgItem {
     @Data
 
     public static class SecondaryRollConfig {
-        public    Map<String, SecondaryRollTierRates> byTier = new HashMap<>();
-        public  Range point2Ratio;
-        public  Range point3Ratio;
+        public Map<String, SecondaryRollTierRates> byTier = new HashMap<>();
+        public Range point2Ratio;
+        public Range point3Ratio;
     }
 
 
@@ -290,7 +309,7 @@ public class CfgItem {
 
     public static class SecondaryRollTierRates {
         public int point2Rate;
-        public  int point3Rate;
+        public int point3Rate;
     }
 
 }

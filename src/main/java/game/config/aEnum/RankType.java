@@ -4,14 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum RankType {
-    NULL(0, ""),
     NORMAL(1, "thường"),
     ADVANCED(2, "hiếm"),
     RARE(3, "đặc biệt"),
-    HERO(4, "anh hùng"),
-    LEGENDARY(5, "huyền thoại"),
-    DIVINE(6, "thần thánh"),
-    ULTIMATE(7, "tối thượng");
+    LEGENDARY(4, "huyền thoại");
 
     public final int value;
     public final String name;

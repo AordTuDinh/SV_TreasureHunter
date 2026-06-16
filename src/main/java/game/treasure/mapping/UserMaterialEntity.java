@@ -21,20 +21,20 @@ public class UserMaterialEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
     int userId, materialId;
-    int matRank;
+    int tier;
     int level;
     float value;
     @Column(name = "socket_rate")
     float socketRate;
 
-    public UserMaterialEntity(int userId, int materialId, int matRank) {
+    public UserMaterialEntity(int userId, int materialId, int tier) {
         this.userId = userId;
         this.materialId = materialId;
-        this.matRank = matRank;
+        this.tier = tier;
         this.level = 1;
         this.socketRate = CfgMaterial.rollSocketRate();
         ResMaterialEntity res = getRes();
-        this.value = res != null ? CfgMaterial.rollValue(res, matRank) : 0f;
+        this.value = res != null ? CfgMaterial.rollValue(res, tier) : 0f;
     }
 
     /** Giữ stat/rate khi merge fail — trả 1 viên rank cao nhất. */
@@ -42,7 +42,7 @@ public class UserMaterialEntity implements Serializable {
         UserMaterialEntity c = new UserMaterialEntity();
         c.userId = src.userId;
         c.materialId = src.materialId;
-        c.matRank = src.matRank;
+        c.tier = src.tier;
         c.level = src.level;
         c.value = src.value;
         c.socketRate = src.socketRate;
@@ -53,11 +53,6 @@ public class UserMaterialEntity implements Serializable {
         return ResItem.getMaterial(materialId);
     }
 
-    public int getTier() {
-        ResMaterialEntity res = getRes();
-        return res == null ? 0 : res.getTier();
-    }
-
     public float getSocketSuccessPercent() {
         return CfgMaterial.getSocketSuccessPercent(socketRate, level);
     }
@@ -66,7 +61,7 @@ public class UserMaterialEntity implements Serializable {
         protocol.Pbmethod.PbMaterial.Builder pb = protocol.Pbmethod.PbMaterial.newBuilder();
         pb.setId(id);
         pb.setMaterialId(materialId);
-        pb.setRank(matRank);
+        pb.setTier(tier);
         pb.setValue(value);
         pb.setLevel(level);
         return pb;

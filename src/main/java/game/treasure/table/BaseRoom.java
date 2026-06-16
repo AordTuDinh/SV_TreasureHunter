@@ -478,7 +478,7 @@ public abstract class BaseRoom extends MonoRoom {
             int materialId = chunk.get(1).intValue();
             int rank = chunk.get(2).intValue();
             UserMaterialEntity preview = new UserMaterialEntity(mUser.getUser().getId(), materialId, rank);
-            return CfgMaterial.getMergeSellPrice(preview.getTier(), preview.getMatRank(), preview.getLevel());
+            return CfgMaterial.getMergeSellPrice(preview.getTier(), preview.getLevel());
         }
         return 0;
     }

@@ -28,7 +28,7 @@ import java.util.Map;
 public class ItemHandler extends AHandler {
     @Override
     public void initAction(Map<Integer, AHandler> mHandler) {
-        List<Integer> actions = Arrays.asList(ITEM_EQUIPMENT_INFO, ITEM_EQUIPMENT_LOCK_DESTROY, ITEM_EQUIPMENT_UP_LEVEL,  ITEM_EQUIPMENT_VIEW_INFO, ITEM_INFO, ITEM_SELL, ITEM_EQUIPMENT_UN_EQUIP, ITEM_USED, ITEM_EQUIPMENT_EQUIP);
+        List<Integer> actions = Arrays.asList(ITEM_EQUIPMENT_INFO, ITEM_EQUIPMENT_LOCK_DESTROY, ITEM_UP_LEVEL,  ITEM_EQUIPMENT_VIEW_INFO, ITEM_INFO, ITEM_SELL, ITEM_EQUIPMENT_UN_EQUIP, ITEM_USED, ITEM_EQUIPMENT_EQUIP);
         actions.forEach(action -> mHandler.put(action, this));
     }
 
@@ -58,7 +58,7 @@ public class ItemHandler extends AHandler {
                 case IAction.ITEM_USED -> usedItem();
                 case IAction.ITEM_INFO -> itemInfo();
                 case IAction.ITEM_EQUIPMENT_LOCK_DESTROY -> lockDestroy();
-                case IAction.ITEM_EQUIPMENT_UP_LEVEL -> uplevel();
+                case IAction.ITEM_UP_LEVEL -> uplevel();
                 case IAction.ITEM_EQUIPMENT_VIEW_INFO -> viewInfoEquipment();
             }
         } catch (Exception ex) {
@@ -435,25 +435,20 @@ public class ItemHandler extends AHandler {
             addErrResponse(err);
             return;
         }
-        List<Long> paid = Bonus.receiveListItem(mUser, DetailActionType.NANG_CAP_TRANG_BI.getKey(item.getItemId()), fee);
+        List<Long> paid = Bonus.receiveListItem(mUser, DetailActionType.NANG_CAP_VAT_PHAM.getKey(item.getItemId()), fee);
         if (paid.isEmpty()) {
             addErrResponse();
             return;
         }
         int newLevel = item.getLevel() + 1;
-        String medicineData = null;
-        if (CfgItem.isItemMedicine(item.getItemId())) {
-            medicineData = ResItem.rollMedicineUpgradeData(item);
-            if (medicineData == null) {
-                Bonus.receiveListItem(mUser, DetailActionType.UPDATE_FAIL.getKey(), Bonus.reverseBonus(fee));
-                addErrResponse();
-                return;
-            }
+        if ((CfgItem.isItemMedicine(item.getItemId()) || item.isEquipment())
+                && !ResItem.hasUpgradePointData(item)) {
+            Bonus.receiveListItem(mUser, DetailActionType.UPDATE_FAIL.getKey(), Bonus.reverseBonus(fee));
+            addErrResponse();
+            return;
         }
 
         List<Object> updateFields = new ArrayList<>(Arrays.asList("level", newLevel));
-        if (medicineData != null)
-            updateFields.addAll(Arrays.asList("data", medicineData));
 
         if (!item.update(updateFields)) {
             Bonus.receiveListItem(mUser, DetailActionType.UPDATE_FAIL.getKey(), Bonus.reverseBonus(fee));
@@ -461,8 +456,6 @@ public class ItemHandler extends AHandler {
             return;
         }
         item.setLevel(newLevel);
-        if (medicineData != null)
-            item.setData(medicineData);
 
         boolean syncEquip = item.isEquipment()
                 && (item.isEquip() || mUser.getUser().getListIdEquipmentEquip().contains((int) id));
@@ -488,8 +481,6 @@ public class ItemHandler extends AHandler {
             UserHandler.buffInfo(mUser);
         } else {
             addResponse(getCommonVector(id, (long) newLevel));
-            if (CfgItem.isItemMedicine(item.getItemId()))
-                addItemPointUpdate(item);
         }
     }
 

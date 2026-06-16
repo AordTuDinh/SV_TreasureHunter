@@ -155,7 +155,7 @@ public class IAction {
     public static final int ITEM_EQUIPMENT_LOCK_STATUS = 403;
     public static final int ITEM_EQUIPMENT_LOCK_DESTROY = 404;
     public static final int ITEM_SELL = 405;
-    public static final int ITEM_EQUIPMENT_UP_LEVEL = 406;
+    public static final int ITEM_UP_LEVEL = 406;
     public static final int ITEM_EQUIPMENT_VIEW_INFO = 407;
     // buy gold
     public static final int BUY_GOLD_STATUS = 425;

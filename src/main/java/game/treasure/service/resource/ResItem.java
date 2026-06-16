@@ -117,37 +117,33 @@ public class ResItem {
         return StringHelper.toDBString(Arrays.asList((float) pointId, IMath.round1(value)));
     }
 
-    public static float readPointValue(UserItemEntity uItem, int pointId) {
-        if (uItem == null || uItem.getData() == null || uItem.getData().length() < 2)
-            return 0f;
-        List<Float> list = GsonUtil.strToListFloat(uItem.getData());
+    /** Kiểm tra item có data point hợp lệ để nâng cấp (medicine / equipment). */
+    public static boolean hasUpgradePointData(UserItemEntity uItem) {
+        if (uItem == null)
+            return false;
+        return uItem.hasUpgradePointData();
+    }
+
+    /** user_item.data → wire [pointId, value, ...] đã nhân theo level. */
+    public static List<Float> dataToPointWire(String data, int level) {
+        if (data == null || data.length() < 2 || "[]".equals(data))
+            return Collections.emptyList();
+        List<Float> list = GsonUtil.strToListFloat(data);
         if (list.isEmpty())
-            return 0f;
-        if (list.size() >= 2 && Math.round(list.get(0)) == pointId)
-            return list.get(1);
-        if (list.size() == 1 && pointId == Point.HP)
-            return list.get(0);
-        return 0f;
-    }
-
-    public static float readHpBonus(UserItemEntity uItem) {
-        return readPointValue(uItem, Point.HP);
-    }
-
-    /**
-     * Nâng cấp medicine: cộng random [9%, 11%] HP hiện tại.
-     * Trả data mới dạng [pointId, value]; null nếu không hợp lệ.
-     */
-    public static String rollMedicineUpgradeData(UserItemEntity uItem) {
-        if (uItem == null || !CfgItem.isItemMedicine(uItem.getItemId()))
-            return null;
-        float currentHp = readHpBonus(uItem);
-        if (currentHp <= 0f)
-            return null;
-        float minAdd = currentHp * CfgItem.HP_UPGRADE_MIN_RATE;
-        float maxAdd = currentHp * CfgItem.HP_UPGRADE_MAX_RATE;
-        float newHp = currentHp + NumberUtil.getRandom(minAdd, maxAdd);
-        return toPointDataString(Point.HP, newHp);
+            return Collections.emptyList();
+        int itemLevel = level > 0 ? level : 1;
+        if (list.size() >= 2) {
+            List<Float> wire = new ArrayList<>();
+            for (int i = 0; i + 1 < list.size(); i += 2) {
+                int pointId = Math.round(list.get(i));
+                float scaled = CfgItem.formatPointStat(pointId, CfgItem.getStatAtLevel(list.get(i + 1), itemLevel));
+                wire.add(list.get(i));
+                wire.add(scaled);
+            }
+            return wire;
+        }
+        float scaled = CfgItem.formatPointStat(Point.HP, CfgItem.getStatAtLevel(list.get(0), itemLevel));
+        return new ArrayList<>(Arrays.asList((float) Point.HP, scaled));
     }
 
     public static int resolveTypeBonus(UserItemEntity uItem) {
@@ -158,26 +154,13 @@ public class ResItem {
 
     /** user_item.data → wire [pointId, value, ...]. */
     public static List<Float> dataToPointWire(String data) {
-        if (data == null || data.length() < 2 || "[]".equals(data))
-            return Collections.emptyList();
-        List<Float> list = GsonUtil.strToListFloat(data);
-        if (list.isEmpty())
-            return Collections.emptyList();
-        if (list.size() >= 2) {
-            List<Float> wire = new ArrayList<>();
-            for (int i = 0; i + 1 < list.size(); i += 2) {
-                wire.add(list.get(i));
-                wire.add(IMath.round1(list.get(i + 1)));
-            }
-            return wire;
-        }
-        return new ArrayList<>(Arrays.asList((float) Point.HP, IMath.round1(list.get(0))));
+        return dataToPointWire(data, 1);
     }
 
     public static Pbmethod.PbPointItemUpdate buildPointItemUpdate(UserItemEntity uItem) {
         if (uItem == null)
             return null;
-        List<Float> points = dataToPointWire(uItem.getData());
+        List<Float> points = dataToPointWire(uItem.getData(), uItem.getLevel());
         if (points.isEmpty())
             return null;
         return Pbmethod.PbPointItemUpdate.newBuilder()
@@ -203,7 +186,7 @@ public class ResItem {
         if (item.getUserId() != mUser.getUser().getId())
             return false;
 
-        float hpAdd = readHpBonus(item);
+        float hpAdd = item.readHpBonus();
         List<Long> removed = removeUserItemRow(mUser, item, DetailActionType.SU_DUNG_ITEM.getKey(userItemId));
         if (removed.isEmpty())
             return false;

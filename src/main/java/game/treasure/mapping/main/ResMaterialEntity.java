@@ -19,8 +19,6 @@ public class ResMaterialEntity implements Serializable {
     @Getter
     String name;
     @Getter
-    int tier;
-    @Getter
     @Column(name = "point_id")
     int pointId;
     @Getter

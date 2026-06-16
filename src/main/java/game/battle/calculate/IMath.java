@@ -118,12 +118,30 @@ public class IMath {
                 }
             }
         }
+        if (hasItemEquip)
+            addEquippedItemPoints(mUser, pt);
         // cal power from shuriken equipment
         float perPowerWeaponEquip = 1;
 
         // power tinh cuoi cung
         pt.calculatorPower(1, perPowerWeaponEquip);
         return pt;
+    }
+
+    /** Cộng stat từ trang bị đang mặc (user.item_equipment, id > 0). */
+    static void addEquippedItemPoints(MyUser mUser, Point pt) {
+        for (int itemId : mUser.getUser().getListIdEquipmentEquip()) {
+            if (itemId <= 0)
+                continue;
+            UserItemEntity item = mUser.getResources().getItemEquipment(itemId);
+            if (item == null)
+                continue;
+            List<Long> itemPoints = item.getPoint();
+            if (itemPoints == null || itemPoints.isEmpty())
+                continue;
+            for (int i = 0; i + 1 < itemPoints.size(); i += 2)
+                addPointData(pt, itemPoints.get(i).intValue(), itemPoints.get(i + 1).floatValue());
+        }
     }
 
     public static void addPointEffect(Point point, PointData[] aEffect) {
