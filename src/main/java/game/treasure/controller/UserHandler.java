@@ -36,7 +36,7 @@ public class UserHandler extends AHandler {
         List<Integer> actions = Arrays.asList(CREATE_NAME, USER_INFO, DAME_SKIN_EQUIP, CHANGE_LANG,
                 CHAT_FRAME_EQUIP, USE_GIFT_CODE, TRIAL_EQUIP, BUFF_INFO, RANKING_STATUS, TUTORIAL_STATUS,
                 TUTORIAL_QUEST_RECEIVE, TUTORIAL_GO_TO, TUTORIAL_QUEST_STATUS, RANKING_INFO, SEND_MAIL,
-                HELP_VALUE, CHANGE_NAME, SKIN_EQUIP, USER_DATA_INFO, UPDATE_NEXT_DAY);
+                HELP_VALUE, CHANGE_NAME, SKIN_EQUIP, USER_DATA_INFO, UPDATE_NEXT_DAY,SET_AUTO);
         actions.forEach(action -> mHandler.put(action, this));
     }
 
@@ -79,10 +79,59 @@ public class UserHandler extends AHandler {
                 case USE_GIFT_CODE -> useGiftCode();
                 case BUFF_INFO -> buffInfo(mUser);
                 case CHANGE_LANG -> changeLang(getInputString());
+                case SET_AUTO -> setAuto();
             }
         } catch (Exception ex) {
             Logs.error(ex);
         }
+    }
+
+    private void setAuto() {
+        List<Long> input = getInputALong();
+        if (input.size() < 3) {
+            addErrParam();
+            return;
+        }
+        int type = input.get(0).intValue();
+        int autoId = input.get(1).intValue();
+        int value = input.get(2).intValue();
+        if (value != 0 && value != 1) {
+            addErrParam();
+            return;
+        }
+
+        UserSettingsEntity uSetting = mUser.getUSetting();
+        if (type == CfgMaterial.AUTO_SELL_TYPE_ITEM) {
+            if (Pbmethod.AutoSell.valueOf(autoId) == null) {
+                addErrParam();
+                return;
+            }
+            List<Integer> list = uSetting.getAutoSellItemList();
+            if (list.get(autoId) != value) {
+                list.set(autoId, value);
+                if (!uSetting.updateAutoSellItem(StringHelper.toDBString(list))) {
+                    addErrSystem();
+                    return;
+                }
+            }
+        } else if (type == CfgMaterial.AUTO_SELL_TYPE_MATERIAL) {
+            if (!CfgMaterial.isValidAutoSellMaterialIndex(autoId)) {
+                addErrParam();
+                return;
+            }
+            List<Integer> list = uSetting.getAutoSellMaterialList();
+            if (list.get(autoId) != value) {
+                list.set(autoId, value);
+                if (!uSetting.updateAutoSellMaterial(StringHelper.toDBString(list))) {
+                    addErrSystem();
+                    return;
+                }
+            }
+        } else {
+            addErrParam();
+            return;
+        }
+        addResponse(getCommonVector(type, autoId, value));
     }
 
     private void changeLang(String inputString) {

@@ -1144,6 +1144,214 @@ public final class Pbmethod {
     // @@protoc_insertion_point(enum_scope:pbdson.EquipSlotType)
   }
 
+  /**
+   * Protobuf enum {@code pbdson.AutoSell}
+   */
+  public enum AutoSell
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>AUTO_SELL_HP_1 = 0;</code>
+     */
+    AUTO_SELL_HP_1(0, 0),
+    /**
+     * <code>AUTO_SELL_HP_2 = 1;</code>
+     */
+    AUTO_SELL_HP_2(1, 1),
+    /**
+     * <code>AUTO_SELL_HP_3 = 2;</code>
+     */
+    AUTO_SELL_HP_3(2, 2),
+    /**
+     * <code>AUTO_SELL_HP_4 = 3;</code>
+     */
+    AUTO_SELL_HP_4(3, 3),
+    /**
+     * <code>AUTO_SELL_EQUIP_1 = 4;</code>
+     */
+    AUTO_SELL_EQUIP_1(4, 4),
+    /**
+     * <code>AUTO_SELL_EQUIP_2 = 5;</code>
+     */
+    AUTO_SELL_EQUIP_2(5, 5),
+    /**
+     * <code>AUTO_SELL_EQUIP_3 = 6;</code>
+     */
+    AUTO_SELL_EQUIP_3(6, 6),
+    /**
+     * <code>AUTO_SELL_EQUIP_4 = 7;</code>
+     */
+    AUTO_SELL_EQUIP_4(7, 7),
+    /**
+     * <code>AUTO_SELL_MOUNT_1 = 8;</code>
+     */
+    AUTO_SELL_MOUNT_1(8, 8),
+    /**
+     * <code>AUTO_SELL_MOUNT_2 = 9;</code>
+     */
+    AUTO_SELL_MOUNT_2(9, 9),
+    /**
+     * <code>AUTO_SELL_MOUNT_3 = 10;</code>
+     */
+    AUTO_SELL_MOUNT_3(10, 10),
+    /**
+     * <code>AUTO_SELL_MOUNT_4 = 11;</code>
+     */
+    AUTO_SELL_MOUNT_4(11, 11),
+    /**
+     * <code>AUTO_SELL_PET_1 = 12;</code>
+     */
+    AUTO_SELL_PET_1(12, 12),
+    /**
+     * <code>AUTO_SELL_PET_2 = 13;</code>
+     */
+    AUTO_SELL_PET_2(13, 13),
+    /**
+     * <code>AUTO_SELL_PET_3 = 14;</code>
+     */
+    AUTO_SELL_PET_3(14, 14),
+    /**
+     * <code>AUTO_SELL_PET_4 = 15;</code>
+     */
+    AUTO_SELL_PET_4(15, 15),
+    ;
+
+    /**
+     * <code>AUTO_SELL_HP_1 = 0;</code>
+     */
+    public static final int AUTO_SELL_HP_1_VALUE = 0;
+    /**
+     * <code>AUTO_SELL_HP_2 = 1;</code>
+     */
+    public static final int AUTO_SELL_HP_2_VALUE = 1;
+    /**
+     * <code>AUTO_SELL_HP_3 = 2;</code>
+     */
+    public static final int AUTO_SELL_HP_3_VALUE = 2;
+    /**
+     * <code>AUTO_SELL_HP_4 = 3;</code>
+     */
+    public static final int AUTO_SELL_HP_4_VALUE = 3;
+    /**
+     * <code>AUTO_SELL_EQUIP_1 = 4;</code>
+     */
+    public static final int AUTO_SELL_EQUIP_1_VALUE = 4;
+    /**
+     * <code>AUTO_SELL_EQUIP_2 = 5;</code>
+     */
+    public static final int AUTO_SELL_EQUIP_2_VALUE = 5;
+    /**
+     * <code>AUTO_SELL_EQUIP_3 = 6;</code>
+     */
+    public static final int AUTO_SELL_EQUIP_3_VALUE = 6;
+    /**
+     * <code>AUTO_SELL_EQUIP_4 = 7;</code>
+     */
+    public static final int AUTO_SELL_EQUIP_4_VALUE = 7;
+    /**
+     * <code>AUTO_SELL_MOUNT_1 = 8;</code>
+     */
+    public static final int AUTO_SELL_MOUNT_1_VALUE = 8;
+    /**
+     * <code>AUTO_SELL_MOUNT_2 = 9;</code>
+     */
+    public static final int AUTO_SELL_MOUNT_2_VALUE = 9;
+    /**
+     * <code>AUTO_SELL_MOUNT_3 = 10;</code>
+     */
+    public static final int AUTO_SELL_MOUNT_3_VALUE = 10;
+    /**
+     * <code>AUTO_SELL_MOUNT_4 = 11;</code>
+     */
+    public static final int AUTO_SELL_MOUNT_4_VALUE = 11;
+    /**
+     * <code>AUTO_SELL_PET_1 = 12;</code>
+     */
+    public static final int AUTO_SELL_PET_1_VALUE = 12;
+    /**
+     * <code>AUTO_SELL_PET_2 = 13;</code>
+     */
+    public static final int AUTO_SELL_PET_2_VALUE = 13;
+    /**
+     * <code>AUTO_SELL_PET_3 = 14;</code>
+     */
+    public static final int AUTO_SELL_PET_3_VALUE = 14;
+    /**
+     * <code>AUTO_SELL_PET_4 = 15;</code>
+     */
+    public static final int AUTO_SELL_PET_4_VALUE = 15;
+
+
+    public final int getNumber() { return value; }
+
+    public static AutoSell valueOf(int value) {
+      switch (value) {
+        case 0: return AUTO_SELL_HP_1;
+        case 1: return AUTO_SELL_HP_2;
+        case 2: return AUTO_SELL_HP_3;
+        case 3: return AUTO_SELL_HP_4;
+        case 4: return AUTO_SELL_EQUIP_1;
+        case 5: return AUTO_SELL_EQUIP_2;
+        case 6: return AUTO_SELL_EQUIP_3;
+        case 7: return AUTO_SELL_EQUIP_4;
+        case 8: return AUTO_SELL_MOUNT_1;
+        case 9: return AUTO_SELL_MOUNT_2;
+        case 10: return AUTO_SELL_MOUNT_3;
+        case 11: return AUTO_SELL_MOUNT_4;
+        case 12: return AUTO_SELL_PET_1;
+        case 13: return AUTO_SELL_PET_2;
+        case 14: return AUTO_SELL_PET_3;
+        case 15: return AUTO_SELL_PET_4;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<AutoSell>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<AutoSell>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<AutoSell>() {
+            public AutoSell findValueByNumber(int number) {
+              return AutoSell.valueOf(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return protocol.Pbmethod.getDescriptor().getEnumTypes().get(8);
+    }
+
+    private static final AutoSell[] VALUES = values();
+
+    public static AutoSell valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int index;
+    private final int value;
+
+    private AutoSell(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:pbdson.AutoSell)
+  }
+
   public interface RequestDataOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
@@ -80819,7 +81027,16 @@ public final class Pbmethod {
       "E\020\001\022\007\n\003EYE\020\002\022\010\n\004BODY\020\003*q\n\rEquipSlotType\022",
       "\010\n\004NULL\020\000\022\n\n\006WEAPON\020\001\022\007\n\003HAT\020\002\022\t\n\005ARMOR\020" +
       "\003\022\t\n\005CLOAK\020\004\022\t\n\005SHOES\020\005\022\014\n\010TREASURE\020\006\022\007\n" +
-      "\003PET\020\007\022\t\n\005MOUNT\020\010B\024\n\010protocolB\010Pbmethod"
+      "\003PET\020\007\022\t\n\005MOUNT\020\010*\346\002\n\010AutoSell\022\022\n\016AUTO_S" +
+      "ELL_HP_1\020\000\022\022\n\016AUTO_SELL_HP_2\020\001\022\022\n\016AUTO_S" +
+      "ELL_HP_3\020\002\022\022\n\016AUTO_SELL_HP_4\020\003\022\025\n\021AUTO_S" +
+      "ELL_EQUIP_1\020\004\022\025\n\021AUTO_SELL_EQUIP_2\020\005\022\025\n\021" +
+      "AUTO_SELL_EQUIP_3\020\006\022\025\n\021AUTO_SELL_EQUIP_4" +
+      "\020\007\022\025\n\021AUTO_SELL_MOUNT_1\020\010\022\025\n\021AUTO_SELL_M" +
+      "OUNT_2\020\t\022\025\n\021AUTO_SELL_MOUNT_3\020\n\022\025\n\021AUTO_" +
+      "SELL_MOUNT_4\020\013\022\023\n\017AUTO_SELL_PET_1\020\014\022\023\n\017A",
+      "UTO_SELL_PET_2\020\r\022\023\n\017AUTO_SELL_PET_3\020\016\022\023\n" +
+      "\017AUTO_SELL_PET_4\020\017B\024\n\010protocolB\010Pbmethod"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

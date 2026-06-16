@@ -43,6 +43,8 @@ enum CellState{
 }
 
 
+
+
 enum SubStateType {
   ADD_BONUS = 1;          // custom size
   DIE = 2;                // faction
@@ -509,6 +511,25 @@ enum EquipSlotType {
   TREASURE = 6;
   PET = 7;
   MOUNT = 8;
+}
+
+enum AutoSell {
+  AUTO_SELL_HP_1 = 0;
+  AUTO_SELL_HP_2 = 1;
+  AUTO_SELL_HP_3 = 2;
+  AUTO_SELL_HP_4 = 3;
+  AUTO_SELL_EQUIP_1 = 4;
+  AUTO_SELL_EQUIP_2 = 5;
+  AUTO_SELL_EQUIP_3 = 6;
+  AUTO_SELL_EQUIP_4 = 7;
+  AUTO_SELL_MOUNT_1 = 8;
+  AUTO_SELL_MOUNT_2 = 9;
+  AUTO_SELL_MOUNT_3 = 10;
+  AUTO_SELL_MOUNT_4 = 11;
+  AUTO_SELL_PET_1 = 12;
+  AUTO_SELL_PET_2 = 13;
+  AUTO_SELL_PET_3 = 14;
+  AUTO_SELL_PET_4 = 15;
 }
 
 

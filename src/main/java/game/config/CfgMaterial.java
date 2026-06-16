@@ -25,6 +25,9 @@ public class CfgMaterial {
     public static final int RANK_RARE = 2;
     public static final int RANK_EPIC = 3;
     public static final int RANK_LEGEND = 4;
+    public static final int TIER_COUNT = 4;
+    public static final int AUTO_SELL_TYPE_ITEM = 1;
+    public static final int AUTO_SELL_TYPE_MATERIAL = 2;
 
     public static final int MAX_LEVEL = 10;
     public static final double COST_LEVEL_MULT = 1.5;
@@ -76,6 +79,23 @@ public class CfgMaterial {
 
     public static ResMaterialEntity get(int materialId) {
         return ResItem.getMaterial(materialId);
+    }
+
+    public static int getAutoSellMaterialSize() {
+        return ResItem.getMaterialCount() * TIER_COUNT;
+    }
+
+    public static boolean isValidAutoSellMaterialIndex(int index) {
+        return index >= 0 && index < getAutoSellMaterialSize();
+    }
+
+    public static int toAutoSellMaterialIndex(int materialId, int tier) {
+        List<Integer> ids = ResItem.getSortedMaterialIds();
+        int materialIndex = ids.indexOf(materialId);
+        if (materialIndex < 0 || tier < RANK_COMMON || tier > RANK_LEGEND) {
+            return -1;
+        }
+        return materialIndex * TIER_COUNT + (tier - 1);
     }
 
     public static boolean canUpgrade(int level) {

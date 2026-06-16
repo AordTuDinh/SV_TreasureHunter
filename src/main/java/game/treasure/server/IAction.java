@@ -47,6 +47,7 @@ public class IAction {
     public static final int CHAT_FRAME_EQUIP = 52;
     public static final int TRIAL_EQUIP = 53;
     public static final int USE_GIFT_CODE = 54;
+    public static final int SET_AUTO = 55;
 
     // chat
     public static final int CHAT_SERVER = 70;

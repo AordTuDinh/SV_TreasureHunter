@@ -343,6 +343,10 @@ public class LoginHandler extends AHandler {
         // size 2 : chat setting
         settings.addAllALong(uSet.getChatSetting());
         lstCmm.addAVector(settings);
+        // auto sell item setting (index = AutoSell enum, value = 0/1)
+        lstCmm.addAVector(getCommonIntVector(uSet.getAutoSellItemList()));
+        // auto sell material setting (index = materialIndex * 4 + tier - 1, value = 0/1)
+        lstCmm.addAVector(getCommonIntVector(uSet.getAutoSellMaterialList()));
         // danh sách các thằng mình block chat
         lstCmm.addAVector(getCommonIntVector(uSet.listBlockChat()));
         // fee up item

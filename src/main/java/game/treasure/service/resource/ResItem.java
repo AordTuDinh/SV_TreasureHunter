@@ -45,6 +45,16 @@ public class ResItem {
         return mMaterial.get(materialId);
     }
 
+    public static int getMaterialCount() {
+        return mMaterial.size();
+    }
+
+    public static List<Integer> getSortedMaterialIds() {
+        List<Integer> ids = new ArrayList<>(mMaterial.keySet());
+        Collections.sort(ids);
+        return ids;
+    }
+
     public static final int sizeItemEquipment = 24;
 
     public static void init() {
