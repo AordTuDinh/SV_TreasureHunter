@@ -283,8 +283,6 @@ message  PbUserData{
   optional  int64 timeProtected = 29;
 }
 
-
-
 message PbListItem{
   repeated  PbItem item = 1;
 }
