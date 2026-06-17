@@ -4,6 +4,7 @@ import game.config.CfgCheckin;
 import game.config.CfgUser;
 import game.config.aEnum.*;
 import game.object.MyUser;
+import game.treasure.BattleConfig;
 import game.treasure.controller.AHandler;
 import game.treasure.controller.UserHandler;
 import game.treasure.mapping.main.*;
@@ -332,7 +333,7 @@ public class UserDataEntity implements Serializable {
                 }
             }
         }
-        pb.setTimeProtected(timeProtected);
+        pb.setTimeProtected(BattleConfig.toWireProtectedMs(timeProtected));
 
         return pb.build();
     }

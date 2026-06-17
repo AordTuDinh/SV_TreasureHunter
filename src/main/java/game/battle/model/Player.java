@@ -211,7 +211,7 @@ public class Player extends Unit implements Serializable {
         pos = Pos.zero();
         long protectedEnd = mUser.getUData().getTimeProtected();
         setTimeProtectedEnd(protectedEnd);
-        protoStatus(Pbmethod.SubStateType.REVIVE, 0L, 0L, protectedEnd);
+        protoStatus(Pbmethod.SubStateType.REVIVE, 0L, 0L, BattleConfig.toWireProtectedMs(protectedEnd));
         this.alive = true;
         point.initDefault();
         point.resetHpPercent(BattleConfig.P_reviveHpPercent);
@@ -257,7 +257,7 @@ public class Player extends Unit implements Serializable {
         pbAdd.setUserId(mUser.getUserId());
         long protectedEnd = mUser.getUData().getTimeProtected();
         if (protectedEnd > System.currentTimeMillis()) {
-            pbAdd.setTimeProtected(protectedEnd);
+            pbAdd.setTimeProtected(BattleConfig.toWireProtectedMs(protectedEnd));
             setTimeProtectedEnd(protectedEnd);
         }
         return pbAdd.build();

@@ -19,6 +19,13 @@ public class BattleConfig {
     public static final int P_reviveHpPercent = 50; // HP khi hồi sinh về làng (% max HP)
     public static final long P_timeProtectedMs = 3_600_000L; // 1 giờ bảo vệ sau khi chết
 
+    /** Chuyển thời điểm hết bảo vệ (ms tuyệt đối) → ms còn lại gửi client. */
+    public static long toWireProtectedMs(long absoluteEndMs) {
+        if (absoluteEndMs <= 0) return 0;
+        long remain = absoluteEndMs - System.currentTimeMillis();
+        return Math.max(0, remain);
+    }
+
     // ---------------------------------------------------------------------------------------------------------------------------------------------------------
     // server config - không gửi cho client config
     public static final float E_ReviveReady = 0.5f; //hồi sinh xong cho bât tử 1 lúc

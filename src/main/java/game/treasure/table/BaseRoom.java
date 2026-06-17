@@ -12,6 +12,7 @@ import game.config.CfgServer;
 import game.config.aEnum.DetailActionType;
 import game.config.aEnum.ItemType;
 import game.config.aEnum.MapType;
+import game.treasure.BattleConfig;
 import game.treasure.mapping.UserEquipmentEntity;
 import game.treasure.mapping.UserItemEntity;
 import game.treasure.mapping.UserMaterialEntity;
@@ -524,7 +525,7 @@ public abstract class BaseRoom extends MonoRoom {
         long protectedEnd = player.getMUser().getUData().getTimeProtected();
         if (protectedEnd > System.currentTimeMillis()) {
             player.setTimeProtectedEnd(protectedEnd);
-            pbInit.setTimeProtected(protectedEnd);
+            pbInit.setTimeProtected(BattleConfig.toWireProtectedMs(protectedEnd));
         }
 
         for (int i = 0; i < chunkVisible.size(); i++) {
