@@ -521,6 +521,11 @@ public abstract class BaseRoom extends MonoRoom {
         int curChunk = player.getChunkId();
         List<Integer> chunkVisible = visibleByChunkId.get(curChunk);
         Pbmethod.PbInitMap.Builder pbInit = newPbInitMap();
+        long protectedEnd = player.getMUser().getUData().getTimeProtected();
+        if (protectedEnd > System.currentTimeMillis()) {
+            player.setTimeProtectedEnd(protectedEnd);
+            pbInit.setTimeProtected(protectedEnd);
+        }
 
         for (int i = 0; i < chunkVisible.size(); i++) {
             // add data chunks

@@ -184,6 +184,10 @@ public class Point {
         setCurHp(getMaxHp());
     }
 
+    public void resetHpPercent(int percent) {
+        setCurHp((long) (getMaxHp() * percent / 100f));
+    }
+
     public long forceDie() {
         return values[CUR_HP] = 0;
     }

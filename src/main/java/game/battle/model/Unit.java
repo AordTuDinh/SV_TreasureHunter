@@ -57,6 +57,17 @@ public abstract class Unit {
     //long timeBeAttack;
     Pos directionMoveAttack = Pos.zero(); // chưa có hướng move attack melee
     boolean sendDie = true;
+    /** Thời điểm (ms) hết bảo vệ sau khi chết — 0 = không bảo vệ. */
+    long timeProtectedEnd;
+
+
+    public boolean isProtected() {
+        return timeProtectedEnd > System.currentTimeMillis();
+    }
+
+    public void setTimeProtectedEnd(long timeProtectedEnd) {
+        this.timeProtectedEnd = timeProtectedEnd;
+    }
 
 
     public boolean isPlayer() {

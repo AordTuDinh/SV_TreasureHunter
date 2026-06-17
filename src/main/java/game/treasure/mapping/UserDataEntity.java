@@ -42,6 +42,7 @@ public class UserDataEntity implements Serializable {
     String buff; // [time25,time50,timex2 ...] x9
     String dameSkin, chatFrame, listTrial;
     int dameSkinEquip, chatFrameEquip, trialEquip, effInit, craftLevel, craftExp;
+    long timeProtected;
 
     @Transient
     int maxLvTraining = 60;
@@ -331,6 +332,7 @@ public class UserDataEntity implements Serializable {
                 }
             }
         }
+        pb.setTimeProtected(timeProtected);
 
         return pb.build();
     }

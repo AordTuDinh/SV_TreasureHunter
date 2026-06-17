@@ -6,6 +6,7 @@ import game.config.CfgBattle;
 import game.config.CfgServer;
 import game.config.aEnum.*;
 import game.config.lang.Lang;
+import game.treasure.BattleConfig;
 import game.treasure.mapping.main.*;
 import game.treasure.service.resource.ResMap;
 import game.treasure.table.*;
@@ -149,5 +150,6 @@ public class BattleHandler extends AHandler implements Serializable {
         Player player = ((MyUser) ChUtil.get(channel, ChUtil.KEY_M_USER)).getPlayer();
         player.revive();
         initMapByTypeId(MapType.HOME, Pos.zero(), PopupType.NULL);
+        player.getPoint().resetHpPercent(BattleConfig.P_reviveHpPercent);
     }
 }

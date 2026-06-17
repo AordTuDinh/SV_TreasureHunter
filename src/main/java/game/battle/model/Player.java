@@ -50,6 +50,10 @@ public class Player extends Unit implements Serializable {
         this.idChatFrame = mUser.getUData().getChatFrameEquip();
         this.idTrial = mUser.getUData().getTrialEquip();
         this.petUse = mUser.getPet(this);
+        long protectedEnd = mUser.getUData().getTimeProtected();
+        if (protectedEnd > System.currentTimeMillis()) {
+            setTimeProtectedEnd(protectedEnd);
+        }
     }
 
     private void initDefault( int clanId, Point point) {
@@ -135,6 +139,10 @@ public class Player extends Unit implements Serializable {
         directionMoveAttack = Pos.zero();
         this.room = room;
         this.panelMap = room.getMapInfo();
+        long protectedEnd = mUser.getUData().getTimeProtected();
+        if (protectedEnd > System.currentTimeMillis()) {
+            setTimeProtectedEnd(protectedEnd);
+        }
         updateBuff();
     }
 
@@ -180,6 +188,10 @@ public class Player extends Unit implements Serializable {
 
     @Override
     public synchronized void protoDie(Unit killer) {
+        long protectedUntil = System.currentTimeMillis() + BattleConfig.P_timeProtectedMs;
+        setTimeProtectedEnd(protectedUntil);
+        mUser.getUData().setTimeProtected(protectedUntil);
+        mUser.getUData().update(Arrays.asList("time_protected", protectedUntil));
         super.protoDie(killer);
         if (sendDie) {
             protoStatus(Pbmethod.SubStateType.DIE);
@@ -196,10 +208,13 @@ public class Player extends Unit implements Serializable {
     public void revive() {
         timeRevive = System.currentTimeMillis();
         this.sendDie = false;
-        protoStatus(Pbmethod.SubStateType.REVIVE, (long) (pos.x * 1000), (long) (pos.y * 1000));
+        pos = Pos.zero();
+        long protectedEnd = mUser.getUData().getTimeProtected();
+        setTimeProtectedEnd(protectedEnd);
+        protoStatus(Pbmethod.SubStateType.REVIVE, 0L, 0L, protectedEnd);
         this.alive = true;
         point.initDefault();
-        point.resetHp();
+        point.resetHpPercent(BattleConfig.P_reviveHpPercent);
         protoStatus(Pbmethod.SubStateType.UPDATE_MULTI_POINT, point.toProto());
         sendDie = true;
     }
@@ -240,6 +255,11 @@ public class Player extends Unit implements Serializable {
         pbAdd.addAllPoint(point.toProto());
         pbAdd.addAllInfo(getListInfo(mUser.getUData().getEffInit()));
         pbAdd.setUserId(mUser.getUserId());
+        long protectedEnd = mUser.getUData().getTimeProtected();
+        if (protectedEnd > System.currentTimeMillis()) {
+            pbAdd.setTimeProtected(protectedEnd);
+            setTimeProtectedEnd(protectedEnd);
+        }
         return pbAdd.build();
     }
 

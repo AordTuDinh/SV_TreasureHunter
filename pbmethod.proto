@@ -119,6 +119,7 @@ message PbUnit{
   optional int64 lastInputSeq = 15;
   repeated int64 point = 16;
   optional int32 userId = 17;
+  optional int64 timeProtected = 18;
 }
 
 message PbCell {
@@ -149,6 +150,7 @@ message PbInitMap {
   optional int64 battleId = 2;
   repeated PbChunk chunks = 3;  // AOI ban đầu (tối đa 9 chunk)
   repeated PbUnit units = 4;
+  optional int64 timeProtected = 5;
 }
 
 // lúc đã init xong thì trả về state để update trạng thái của client
@@ -278,6 +280,7 @@ message  PbUserData{
   optional  int32 craftExp = 26;
   repeated  int64 itemSlot = 27;
   optional  PbListEquipment equipments = 28;
+  optional  int64 timeProtected = 29;
 }
 
 
