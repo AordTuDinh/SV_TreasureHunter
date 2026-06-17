@@ -54,6 +54,30 @@ public class MyUser implements Serializable {
     List<Integer> cacheSendParty = new ArrayList<>(); // [userId,timeSend, number]
     List<Integer> perReceiveBoss = List.of(0, 0);  // per tăng đá - per tăng drop
     List<Pbmethod.PbPointItemUpdate> itemPointUpdates = new ArrayList<>();
+    boolean updateBagPending;
+    boolean userDataInfoPending;
+
+    public void queueUpdateBag() {
+        updateBagPending = true;
+    }
+
+    public boolean drainUpdateBagPending() {
+        if (!updateBagPending)
+            return false;
+        updateBagPending = false;
+        return true;
+    }
+
+    public void queueUserDataInfo() {
+        userDataInfoPending = true;
+    }
+
+    public boolean drainUserDataInfoPending() {
+        if (!userDataInfoPending)
+            return false;
+        userDataInfoPending = false;
+        return true;
+    }
 
     public void queueItemPointUpdate(UserItemEntity uItem) {
         Pbmethod.PbPointItemUpdate pb = ResItem.buildPointItemUpdate(uItem);
@@ -257,17 +281,19 @@ public class MyUser implements Serializable {
             if (bonusType == Bonus.BONUS_ITEM) {
                 int itemKey = chunk.get(1).intValue();
                 if (itemKey < 0) continue;
-                ItemType storageType = Bonus.resolveStorageType(itemKey);
                 if (Bonus.isAggregatedEventItemKey(itemKey)) {
                     if (resources.getItemByItemKey(itemKey) == null) numEvent++;
                     continue;
                 }
+                ItemType storageType = Bonus.resolveStorageType(itemKey);
                 if (storageType == ItemType.EVENT) {
                     numEvent++;
-                } else if (storageType != ItemType.CURRENCY) {
+                } else if (Bonus.usesItemSlotForUserItem(storageType)) {
                     numBag++;
                 }
-            } else if (bonusType == Bonus.BONUS_EQUIPMENT) {
+            } else if (bonusType == Bonus.BONUS_EQUIPMENT
+                    || bonusType == Bonus.BONUS_PET
+                    || bonusType == Bonus.BONUS_MOUNT) {
                 numBag++;
             } else if (bonusType == Bonus.BONUS_MATERIAL) {
                 numMaterial++;
@@ -288,6 +314,7 @@ public class MyUser implements Serializable {
 
     public void userLogout() {
         long curTime = System.currentTimeMillis();
+        uData.flushItemSlotIfDirty();
         getUser().update(Arrays.asList("logout", Calendar.getInstance().getTime()));
         UserAchievementEntity uAchie = Services.userDAO.getUserAchievement(this);
         if (uAchie != null && uAchie.isCanUpdate()) uAchie.updateAll();

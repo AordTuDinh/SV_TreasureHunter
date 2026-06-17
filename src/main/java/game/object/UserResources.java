@@ -3,6 +3,7 @@ package game.object;
 import game.config.CfgAchievement;
 import game.config.aEnum.*;
 import game.treasure.mapping.*;
+import game.protocol.CommonProto;
 import game.treasure.service.user.Bonus;
 import game.treasure.service.user.ItemSlotHelper;
 import protocol.Pbmethod;
@@ -72,27 +73,19 @@ public class UserResources implements Serializable {
     }
 
     void rebuildItemSlotIfNeeded() {
+        Bonus.reconcileItemSlots(mUser);
         List<Long> slots = mUser.getUData().getItemSlotList();
         int bagCount = mUser.getUData().getSlotBagUI();
-        int eventCount = mUser.getUData().getSlotEvent();
-        if (ItemSlotHelper.countOccupied(slots, 0, bagCount + eventCount) > 0)
+        if (ItemSlotHelper.countOccupied(slots, 0, bagCount) > 0)
             return;
         boolean changed = false;
         for (UserItemEntity item : mItem.values()) {
-            ItemType type = ItemType.get(item.getType());
-            if (type == null) continue;
-            if (type == ItemType.EVENT) {
-                Integer s = ItemSlotHelper.findFirstEmpty(slots, bagCount, eventCount);
-                if (s != null) {
-                    ItemSlotHelper.setPair(slots, s, Bonus.BONUS_ITEM, item.getId());
-                    changed = true;
-                }
-            } else if (type == ItemType.CONSUMABLE || type == ItemType.CURRENCY) {
-                Integer s = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
-                if (s != null) {
-                    ItemSlotHelper.setPair(slots, s, Bonus.BONUS_ITEM, item.getId());
-                    changed = true;
-                }
+            if (ItemType.get(item.getType()) != ItemType.CONSUMABLE)
+                continue;
+            Integer s = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
+            if (s != null) {
+                ItemSlotHelper.setPair(slots, s, Bonus.BONUS_ITEM, item.getId());
+                changed = true;
             }
         }
         for (UserEquipmentEntity equip : mEquipment.values()) {
@@ -103,24 +96,34 @@ public class UserResources implements Serializable {
                 changed = true;
             }
         }
+        for (UserPetEntity pet : mPet.values()) {
+            Integer s = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
+            if (s != null) {
+                ItemSlotHelper.setPair(slots, s, Bonus.BONUS_PET, pet.getId());
+                changed = true;
+            }
+        }
+        for (UserMountEntity mount : mMount.values()) {
+            Integer s = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
+            if (s != null) {
+                ItemSlotHelper.setPair(slots, s, Bonus.BONUS_MOUNT, mount.getId());
+                changed = true;
+            }
+        }
         if (changed)
-            mUser.getUData().saveItemSlot(slots);
+            saveItemSlot(slots);
     }
 
     void applyItemSlotsFromUserData() {
         List<Long> slots = mUser.getUData().getItemSlotList();
         int bagCount = mUser.getUData().getSlotBagUI();
-        int eventCount = mUser.getUData().getSlotEvent();
         for (UserItemEntity item : mItem.values()) {
             item.setBagSlot(-1);
-            Integer bagSlot = ItemSlotHelper.findSlotOf(slots, 0, bagCount, Bonus.BONUS_ITEM, item.getId());
-            if (bagSlot != null) {
-                item.setBagSlot(bagSlot);
+            if (ItemType.get(item.getType()) != ItemType.CONSUMABLE)
                 continue;
-            }
-            Integer eventSlot = ItemSlotHelper.findSlotOf(slots, bagCount, eventCount, Bonus.BONUS_ITEM, item.getId());
-            if (eventSlot != null)
-                item.setBagSlot(eventSlot);
+            Integer bagSlot = ItemSlotHelper.findSlotOf(slots, 0, bagCount, Bonus.BONUS_ITEM, item.getId());
+            if (bagSlot != null)
+                item.setBagSlot(bagSlot);
         }
         for (UserEquipmentEntity equip : mEquipment.values()) {
             if (equip.isEquip()) {
@@ -238,13 +241,6 @@ public class UserResources implements Serializable {
         return ItemSlotHelper.countOccupied(slots, 0, bagCount);
     }
 
-    public int getNumItemEvent() {
-        int bagCount = mUser.getUData().getSlotBagUI();
-        int eventCount = mUser.getUData().getSlotEvent();
-        List<Long> slots = mUser.getUData().getItemSlotList();
-        return ItemSlotHelper.countOccupied(slots, bagCount, eventCount);
-    }
-
     public int getNumMaterial() {
         return mMaterial.size();
     }
@@ -255,12 +251,24 @@ public class UserResources implements Serializable {
 
     public boolean canAddBagItem(int count) {
         if (count <= 0) return true;
+        Bonus.reconcileItemSlots(mUser);
         return getNumItemBag() + count <= mUser.getUData().getSlotBagUI();
     }
 
     public boolean canAddEventItem(int count) {
         if (count <= 0) return true;
         return getNumItemEvent() + count <= mUser.getUData().getSlotEvent();
+    }
+
+    /** Event item không dùng item_slot — đếm row event riêng (aggregated = 1 row). */
+    public int getNumItemEvent() {
+        int n = 0;
+        for (UserItemEntity item : mItem.values()) {
+            ItemType type = ItemType.get(item.getType());
+            if (type == ItemType.EVENT)
+                n++;
+        }
+        return n;
     }
 
     public boolean canAddMaterial(int count) {
@@ -402,5 +410,38 @@ public class UserResources implements Serializable {
         if (skins == null) skins = new ArrayList<>();
         skins.add(uSkin);
         mSkin.put(uSkin.getId(), uSkin);
+    }
+
+    /** Lưu item_slot in-memory; flush response sẽ gửi UPDATE_BAG. */
+    public boolean saveItemSlot(List<Long> slots) {
+        if (!mUser.getUData().saveItemSlot(slots))
+            return false;
+        mUser.queueUpdateBag();
+        return true;
+    }
+
+    /** Full snapshot ô túi nhỏ home: flat [bonusType, rowId, ...] × slotBagUI. */
+    public Pbmethod.CommonVector buildUpdateBagPayload() {
+        List<Long> slots = mUser.getUData().getItemSlotList();
+        int bagCount = mUser.getUData().getSlotBagUI();
+        List<Long> payload = new ArrayList<>(bagCount * 2);
+        for (int i = 0; i < bagCount * 2; i++)
+            payload.add(i < slots.size() ? slots.get(i) : 0L);
+        return CommonProto.getCommonVectorProto(payload);
+    }
+
+    /** Gán ô túi UI khi nhận consum / equip / pet / mount. */
+    public boolean prepareNewItemSlot(int bonusType, long rowId) {
+        return Bonus.prepareNewItemSlot(mUser, bonusType, rowId);
+    }
+
+    public void clearItemFromSlot(int bonusType, long rowId) {
+        Bonus.clearItemFromSlot(mUser, bonusType, rowId);
+    }
+
+    /** Mở thêm ô túi — client cần USER_DATA_INFO (slotBagUI) kèm UPDATE_BAG. */
+    public void notifyBagSlotCountChanged() {
+        mUser.queueUserDataInfo();
+        mUser.queueUpdateBag();
     }
 }

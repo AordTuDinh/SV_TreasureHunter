@@ -74,8 +74,9 @@ public class MaterialHandler extends AHandler {
             addErrResponse(getLang(Lang.err_max_level));
             return;
         }
-        int tier = gem.getTier();
-        List<Long> fee = CfgMaterial.getUpgradeFee(tier, gem.getTier(), gem.getLevel());
+        int gemTypeTier = res.getTier();
+        int rank = gem.getTier();
+        List<Long> fee = CfgMaterial.getUpgradeFee(gemTypeTier, rank, gem.getLevel());
         if (fee.isEmpty()) {
             addErrParam();
             return;

@@ -84,6 +84,7 @@ public class ResponseMessage {
                     AHandler handler = mHandler.get(sv).newInstance();
                     handler.handle(channel, session, sv, actions.get(i).getData().toByteArray());
                     handler.flushItemPointUpdates();
+                    handler.flushUpdateBag();
                     responseData.addAllAAction(handler.getResponse().getAActionList());
                 }
             }

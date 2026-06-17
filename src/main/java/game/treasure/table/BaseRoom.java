@@ -443,6 +443,8 @@ public abstract class BaseRoom extends MonoRoom {
                 if (mUser.getResources().getItemByItemKey(itemKey) == null) need[1] = 1;
                 return need;
             }
+            if (Bonus.resolveStorageType(itemKey) == ItemType.CONSUMABLE)
+                need[0] = 1;
         } else if (bonusType == Bonus.BONUS_EQUIPMENT) {
             need[0] = 1;
         } else if (bonusType == Bonus.BONUS_MATERIAL) {

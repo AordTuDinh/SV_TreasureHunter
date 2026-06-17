@@ -30,4 +30,6 @@ public class ResMaterialEntity implements Serializable {
     double epic;
     @Getter
     double legend;
+    @Getter
+    int tier;
 }

@@ -31,6 +31,13 @@ public final class ItemSlotHelper {
             slots.add(0L);
     }
 
+    /** item_slot chỉ có {@code bagCount} ô (consum / equip / pet / mount). */
+    public static void ensureBagCapacity(List<Long> slots, int bagCount) {
+        int need = bagCount * 2;
+        while (slots.size() < need)
+            slots.add(0L);
+    }
+
     public static int getBonusType(List<Long> slots, int slotIndex) {
         int i = slotIndex * 2;
         return i < slots.size() ? slots.get(i).intValue() : 0;

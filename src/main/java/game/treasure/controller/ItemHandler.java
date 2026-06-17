@@ -1,11 +1,13 @@
 package game.treasure.controller;
 
 import game.config.CfgItem;
+import game.config.CfgMaterial;
 import game.config.aEnum.*;
 import game.config.lang.Lang;
 import game.treasure.mapping.UserEntity;
 import game.treasure.mapping.UserEquipmentEntity;
 import game.treasure.mapping.UserItemEntity;
+import game.treasure.mapping.UserMaterialEntity;
 import game.treasure.mapping.main.ResItemEntity;
 import game.treasure.mapping.main.ResItemEquipmentEntity;
 import game.treasure.server.IAction;
@@ -243,26 +245,56 @@ public class ItemHandler extends AHandler {
 
 
     void sellItem() {
-        long id = CommonProto.parseCommonVector(requestData).getALong(0);
-        UserEquipmentEntity equip = mUser.getResources().getEquipment(id);
-        if (equip != null) {
+        List<Long> req = CommonProto.parseCommonVector(requestData).getALongList();
+        if (req == null || req.size() < 2) {
+            addErrParam();
+            return;
+        }
+        int bonusType = req.get(0).intValue();
+        long id = req.get(1);
+        if (bonusType == Bonus.BONUS_EQUIPMENT) {
+            UserEquipmentEntity equip = mUser.getResources().getEquipment(id);
+            if (equip == null) {
+                addErrResponse(getLang(Lang.item_not_own));
+                return;
+            }
             sellEquipment(equip);
             return;
         }
-        UserItemEntity item = mUser.getResources().getItem(id);
-        if (item == null) {
-            addErrResponse(getLang(Lang.item_not_own));
+        if (bonusType == Bonus.BONUS_ITEM) {
+            UserItemEntity item = mUser.getResources().getItem(id);
+            if (item == null) {
+                addErrResponse(getLang(Lang.item_not_own));
+                return;
+            }
+            Bonus.clearItemFromSlot(mUser, Bonus.BONUS_ITEM, id);
+            if (item.deleteFromDb()) {
+                mUser.getResources().removeItem(id);
+                List<Long> bonus = CfgItem.getPriceSellItem(item);
+                addBonusToast(Bonus.receiveListItem(mUser, DetailActionType.SELL_ITEM.getKey(item.getItemId()), bonus));
+                addResponse(getCommonVector(id, 1L));
+            } else {
+                addErrResponse();
+            }
             return;
         }
-        Bonus.clearItemFromSlot(mUser, Bonus.BONUS_ITEM, id);
-        if (item.deleteFromDb()) {
-            mUser.getResources().removeItem(id);
-            List<Long> bonus = CfgItem.getPriceSellItem(item);
-            addBonusToast(Bonus.receiveListItem(mUser, DetailActionType.SELL_ITEM.getKey(item.getItemId()), bonus));
-            addResponse(getCommonVector(id, 1L));
-        } else {
-            addErrResponse();
+        if (bonusType == Bonus.BONUS_MATERIAL) {
+            UserMaterialEntity material = mUser.getResources().getMaterial(id);
+            if (material == null) {
+                addErrResponse(getLang(Lang.item_not_own));
+                return;
+            }
+            if (material.deleteFromDb()) {
+                mUser.getResources().removeMaterial(id);
+                List<Long> bonus = CfgMaterial.getPriceSellMaterial(material);
+                addBonusToast(Bonus.receiveListItem(mUser, DetailActionType.SELL_ITEM.getKey(material.getMaterialId()), bonus));
+                addResponse(getCommonVector(id, 1L));
+            } else {
+                addErrResponse();
+            }
+            return;
         }
+        addErrParam();
     }
 
     private void sellEquipment(UserEquipmentEntity equip) {

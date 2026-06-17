@@ -11,6 +11,7 @@ import game.config.lang.Lang;
 
 import game.treasure.mapping.UserEquipmentEntity;
 import game.treasure.mapping.UserItemEntity;
+import game.treasure.mapping.UserMaterialEntity;
 
 import game.object.MyUser;
 
@@ -105,7 +106,6 @@ public class CfgItem {
         return tier > 0 ? tier : 1;
     }
 
-
     /**
      * Phí nâng từ level hiện tại lên level+1 (vàng, trước khi trừ).
      */
@@ -158,7 +158,6 @@ public class CfgItem {
         int idx = Math.min(level, SELL_PRICE_BASE_T1.size()) - 1;
         return getTierMult(item) * SELL_PRICE_BASE_T1.get(idx);
     }
-
 
     public static List<Long> getPriceSellItem(UserItemEntity uItem) {
         return Bonus.viewGold(getSellPriceGold(uItem));

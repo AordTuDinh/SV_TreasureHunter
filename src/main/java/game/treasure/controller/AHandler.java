@@ -126,16 +126,21 @@ public abstract class AHandler extends IAction {
             addResponse(UPDATE_ITEM_POINT, pb);
     }
 
+    public void flushUpdateBag() {
+        if (mUser == null)
+            return;
+        if (mUser.drainUserDataInfoPending())
+            addResponse(USER_DATA_INFO, mUser.getUData().toProto(mUser));
+        if (mUser.drainUpdateBagPending())
+            addResponse(UPDATE_BAG, mUser.getResources().buildUpdateBagPayload());
+    }
+
     public void addErrResponse() {
         addResponse(MSG_TOAST, ToastType.NORMAL.retToast(getLang(Lang.err_send_data)));
     }
 
     public void addToast(ToastType type, String msg) {
-        if (type != null) {
             addResponse(MSG_TOAST, type.retToast(msg));
-        } else {
-            debug("Sai cấu trúc toast " + msg);
-        }
     }
 
     public void addCountDown(long time, String msg) { // String format : "Test xem sao {0}"

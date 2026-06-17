@@ -166,26 +166,20 @@ public class Bonus {
         int type = Math.toIntExact(bonus.get(0));
         switch (type) {
             case BONUS_ITEM -> {
-                if (bonus.size() >= 4)
-                    return Math.toIntExact(bonus.get(2));
-                if (bonus.size() >= 3)
-                    return Math.toIntExact(bonus.get(1));
-                return Math.toIntExact(bonus.get(1));
+                // preview [4, itemKey] | receive [4, rowId, itemKey]
+                return bonus.size() == 3
+                        ? Math.toIntExact(bonus.get(2))
+                        : Math.toIntExact(bonus.get(1));
             }
             case BONUS_EQUIPMENT -> {
-                if (bonus.size() >= 4)
-                    return Math.toIntExact(bonus.get(2));
-                return Math.toIntExact(bonus.get(1));
+                // preview [12, itemKey, tier] | receive [12, rowId, itemKey, tier]
+                return bonus.size() == 4
+                        ? Math.toIntExact(bonus.get(2))
+                        : Math.toIntExact(bonus.get(1));
             }
-            case BONUS_ARTIFACT -> {
-                return Math.toIntExact(bonus.get(2));
-            }
-            case BONUS_SKIN -> {
-                return Math.toIntExact(bonus.get(1));
-            }
-            case BONUS_EFFECT_SKIN -> {
-                return Math.toIntExact(bonus.get(2));
-            }
+            case BONUS_ARTIFACT -> Math.toIntExact(bonus.get(2));
+            case BONUS_SKIN -> Math.toIntExact(bonus.get(1));
+            case BONUS_EFFECT_SKIN -> Math.toIntExact(bonus.get(2));
         }
         return 0;
     }
@@ -197,7 +191,8 @@ public class Bonus {
                 || v == BONUS_PET || v == BONUS_MOUNT || v == BONUS_MATERIAL;
     }
 
-    static int itemBonusPayloadLength(List<Long> bonus, int index) {
+    /** Apply/cost payload sau type — ITEM: [itemKey] | [-itemKey] | [rowId, itemKey]. */
+    static int itemApplyPayloadLength(List<Long> bonus, int index) {
         if (index >= bonus.size())
             return 0;
         if (bonus.get(index) < 0)
@@ -209,7 +204,7 @@ public class Bonus {
         return 2;
     }
 
-    static int itemBonusPayloadLength(JsonArray aBonus, int index) {
+    static int itemApplyPayloadLength(JsonArray aBonus, int index) {
         if (index >= aBonus.size())
             return 0;
         if (aBonus.get(index).getAsLong() < 0)
@@ -221,19 +216,8 @@ public class Bonus {
         return 2;
     }
 
-    static int equipmentBonusPayloadLength(List<Long> bonus, int index) {
-        if (index >= bonus.size())
-            return 0;
-        if (index + 2 >= bonus.size())
-            return Math.max(0, bonus.size() - index);
-        if (index + 3 >= bonus.size())
-            return 2;
-        if (isBonusWireType(bonus.get(index + 3).intValue()))
-            return 2;
-        return 3;
-    }
-
-    static int equipmentBonusPayloadLength(JsonArray aBonus, int index) {
+    /** Apply/cost payload sau type — EQUIP: [itemKey, tier] | [rowId, itemKey, tier]. */
+    static int equipmentApplyPayloadLength(JsonArray aBonus, int index) {
         if (index >= aBonus.size())
             return 0;
         if (index + 2 >= aBonus.size())
@@ -245,30 +229,32 @@ public class Bonus {
         return 3;
     }
 
-    static int bonusConfigLength(List<Long> bonus, int index, int type) {
+    static int equipmentApplyPayloadLength(List<Long> bonus, int index) {
+        if (index >= bonus.size())
+            return 0;
+        if (index + 2 >= bonus.size())
+            return Math.max(0, bonus.size() - index);
+        if (index + 3 >= bonus.size())
+            return 2;
+        if (isBonusWireType(bonus.get(index + 3).intValue()))
+            return 2;
+        return 3;
+    }
+
+    static int applyPayloadLength(List<Long> bonus, int index, int type) {
         if (type == BONUS_ITEM)
-            return itemBonusPayloadLength(bonus, index);
+            return itemApplyPayloadLength(bonus, index);
         if (type == BONUS_EQUIPMENT)
-            return equipmentBonusPayloadLength(bonus, index);
+            return equipmentApplyPayloadLength(bonus, index);
         return mTypeLength.getOrDefault(type, 0);
     }
 
-    static int bonusConfigLength(JsonArray aBonus, int index, int type) {
+    static int applyPayloadLength(JsonArray aBonus, int index, int type) {
         if (type == BONUS_ITEM)
-            return itemBonusPayloadLength(aBonus, index);
+            return itemApplyPayloadLength(aBonus, index);
         if (type == BONUS_EQUIPMENT)
-            return equipmentBonusPayloadLength(aBonus, index);
+            return equipmentApplyPayloadLength(aBonus, index);
         return mTypeLength.getOrDefault(type, 0);
-    }
-
-    /** Preview chunk [4, itemKey] — không phải remove/receive [4, rowId, itemKey]. */
-    static boolean isItemPreviewChunk(List<Long> chunk) {
-        return chunk.size() == 2;
-    }
-
-    /** Preview chunk [12, itemKey, tier]. */
-    static boolean isEquipmentPreviewChunk(List<Long> chunk) {
-        return chunk.size() == 3;
     }
 
     public static ItemType resolveStorageType(int itemKey) {
@@ -298,58 +284,55 @@ public class Bonus {
 
     static List<Long> receiveListItem(MyUser mUser, JsonArray aBonus, String detailAction) {
         List<Long> aLong = new ArrayList<>();
-        Integer index = 0;
+        int index = 0;
         while (index < aBonus.size()) {
             int type = aBonus.get(index++).getAsInt();
+            int payloadIndex = index;
             switch (type) {
                 case BONUS_GOLD:
-                    aLong.addAll(addGold(mUser, aBonus, index, detailAction));
+                    aLong.addAll(addGold(mUser, aBonus, payloadIndex, detailAction));
                     break;
                 case BONUS_GEM:
-                    aLong.addAll(addGem(mUser, aBonus, index, detailAction));
+                    aLong.addAll(addGem(mUser, aBonus, payloadIndex, detailAction));
                     break;
                 case BONUS_RUBY:
-                    aLong.addAll(addRuby(mUser, aBonus, index, detailAction));
+                    aLong.addAll(addRuby(mUser, aBonus, payloadIndex, detailAction));
                     break;
                 case BONUS_ITEM:
-                    aLong.addAll(addUserItem(mUser, aBonus, index, detailAction));
+                    aLong.addAll(applyUserItem(mUser, aBonus, payloadIndex, detailAction));
                     break;
                 case BONUS_EQUIPMENT:
-                    aLong.addAll(addUserEquipment(mUser, aBonus, index, detailAction));
+                    aLong.addAll(applyUserEquipment(mUser, aBonus, payloadIndex, detailAction));
                     break;
                 case BONUS_ARTIFACT:
-                    aLong.addAll(addItemArtifact(mUser, aBonus, index, detailAction));
+                    aLong.addAll(addItemArtifact(mUser, aBonus, payloadIndex, detailAction));
                     break;
                 case BONUS_VIP_EXP:
-                    aLong.addAll(addVipExp(mUser, aBonus, index, detailAction));
+                    aLong.addAll(addVipExp(mUser, aBonus, payloadIndex, detailAction));
                     break;
                 case BONUS_SKIN:
-                    aLong.addAll(addCharacterSkin(mUser, aBonus, index, detailAction));
+                    aLong.addAll(addCharacterSkin(mUser, aBonus, payloadIndex, detailAction));
                     break;
                 case BONUS_EFFECT_SKIN:
-                    aLong.addAll(addEffectSkin(mUser, aBonus, index, detailAction));
+                    aLong.addAll(addEffectSkin(mUser, aBonus, payloadIndex, detailAction));
                     break;
                 case BONUS_PET:
-                    aLong.addAll(addPet(mUser, aBonus, index, detailAction));
+                    aLong.addAll(addPet(mUser, aBonus, payloadIndex, detailAction));
                     break;
                 case BONUS_MOUNT:
-                    aLong.addAll(addMount(mUser, aBonus, index, detailAction));
+                    aLong.addAll(addMount(mUser, aBonus, payloadIndex, detailAction));
                     break;
                 case BONUS_MATERIAL:
-                    aLong.addAll(addMaterial(mUser, aBonus, index, detailAction));
+                    aLong.addAll(addMaterial(mUser, aBonus, payloadIndex, detailAction));
                     break;
             }
-            if (type == BONUS_ITEM || type == BONUS_EQUIPMENT) {
-                index += bonusConfigLength(aBonus, index, type);
-            } else {
-                index += mTypeLength.getOrDefault(type, 0);
-            }
+            index = payloadIndex + applyPayloadLength(aBonus, payloadIndex, type);
         }
         return aLong;
     }
 
-    static List<Long> addCharacterSkin(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-        int skinId = aBonus.get(index++).getAsInt();
+    static List<Long> addCharacterSkin(MyUser mUser, JsonArray aBonus, int payloadIndex, String detailAction) {
+        int skinId = aBonus.get(payloadIndex).getAsInt();
         if (ResAvatar.getSkin(skinId) == null) return new ArrayList<>();
         UserSkinEntity existing = mUser.getResources().getSkinByConfigId(skinId);
         if (existing != null) {
@@ -367,9 +350,9 @@ public class Bonus {
         return new ArrayList<>();
     }
 
-    static List<Long> addEffectSkin(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-        int type = aBonus.get(index++).getAsInt();
-        int skinId = aBonus.get(index++).getAsInt();
+    static List<Long> addEffectSkin(MyUser mUser, JsonArray aBonus, int payloadIndex, String detailAction) {
+        int type = aBonus.get(payloadIndex).getAsInt();
+        int skinId = aBonus.get(payloadIndex + 1).getAsInt();
         if (type == SkinType.DAMAGE_SKIN.value) {
             if (mUser.getUData().addDameSkin(skinId) && mUser.getUData().update(List.of("dame_skin", mUser.getUData().getDameSkin()))) {
                 if (CfgServer.isRealServer())
@@ -395,18 +378,25 @@ public class Bonus {
         return new ArrayList<>();
     }
 
-    static List<Long> addUserItem(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-        if (itemBonusPayloadLength(aBonus, index) == 2)
-            return removeUserItem(mUser, aBonus, index, detailAction);
-        int itemKey = aBonus.get(index++).getAsInt();
-        if (itemKey < 0) {
-            itemKey = -itemKey;
-            if (!mUser.getResources().removeItemsByItemKey(itemKey, 1))
-                return new ArrayList<>();
-            UserItemEntity left = mUser.getResources().getItemByItemKey(itemKey);
-            long rowId = left != null ? left.getId() : 0L;
-            return Arrays.asList((long) BONUS_ITEM, rowId, (long) itemKey);
-        }
+    static List<Long> applyUserItem(MyUser mUser, JsonArray aBonus, int payloadIndex, String detailAction) {
+        int len = itemApplyPayloadLength(aBonus, payloadIndex);
+        if (len == 2)
+            return removeUserItem(mUser, aBonus, payloadIndex, detailAction);
+        int itemKey = aBonus.get(payloadIndex).getAsInt();
+        if (itemKey < 0)
+            return deductUserItemByKey(mUser, -itemKey, detailAction);
+        return grantUserItem(mUser, itemKey, detailAction);
+    }
+
+    static List<Long> deductUserItemByKey(MyUser mUser, int itemKey, String detailAction) {
+        if (!mUser.getResources().removeItemsByItemKey(itemKey, 1))
+            return new ArrayList<>();
+        UserItemEntity left = mUser.getResources().getItemByItemKey(itemKey);
+        long rowId = left != null ? left.getId() : 0L;
+        return Arrays.asList((long) BONUS_ITEM, rowId, (long) itemKey);
+    }
+
+    static List<Long> grantUserItem(MyUser mUser, int itemKey, String detailAction) {
         UserItemEntity uItem;
         if (itemKey == Pbmethod.ItemKey.TICKER_NORMAL.getNumber()) {
             uItem = checkGenItemData(mUser, 1);
@@ -415,12 +405,13 @@ public class Bonus {
         }
         ItemType type = resolveStorageType(itemKey);
         uItem = new UserItemEntity(mUser.getUser().getId(), itemKey, type);
-        if (!prepareNewItemSlot(mUser, BONUS_ITEM, 0, type))
+        boolean needSlot = usesItemSlotForUserItem(type);
+        if (needSlot && !mUser.getResources().prepareNewItemSlot(BONUS_ITEM, 0))
             return new ArrayList<>();
         if (type == ItemType.CONSUMABLE)
             ResItem.initConsumableInstanceData(uItem);
         if (DBJPA.save(uItem)) {
-            if (!prepareNewItemSlot(mUser, BONUS_ITEM, uItem.getId(), type)) {
+            if (needSlot && !mUser.getResources().prepareNewItemSlot(BONUS_ITEM, uItem.getId())) {
                 uItem.deleteFromDb();
                 return new ArrayList<>();
             }
@@ -441,20 +432,25 @@ public class Bonus {
         return new ArrayList<>();
     }
 
-    static List<Long> addUserEquipment(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-        if (equipmentBonusPayloadLength(aBonus, index) == 3)
-            return removeUserEquipment(mUser, aBonus, index, detailAction);
-        int itemKey = aBonus.get(index++).getAsInt();
-        int configTier = aBonus.get(index++).getAsInt();
+    static List<Long> applyUserEquipment(MyUser mUser, JsonArray aBonus, int payloadIndex, String detailAction) {
+        int len = equipmentApplyPayloadLength(aBonus, payloadIndex);
+        if (len == 3)
+            return removeUserEquipment(mUser, aBonus, payloadIndex, detailAction);
+        int itemKey = aBonus.get(payloadIndex).getAsInt();
+        int configTier = aBonus.get(payloadIndex + 1).getAsInt();
+        return grantUserEquipment(mUser, itemKey, configTier, detailAction);
+    }
+
+    static List<Long> grantUserEquipment(MyUser mUser, int itemKey, int configTier, String detailAction) {
         if (ResItem.getItemEquipment(itemKey) == null)
             return new ArrayList<>();
         UserEquipmentEntity uEquip = new UserEquipmentEntity(mUser.getUser().getId(), itemKey);
         uEquip.setTier(configTier);
-        if (!prepareNewItemSlot(mUser, BONUS_EQUIPMENT, 0, ItemType.EQUIPMENT))
+        if (!mUser.getResources().prepareNewItemSlot(BONUS_EQUIPMENT, 0))
             return new ArrayList<>();
         EquipmentStatRollService.rollStatsIfNeeded(uEquip);
         if (DBJPA.save(uEquip)) {
-            if (!prepareNewItemSlot(mUser, BONUS_EQUIPMENT, uEquip.getId(), ItemType.EQUIPMENT)) {
+            if (!mUser.getResources().prepareNewItemSlot(BONUS_EQUIPMENT, uEquip.getId())) {
                 uEquip.deleteFromDb();
                 return new ArrayList<>();
             }
@@ -472,9 +468,9 @@ public class Bonus {
         return new ArrayList<>();
     }
 
-    static List<Long> removeUserItem(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-        long userItemId = aBonus.get(index++).getAsLong();
-        int itemKey = aBonus.get(index++).getAsInt();
+    static List<Long> removeUserItem(MyUser mUser, JsonArray aBonus, int payloadIndex, String detailAction) {
+        long userItemId = aBonus.get(payloadIndex).getAsLong();
+        int itemKey = aBonus.get(payloadIndex + 1).getAsInt();
         UserItemEntity uItem = mUser.getResources().getItem(userItemId);
         if (uItem == null || uItem.getItemId() != itemKey)
             return new ArrayList<>();
@@ -494,10 +490,10 @@ public class Bonus {
         return Arrays.asList((long) BONUS_ITEM, userItemId, (long) itemKey);
     }
 
-    static List<Long> removeUserEquipment(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-        long userEquipId = aBonus.get(index++).getAsLong();
-        int itemKey = aBonus.get(index++).getAsInt();
-        int tier = aBonus.get(index++).getAsInt();
+    static List<Long> removeUserEquipment(MyUser mUser, JsonArray aBonus, int payloadIndex, String detailAction) {
+        long userEquipId = aBonus.get(payloadIndex).getAsLong();
+        int itemKey = aBonus.get(payloadIndex + 1).getAsInt();
+        int tier = aBonus.get(payloadIndex + 2).getAsInt();
         UserEquipmentEntity uEquip = mUser.getResources().getEquipment(userEquipId);
         if (uEquip == null || uEquip.getItemId() != itemKey)
             return new ArrayList<>();
@@ -520,14 +516,11 @@ public class Bonus {
             nums.add(NumberUtil.getRandomLong(100000, 999999));
         if (uItem == null) {
             uItem = new UserItemEntity(mUser.getUser().getId(), Pbmethod.ItemKey.TICKER_NORMAL.getNumber(), ItemType.EVENT);
-            if (!prepareNewItemSlot(mUser, BONUS_ITEM, 0, ItemType.EVENT))
-                return null;
             nums.add(0, eventDay);
             uItem.setData(StringHelper.toDBString(nums));
             if (!DBJPA.save(uItem))
                 return null;
             mUser.getResources().addItem(uItem);
-            prepareNewItemSlot(mUser, BONUS_ITEM, uItem.getId(), ItemType.EVENT);
         } else {
             List<Long> dataSticker = new ArrayList<>(GsonUtil.strToListLong(uItem.getData() == null ? "[]" : uItem.getData()));
             if (dataSticker.isEmpty() || dataSticker.get(0) != eventDay) {
@@ -541,8 +534,8 @@ public class Bonus {
         return uItem;
     }
 
-    static List<Long> addItemArtifact(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-        int artifactId = aBonus.get(index++).getAsInt();
+    static List<Long> addItemArtifact(MyUser mUser, JsonArray aBonus, int payloadIndex, String detailAction) {
+        int artifactId = aBonus.get(payloadIndex).getAsInt();
         UserArtifactEntity uArtifact = new UserArtifactEntity(mUser.getUser().getId(), artifactId);
         if (DBJPA.save(uArtifact)) {
             mUser.getResources().addArtifact(uArtifact);
@@ -553,8 +546,8 @@ public class Bonus {
         return new ArrayList<>();
     }
 
-    static List<Long> addVipExp(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-        int addExp = aBonus.get(index++).getAsInt();
+    static List<Long> addVipExp(MyUser mUser, JsonArray aBonus, int payloadIndex, String detailAction) {
+        int addExp = aBonus.get(payloadIndex).getAsInt();
         UserEntity user = mUser.getUser();
         mUser.getUser().addVipExp(addExp);
         if (DBJPA.update("user", Arrays.asList("vip_exp", user.getVipExp(), "vip", user.getVip()), Arrays.asList("id", user.getId()))) {
@@ -564,10 +557,16 @@ public class Bonus {
         return new ArrayList<>();
     }
 
-    static List<Long> addPet(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-        int petId = aBonus.get(index++).getAsInt();
+    static List<Long> addPet(MyUser mUser, JsonArray aBonus, int payloadIndex, String detailAction) {
+        int petId = aBonus.get(payloadIndex).getAsInt();
+        if (!mUser.getResources().prepareNewItemSlot(BONUS_PET, 0))
+            return new ArrayList<>();
         UserPetEntity uPet = new UserPetEntity(mUser.getUser(), petId);
         if (DBJPA.save(uPet)) {
+            if (!mUser.getResources().prepareNewItemSlot(BONUS_PET, uPet.getId())) {
+                DBJPA.delete("user_pet", "id", uPet.getId(), "user_id", uPet.getUserId());
+                return new ArrayList<>();
+            }
             mUser.getResources().addPet(uPet);
             if (CfgServer.isRealServer()) {
                 Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
@@ -578,11 +577,17 @@ public class Bonus {
         return new ArrayList<>();
     }
 
-    static List<Long> addMount(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-        int mountId = aBonus.get(index++).getAsInt();
+    static List<Long> addMount(MyUser mUser, JsonArray aBonus, int payloadIndex, String detailAction) {
+        int mountId = aBonus.get(payloadIndex).getAsInt();
         if (ResMount.get(mountId) == null) return new ArrayList<>();
+        if (!mUser.getResources().prepareNewItemSlot(BONUS_MOUNT, 0))
+            return new ArrayList<>();
         UserMountEntity uMount = new UserMountEntity(mUser.getUser(), mountId);
         if (DBJPA.save(uMount)) {
+            if (!mUser.getResources().prepareNewItemSlot(BONUS_MOUNT, uMount.getId())) {
+                DBJPA.delete("user_mount", "id", uMount.getId(), "user_id", uMount.getUserId());
+                return new ArrayList<>();
+            }
             mUser.getResources().addMount(uMount);
             if (CfgServer.isRealServer()) {
                 Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
@@ -593,9 +598,9 @@ public class Bonus {
         return new ArrayList<>();
     }
 
-    static List<Long> addMaterial(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-        int materialId = aBonus.get(index++).getAsInt();
-        int rank = aBonus.get(index++).getAsInt();
+    static List<Long> addMaterial(MyUser mUser, JsonArray aBonus, int payloadIndex, String detailAction) {
+        int materialId = aBonus.get(payloadIndex).getAsInt();
+        int rank = aBonus.get(payloadIndex + 1).getAsInt();
         if (CfgMaterial.get(materialId) == null)
             return new ArrayList<>();
         if (!mUser.getResources().canAddMaterial(1)) return new ArrayList<>();
@@ -616,8 +621,8 @@ public class Bonus {
         return new ArrayList<>();
     }
 
-    static List<Long> addGold(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-        long value = aBonus.get(index++).getAsLong();
+    static List<Long> addGold(MyUser mUser, JsonArray aBonus, int payloadIndex, String detailAction) {
+        long value = aBonus.get(payloadIndex).getAsLong();
         if (detailAction.equals(DetailActionType.BONUS_KILL_ENEMY)) {
             mUser.getUser().addGold(value);
             CfgAchievement.addListAchievement(mUser, 5, CfgAchievement.addGold, (int) value);
@@ -633,8 +638,8 @@ public class Bonus {
         }
     }
 
-    static List<Long> addGem(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-        long value = aBonus.get(index++).getAsLong();
+    static List<Long> addGem(MyUser mUser, JsonArray aBonus, int payloadIndex, String detailAction) {
+        long value = aBonus.get(payloadIndex).getAsLong();
         if (dbAddGem(mUser.getUser(), value)) {
             mUser.getUser().addGem(value);
             CfgAchievement.addListAchievement(mUser, 5, CfgAchievement.addGem, (int) value);
@@ -645,8 +650,8 @@ public class Bonus {
         return new ArrayList<>();
     }
 
-    static List<Long> addRuby(MyUser mUser, JsonArray aBonus, Integer index, String detailAction) {
-        long value = aBonus.get(index++).getAsLong();
+    static List<Long> addRuby(MyUser mUser, JsonArray aBonus, int payloadIndex, String detailAction) {
+        long value = aBonus.get(payloadIndex).getAsLong();
         if (dbAddRuby(mUser.getUser(), value)) {
             mUser.getUser().addRuby(value);
             CfgAchievement.addListAchievement(mUser, 5, CfgAchievement.addRuby, (int) value);
@@ -671,7 +676,7 @@ public class Bonus {
 
     public static String checkMoney(MyUser mUser, List<Long> aBonus) {
         Map<Integer, Integer> itemDeduct = new HashMap<>();
-        for (List<Long> chunk : parse(aBonus)) {
+        for (List<Long> chunk : parseCost(aBonus)) {
             int type = chunk.get(0).intValue();
             switch (type) {
                 case BONUS_GOLD:
@@ -687,7 +692,9 @@ public class Bonus {
                         return Lang.instance(mUser).get(Lang.err_not_enough_ruby);
                     break;
                 case BONUS_ITEM:
-                    if (chunk.size() >= 3) {
+                    if (chunk.size() == 2 && chunk.get(1) < 0) {
+                        itemDeduct.merge((int) (-chunk.get(1)), 1, Integer::sum);
+                    } else if (chunk.size() == 3) {
                         long userItemId = chunk.get(1);
                         int itemKey = chunk.get(2).intValue();
                         UserItemEntity uItem = mUser.getResources().getItem(userItemId);
@@ -695,22 +702,20 @@ public class Bonus {
                         String name = resItem != null ? resItem.getName() : "?";
                         if (uItem == null || uItem.getItemId() != itemKey)
                             return String.format(Lang.instance(mUser).get(Lang.err_not_enough_item), name);
-                    } else if (chunk.size() >= 2) {
-                        int itemKey = chunk.get(1).intValue();
-                        if (itemKey < 0)
-                            itemDeduct.merge(-itemKey, 1, Integer::sum);
+                    } else {
+                        return Lang.instance(mUser).get(Lang.err_params);
                     }
                     break;
                 case BONUS_EQUIPMENT:
-                    if (chunk.size() >= 4) {
-                        long userEquipId = chunk.get(1);
-                        int itemKey = chunk.get(2).intValue();
-                        UserEquipmentEntity uEquip = mUser.getResources().getEquipment(userEquipId);
-                        String name = ResItem.getItemEquipment(itemKey) != null
-                                ? ResItem.getItemEquipment(itemKey).getName() : "?";
-                        if (uEquip == null || uEquip.getItemId() != itemKey)
-                            return String.format(Lang.instance(mUser).get(Lang.err_not_enough_item), name);
-                    }
+                    if (chunk.size() != 4)
+                        return Lang.instance(mUser).get(Lang.err_params);
+                    long userEquipId = chunk.get(1);
+                    int itemKey = chunk.get(2).intValue();
+                    UserEquipmentEntity uEquip = mUser.getResources().getEquipment(userEquipId);
+                    String name = ResItem.getItemEquipment(itemKey) != null
+                            ? ResItem.getItemEquipment(itemKey).getName() : "?";
+                    if (uEquip == null || uEquip.getItemId() != itemKey)
+                        return String.format(Lang.instance(mUser).get(Lang.err_not_enough_item), name);
                     break;
             }
         }
@@ -752,10 +757,7 @@ public class Bonus {
         return results;
     }
 
-    public static boolean isBonusType(List<Long> bonus, int bonusType) {
-        return bonus.get(0) == bonusType;
-    }
-
+    /** Parse preview/reward config — ITEM [4,itemKey], EQUIP [12,itemKey,tier]. */
     public static List<List<Long>> parse(List<Long> bonus) {
         List<List<Long>> result = new ArrayList<>();
         if (bonus != null && !bonus.isEmpty()) {
@@ -763,13 +765,33 @@ public class Bonus {
             while (index < bonus.size()) {
                 List<Long> tmp = new ArrayList<>();
                 int type = bonus.get(index++).intValue();
-                int length = bonusConfigLength(bonus, index, type);
+                int length = mTypeLength.getOrDefault(type, 0);
                 tmp.add((long) type);
                 for (int i = index; i < index + length; i++)
                     tmp.add(bonus.get(i));
                 result.add(tmp);
                 index += length;
             }
+        }
+        return result;
+    }
+
+    /** Parse cost/deduct — ITEM [4,-itemKey] | [4,rowId,itemKey], EQUIP [12,rowId,itemKey,tier]. */
+    public static List<List<Long>> parseCost(List<Long> bonus) {
+        List<List<Long>> result = new ArrayList<>();
+        if (bonus == null || bonus.isEmpty())
+            return result;
+        int index = 0;
+        while (index < bonus.size()) {
+            int type = bonus.get(index++).intValue();
+            int payloadIndex = index;
+            int length = applyPayloadLength(bonus, payloadIndex, type);
+            List<Long> tmp = new ArrayList<>();
+            tmp.add((long) type);
+            for (int i = 0; i < length; i++)
+                tmp.add(bonus.get(payloadIndex + i));
+            result.add(tmp);
+            index = payloadIndex + length;
         }
         return result;
     }
@@ -814,50 +836,6 @@ public class Bonus {
         return result;
     }
 
-    /** Gán slot trong user_data.item_slot. {@code bonusType} = wire bonus (4, 12, …); {@code slotZoneType} chỉ chọn vùng bag vs event. */
-    public static boolean prepareNewItemSlot(MyUser mUser, int bonusType, long rowId, ItemType slotZoneType) {
-        List<Long> slots = mUser.getUData().getItemSlotList();
-        int bagCount = mUser.getUData().getSlotBagUI();
-        int eventCount = mUser.getUData().getSlotEvent();
-        if (slotZoneType == ItemType.EVENT) {
-            if (rowId == 0)
-                return mUser.getResources().canAddEventItem(1);
-            if (!mUser.getResources().canAddEventItem(1))
-                return false;
-            Integer slot = ItemSlotHelper.findFirstEmpty(slots, bagCount, eventCount);
-            if (slot == null)
-                return false;
-            ItemSlotHelper.setPair(slots, slot, bonusType, rowId);
-        } else {
-            if (rowId == 0)
-                return mUser.getResources().canAddBagItem(1);
-            if (!mUser.getResources().canAddBagItem(1))
-                return false;
-            Integer slot = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
-            if (slot == null)
-                return false;
-            ItemSlotHelper.setPair(slots, slot, bonusType, rowId);
-        }
-        return mUser.getUData().saveItemSlot(slots);
-    }
-
-    public static void clearItemFromSlot(MyUser mUser, int bonusType, long rowId) {
-        List<Long> slots = mUser.getUData().getItemSlotList();
-        int bagCount = mUser.getUData().getSlotBagUI();
-        int eventCount = mUser.getUData().getSlotEvent();
-        Integer bagSlot = ItemSlotHelper.findSlotOf(slots, 0, bagCount, bonusType, rowId);
-        if (bagSlot != null) {
-            ItemSlotHelper.clearPair(slots, bagSlot);
-            mUser.getUData().saveItemSlot(slots);
-            return;
-        }
-        Integer eventSlot = ItemSlotHelper.findSlotOf(slots, bagCount, eventCount, bonusType, rowId);
-        if (eventSlot != null) {
-            ItemSlotHelper.clearPair(slots, eventSlot);
-            mUser.getUData().saveItemSlot(slots);
-        }
-    }
-
     public static boolean moveEquipmentToBag(MyUser mUser, UserEquipmentEntity equip) {
         if (!mUser.getResources().canAddBagItem(1))
             return false;
@@ -867,7 +845,7 @@ public class Bonus {
         if (slot == null)
             return false;
         ItemSlotHelper.setPair(slots, slot, BONUS_EQUIPMENT, equip.getId());
-        if (!mUser.getUData().saveItemSlot(slots))
+        if (!mUser.getResources().saveItemSlot(slots))
             return false;
         equip.setBagSlot(slot);
         return true;
@@ -882,5 +860,85 @@ public class Bonus {
     public static boolean isAggregatedEventItemKey(int itemKey) {
         return itemKey == Pbmethod.ItemKey.TICKER_NORMAL.getNumber()
                 || itemKey == Pbmethod.ItemKey.TICKER_SPECIAL.getNumber();
+    }
+
+    /** item_slot: consum (BONUS_ITEM), equip, pet, mount — không gồm event/currency. */
+    public static boolean usesItemSlotBonusType(int bonusType) {
+        return bonusType == BONUS_ITEM || bonusType == BONUS_EQUIPMENT
+                || bonusType == BONUS_PET || bonusType == BONUS_MOUNT;
+    }
+
+    public static boolean usesItemSlotForUserItem(ItemType storageType) {
+        return storageType == ItemType.CONSUMABLE;
+    }
+
+    /** Xóa ô item_slot trỏ tới row không còn tồn tại hoặc không thuộc túi UI. */
+    public static void reconcileItemSlots(MyUser mUser) {
+        List<Long> slots = mUser.getUData().getItemSlotList();
+        int bagCount = mUser.getUData().getSlotBagUI();
+        boolean changed = false;
+        for (int s = 0; s < bagCount; s++) {
+            if (ItemSlotHelper.isEmpty(slots, s))
+                continue;
+            int bt = ItemSlotHelper.getBonusType(slots, s);
+            long rowId = ItemSlotHelper.getRowId(slots, s);
+            if (!slotRowExists(mUser, bt, rowId)) {
+                ItemSlotHelper.clearPair(slots, s);
+                changed = true;
+            }
+        }
+        if (changed)
+            mUser.getResources().saveItemSlot(slots);
+    }
+
+    static boolean slotRowExists(MyUser mUser, int bonusType, long rowId) {
+        if (rowId <= 0)
+            return false;
+        switch (bonusType) {
+            case BONUS_ITEM: {
+                UserItemEntity u = mUser.getResources().getItem(rowId);
+                return u != null && usesItemSlotForUserItem(ItemType.get(u.getType()));
+            }
+            case BONUS_EQUIPMENT: {
+                UserEquipmentEntity e = mUser.getResources().getEquipment(rowId);
+                return e != null && !e.isEquip();
+            }
+            case BONUS_PET:
+                return mUser.getResources().getPet(rowId) != null;
+            case BONUS_MOUNT:
+                return mUser.getResources().getMount(rowId) != null;
+            default:
+                return false;
+        }
+    }
+
+    /** Gán ô túi UI — bonusType ∈ {4 consum, 12 equip, 9 pet, 10 mount}. rowId=0 chỉ check còn chỗ. */
+    public static boolean prepareNewItemSlot(MyUser mUser, int bonusType, long rowId) {
+        if (!usesItemSlotBonusType(bonusType))
+            return true;
+        reconcileItemSlots(mUser);
+        List<Long> slots = mUser.getUData().getItemSlotList();
+        int bagCount = mUser.getUData().getSlotBagUI();
+        if (rowId == 0)
+            return mUser.getResources().canAddBagItem(1);
+        if (!mUser.getResources().canAddBagItem(1))
+            return false;
+        Integer slot = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
+        if (slot == null)
+            return false;
+        ItemSlotHelper.setPair(slots, slot, bonusType, rowId);
+        return mUser.getResources().saveItemSlot(slots);
+    }
+
+    public static void clearItemFromSlot(MyUser mUser, int bonusType, long rowId) {
+        if (!usesItemSlotBonusType(bonusType))
+            return;
+        List<Long> slots = mUser.getUData().getItemSlotList();
+        int bagCount = mUser.getUData().getSlotBagUI();
+        Integer slot = ItemSlotHelper.findSlotOf(slots, 0, bagCount, bonusType, rowId);
+        if (slot != null) {
+            ItemSlotHelper.clearPair(slots, slot);
+            mUser.getResources().saveItemSlot(slots);
+        }
     }
 }

@@ -49,6 +49,9 @@ public class UserDataEntity implements Serializable {
     UserInt uInt;
     @Transient
     long lastClanChat;
+    /** item_slot đổi in-memory; flush khi logout hoặc piggyback uData.update(). */
+    @Transient
+    boolean itemSlotDirty;
 
     public UserDataEntity(int userId) {
         this.userId = userId;
@@ -70,35 +73,54 @@ public class UserDataEntity implements Serializable {
         this.itemSlot = buildEmptyItemSlot(CfgUser.getSlotBagInit());
     }
 
-    static String buildEmptyItemSlot(int bagCount, int eventCount) {
+    static String buildEmptyItemSlot(int bagCount) {
         List<Long> slots = new ArrayList<>();
-        ItemSlotHelper.ensureCapacity(slots, bagCount, eventCount);
+        ItemSlotHelper.ensureBagCapacity(slots, bagCount);
         return ItemSlotHelper.serialize(slots);
     }
 
     static String buildEmptyItemSlot(String numSlotJson) {
         List<Integer> caps = GsonUtil.strToListInt(numSlotJson);
         while (caps.size() < 3) caps.add(8);
-        return buildEmptyItemSlot(caps.get(0), caps.get(2));
+        return buildEmptyItemSlot(caps.get(0));
     }
 
     /** Khởi tạo item_slot rỗng theo số ô bag/event hiện tại của user. */
     public void ensureItemSlotInitialized() {
         if (itemSlot != null && !itemSlot.isEmpty())
             return;
-        itemSlot = buildEmptyItemSlot(getSlotBagUI(), getSlotEvent());
+        itemSlot = buildEmptyItemSlot(getSlotBagUI());
     }
 
     public List<Long> getItemSlotList() {
         List<Long> slots = ItemSlotHelper.parse(itemSlot);
-        List<Integer> caps = getSlot();
-        ItemSlotHelper.ensureCapacity(slots, caps.get(0), caps.get(2));
+        ItemSlotHelper.ensureBagCapacity(slots, getSlotBagUI());
         return slots;
     }
 
+    /** Ghi item_slot in-memory; DB flush qua {@link #flushItemSlotIfDirty()} hoặc {@link #update(List)}. */
     public boolean saveItemSlot(List<Long> slots) {
         itemSlot = ItemSlotHelper.serialize(slots);
-        return update(Arrays.asList("item_slot", itemSlot));
+        itemSlotDirty = true;
+        return true;
+    }
+
+    public boolean flushItemSlotIfDirty() {
+        if (!itemSlotDirty)
+            return true;
+        if (DBJPA.update("user_data", Arrays.asList("item_slot", itemSlot), Arrays.asList("user_id", userId))) {
+            itemSlotDirty = false;
+            return true;
+        }
+        return false;
+    }
+
+    static boolean containsUpdateField(List<Object> data, String field) {
+        for (int i = 0; i + 1 < data.size(); i += 2) {
+            if (field.equals(String.valueOf(data.get(i))))
+                return true;
+        }
+        return false;
     }
 
     public void checkQuestTutorial(MyUser mUser, QuestTutType type, int idInfo, int number) {
@@ -322,7 +344,18 @@ public class UserDataEntity implements Serializable {
     }
 
     public boolean update(List<Object> updateData) {
-        return DBJPA.update("user_data", updateData, Arrays.asList("user_id", userId));
+        List<Object> data = new ArrayList<>(updateData);
+        boolean explicitItemSlot = containsUpdateField(updateData, "item_slot");
+        boolean piggybackSlot = itemSlotDirty && !explicitItemSlot;
+        if (piggybackSlot) {
+            data.add("item_slot");
+            data.add(itemSlot);
+        }
+        if (!DBJPA.update("user_data", data, Arrays.asList("user_id", userId)))
+            return false;
+        if (piggybackSlot || explicitItemSlot)
+            itemSlotDirty = false;
+        return true;
     }
 
     public boolean updateTutorialQuest() {

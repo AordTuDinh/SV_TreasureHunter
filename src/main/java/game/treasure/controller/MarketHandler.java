@@ -280,24 +280,18 @@ public class MarketHandler extends AHandler {
         UserItemEntity uItem = mUser.getResources().getItemByItemKey(protocol.Pbmethod.ItemKey.TICKER_SPECIAL.getNumber());
         boolean saved;
         if (uItem == null) {
-            uItem = new UserItemEntity(user.getId(), protocol.Pbmethod.ItemKey.TICKER_SPECIAL.getNumber(), ItemType.EVENT);
-            List<Long> numNew = new ArrayList<>(nums);
-            numNew.add(0, eventDay);
-            uItem.setData(StringHelper.toDBString(numNew));
-            if (!Bonus.prepareNewItemSlot(mUser, Bonus.BONUS_ITEM, 0, ItemType.EVENT)) {
+            if (!mUser.getResources().canAddEventItem(1)) {
                 Bonus.receiveListItem(mUser, "buy_lottery_special", Bonus.reverseBonus(CfgLottery.getFeeBuySpecial(nums.size())));
                 addErrResponse(getLang(Lang.err_max_slot));
                 return;
             }
+            uItem = new UserItemEntity(user.getId(), protocol.Pbmethod.ItemKey.TICKER_SPECIAL.getNumber(), ItemType.EVENT);
+            List<Long> numNew = new ArrayList<>(nums);
+            numNew.add(0, eventDay);
+            uItem.setData(StringHelper.toDBString(numNew));
             saved = DBJPA.save(uItem);
-            if (saved) {
-                if (!Bonus.prepareNewItemSlot(mUser, Bonus.BONUS_ITEM, uItem.getId(), ItemType.EVENT)) {
-                    uItem.deleteFromDb();
-                    saved = false;
-                } else {
-                    mUser.getResources().addItem(uItem);
-                }
-            }
+            if (saved)
+                mUser.getResources().addItem(uItem);
         } else {
             List<Long> dataSticker = GsonUtil.strToListLong(uItem.getData());
             if (dataSticker.isEmpty() || dataSticker.get(0) != eventDay) {

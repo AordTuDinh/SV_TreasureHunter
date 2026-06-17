@@ -276,9 +276,7 @@ message  PbUserData{
   optional  int32 trialEquip = 24;
   optional  int32 craftLevel = 25;
   optional  int32 craftExp = 26;
-  /** Túi UI: flat pairs [bonusType, rowId, ...]. Ô trống = [0, 0]. bonusType = wire Bonus (4=item, 9=pet, 10=mount, 12=equipment, ...). Index cặp = vị trí ô (0..slotBagUI-1 bag, tiếp theo event). */
   repeated  int64 itemSlot = 27;
-  /** user_equipment rows, slot lấy từ itemSlot. */
   optional  PbListEquipment equipments = 28;
 }
 

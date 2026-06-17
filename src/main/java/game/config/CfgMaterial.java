@@ -37,6 +37,7 @@ public class CfgMaterial {
 
     private static long[][] upgradeBaseCost = defaultUpgradeBaseCost();
     private static MergeDataConfig mergeCfg = defaultMergeConfig();
+    private static final List<Integer> SELL_PRICE_BASE_T1 = List.of(5, 10, 16, 25, 38, 57, 83, 120, 172, 246);
 
     // --- load config ---
 
@@ -119,6 +120,39 @@ public class CfgMaterial {
             return Bonus.viewGold(-cost);
         }
         return Bonus.viewGem((int) -cost);
+    }
+
+    /** Giá bán material — res_material.tier × base[level]; tier 1–2 vàng, tier 3–4 kim cương. */
+    public static long getSellPrice(UserMaterialEntity gem) {
+        if (gem == null)
+            return 0;
+        ResMaterialEntity res = gem.getRes();
+        if (res == null)
+            return 0;
+        int gemTier = res.getTier();
+        if (gemTier < 1)
+            gemTier = 1;
+        int level = gem.getLevel();
+        if (level < 1)
+            level = 1;
+        int idx = Math.min(level, SELL_PRICE_BASE_T1.size()) - 1;
+        return (long) gemTier * SELL_PRICE_BASE_T1.get(idx);
+    }
+
+    public static List<Long> getPriceSellMaterial(UserMaterialEntity gem) {
+        long price = getSellPrice(gem);
+        if (price <= 0)
+            return new ArrayList<>();
+        ResMaterialEntity res = gem.getRes();
+        if (res == null)
+            return new ArrayList<>();
+        if (res.getTier() <= 2)
+            return Bonus.viewGold(price);
+        return Bonus.viewGem((int) price);
+    }
+
+    public static boolean usesGemCurrency(ResMaterialEntity res) {
+        return res != null && res.getTier() >= 3;
     }
 
     public static float rollSocketRate() {
