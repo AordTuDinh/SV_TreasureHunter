@@ -17,6 +17,6 @@ public class ResPetEntity implements Serializable {
     @Id
     int id;
     String name;
-    int rank,  showSummon; // showSummon: có thể summon ra
+    int showSummon; // showSummon: có thể summon ra
 
 }

@@ -22,6 +22,7 @@ public class UserMountEntity implements Serializable {
     int userId;
     int mountId;
     int level;
+    int tier = 1;
     int server;
     String data;
     @Transient
@@ -32,6 +33,7 @@ public class UserMountEntity implements Serializable {
         this.mountId = mountId;
         this.server = user.getServer();
         this.level = 1;
+        this.tier = 1;
         this.data = "[]";
     }
 
@@ -44,6 +46,7 @@ public class UserMountEntity implements Serializable {
         pb.setId(id);
         pb.setMountId(mountId);
         pb.setLevel(level);
+        pb.setTier(tier > 0 ? tier : 1);
         return pb;
     }
 

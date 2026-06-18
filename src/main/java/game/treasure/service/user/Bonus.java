@@ -46,8 +46,8 @@ public class Bonus {
         put(BONUS_SKIN, 1);
         put(BONUS_EFFECT_SKIN, 2);
         put(BONUS_VIP_EXP, 1);
-        put(BONUS_PET, 1);
-        put(BONUS_MOUNT, 1);
+        put(BONUS_PET, 2);
+        put(BONUS_MOUNT, 2);
         put(BONUS_MATERIAL, 2);
         put(BONUS_EQUIPMENT, 2);
     }};
@@ -93,12 +93,22 @@ public class Bonus {
         return viewXNumber(view(BONUS_ITEM, type.id), (int) number);
     }
 
-    public static List<Long> viewPet(int itemId) {
-        return view(BONUS_PET, itemId);
+    public static List<Long> viewPet(int petId, int tier) {
+        int t = tier > 0 ? Math.min(tier, 4) : 1;
+        return view(BONUS_PET, petId, t);
+    }
+
+    public static List<Long> viewPet(int petId) {
+        return viewPet(petId, 1);
+    }
+
+    public static List<Long> viewMount(int mountId, int tier) {
+        int t = tier > 0 ? Math.min(tier, 4) : 1;
+        return view(BONUS_MOUNT, mountId, t);
     }
 
     public static List<Long> viewMount(int mountId) {
-        return view(BONUS_MOUNT, mountId);
+        return viewMount(mountId, 1);
     }
 
     public static List<Long> viewMaterial(int materialId, int rank) {
@@ -241,11 +251,38 @@ public class Bonus {
         return 3;
     }
 
+    /** Apply/cost payload sau type — PET/MOUNT: [configId, tier] | [rowId, configId, tier]. */
+    static int petMountApplyPayloadLength(JsonArray aBonus, int index) {
+        if (index >= aBonus.size())
+            return 0;
+        if (index + 2 >= aBonus.size())
+            return Math.max(0, aBonus.size() - index);
+        if (index + 3 >= aBonus.size())
+            return 2;
+        if (isBonusWireType(aBonus.get(index + 3).getAsInt()))
+            return 2;
+        return 3;
+    }
+
+    static int petMountApplyPayloadLength(List<Long> bonus, int index) {
+        if (index >= bonus.size())
+            return 0;
+        if (index + 2 >= bonus.size())
+            return Math.max(0, bonus.size() - index);
+        if (index + 3 >= bonus.size())
+            return 2;
+        if (isBonusWireType(bonus.get(index + 3).intValue()))
+            return 2;
+        return 3;
+    }
+
     static int applyPayloadLength(List<Long> bonus, int index, int type) {
         if (type == BONUS_ITEM)
             return itemApplyPayloadLength(bonus, index);
         if (type == BONUS_EQUIPMENT)
             return equipmentApplyPayloadLength(bonus, index);
+        if (type == BONUS_PET || type == BONUS_MOUNT)
+            return petMountApplyPayloadLength(bonus, index);
         return mTypeLength.getOrDefault(type, 0);
     }
 
@@ -254,6 +291,8 @@ public class Bonus {
             return itemApplyPayloadLength(aBonus, index);
         if (type == BONUS_EQUIPMENT)
             return equipmentApplyPayloadLength(aBonus, index);
+        if (type == BONUS_PET || type == BONUS_MOUNT)
+            return petMountApplyPayloadLength(aBonus, index);
         return mTypeLength.getOrDefault(type, 0);
     }
 
@@ -559,9 +598,13 @@ public class Bonus {
 
     static List<Long> addPet(MyUser mUser, JsonArray aBonus, int payloadIndex, String detailAction) {
         int petId = aBonus.get(payloadIndex).getAsInt();
+        int tier = aBonus.get(payloadIndex + 1).getAsInt();
+        if (tier <= 0)
+            tier = 1;
         if (!mUser.getResources().prepareNewItemSlot(BONUS_PET, 0))
             return new ArrayList<>();
         UserPetEntity uPet = new UserPetEntity(mUser.getUser(), petId);
+        uPet.setTier(tier);
         if (DBJPA.save(uPet)) {
             if (!mUser.getResources().prepareNewItemSlot(BONUS_PET, uPet.getId())) {
                 DBJPA.delete("user_pet", "id", uPet.getId(), "user_id", uPet.getUserId());
@@ -570,19 +613,23 @@ public class Bonus {
             mUser.getResources().addPet(uPet);
             if (CfgServer.isRealServer()) {
                 Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
-                        "type", "pet", "id", uPet.getId(), "petId", petId);
+                        "type", "pet", "id", uPet.getId(), "petId", petId, "tier", tier);
             }
-            return Arrays.asList((long) BONUS_PET, uPet.getId(), (long) petId);
+            return Arrays.asList((long) BONUS_PET, uPet.getId(), (long) petId, (long) tier);
         }
         return new ArrayList<>();
     }
 
     static List<Long> addMount(MyUser mUser, JsonArray aBonus, int payloadIndex, String detailAction) {
         int mountId = aBonus.get(payloadIndex).getAsInt();
+        int tier = aBonus.get(payloadIndex + 1).getAsInt();
+        if (tier <= 0)
+            tier = 1;
         if (ResMount.get(mountId) == null) return new ArrayList<>();
         if (!mUser.getResources().prepareNewItemSlot(BONUS_MOUNT, 0))
             return new ArrayList<>();
         UserMountEntity uMount = new UserMountEntity(mUser.getUser(), mountId);
+        uMount.setTier(tier);
         if (DBJPA.save(uMount)) {
             if (!mUser.getResources().prepareNewItemSlot(BONUS_MOUNT, uMount.getId())) {
                 DBJPA.delete("user_mount", "id", uMount.getId(), "user_id", uMount.getUserId());
@@ -591,9 +638,9 @@ public class Bonus {
             mUser.getResources().addMount(uMount);
             if (CfgServer.isRealServer()) {
                 Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
-                        "type", "mount", "id", uMount.getId(), "mountId", mountId);
+                        "type", "mount", "id", uMount.getId(), "mountId", mountId, "tier", tier);
             }
-            return Arrays.asList((long) BONUS_MOUNT, uMount.getId(), (long) mountId);
+            return Arrays.asList((long) BONUS_MOUNT, uMount.getId(), (long) mountId, (long) tier);
         }
         return new ArrayList<>();
     }
@@ -757,7 +804,7 @@ public class Bonus {
         return results;
     }
 
-    /** Parse preview/reward config — ITEM [4,itemKey], EQUIP [12,itemKey,tier]. */
+    /** Parse preview/reward config — ITEM [4,itemKey], EQUIP [12,itemKey,tier], PET/MOUNT [9|10,configId,tier]. */
     public static List<List<Long>> parse(List<Long> bonus) {
         List<List<Long>> result = new ArrayList<>();
         if (bonus != null && !bonus.isEmpty()) {

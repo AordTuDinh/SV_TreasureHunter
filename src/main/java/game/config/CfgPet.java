@@ -35,7 +35,8 @@ public class CfgPet {
                     bonus.addAll(getBonusStone(1));
                 } else {
                     int rand = NumberUtil.getRandom(1000);
-                    int rate = isVip ? config.ratePetVip.get(rPet.getRank() - 1) : config.ratePet.get(rPet.getRank() - 1);
+                    int rateIndex = 0;
+                    int rate = isVip ? config.ratePetVip.get(rateIndex) : config.ratePet.get(rateIndex);
                     if (rand <= rate) {
                         bonus.addAll(Bonus.viewPet( petId));
                         hasPet = true;

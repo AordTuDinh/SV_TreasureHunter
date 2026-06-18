@@ -311,6 +311,7 @@ message PbMount{
   repeated int64 point = 2;
   optional int32 mountId = 3;
   optional int32 level = 4;
+  optional int32 tier = 5;
 }
 
 
@@ -323,6 +324,7 @@ message PbPet{
   repeated int64 point = 2;
   optional int32 petId = 3;
   optional int32 level = 4;
+  optional int32 tier = 5;
 }
 
 message PbListItemPoint{

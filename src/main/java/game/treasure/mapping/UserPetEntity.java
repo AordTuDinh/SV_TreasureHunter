@@ -22,6 +22,7 @@ public class UserPetEntity implements Serializable {
     int userId;
     int petId;
     int level;
+    int tier = 1;
     int server;
     @Transient
     Point point;
@@ -31,6 +32,7 @@ public class UserPetEntity implements Serializable {
         this.server = user.getServer();
         this.petId = petId;
         this.level = 1;
+        this.tier = 1;
     }
 
     public ResPetEntity getResPet() {
@@ -42,6 +44,7 @@ public class UserPetEntity implements Serializable {
         pb.setId(id);
         pb.setPetId(petId);
         pb.setLevel(level);
+        pb.setTier(tier > 0 ? tier : 1);
         return pb;
     }
 
