@@ -17,6 +17,8 @@ public enum PubSubService {
     RELOAD_CONFIG(8), // force reload config
     RELOAD_GIFT_CODE(9),
     DELAY_RESTART_SERVER(10), // hẹn giờ restart server
+    DELAY_MAINTENANCE(11), // hẹn giờ bảo trì - countdown
+    MAINTENANCE_START(12), // bắt đầu bảo trì - kick player
     ;
 
     public int id;

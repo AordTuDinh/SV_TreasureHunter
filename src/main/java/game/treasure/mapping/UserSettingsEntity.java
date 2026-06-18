@@ -7,6 +7,7 @@ import ozudo.base.database.DBJPA;
 import ozudo.base.helper.GsonUtil;
 import ozudo.base.helper.NumberUtil;
 import ozudo.base.helper.StringHelper;
+import protocol.Pbmethod;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -22,8 +23,6 @@ import java.util.List;
 @Table(name = "user_settings")
 @NoArgsConstructor
 public class UserSettingsEntity implements Serializable {
-    public static final int AUTO_SELL_ITEM_SIZE = 16;
-
     @Id
     int userId;
     String blockChat, chatSetting; //chatSetting s;ize 2
@@ -34,7 +33,7 @@ public class UserSettingsEntity implements Serializable {
         this.userId = userId;
         this.blockChat = "[]"; // Danh sách bị mình block chat
         this.chatSetting = StringHelper.toDBString(NumberUtil.genListInt(2, 50));
-        this.autoSellItem = StringHelper.toDBString(NumberUtil.genListInt(AUTO_SELL_ITEM_SIZE, 0));
+        this.autoSellItem = StringHelper.toDBString(NumberUtil.genListInt(Pbmethod.AutoSell.values().length, 0));
         this.autoSellMaterial = StringHelper.toDBString(NumberUtil.genListInt(CfgMaterial.getAutoSellMaterialSize(), 0));
     }
 
@@ -75,7 +74,7 @@ public class UserSettingsEntity implements Serializable {
         List<Integer> list = StringHelper.isEmpty(autoSellItem)
                 ? new ArrayList<>()
                 : new ArrayList<>(GsonUtil.strToListInt(autoSellItem));
-        while (list.size() < AUTO_SELL_ITEM_SIZE) {
+        while (list.size() < Pbmethod.AutoSell.values().length) {
             list.add(0);
         }
         return list;

@@ -3,6 +3,7 @@ package game.pubsub;
 import com.google.gson.JsonObject;
 import game.config.CfgChat;
 import game.config.CfgServer;
+import game.cache.JCache;
 import game.config.aEnum.NotifyType;
 import game.config.aEnum.DetailActionType;
 import game.config.aEnum.StatusType;
@@ -20,6 +21,7 @@ import game.treasure.service.resource.ResGift;
 import game.treasure.service.resource.ResIAP;
 import game.treasure.service.user.Bonus;
 import game.monitor.Online;
+import game.monitor.MaintenanceChecker;
 import game.object.MyUser;
 import game.protocol.CommonProto;
 import io.netty.channel.Channel;
@@ -65,6 +67,8 @@ public class Subscriber extends JedisPubSub {
                     case RELOAD_CONFIG -> reloadConfig(message);
                     case RELOAD_GIFT_CODE -> reloadGiftCode(message);
                     case DELAY_RESTART_SERVER -> delayRestartServer(message);
+                    case DELAY_MAINTENANCE -> delayMaintenanceServer(message);
+                    case MAINTENANCE_START -> maintenanceStart(message);
                 }
             }
         } catch (Exception ex) {
@@ -270,6 +274,63 @@ public class Subscriber extends JedisPubSub {
         } else channels = Online.getUserInServer(server);
         if(channels.isEmpty()) return;
         Util.sendProtoDataToListChanel(channels, protocol.Pbmethod.CommonVector.newBuilder().addALong(delayTime).addAString(Lang.getTitle(CfgServer.config.mainLanguage, Lang.countdown_server_update)).build(), IAction.COUNTDOWN_MSG);
+    }
+
+    void delayMaintenanceServer(String msg) {
+        String[] tmp = msg.split("_");
+        if (tmp.length < 2) return;
+        int server = Integer.parseInt(tmp[0]);
+        int delayTime = Integer.parseInt(tmp[1]) * 60;
+        List<Channel> channels = new ArrayList<>();
+        if (server == 0) {
+            channels = Online.getAllChanel();
+        } else {
+            channels = Online.getUserInServer(server);
+        }
+        if (channels.isEmpty()) return;
+        Util.sendProtoDataToListChanel(channels,
+                protocol.Pbmethod.CommonVector.newBuilder()
+                        .addALong(delayTime)
+                        .addAString(Lang.getTitle(CfgServer.config.mainLanguage, Lang.countdown_server_maintenance))
+                        .build(),
+                IAction.COUNTDOWN_MAINTENANCE);
+    }
+
+    void maintenanceStart(String msg) {
+        int server = Integer.parseInt(msg.trim());
+        MaintenanceChecker.invalidate();
+        String kickMsg = MaintenanceChecker.getMipMessage();
+        if (kickMsg == null || kickMsg.isEmpty()) {
+            kickMsg = Lang.getTitle(CfgServer.config.mainLanguage, Lang.msg_server_maintenance);
+        }
+        List<Channel> channels = new ArrayList<>();
+        if (server == 0) {
+            channels = Online.getAllChanel();
+        } else {
+            channels = Online.getUserInServer(server);
+        }
+        for (Channel ch : new ArrayList<>(channels)) {
+            kickChannelForMaintenance(ch, kickMsg);
+        }
+    }
+
+    void kickChannelForMaintenance(Channel ch, String kickMsg) {
+        try {
+            MyUser mUser = Online.getMUser(ch);
+            if (mUser != null && mUser.getUser() != null) {
+                String username = mUser.getUser().getUsername();
+                String name = username;
+                if (username.contains("_")) {
+                    name = username.substring(username.indexOf("_") + 1);
+                }
+                JCache.getInstance().removeValue("s:" + name);
+            }
+            Util.sendProtoData(ch, CommonProto.getErrorMsg(kickMsg), IAction.LOGIN_GAME_BLOCK);
+            Online.logoutChannel(ch);
+            ch.close();
+        } catch (Exception ex) {
+            getLogger().error(GUtil.exToString(ex));
+        }
     }
 
     void telegramNotify(String message) {

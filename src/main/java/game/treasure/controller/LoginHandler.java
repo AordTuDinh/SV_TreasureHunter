@@ -20,6 +20,7 @@ import game.treasure.table.BaseRoom;
 import game.treasure.task.dbcache.MailCreatorCache;
 import game.monitor.ClanManager;
 import game.monitor.Online;
+import game.monitor.MaintenanceChecker;
 import game.object.MyUser;
 import game.object.UserResources;
 import game.protocol.CommonProto;
@@ -217,6 +218,15 @@ public class LoginHandler extends AHandler {
 
         if (user.getBlockType() == BlockType.BLOCK_LOGIN) {
             addResponse(LOGIN_GAME_BLOCK, CommonProto.getErrorMsg(getLang(Lang.err_user_block)));
+            return;
+        }
+
+        if (MaintenanceChecker.isMaintenance()) {
+            String mipMsg = MaintenanceChecker.getMipMessage();
+            if (mipMsg == null || mipMsg.isEmpty()) {
+                mipMsg = getLang(Lang.msg_server_maintenance);
+            }
+            addResponse(LOGIN_GAME_BLOCK, CommonProto.getErrorMsg(mipMsg));
             return;
         }
 

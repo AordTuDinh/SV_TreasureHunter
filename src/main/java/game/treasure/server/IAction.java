@@ -40,6 +40,7 @@ public class IAction {
     // disconect by message
     public static final int DISCONNECT_MSG = 44;
     public static final int CHANGE_LANG = 45;
+    public static final int COUNTDOWN_MAINTENANCE = 46;
 
     // other
     public static final int DAME_SKIN_EQUIP = 50;

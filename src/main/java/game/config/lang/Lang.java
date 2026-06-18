@@ -330,6 +330,7 @@ public abstract class Lang implements Serializable {
     public static String msg_server_not_open = "msg_server_not_open"; // Server chưa mở, server Kiến Lập mở lúc 11h ngày
     public static String msg_server_maintenance = "msg_server_maintenance"; // Server đang bảo trì, bạn quay lại sau
     public static String countdown_server_update = "countdown_server_update"; // Server update dữ liệu sau {0}
+    public static String countdown_server_maintenance = "countdown_server_maintenance"; // Server sẽ bảo trì sau {0}
     public static String msg_disconnect_idle = "msg_disconnect_idle"; // Ngắt kết nối do không hoạt động!
     // IAP
     public static String err_transaction_cancelled_refund = "err_transaction_cancelled_refund"; // Giao dịch đã bị hủy hoặc hoàn tiền.
