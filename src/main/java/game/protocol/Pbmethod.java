@@ -675,6 +675,10 @@ public final class Pbmethod {
      * <code>BONG_SIEU_THU = 13;</code>
      */
     BONG_SIEU_THU(12, 13),
+    /**
+     * <code>LOA_THE_GIOI = 15;</code>
+     */
+    LOA_THE_GIOI(13, 15),
     ;
 
     /**
@@ -729,6 +733,10 @@ public final class Pbmethod {
      * <code>BONG_SIEU_THU = 13;</code>
      */
     public static final int BONG_SIEU_THU_VALUE = 13;
+    /**
+     * <code>LOA_THE_GIOI = 15;</code>
+     */
+    public static final int LOA_THE_GIOI_VALUE = 15;
 
 
     public final int getNumber() { return value; }
@@ -748,6 +756,7 @@ public final class Pbmethod {
         case 11: return CHIP;
         case 12: return BONG_LINH_THU;
         case 13: return BONG_SIEU_THU;
+        case 15: return LOA_THE_GIOI;
         default: return null;
       }
     }
@@ -797,6 +806,119 @@ public final class Pbmethod {
     }
 
     // @@protoc_insertion_point(enum_scope:pbdson.ItemKey)
+  }
+
+  /**
+   * Protobuf enum {@code pbdson.ItemType}
+   *
+   * <pre>
+   * user_item.type / res_item.type — loại lưu trữ item (đồng bộ server + client)
+   * </pre>
+   */
+  public enum ItemType
+      implements com.google.protobuf.ProtocolMessageEnum {
+    /**
+     * <code>POSITION = 1;</code>
+     */
+    POSITION(0, 1),
+    /**
+     * <code>CURRENCY = 2;</code>
+     */
+    CURRENCY(1, 2),
+    /**
+     * <code>EVENT = 3;</code>
+     */
+    EVENT(2, 3),
+    /**
+     * <code>USE = 4;</code>
+     */
+    USE(3, 4),
+    /**
+     * <code>SPEAKER = 5;</code>
+     */
+    SPEAKER(4, 5),
+    ;
+
+    /**
+     * <code>POSITION = 1;</code>
+     */
+    public static final int POSITION_VALUE = 1;
+    /**
+     * <code>CURRENCY = 2;</code>
+     */
+    public static final int CURRENCY_VALUE = 2;
+    /**
+     * <code>EVENT = 3;</code>
+     */
+    public static final int EVENT_VALUE = 3;
+    /**
+     * <code>USE = 4;</code>
+     */
+    public static final int USE_VALUE = 4;
+    /**
+     * <code>SPEAKER = 5;</code>
+     */
+    public static final int SPEAKER_VALUE = 5;
+
+
+    public final int getNumber() { return value; }
+
+    public static ItemType valueOf(int value) {
+      switch (value) {
+        case 1: return POSITION;
+        case 2: return CURRENCY;
+        case 3: return EVENT;
+        case 4: return USE;
+        case 5: return SPEAKER;
+        default: return null;
+      }
+    }
+
+    public static com.google.protobuf.Internal.EnumLiteMap<ItemType>
+        internalGetValueMap() {
+      return internalValueMap;
+    }
+    private static com.google.protobuf.Internal.EnumLiteMap<ItemType>
+        internalValueMap =
+          new com.google.protobuf.Internal.EnumLiteMap<ItemType>() {
+            public ItemType findValueByNumber(int number) {
+              return ItemType.valueOf(number);
+            }
+          };
+
+    public final com.google.protobuf.Descriptors.EnumValueDescriptor
+        getValueDescriptor() {
+      return getDescriptor().getValues().get(index);
+    }
+    public final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptorForType() {
+      return getDescriptor();
+    }
+    public static final com.google.protobuf.Descriptors.EnumDescriptor
+        getDescriptor() {
+      return protocol.Pbmethod.getDescriptor().getEnumTypes().get(5);
+    }
+
+    private static final ItemType[] VALUES = values();
+
+    public static ItemType valueOf(
+        com.google.protobuf.Descriptors.EnumValueDescriptor desc) {
+      if (desc.getType() != getDescriptor()) {
+        throw new java.lang.IllegalArgumentException(
+          "EnumValueDescriptor is not for this type.");
+      }
+      return VALUES[desc.getIndex()];
+    }
+
+    private final int index;
+    private final int value;
+
+    private ItemType(int index, int value) {
+      this.index = index;
+      this.value = value;
+    }
+
+    // @@protoc_insertion_point(enum_scope:pbdson.ItemType)
   }
 
   /**
@@ -874,7 +996,7 @@ public final class Pbmethod {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return protocol.Pbmethod.getDescriptor().getEnumTypes().get(5);
+      return protocol.Pbmethod.getDescriptor().getEnumTypes().get(6);
     }
 
     private static final TargetAttack[] VALUES = values();
@@ -974,7 +1096,7 @@ public final class Pbmethod {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return protocol.Pbmethod.getDescriptor().getEnumTypes().get(6);
+      return protocol.Pbmethod.getDescriptor().getEnumTypes().get(7);
     }
 
     private static final SkinType[] VALUES = values();
@@ -1119,7 +1241,7 @@ public final class Pbmethod {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return protocol.Pbmethod.getDescriptor().getEnumTypes().get(7);
+      return protocol.Pbmethod.getDescriptor().getEnumTypes().get(8);
     }
 
     private static final EquipSlotType[] VALUES = values();
@@ -1327,7 +1449,7 @@ public final class Pbmethod {
     }
     public static final com.google.protobuf.Descriptors.EnumDescriptor
         getDescriptor() {
-      return protocol.Pbmethod.getDescriptor().getEnumTypes().get(8);
+      return protocol.Pbmethod.getDescriptor().getEnumTypes().get(9);
     }
 
     private static final AutoSell[] VALUES = values();
@@ -83046,28 +83168,30 @@ public final class Pbmethod {
       "\003\022\024\n\020TYPE_CHUNK_STATE\020\004*y\n\016CellObjectTyp" +
       "e\022\010\n\004ROCK\020\001\022\010\n\004SIGN\020\002\022\n\n\006CACTUS\020\003\022\n\n\006FLO" +
       "WER\020\004\022\t\n\005SKULL\020\005\022\t\n\005CHEST\020\006\022\t\n\005BONES\020\007\022\016" +
-      "\n\nGRAVESTONE\020\010\022\n\n\006HELMET\020\t*\316\001\n\007ItemKey\022\016" +
+      "\n\nGRAVESTONE\020\010\022\n\n\006HELMET\020\t*\340\001\n\007ItemKey\022\016" +
       "\n\nBINH_MAU_1\020\001\022\016\n\nBINH_MAU_2\020\002\022\016\n\nBINH_M",
       "AU_3\020\003\022\016\n\nBINH_MAU_4\020\004\022\010\n\004GOLD\020\005\022\007\n\003GEM\020" +
       "\006\022\010\n\004RUBY\020\007\022\017\n\013TICKER_MINI\020\010\022\021\n\rTICKER_N" +
       "ORMAL\020\t\022\022\n\016TICKER_SPECIAL\020\n\022\010\n\004CHIP\020\013\022\021\n" +
-      "\rBONG_LINH_THU\020\014\022\021\n\rBONG_SIEU_THU\020\r*;\n\014T" +
-      "argetAttack\022\n\n\006OBJECT\020\000\022\t\n\005ENEMY\020\001\022\010\n\004BO" +
-      "SS\020\002\022\n\n\006PLAYER\020\003*1\n\010SkinType\022\010\n\004HAIR\020\000\022\010" +
-      "\n\004FACE\020\001\022\007\n\003EYE\020\002\022\010\n\004BODY\020\003*q\n\rEquipSlot" +
-      "Type\022\010\n\004NULL\020\000\022\n\n\006WEAPON\020\001\022\007\n\003HAT\020\002\022\t\n\005A" +
-      "RMOR\020\003\022\t\n\005CLOAK\020\004\022\t\n\005SHOES\020\005\022\014\n\010TREASURE" +
-      "\020\006\022\007\n\003PET\020\007\022\t\n\005MOUNT\020\010*\346\002\n\010AutoSell\022\022\n\016A",
-      "UTO_SELL_HP_1\020\000\022\022\n\016AUTO_SELL_HP_2\020\001\022\022\n\016A" +
-      "UTO_SELL_HP_3\020\002\022\022\n\016AUTO_SELL_HP_4\020\003\022\025\n\021A" +
-      "UTO_SELL_EQUIP_1\020\004\022\025\n\021AUTO_SELL_EQUIP_2\020" +
-      "\005\022\025\n\021AUTO_SELL_EQUIP_3\020\006\022\025\n\021AUTO_SELL_EQ" +
-      "UIP_4\020\007\022\025\n\021AUTO_SELL_MOUNT_1\020\010\022\025\n\021AUTO_S" +
-      "ELL_MOUNT_2\020\t\022\025\n\021AUTO_SELL_MOUNT_3\020\n\022\025\n\021" +
-      "AUTO_SELL_MOUNT_4\020\013\022\023\n\017AUTO_SELL_PET_1\020\014" +
-      "\022\023\n\017AUTO_SELL_PET_2\020\r\022\023\n\017AUTO_SELL_PET_3" +
-      "\020\016\022\023\n\017AUTO_SELL_PET_4\020\017B\024\n\010protocolB\010Pbm" +
-      "ethod"
+      "\rBONG_LINH_THU\020\014\022\021\n\rBONG_SIEU_THU\020\r\022\020\n\014L" +
+      "OA_THE_GIOI\020\017*G\n\010ItemType\022\014\n\010POSITION\020\001\022" +
+      "\014\n\010CURRENCY\020\002\022\t\n\005EVENT\020\003\022\007\n\003USE\020\004\022\013\n\007SPE" +
+      "AKER\020\005*;\n\014TargetAttack\022\n\n\006OBJECT\020\000\022\t\n\005EN" +
+      "EMY\020\001\022\010\n\004BOSS\020\002\022\n\n\006PLAYER\020\003*1\n\010SkinType\022" +
+      "\010\n\004HAIR\020\000\022\010\n\004FACE\020\001\022\007\n\003EYE\020\002\022\010\n\004BODY\020\003*q" +
+      "\n\rEquipSlotType\022\010\n\004NULL\020\000\022\n\n\006WEAPON\020\001\022\007\n",
+      "\003HAT\020\002\022\t\n\005ARMOR\020\003\022\t\n\005CLOAK\020\004\022\t\n\005SHOES\020\005\022" +
+      "\014\n\010TREASURE\020\006\022\007\n\003PET\020\007\022\t\n\005MOUNT\020\010*\346\002\n\010Au" +
+      "toSell\022\022\n\016AUTO_SELL_HP_1\020\000\022\022\n\016AUTO_SELL_" +
+      "HP_2\020\001\022\022\n\016AUTO_SELL_HP_3\020\002\022\022\n\016AUTO_SELL_" +
+      "HP_4\020\003\022\025\n\021AUTO_SELL_EQUIP_1\020\004\022\025\n\021AUTO_SE" +
+      "LL_EQUIP_2\020\005\022\025\n\021AUTO_SELL_EQUIP_3\020\006\022\025\n\021A" +
+      "UTO_SELL_EQUIP_4\020\007\022\025\n\021AUTO_SELL_MOUNT_1\020" +
+      "\010\022\025\n\021AUTO_SELL_MOUNT_2\020\t\022\025\n\021AUTO_SELL_MO" +
+      "UNT_3\020\n\022\025\n\021AUTO_SELL_MOUNT_4\020\013\022\023\n\017AUTO_S" +
+      "ELL_PET_1\020\014\022\023\n\017AUTO_SELL_PET_2\020\r\022\023\n\017AUTO",
+      "_SELL_PET_3\020\016\022\023\n\017AUTO_SELL_PET_4\020\017B\024\n\010pr" +
+      "otocolB\010Pbmethod"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

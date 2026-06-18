@@ -203,7 +203,7 @@ public class LuckySpineHandler extends AHandler {
         }
 
         List<Long> bonus = new ArrayList<>();
-        bonus.addAll(Bonus.viewItem(ItemType.EVENT.value, MaterialType.CHIP.id, numberChip));
+        bonus.addAll(Bonus.viewItem( MaterialType.CHIP.id, numberChip));
         bonus.addAll(Bonus.viewGem(-(numberChip * CfgLuckySpine.config.priceChip)));
         //
         List<Long> retBonus = Bonus.receiveListItem(mUser, DetailActionType.MUA_CHIP_VONG_QUAY.getKey(), bonus);

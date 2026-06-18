@@ -5,13 +5,14 @@ import com.google.gson.Gson;
 
 import game.battle.calculate.IMath;
 import game.battle.object.Point;
-import game.config.aEnum.ItemType;
+import protocol.Pbmethod;
 
 import game.config.lang.Lang;
 
 import game.treasure.mapping.UserEquipmentEntity;
 import game.treasure.mapping.UserItemEntity;
-import game.treasure.mapping.UserMaterialEntity;
+import game.treasure.mapping.main.ResItemEntity;
+import game.treasure.service.resource.ResItem;
 
 import game.object.MyUser;
 
@@ -34,6 +35,7 @@ import java.util.Map;
 
 public class CfgItem {
     public static final int MAX_UPGRADE_LEVEL = 10;
+    public static final int SPEAKER_MAX_LEN = 120;
     public static final List<Integer> UPGRADE_FEE_BASE_T1 = List.of(10, 13, 19, 27, 38, 53, 75, 105, 147);
     public static final List<Integer> SELL_PRICE_BASE_T1 = List.of(5, 10, 16, 25, 38, 57, 83, 120, 172, 246);
 
@@ -84,7 +86,7 @@ public class CfgItem {
     public static boolean canUpLevel(UserItemEntity item) {
         if (item == null) return false;
         int type = item.getType();
-        if (type != ItemType.CONSUMABLE.value && type != ItemType.EQUIPMENT.value) return false;
+        if (type != Pbmethod.ItemType.POSITION.getNumber()) return false;
         int level = item.getLevel();
         return level >= 1 && level < MAX_UPGRADE_LEVEL;
     }
@@ -116,7 +118,7 @@ public class CfgItem {
         int idx = level - 1;
         if (idx < 0 || idx >= UPGRADE_FEE_BASE_T1.size()) return 0;
         long fee = (long) getTierMult(item) * UPGRADE_FEE_BASE_T1.get(idx);
-        if (item.getType() == ItemType.CONSUMABLE.value) {
+        if (item.getType() == Pbmethod.ItemType.POSITION.getNumber()) {
             fee = fee / 2;
         }
 
@@ -146,6 +148,11 @@ public class CfgItem {
 
 
     public static int getSellPriceGold(UserItemEntity item) {
+        ResItemEntity res = ResItem.getItem(item.getItemId());
+        if (res != null && res.getSellPrice() > 0)
+            return res.getSellPrice();
+        if (item.getType() != Pbmethod.ItemType.POSITION.getNumber())
+            return 0;
         int level = item.getLevel();
         if (level < 1) level = 1;
         int idx = Math.min(level, SELL_PRICE_BASE_T1.size()) - 1;

@@ -80,7 +80,7 @@ public class UserResources implements Serializable {
             return;
         boolean changed = false;
         for (UserItemEntity item : mItem.values()) {
-            if (ItemType.get(item.getType()) != ItemType.CONSUMABLE)
+            if (!Bonus.usesItemSlotForUserItem(Pbmethod.ItemType.valueOf(item.getType())))
                 continue;
             Integer s = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
             if (s != null) {
@@ -119,7 +119,7 @@ public class UserResources implements Serializable {
         int bagCount = mUser.getUData().getSlotBagUI();
         for (UserItemEntity item : mItem.values()) {
             item.setBagSlot(-1);
-            if (ItemType.get(item.getType()) != ItemType.CONSUMABLE)
+            if (!Bonus.usesItemSlotForUserItem(Pbmethod.ItemType.valueOf(item.getType())))
                 continue;
             Integer bagSlot = ItemSlotHelper.findSlotOf(slots, 0, bagCount, Bonus.BONUS_ITEM, item.getId());
             if (bagSlot != null)
@@ -260,12 +260,12 @@ public class UserResources implements Serializable {
         return getNumItemEvent() + count <= mUser.getUData().getSlotEvent();
     }
 
-    /** Event item không dùng item_slot — đếm row event riêng (aggregated = 1 row). */
+    /** Item tab túi lớn — user_item type >= EVENT (EVENT, USE, SPEAKER). */
     public int getNumItemEvent() {
         int n = 0;
         for (UserItemEntity item : mItem.values()) {
-            ItemType type = ItemType.get(item.getType());
-            if (type == ItemType.EVENT)
+            Pbmethod.ItemType type = Pbmethod.ItemType.valueOf(item.getType());
+            if (Bonus.usesEventBagStorage(type))
                 n++;
         }
         return n;

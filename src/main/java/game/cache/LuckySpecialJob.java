@@ -94,7 +94,7 @@ public class LuckySpecialJob {
                 status = StatusType.RECEIVE.value;
                 bonus = Bonus.viewGem((int) curGemWin);
             }
-            sql += "(" + uLot.get(i).getUserId() + "," + event + "," + uLot.get(i).getResItemType().value + "," + StringHelper.toDBString(uLot.get(i).getData()) + ",'"
+            sql += "(" + uLot.get(i).getUserId() + "," + event + "," + uLot.get(i).getResItemType().getNumber() + "," + StringHelper.toDBString(uLot.get(i).getData()) + ",'"
                     + DateTime.getFullDate() + "'," + luckyNum + "," + status + ",'" + StringHelper.toDBString(bonus) + "'),";
         }
         sql = String.format("INSERT INTO user_lottery_history(user_id,event_id,type,number,time,lucky,status,bonus) VALUES %s", sql.substring(0, sql.length() - 1));

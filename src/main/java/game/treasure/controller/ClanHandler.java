@@ -647,7 +647,7 @@ public class ClanHandler extends AHandler {
             int clanHonor = CfgClan.config.checkInGuildExp, guildCoin = CfgClan.config.checkInGuildCoin;
             ClanEntity clan = clanManager.getClan();
             clan.addHonor(clanHonor);
-            List<Long> aBonus = Bonus.receiveListItem(mUser, DetailActionType.DIEM_DANH_BANG_HOI.getKey(), Bonus.viewItem( ItemType.CONSUMABLE.value,1, guildCoin));
+            List<Long> aBonus = Bonus.receiveListItem(mUser, DetailActionType.DIEM_DANH_BANG_HOI.getKey(), Bonus.viewItem(1, guildCoin));
             addResponse(protocol.Pbmethod.CommonVector.newBuilder().addALong(clan.getLevel()).
                     addALong(clan.getExp()).addALong(clanHonor).addALong(DateTime.secondsUntilEndDay()).addALong(clan.getHonor()).addAllALong(aBonus).build());
             CfgQuest.addNumQuest(mUser, DataQuest.CHECK_IN_CLAN, 1);

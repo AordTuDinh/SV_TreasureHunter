@@ -2,7 +2,6 @@ package game.treasure.mapping;
 
 import game.battle.object.Point;
 import game.config.CfgItem;
-import game.config.aEnum.ItemType;
 import game.treasure.mapping.main.ResItemEntity;
 import game.treasure.mapping.main.ResItemEquipmentEntity;
 import game.treasure.service.resource.ResItem;
@@ -20,8 +19,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static game.config.aEnum.ItemType.*;
 
 @Data
 @NoArgsConstructor
@@ -53,14 +50,14 @@ public class UserItemEntity implements Serializable {
         data = "[]";
     }
 
-    public UserItemEntity(int userId, int itemId, ItemType type) {
+    public UserItemEntity(int userId, int itemId, Pbmethod.ItemType type) {
         this(userId, itemId);
     }
 
     /** user_item.type — lấy từ res_item, không lưu tier trên row. */
     public int getType() {
         ResItemEntity res = getRes();
-        return res != null && res.getItemType() != null ? res.getItemType().value : 0;
+        return res != null && res.getItemType() != null ? res.getItemType().getNumber() : 0;
     }
 
     /** Tier consumable/event — lấy từ res_item.rank. */
@@ -79,8 +76,8 @@ public class UserItemEntity implements Serializable {
     }
 
     public List<Long> getPoint() {
-        ItemType type = getRes().getItemType();
-        if (type == EVENT || type == CURRENCY)
+        Pbmethod.ItemType type = getRes().getItemType();
+        if (type == Pbmethod.ItemType.EVENT || type == Pbmethod.ItemType.CURRENCY)
             return null;
         if (point == null)
             rebuildPointCache();
@@ -183,7 +180,7 @@ public class UserItemEntity implements Serializable {
         return pb;
     }
 
-    public ItemType getResItemType() {
+    public Pbmethod.ItemType getResItemType() {
         ResItemEntity res = getRes();
         return res != null ? res.getItemType() : null;
     }

@@ -6,7 +6,7 @@ import game.battle.object.Point;
 import game.config.CfgItem;
 import game.config.CfgServer;
 import game.config.aEnum.DetailActionType;
-import game.config.aEnum.ItemType;
+import protocol.Pbmethod;
 import game.object.MyUser;
 import game.protocol.CommonProto;
 import game.treasure.mapping.UserEquipmentEntity;
@@ -87,7 +87,7 @@ public class ResItem {
      * Roll base từ res_item.data [min,max] → lưu [pointId, value], pointId = {@link Point#HP}.
      */
     public static void initConsumableInstanceData(UserItemEntity uItem) {
-        if (uItem == null || uItem.getType() != ItemType.CONSUMABLE.value)
+        if (uItem == null || uItem.getType() != Pbmethod.ItemType.POSITION.getNumber())
             return;
         if (!CfgItem.isItemMedicine(uItem.getItemId()))
             return;
@@ -193,7 +193,7 @@ public class ResItem {
         UserItemEntity item = mUser.getResources().getItem(userItemId);
         if (item == null)
             return false;
-        if (item.getType() != ItemType.CONSUMABLE.value)
+        if (item.getType() != Pbmethod.ItemType.POSITION.getNumber())
             return false;
         if (item.getUserId() != mUser.getUser().getId())
             return false;
@@ -213,7 +213,7 @@ public class ResItem {
         return true;
     }
 
-    /** Xóa 1 row user_item và trả chunk bonus [4,rowId,itemKey] cho client. */
+    /** Xóa 1 row user_item và trả chunk bonus [4,rowId,-itemKey] cho client. */
     public static List<Long> removeUserItemRow(MyUser mUser, UserItemEntity uItem, String detailAction) {
         if (uItem == null || mUser == null)
             return Collections.emptyList();
@@ -228,6 +228,6 @@ public class ResItem {
         if (!uItem.deleteFromDb())
             return Collections.emptyList();
         mUser.getResources().removeItem(rowId);
-        return List.of((long) Bonus.BONUS_ITEM, rowId, (long) itemKey);
+        return List.of((long) Bonus.BONUS_ITEM, rowId, (long) -itemKey);
     }
 }

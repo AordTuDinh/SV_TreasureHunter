@@ -16,7 +16,6 @@ import game.treasure.service.user.Bonus;
 import protocol.Pbmethod;
 import io.netty.channel.Channel;
 import ozudo.base.log.Logs;
-import protocol.Pbmethod;
 
 import java.util.*;
 
@@ -85,7 +84,7 @@ public class PetHandler extends AHandler {
             return;
         }
         boolean isVip = inputs.get(1) == 1L;
-        List<Long> bonus = Bonus.viewItem(ItemType.EVENT.value,  isVip ? Pbmethod.ItemKey.BONG_SIEU_THU : Pbmethod.ItemKey.BONG_LINH_THU, -number);
+        List<Long> bonus = Bonus.viewItem(Pbmethod.ItemType.EVENT.getNumber(),  isVip ? Pbmethod.ItemKey.BONG_SIEU_THU : Pbmethod.ItemKey.BONG_LINH_THU, -number);
         String err = Bonus.checkMoney(mUser, bonus);
         if (err != null) {
             addErrResponse(err);

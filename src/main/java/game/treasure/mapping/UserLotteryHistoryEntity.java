@@ -1,6 +1,5 @@
 package game.treasure.mapping;
 
-import game.config.aEnum.ItemType;
 import game.treasure.service.user.Bonus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -44,8 +43,8 @@ public class UserLotteryHistoryEntity implements Serializable {
     }
 
 
-    public ItemType getItemType() {
-        return ItemType.get(type);
+    public Pbmethod.ItemType getItemType() {
+        return Pbmethod.ItemType.valueOf(type);
     }
 
     public Pbmethod.PbLotteryHistory toProto() {

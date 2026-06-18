@@ -97,6 +97,16 @@ enum ItemKey {
   CHIP = 11;
   BONG_LINH_THU = 12;
   BONG_SIEU_THU = 13;
+  LOA_THE_GIOI = 15;
+}
+
+// user_item.type / res_item.type — loại lưu trữ item (đồng bộ server + client)
+enum ItemType {
+  POSITION = 1;
+  CURRENCY = 2;
+  EVENT = 3;
+  USE = 4;
+  SPEAKER = 5;
 }
 
 message PbUnit{

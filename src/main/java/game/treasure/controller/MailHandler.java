@@ -78,6 +78,7 @@ public class MailHandler extends AHandler {
 
     void receive() {
         int mailId = (int) CommonProto.parseCommonVector(requestData).getALong(0);
+        System.out.println("mailId = " + mailId);
         if (mailId == -1) { // view all
             List<UserMailEntity> uMail = dbGetListUnreceived();
             if (uMail.isEmpty()) {

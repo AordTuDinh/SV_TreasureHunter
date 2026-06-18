@@ -2,7 +2,6 @@ package game.treasure.controller;
 
 import game.config.CfgLottery;
 import game.config.aEnum.DetailActionType;
-import game.config.aEnum.ItemType;
 import protocol.Pbmethod;
 import game.config.aEnum.StatusType;
 import game.config.lang.Lang;
@@ -16,7 +15,6 @@ import ozudo.base.database.DBJPA;
 import ozudo.base.helper.DateTime;
 import ozudo.base.helper.GsonUtil;
 import ozudo.base.log.Logs;
-import protocol.Pbmethod;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -96,7 +94,7 @@ public class LotteryHandler extends AHandler {
             }
         }
 
-        List<Long> bonus = Bonus.viewItem(ItemType.EVENT.value, Pbmethod.ItemKey.TICKER_MINI, -numTicker);
+        List<Long> bonus = Bonus.viewItem(Pbmethod.ItemType.EVENT.getNumber(), Pbmethod.ItemKey.TICKER_MINI, -numTicker);
         String err = Bonus.checkMoney(mUser, bonus);
         if (err != null) {
             addErrResponse(err);
@@ -126,12 +124,12 @@ public class LotteryHandler extends AHandler {
     }
 
     void history(int inputType) {
-        ItemType type = ItemType.get(inputType);
+        Pbmethod.ItemType type = Pbmethod.ItemType.valueOf(inputType);
         if (type == null) {
             addErrParam();
             return;
         }
-        List<UserLotteryHistoryEntity> history = DBJPA.getList("user_lottery_history", Arrays.asList("type", type.value, "user_id", user.getId()), "", UserLotteryHistoryEntity.class);
+        List<UserLotteryHistoryEntity> history = DBJPA.getList("user_lottery_history", Arrays.asList("type", type.getNumber(), "user_id", user.getId()), "", UserLotteryHistoryEntity.class);
         Pbmethod.PbListLotteryHistory.Builder pb = Pbmethod.PbListLotteryHistory.newBuilder();
         for (UserLotteryHistoryEntity u : history) {
             pb.addALottery(u.toProto());
@@ -141,13 +139,13 @@ public class LotteryHandler extends AHandler {
 
     void receive() {
         List<Long> input = getInputALong();
-        ItemType type = ItemType.get(Math.toIntExact(input.get(0)));
+        Pbmethod.ItemType type = Pbmethod.ItemType.valueOf(Math.toIntExact(input.get(0)));
         if (type == null) {
             addErrParam();
             return;
         }
         int eventId = Math.toIntExact(input.get(1));
-        List<UserLotteryHistoryEntity> history = DBJPA.getList("user_lottery_history", Arrays.asList("type", type.value, "event_id", eventId, "user_id", user.getId()), "", UserLotteryHistoryEntity.class);
+        List<UserLotteryHistoryEntity> history = DBJPA.getList("user_lottery_history", Arrays.asList("type", type.getNumber(), "event_id", eventId, "user_id", user.getId()), "", UserLotteryHistoryEntity.class);
         if (history == null || history.isEmpty()) {
             addErrParam();
             return;

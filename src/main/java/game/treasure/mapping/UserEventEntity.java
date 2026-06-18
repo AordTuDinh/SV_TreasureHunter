@@ -5,7 +5,7 @@ import game.config.CfgEvent;
 import game.config.CfgEventCommunity;
 import game.config.CfgEventDrop;
 import game.config.aEnum.DetailActionType;
-import game.config.aEnum.ItemType;
+import protocol.Pbmethod;
 import game.config.aEnum.StatusType;
 import game.treasure.service.resource.ResEvent;
 import game.treasure.service.user.Bonus;
@@ -97,7 +97,7 @@ public class UserEventEntity implements Serializable {
             int itemKey = CfgEventDrop.config.getItemId();
             int qty = mUser.getResources().countByItemKey(itemKey);
             if (qty > 0) {
-                Bonus.receiveListItem(mUser, DetailActionType.CLEAR_ITEM_EVENT_DROP.getKey(), Bonus.viewItem(ItemType.EVENT.value, itemKey, -qty));
+                Bonus.receiveListItem(mUser, DetailActionType.CLEAR_ITEM_EVENT_DROP.getKey(), Bonus.viewItem( itemKey, -qty));
             }
             update(List.of("event_drop", eventDrop));
         }

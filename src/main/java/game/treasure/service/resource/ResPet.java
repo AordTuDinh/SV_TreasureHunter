@@ -21,11 +21,4 @@ public class ResPet {
         mPet.clear();
         aPet.forEach(pet -> mPet.put(pet.getId(), pet));
     }
-
-    public static List<Long> getDataEquipByLevel(List<List<Long>> points, int level) {
-        if (!points.isEmpty()) {
-            return points.get(level);
-        }
-        return new ArrayList<>();
-    }
 }

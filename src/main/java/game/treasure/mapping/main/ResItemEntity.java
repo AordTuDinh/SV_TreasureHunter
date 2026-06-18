@@ -2,7 +2,7 @@ package game.treasure.mapping.main;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import game.config.aEnum.ItemType;
+import protocol.Pbmethod;
 import game.object.BonusConfig;
 import game.object.PointBuff;
 import lombok.Getter;
@@ -32,7 +32,7 @@ public class ResItemEntity extends BaseEntity implements Serializable {
     List<BonusConfig> itemOpen;
     @Getter
     @Transient
-    ItemType itemType;
+    Pbmethod.ItemType itemType;
 
 
     /** user_item.tier cho consumable/event — lấy từ cột rank. */
@@ -41,7 +41,7 @@ public class ResItemEntity extends BaseEntity implements Serializable {
     }
 
     public void init() {
-        itemType = ItemType.get(type);
+        itemType = Pbmethod.ItemType.valueOf(type);
 //        if (type == ItemType.ITEM_OPEN.value) {
 //            try {
 //                itemOpen = new Gson().fromJson(data, new TypeToken<List<BonusConfig>>() {

@@ -37,6 +37,7 @@ public enum DetailActionType {
     BONUS_GIFT_CODE("bonus_gift_code_"),
     SU_DUNG_VE_SO_NHO("lottery_mini_use"),
     SU_DUNG_ITEM("used_item_"),
+    SU_DUNG_LOA_THE_GIOI("speaker_use"),
     MUA_CHIP_VONG_QUAY("buy_chip"),
     BUY_SHOP("buy_shop_"),
     REFRESH_SHOP("refresh_shop_"),

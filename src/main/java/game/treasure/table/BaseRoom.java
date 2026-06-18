@@ -10,7 +10,7 @@ import game.config.CfgItem;
 import game.config.CfgMaterial;
 import game.config.CfgServer;
 import game.config.aEnum.DetailActionType;
-import game.config.aEnum.ItemType;
+import protocol.Pbmethod;
 import game.config.aEnum.MapType;
 import game.treasure.BattleConfig;
 import game.treasure.mapping.UserEquipmentEntity;
@@ -348,7 +348,7 @@ public abstract class BaseRoom extends MonoRoom {
                 CellObject cellObject = getCellObject(globalCellId, player.getChunkId());
                 if (cellObject != null && cellObject.canAttack() && player.hasAttack()) {
                     addCellProcess(cellObject);
-                    boolean cellDie = cellObject.attack(player.getPoint().getAttackDamage());
+                    boolean cellDie = cellObject.attack();
                     player.setTimeAttack();
                     player.protoStatus(Pbmethod.SubStateType.PLAY_ANIM, (long) AnimationType.ATTACK.value);
                     if (cellDie) {
@@ -444,7 +444,7 @@ public abstract class BaseRoom extends MonoRoom {
                 if (mUser.getResources().getItemByItemKey(itemKey) == null) need[1] = 1;
                 return need;
             }
-            if (Bonus.resolveStorageType(itemKey) == ItemType.CONSUMABLE)
+            if (Bonus.resolveStorageType(itemKey) == Pbmethod.ItemType.POSITION)
                 need[0] = 1;
         } else if (bonusType == Bonus.BONUS_EQUIPMENT) {
             need[0] = 1;
@@ -460,7 +460,7 @@ public abstract class BaseRoom extends MonoRoom {
         if (bonusType == Bonus.BONUS_ITEM) {
             int itemKey = chunk.get(1).intValue();
             if (itemKey < 0) return 0;
-            ItemType type = Bonus.resolveStorageType(itemKey);
+            Pbmethod.ItemType type = Bonus.resolveStorageType(itemKey);
             UserItemEntity preview = new UserItemEntity(mUser.getUser().getId(), itemKey, type);
             return CfgItem.getSellPriceGold(preview);
         }

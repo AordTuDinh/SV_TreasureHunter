@@ -1,6 +1,5 @@
 package game.treasure.mapping.main;
 
-import game.config.aEnum.ItemType;
 import game.object.BonusConfig;
 import game.treasure.service.resource.ResItem;
 import game.treasure.service.user.Bonus;

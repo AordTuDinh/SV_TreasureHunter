@@ -176,6 +176,7 @@ public class IAction {
 
     public static final int ITEM_USED = 452;
     public static final int ITEM_INFO = 453;
+    public static final int SPEAKER_SEND = 454;
     public static final int MATERIAL_UPGRADE = 458;
     public static final int CRAFT_EXECUTE = 459;
     public static final int CRAFT_UPDATE = 460;

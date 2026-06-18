@@ -58,9 +58,10 @@ public class CellObject {
         return resObject.randomBonus();
     }
 
-    public synchronized boolean attack(long damage) {
+    /** Mỗi lần đánh trừ 1 máu, không dùng damage của player. */
+    public synchronized boolean attack() {
         timeBeAttack = System.currentTimeMillis();
-        this.curHp -= damage;
+        this.curHp -= 1;
         curHp = Math.max(curHp, 0);
         if (curHp == 0) {
             state = Pbmethod.CellState.HIDE;

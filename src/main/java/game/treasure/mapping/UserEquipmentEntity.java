@@ -2,7 +2,6 @@ package game.treasure.mapping;
 
 import game.battle.object.Point;
 import game.config.CfgItem;
-import game.config.aEnum.ItemType;
 import game.treasure.mapping.main.ResItemEntity;
 import game.treasure.mapping.main.ResItemEquipmentEntity;
 import game.treasure.service.resource.ResItem;

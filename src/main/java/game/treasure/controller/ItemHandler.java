@@ -1,5 +1,6 @@
 package game.treasure.controller;
 
+import game.config.CfgChat;
 import game.config.CfgItem;
 import game.config.CfgMaterial;
 import game.config.aEnum.*;
@@ -27,11 +28,14 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import static game.config.CfgItem.SPEAKER_MAX_LEN;
+
 
 public class ItemHandler extends AHandler {
     @Override
     public void initAction(Map<Integer, AHandler> mHandler) {
-        List<Integer> actions = Arrays.asList(ITEM_EQUIPMENT_INFO, ITEM_EQUIPMENT_LOCK_DESTROY, ITEM_UP_LEVEL,  ITEM_EQUIPMENT_VIEW_INFO, ITEM_INFO, ITEM_SELL, ITEM_EQUIPMENT_UN_EQUIP, ITEM_USED, ITEM_EQUIPMENT_EQUIP);
+        List<Integer> actions = Arrays.asList(ITEM_EQUIPMENT_INFO, ITEM_EQUIPMENT_LOCK_DESTROY, ITEM_UP_LEVEL,
+                ITEM_EQUIPMENT_VIEW_INFO, ITEM_INFO, ITEM_SELL, ITEM_EQUIPMENT_UN_EQUIP, ITEM_USED, ITEM_EQUIPMENT_EQUIP, SPEAKER_SEND);
         actions.forEach(action -> mHandler.put(action, this));
     }
 
@@ -63,6 +67,7 @@ public class ItemHandler extends AHandler {
                 case IAction.ITEM_EQUIPMENT_LOCK_DESTROY -> lockDestroy();
                 case IAction.ITEM_UP_LEVEL -> uplevel();
                 case IAction.ITEM_EQUIPMENT_VIEW_INFO -> viewInfoEquipment();
+                case IAction.SPEAKER_SEND -> speakerSend();
             }
         } catch (Exception ex) {
             Logs.error(ex);
@@ -399,7 +404,7 @@ public class ItemHandler extends AHandler {
 //                mUser.getPlayer().protoBuffPoint(buffs);
 //                addResponse(getCommonVector(aBonus));
 //                break;
-            case CONSUMABLE:
+            case POSITION:
                 switch (Pbmethod.ItemKey.valueOf(item.getItemId())) {
 //                    case THE_HOAN_TRA_1 -> {
 //                        if (mUser.getUData().resetLevelStat(mUser)) {
@@ -603,6 +608,46 @@ public class ItemHandler extends AHandler {
             itemEquipment.setLockDestroy(status);
         }
         addResponse(getCommonVector(inputs));
+    }
+
+
+
+    void speakerSend() {
+        String text = getInputString();
+        if (StringHelper.isEmpty(text)) {
+            addErrParam();
+            return;
+        }
+        text = text.trim();
+        if (text.length() > SPEAKER_MAX_LEN) {
+            addErrParam();
+            return;
+        }
+        if (text.contains("<") || text.contains(">") || text.contains("[") || text.contains("]")) {
+            addErrResponse(getLang(Lang.err_string_prefix));
+            return;
+        }
+        int itemKey = Pbmethod.ItemKey.LOA_THE_GIOI.getNumber();
+        if (mUser.getResources().getItemByItemKey(itemKey) == null) {
+            addErrResponse(getLang(Lang.item_not_own));
+            return;
+        }
+        List<Long> fee = Bonus.viewItem( itemKey, -1);
+        String err = Bonus.checkMoney(mUser, fee);
+        if (err != null) {
+            addErrResponse(err);
+            return;
+        }
+        List<Long> bonus = Bonus.receiveListItem(mUser, DetailActionType.SU_DUNG_LOA_THE_GIOI.getKey(), fee);
+        if (bonus.isEmpty()) {
+            addErrResponse();
+            return;
+        }
+        String filtered = CfgChat.replaceInvalidWord(text);
+        String msg = "[" + user.getName() + "]: " + filtered;
+        List<Channel> channels = Online.getUserInServer(user.getServer());
+        Util.sendSliderChat(channels, msg);
+        addBonusPrivate(bonus);
     }
 
 

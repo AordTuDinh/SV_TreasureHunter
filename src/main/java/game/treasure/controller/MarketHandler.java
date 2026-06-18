@@ -24,6 +24,7 @@ import ozudo.base.database.DBJPA;
 import ozudo.base.helper.GsonUtil;
 import ozudo.base.helper.StringHelper;
 import ozudo.base.log.Logs;
+import protocol.Pbmethod;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -285,7 +286,7 @@ public class MarketHandler extends AHandler {
                 addErrResponse(getLang(Lang.err_max_slot));
                 return;
             }
-            uItem = new UserItemEntity(user.getId(), protocol.Pbmethod.ItemKey.TICKER_SPECIAL.getNumber(), ItemType.EVENT);
+            uItem = new UserItemEntity(user.getId(), protocol.Pbmethod.ItemKey.TICKER_SPECIAL.getNumber(), Pbmethod.ItemType.EVENT);
             List<Long> numNew = new ArrayList<>(nums);
             numNew.add(0, eventDay);
             uItem.setData(StringHelper.toDBString(numNew));
@@ -352,7 +353,7 @@ public class MarketHandler extends AHandler {
         }
         long eventDay = CfgLottery.getEventIdBuy();
         if (uItem == null) {
-            uItem = new UserItemEntity(user.getId(), protocol.Pbmethod.ItemKey.TICKER_NORMAL.getNumber(), ItemType.EVENT);
+            uItem = new UserItemEntity(user.getId(), protocol.Pbmethod.ItemKey.TICKER_NORMAL.getNumber(), Pbmethod.ItemType.EVENT);
             List<Long> aNum = new ArrayList<>(nums);
             aNum.add(0, eventDay);
             uItem.setData(StringHelper.toDBString(aNum));

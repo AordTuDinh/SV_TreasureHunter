@@ -285,8 +285,8 @@ public class MyUser implements Serializable {
                     if (resources.getItemByItemKey(itemKey) == null) numEvent++;
                     continue;
                 }
-                ItemType storageType = Bonus.resolveStorageType(itemKey);
-                if (storageType == ItemType.EVENT) {
+                Pbmethod.ItemType storageType = Bonus.resolveStorageType(itemKey);
+                if (Bonus.usesEventBagStorage(storageType)) {
                     numEvent++;
                 } else if (Bonus.usesItemSlotForUserItem(storageType)) {
                     numBag++;
