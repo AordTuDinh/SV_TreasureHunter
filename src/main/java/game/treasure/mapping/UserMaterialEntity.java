@@ -24,7 +24,6 @@ public class UserMaterialEntity implements Serializable {
     int tier;
     int level;
     float value;
-    @Column(name = "socket_rate")
     float socketRate;
 
     public UserMaterialEntity(int userId, int materialId, int tier) {
@@ -64,6 +63,7 @@ public class UserMaterialEntity implements Serializable {
         pb.setTier(tier);
         pb.setValue(value);
         pb.setLevel(level);
+        pb.setSocketRate(socketRate);
         return pb;
     }
 
