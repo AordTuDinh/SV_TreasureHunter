@@ -60,7 +60,7 @@ public class CfgMaterial {
         }
         if (root.merge != null) {
             applyMergeConfig(root.merge);
-        } else if (root.minMaterials > 0 || (root.standardRates != null && !root.standardRates.isEmpty())) {
+        } else if (root.minMaterials > 0 || (root.legendRecipes != null && !root.legendRecipes.isEmpty())) {
             applyMergeConfig(root.toMergeConfig());
         }
     }
@@ -217,7 +217,9 @@ public class CfgMaterial {
         };
     }
 
-    // --- merge ---
+    // --- merge (point-based: rankPt = 7^(tier-1), levelPt = (level-1)*rankPt*levelPointMult) ---
+
+    private static final double RANK_POINT_BASE = 7.0;
 
     public static int getMergeMinMaterials() {
         return mergeCfg.minMaterials;
@@ -245,6 +247,63 @@ public class CfgMaterial {
         return sum;
     }
 
+    /** Điểm rank: 7^(tier-1). Level: (level-1) × rankPt × levelPointMult. */
+    public static double rankPointValue(int tier) {
+        if (tier < 1 || tier > TIER_COUNT) {
+            return 0;
+        }
+        return Math.pow(RANK_POINT_BASE, tier - 1);
+    }
+
+    public static double gemMergePoints(UserMaterialEntity gem) {
+        if (gem == null) {
+            return 0;
+        }
+        int tier = gem.getTier();
+        if (tier < 1 || tier > TIER_COUNT) {
+            return 0;
+        }
+        int level = Math.max(1, gem.getLevel());
+        double rankPt = rankPointValue(tier);
+        double levelPt = (level - 1) * rankPt * mergeCfg.levelPointMult;
+        return rankPt + levelPt;
+    }
+
+    public static double sumMergePoints(List<UserMaterialEntity> gems) {
+        double total = 0;
+        for (UserMaterialEntity g : gems) {
+            double pt = gemMergePoints(g);
+            if (pt <= 0) {
+                return 0;
+            }
+            total += pt;
+        }
+        return total;
+    }
+
+    /** Ngưỡng 100% lên rank minRank+1. */
+    public static double upgradeThreshold(int minRank) {
+        if (minRank < 1 || minRank >= TIER_COUNT) {
+            return 0;
+        }
+        return Math.pow(RANK_POINT_BASE, minRank);
+    }
+
+    /** Ngưỡng 100% giữ cùng rank R (need = R+1 viên cùng rank). */
+    public static double sameRankThreshold(int rank) {
+        if (rank < 1 || rank > TIER_COUNT) {
+            return 0;
+        }
+        return (rank + 1) * rankPointValue(rank);
+    }
+
+    static int pointsToRatePercent(double points, double threshold) {
+        if (threshold <= 0 || points <= 0) {
+            return 0;
+        }
+        return (int) Math.min(100, Math.floor(points / threshold * 100.0));
+    }
+
     public static MergePlan buildMergePlan(List<UserMaterialEntity> gems) {
         if (gems == null || gems.size() < mergeCfg.minMaterials || gems.size() > mergeCfg.maxMaterials) {
             return null;
@@ -252,10 +311,13 @@ public class CfgMaterial {
         int count = gems.size();
         Map<Integer, Integer> rankCount = new HashMap<>();
         Map<Integer, Integer> materialCount = new HashMap<>();
-        int minRank = 4;
+        int minRank = TIER_COUNT;
         int maxRank = 0;
         for (UserMaterialEntity g : gems) {
             int r = g.getTier();
+            if (r < RANK_COMMON || r > RANK_LEGEND) {
+                return null;
+            }
             rankCount.merge(r, 1, Integer::sum);
             materialCount.merge(g.getMaterialId(), 1, Integer::sum);
             minRank = Math.min(minRank, r);
@@ -264,31 +326,69 @@ public class CfgMaterial {
 
         LegendRecipeRow legend = matchLegendRecipe(rankCount, count);
         if (legend != null) {
-            return new MergePlan(legend.outputRank, legend.rate, true, materialCount, gems);
+            int rate = Math.min(100, legend.rate + calcLegendLevelBonusPercent(gems));
+            return new MergePlan(legend.outputRank, rate, true, materialCount, gems);
         }
 
-        if (minRank != maxRank || minRank >= 4) {
+        if (maxRank - minRank > 1) {
             return null;
         }
-        int rate = getStandardMergeRate(minRank, count);
+        if (minRank >= RANK_LEGEND) {
+            return null;
+        }
+
+        double totalPoints = sumMergePoints(gems);
+        if (totalPoints <= 0) {
+            return null;
+        }
+
+        boolean upgradePath = shouldUseUpgradePath(minRank, maxRank, count, totalPoints);
+        int outputRank;
+        int rate;
+        if (upgradePath) {
+            outputRank = minRank + 1;
+            rate = pointsToRatePercent(totalPoints, upgradeThreshold(minRank));
+        } else {
+            outputRank = maxRank;
+            rate = pointsToRatePercent(totalPoints, sameRankThreshold(maxRank));
+        }
         if (rate <= 0) {
             return null;
         }
-        return new MergePlan(minRank + 1, rate, false, materialCount, gems);
+        return new MergePlan(outputRank, rate, false, materialCount, gems);
+    }
+
+    /** Mixed rank → lên bậc; cùng rank → lên bậc khi đủ điểm 7^minRank hoặc ≥ upgradeMinCount viên. */
+    static boolean shouldUseUpgradePath(int minRank, int maxRank, int count, double totalPoints) {
+        if (minRank != maxRank) {
+            return true;
+        }
+        if (totalPoints >= upgradeThreshold(minRank)) {
+            return true;
+        }
+        return count >= mergeCfg.upgradeMinCount;
+    }
+
+    /** Level đã góp vào T; legend cộng thêm % từ phần level qua ngưỡng rank 2. */
+    static int calcLegendLevelBonusPercent(List<UserMaterialEntity> gems) {
+        double levelPoints = 0;
+        for (UserMaterialEntity g : gems) {
+            int tier = g.getTier();
+            int level = Math.max(1, g.getLevel());
+            if (tier < 1 || tier > TIER_COUNT) {
+                continue;
+            }
+            levelPoints += (level - 1) * rankPointValue(tier) * mergeCfg.levelPointMult;
+        }
+        double threshold = upgradeThreshold(RANK_RARE);
+        if (threshold <= 0) {
+            return 0;
+        }
+        return (int) Math.floor(levelPoints / threshold * 100.0);
     }
 
     public static int calcMergeSuccessPercent(MergePlan plan) {
-        int rate = plan.baseRate;
-        for (UserMaterialEntity g : plan.gems) {
-            int lv = g.getLevel();
-            if (lv > 1) {
-                rate += (lv - 1) * mergeCfg.levelBonusPerLevelTier1;
-            }
-            if (lv > 2) {
-                rate += (lv - 2) * mergeCfg.levelBonusPerLevelTier2;
-            }
-        }
-        return Math.min(100, rate);
+        return Math.min(100, Math.max(0, plan.baseRate));
     }
 
     public static int pickMergeOutputMaterialId(Map<Integer, Integer> materialCount) {
@@ -334,24 +434,6 @@ public class CfgMaterial {
         return null;
     }
 
-    private static int getStandardMergeRate(int inputRank, int count) {
-        Map<String, Integer> row = mergeCfg.standardRates.get(String.valueOf(inputRank));
-        if (row == null) {
-            return 0;
-        }
-        Integer exact = row.get(String.valueOf(count));
-        if (exact != null) {
-            return exact;
-        }
-        for (int c = count; c >= mergeCfg.minMaterials; c--) {
-            Integer v = row.get(String.valueOf(c));
-            if (v != null) {
-                return v;
-            }
-        }
-        return 0;
-    }
-
     private static void applyMergeConfig(MergeDataConfig loaded) {
         if (loaded.minMaterials > 0) {
             mergeCfg.minMaterials = loaded.minMaterials;
@@ -365,13 +447,16 @@ public class CfgMaterial {
         if (loaded.levelBonusPerLevelTier2 >= 0) {
             mergeCfg.levelBonusPerLevelTier2 = loaded.levelBonusPerLevelTier2;
         }
+        if (loaded.levelPointMult > 0) {
+            mergeCfg.levelPointMult = loaded.levelPointMult;
+        }
+        if (loaded.upgradeMinCount > 0) {
+            mergeCfg.upgradeMinCount = loaded.upgradeMinCount;
+        }
         if (loaded.sellBaseRows != null && !loaded.sellBaseRows.isEmpty()) {
             mergeCfg.sellBase = toGrid(loaded.sellBaseRows);
         } else if (loaded.sellBase != null && loaded.sellBase.length > 0) {
             mergeCfg.sellBase = loaded.sellBase;
-        }
-        if (loaded.standardRates != null && !loaded.standardRates.isEmpty()) {
-            mergeCfg.standardRates = loaded.standardRates;
         }
         if (loaded.legendRecipes != null && !loaded.legendRecipes.isEmpty()) {
             mergeCfg.legendRecipes = loaded.legendRecipes;
@@ -398,6 +483,8 @@ public class CfgMaterial {
         d.maxMaterials = 8;
         d.levelBonusPerLevelTier1 = 5;
         d.levelBonusPerLevelTier2 = 1;
+        d.levelPointMult = 0.49;
+        d.upgradeMinCount = 6;
         d.sellBaseRows = List.of(
                 List.of(5L, 10L, 15L, 20L),
                 List.of(10L, 20L, 30L, 40L),
@@ -405,10 +492,6 @@ public class CfgMaterial {
                 List.of(2L, 3L, 5L, 6L)
         );
         d.sellBase = toGrid(d.sellBaseRows);
-        d.standardRates = new HashMap<>();
-        d.standardRates.put("1", mapRates("3", 10, "4", 25, "5", 50, "6", 100, "7", 100, "8", 100));
-        d.standardRates.put("2", mapRates("3", 5, "4", 15, "5", 35, "6", 100, "7", 100, "8", 100));
-        d.standardRates.put("3", mapRates("3", 2, "4", 8, "5", 20, "6", 100, "7", 100, "8", 100));
         d.legendRecipes = List.of(
                 legendRow(7, 1, 3, 4),
                 legendRow(6, 2, 10, 4),
@@ -416,14 +499,6 @@ public class CfgMaterial {
                 legendRow(4, 4, 40, 4)
         );
         return d;
-    }
-
-    private static Map<String, Integer> mapRates(Object... kv) {
-        Map<String, Integer> m = new HashMap<>();
-        for (int i = 0; i < kv.length; i += 2) {
-            m.put(String.valueOf(kv[i]), ((Number) kv[i + 1]).intValue());
-        }
-        return m;
     }
 
     private static LegendRecipeRow legendRow(int rare, int epic, int rate, int outputRank) {
@@ -447,9 +522,10 @@ public class CfgMaterial {
             m.maxMaterials = maxMaterials;
             m.levelBonusPerLevelTier1 = levelBonusPerLevelTier1;
             m.levelBonusPerLevelTier2 = levelBonusPerLevelTier2;
+            m.levelPointMult = levelPointMult;
+            m.upgradeMinCount = upgradeMinCount;
             m.sellBaseRows = sellBaseRows;
             m.sellBase = sellBase;
-            m.standardRates = standardRates;
             m.legendRecipes = legendRecipes;
             return m;
         }
@@ -467,9 +543,10 @@ public class CfgMaterial {
         int maxMaterials = 8;
         int levelBonusPerLevelTier1 = 5;
         int levelBonusPerLevelTier2 = 1;
+        double levelPointMult = 0.49;
+        int upgradeMinCount = 6;
         long[][] sellBase = new long[4][4];
         List<List<Long>> sellBaseRows = new ArrayList<>();
-        Map<String, Map<String, Integer>> standardRates = new HashMap<>();
         List<LegendRecipeRow> legendRecipes = new ArrayList<>();
     }
 

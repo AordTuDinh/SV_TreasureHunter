@@ -108,7 +108,7 @@ public class MaterialHandler extends AHandler {
     }
 
     /**
-     * Request: [gemRowId1, gemRowId2, ...] (2–8 viên)
+     * Request: [gemRowId1, gemRowId2, ...] (2–8 viên, mixed rank OK nếu chênh ≤ 1 bậc)
      * Response MATERIAL_MERGE: {@link protocol.Pbmethod.PbMaterial} (viên kết quả; fail = trả 1 viên rank cao nhất)
      */
     private void mergeMaterial() {
