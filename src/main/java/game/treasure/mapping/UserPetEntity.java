@@ -23,6 +23,7 @@ public class UserPetEntity implements Serializable {
     int petId;
     int level;
     int tier = 1;
+    int isCraft;
     int server;
     @Transient
     Point point;
@@ -33,6 +34,7 @@ public class UserPetEntity implements Serializable {
         this.petId = petId;
         this.level = 1;
         this.tier = 1;
+        this.isCraft = 0;
     }
 
     public ResPetEntity getResPet() {
@@ -45,6 +47,7 @@ public class UserPetEntity implements Serializable {
         pb.setPetId(petId);
         pb.setLevel(level);
         pb.setTier(tier > 0 ? tier : 1);
+        pb.setIsCraft(isCraft);
         return pb;
     }
 

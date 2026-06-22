@@ -322,6 +322,7 @@ message PbMount{
   optional int32 mountId = 3;
   optional int32 level = 4;
   optional int32 tier = 5;
+  optional int32 isCraft = 6;
 }
 
 
@@ -335,6 +336,7 @@ message PbPet{
   optional int32 petId = 3;
   optional int32 level = 4;
   optional int32 tier = 5;
+  optional int32 isCraft = 6;
 }
 
 message PbListItemPoint{
@@ -400,6 +402,7 @@ message  PbItem{
   optional  int32 level = 3;
   optional  bool lockDestroy = 4;
   optional  string data = 6;
+  optional  int32 isCraft = 7;
 }
 
 message  PbEquipment{
@@ -409,6 +412,7 @@ message  PbEquipment{
   optional  bool lockDestroy = 4;
   optional  int32 tier = 5;
   optional  string data = 6;
+  optional  int32 isCraft = 7;
 }
 
 message  PbItemPoint{

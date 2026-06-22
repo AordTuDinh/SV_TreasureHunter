@@ -32,6 +32,7 @@ public class UserItemEntity implements Serializable {
     int itemId;
     int level;
     int lockDestroy;
+    int isCraft;
     String data;
 
     @Transient
@@ -47,6 +48,7 @@ public class UserItemEntity implements Serializable {
         this.itemId = itemId;
         level = 1;
         lockDestroy = 0;
+        isCraft = 0;
         data = "[]";
     }
 
@@ -175,6 +177,7 @@ public class UserItemEntity implements Serializable {
         pb.setItemKey(itemId);
         pb.setLevel(level);
         pb.setLockDestroy(lockDestroy == 1);
+        pb.setIsCraft(isCraft);
         if (data != null && !data.isEmpty() && !"[]".equals(data))
             pb.setData(data);
         return pb;

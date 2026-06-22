@@ -161,6 +161,12 @@ public class CraftHandler extends AHandler {
             return;
         }
 
+        if (!markTargetCrafted(targetType, targetId)) {
+            Bonus.receiveListItem(mUser, DetailActionType.UPDATE_FAIL.getKey(), Bonus.reverseBonus(fee));
+            addErrSystem();
+            return;
+        }
+
         resp.add((long) resolveItemLevel(targetType, targetId));
         resp.add((long) gems.size());
 
@@ -251,7 +257,35 @@ public class CraftHandler extends AHandler {
             }
             return false;
         }
-        return false;
+        return true;
+    }
+
+    private boolean markTargetCrafted(CraftTargetType type, long targetId) {
+        if (type == CraftTargetType.EQUIPMENT) {
+            UserEquipmentEntity equip = mUser.getResources().getItemEquipment(targetId);
+            if (equip == null)
+                return false;
+            if (equip.getIsCraft() == 1)
+                return true;
+            if (equip.update(List.of("is_craft", 1))) {
+                equip.setIsCraft(1);
+                return true;
+            }
+            return false;
+        }
+        if (type == CraftTargetType.PET) {
+            UserPetEntity pet = mUser.getResources().getPetByConfigId(Math.toIntExact(targetId));
+            if (pet == null)
+                return false;
+            if (pet.getIsCraft() == 1)
+                return true;
+            if (pet.update(List.of("is_craft", 1))) {
+                pet.setIsCraft(1);
+                return true;
+            }
+            return false;
+        }
+        return true;
     }
 
     private void destroyEquipment(long equipId) {
