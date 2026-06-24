@@ -342,10 +342,11 @@ public abstract class BaseRoom extends MonoRoom {
         } else if (input.typeId == NInput.USE_ITEM) {
             game.treasure.service.resource.ResItem.useBuffItemInRoom(player, input.useItemId);
         } else if (input.typeId == NInput.ATTACK) {
-            int globalCellId = MapService.worldPosToGlobalCellId(mapInfo, player.getPos());
             if (!player.canAttack()) return;
             if (input.targetAttack == Pbmethod.TargetAttack.OBJECT) {
-                CellObject cellObject = getCellObject(globalCellId, player.getChunkId());
+                int globalCellId = (int) input.idAttack;
+                int chunkId = MapService.globalCellIdToChunkId(mapInfo, globalCellId);
+                CellObject cellObject = getCellObject(globalCellId, chunkId);
                 if (cellObject != null && cellObject.canAttack() && player.hasAttack()) {
                     addCellProcess(cellObject);
                     boolean cellDie = cellObject.attack();
