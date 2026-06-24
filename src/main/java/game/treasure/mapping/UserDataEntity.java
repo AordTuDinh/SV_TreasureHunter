@@ -308,6 +308,14 @@ public class UserDataEntity implements Serializable {
             if (matPb != null) lstMat.addMaterials(matPb);
         }
         pb.setAMaterial(lstMat);
+        // artifact
+        Pbmethod.PbListArtifact.Builder lstArtifact = Pbmethod.PbListArtifact.newBuilder();
+        for (Map.Entry<Long, UserArtifactEntity> artifact : mUser.getResources().getMArtifact().entrySet()) {
+            Pbmethod.PbArtifact.Builder artifactPb = artifact.getValue().toProto();
+            if (artifactPb != null)
+                lstArtifact.addArtifacts(artifactPb);
+        }
+        pb.setAArtifact(lstArtifact);
         // pet
         for (Map.Entry<Long, UserPetEntity> pets : mUser.getResources().getMPet().entrySet()) {
             pb.addAPet(pets.getValue().toProto());

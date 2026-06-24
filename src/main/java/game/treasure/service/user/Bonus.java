@@ -499,8 +499,16 @@ public class Bonus {
     }
 
     static List<Long> addItemArtifact(MyUser mUser, int artifactId, String detailAction) {
+        if (mUser.getResources().getArtifactByConfigId(artifactId) != null)
+            return new ArrayList<>();
+        if (!mUser.getResources().prepareNewItemSlot(BONUS_ARTIFACT, 0))
+            return new ArrayList<>();
         UserArtifactEntity uArtifact = new UserArtifactEntity(mUser.getUser().getId(), artifactId);
         if (DBJPA.save(uArtifact)) {
+            if (!mUser.getResources().prepareNewItemSlot(BONUS_ARTIFACT, uArtifact.getId())) {
+                DBJPA.delete("user_artifact", "id", uArtifact.getId(), "user_id", uArtifact.getUserId());
+                return new ArrayList<>();
+            }
             mUser.getResources().addArtifact(uArtifact);
             if (CfgServer.isRealServer())
                 Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "artifact", "id", uArtifact.getId(), "artifactId", artifactId);
@@ -812,6 +820,68 @@ public class Bonus {
         return true;
     }
 
+    public static boolean moveArtifactOutOfBag(MyUser mUser, UserArtifactEntity artifact) {
+        if (artifact == null)
+            return false;
+        clearItemFromSlot(mUser, BONUS_ARTIFACT, artifact.getId());
+        artifact.setBagSlot(-1);
+        return true;
+    }
+
+    public static boolean moveArtifactToBag(MyUser mUser, UserArtifactEntity artifact) {
+        if (artifact == null || !mUser.getResources().canAddBagItem(1))
+            return false;
+        List<Long> slots = mUser.getUData().getItemSlotList();
+        int bagCount = mUser.getUData().getSlotBagUI();
+        Integer slot = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
+        if (slot == null)
+            return false;
+        ItemSlotHelper.setPair(slots, slot, BONUS_ARTIFACT, artifact.getId());
+        if (!mUser.getResources().saveItemSlot(slots))
+            return false;
+        artifact.setBagSlot(slot);
+        return true;
+    }
+
+    public static boolean moveArtifactToBagSlot(MyUser mUser, UserArtifactEntity artifact, int slotIndex) {
+        if (artifact == null || slotIndex < 0)
+            return false;
+        List<Long> slots = mUser.getUData().getItemSlotList();
+        int bagCount = mUser.getUData().getSlotBagUI();
+        if (slotIndex >= bagCount)
+            return false;
+        ItemSlotHelper.setPair(slots, slotIndex, BONUS_ARTIFACT, artifact.getId());
+        if (!mUser.getResources().saveItemSlot(slots))
+            return false;
+        artifact.setBagSlot(slotIndex);
+        return true;
+    }
+
+    public static int getEquippedArtifactRowId(MyUser mUser) {
+        int treasureIdx = game.treasure.mapping.UserEntity.equipSlotIndex(
+                protocol.Pbmethod.EquipSlotType.TREASURE.getNumber());
+        List<Integer> lst = mUser.getUser().normalizeItemEquipList();
+        if (treasureIdx < 0 || treasureIdx >= lst.size())
+            return 0;
+        return lst.get(treasureIdx);
+    }
+
+    public static boolean isArtifactEquipped(MyUser mUser, long rowId) {
+        return rowId > 0 && getEquippedArtifactRowId(mUser) == (int) rowId;
+    }
+
+    public static boolean clearTreasureEquipSlot(MyUser mUser) {
+        int treasureIdx = game.treasure.mapping.UserEntity.equipSlotIndex(
+                protocol.Pbmethod.EquipSlotType.TREASURE.getNumber());
+        List<Integer> lst = mUser.getUser().normalizeItemEquipList();
+        if (treasureIdx < 0)
+            return false;
+        lst.set(treasureIdx, 0);
+        lst.set(treasureIdx + 1, 0);
+        lst.set(treasureIdx + 2, 0);
+        return mUser.getUser().updateItemEquip(lst);
+    }
+
     public static boolean moveEquipmentOutOfBag(MyUser mUser, UserEquipmentEntity equip) {
         clearItemFromSlot(mUser, BONUS_EQUIPMENT, equip.getId());
         equip.setBagSlot(-1);
@@ -823,10 +893,11 @@ public class Bonus {
                 || itemKey == Pbmethod.ItemKey.TICKER_SPECIAL.getNumber();
     }
 
-    /** item_slot: consum (BONUS_ITEM), equip, pet, mount — không gồm event/currency. */
+    /** item_slot: consum (BONUS_ITEM), equip, pet, mount, artifact — không gồm event/currency. */
     public static boolean usesItemSlotBonusType(int bonusType) {
         return bonusType == BONUS_ITEM || bonusType == BONUS_EQUIPMENT
-                || bonusType == BONUS_PET || bonusType == BONUS_MOUNT;
+                || bonusType == BONUS_PET || bonusType == BONUS_MOUNT
+                || bonusType == BONUS_ARTIFACT;
     }
 
     public static boolean usesItemSlotForUserItem(Pbmethod.ItemType storageType) {
@@ -875,12 +946,14 @@ public class Bonus {
                 return mUser.getResources().getPet(rowId) != null;
             case BONUS_MOUNT:
                 return mUser.getResources().getMount(rowId) != null;
+            case BONUS_ARTIFACT:
+                return mUser.getResources().getArtifact(rowId) != null;
             default:
                 return false;
         }
     }
 
-    /** Gán ô túi UI — bonusType ∈ {4 consum, 12 equip, 9 pet, 10 mount}. rowId=0 chỉ check còn chỗ. */
+    /** Gán ô túi UI — bonusType ∈ {4 consum, 12 equip, 9 pet, 10 mount, 5 artifact}. rowId=0 chỉ check còn chỗ. */
     public static boolean prepareNewItemSlot(MyUser mUser, int bonusType, long rowId) {
         if (!usesItemSlotBonusType(bonusType))
             return true;

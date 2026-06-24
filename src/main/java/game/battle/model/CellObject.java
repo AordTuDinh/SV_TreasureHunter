@@ -14,9 +14,6 @@ import protocol.Pbmethod;
 import java.util.ArrayList;
 import java.util.List;
 
-import static game.treasure.BattleConfig.CHUNK_SIZE;
-
-
 /**
  * Không dùng {@code @Data} cho equals/hashCode trên toàn bộ field: {@code curHp}/{@code state} đổi sau khi chết/revive
  * sẽ làm thay đổi hash khi object vẫn nằm trong {@code HashSet} (vd. {@code cellObjectDie}) → một số cell không revive.

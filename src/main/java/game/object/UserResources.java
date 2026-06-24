@@ -110,6 +110,13 @@ public class UserResources implements Serializable {
                 changed = true;
             }
         }
+        for (UserArtifactEntity artifact : mArtifact.values()) {
+            Integer s = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
+            if (s != null) {
+                ItemSlotHelper.setPair(slots, s, Bonus.BONUS_ARTIFACT, artifact.getId());
+                changed = true;
+            }
+        }
         if (changed)
             saveItemSlot(slots);
     }
@@ -132,6 +139,12 @@ public class UserResources implements Serializable {
             }
             Integer bagSlot = ItemSlotHelper.findSlotOf(slots, 0, bagCount, Bonus.BONUS_EQUIPMENT, equip.getId());
             equip.setBagSlot(bagSlot != null ? bagSlot : -1);
+        }
+        for (UserArtifactEntity artifact : mArtifact.values()) {
+            artifact.setBagSlot(-1);
+            Integer bagSlot = ItemSlotHelper.findSlotOf(slots, 0, bagCount, Bonus.BONUS_ARTIFACT, artifact.getId());
+            if (bagSlot != null)
+                artifact.setBagSlot(bagSlot);
         }
     }
 
@@ -291,10 +304,26 @@ public class UserResources implements Serializable {
         return mArtifact.get(id);
     }
 
+    public UserArtifactEntity getArtifactByConfigId(int artifactId) {
+        if (artifacts == null)
+            return null;
+        for (UserArtifactEntity artifact : artifacts) {
+            if (artifact.getArtifactId() == artifactId)
+                return artifact;
+        }
+        return null;
+    }
+
     public void addArtifact(UserArtifactEntity uArtifact) {
         if (artifacts == null) artifacts = new ArrayList<>();
         artifacts.add(uArtifact);
         mArtifact.put(uArtifact.getId(), uArtifact);
+    }
+
+    public void removeArtifact(long id) {
+        UserArtifactEntity rm = mArtifact.remove(id);
+        if (rm != null && artifacts != null)
+            artifacts.remove(rm);
     }
 
     public UserMountEntity getMount(long id) {

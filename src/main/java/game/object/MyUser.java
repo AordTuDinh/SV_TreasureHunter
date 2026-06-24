@@ -295,6 +295,12 @@ public class MyUser implements Serializable {
                     || bonusType == Bonus.BONUS_PET
                     || bonusType == Bonus.BONUS_MOUNT) {
                 numBag++;
+            } else if (bonusType == Bonus.BONUS_ARTIFACT) {
+                if (chunk.size() > 1) {
+                    int artifactId = chunk.get(1).intValue();
+                    if (artifactId > 0 && resources.getArtifactByConfigId(artifactId) == null)
+                        numBag++;
+                }
             } else if (bonusType == Bonus.BONUS_MATERIAL) {
                 numMaterial++;
             }

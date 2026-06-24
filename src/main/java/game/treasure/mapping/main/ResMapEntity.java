@@ -7,7 +7,6 @@ import game.battle.model.CellObject;
 import game.battle.model.ChunkObject;
 import game.battle.model.MapService;
 import game.battle.object.Pos;
-import game.treasure.BattleConfig;
 import game.object.MapData;
 import lombok.Getter;
 import protocol.Pbmethod;
@@ -20,8 +19,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import static game.treasure.BattleConfig.CHUNK_SIZE;
 
 @Entity
 public class ResMapEntity extends BaseEntity implements Serializable {
@@ -38,6 +35,9 @@ public class ResMapEntity extends BaseEntity implements Serializable {
     int widthChunk, heightChunk;
     @Transient
     @Getter
+    int cellsPerChunkX, cellsPerChunkY;
+    @Transient
+    @Getter
     MapData mapData;
     @Getter
     @Transient
@@ -47,6 +47,8 @@ public class ResMapEntity extends BaseEntity implements Serializable {
     int minChunkX, maxChunkX, minChunkY, maxChunkY;
     @Transient
     Map<Integer, ChunkObject> mChunk = new HashMap<>();
+    @Transient
+    Map<Integer, MapData.ChunkDto> chunkMetaById = new HashMap<>();
 
 
     public void init() {
@@ -55,17 +57,7 @@ public class ResMapEntity extends BaseEntity implements Serializable {
             }.getType());
             checkJson(id, map);
         }
-        widthChunk = mapData.sizeX;
-        heightChunk = mapData.sizeY;
-        int px = mapData.sizeX * CHUNK_SIZE / 2;
-        int py = mapData.sizeY * CHUNK_SIZE / 2;
-        botLeftP = new Pos(-px, -py);
-        topRightP = new Pos(px, py);
-
-        minChunkX = -widthChunk / 2;
-        minChunkY = -heightChunk / 2;
-        maxChunkX = minChunkX + widthChunk - 1;
-        maxChunkY = minChunkY + heightChunk - 1;
+        resolveMapLayout();
 
         // gen default chunk
         for (int y = minChunkY; y <= maxChunkY; y++) {
@@ -73,12 +65,14 @@ public class ResMapEntity extends BaseEntity implements Serializable {
                 int chunkId = MapService.chunkPosToId(this, x, y);
                 int baseX100 = Math.round(botLeftP.x * 100f);
                 int baseY100 = Math.round(botLeftP.y * 100f);
-                int worldX100 = baseX100 + (x - minChunkX) * BattleConfig.CHUNK_SIZE * 100;
-                int worldY100 = baseY100 + (y - minChunkY) * BattleConfig.CHUNK_SIZE * 100;
+                int worldX100 = baseX100 + (x - minChunkX) * cellsPerChunkX * 100;
+                int worldY100 = baseY100 + (y - minChunkY) * cellsPerChunkY * 100;
                 ChunkObject chunk = new ChunkObject(chunkId, new Pos(worldX100, worldY100), new HashMap<>());
                 mChunk.put(chunkId, chunk);
             }
         }
+
+        applyChunkMeta();
 
         // parse map object
         for (MapData.CellDto c : mapData.cells) {
@@ -123,11 +117,63 @@ public class ResMapEntity extends BaseEntity implements Serializable {
         return new HashMap<>(mChunk);
     }
 
+    public MapData.ChunkDto getChunkMeta(int chunkId) {
+        return chunkMetaById.get(chunkId);
+    }
+
+    public int getTypeRoom(int chunkId) {
+        MapData.ChunkDto dto = chunkMetaById.get(chunkId);
+        return dto != null ? dto.typeRoom : 0;
+    }
+
+    public int getTypeDrop(int chunkId) {
+        MapData.ChunkDto dto = chunkMetaById.get(chunkId);
+        return dto != null ? dto.typeDrop : 0;
+    }
+
+    void applyChunkMeta() {
+        chunkMetaById.clear();
+        if (mapData == null || mapData.chunks == null) return;
+
+        for (MapData.ChunkDto dto : mapData.chunks) {
+            chunkMetaById.put(dto.id, dto);
+            ChunkObject chunk = mChunk.get(dto.id);
+            if (chunk != null) {
+                chunk.setTypeDrop(dto.typeDrop);
+                chunk.setTypeRoom(dto.typeRoom);
+            }
+        }
+    }
+
     boolean isInsideWorld(int worldX, int worldY) {
-        return worldX > botLeftP.getX()
+        return worldX >= botLeftP.getX()
                 && worldX < topRightP.x
-                && worldY > botLeftP.y
+                && worldY >= botLeftP.y
                 && worldY < topRightP.y;
+    }
+
+    /**
+     * sizeX/sizeY = cell mỗi chunk; chunkX/chunkY = số chunk theo trục (từ map JSON).
+     */
+    void resolveMapLayout() {
+        cellsPerChunkX = Math.max(1, mapData.sizeX);
+        cellsPerChunkY = Math.max(1, mapData.sizeY);
+        widthChunk = Math.max(1, mapData.chunkX);
+        heightChunk = Math.max(1, mapData.chunkY);
+        minChunkX = 0;
+        minChunkY = 0;
+
+        maxChunkX = minChunkX + widthChunk - 1;
+        maxChunkY = minChunkY + heightChunk - 1;
+
+        int worldWidth = widthChunk * cellsPerChunkX;
+        int worldHeight = heightChunk * cellsPerChunkY;
+        botLeftP = new Pos(-worldWidth / 2f, -worldHeight / 2f);
+        topRightP = new Pos(botLeftP.x + worldWidth, botLeftP.y + worldHeight);
+    }
+
+    public int getCellsPerChunkArea() {
+        return cellsPerChunkX * cellsPerChunkY;
     }
 
 

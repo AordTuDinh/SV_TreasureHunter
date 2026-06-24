@@ -140,13 +140,35 @@ public class CfgMaterial {
     }
 
     public static List<Long> getPriceSellMaterial(UserMaterialEntity gem) {
-        long price = getSellPrice(gem);
-        if (price <= 0)
-            return new ArrayList<>();
+        return getPriceSellByTierAndLevel(getSellTier(gem), getSellLevel(gem));
+    }
+
+    static int getSellTier(UserMaterialEntity gem) {
+        if (gem == null)
+            return 0;
         ResMaterialEntity res = gem.getRes();
         if (res == null)
+            return 0;
+        int gemTier = res.getTier();
+        return gemTier < 1 ? 1 : gemTier;
+    }
+
+    static int getSellLevel(UserMaterialEntity gem) {
+        if (gem == null)
+            return 1;
+        int level = gem.getLevel();
+        return level < 1 ? 1 : level;
+    }
+
+    /** Giá bán theo material tier × base[level] — tier 1–2 vàng, tier 3–4 gem. */
+    public static List<Long> getPriceSellByTierAndLevel(int tier, int level) {
+        if (tier < 1 || level < 1)
             return new ArrayList<>();
-        if (res.getTier() <= 2)
+        int idx = Math.min(level, SELL_PRICE_BASE_T1.size()) - 1;
+        long price = (long) tier * SELL_PRICE_BASE_T1.get(idx);
+        if (price <= 0)
+            return new ArrayList<>();
+        if (tier <= 2)
             return Bonus.viewGold(price);
         return Bonus.viewGem((int) price);
     }

@@ -12,6 +12,8 @@ public class ChunkObject {
     int chunkId;
     Map<Integer, CellObject> mCells; // id - cell
     Pos pos;
+    int typeDrop;
+    int typeRoom;
 
     public ChunkObject(int chunkId, Pos pos, Map<Integer, CellObject> cells) {
         this.chunkId = chunkId;

@@ -291,6 +291,7 @@ message  PbUserData{
   repeated  int64 itemSlot = 27;
   optional  PbListEquipment equipments = 28;
   optional  int64 timeProtected = 29;
+  optional  PbListArtifact aArtifact = 30;
 }
 
 message PbListItem{
@@ -394,6 +395,17 @@ message PbMaterial{
   optional  int32 level = 4;
   optional float value = 5;
   optional float socketRate = 6;
+}
+
+message PbArtifact{
+  optional  int64 id = 1;
+  optional  int32 artifactId = 2;
+  optional  int32 level = 3;
+  optional  string data = 4;
+}
+
+message PbListArtifact{
+  repeated  PbArtifact artifacts = 1;
 }
 
 message  PbItem{

@@ -10,6 +10,8 @@ public class MapData implements Serializable {
     public List<Integer> chunkNoAttack = new ArrayList<>();
     public  int sizeX;
     public  int sizeY;
+    public  int chunkX;
+    public  int chunkY;
 
     public static class CellDto {
         public int x;
@@ -20,6 +22,7 @@ public class MapData implements Serializable {
     public static class ChunkDto {
         public int id;
         public int typeDrop;  // config từ 1 - 5 loại vật liệu
+        public int typeRoom;
     }
 }
 

@@ -369,7 +369,6 @@ public class LoginHandler extends AHandler {
 
     private void loadBattleConfig() {
         Pbmethod.CommonVector.Builder cmm = Pbmethod.CommonVector.newBuilder();
-        cmm.addALong(BattleConfig.CHUNK_SIZE * 100L);
         cmm.addALong((long) (BattleConfig.attackSpeed * 100L));
         cmm.addALong((long) (BattleConfig.P_Height * 100));
         cmm.addALong((long) (BattleConfig.P_Width * 100));
