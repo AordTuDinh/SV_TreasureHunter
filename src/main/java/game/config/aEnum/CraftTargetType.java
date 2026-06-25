@@ -6,7 +6,8 @@ public enum CraftTargetType {
     EQUIPMENT(1),
     MOUNT(2),
     PET(3),
-    SKIN(4);
+    SKIN(4),
+    ARTIFACT(5);
 
     public final int id;
 

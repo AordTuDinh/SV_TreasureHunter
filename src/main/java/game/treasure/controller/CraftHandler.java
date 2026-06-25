@@ -1,15 +1,18 @@
 package game.treasure.controller;
 
 import game.battle.calculate.IMath;
+import game.config.CfgArtifact;
 import game.config.CfgCraft;
 import game.config.aEnum.CraftTargetType;
 import game.config.aEnum.DetailActionType;
 import game.config.lang.Lang;
+import game.treasure.mapping.UserArtifactEntity;
 import game.treasure.mapping.UserDataEntity;
 import game.treasure.mapping.UserEquipmentEntity;
 import game.treasure.mapping.UserItemEntity;
 import game.treasure.mapping.UserMaterialEntity;
 import game.treasure.mapping.UserPetEntity;
+import game.treasure.mapping.main.ResArtifactEntity;
 import game.treasure.mapping.main.ResMaterialEntity;
 import game.treasure.server.IAction;
 import game.treasure.service.user.Bonus;
@@ -94,18 +97,39 @@ public class CraftHandler extends AHandler {
             return;
         }
 
+        UserArtifactEntity craftArtifact = null;
+        if (targetType == CraftTargetType.ARTIFACT) {
+            craftArtifact = mUser.getResources().getArtifact(targetId);
+            if (craftArtifact == null) {
+                addErrResponse(getLang(Lang.err_item_equip_not_found));
+                return;
+            }
+            if (craftArtifact.getIsCraft() == 1) {
+                addErrResponse(getLang(Lang.err_params));
+                return;
+            }
+        }
+
         List<UserMaterialEntity> gems = new ArrayList<>();
         List<Integer> gemRanks = new ArrayList<>();
         int maxGemRank = 0;
+        int requiredPointId = resolveRequiredMaterialPointId(targetType, targetId, craftArtifact);
         for (Long rowId : gemRowIds) {
             UserMaterialEntity gem = mUser.getResources().getMaterial(rowId);
             if (gem == null) {
                 addErrResponse(getLang(Lang.err_item_equip_not_found));
                 return;
             }
-            if (gem.getRes() == null) {
+            ResMaterialEntity gemRes = gem.getRes();
+            if (gemRes == null) {
                 addErrParam();
                 return;
+            }
+            if (targetType == CraftTargetType.ARTIFACT) {
+                if (requiredPointId <= 0 || gemRes.getPointId() != requiredPointId) {
+                    addErrResponse(getLang(Lang.err_params));
+                    return;
+                }
             }
             gems.add(gem);
             gemRanks.add(gem.getTier());
@@ -118,7 +142,7 @@ public class CraftHandler extends AHandler {
             return;
         }
 
-        List<Long> fee = CfgCraft.sumCraftFees(targetType, gemRanks);
+        List<Long> fee = resolveCraftFee(targetType, craftArtifact, gemRanks);
         if (fee.isEmpty()) {
             addErrParam();
             return;
@@ -172,15 +196,26 @@ public class CraftHandler extends AHandler {
 
         int totalExpGain = 0;
         for (UserMaterialEntity gem : gems) {
-            boolean socketOk = NumberUtil.getRandom(100) < gem.getSocketSuccessPercent();
+            boolean socketOk;
             boolean consumed = false;
-            if (socketOk) {
-                boolean statApplied = applySocketStat(targetType, targetId, gem);
-                boolean canConsume = statApplied || targetType == CraftTargetType.PET;
-                if (canConsume && removeMaterial(gem)) {
+            if (targetType == CraftTargetType.ARTIFACT) {
+                socketOk = true;
+                if (removeMaterial(gem)) {
                     consumed = true;
                     if (CfgCraft.grantsCraftExp(craftLevel, gem.getTier())) {
                         totalExpGain += CfgCraft.getCraftExpByRank(gem.getTier());
+                    }
+                }
+            } else {
+                socketOk = NumberUtil.getRandom(100) < gem.getSocketSuccessPercent();
+                if (socketOk) {
+                    boolean statApplied = applySocketStat(targetType, targetId, gem);
+                    boolean canConsume = statApplied || targetType == CraftTargetType.PET;
+                    if (canConsume && removeMaterial(gem)) {
+                        consumed = true;
+                        if (CfgCraft.grantsCraftExp(craftLevel, gem.getTier())) {
+                            totalExpGain += CfgCraft.getCraftExpByRank(gem.getTier());
+                        }
                     }
                 }
             }
@@ -216,7 +251,35 @@ public class CraftHandler extends AHandler {
             if (pet != null) {
                 addResponse(pet.toProto().build());
             }
+        } else if (targetType == CraftTargetType.ARTIFACT) {
+            UserArtifactEntity artifact = mUser.getResources().getArtifact(targetId);
+            if (artifact != null) {
+                addResponse(artifact.toProto().build());
+            }
         }
+    }
+
+    private List<Long> resolveCraftFee(CraftTargetType targetType, UserArtifactEntity artifact,
+            List<Integer> gemRanks) {
+        if (targetType == CraftTargetType.ARTIFACT) {
+            if (artifact == null)
+                return List.of();
+            int tier = artifact.getTier() > 0 ? artifact.getTier() : 1;
+            return CfgArtifact.getCraftFee(tier);
+        }
+        return CfgCraft.sumCraftFees(targetType, gemRanks);
+    }
+
+    private int resolveRequiredMaterialPointId(CraftTargetType targetType, long targetId,
+            UserArtifactEntity artifact) {
+        if (targetType != CraftTargetType.ARTIFACT)
+            return 0;
+        if (artifact == null)
+            artifact = mUser.getResources().getArtifact(targetId);
+        if (artifact == null)
+            return -1;
+        ResArtifactEntity res = artifact.getRes();
+        return res == null ? -1 : res.getPointMain();
     }
 
     private void appendCraftStatus(List<Long> resp, CraftTargetType targetType, UserDataEntity uData) {
@@ -241,6 +304,12 @@ public class CraftHandler extends AHandler {
         if (type == CraftTargetType.EQUIPMENT) {
             UserEquipmentEntity equip = mUser.getResources().getItemEquipment(targetId);
             return equip == null ? -1 : equip.getLevel();
+        }
+        if (type == CraftTargetType.ARTIFACT) {
+            UserArtifactEntity artifact = mUser.getResources().getArtifact(targetId);
+            if (artifact == null)
+                return -1;
+            return artifact.getTier() > 0 ? artifact.getTier() : 1;
         }
         return -1;
     }
@@ -281,6 +350,18 @@ public class CraftHandler extends AHandler {
                 return true;
             if (pet.update(List.of("is_craft", 1))) {
                 pet.setIsCraft(1);
+                return true;
+            }
+            return false;
+        }
+        if (type == CraftTargetType.ARTIFACT) {
+            UserArtifactEntity artifact = mUser.getResources().getArtifact(targetId);
+            if (artifact == null)
+                return false;
+            if (artifact.getIsCraft() == 1)
+                return true;
+            if (artifact.update(List.of("is_craft", 1))) {
+                artifact.setIsCraft(1);
                 return true;
             }
             return false;

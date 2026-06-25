@@ -230,7 +230,8 @@ public class CfgCraft {
                 target(1, 8, "gold", true, 0, 50, 100, 150, 200),
                 target(2, 12, "gem", false, 0, 100, 200, 300, 400),
                 target(3, 12, "gem", false, 0, 50, 100, 150, 200),
-                target(4, 12, "gem", false, 0, 500, 1000, 1500, 2000)
+                target(4, 12, "gem", false, 0, 500, 1000, 1500, 2000),
+                target(5, 12, "item_point", false, 0, 1000, 2000, 3000, 4000)
         );
         return d;
     }
