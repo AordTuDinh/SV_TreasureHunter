@@ -292,6 +292,7 @@ message  PbUserData{
   optional  PbListEquipment equipments = 28;
   optional  int64 timeProtected = 29;
   optional  PbListArtifact aArtifact = 30;
+  optional  PbListItemPoint aItemPoint = 31;
 }
 
 message PbListItem{

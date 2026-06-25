@@ -13,6 +13,7 @@ import game.treasure.mapping.main.ResItemEntity;
 import game.treasure.service.resource.ResAvatar;
 import game.treasure.service.item.EquipmentStatRollService;
 import game.treasure.service.resource.ResItem;
+import game.treasure.service.resource.ResItemPoint;
 import game.treasure.service.resource.ResMount;
 import game.object.MyUser;
 import ozudo.base.database.DBJPA;
@@ -35,6 +36,7 @@ public class Bonus {
     public static final int BONUS_MOUNT = 10;
     public static final int BONUS_MATERIAL = 11;
     public static final int BONUS_EQUIPMENT = 12;
+    public static final int BONUS_ITEM_POINT = 13;
 
     public static final Map<Integer, Integer> mTypeLength = new HashMap<>() {{
         put(BONUS_GOLD, 1);
@@ -49,11 +51,12 @@ public class Bonus {
         put(BONUS_MOUNT, 2);
         put(BONUS_MATERIAL, 2);
         put(BONUS_EQUIPMENT, 2);
+        put(BONUS_ITEM_POINT, 2);
     }};
 
     public static List<Integer> bonusSinger = Arrays.asList(
             BONUS_ITEM, BONUS_EQUIPMENT, BONUS_ARTIFACT, BONUS_PET, BONUS_MOUNT,
-            BONUS_SKIN, BONUS_EFFECT_SKIN, BONUS_MATERIAL);
+            BONUS_SKIN, BONUS_EFFECT_SKIN, BONUS_MATERIAL, BONUS_ITEM_POINT);
 
     public static boolean isBonusSinger(int type) {
         return bonusSinger.contains(type);
@@ -158,6 +161,10 @@ public class Bonus {
         return view(BONUS_VIP_EXP, number);
     }
 
+    public static List<Long> viewItemPoint(int pointId, long number) {
+        return view(BONUS_ITEM_POINT, pointId, number);
+    }
+
     public static List<Long> view(int bonusType, long... values) {
         List<Long> aLong = new ArrayList<>();
         aLong.add((long) bonusType);
@@ -192,7 +199,8 @@ public class Bonus {
         return v == BONUS_GOLD || v == BONUS_GEM || v == BONUS_RUBY || v == BONUS_ITEM
                 || v == BONUS_EQUIPMENT || v == BONUS_ARTIFACT || v == BONUS_SKIN
                 || v == BONUS_EFFECT_SKIN || v == BONUS_VIP_EXP
-                || v == BONUS_PET || v == BONUS_MOUNT || v == BONUS_MATERIAL;
+                || v == BONUS_PET || v == BONUS_MOUNT || v == BONUS_MATERIAL
+                || v == BONUS_ITEM_POINT;
     }
 
   /** Apply wire payload sau type — ITEM preview [itemKey], deduct [-itemKey], remove [rowId, ±itemKey]. */
@@ -266,10 +274,36 @@ public class Bonus {
     }
 
     public static List<Long> receiveListItem(MyUser mUser, String detailAction, List<Long> aBonus) {
-        List<Long> aLong = new ArrayList<>();
+        List<List<Long>> applied = new ArrayList<>();
         for (List<Long> chunk : parseForApply(aBonus))
-            aLong.addAll(applyBonusChunk(mUser, chunk, detailAction));
-        return aLong;
+            applied.add(applyBonusChunk(mUser, chunk, detailAction));
+        return flattenReceiveItemPoint(applied);
+    }
+
+    /** Gộp receive wire cùng pointId — preview vẫn tách từng chunk. */
+    static List<Long> flattenReceiveItemPoint(List<List<Long>> applied) {
+        List<Long> ret = new ArrayList<>();
+        Map<Integer, Integer> indexByPoint = new HashMap<>();
+        for (List<Long> chunk : applied) {
+            if (chunk == null || chunk.isEmpty())
+                continue;
+            if (chunk.get(0).intValue() == BONUS_ITEM_POINT && chunk.size() >= 4) {
+                int pointId = chunk.get(1).intValue();
+                long delta = chunk.get(2);
+                long cur = chunk.get(3);
+                if (indexByPoint.containsKey(pointId)) {
+                    int idx = indexByPoint.get(pointId);
+                    ret.set(idx + 2, ret.get(idx + 2) + delta);
+                    ret.set(idx + 3, cur);
+                } else {
+                    indexByPoint.put(pointId, ret.size());
+                    ret.addAll(chunk);
+                }
+            } else {
+                ret.addAll(chunk);
+            }
+        }
+        return ret;
     }
 
     /** Tách flat wire apply — preview grant (parse cố định) + deduct/remove (payload biến). */
@@ -294,6 +328,7 @@ public class Bonus {
             case BONUS_PET -> addPet(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
             case BONUS_MOUNT -> addMount(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
             case BONUS_MATERIAL -> addMaterial(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
+            case BONUS_ITEM_POINT -> addItemPoint(mUser, chunk.get(1).intValue(), chunk.get(2), detailAction);
             default -> new ArrayList<>();
         };
     }
@@ -517,6 +552,37 @@ public class Bonus {
         return new ArrayList<>();
     }
 
+    static List<Long> addItemPoint(MyUser mUser, int pointId, long delta, String detailAction) {
+        if (ResItemPoint.get(pointId) == null)
+            return new ArrayList<>();
+        int server = mUser.getUser().getServer();
+        UserItemPointEntity row = mUser.getResources().getItemPoint(pointId);
+        if (row == null) {
+            if (delta < 0)
+                return new ArrayList<>();
+            row = new UserItemPointEntity(mUser.getUser().getId(), pointId, server);
+            row.setNumber((int) delta);
+            if (!row.saveOrUpdate())
+                return new ArrayList<>();
+            mUser.getResources().addItemPoint(row);
+            if (CfgServer.isRealServer())
+                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
+                        "type", "item_point", "pointId", pointId, "add", delta, "cur", row.getNumber());
+            return Arrays.asList((long) BONUS_ITEM_POINT, (long) pointId, delta, (long) row.getNumber());
+        }
+        long newNum = (long) row.getNumber() + delta;
+        if (newNum < 0)
+            return new ArrayList<>();
+        row.setNumber((int) newNum);
+        row.setServer(server);
+        if (!row.updateNumber((int) newNum))
+            return new ArrayList<>();
+        if (CfgServer.isRealServer())
+            Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
+                    "type", "item_point", "pointId", pointId, "add", delta, "cur", newNum);
+        return Arrays.asList((long) BONUS_ITEM_POINT, (long) pointId, delta, newNum);
+    }
+
     static List<Long> addVipExp(MyUser mUser, int addExp, String detailAction) {
         UserEntity user = mUser.getUser();
         mUser.getUser().addVipExp(addExp);
@@ -532,8 +598,7 @@ public class Bonus {
             tier = 1;
         if (!mUser.getResources().prepareNewItemSlot(BONUS_PET, 0))
             return new ArrayList<>();
-        UserPetEntity uPet = new UserPetEntity(mUser.getUser(), petId);
-        uPet.setTier(tier);
+        UserPetEntity uPet = new UserPetEntity(mUser.getUser(), petId,tier);
         if (DBJPA.save(uPet)) {
             if (!mUser.getResources().prepareNewItemSlot(BONUS_PET, uPet.getId())) {
                 DBJPA.delete("user_pet", "id", uPet.getId(), "user_id", uPet.getUserId());
@@ -555,8 +620,7 @@ public class Bonus {
         if (ResMount.get(mountId) == null) return new ArrayList<>();
         if (!mUser.getResources().prepareNewItemSlot(BONUS_MOUNT, 0))
             return new ArrayList<>();
-        UserMountEntity uMount = new UserMountEntity(mUser.getUser(), mountId);
-        uMount.setTier(tier);
+        UserMountEntity uMount = new UserMountEntity(mUser.getUser(), mountId,tier);
         if (DBJPA.save(uMount)) {
             if (!mUser.getResources().prepareNewItemSlot(BONUS_MOUNT, uMount.getId())) {
                 DBJPA.delete("user_mount", "id", uMount.getId(), "user_id", uMount.getUserId());
@@ -645,6 +709,7 @@ public class Bonus {
 
     public static String checkMoney(MyUser mUser, List<Long> aBonus) {
         Map<Integer, Integer> itemDeduct = new HashMap<>();
+        Map<Integer, Long> pointDeduct = new HashMap<>();
         for (List<Long> chunk : parseCost(aBonus)) {
             int type = chunk.get(0).intValue();
             switch (type) {
@@ -686,12 +751,24 @@ public class Bonus {
                     if (uEquip == null || uEquip.getItemId() != itemKey)
                         return String.format(Lang.instance(mUser).get(Lang.err_not_enough_item), name);
                     break;
+                case BONUS_ITEM_POINT:
+                    if (chunk.size() != 3)
+                        return Lang.instance(mUser).get(Lang.err_params);
+                    if (chunk.get(2) < 0)
+                        pointDeduct.merge(chunk.get(1).intValue(), chunk.get(2), Long::sum);
+                    break;
             }
         }
         for (Map.Entry<Integer, Integer> entry : itemDeduct.entrySet()) {
             ResItemEntity resItem = ResItem.getItem(entry.getKey());
             String name = resItem != null ? resItem.getName() : "?";
             if (mUser.getResources().countByItemKey(entry.getKey()) < entry.getValue())
+                return String.format(Lang.instance(mUser).get(Lang.err_not_enough_item), name);
+        }
+        for (Map.Entry<Integer, Long> entry : pointDeduct.entrySet()) {
+            game.treasure.mapping.main.ResItemPointEntity res = ResItemPoint.get(entry.getKey());
+            String name = res != null ? res.getName() : "?";
+            if (mUser.getResources().getItemPointNumber(entry.getKey()) + entry.getValue() < 0)
                 return String.format(Lang.instance(mUser).get(Lang.err_not_enough_item), name);
         }
         return null;
@@ -769,6 +846,12 @@ public class Bonus {
         List<Long> ret = new ArrayList<>();
         List<List<Long>> aBonus = parse(bonus);
         for (List<Long> bm : aBonus) {
+            if (bm.get(0).intValue() == BONUS_ITEM_POINT && bm.size() >= 3) {
+                List<Long> copy = new ArrayList<>(bm);
+                copy.set(2, -copy.get(2));
+                ret.addAll(copy);
+                continue;
+            }
             if (!bonusSinger.contains(bm.get(0).intValue())) {
                 int last = bm.size() - 1;
                 bm.set(last, -bm.get(last));

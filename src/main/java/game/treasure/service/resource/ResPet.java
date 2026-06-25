@@ -19,6 +19,9 @@ public class ResPet {
     public static void init() {
         List<ResPetEntity> aPet = DBResource.getInstance().getList(CfgServer.DB_MAIN + "res_pet", ResPetEntity.class);
         mPet.clear();
-        aPet.forEach(pet -> mPet.put(pet.getId(), pet));
+        aPet.forEach(pet -> {
+            pet.init();
+            mPet.put(pet.getId(), pet);
+        });
     }
 }

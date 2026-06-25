@@ -19,6 +19,9 @@ public class ResMount {
         List<ResMountEntity> list = DBResource.getInstance().getList(
                 CfgServer.DB_MAIN + "res_mount", ResMountEntity.class);
         mMount.clear();
-        list.forEach(mount -> mMount.put(mount.getId(), mount));
+        list.forEach(mount -> {
+            mount.init();
+            mMount.put(mount.getId(), mount);
+        });
     }
 }

@@ -38,6 +38,8 @@ public class UserResources implements Serializable {
     List<UserMaterialEntity> materials;
     @Setter
     List<UserSkinEntity> skins;
+    @Setter
+    List<UserItemPointEntity> itemPoints;
 
     @Getter
     Map<Long, UserItemEntity> mItem = new HashMap<>();
@@ -57,6 +59,8 @@ public class UserResources implements Serializable {
     Map<Long, UserMaterialEntity> mMaterial = new HashMap<>();
     @Getter
     Map<Long, UserSkinEntity> mSkin = new HashMap<>();
+    @Getter
+    Map<Integer, UserItemPointEntity> mItemPoint = new HashMap<>();
 
     public UserResources(MyUser mUser) {
         this.mUser = mUser;
@@ -177,6 +181,9 @@ public class UserResources implements Serializable {
             }
             if (skins != null) {
                 skins.forEach(skin -> mSkin.put(skin.getId(), skin));
+            }
+            if (itemPoints != null) {
+                itemPoints.forEach(row -> mItemPoint.put(row.getPointId(), row));
             }
             syncEquipFlagsFromUser();
             rebuildItemSlotIfNeeded();
@@ -472,5 +479,22 @@ public class UserResources implements Serializable {
     public void notifyBagSlotCountChanged() {
         mUser.queueUserDataInfo();
         mUser.queueUpdateBag();
+    }
+
+    public UserItemPointEntity getItemPoint(int pointId) {
+        return mItemPoint.get(pointId);
+    }
+
+    public int getItemPointNumber(int pointId) {
+        UserItemPointEntity row = mItemPoint.get(pointId);
+        return row != null ? row.getNumber() : 0;
+    }
+
+    public void addItemPoint(UserItemPointEntity row) {
+        if (itemPoints == null)
+            itemPoints = new ArrayList<>();
+        if (!itemPoints.contains(row))
+            itemPoints.add(row);
+        mItemPoint.put(row.getPointId(), row);
     }
 }

@@ -26,17 +26,15 @@ public class UserMountEntity implements Serializable {
     int isCraft;
     int server;
     String data;
-    @Transient
-    Point point;
 
-    public UserMountEntity(UserEntity user, int mountId) {
+    public UserMountEntity(UserEntity user, int mountId,int tier) {
         this.userId = user.getId();
         this.mountId = mountId;
         this.server = user.getServer();
         this.level = 1;
-        this.tier = 1;
+        this.tier = tier;
         this.isCraft = 0;
-        this.data = "[]";
+        this.data = getRes().getPointData(tier);
     }
 
     public ResMountEntity getRes() {

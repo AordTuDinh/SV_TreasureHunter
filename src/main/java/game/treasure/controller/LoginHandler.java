@@ -485,6 +485,10 @@ public class LoginHandler extends AHandler {
 
             List<UserSkinEntity> userSkins = session.createNativeQuery("select * from user_skin where user_id = " + userId, UserSkinEntity.class).getResultList();
             mUser.getResources().setSkins(userSkins);
+
+            List<UserItemPointEntity> itemPoints = session.createNativeQuery("select * from user_item_point where user_id = " + userId, UserItemPointEntity.class).getResultList();
+            mUser.getResources().setItemPoints(itemPoints);
+
             ResAvatar.ensureDefaultSkins(mUser, session);
 
             mUser.setInitUData(uData, mUser.getUser());

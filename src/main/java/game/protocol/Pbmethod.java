@@ -25654,6 +25654,20 @@ public final class Pbmethod {
      * <code>optional .pbdson.PbListArtifact aArtifact = 30;</code>
      */
     protocol.Pbmethod.PbListArtifactOrBuilder getAArtifactOrBuilder();
+
+    // optional .pbdson.PbListItemPoint aItemPoint = 31;
+    /**
+     * <code>optional .pbdson.PbListItemPoint aItemPoint = 31;</code>
+     */
+    boolean hasAItemPoint();
+    /**
+     * <code>optional .pbdson.PbListItemPoint aItemPoint = 31;</code>
+     */
+    protocol.Pbmethod.PbListItemPoint getAItemPoint();
+    /**
+     * <code>optional .pbdson.PbListItemPoint aItemPoint = 31;</code>
+     */
+    protocol.Pbmethod.PbListItemPointOrBuilder getAItemPointOrBuilder();
   }
   /**
    * Protobuf type {@code pbdson.PbUserData}
@@ -25950,6 +25964,19 @@ public final class Pbmethod {
                 aArtifact_ = subBuilder.buildPartial();
               }
               bitField0_ |= 0x00010000;
+              break;
+            }
+            case 250: {
+              protocol.Pbmethod.PbListItemPoint.Builder subBuilder = null;
+              if (((bitField0_ & 0x00020000) == 0x00020000)) {
+                subBuilder = aItemPoint_.toBuilder();
+              }
+              aItemPoint_ = input.readMessage(protocol.Pbmethod.PbListItemPoint.PARSER, extensionRegistry);
+              if (subBuilder != null) {
+                subBuilder.mergeFrom(aItemPoint_);
+                aItemPoint_ = subBuilder.buildPartial();
+              }
+              bitField0_ |= 0x00020000;
               break;
             }
           }
@@ -26547,6 +26574,28 @@ public final class Pbmethod {
       return aArtifact_;
     }
 
+    // optional .pbdson.PbListItemPoint aItemPoint = 31;
+    public static final int AITEMPOINT_FIELD_NUMBER = 31;
+    private protocol.Pbmethod.PbListItemPoint aItemPoint_;
+    /**
+     * <code>optional .pbdson.PbListItemPoint aItemPoint = 31;</code>
+     */
+    public boolean hasAItemPoint() {
+      return ((bitField0_ & 0x00020000) == 0x00020000);
+    }
+    /**
+     * <code>optional .pbdson.PbListItemPoint aItemPoint = 31;</code>
+     */
+    public protocol.Pbmethod.PbListItemPoint getAItemPoint() {
+      return aItemPoint_;
+    }
+    /**
+     * <code>optional .pbdson.PbListItemPoint aItemPoint = 31;</code>
+     */
+    public protocol.Pbmethod.PbListItemPointOrBuilder getAItemPointOrBuilder() {
+      return aItemPoint_;
+    }
+
     private void initFields() {
       slogBagUI_ = 0;
       slotMaterial_ = 0;
@@ -26573,6 +26622,7 @@ public final class Pbmethod {
       equipments_ = protocol.Pbmethod.PbListEquipment.getDefaultInstance();
       timeProtected_ = 0L;
       aArtifact_ = protocol.Pbmethod.PbListArtifact.getDefaultInstance();
+      aItemPoint_ = protocol.Pbmethod.PbListItemPoint.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -26660,6 +26710,9 @@ public final class Pbmethod {
       }
       if (((bitField0_ & 0x00010000) == 0x00010000)) {
         output.writeMessage(30, aArtifact_);
+      }
+      if (((bitField0_ & 0x00020000) == 0x00020000)) {
+        output.writeMessage(31, aItemPoint_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -26794,6 +26847,10 @@ public final class Pbmethod {
       if (((bitField0_ & 0x00010000) == 0x00010000)) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(30, aArtifact_);
+      }
+      if (((bitField0_ & 0x00020000) == 0x00020000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(31, aItemPoint_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -26996,6 +27053,12 @@ public final class Pbmethod {
           aArtifactBuilder_.clear();
         }
         bitField0_ = (bitField0_ & ~0x01000000);
+        if (aItemPointBuilder_ == null) {
+          aItemPoint_ = protocol.Pbmethod.PbListItemPoint.getDefaultInstance();
+        } else {
+          aItemPointBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x02000000);
         return this;
       }
 
@@ -27159,6 +27222,14 @@ public final class Pbmethod {
           result.aArtifact_ = aArtifact_;
         } else {
           result.aArtifact_ = aArtifactBuilder_.build();
+        }
+        if (((from_bitField0_ & 0x02000000) == 0x02000000)) {
+          to_bitField0_ |= 0x00020000;
+        }
+        if (aItemPointBuilder_ == null) {
+          result.aItemPoint_ = aItemPoint_;
+        } else {
+          result.aItemPoint_ = aItemPointBuilder_.build();
         }
         result.bitField0_ = to_bitField0_;
         onBuilt();
@@ -27354,6 +27425,9 @@ public final class Pbmethod {
         }
         if (other.hasAArtifact()) {
           mergeAArtifact(other.getAArtifact());
+        }
+        if (other.hasAItemPoint()) {
+          mergeAItemPoint(other.getAItemPoint());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -29355,6 +29429,97 @@ public final class Pbmethod {
           aArtifact_ = null;
         }
         return aArtifactBuilder_;
+      }
+
+      // optional .pbdson.PbListItemPoint aItemPoint = 31;
+      private protocol.Pbmethod.PbListItemPoint aItemPoint_ = protocol.Pbmethod.PbListItemPoint.getDefaultInstance();
+      private com.google.protobuf.SingleFieldBuilder<
+          protocol.Pbmethod.PbListItemPoint, protocol.Pbmethod.PbListItemPoint.Builder, protocol.Pbmethod.PbListItemPointOrBuilder>
+          aItemPointBuilder_;
+      public boolean hasAItemPoint() {
+        return ((bitField0_ & 0x02000000) == 0x02000000);
+      }
+      public protocol.Pbmethod.PbListItemPoint getAItemPoint() {
+        if (aItemPointBuilder_ == null) {
+          return aItemPoint_;
+        } else {
+          return aItemPointBuilder_.getMessage();
+        }
+      }
+      public Builder setAItemPoint(protocol.Pbmethod.PbListItemPoint value) {
+        if (aItemPointBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          aItemPoint_ = value;
+          onChanged();
+        } else {
+          aItemPointBuilder_.setMessage(value);
+        }
+        bitField0_ |= 0x02000000;
+        return this;
+      }
+      public Builder setAItemPoint(
+          protocol.Pbmethod.PbListItemPoint.Builder builderForValue) {
+        if (aItemPointBuilder_ == null) {
+          aItemPoint_ = builderForValue.build();
+          onChanged();
+        } else {
+          aItemPointBuilder_.setMessage(builderForValue.build());
+        }
+        bitField0_ |= 0x02000000;
+        return this;
+      }
+      public Builder mergeAItemPoint(protocol.Pbmethod.PbListItemPoint value) {
+        if (aItemPointBuilder_ == null) {
+          if (((bitField0_ & 0x02000000) == 0x02000000) &&
+              aItemPoint_ != protocol.Pbmethod.PbListItemPoint.getDefaultInstance()) {
+            aItemPoint_ =
+              protocol.Pbmethod.PbListItemPoint.newBuilder(aItemPoint_).mergeFrom(value).buildPartial();
+          } else {
+            aItemPoint_ = value;
+          }
+          onChanged();
+        } else {
+          aItemPointBuilder_.mergeFrom(value);
+        }
+        bitField0_ |= 0x02000000;
+        return this;
+      }
+      public Builder clearAItemPoint() {
+        if (aItemPointBuilder_ == null) {
+          aItemPoint_ = protocol.Pbmethod.PbListItemPoint.getDefaultInstance();
+          onChanged();
+        } else {
+          aItemPointBuilder_.clear();
+        }
+        bitField0_ = (bitField0_ & ~0x02000000);
+        return this;
+      }
+      public protocol.Pbmethod.PbListItemPoint.Builder getAItemPointBuilder() {
+        bitField0_ |= 0x02000000;
+        onChanged();
+        return getAItemPointFieldBuilder().getBuilder();
+      }
+      public protocol.Pbmethod.PbListItemPointOrBuilder getAItemPointOrBuilder() {
+        if (aItemPointBuilder_ != null) {
+          return aItemPointBuilder_.getMessageOrBuilder();
+        } else {
+          return aItemPoint_;
+        }
+      }
+      private com.google.protobuf.SingleFieldBuilder<
+          protocol.Pbmethod.PbListItemPoint, protocol.Pbmethod.PbListItemPoint.Builder, protocol.Pbmethod.PbListItemPointOrBuilder>
+          getAItemPointFieldBuilder() {
+        if (aItemPointBuilder_ == null) {
+          aItemPointBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+              protocol.Pbmethod.PbListItemPoint, protocol.Pbmethod.PbListItemPoint.Builder, protocol.Pbmethod.PbListItemPointOrBuilder>(
+                  aItemPoint_,
+                  getParentForChildren(),
+                  isClean());
+          aItemPoint_ = null;
+        }
+        return aItemPointBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:pbdson.PbUserData)

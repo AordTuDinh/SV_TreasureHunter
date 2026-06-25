@@ -25,16 +25,17 @@ public class UserPetEntity implements Serializable {
     int tier = 1;
     int isCraft;
     int server;
-    @Transient
-    Point point;
+    String data;
 
-    public UserPetEntity(UserEntity user, int petId) {
+
+    public UserPetEntity(UserEntity user, int petId,int tier) {
         this.userId = user.getId();
         this.server = user.getServer();
         this.petId = petId;
         this.level = 1;
-        this.tier = 1;
+        this.tier = tier;
         this.isCraft = 0;
+        this.data = getResPet().getPointData(tier);
     }
 
     public ResPetEntity getResPet() {

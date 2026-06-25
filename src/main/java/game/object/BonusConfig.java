@@ -81,46 +81,46 @@ public class BonusConfig implements Serializable {
 
     // check cả bonus -1 , còn lại thì trả về 1 bonus theo per
     // luôn lấy tất cả config rate=-1, và thêm tối đa 1 config rate>=0
-    public List<Long> getRandomBonus(List<BonusConfig> aBonus) {
-        int per = NumberUtil.getRandom(1000);
-        List<Long> ret = new ArrayList<>();
-        boolean hasBonusOne = false;
-        for (int i = 0; i < aBonus.size(); i++) {
-            BonusConfig bm = aBonus.get(i);
-            if (bm.rate == -1) {
-                int num = bm.max == 1 ? 1 : NumberUtil.getRandom(bm.min, bm.max);
-                ret.addAll(Bonus.viewXNumber(new ArrayList<>(bm.bonus), num));
-            } else if (!hasBonusOne) {
-                if (per < bm.rate) {
-                    ret.addAll(Bonus.viewXNumber(new ArrayList<>(bm.bonus), NumberUtil.getRandom(bm.min, bm.max)));
-                    hasBonusOne = true;
-                } else per -= bm.rate;
-            }
-        }
-        return ret;
-    }
+//    public List<Long> getRandomBonus(List<BonusConfig> aBonus) {
+//        int per = NumberUtil.getRandom(1000);
+//        List<Long> ret = new ArrayList<>();
+//        boolean hasBonusOne = false;
+//        for (int i = 0; i < aBonus.size(); i++) {
+//            BonusConfig bm = aBonus.get(i);
+//            if (bm.rate == -1) {
+//                int num = bm.max == 1 ? 1 : NumberUtil.getRandom(bm.min, bm.max);
+//                ret.addAll(Bonus.viewXNumber(new ArrayList<>(bm.bonus), num));
+//            } else if (!hasBonusOne) {
+//                if (per < bm.rate) {
+//                    ret.addAll(Bonus.viewXNumber(new ArrayList<>(bm.bonus), NumberUtil.getRandom(bm.min, bm.max)));
+//                    hasBonusOne = true;
+//                } else per -= bm.rate;
+//            }
+//        }
+//        return ret;
+//    }
 
     // only boss
     // như getRandomBonus nhưng có buff perBonusAdd
-    public static List<Long> getRandomBonusBoss(List<BonusConfig> aBonus, List<Integer> perBonusAdd) {
-        int per = NumberUtil.getRandom(1000);
-        List<Long> ret = new ArrayList<>();
-        boolean hasBonusOne = false;
-        for (int i = 0; i < aBonus.size(); i++) {
-            BonusConfig bm = aBonus.get(i);
-            if (bm.rate == -1) {
-                int num = bm.max == 1 ? 1 : NumberUtil.getRandom(bm.min, bm.max);
-                num += (int) (num * perBonusAdd.get(0) / 100f);
-                ret.addAll(Bonus.viewXNumber(new ArrayList<>(bm.bonus), num));
-            } else if (!hasBonusOne) {
-                if (per < bm.rate + perBonusAdd.get(1) * 10) {
-                    int num = NumberUtil.getRandom(bm.min, bm.max);
-                    num += (int) (num * perBonusAdd.get(0) / 100f);
-                    ret.addAll(Bonus.viewXNumber(new ArrayList<>(bm.bonus), num));
-                    hasBonusOne = true;
-                } else per -= bm.rate;
-            }
-        }
-        return ret;
-    }
+//    public static List<Long> getRandomBonusBoss(List<BonusConfig> aBonus, List<Integer> perBonusAdd) {
+//        int per = NumberUtil.getRandom(1000);
+//        List<Long> ret = new ArrayList<>();
+//        boolean hasBonusOne = false;
+//        for (int i = 0; i < aBonus.size(); i++) {
+//            BonusConfig bm = aBonus.get(i);
+//            if (bm.rate == -1) {
+//                int num = bm.max == 1 ? 1 : NumberUtil.getRandom(bm.min, bm.max);
+//                num += (int) (num * perBonusAdd.get(0) / 100f);
+//                ret.addAll(Bonus.viewXNumber(new ArrayList<>(bm.bonus), num));
+//            } else if (!hasBonusOne) {
+//                if (per < bm.rate + perBonusAdd.get(1) * 10) {
+//                    int num = NumberUtil.getRandom(bm.min, bm.max);
+//                    num += (int) (num * perBonusAdd.get(0) / 100f);
+//                    ret.addAll(Bonus.viewXNumber(new ArrayList<>(bm.bonus), num));
+//                    hasBonusOne = true;
+//                } else per -= bm.rate;
+//            }
+//        }
+//        return ret;
+//    }
 }

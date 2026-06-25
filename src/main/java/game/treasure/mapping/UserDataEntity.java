@@ -343,6 +343,13 @@ public class UserDataEntity implements Serializable {
         }
         pb.setTimeProtected(BattleConfig.toWireProtectedMs(timeProtected));
 
+        Pbmethod.PbListItemPoint.Builder lstItemPoint = Pbmethod.PbListItemPoint.newBuilder();
+        for (Map.Entry<Integer, UserItemPointEntity> entry : mUser.getResources().getMItemPoint().entrySet()) {
+            lstItemPoint.addItemPoints(entry.getValue().toProto());
+        }
+        if (lstItemPoint.getItemPointsCount() > 0)
+            pb.setAItemPoint(lstItemPoint);
+
         return pb.build();
     }
 
