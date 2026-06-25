@@ -10,8 +10,11 @@ import java.util.Map;
 
 public class ResArtifact {
     static Map<Integer, ResArtifactEntity> mArtifact = new HashMap<>();
+    static boolean loaded;
 
     public static ResArtifactEntity get(int artifactId) {
+        if (!loaded)
+            init();
         return mArtifact.get(artifactId);
     }
 
@@ -19,6 +22,10 @@ public class ResArtifact {
         List<ResArtifactEntity> list = DBResource.getInstance().getList(
                 CfgServer.DB_MAIN + "res_artifact", ResArtifactEntity.class);
         mArtifact.clear();
-        list.forEach(row -> mArtifact.put(row.getId(), row));
+        list.forEach(row -> {
+            row.init();
+            mArtifact.put(row.getId(), row);
+        });
+        loaded = true;
     }
 }

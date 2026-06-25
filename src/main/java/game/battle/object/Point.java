@@ -27,29 +27,30 @@ public class Point {
     public static final int P_DEFENSE = 9;
     public static final int CRIT = 10;
     public static final int CRIT_DAMAGE = 11;
-    public static final int IMMUNITY = 12;
-    public static final int AGILITY = 13;
+    public static final int COUNTER_ATTACK = 12;
+    public static final int LIFE_STEAL = 13;
     public static final int ACCURACY = 14;
-    public static final int CRIT_DAMAGE_REDUCTION = 15;
+    public static final int HEALING = 15;
     public static final int P_ITEM_DROP_INCREASE = 16;
     public static final int P_GOLD_INCREASE = 17;
     public static final int DOGE = 18;
+    public static final int DOT = 19;
+    public static final int FREEZE = 20;
+    public static final int POISON = 21;
+    public static final int MULTI_ATTACK = 22;
 
     // CHANGE
-    public static final int CHANGE_MOVE_SPEED = 19;
-    public static final int CHANGE_ATTACK = 20;
-    public static final int CHANGE_DEFENSE = 21;
-    public static final int CHANGE_MAGIC_RESIST = 22;
-    public static final int CHANGE_AGILITY = 23;
-    public static final int CHANGE_HEATH = 24;
-    public static final int CHANGE_CRIT = 25;
-    public static final int CHANGE_CRIT_DAMAGE = 26;
-
+    public static final int CHANGE_ATTACK = 23;
+    public static final int CHANGE_DEFENSE = 24;
+    public static final int CHANGE_MAGIC_RESIST = 25;
+    public static final int CHANGE_AGILITY = 26;
+    public static final int CHANGE_HEATH = 27;
+    public static final int CHANGE_CRIT = 28;
+    public static final int CHANGE_CRIT_DAMAGE = 29;
+    public static final int CHANGE_MOVE_SPEED = 30;
     // EFFECT
-    public static final int BLOCK_PARALYZE = 27;
-    public static final int STUN = 28;
-    public static final int FREEZE = 29;
-    public static final int CHANGE_DAME = 30;
+    public static final int BLOCK_PARALYZE = 31;
+    public static final int STUN = 32;
 
     @Setter
     @Getter
@@ -69,7 +70,6 @@ public class Point {
         // set 1 số chỉ số mặc định
         values[CHANGE_MOVE_SPEED] = 100;
         values[CHANGE_DEFENSE] = 100;
-        values[CHANGE_DAME] = 100;
         values[CHANGE_MAGIC_RESIST] = 100;
         values[CHANGE_AGILITY] = 100;
         values[CHANGE_ATTACK] = 100;
@@ -211,15 +211,6 @@ public class Point {
         values[CRIT_DAMAGE] = value;
     }
 
-
-    public void setImmunity(int value) {
-        values[IMMUNITY] = value;
-    }
-
-    public void setAgility(int value) {
-        values[AGILITY] = value;
-    }
-
     // float => chia 100
     public void setMoveSpeed(int value) {
         values[MOVE_SPEED] = value;
@@ -249,19 +240,6 @@ public class Point {
         return values[DOGE];
     }
 
-
-    public long getImmunity() {
-        return values[IMMUNITY];
-    }
-
-    public long getAgility() {
-        long baseValue = values[AGILITY];
-//        System.out.println("baseValue = " + baseValue);
-        long changeValue = values[CHANGE_AGILITY];
-//        System.out.println("changeValue = " + changeValue);
-//        System.out.println("baseValue * changeValue = " + baseValue * changeValue);
-        return (baseValue * changeValue) / 100;
-    }
 
     public long getMoveSpeed() {
         long baseValue = values[MOVE_SPEED];
@@ -317,15 +295,6 @@ public class Point {
         return (long) ((baseValue + baseValue * perValue / 100f) * (changeValue / 100f));
     }
 
-    public float getChangeDame() {
-        return values[CHANGE_DAME] / 100f;
-    }
-
-    public long getCritDamageReduce() {
-        return values[CRIT_DAMAGE_REDUCTION];
-    }
-    //
-
     public Point cloneInstance() {
         Point point = new Point();
         for (int i = 0; i < size; i++) {
@@ -375,8 +344,6 @@ public class Point {
         power += getDefense() * 2f;
         power += getCrit() * level * 0.02f;
         power += getCritDamage() * 0.02f;
-        power += getAgility() * level * 0.02f;
-        power += getImmunity() * level * 0.02f;
         values[POWER] = power;
 
     }
@@ -389,8 +356,6 @@ public class Point {
         power += getMoveSpeed() * 2f;
         power += getDefense() * 2f;
         power += getCritDamage() * 0.02f;
-        power += getAgility() * 0.02f;
-        power += getImmunity() * 0.02f;
         values[POWER] = power;
 
     }
@@ -471,14 +436,6 @@ public class Point {
         values[MOVE_SPEED] += value;
     }
 
-    public void addImmunity(int value) {
-        values[IMMUNITY] += value;
-    }
-
-    public void addAgility(int value) {
-        values[AGILITY] += value;
-    }
-
     public void addBattlePower(long value) {
         values[POWER] += value;
     }
@@ -491,8 +448,6 @@ public class Point {
         addPerDef(per);
         addCrit(per / 10);
         addCritDamage(per);
-        addImmunity(per);
-        addAgility(per);
     }
 
 

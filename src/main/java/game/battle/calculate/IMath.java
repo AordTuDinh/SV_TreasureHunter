@@ -18,7 +18,7 @@ import java.util.Random;
 
 public class IMath {
 
-    public static final List<Integer> POINT_X100 = List.of(Point.CRIT, Point.AGILITY, Point.IMMUNITY);
+    public static final List<Integer> POINT_X100 = List.of(Point.CRIT);
 
 
     public static float randomBetweenFloat(float max, float min) {
@@ -77,8 +77,7 @@ public class IMath {
         if (isCrit(attacker.getPoint().getCrit())) {
             status = 1;
             float bonus = attacker.getPoint().getCritDamage() - 200f; // nếu critDamage đang chứa total%
-            float reduce = target.getPoint().getCritDamageReduce();   // hiểu là % giảm bonus hoặc giảm total tuỳ bạn
-            float finalCritDamagePercent = 200f + Math.max(0f, bonus - reduce);
+            float finalCritDamagePercent = 200f + Math.max(0f, bonus);
             critPer = finalCritDamagePercent / 100f;
         }
         int dame = calculateDamageBase(atkDame, target, critPer, null, attacker);
@@ -88,7 +87,6 @@ public class IMath {
     // Hàm gốc - tất cả đều tính qua hàm này
     public static int calculateDamageBase(long atkDame, Unit beAttacker, float critPer, PointBuff buff, Unit attacker) {
         // Lưu ý : Sát thương chuẩn sẽ mạnh hơn giảm dame trực tiếp
-        float changeDame = beAttacker.getPoint().getChangeDame();
         long def = beAttacker.getPoint().getDefense();
         if (buff != null && buff.getPointId() == Point.DEFENSE) {
             def += buff.getValue();
@@ -99,7 +97,7 @@ public class IMath {
         float defF = (float) def;
         int dmg = (int) ((atkF * atkF) / (atkF + defF + 0.0001f)); // tránh chia 0
 
-        dmg = (int) (dmg * changeDame * critPer);
+        dmg = (int) (dmg  * critPer);
         if (dmg <= 0) dmg = 1;
         return dmg;
     }

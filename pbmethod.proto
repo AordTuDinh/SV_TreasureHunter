@@ -402,7 +402,14 @@ message PbArtifact{
   optional  int64 id = 1;
   optional  int32 artifactId = 2;
   optional  int32 level = 3;
-  optional  string data = 4;
+  optional  int32 tier = 4;
+  optional float  time = 5;
+  optional float  cooldown = 6;
+  optional float  pointID = 7;
+  optional float  value = 8;
+  optional float  range = 9;
+  optional float  person = 10;
+  optional int32 isCraft = 11;
 }
 
 message PbListArtifact{

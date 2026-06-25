@@ -43,7 +43,7 @@ public class Bonus {
         put(BONUS_GEM, 1);
         put(BONUS_RUBY, 1);
         put(BONUS_ITEM, 1);
-        put(BONUS_ARTIFACT, 1);
+        put(BONUS_ARTIFACT, 2);
         put(BONUS_SKIN, 1);
         put(BONUS_EFFECT_SKIN, 2);
         put(BONUS_VIP_EXP, 1);
@@ -145,8 +145,13 @@ public class Bonus {
         return ret;
     }
 
+    public static List<Long> viewItemArtifact(int artifactId, int tier) {
+        int t = tier > 0 ? Math.min(tier, 4) : 1;
+        return view(BONUS_ARTIFACT, artifactId, t);
+    }
+
     public static List<Long> viewItemArtifact(int artifactId) {
-        return view(BONUS_ARTIFACT, artifactId);
+        return viewItemArtifact(artifactId, 1);
     }
 
     public static List<Long> viewGem(int number) {
@@ -188,7 +193,12 @@ public class Bonus {
                         ? Math.toIntExact(bonus.get(2))
                         : Math.toIntExact(bonus.get(1));
             }
-            case BONUS_ARTIFACT -> Math.toIntExact(bonus.get(2));
+            case BONUS_ARTIFACT -> {
+                // preview [5, itemKey, tier] | receive [5, rowId, itemKey, tier]
+                return bonus.size() == 4
+                        ? Math.toIntExact(bonus.get(2))
+                        : Math.toIntExact(bonus.get(1));
+            }
             case BONUS_SKIN -> Math.toIntExact(bonus.get(1));
             case BONUS_EFFECT_SKIN -> Math.toIntExact(bonus.get(2));
         }
@@ -321,7 +331,7 @@ public class Bonus {
             case BONUS_RUBY -> addRuby(mUser, chunk.get(1), detailAction);
             case BONUS_ITEM -> applyUserItemChunk(mUser, chunk, detailAction);
             case BONUS_EQUIPMENT -> applyUserEquipmentChunk(mUser, chunk, detailAction);
-            case BONUS_ARTIFACT -> addItemArtifact(mUser, chunk.get(1).intValue(), detailAction);
+            case BONUS_ARTIFACT -> applyUserArtifactChunk(mUser, chunk, detailAction);
             case BONUS_VIP_EXP -> addVipExp(mUser, chunk.get(1).intValue(), detailAction);
             case BONUS_SKIN -> addCharacterSkin(mUser, chunk.get(1).intValue(), detailAction);
             case BONUS_EFFECT_SKIN -> addEffectSkin(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
@@ -343,6 +353,13 @@ public class Bonus {
         }
         if (chunk.size() == 3)
             return removeUserItemRow(mUser, chunk.get(1), Math.abs(chunk.get(2).intValue()), detailAction);
+        return new ArrayList<>();
+    }
+
+    /** Preview grant [5,itemKey,tier]. */
+    static List<Long> applyUserArtifactChunk(MyUser mUser, List<Long> chunk, String detailAction) {
+        if (chunk.size() == 3)
+            return addItemArtifact(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
         return new ArrayList<>();
     }
 
@@ -533,12 +550,11 @@ public class Bonus {
         return uItem;
     }
 
-    static List<Long> addItemArtifact(MyUser mUser, int artifactId, String detailAction) {
-        if (mUser.getResources().getArtifactByConfigId(artifactId) != null)
-            return new ArrayList<>();
+    static List<Long> addItemArtifact(MyUser mUser, int artifactId, int configTier, String detailAction) {
         if (!mUser.getResources().prepareNewItemSlot(BONUS_ARTIFACT, 0))
             return new ArrayList<>();
-        UserArtifactEntity uArtifact = new UserArtifactEntity(mUser.getUser().getId(), artifactId);
+        int tier = configTier > 0 ? Math.min(configTier, 4) : 1;
+        UserArtifactEntity uArtifact = new UserArtifactEntity(mUser.getUser().getId(), artifactId, tier);
         if (DBJPA.save(uArtifact)) {
             if (!mUser.getResources().prepareNewItemSlot(BONUS_ARTIFACT, uArtifact.getId())) {
                 DBJPA.delete("user_artifact", "id", uArtifact.getId(), "user_id", uArtifact.getUserId());
@@ -546,8 +562,9 @@ public class Bonus {
             }
             mUser.getResources().addArtifact(uArtifact);
             if (CfgServer.isRealServer())
-                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "artifact", "id", uArtifact.getId(), "artifactId", artifactId);
-            return Arrays.asList((long) BONUS_ARTIFACT, uArtifact.getId(), (long) artifactId);
+                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
+                        "type", "artifact", "id", uArtifact.getId(), "artifactId", artifactId, "tier", tier);
+            return Arrays.asList((long) BONUS_ARTIFACT, uArtifact.getId(), (long) artifactId, (long) uArtifact.getTier());
         }
         return new ArrayList<>();
     }
@@ -803,7 +820,7 @@ public class Bonus {
         return results;
     }
 
-    /** Parse preview/reward config — ITEM [4,itemKey], EQUIP [12,itemKey,tier], PET/MOUNT [9|10,configId,tier]. */
+    /** Parse preview/reward config — ITEM [4,itemKey], ARTIFACT [5,itemKey,tier], EQUIP [12,itemKey,tier], PET/MOUNT [9|10,configId,tier]. */
     public static List<List<Long>> parse(List<Long> bonus) {
         List<List<Long>> result = new ArrayList<>();
         if (bonus != null && !bonus.isEmpty()) {
