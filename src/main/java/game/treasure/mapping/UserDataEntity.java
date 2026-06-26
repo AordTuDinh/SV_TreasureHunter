@@ -40,7 +40,7 @@ public class UserDataEntity implements Serializable {
     int levelTraining, friendNotify, tutorial, questTutorial, questTutorialNumber;
     String numSlot, dataInt, checkIn;
     String itemSlot;
-    String buff; // [time25,time50,timex2 ...] x9
+    String buff; // [pointId, value, time end]
     String dameSkin, chatFrame, listTrial;
     int dameSkinEquip, chatFrameEquip, trialEquip, effInit, craftLevel, craftExp;
     long timeProtected;
@@ -72,7 +72,7 @@ public class UserDataEntity implements Serializable {
         this.craftLevel = 1;
         this.trialEquip = 0;
         this.craftExp = 0;
-        this.buff = NumberUtil.genListStringInt(9, 0);
+        this.buff = "[]";
         this.itemSlot = buildEmptyItemSlot(CfgUser.getSlotBagInit());
     }
 
@@ -145,10 +145,8 @@ public class UserDataEntity implements Serializable {
     }
 
 
-    public List<Long> getBuff() {
-        List<Long> aBuff = GsonUtil.strToListLong(buff);
-        while (aBuff.size() < BuffItemType.values().length) aBuff.add(0L);
-        return aBuff;
+    public List<Long> getBuffTriplets() {
+        return game.treasure.service.user.UserBuff.parseTriplets(buff);
     }
 
     public List<Integer> getSlot() {

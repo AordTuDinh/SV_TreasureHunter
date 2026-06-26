@@ -188,6 +188,7 @@ public class IAction {
     public static final int ARTIFACT_SELL = 465;
     public static final int ARTIFACT_USE = 466;
     public static final int ARTIFACT_INFO = 467;
+    public static final int ADD_BUFF = 468;
 
     // Event
     public static final int RPS_SEND_RQ = 600;

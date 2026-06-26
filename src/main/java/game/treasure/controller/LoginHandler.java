@@ -271,6 +271,7 @@ public class LoginHandler extends AHandler {
         addResponse(builder.build());
         // tra user data luon
         ChUtil.setMUser(channel, mUser);
+        game.treasure.service.user.UserBuff.onLogin(mUser);
         // check event
         checkEvent();
 

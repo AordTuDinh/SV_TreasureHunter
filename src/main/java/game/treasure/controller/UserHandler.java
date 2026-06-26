@@ -550,30 +550,10 @@ public class UserHandler extends AHandler {
     }
 
     public static void buffInfo(MyUser mUser) {
-        List<Long> buffs = mUser.getUData().getBuff();
-        List<Long> ret = new ArrayList<>();
-        List<Long> sumBuff = NumberUtil.genListLong(4, 0L);
-        // buff from item
-        for (int i = 0; i < buffs.size(); i++) {
-            if (buffs.get(i) <= 0) continue;
-            // còn hạn
-            long timeRemain = (buffs.get(i) - System.currentTimeMillis()) / 1000;
-            if (timeRemain > 0) {
-                BuffItemType buff = BuffItemType.getByIndex(i);
-                ret.add((long) buff.id);
-                ret.add(timeRemain);
-                sumBuff.set(buff.pointIndex, sumBuff.get(buff.pointIndex) + buff.valueBuff);
-                sumBuff.set(3, 1L); // active anim buff
-            }
-        }
-        // buff từ phúc lợi bang và trang bị
-        Point point = mUser.getPlayer().getPoint();
-        sumBuff.set(0, sumBuff.get(0) + point.getBuffDrop());
-        sumBuff.set(1, sumBuff.get(1) + point.getBuffGold());
-        //
-        sumBuff.addAll(ret);
-        Util.sendProtoData(mUser.getChannel(), CommonProto.getCommonVector(sumBuff), IAction.BUFF_INFO);
-        mUser.getPlayer().updateBuff();
+        if (mUser == null || mUser.getPlayer() == null || mUser.getChannel() == null)
+            return;
+        List<Long> wire = game.treasure.service.user.UserBuff.buildWire(mUser);
+        Util.sendProtoData(mUser.getChannel(), CommonProto.getCommonVector(wire), IAction.BUFF_INFO);
     }
 
     private void addDefault() {

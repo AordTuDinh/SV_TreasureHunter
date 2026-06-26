@@ -308,8 +308,8 @@ public class MyUser implements Serializable {
 
     public void addBuffs(List<Long> aBuffs) {
         uData.update(List.of("buff", StringHelper.toDBString(aBuffs)));
-        uData.setBuff(aBuffs.toString());
-        player.updateBuff();
+        uData.setBuff(StringHelper.toDBString(aBuffs));
+        reCalculatePoint();
         UserHandler.buffInfo(this);
     }
 

@@ -559,6 +559,20 @@ public abstract class BaseRoom extends MonoRoom {
         return mUnit.containsKey(userId);
     }
 
+    /** Player đang online trong room (dùng cho buff cổ vật area). */
+    public List<Player> listPlayers() {
+        List<Player> list = new ArrayList<>();
+        for (int i = 0; i < aPlayerIds.size(); i++) {
+            Unit unit = mUnit.get(aPlayerIds.get(i));
+            if (unit != null && unit.isPlayer()) {
+                Player p = unit.getPlayer();
+                if (p != null && p.getMUser() != null)
+                    list.add(p);
+            }
+        }
+        return list;
+    }
+
     public int worldPosToChunkId(Pos pos) {
         return MapService.worldPosToChunkId(mapInfo, pos);
     }

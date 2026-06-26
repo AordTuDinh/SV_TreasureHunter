@@ -427,21 +427,7 @@ public class ItemHandler extends AHandler {
 //                        }
 //                    }
                     default -> {
-                        if (BuffItemType.buffIds.contains(item.getItemId())) {
-                            BuffItemType buffType = BuffItemType.get(item.getItemId());
-                            if (buffType != null) {
-                                List<Long> aBuffs = mUser.getUData().getBuff();
-                                long curBuff = aBuffs.get(buffType.index);
-                                if (curBuff < System.currentTimeMillis()) { // chưa có buff
-                                    curBuff = System.currentTimeMillis() + DateTime.HOUR_MILLI_SECOND;
-                                } else {// đang có sẵn buff
-                                    curBuff += DateTime.HOUR_MILLI_SECOND;
-                                }
-                                aBuffs.set(buffType.index, curBuff);
-                                mUser.addBuffs(aBuffs);
-                                addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.SU_DUNG_ITEM.getKey(id), fee)));
-                            } else addErrParam();
-                        }
+                        addErrParam();
                     }
                 }
                 break;

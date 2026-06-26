@@ -2,7 +2,9 @@ package game.treasure.controller;
 
 
 
+import game.config.ArtifactDataSlot;
 import game.config.CfgArtifact;
+import game.object.MyUser;
 
 import game.config.aEnum.DetailActionType;
 
@@ -18,7 +20,10 @@ import game.treasure.mapping.main.ResArtifactEntity;
 
 import game.treasure.server.IAction;
 
+import game.treasure.controller.UserHandler;
 import game.treasure.service.user.Bonus;
+import game.treasure.service.user.ArtifactBuffTargets;
+import game.treasure.service.user.UserBuff;
 
 import game.treasure.service.user.ItemSlotHelper;
 
@@ -584,6 +589,21 @@ public class ArtifactHandler extends AHandler {
         }
         mUser.getUData().setTimeActiveArtifact(now);
         mUser.queueUserDataInfo();
+        ResArtifactEntity res = artifact.getRes();
+        if (res != null && res.getArtifactType() != null) {
+            int pointId = res.getPointMain();
+            float effValue = artifact.getEffectiveSlot(ArtifactDataSlot.IDX_VALUE);
+            long durationSec = Math.round(artifact.getEffectiveSlot(ArtifactDataSlot.IDX_TIME));
+            if (pointId != 0 && effValue != 0 && durationSec > 0) {
+                long valueScaled = Math.round(effValue * 1000);
+                List<MyUser> targets = ArtifactBuffTargets.resolve(mUser, res.getArtifactType(), artifact);
+                for (MyUser target : targets) {
+                    if (target != null)
+                        UserBuff.grantBuff(target, pointId, valueScaled, durationSec);
+                }
+            }
+        }
+        UserHandler.buffInfo(mUser);
         addResponse(getCommonVector(now, cdSec));
     }
 

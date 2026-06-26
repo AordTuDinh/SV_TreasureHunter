@@ -200,6 +200,7 @@ public class UserEntity implements Serializable {
         Point point = mUser.getPlayer().getPoint();
         long cacheHp = point.getCurHP();
         point = IMath.calculatePoint(mUser, true);
+        game.treasure.service.user.UserBuff.applyActiveToPoint(mUser, point);
         point.setCurHp(Math.min(cacheHp, point.getMaxHp()));
         mUser.getPlayer().setPoint(point);
         //todo tính thêm chỉ số của thẻ monster
@@ -212,6 +213,7 @@ public class UserEntity implements Serializable {
         long cacheHp = point.getCurHP();
         // tính lại point
         point = IMath.calculatePoint(mUser, true);
+        game.treasure.service.user.UserBuff.applyActiveToPoint(mUser, point);
         point.setCurHp(cacheHp <= 0 ? point.getMaxHp() : cacheHp);
         return point;
     }

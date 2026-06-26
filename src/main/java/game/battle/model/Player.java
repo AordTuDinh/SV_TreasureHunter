@@ -31,11 +31,9 @@ public class Player extends Unit implements Serializable {
     Pos targetDirectionAttackRun2;
     boolean isAttackRun2;
     Pos directionHitRun = Pos.zero();
-    List<Long> timeBuff; // list time buff theo slot
     //ping logic
     long curTick = 0;
     int poolSizeTick = 5;
-    List<Long> buffs = Arrays.asList(0L, 0L, 0L); // size =3 drop - gold - exp : per 100
     public List<Integer> listTick = new ArrayList<>(); // size =5; // test
     // analysis
     int countUpdate;
@@ -67,25 +65,6 @@ public class Player extends Unit implements Serializable {
         this.direction = Pos.right();
         this.isMove = false;
         this.skillSlotNext = 0;
-        timeBuff = new ArrayList<>();
-    }
-
-    public void updateBuff() {
-        // tính ra list 6 số gồm max buff và thời gian còn lại gần nhất,để đến lúc hẹn giờ theo time đó thì tính lại buff
-        List<Long> buffCache = mUser.getUData().getBuff(); // 9 số
-        buffs = NumberUtil.genListLong(3, 0L); // drop - gold -exp
-        // buff từ phúc lợi bang và trang bị
-        Point point = getPoint();
-        buffs.set(0, (long) point.getBuffDrop());
-        buffs.set(1, (long) point.getBuffGold());
-
-        for (int i = 0; i < buffCache.size(); i++) {
-            BuffItemType type = BuffItemType.getByIndex(i);
-            long timeCache = buffCache.get(i);
-            if (timeCache > System.currentTimeMillis()) {
-                buffs.set(type.pointIndex, buffs.get(type.pointIndex) + type.valueBuff);
-            }
-        }
     }
 
     public Player( int teamId, Point point, UnitType type) {
@@ -143,7 +122,6 @@ public class Player extends Unit implements Serializable {
         if (protectedEnd > System.currentTimeMillis()) {
             setTimeProtectedEnd(protectedEnd);
         }
-        updateBuff();
     }
 
     public boolean isAuto() {
