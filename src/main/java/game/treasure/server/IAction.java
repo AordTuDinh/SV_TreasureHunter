@@ -90,6 +90,7 @@ public class IAction {
     public static final int MARKET_REFRESH = 130;
 
     public static final int PET_INFO = 137;
+    public static final int MOUNT_INFO = 138;
     // collection pet
     public static final int PET_SUMMON = 142;
     // quest hàng ngày
@@ -185,6 +186,7 @@ public class IAction {
     public static final int ARTIFACT_EQUIP = 463;
     public static final int ARTIFACT_UNEQUIP = 464;
     public static final int ARTIFACT_SELL = 465;
+    public static final int ARTIFACT_USE = 466;
 
     // Event
     public static final int RPS_SEND_RQ = 600;

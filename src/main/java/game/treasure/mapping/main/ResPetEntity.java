@@ -22,6 +22,7 @@ public class ResPetEntity implements Serializable {
     int showSummon; // showSummon: có thể summon ra
     float rare, epic, legends;
     String data;
+    int hh1, hh2, hh3;
     @Transient
     List<PointRandomConfig> aPoint;
 
@@ -45,5 +46,14 @@ public class ResPetEntity implements Serializable {
         if (tier == 3) return epic;
         if (tier == 4) return legends;
         return 1;
+    }
+
+    public int getTransformIcon(int tier) {
+        return switch (tier) {
+            case 1 -> hh1;
+            case 2 -> hh2;
+            case 3 -> hh3;
+            default -> 0;
+        };
     }
 }

@@ -1,5 +1,6 @@
 package game.config;
 
+import game.object.MyUser;
 import game.treasure.mapping.UserArtifactEntity;
 import game.treasure.service.user.Bonus;
 
@@ -66,5 +67,30 @@ public class CfgArtifact {
         if (price <= 0)
             return new ArrayList<>();
         return Bonus.viewItemPoint(ARTIFACT_POINT_ID, price);
+    }
+
+    public static UserArtifactEntity getEquippedArtifact(MyUser mUser) {
+        int rowId = Bonus.getEquippedArtifactRowId(mUser);
+        if (rowId <= 0)
+            return null;
+        return mUser.getResources().getArtifact(rowId);
+    }
+
+    /** CD artifact đang mặc (giây) — từ user_artifact.data[idx_cd]. */
+    public static long getEquippedArtifactCooldownSec(MyUser mUser) {
+        UserArtifactEntity artifact = getEquippedArtifact(mUser);
+        if (artifact == null)
+            return 0;
+        return Math.round(artifact.getEffectiveSlot(ArtifactDataSlot.IDX_CD));
+    }
+
+    public static boolean isArtifactOnCooldown(MyUser mUser) {
+        long activeMs = mUser.getUData().getTimeActiveArtifact();
+        if (activeMs <= 0)
+            return false;
+        long cdSec = getEquippedArtifactCooldownSec(mUser);
+        if (cdSec <= 0)
+            return false;
+        return System.currentTimeMillis() < activeMs + cdSec * 1000L;
     }
 }

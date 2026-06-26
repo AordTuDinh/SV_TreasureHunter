@@ -1,11 +1,11 @@
 package game.treasure.mapping;
 
-import game.battle.object.Point;
 import game.treasure.mapping.main.ResMountEntity;
 import game.treasure.service.resource.ResMount;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ozudo.base.database.DBJPA;
+import ozudo.base.helper.GsonUtil;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -24,6 +24,7 @@ public class UserMountEntity implements Serializable {
     int level;
     int tier = 1;
     int isCraft;
+    int icon;
     int server;
     String data;
 
@@ -34,7 +35,18 @@ public class UserMountEntity implements Serializable {
         this.level = 1;
         this.tier = tier;
         this.isCraft = 0;
+        this.icon = mountId;
         this.data = getRes().getPointData(tier);
+    }
+
+    public List<Float> getDataListFloat() {
+        if (data == null || data.isEmpty() || "[]".equals(data))
+            return new java.util.ArrayList<>();
+        return GsonUtil.strToListFloat(data);
+    }
+
+    public void setData(String data) {
+        this.data = data;
     }
 
     public ResMountEntity getRes() {
@@ -48,6 +60,8 @@ public class UserMountEntity implements Serializable {
         pb.setLevel(level);
         pb.setTier(tier > 0 ? tier : 1);
         pb.setIsCraft(isCraft);
+        if (icon > 0)
+            pb.setIcon(icon);
         return pb;
     }
 

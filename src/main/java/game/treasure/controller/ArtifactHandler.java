@@ -71,6 +71,7 @@ public class ArtifactHandler extends AHandler {
         mHandler.put(IAction.ARTIFACT_UNEQUIP, this);
 
         mHandler.put(IAction.ARTIFACT_SELL, this);
+        mHandler.put(IAction.ARTIFACT_USE, this);
 
     }
 
@@ -103,6 +104,8 @@ public class ArtifactHandler extends AHandler {
                 case IAction.ARTIFACT_UNEQUIP -> unequipArtifact();
 
                 case IAction.ARTIFACT_SELL -> sellArtifact();
+
+                case IAction.ARTIFACT_USE -> useArtifact();
 
             }
 
@@ -221,6 +224,11 @@ public class ArtifactHandler extends AHandler {
 
 
     private void equipArtifact() {
+
+        if (CfgArtifact.isArtifactOnCooldown(mUser)) {
+            addErrResponse(getLang(Lang.err_artifact_cooldown));
+            return;
+        }
 
         List<Long> inputs = getInputALong();
 
@@ -386,6 +394,11 @@ public class ArtifactHandler extends AHandler {
 
     private void unequipArtifact() {
 
+        if (CfgArtifact.isArtifactOnCooldown(mUser)) {
+            addErrResponse(getLang(Lang.err_artifact_cooldown));
+            return;
+        }
+
         List<Long> inputs = getInputALong();
 
         if (inputs.isEmpty()) {
@@ -447,6 +460,11 @@ public class ArtifactHandler extends AHandler {
 
 
     private void sellArtifact() {
+
+        if (CfgArtifact.isArtifactOnCooldown(mUser)) {
+            addErrResponse(getLang(Lang.err_artifact_cooldown));
+            return;
+        }
 
         List<Long> inputs = getInputALong();
 
@@ -514,6 +532,40 @@ public class ArtifactHandler extends AHandler {
 
         addResponse(pb.build());
 
+    }
+
+    private void useArtifact() {
+        List<Long> inputs = getInputALong();
+        if (inputs.isEmpty()) {
+            addErrParam();
+            return;
+        }
+        long rowId = inputs.get(0);
+        if (!Bonus.isArtifactEquipped(mUser, rowId)) {
+            addErrResponse(getLang(Lang.err_params));
+            return;
+        }
+        UserArtifactEntity artifact = mUser.getResources().getArtifact(rowId);
+        if (artifact == null) {
+            addErrResponse(getLang(Lang.err_item_equip_not_found));
+            return;
+        }
+        if (CfgArtifact.isArtifactOnCooldown(mUser)) {
+            addErrResponse(getLang(Lang.err_artifact_cooldown));
+            return;
+        }
+        long cdSec = Math.round(artifact.getEffectiveSlot(game.config.ArtifactDataSlot.IDX_CD));
+        if (cdSec <= 0) {
+            addErrParam();
+            return;
+        }
+        long now = System.currentTimeMillis();
+        if (!mUser.getUData().update(Arrays.asList("time_active_artifact", now))) {
+            addErrSystem();
+            return;
+        }
+        mUser.getUData().setTimeActiveArtifact(now);
+        addResponse(getCommonVector(now, cdSec));
     }
 
 

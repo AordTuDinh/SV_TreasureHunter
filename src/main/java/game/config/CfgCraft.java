@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import game.config.aEnum.CraftTargetType;
 import game.treasure.service.user.Bonus;
 import lombok.Data;
+import ozudo.base.helper.NumberUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -168,6 +169,32 @@ public class CfgCraft {
         return leveled || uData.getCraftLevel() != oldLevel;
     }
 
+    /** @return 0 = no transform, 1..3 = hh tier */
+    public static int rollTransformTier() {
+        if (cfg.transformRate <= 0 || NumberUtil.getRandom(100) >= cfg.transformRate)
+            return 0;
+        if (cfg.transformTiers == null || cfg.transformTiers.isEmpty())
+            return 0;
+        int roll = NumberUtil.getRandom(100);
+        int acc = 0;
+        for (TransformTierConfig tier : cfg.transformTiers) {
+            acc += tier.rate;
+            if (roll < acc)
+                return tier.tier;
+        }
+        return cfg.transformTiers.get(cfg.transformTiers.size() - 1).tier;
+    }
+
+    public static float getTransformStatMul(int tier) {
+        if (cfg.transformTiers == null || tier <= 0)
+            return 1f;
+        for (TransformTierConfig t : cfg.transformTiers) {
+            if (t.tier == tier)
+                return t.statMul > 0 ? t.statMul : 1f;
+        }
+        return 1f;
+    }
+
     private static void mergeConfig(DataConfig loaded) {
         if (loaded.maxCraftLevel > 0) {
             cfg.maxCraftLevel = loaded.maxCraftLevel;
@@ -202,6 +229,12 @@ public class CfgCraft {
         if (loaded.targets != null && !loaded.targets.isEmpty()) {
             cfg.targets = loaded.targets;
         }
+        if (loaded.transformRate > 0) {
+            cfg.transformRate = loaded.transformRate;
+        }
+        if (loaded.transformTiers != null && !loaded.transformTiers.isEmpty()) {
+            cfg.transformTiers = loaded.transformTiers;
+        }
     }
 
     private static Map<Integer, TargetConfig> buildTargetMap(DataConfig data) {
@@ -226,6 +259,12 @@ public class CfgCraft {
         d.lockedSocket = List.of(4, 3, 2, 1, 0, 0, 0, 0, 0, 0);
         d.craftSuccessBaseByRank = List.of(0, 75, 70, 65, 60);
         d.expByRank = List.of(0, 1, 2, 3, 4);
+        d.transformRate = 20;
+        d.transformTiers = List.of(
+                transformTier(1, 50, 1.2f),
+                transformTier(2, 35, 1.35f),
+                transformTier(3, 15, 1.5f)
+        );
         d.targets = List.of(
                 target(1, 8, "gold", true, 0, 50, 100, 150, 200),
                 target(2, 12, "gem", false, 0, 100, 200, 300, 400),
@@ -234,6 +273,14 @@ public class CfgCraft {
                 target(5, 12, "item_point", false, 0, 1000, 2000, 3000, 4000)
         );
         return d;
+    }
+
+    private static TransformTierConfig transformTier(int tier, int rate, float statMul) {
+        TransformTierConfig t = new TransformTierConfig();
+        t.tier = tier;
+        t.rate = rate;
+        t.statMul = statMul;
+        return t;
     }
 
     private static TargetConfig target(int type, int maxSocket, String currency, boolean loseOnFail, int... fees) {
@@ -264,6 +311,17 @@ public class CfgCraft {
         List<Integer> craftSuccessBaseByRank = new ArrayList<>();
         List<Integer> expByRank = new ArrayList<>();
         List<TargetConfig> targets = new ArrayList<>();
+        int transformRate = 20;
+        List<TransformTierConfig> transformTiers = new ArrayList<>();
+    }
+
+    @Data
+    public static class TransformTierConfig {
+        /** 1 = hh1, 2 = hh2, 3 = hh3 */
+        int tier = 1;
+        /** weight trong 100 khi đã trúng hóa hình */
+        int rate;
+        float statMul = 1f;
     }
 
     @Data

@@ -44,6 +44,7 @@ public class UserDataEntity implements Serializable {
     String dameSkin, chatFrame, listTrial;
     int dameSkinEquip, chatFrameEquip, trialEquip, effInit, craftLevel, craftExp;
     long timeProtected;
+    long timeActiveArtifact;
 
     @Transient
     int maxLvTraining = 60;
@@ -342,6 +343,7 @@ public class UserDataEntity implements Serializable {
             }
         }
         pb.setTimeProtected(BattleConfig.toWireProtectedMs(timeProtected));
+        pb.setTimeActiveArtifact(timeActiveArtifact);
 
         Pbmethod.PbListItemPoint.Builder lstItemPoint = Pbmethod.PbListItemPoint.newBuilder();
         for (Map.Entry<Integer, UserItemPointEntity> entry : mUser.getResources().getMItemPoint().entrySet()) {

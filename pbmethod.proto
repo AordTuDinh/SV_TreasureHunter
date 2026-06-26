@@ -293,6 +293,7 @@ message  PbUserData{
   optional  int64 timeProtected = 29;
   optional  PbListArtifact aArtifact = 30;
   optional  PbListItemPoint aItemPoint = 31;
+  optional  int64 timeActiveArtifact = 32;
 }
 
 message PbListItem{
@@ -325,6 +326,7 @@ message PbMount{
   optional int32 level = 4;
   optional int32 tier = 5;
   optional int32 isCraft = 6;
+  optional int32 icon = 7;
 }
 
 
@@ -339,6 +341,7 @@ message PbPet{
   optional int32 level = 4;
   optional int32 tier = 5;
   optional int32 isCraft = 6;
+  optional int32 icon = 7;
 }
 
 message PbListItemPoint{
@@ -433,6 +436,7 @@ message  PbEquipment{
   optional  int32 tier = 5;
   optional  string data = 6;
   optional  int32 isCraft = 7;
+  optional  int32 icon = 8;
 }
 
 message  PbItemPoint{

@@ -18,7 +18,17 @@ public class ResItemEquipmentEntity {
     @Id
     int id;
     String name, desc;
-    int  rank,set, type;
+    int rank, set, type;
+    int hh1, hh2, hh3;
+
+    public int getTransformIcon(int tier) {
+        return switch (tier) {
+            case 1 -> hh1;
+            case 2 -> hh2;
+            case 3 -> hh3;
+            default -> 0;
+        };
+    }
 
 
     public ItemEquipmentType getEquipmentType() {
