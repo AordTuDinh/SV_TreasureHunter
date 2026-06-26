@@ -12,8 +12,9 @@ public class CfgArtifact {
     public static final int ARTIFACT_POINT_ID = 1;
     public static final int MAX_LEVEL = CfgMaterial.MAX_LEVEL;
     public static final int BASE_COST_PER_TIER = 100;
+    public static final int CRAFT_COST_PER_TIER = 1000;
     public static final double COST_LEVEL_MULT = 1.4;
-    private static final List<Integer> SELL_PRICE_BASE = List.of(5, 10, 16, 25, 38, 57, 83, 120, 172, 246);
+    public static final double SELL_LEVEL_MULT = 1.5;
 
     public static boolean canUpgrade(int level) {
         return CfgMaterial.canUpgrade(level);
@@ -37,10 +38,19 @@ public class CfgArtifact {
     }
 
     public static long getSellPrice(int tier, int level) {
-        if (tier < 1 || level < 1)
+        if (tier < 1 || tier > 4 || level < 1)
             return 0;
-        int idx = Math.min(level, SELL_PRICE_BASE.size()) - 1;
-        return (long) tier * SELL_PRICE_BASE.get(idx);
+        long base = (long) BASE_COST_PER_TIER * tier;
+        return Math.round(base * Math.pow(SELL_LEVEL_MULT, level - 1));
+    }
+
+    /** GAME_CONFIG index 7 — client đọc hệ số tính phí nâng/bán/chế tạo. */
+    public static List<Integer> getGameConfigCoeffs() {
+        return List.of(
+                BASE_COST_PER_TIER,
+                (int) Math.round(COST_LEVEL_MULT * 1000),
+                (int) Math.round(SELL_LEVEL_MULT * 1000),
+                CRAFT_COST_PER_TIER);
     }
 
     /** Giá bán artifact — nhận item point Cổ vật (id=1). */
@@ -48,7 +58,7 @@ public class CfgArtifact {
     public static long getCraftCost(int tier) {
         if (tier < 1 || tier > 4)
             return 0;
-        return 1000L * tier;
+        return (long) CRAFT_COST_PER_TIER * tier;
     }
 
     public static List<Long> getCraftFee(int tier) {

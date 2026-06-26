@@ -81,16 +81,34 @@ public class UserEntity implements Serializable {
         builder.addAllVip(getVipInfo());
         builder.setRank(userRank);
         builder.addAllChannel(Online.getUserChannelInfo(id));
-        List<Integer> items = mUser.getUser().getAllInfoItemEquip();
+        List<Integer> items = new ArrayList<>(mUser.getUser().getAllInfoItemEquip());
+        while (items.size() < EQUIP_LIST_SIZE)
+            items.add(0);
+        int treasureIdx = equipSlotIndex(protocol.Pbmethod.EquipSlotType.TREASURE.getNumber());
         boolean update = false;
-        for (int i = 0; i < items.size(); i += 3) {
-            UserEquipmentEntity item = mUser.getResources().getItemEquipment(items.get(i));
-            if (item == null) { // check hết hạn thì xóa khỏi equip
+        for (int i = 0; i < items.size(); i += EQUIP_FIELDS_PER_SLOT) {
+            int rowId = items.get(i);
+            if (rowId <= 0)
+                continue;
+            if (i == treasureIdx) {
+                if (mUser.getResources().getArtifact(rowId) == null) {
+                    items.set(i, 0);
+                    items.set(i + 1, 0);
+                    items.set(i + 2, 0);
+                    update = true;
+                }
+                continue;
+            }
+            UserEquipmentEntity item = mUser.getResources().getItemEquipment(rowId);
+            if (item == null) {
                 items.set(i, 0);
+                items.set(i + 1, 0);
+                items.set(i + 2, 0);
                 update = true;
             }
         }
-        if (update) updateItemEquip(items);
+        if (update)
+            updateItemEquip(items);
         // point
         builder.addAllPoint(StringHelper.isEmpty(name) ? new Point().toProto() : mUser.getPlayer().getPoint().toProto());
         builder.addAllItemEquip(getAllInfoItemEquip());

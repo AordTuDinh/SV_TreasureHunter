@@ -363,6 +363,8 @@ public class LoginHandler extends AHandler {
         lstCmm.addAVector(getCommonIntVector(CfgItem.UPGRADE_FEE_BASE_T1));
         // fee up hp
         lstCmm.addAVector(getCommonIntVector(CfgItem.SELL_PRICE_BASE_T1));
+        // artifact coeffs: baseCost, upgradeMult×1000, sellMult×1000, craftCostPerTier
+        lstCmm.addAVector(getCommonIntVector(CfgArtifact.getGameConfigCoeffs()));
         // ret
         addResponse(IAction.GAME_CONFIG, lstCmm.build());
     }

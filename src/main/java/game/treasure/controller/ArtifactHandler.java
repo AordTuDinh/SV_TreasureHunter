@@ -72,6 +72,7 @@ public class ArtifactHandler extends AHandler {
 
         mHandler.put(IAction.ARTIFACT_SELL, this);
         mHandler.put(IAction.ARTIFACT_USE, this);
+        mHandler.put(IAction.ARTIFACT_INFO, this);
 
     }
 
@@ -107,6 +108,8 @@ public class ArtifactHandler extends AHandler {
 
                 case IAction.ARTIFACT_USE -> useArtifact();
 
+                case IAction.ARTIFACT_INFO -> listArtifacts(getInputALong(), this, mUser);
+
             }
 
         } catch (Exception ex) {
@@ -115,6 +118,21 @@ public class ArtifactHandler extends AHandler {
 
         }
 
+    }
+
+
+
+    public static void listArtifacts(List<Long> ids, AHandler handler, game.object.MyUser mUser) {
+        Pbmethod.PbListArtifact.Builder lst = Pbmethod.PbListArtifact.newBuilder();
+        for (int i = 0; i < ids.size(); i++) {
+            UserArtifactEntity artifact = mUser.getResources().getArtifact(ids.get(i));
+            if (artifact == null) {
+                handler.addErrResponse(getLang(mUser, Lang.err_item_equip_not_found));
+                return;
+            }
+            lst.addArtifacts(artifact.toProto());
+        }
+        handler.addResponse(IAction.ARTIFACT_INFO, lst.build());
     }
 
 
@@ -565,6 +583,7 @@ public class ArtifactHandler extends AHandler {
             return;
         }
         mUser.getUData().setTimeActiveArtifact(now);
+        mUser.queueUserDataInfo();
         addResponse(getCommonVector(now, cdSec));
     }
 
