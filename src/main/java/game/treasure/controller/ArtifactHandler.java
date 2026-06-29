@@ -667,6 +667,8 @@ public class ArtifactHandler extends AHandler {
 
         addResponse(pb.build());
 
+        mUser.reCalculatePoint();
+
         addResponse(IAction.UPDATE_BAG, mUser.getResources().buildUpdateBagPayload());
 
     }

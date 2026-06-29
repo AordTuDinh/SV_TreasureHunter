@@ -5,6 +5,7 @@ import game.treasure.service.user.Bonus;
 import ozudo.base.helper.DateTime;
 import ozudo.base.helper.GsonUtil;
 import ozudo.base.helper.NumberUtil;
+import game.config.aEnum.ItemPointKey;
 import protocol.Pbmethod;
 
 import java.util.ArrayList;
@@ -52,7 +53,7 @@ public class CfgLottery {
     }
 
     public static List<Long> getTickerMini(int num) {
-        return Bonus.viewItem(Pbmethod.ItemType.EVENT.getNumber(), Pbmethod.ItemKey.TICKER_MINI, num);
+        return Bonus.viewItemPoint(ItemPointKey.TICKER_MINI.id, num);
     }
 
 

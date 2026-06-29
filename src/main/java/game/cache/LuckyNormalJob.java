@@ -2,9 +2,9 @@ package game.cache;
 
 import game.config.CfgLottery;
 import game.config.CfgServer;
+import game.config.aEnum.ItemPointKey;
 import game.config.aEnum.StatusType;
-import protocol.Pbmethod;
-import game.treasure.mapping.UserItemEntity;
+import game.treasure.mapping.UserItemPointEntity;
 import game.treasure.server.App;
 import game.treasure.server.AppInit;
 import game.treasure.service.user.Bonus;
@@ -12,6 +12,7 @@ import ozudo.base.database.DBJPA2;
 import ozudo.base.database.DBResource;
 import ozudo.base.helper.*;
 import ozudo.base.log.Logs;
+import protocol.Pbmethod;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
@@ -40,10 +41,15 @@ public class LuckyNormalJob {
     private void processConvertDB() {
         int luckyNum = NumberUtil.getRandom(100000, 999999);
         int event = DateTime.getNumberDay() + 1;
-        List<UserItemEntity> uLot = DBResource.getInstance().getList(CfgServer.DB_DSON + "user_item", Arrays.asList("item_id", Pbmethod.ItemKey.TICKER_NORMAL.getNumber()), "", UserItemEntity.class);
+        List<UserItemPointEntity> uLot = DBResource.getInstance().getList(
+                CfgServer.DB_DSON + "user_item_point",
+                Arrays.asList("point_id", ItemPointKey.TICKER_NORMAL.id),
+                "",
+                UserItemPointEntity.class);
         if (uLot == null || uLot.size() <= 0) return;
         List<Integer> luckyId = new ArrayList<>();
         String sql = "";
+        int eventType = Pbmethod.ItemPointType.EVENT.getNumber();
         for (int i = 0; i < uLot.size(); i++) {
             List<Integer> ticker = GsonUtil.strToListInt(uLot.get(i).getData());
             if (ticker == null || ticker.isEmpty()) continue;
@@ -63,7 +69,7 @@ public class LuckyNormalJob {
                 }
             }
             List<Long> bonus = gem > 0 ? Bonus.viewGem(gem) : new ArrayList<>();
-            sql += "(" + uLot.get(i).getUserId() + "," + event + "," + uLot.get(i).getResItemType().getNumber() + ",'" + StringHelper.toDBString(ticker) + "','" + DateTime.getFullDate() + "'," +
+            sql += "(" + uLot.get(i).getUserId() + "," + event + "," + eventType + ",'" + StringHelper.toDBString(ticker) + "','" + DateTime.getFullDate() + "'," +
                     luckyNum + "," + status + ",'" + StringHelper.toDBString(bonus) + "','" + StringHelper.toDBString(result) + "'),";
         }
         System.out.println("Quay vé số thường xong, số may mắn của kì quay \" + event + \" là: \" + luckyNum + \". Người trúng giải đặc biệt: \" + luckyId");

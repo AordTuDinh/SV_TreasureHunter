@@ -19,6 +19,9 @@ public class ResItemPoint {
         List<ResItemPointEntity> rows = DBResource.getInstance()
                 .getList(CfgServer.DB_MAIN + "res_item_point", ResItemPointEntity.class);
         mPoint.clear();
-        rows.forEach(row -> mPoint.put(row.getPointId(), row));
+        rows.forEach(row -> {
+            row.init();
+            mPoint.put(row.getPointId(), row);
+        });
     }
 }

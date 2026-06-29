@@ -36,7 +36,7 @@ public class UserHandler extends AHandler {
         List<Integer> actions = Arrays.asList(CREATE_NAME, USER_INFO, DAME_SKIN_EQUIP, CHANGE_LANG,
                 CHAT_FRAME_EQUIP, USE_GIFT_CODE, TRIAL_EQUIP, BUFF_INFO, RANKING_STATUS, TUTORIAL_STATUS,
                 TUTORIAL_QUEST_RECEIVE, TUTORIAL_GO_TO, TUTORIAL_QUEST_STATUS, RANKING_INFO, SEND_MAIL,
-                HELP_VALUE, CHANGE_NAME, SKIN_EQUIP, USER_DATA_INFO, UPDATE_NEXT_DAY,SET_AUTO);
+                HELP_VALUE, CHANGE_NAME, SKIN_EQUIP, USER_DATA_INFO, UPDATE_NEXT_DAY, SET_AUTO, CANCEL_PROTECT);
         actions.forEach(action -> mHandler.put(action, this));
     }
 
@@ -80,10 +80,28 @@ public class UserHandler extends AHandler {
                 case BUFF_INFO -> buffInfo(mUser);
                 case CHANGE_LANG -> changeLang(getInputString());
                 case SET_AUTO -> setAuto();
+                case CANCEL_PROTECT -> cancelProtect();
             }
         } catch (Exception ex) {
             Logs.error(ex);
         }
+    }
+
+    private void cancelProtect() {
+        long protectedEnd = mUser.getUData().getTimeProtected();
+        if (protectedEnd <= System.currentTimeMillis()) {
+            addResponse(getCommonVector(0L));
+            return;
+        }
+        if (!mUser.getUData().update(List.of("time_protected", 0L))) {
+            addErrSystem();
+            return;
+        }
+        mUser.getUData().setTimeProtected(0);
+        if (mUser.getPlayer() != null) {
+            mUser.getPlayer().setTimeProtectedEnd(0);
+        }
+        addResponse(getCommonVector(0L));
     }
 
     private void setAuto() {
@@ -363,6 +381,12 @@ public class UserHandler extends AHandler {
 
     void userInfo() {
         int userId = getInputInt();
+        MyUser online = Online.getMUser(userId);
+        if (online != null && online.getUser() != null && online.getPlayer() != null) {
+            online.getUser().reCalculatePoint(online);
+            addResponse(online.getUser().toProto(online));
+            return;
+        }
         UserEntity user = Online.getDbUser(userId);
         if (user == null) {
             addErrResponse(getLang(user_not_found));

@@ -211,8 +211,8 @@ public class MarketHandler extends AHandler {
                 return;
             }
             int idItem = Bonus.getIdItem(rMarketDetail.getItems());
-            if (idItem == protocol.Pbmethod.ItemKey.TICKER_NORMAL.getNumber()) buyTicketNormal(nums, resItem, market, aItem);
-            else if (idItem == protocol.Pbmethod.ItemKey.TICKER_SPECIAL.getNumber()) buyTicketSpecial(nums, resItem, market, aItem);
+            if (idItem == ItemPointKey.TICKER_NORMAL.id) buyTicketNormal(nums, resItem, market, aItem);
+            else if (idItem == ItemPointKey.TICKER_SPECIAL.id) buyTicketSpecial(nums, resItem, market, aItem);
             else {
                 // mua vật phẩm bình thường
                 String errBuy = CfgItem.canBuyItem(mUser, resItem.getItems(), 1);
@@ -272,46 +272,15 @@ public class MarketHandler extends AHandler {
             addErrResponse(err);
             return;
         }
-        List<Long> aBonus = Bonus.receiveListItem(mUser, "buy_lottery_special", bonus);
-        if (aBonus == null) {
-            addErrResponse();
-            return;
-        }
         long eventDay = CfgLottery.getEventIdBuy();
-        UserItemEntity uItem = mUser.getResources().getItemByItemKey(protocol.Pbmethod.ItemKey.TICKER_SPECIAL.getNumber());
-        boolean saved;
-        if (uItem == null) {
-            if (!mUser.getResources().canAddEventItem(1)) {
-                Bonus.receiveListItem(mUser, "buy_lottery_special", Bonus.reverseBonus(CfgLottery.getFeeBuySpecial(nums.size())));
-                addErrResponse(getLang(Lang.err_max_slot));
-                return;
-            }
-            uItem = new UserItemEntity(user.getId(), protocol.Pbmethod.ItemKey.TICKER_SPECIAL.getNumber(), Pbmethod.ItemType.EVENT);
-            List<Long> numNew = new ArrayList<>(nums);
-            numNew.add(0, eventDay);
-            uItem.setData(StringHelper.toDBString(numNew));
-            saved = DBJPA.save(uItem);
-            if (saved)
-                mUser.getResources().addItem(uItem);
-        } else {
-            List<Long> dataSticker = GsonUtil.strToListLong(uItem.getData());
-            if (dataSticker.isEmpty() || dataSticker.get(0) != eventDay) {
-                dataSticker = new ArrayList<>();
-                dataSticker.add(eventDay);
-            }
-            dataSticker.addAll(nums);
-            uItem.setData(dataSticker.toString());
-            saved = uItem.update(List.of("data", uItem.getData()));
-        }
-        if (!saved) {
-            Bonus.receiveListItem(mUser, "buy_lottery_special", Bonus.reverseBonus(CfgLottery.getFeeBuySpecial(nums.size())));
-            addErrSystem();
+        List<Long> ticketBonus = Bonus.grantLotteryTickets(mUser, ItemPointKey.TICKER_SPECIAL.id, eventDay, nums, "buy_lottery_special");
+        if (ticketBonus.isEmpty()) {
+            addErrResponse(getLang(Lang.err_max_slot));
             return;
         }
         resItem.setStock(resItem.getStock() - nums.size());
-        aBonus.add((long) Bonus.BONUS_ITEM);
-        aBonus.add(uItem.getId());
-        aBonus.add((long) uItem.getItemId());
+        List<Long> aBonus = new ArrayList<>(Bonus.receiveListItem(mUser, "buy_lottery_special", bonus));
+        aBonus.addAll(ticketBonus);
 
         if (userMarket.updateShop(market, new Gson().toJson(aItem))) {
             addBonusToastPlus(aBonus);
@@ -339,40 +308,21 @@ public class MarketHandler extends AHandler {
                 return;
             }
         }
-        UserItemEntity uItem = mUser.getResources().getItemByItemKey(protocol.Pbmethod.ItemKey.TICKER_NORMAL.getNumber());
         List<Long> bonus = CfgLottery.getFeeBuyNormal(nums.size());
         String err = Bonus.checkMoney(mUser, bonus);
         if (err != null) {
             addErrResponse(err);
             return;
         }
-        List<Long> aBonus = Bonus.receiveListItem(mUser, "buy_lottery_normal", bonus);
-        if (aBonus.isEmpty()) {
-            addErrResponse();
+        long eventDay = CfgLottery.getEventIdBuy();
+        List<Long> ticketBonus = Bonus.grantLotteryTickets(mUser, ItemPointKey.TICKER_NORMAL.id, eventDay, nums, "buy_lottery_normal");
+        if (ticketBonus.isEmpty()) {
+            addErrResponse(getLang(Lang.err_max_slot));
             return;
         }
-        long eventDay = CfgLottery.getEventIdBuy();
-        if (uItem == null) {
-            uItem = new UserItemEntity(user.getId(), protocol.Pbmethod.ItemKey.TICKER_NORMAL.getNumber(), Pbmethod.ItemType.EVENT);
-            List<Long> aNum = new ArrayList<>(nums);
-            aNum.add(0, eventDay);
-            uItem.setData(StringHelper.toDBString(aNum));
-            DBJPA.save(uItem);
-            mUser.getResources().addItem(uItem);
-        } else {
-            List<Long> dataSticker = GsonUtil.strToListLong(uItem.getData() == null ? "[]" : uItem.getData());
-            if (dataSticker.isEmpty() || dataSticker.get(0) != eventDay) {
-                dataSticker = new ArrayList<>();
-                dataSticker.add(eventDay);
-            }
-            dataSticker.addAll(nums);
-            uItem.setData(dataSticker.toString());
-            uItem.update(List.of("data", uItem.getData()));
-        }
         resItem.setStock(resItem.getStock() - nums.size());
-        aBonus.add((long) Bonus.BONUS_ITEM);
-        aBonus.add(uItem.getId());
-        aBonus.add((long) uItem.getItemId());
+        List<Long> aBonus = new ArrayList<>(Bonus.receiveListItem(mUser, "buy_lottery_normal", bonus));
+        aBonus.addAll(ticketBonus);
         if (userMarket.updateShop(market, new Gson().toJson(aItem))) {
             addBonusToastPlus(aBonus);
             mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.BUY_SHOP, nums.size());

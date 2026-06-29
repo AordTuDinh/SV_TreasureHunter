@@ -2,9 +2,9 @@ package game.cache;
 
 import game.config.CfgLottery;
 import game.config.CfgServer;
-import protocol.Pbmethod;
+import game.config.aEnum.ItemPointKey;
 import game.config.aEnum.StatusType;
-import game.treasure.mapping.UserItemEntity;
+import game.treasure.mapping.UserItemPointEntity;
 import game.treasure.server.App;
 import game.treasure.server.AppInit;
 import game.treasure.service.user.Bonus;
@@ -15,6 +15,7 @@ import ozudo.base.helper.GUtil;
 import ozudo.base.helper.GsonUtil;
 import ozudo.base.helper.StringHelper;
 import ozudo.base.log.Logs;
+import protocol.Pbmethod;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
@@ -37,25 +38,25 @@ public class LuckySpecialJob {
         } catch (Exception ex) {
             String exception = GUtil.exToString(ex);
             Logs.error(exception);
-//            Telegram.sendNotify("LuckySpecialJob -> err=" + exception);
         }
     }
 
 
     private void processConverDB() {
         int event = DateTime.getNumberDay();
-        List<UserItemEntity> uLot = DBResource.getInstance().getList(
-                CfgServer.DB_DSON + "user_item",
-                Arrays.asList("item_id", Pbmethod.ItemKey.TICKER_SPECIAL.getNumber()),
+        List<UserItemPointEntity> uLot = DBResource.getInstance().getList(
+                CfgServer.DB_DSON + "user_item_point",
+                Arrays.asList("point_id", ItemPointKey.TICKER_SPECIAL.id),
                 "",
-                UserItemEntity.class);
+                UserItemPointEntity.class);
         if (uLot == null || uLot.size() <= 0) return;
         long count = 0;
         long sumNumber = 0;
         for (int i = 0; i < uLot.size(); i++) {
             List<Integer> special = GsonUtil.strToListInt(uLot.get(i).getData());
-            count += special.size();
-            for (int j = 0; j < special.size(); j++) {
+            if (special.size() <= 1) continue;
+            count += special.size() - 1;
+            for (int j = 1; j < special.size(); j++) {
                 sumNumber += special.get(j);
             }
         }
@@ -64,21 +65,21 @@ public class LuckySpecialJob {
         long cacheGem = DBResource.getInstance().getNumber("select gem from " + CfgServer.DB_MAIN + "lottery_special");
         long gem = (int) (count * CfgLottery.config.feeSpecial) + cacheGem;
         int winnerTicker = 0;
+        int[] countWinByRow = new int[uLot.size()];
         String sql = "";
         for (int i = 0; i < uLot.size(); i++) {
-            int countTick = 0; // number win ticker
+            int countTick = 0;
             List<Integer> ticker = GsonUtil.strToListInt(uLot.get(i).getData());
             if (ticker.isEmpty()) continue;
             int eventTicker = ticker.get(0);
             if (eventTicker != DateTime.getNumberDay()) continue;
-            ticker = ticker.subList(1, ticker.size());
-            for (int j = 0; j < ticker.size(); j++) {
+            for (int j = 1; j < ticker.size(); j++) {
                 if (ticker.get(j) == luckyNum) {
                     countTick++;
                     winnerTicker++;
                 }
             }
-            uLot.get(i).setCountWin(countTick);
+            countWinByRow[i] = countTick;
         }
         long gemInTickerWin = 0;
         if (winnerTicker > 0) {
@@ -86,21 +87,21 @@ public class LuckySpecialJob {
         } else {
             DBResource.getInstance().rawSQL("update " + CfgServer.DB_MAIN + "lottery_special set gem= " + gem);
         }
+        int eventType = Pbmethod.ItemPointType.EVENT.getNumber();
         for (int i = 0; i < uLot.size(); i++) {
-            long curGemWin = uLot.get(i).getCountWin() * gemInTickerWin;
+            long curGemWin = (long) countWinByRow[i] * gemInTickerWin;
             List<Long> bonus = new ArrayList<>();
             int status = StatusType.LOCK.value;
             if (curGemWin > 0) {
                 status = StatusType.RECEIVE.value;
                 bonus = Bonus.viewGem((int) curGemWin);
             }
-            sql += "(" + uLot.get(i).getUserId() + "," + event + "," + uLot.get(i).getResItemType().getNumber() + "," + StringHelper.toDBString(uLot.get(i).getData()) + ",'"
+            sql += "(" + uLot.get(i).getUserId() + "," + event + "," + eventType + "," + StringHelper.toDBString(uLot.get(i).getData()) + ",'"
                     + DateTime.getFullDate() + "'," + luckyNum + "," + status + ",'" + StringHelper.toDBString(bonus) + "'),";
         }
         sql = String.format("INSERT INTO user_lottery_history(user_id,event_id,type,number,time,lucky,status,bonus) VALUES %s", sql.substring(0, sql.length() - 1));
         DBResource.getInstance().rawSQL(sql);
         System.out.println("Quay vé số đặc biệt xong, số may mắn của kì quay " + event + " là: " + luckyNum);
-//        Telegram.sendNotify("Quay vé số đặc biệt xong, số may mắn của kì quay " + event + " là: " + luckyNum);
     }
 
     protected EntityManager getEntityManager() {

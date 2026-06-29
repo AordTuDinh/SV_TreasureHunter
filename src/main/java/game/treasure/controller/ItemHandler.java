@@ -8,6 +8,7 @@ import game.config.lang.Lang;
 import game.treasure.mapping.UserEntity;
 import game.treasure.mapping.UserEquipmentEntity;
 import game.treasure.mapping.UserItemEntity;
+import game.treasure.mapping.UserItemPointEntity;
 import game.treasure.mapping.UserMaterialEntity;
 import game.treasure.mapping.main.ResItemEntity;
 import game.treasure.mapping.main.ResItemEquipmentEntity;
@@ -239,6 +240,7 @@ public class ItemHandler extends AHandler {
             pb.addAVector(getCommonIntVector(slotData));
         }
         addResponse(pb.build());
+        mUser.reCalculatePoint();
         broadcastItemEquipUpdate();
         UserHandler.buffInfo(mUser);
     }
@@ -327,6 +329,7 @@ public class ItemHandler extends AHandler {
                 pb.addAVector(user.reCalculatePoint(mUser).toCommonVector());
                 pb.addAVector(getCommonIntVector(mUser.getUser().normalizeItemEquipList()));
                 addResponse(pb.build());
+                mUser.reCalculatePoint();
                 broadcastItemEquipUpdate();
                 UserHandler.buffInfo(mUser);
             } else {
@@ -543,6 +546,7 @@ public class ItemHandler extends AHandler {
             pb.addAVector(user.reCalculatePoint(mUser).toCommonVector());
             pb.addAVector(getCommonIntVector(mUser.getUser().normalizeItemEquipList()));
             addResponse(pb.build());
+            mUser.reCalculatePoint();
             broadcastItemEquipUpdate();
             UserHandler.buffInfo(mUser);
         } else {
@@ -559,22 +563,21 @@ public class ItemHandler extends AHandler {
     }
 
     private void itemInfo() {
-        long id = getInputLong();
-        UserItemEntity item = mUser.getResources().getItem(id);
-        if (item == null) {
+        int pointId = getInputInt();
+        if (!game.config.aEnum.ItemPointKey.isLotteryTicket(pointId)) {
             addErrResponse();
             return;
         }
-        switch (item.getItemId()) {
-            case Pbmethod.ItemKey.TICKER_SPECIAL_VALUE, Pbmethod.ItemKey.TICKER_NORMAL_VALUE -> {
-                List<Integer> info = GsonUtil.strToListInt(item.getData());
-                if (info.size() > 0) {
-                    info.remove(0);
-                    addResponse(getCommonIntVector(info));
-                }
-            }
-            default -> addErrResponse();
+        UserItemPointEntity row = mUser.getResources().getItemPoint(pointId);
+        if (row == null) {
+            addErrResponse();
+            return;
         }
+        List<Long> nums = row.getTicketNumbersForEvent(ozudo.base.helper.DateTime.getNumberDay());
+        List<Integer> info = new ArrayList<>();
+        for (Long n : nums)
+            info.add(n.intValue());
+        addResponse(getCommonIntVector(info));
     }
 
     private void lockDestroy() {
@@ -613,12 +616,12 @@ public class ItemHandler extends AHandler {
             addErrResponse(getLang(Lang.err_string_prefix));
             return;
         }
-        int itemKey = Pbmethod.ItemKey.LOA_THE_GIOI.getNumber();
-        if (mUser.getResources().getItemByItemKey(itemKey) == null) {
+        int pointId = game.config.aEnum.ItemPointKey.LOA_THE_GIOI.id;
+        if (mUser.getResources().getItemPointNumber(pointId) < 1) {
             addErrResponse(getLang(Lang.item_not_own));
             return;
         }
-        List<Long> fee = Bonus.viewItem( itemKey, -1);
+        List<Long> fee = Bonus.viewItemPoint(pointId, -1);
         String err = Bonus.checkMoney(mUser, fee);
         if (err != null) {
             addErrResponse(err);

@@ -139,11 +139,11 @@ public class LuckySpineHandler extends AHandler {
             feeRotate = CfgLuckySpine.config.feeRotate[INDEX_FEE_CASINO_10_TIMES];
         }
 
-        if (mUser.getResources().countByItemKey(MaterialType.CHIP.id) < feeRotate) {
+        if (mUser.getResources().getItemPointNumber(game.config.aEnum.ItemPointKey.CHIP.id) < feeRotate) {
             addErrResponse(getLang(Lang.not_enough_chip));
             return;
         }
-        List<Long> retBonus = Bonus.viewItemMaterial(MaterialType.CHIP, -feeRotate);
+        List<Long> retBonus = Bonus.viewItemPoint(game.config.aEnum.ItemPointKey.CHIP.id, -feeRotate);
 
         int max = 0;
         List<List<Long>> allBonus = GsonUtil.strTo2ListLong(userSpine.getBonusNormal());
@@ -178,7 +178,7 @@ public class LuckySpineHandler extends AHandler {
                 addResponse(getCommonVector(retBonus));
 
             } else {
-                Bonus.receiveListItem(mUser, DetailActionType.ROTATE_SPINE_NORMAL.getKey(-1), Bonus.viewItemMaterial(MaterialType.CHIP, feeRotate));
+                Bonus.receiveListItem(mUser, DetailActionType.ROTATE_SPINE_NORMAL.getKey(-1), Bonus.viewItemPoint(game.config.aEnum.ItemPointKey.CHIP.id, feeRotate));
                 addErrResponse();
                 return;
             }
@@ -203,7 +203,7 @@ public class LuckySpineHandler extends AHandler {
         }
 
         List<Long> bonus = new ArrayList<>();
-        bonus.addAll(Bonus.viewItem( MaterialType.CHIP.id, numberChip));
+        bonus.addAll(Bonus.viewItemPoint(game.config.aEnum.ItemPointKey.CHIP.id, numberChip));
         bonus.addAll(Bonus.viewGem(-(numberChip * CfgLuckySpine.config.priceChip)));
         //
         List<Long> retBonus = Bonus.receiveListItem(mUser, DetailActionType.MUA_CHIP_VONG_QUAY.getKey(), bonus);

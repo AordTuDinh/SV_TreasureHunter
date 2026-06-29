@@ -2,11 +2,12 @@ package game.treasure.mapping.main;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import protocol.Pbmethod;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.io.Serializable;
 
 @NoArgsConstructor
@@ -15,7 +16,6 @@ import java.io.Serializable;
 public class ResItemPointEntity implements Serializable {
     @Getter
     @Id
-    @Column(name = "point_id")
     int pointId;
     @Getter
     String name;
@@ -23,4 +23,14 @@ public class ResItemPointEntity implements Serializable {
     String desc;
     @Getter
     int tier;
+    @Getter
+    int type, sellPrice;
+
+    @Getter
+    @Transient
+    Pbmethod.ItemPointType itemPointType;
+
+    public void init() {
+        itemPointType = type > 0 ? Pbmethod.ItemPointType.valueOf(type) : null;
+    }
 }

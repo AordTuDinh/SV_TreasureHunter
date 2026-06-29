@@ -281,16 +281,21 @@ public class MyUser implements Serializable {
             if (bonusType == Bonus.BONUS_ITEM) {
                 int itemKey = chunk.get(1).intValue();
                 if (itemKey < 0) continue;
-                if (Bonus.isAggregatedEventItemKey(itemKey)) {
-                    if (resources.getItemByItemKey(itemKey) == null) numEvent++;
+                if (game.config.aEnum.ItemPointKey.isPointKey(itemKey)) {
+                    if (Bonus.usesEventBagPoint(itemKey)
+                            && resources.getItemPointNumber(itemKey) <= 0)
+                        numEvent++;
                     continue;
                 }
                 Pbmethod.ItemType storageType = Bonus.resolveStorageType(itemKey);
-                if (Bonus.usesEventBagStorage(storageType)) {
-                    numEvent++;
-                } else if (Bonus.usesItemSlotForUserItem(storageType)) {
+                if (Bonus.usesItemSlotForUserItem(storageType)) {
                     numBag++;
                 }
+            } else if (bonusType == Bonus.BONUS_ITEM_POINT) {
+                int pointId = chunk.get(1).intValue();
+                if (chunk.size() >= 3 && chunk.get(2) > 0 && Bonus.usesEventBagPoint(pointId)
+                        && resources.getItemPointNumber(pointId) <= 0)
+                    numEvent++;
             } else if (bonusType == Bonus.BONUS_EQUIPMENT
                     || bonusType == Bonus.BONUS_PET
                     || bonusType == Bonus.BONUS_MOUNT

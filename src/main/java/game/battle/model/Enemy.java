@@ -26,6 +26,11 @@ public class Enemy extends Unit implements Serializable {
     long damage;
     int skillNormal = 0;
     Unit targetAttack;
+    long timeLastChaseRefresh;
+    Pos lastMoveCheckPos;
+    int stuckMoveTicks;
+
+    static final int STUCK_MOVE_TICKS = 32; // ~0.5s @ 16ms/tick
 
     public Enemy(int enemyKey, Unit player, Pos pos) {
         setRoom(player.getRoom());
@@ -48,6 +53,7 @@ public class Enemy extends Unit implements Serializable {
     @Override
     public Point resetData() {
         targetAttack = null;
+        clearMoveStuck();
         return super.resetData();
     }
 
@@ -113,6 +119,7 @@ public class Enemy extends Unit implements Serializable {
         if (rand < BattleConfig.M_idleMoveChance) {
             setMove(true);
             targetMove = Pos.v_add(panelMap, instancePos, randomMove());
+            clearMoveStuck();
         }
         setTimeRandomMove();
     }
@@ -143,14 +150,75 @@ public class Enemy extends Unit implements Serializable {
                 && DateTime.isAfterTime(timeActionMove, 0.3f);
     }
 
+    /** Hướng nhìn khi đứng yên / đánh — hysteresis theo vị trí world X của target. */
     private void setDirectionChase(Pos lookAt) {
         if (lookAt == null) return;
-        Pos faceDir = pos.getDirectionTo(lookAt);
-        if (faceDir.equals(Pos.zero()) || Math.abs(faceDir.x) < 0.01f) return;
+        applyFaceTowardWorldX(lookAt.x);
+    }
+
+    /** Hướng nhìn khi đang di chuyển — theo dấu vector move (trục X). */
+    private void setDirectionFromMove(Pos moveDir) {
+        if (moveDir == null || moveDir.equals(Pos.zero())) return;
+        applyFaceFromMoveX(moveDir.x);
+    }
+
+    private void applyFaceFromMoveX(float moveX) {
+        if (Math.abs(moveX) < BattleConfig.M_directionMinDx) return;
+        applyFaceSign(moveX > 0 ? 1f : -1f);
+    }
+
+    /** Chỉ lật khi target lệch đủ xa (tránh player lượn sát quái). */
+    private void applyFaceTowardWorldX(float worldX) {
+        float dx = worldX - pos.x;
+        if (Math.abs(dx) < BattleConfig.M_directionMinDx) return;
+        float wantSign = dx > 0 ? 1f : -1f;
+        float curSign = direction.x >= 0 ? 1f : -1f;
+        if (Math.abs(direction.x) >= 0.01f && wantSign != curSign
+                && Math.abs(dx) < BattleConfig.M_faceFlipHysteresisX) {
+            return;
+        }
+        applyFaceSign(wantSign);
+    }
+
+    private void applyFaceSign(float sign) {
+        Pos faceDir = new Pos(sign, 0);
         if (Math.abs(direction.x) < 0.01f || !isLikeFace(faceDir)) {
             setDirection(faceDir);
-            protoStatus(Pbmethod.SubStateType.UPDATE_DIRECTION, (long) (faceDir.x * 1000), (long) (faceDir.y * 1000));
+            protoStatus(Pbmethod.SubStateType.UPDATE_DIRECTION, (long) (faceDir.x * 1000), 0L);
         }
+    }
+
+    private void clearMoveStuck() {
+        lastMoveCheckPos = null;
+        stuckMoveTicks = 0;
+    }
+
+    /** Không tiến thêm được → đổi target về vị trí spawn. */
+    private void redirectToSpawnIfStuck() {
+        if (targetMove == null) return;
+        Pos cur = pos.round();
+        if (lastMoveCheckPos == null || !lastMoveCheckPos.likeEquals(cur)) {
+            lastMoveCheckPos = cur.clone();
+            stuckMoveTicks = 0;
+            return;
+        }
+        stuckMoveTicks++;
+        if (stuckMoveTicks < STUCK_MOVE_TICKS) return;
+        clearMoveStuck();
+        targetMove = instancePos.clone();
+        setMove(true);
+    }
+
+    private void snapToTargetMove() {
+        pos.x = targetMove.x;
+        pos.y = targetMove.y;
+        updateChunkByPos(pos);
+    }
+
+    private void finishIdleArrival() {
+        clearMoveStuck();
+        targetMove = null;
+        setMove(false);
     }
 
     private boolean isBeyondLeash() {
@@ -187,8 +255,7 @@ public class Enemy extends Unit implements Serializable {
             if (!moveToTargetDone()) {
                 enemyMove();
             } else {
-                targetMove = null;
-                setMove(false);
+                finishIdleArrival();
             }
             return;
         }
@@ -198,11 +265,11 @@ public class Enemy extends Unit implements Serializable {
 
     private void moveToInstancePos() {
         targetMove = instancePos.clone();
+        clearMoveStuck();
         if (!moveToTargetDone()) {
             enemyMove();
         } else {
-            targetMove = null;
-            setMove(false);
+            finishIdleArrival();
         }
     }
 
@@ -214,12 +281,18 @@ public class Enemy extends Unit implements Serializable {
             protoStatus(Pbmethod.SubStateType.PLAY_ANIM, (long) AnimationType.ATTACK.value);
             scheduleAttackDamage(targetAttack);
         } else if (!inRankAttackMelee()) {
-            targetMove = getChasePos(targetAttack);
+            if (targetMove == null || DateTime.isAfterTime(timeLastChaseRefresh, BattleConfig.M_chaseMoveRefresh)) {
+                targetMove = getChasePos(targetAttack);
+                timeLastChaseRefresh = System.currentTimeMillis();
+            }
             setMove(true);
             enemyMove();
         } else {
             setMove(false);
-            setDirectionChase(targetAttack.getPos());
+            if (DateTime.isAfterTime(timeCheckDirectionAttack, BattleConfig.E_timeCheckDirection)) {
+                setDirectionChase(targetAttack.getPos());
+                timeCheckDirectionAttack = System.currentTimeMillis();
+            }
         }
     }
 
@@ -228,21 +301,39 @@ public class Enemy extends Unit implements Serializable {
         if (!moveToTargetDone()) {
             enemyMove();
         } else {
-            targetMove = null;
-            setMove(false);
+            finishIdleArrival();
         }
     }
 
     public void enemyMove() {
         if (targetMove == null || beBlock()) return;
+        redirectToSpawnIfStuck();
+
+        if (moveToTargetDone()) {
+            if (targetAttack == null) finishIdleArrival();
+            return;
+        }
+
         Pos moveDir = pos.getDirectionTo(targetMove);
-        if (moveDir.equals(Pos.zero())) return;
-        setDirectionChase(targetAttack != null ? targetAttack.getPos() : targetMove);
-        Pos nd = Pos.moveFromDirection(moveDir, getCurSpeed());
-        move(nd);
+        if (moveDir.equals(Pos.zero())) {
+            snapToTargetMove();
+            if (targetAttack == null) finishIdleArrival();
+            return;
+        }
+
+        float stepLen = getCurSpeed() * BattleConfig.hSpeed;
+        float remain = (float) pos.distance(targetMove);
+        if (remain <= stepLen) {
+            setDirectionFromMove(moveDir);
+            snapToTargetMove();
+            if (targetAttack == null) finishIdleArrival();
+            return;
+        }
+
+        setDirectionFromMove(moveDir);
+        move(Pos.moveFromDirection(moveDir, getCurSpeed()));
         if (moveToTargetDone() && targetAttack == null) {
-            targetMove = null;
-            setMove(false);
+            finishIdleArrival();
         }
     }
 
@@ -260,7 +351,14 @@ public class Enemy extends Unit implements Serializable {
     }
 
     private Pos getChasePos(Unit target) {
-        return Pos.capPos(target.getPos(), panelMap.getBotLeftP(), panelMap.getTopRightP(), BattleConfig.P_Width / 2);
+        Pos targetPos = Pos.capPos(target.getPos(), panelMap.getBotLeftP(), panelMap.getTopRightP(), BattleConfig.P_Width / 2);
+        float dx = targetPos.x - pos.x;
+        float stopShort = Math.max(0.4f, rangeAttack * 0.55f);
+        if (Math.abs(dx) <= stopShort) {
+            return new Pos(pos.x, targetPos.y);
+        }
+        float sign = dx > 0 ? 1f : -1f;
+        return new Pos(targetPos.x - sign * stopShort, targetPos.y);
     }
 
     @Override

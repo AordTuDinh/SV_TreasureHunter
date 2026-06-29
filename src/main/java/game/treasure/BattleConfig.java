@@ -40,6 +40,7 @@ public class BattleConfig {
     public static float M_delayAttackDamage = 0.3f; // delay anim attack roi moi gui dame
     public static float M_directionMinDx = 0.5f; // chi doi huong nhin khi lech target theo truc x
     public static float M_chaseMoveRefresh = 0.5f; // cap nhat diem move duoi target moi khoang nay
+    public static float M_faceFlipHysteresisX = 1.0f; // phai lech hon muc nay moi lat mat khi dang nhin nguoc huong
     public static float E_timeDelayAttackToMove = 0.6f; //Attack xong sau khoảng time này mới cho enemy move
 
     public static float C_haSReciveDamage = 1f; // sau khoảng time này thì mới nhận dame từ thằng đó tiếp (tránh đánh liên tục)

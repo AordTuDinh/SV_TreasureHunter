@@ -441,12 +441,18 @@ public abstract class BaseRoom extends MonoRoom {
         if (bonusType == Bonus.BONUS_ITEM) {
             int itemKey = chunk.get(1).intValue();
             if (itemKey < 0) return need;
-            if (Bonus.isAggregatedEventItemKey(itemKey)) {
-                if (mUser.getResources().getItemByItemKey(itemKey) == null) need[1] = 1;
+            if (game.config.aEnum.ItemPointKey.isPointKey(itemKey)) {
+                if (Bonus.usesEventBagPoint(itemKey) && mUser.getResources().getItemPointNumber(itemKey) <= 0)
+                    need[1] = 1;
                 return need;
             }
             if (Bonus.resolveStorageType(itemKey) == Pbmethod.ItemType.POSITION)
                 need[0] = 1;
+        } else if (bonusType == Bonus.BONUS_ITEM_POINT) {
+            int pointId = chunk.get(1).intValue();
+            if (chunk.size() >= 3 && chunk.get(2) > 0 && Bonus.usesEventBagPoint(pointId)
+                    && mUser.getResources().getItemPointNumber(pointId) <= 0)
+                need[1] = 1;
         } else if (bonusType == Bonus.BONUS_EQUIPMENT) {
             need[0] = 1;
         } else if (bonusType == Bonus.BONUS_MATERIAL) {
@@ -507,10 +513,11 @@ public abstract class BaseRoom extends MonoRoom {
         newSet.add(unit.getId());
         unit.setChunkId(newChunk);
 
-        // chỉ gửi remove nếu oldChunk hợp lệ
-        if (oldValid) aProtoChange.add(unit.toProtoRemove(oldChunk));
-
-        aProtoChange.add(unit.toProtoAdd(newChunk));
+        // Quái/pet: client nhận chunkId mới qua PbUnitPos — không remove/add để tránh despawn.
+        if (unit.isPlayer()) {
+            if (oldValid) aProtoChange.add(unit.toProtoRemove(oldChunk));
+            aProtoChange.add(unit.toProtoAdd(newChunk));
+        }
 
         return true;
     }

@@ -73,13 +73,9 @@ public class UserItemEntity implements Serializable {
         return false;
     }
 
-    public boolean isAggregatedItem() {
-        return itemId == Pbmethod.ItemKey.TICKER_NORMAL.getNumber() || itemId == Pbmethod.ItemKey.TICKER_SPECIAL.getNumber();
-    }
-
     public List<Long> getPoint() {
         Pbmethod.ItemType type = getRes().getItemType();
-        if (type == Pbmethod.ItemType.EVENT || type == Pbmethod.ItemType.CURRENCY)
+        if (type == Pbmethod.ItemType.CURRENCY)
             return null;
         if (point == null)
             rebuildPointCache();
@@ -199,10 +195,6 @@ public class UserItemEntity implements Serializable {
 
 
     public List<Long> viewBonusItem(long number) {
-        if (number >= 0)
-            return Bonus.viewItem(itemId, number);
-        if (isAggregatedItem())
-            return Bonus.viewItemRemove(id, itemId, (int) -number);
         return Bonus.viewItem(itemId, number);
     }
 

@@ -220,10 +220,6 @@ public class ResItem {
         long rowId = uItem.getId();
         int itemKey = uItem.getItemId();
 
-        if (uItem.isAggregatedItem()) {
-            return Bonus.receiveListItem(mUser, detailAction,
-                    Bonus.viewItemRemove(rowId, itemKey, 1));
-        }
         Bonus.clearItemFromSlot(mUser, Bonus.BONUS_ITEM, rowId);
         if (!uItem.deleteFromDb())
             return Collections.emptyList();

@@ -226,6 +226,8 @@ public class UserResources implements Serializable {
     }
 
     public int countByItemKey(int itemId) {
+        if (game.config.aEnum.ItemPointKey.isPointKey(itemId))
+            return getItemPointNumber(itemId);
         int total = 0;
         for (UserItemEntity item : mItem.values()) {
             if (item.getItemId() == itemId) total += 1;
@@ -280,12 +282,11 @@ public class UserResources implements Serializable {
         return getNumItemEvent() + count <= mUser.getUData().getSlotEvent();
     }
 
-    /** Item tab túi lớn — user_item type >= EVENT (EVENT, USE, SPEAKER). */
+    /** Item tab túi lớn — user_item_point có type EVENT/USE/SPEAKER và number > 0. */
     public int getNumItemEvent() {
         int n = 0;
-        for (UserItemEntity item : mItem.values()) {
-            Pbmethod.ItemType type = Pbmethod.ItemType.valueOf(item.getType());
-            if (Bonus.usesEventBagStorage(type))
+        for (UserItemPointEntity row : mItemPoint.values()) {
+            if (row.getNumber() > 0 && Bonus.usesEventBagPoint(row.getPointId()))
                 n++;
         }
         return n;
@@ -338,6 +339,8 @@ public class UserResources implements Serializable {
     }
 
     public boolean hasItem(int itemId) {
+        if (game.config.aEnum.ItemPointKey.isPointKey(itemId))
+            return getItemPointNumber(itemId) > 0;
         return countByItemKey(itemId) > 0;
     }
 
@@ -376,18 +379,12 @@ public class UserResources implements Serializable {
 
     public boolean removeItemsByItemKey(int itemId, int count) {
         if (count <= 0) return true;
+        if (game.config.aEnum.ItemPointKey.isPointKey(itemId)) {
+            List<Long> bonus = Bonus.viewItemPoint(itemId, -count);
+            return !Bonus.receiveListItem(mUser, "remove_item_point", bonus).isEmpty();
+        }
         List<UserItemEntity> rows = listByItemKey(itemId);
         if (rows.isEmpty()) return false;
-        UserItemEntity first = rows.get(0);
-        if (first.isAggregatedItem()) {
-            List<Long> dataSticker = new ArrayList<>(ozudo.base.helper.GsonUtil.strToListLong(first.getData() == null ? "[]" : first.getData()));
-            for (int i = 0; i < count && dataSticker.size() > 1; i++) {
-                dataSticker.remove(dataSticker.size() - 1);
-            }
-            if (dataSticker.size() <= 1) first.clearAggregated();
-            first.setData(ozudo.base.helper.StringHelper.toDBString(dataSticker));
-            return first.update(List.of("data", first.getData()));
-        }
         int removed = 0;
         for (UserItemEntity row : rows) {
             if (removed >= count) break;

@@ -10,6 +10,7 @@ import game.config.lang.Lang;
 import protocol.Pbmethod;
 import game.treasure.mapping.*;
 import game.treasure.mapping.main.ResItemEntity;
+import game.treasure.mapping.main.ResItemPointEntity;
 import game.treasure.service.resource.ResAvatar;
 import game.treasure.service.item.EquipmentStatRollService;
 import game.treasure.service.resource.ResItem;
@@ -66,8 +67,10 @@ public class Bonus {
         return view(BONUS_GOLD, number);
     }
 
-    /** Preview/receive item by config key (consum / currency / event). */
+    /** Preview/receive item by config key (consum / currency). Item point → viewItemPoint. */
     public static List<Long> viewItem(int itemKey, long number) {
+        if (ItemPointKey.isPointKey(itemKey))
+            return viewItemPoint(itemKey, number);
         if (number < 0) {
             List<Long> ret = new ArrayList<>();
             for (int i = 0; i < -number; i++)
@@ -417,6 +420,8 @@ public class Bonus {
     }
 
     static List<Long> deductUserItemByKey(MyUser mUser, int itemKey, String detailAction) {
+        if (ItemPointKey.isPointKey(itemKey))
+            return addItemPoint(mUser, itemKey, -1, detailAction);
         List<UserItemEntity> rows = mUser.getResources().listByItemKey(itemKey);
         if (rows.isEmpty())
             return new ArrayList<>();
@@ -427,12 +432,9 @@ public class Bonus {
     }
 
     static List<Long> grantUserItem(MyUser mUser, int itemKey, String detailAction) {
+        if (ItemPointKey.isPointKey(itemKey))
+            return addItemPoint(mUser, itemKey, 1, detailAction);
         UserItemEntity uItem;
-        if (itemKey == Pbmethod.ItemKey.TICKER_NORMAL.getNumber()) {
-            uItem = checkGenItemData(mUser, 1);
-            if (uItem == null) return new ArrayList<>();
-            return Arrays.asList((long) BONUS_ITEM, uItem.getId(), (long) itemKey);
-        }
         Pbmethod.ItemType type = resolveStorageType(itemKey);
         uItem = new UserItemEntity(mUser.getUser().getId(), itemKey, type);
         boolean needSlot = usesItemSlotForUserItem(type);
@@ -494,14 +496,10 @@ public class Bonus {
         if (uItem == null || uItem.getItemId() != itemKey)
             return new ArrayList<>();
         clearItemFromSlot(mUser, BONUS_ITEM, userItemId);
-        if (uItem.isAggregatedItem()) {
-            if (!mUser.getResources().removeItemsByItemKey(itemKey, 1))
-                return new ArrayList<>();
-        } else if (!uItem.deleteFromDb()) {
+        if (!uItem.deleteFromDb()) {
             return new ArrayList<>();
-        } else {
-            mUser.getResources().removeItem(userItemId);
         }
+        mUser.getResources().removeItem(userItemId);
         if (CfgServer.isRealServer()) {
             Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
                     "type", "user_item_remove", "id", userItemId, "itemId", itemKey);
@@ -522,32 +520,6 @@ public class Bonus {
                     "type", "user_equipment_remove", "id", userEquipId, "itemId", itemKey, "tier", tier);
         }
         return Arrays.asList((long) BONUS_EQUIPMENT, userEquipId, (long) -itemKey, (long) uEquip.getTier());
-    }
-
-    static UserItemEntity checkGenItemData(MyUser mUser, int numItem) {
-        UserItemEntity uItem = mUser.getResources().getItemByItemKey(Pbmethod.ItemKey.TICKER_NORMAL.getNumber());
-        long eventDay = CfgLottery.getEventIdBuy();
-        List<Long> nums = new ArrayList<>();
-        for (int i = 0; i < numItem; i++)
-            nums.add(NumberUtil.getRandomLong(100000, 999999));
-        if (uItem == null) {
-            uItem = new UserItemEntity(mUser.getUser().getId(), Pbmethod.ItemKey.TICKER_NORMAL.getNumber(), Pbmethod.ItemType.EVENT);
-            nums.add(0, eventDay);
-            uItem.setData(StringHelper.toDBString(nums));
-            if (!DBJPA.save(uItem))
-                return null;
-            mUser.getResources().addItem(uItem);
-        } else {
-            List<Long> dataSticker = new ArrayList<>(GsonUtil.strToListLong(uItem.getData() == null ? "[]" : uItem.getData()));
-            if (dataSticker.isEmpty() || dataSticker.get(0) != eventDay) {
-                dataSticker = new ArrayList<>();
-                dataSticker.add(eventDay);
-            }
-            dataSticker.addAll(nums);
-            uItem.setData(StringHelper.toDBString(dataSticker));
-            uItem.update(List.of("data", uItem.getData()));
-        }
-        return uItem;
     }
 
     static List<Long> addItemArtifact(MyUser mUser, int artifactId, int configTier, String detailAction) {
@@ -576,6 +548,8 @@ public class Bonus {
         UserItemPointEntity row = mUser.getResources().getItemPoint(pointId);
         if (row == null) {
             if (delta < 0)
+                return new ArrayList<>();
+            if (usesEventBagPoint(pointId) && !mUser.getResources().canAddEventItem(1))
                 return new ArrayList<>();
             row = new UserItemPointEntity(mUser.getUser().getId(), pointId, server);
             row.setNumber((int) delta);
@@ -988,9 +962,46 @@ public class Bonus {
         return true;
     }
 
-    public static boolean isAggregatedEventItemKey(int itemKey) {
-        return itemKey == Pbmethod.ItemKey.TICKER_NORMAL.getNumber()
-                || itemKey == Pbmethod.ItemKey.TICKER_SPECIAL.getNumber();
+    public static boolean isLotteryTicketPoint(int pointId) {
+        return ItemPointKey.isLotteryTicket(pointId);
+    }
+
+    /** Tab túi event — res_item_point.type ∈ {EVENT, USE, SPEAKER}. */
+    public static boolean usesEventBagStorage(Pbmethod.ItemPointType storageType) {
+        return storageType == Pbmethod.ItemPointType.EVENT
+                || storageType == Pbmethod.ItemPointType.USE
+                || storageType == Pbmethod.ItemPointType.SPEAKER;
+    }
+
+    public static boolean usesEventBagPoint(int pointId) {
+        ResItemPointEntity res = ResItemPoint.get(pointId);
+        return res != null && res.getItemPointType() != null && usesEventBagStorage(res.getItemPointType());
+    }
+
+    /** Mua vé số — lưu user_item_point.data [eventDay, các số vé]. */
+    public static List<Long> grantLotteryTickets(MyUser mUser, int pointId, long eventDay, List<Long> nums, String detailAction) {
+        if (!ItemPointKey.isLotteryTicket(pointId) || nums == null || nums.isEmpty())
+            return new ArrayList<>();
+        UserItemPointEntity row = mUser.getResources().getItemPoint(pointId);
+        if ((row == null || row.getNumber() <= 0) && !mUser.getResources().canAddEventItem(1))
+            return new ArrayList<>();
+        int server = mUser.getUser().getServer();
+        if (row == null) {
+            row = new UserItemPointEntity(mUser.getUser().getId(), pointId, server);
+            row.appendTicketNumbers(eventDay, nums);
+            if (!row.saveOrUpdate())
+                return new ArrayList<>();
+            mUser.getResources().addItemPoint(row);
+        } else {
+            row.appendTicketNumbers(eventDay, nums);
+            if (!row.persist())
+                return new ArrayList<>();
+        }
+        if (CfgServer.isRealServer()) {
+            Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
+                    "type", "item_point_ticket", "pointId", pointId, "add", nums.size(), "cur", row.getNumber());
+        }
+        return Arrays.asList((long) BONUS_ITEM_POINT, (long) pointId, (long) nums.size(), (long) row.getNumber());
     }
 
     /** item_slot: consum (BONUS_ITEM), equip, pet, mount, artifact — không gồm event/currency. */
@@ -1002,13 +1013,6 @@ public class Bonus {
 
     public static boolean usesItemSlotForUserItem(Pbmethod.ItemType storageType) {
         return storageType == Pbmethod.ItemType.POSITION;
-    }
-
-    /** Item hiển thị tab Túi (type >= EVENT), không dùng item_slot home. */
-    public static boolean usesEventBagStorage(Pbmethod.ItemType storageType) {
-        return storageType != null
-                && storageType != Pbmethod.ItemType.CURRENCY
-                && storageType.getNumber() >= Pbmethod.ItemType.EVENT.getNumber();
     }
 
     /** Xóa ô item_slot trỏ tới row không còn tồn tại hoặc không thuộc túi UI. */

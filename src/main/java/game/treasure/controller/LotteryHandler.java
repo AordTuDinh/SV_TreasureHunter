@@ -2,10 +2,10 @@ package game.treasure.controller;
 
 import game.config.CfgLottery;
 import game.config.aEnum.DetailActionType;
-import protocol.Pbmethod;
+import game.config.aEnum.ItemPointKey;
 import game.config.aEnum.StatusType;
 import game.config.lang.Lang;
-import game.treasure.mapping.UserItemEntity;
+import game.treasure.mapping.UserItemPointEntity;
 import game.treasure.mapping.UserLotteryHistoryEntity;
 import game.treasure.server.IAction;
 import game.treasure.service.user.Bonus;
@@ -13,8 +13,8 @@ import game.protocol.CommonProto;
 import io.netty.channel.Channel;
 import ozudo.base.database.DBJPA;
 import ozudo.base.helper.DateTime;
-import ozudo.base.helper.GsonUtil;
 import ozudo.base.log.Logs;
+import protocol.Pbmethod;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -94,7 +94,7 @@ public class LotteryHandler extends AHandler {
             }
         }
 
-        List<Long> bonus = Bonus.viewItem(Pbmethod.ItemType.EVENT.getNumber(), Pbmethod.ItemKey.TICKER_MINI, -numTicker);
+        List<Long> bonus = Bonus.viewItemPoint(ItemPointKey.TICKER_MINI.id, -numTicker);
         String err = Bonus.checkMoney(mUser, bonus);
         if (err != null) {
             addErrResponse(err);
@@ -106,25 +106,22 @@ public class LotteryHandler extends AHandler {
     }
 
     void lotteView() {
-        UserItemEntity item = mUser.getResources().getItem(getInputLong());
-        if (item == null) {
-            addErrResponse(getLang(Lang.item_not_found));
-            return;
-        }
-        if (item.getItemId() != Pbmethod.ItemKey.TICKER_NORMAL.getNumber() && item.getItemId() != Pbmethod.ItemKey.TICKER_SPECIAL_VALUE) {
+        int pointId = getInputInt();
+        if (!ItemPointKey.isLotteryTicket(pointId)) {
             addErrResponse(getLang(Lang.err_params));
             return;
         }
-        List<Long> lst = GsonUtil.strToListLong(item.getData());
-        if (lst.size() == 0 || lst.get(0) != DateTime.getNumberDay()) {
+        UserItemPointEntity row = mUser.getResources().getItemPoint(pointId);
+        if (row == null) {
             addResponse(getCommonVector(new ArrayList<>()));
-        } else {
-            addResponse(getCommonVector(lst.subList(1, lst.size())));
+            return;
         }
+        List<Long> lst = row.getTicketNumbersForEvent(DateTime.getNumberDay());
+        addResponse(getCommonVector(lst));
     }
 
     void history(int inputType) {
-        Pbmethod.ItemType type = Pbmethod.ItemType.valueOf(inputType);
+        Pbmethod.ItemPointType type = Pbmethod.ItemPointType.valueOf(inputType);
         if (type == null) {
             addErrParam();
             return;
@@ -139,7 +136,7 @@ public class LotteryHandler extends AHandler {
 
     void receive() {
         List<Long> input = getInputALong();
-        Pbmethod.ItemType type = Pbmethod.ItemType.valueOf(Math.toIntExact(input.get(0)));
+        Pbmethod.ItemPointType type = Pbmethod.ItemPointType.valueOf(Math.toIntExact(input.get(0)));
         if (type == null) {
             addErrParam();
             return;

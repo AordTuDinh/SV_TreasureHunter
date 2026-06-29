@@ -71,7 +71,7 @@ public class ProtoState {
                         buffer.writeByte(sizeCell);
                         for (int j = 0; j < sizeCell; j++) {
                             Pbmethod.PbCell cell = tmp.getCells(j);
-                            buffer.writeShort(cell.getId());
+                            buffer.writeInt(cell.getId());
                             // cell state
                             buffer.writeByte(cell.getState().getNumber());
                             buffer.writeInt(cell.getHp());
