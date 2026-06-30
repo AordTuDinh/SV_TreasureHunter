@@ -441,11 +441,6 @@ public abstract class BaseRoom extends MonoRoom {
         if (bonusType == Bonus.BONUS_ITEM) {
             int itemKey = chunk.get(1).intValue();
             if (itemKey < 0) return need;
-            if (game.config.aEnum.ItemPointKey.isPointKey(itemKey)) {
-                if (Bonus.usesEventBagPoint(itemKey) && mUser.getResources().getItemPointNumber(itemKey) <= 0)
-                    need[1] = 1;
-                return need;
-            }
             if (Bonus.resolveStorageType(itemKey) == Pbmethod.ItemType.POSITION)
                 need[0] = 1;
         } else if (bonusType == Bonus.BONUS_ITEM_POINT) {

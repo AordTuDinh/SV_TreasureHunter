@@ -257,6 +257,14 @@ public class ItemHandler extends AHandler {
             addErrParam();
             return;
         }
+        if (req.get(0) == 1L && req.size() >= 3) {
+            sellItemBatchAuto(req.subList(1, req.size()));
+            return;
+        }
+        if (req.size() != 2) {
+            addErrParam();
+            return;
+        }
         int bonusType = req.get(0).intValue();
         long id = req.get(1);
         if (bonusType == Bonus.BONUS_EQUIPMENT) {
@@ -302,6 +310,107 @@ public class ItemHandler extends AHandler {
             return;
         }
         addErrParam();
+    }
+
+    /** Auto-sell batch: prefix 1 + pairs (bonusType, id). Vàng cộng im lặng, không BONUS_TOAST. */
+    private void sellItemBatchAuto(List<Long> pairs) {
+        if (pairs == null || pairs.size() < 2 || pairs.size() % 2 != 0)
+            return;
+
+        List<Long> allPriceBonus = new ArrayList<>();
+        List<Long> soldResponse = new ArrayList<>();
+        boolean needEquipRecalc = false;
+
+        for (int i = 0; i < pairs.size(); i += 2) {
+            int bonusType = pairs.get(i).intValue();
+            long id = pairs.get(i + 1);
+            SellBatchResult result = trySellInBatch(bonusType, id);
+            if (result == null)
+                continue;
+            if (result.priceBonus != null && !result.priceBonus.isEmpty())
+                allPriceBonus.addAll(result.priceBonus);
+            soldResponse.add(id);
+            soldResponse.add(1L);
+            if (result.wasEquipped)
+                needEquipRecalc = true;
+        }
+
+        if (soldResponse.isEmpty())
+            return;
+
+        List<Long> merged = Bonus.merge(allPriceBonus);
+        addBonusPrivate(Bonus.receiveListItem(mUser, DetailActionType.SELL_ITEM.getKey(-1), merged));
+
+        if (needEquipRecalc) {
+            Pbmethod.ListCommonVector.Builder pb = Pbmethod.ListCommonVector.newBuilder();
+            pb.addAVector(getCommonVector(soldResponse));
+            pb.addAVector(user.reCalculatePoint(mUser).toCommonVector());
+            pb.addAVector(getCommonIntVector(mUser.getUser().normalizeItemEquipList()));
+            addResponse(pb.build());
+            mUser.reCalculatePoint();
+            broadcastItemEquipUpdate();
+            UserHandler.buffInfo(mUser);
+        } else {
+            addResponse(getCommonVector(soldResponse));
+        }
+    }
+
+    private static final class SellBatchResult {
+        List<Long> priceBonus;
+        boolean wasEquipped;
+    }
+
+    private SellBatchResult trySellInBatch(int bonusType, long id) {
+        if (bonusType == Bonus.BONUS_EQUIPMENT) {
+            UserEquipmentEntity equip = mUser.getResources().getEquipment(id);
+            if (equip == null)
+                return null;
+            return sellEquipmentForBatch(equip);
+        }
+        if (bonusType == Bonus.BONUS_ITEM) {
+            UserItemEntity item = mUser.getResources().getItem(id);
+            if (item == null)
+                return null;
+            Bonus.clearItemFromSlot(mUser, Bonus.BONUS_ITEM, id);
+            if (!item.deleteFromDb())
+                return null;
+            mUser.getResources().removeItem(id);
+            SellBatchResult result = new SellBatchResult();
+            result.priceBonus = CfgItem.getPriceSellItem(item);
+            return result;
+        }
+        if (bonusType == Bonus.BONUS_MATERIAL) {
+            UserMaterialEntity material = mUser.getResources().getMaterial(id);
+            if (material == null)
+                return null;
+            if (!material.deleteFromDb())
+                return null;
+            mUser.getResources().removeMaterial(id);
+            SellBatchResult result = new SellBatchResult();
+            result.priceBonus = CfgMaterial.getPriceSellMaterial(material);
+            return result;
+        }
+        return null;
+    }
+
+    private SellBatchResult sellEquipmentForBatch(UserEquipmentEntity equip) {
+        long id = equip.getId();
+        if (equip.getLockDestroy() == 1)
+            return null;
+        boolean wasEquipped = equip.isEquip() || mUser.getUser().getListIdEquipmentEquip().contains((int) id);
+        if (wasEquipped) {
+            if (!clearItemFromEquipList((int) id, equip))
+                return null;
+            equip.unEquip();
+        }
+        Bonus.clearItemFromSlot(mUser, Bonus.BONUS_EQUIPMENT, id);
+        if (!equip.deleteFromDb())
+            return null;
+        mUser.getResources().removeEquipment(id);
+        SellBatchResult result = new SellBatchResult();
+        result.priceBonus = CfgItem.getPriceSellItem(equip);
+        result.wasEquipped = wasEquipped;
+        return result;
     }
 
     private void sellEquipment(UserEquipmentEntity equip) {

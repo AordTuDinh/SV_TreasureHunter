@@ -334,6 +334,9 @@ message PbMount{
   optional int32 tier = 5;
   optional int32 isCraft = 6;
   optional int32 icon = 7;
+  optional int32  priceTreasure = 8;
+  optional string data = 9;
+  optional int32 isEquip = 10;
 }
 
 
@@ -349,6 +352,9 @@ message PbPet{
   optional int32 tier = 5;
   optional int32 isCraft = 6;
   optional int32 icon = 7;
+  optional int32 priceTreasure = 8;
+  optional string data = 9;
+  optional int32 isEquip = 10;
 }
 
 message PbListItemPoint{
@@ -444,6 +450,7 @@ message  PbEquipment{
   optional  string data = 6;
   optional  int32 isCraft = 7;
   optional  int32 icon = 8;
+  optional int32  priceTreasure = 9;
 }
 
 message  PbItemPoint{

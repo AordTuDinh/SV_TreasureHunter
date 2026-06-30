@@ -224,6 +224,7 @@ public class CraftHandler extends AHandler {
         resp.add((long) gems.size());
 
         int totalExpGain = 0;
+        int totalPriceTreasureGain = 0;
         for (UserMaterialEntity gem : gems) {
             boolean socketOk;
             boolean consumed = false;
@@ -244,12 +245,21 @@ public class CraftHandler extends AHandler {
                         if (CfgCraft.grantsCraftExp(craftLevel, gem.getTier())) {
                             totalExpGain += CfgCraft.getCraftExpByRank(gem.getTier());
                         }
+                        ResMaterialEntity gemRes = gem.getRes();
+                        if (gemRes != null) {
+                            totalPriceTreasureGain += CfgCraft.getPriceTreasurePoints(
+                                    gemRes.getTier(), gem.getTier());
+                        }
                     }
                 }
             }
             resp.add(gem.getId());
             resp.add(socketOk ? 1L : 0L);
             resp.add(consumed ? 1L : 0L);
+        }
+
+        if (totalPriceTreasureGain > 0) {
+            addPriceTreasure(targetType, targetId, totalPriceTreasureGain);
         }
 
         if (targetType == CraftTargetType.EQUIPMENT) {
@@ -589,5 +599,39 @@ public class CraftHandler extends AHandler {
         }
         mUser.getResources().removeMaterial(gem.getId());
         return true;
+    }
+
+    private void addPriceTreasure(CraftTargetType type, long targetId, int gain) {
+        if (gain <= 0) {
+            return;
+        }
+        if (type == CraftTargetType.EQUIPMENT) {
+            UserEquipmentEntity equip = mUser.getResources().getItemEquipment(targetId);
+            if (equip == null) {
+                return;
+            }
+            int newValue = equip.getPriceTreasure() + gain;
+            if (equip.update(List.of("price_treasure", newValue))) {
+                equip.setPriceTreasure(newValue);
+            }
+        } else if (type == CraftTargetType.PET) {
+            UserPetEntity pet = mUser.getResources().getPet(targetId);
+            if (pet == null) {
+                return;
+            }
+            int newValue = pet.getPriceTreasure() + gain;
+            if (pet.update(List.of("price_treasure", newValue))) {
+                pet.setPriceTreasure(newValue);
+            }
+        } else if (type == CraftTargetType.MOUNT) {
+            UserMountEntity mount = mUser.getResources().getMount(targetId);
+            if (mount == null) {
+                return;
+            }
+            int newValue = mount.getPriceTreasure() + gain;
+            if (mount.update(List.of("price_treasure", newValue))) {
+                mount.setPriceTreasure(newValue);
+            }
+        }
     }
 }

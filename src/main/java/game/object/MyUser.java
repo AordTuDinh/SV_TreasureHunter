@@ -281,12 +281,6 @@ public class MyUser implements Serializable {
             if (bonusType == Bonus.BONUS_ITEM) {
                 int itemKey = chunk.get(1).intValue();
                 if (itemKey < 0) continue;
-                if (game.config.aEnum.ItemPointKey.isPointKey(itemKey)) {
-                    if (Bonus.usesEventBagPoint(itemKey)
-                            && resources.getItemPointNumber(itemKey) <= 0)
-                        numEvent++;
-                    continue;
-                }
                 Pbmethod.ItemType storageType = Bonus.resolveStorageType(itemKey);
                 if (Bonus.usesItemSlotForUserItem(storageType)) {
                     numBag++;

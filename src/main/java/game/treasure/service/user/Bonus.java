@@ -420,8 +420,6 @@ public class Bonus {
     }
 
     static List<Long> deductUserItemByKey(MyUser mUser, int itemKey, String detailAction) {
-        if (ItemPointKey.isPointKey(itemKey))
-            return addItemPoint(mUser, itemKey, -1, detailAction);
         List<UserItemEntity> rows = mUser.getResources().listByItemKey(itemKey);
         if (rows.isEmpty())
             return new ArrayList<>();
@@ -432,8 +430,6 @@ public class Bonus {
     }
 
     static List<Long> grantUserItem(MyUser mUser, int itemKey, String detailAction) {
-        if (ItemPointKey.isPointKey(itemKey))
-            return addItemPoint(mUser, itemKey, 1, detailAction);
         UserItemEntity uItem;
         Pbmethod.ItemType type = resolveStorageType(itemKey);
         uItem = new UserItemEntity(mUser.getUser().getId(), itemKey, type);

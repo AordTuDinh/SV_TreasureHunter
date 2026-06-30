@@ -56,6 +56,7 @@ public class ResponseMessage {
         MaterialHandler.getInstance().initAction(mHandler);
         CraftHandler.getInstance().initAction(mHandler);
         ArtifactHandler.getInstance().initAction(mHandler);
+        TreasureHandler.getInstance().initAction(mHandler);
 //        FarmHandler.getInstance().initAction(mHandler);
     }
 

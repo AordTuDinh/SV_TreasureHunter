@@ -351,6 +351,11 @@ public class LoginHandler extends AHandler {
         // for settings
         Pbmethod.CommonVector.Builder settings = Pbmethod.CommonVector.newBuilder();
         UserSettingsEntity uSet = mUser.getUSetting();
+        if (uSet == null) {
+            Logs.error("loadGameConfig: uSetting null userId=" + mUser.getUser().getId() + " — dbInitUser thiếu setUSetting");
+            uSet = new UserSettingsEntity(mUser.getUser().getId());
+            mUser.setUSetting(uSet);
+        }
         // size 2 : chat setting
         settings.addAllALong(uSet.getChatSetting());
         lstCmm.addAVector(settings);

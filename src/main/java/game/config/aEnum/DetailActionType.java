@@ -45,6 +45,8 @@ public enum DetailActionType {
     NANG_CAP_VAT_PHAM("upgrade_item"),
     UPGRADE_MATERIAL("upgrade_material_"),
     CRAFT_EXECUTE("craft_execute_"),
+    TREASURE_TRANS("treasure_trans_"),
+    TREASURE_BUY("treasure_buy_"),
     MATERIAL_MERGE("material_merge_"),
     UPGRADE_ARTIFACT("upgrade_artifact_"),
     EQUIP_ARTIFACT("equip_artifact_"),

@@ -190,6 +190,8 @@ public class IAction {
     public static final int ARTIFACT_INFO = 467;
     public static final int ADD_BUFF = 468;
     public static final int CANCEL_PROTECT = 469;
+    public static final int TREASURE_TRANS = 470;
+    public static final int TREASURE_BUY = 471;
 
     // Event
     public static final int RPS_SEND_RQ = 600;

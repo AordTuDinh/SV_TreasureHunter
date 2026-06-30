@@ -74,6 +74,12 @@ public class UserResources implements Serializable {
             if (equipped)
                 item.setBagSlot(-1);
         }
+        for (UserPetEntity pet : mPet.values()) {
+            pet.syncEquipFlag(mUser);
+        }
+        for (UserMountEntity mount : mMount.values()) {
+            mount.syncEquipFlag(mUser);
+        }
     }
 
     void rebuildItemSlotIfNeeded() {
@@ -426,6 +432,20 @@ public class UserResources implements Serializable {
         if (mounts == null) mounts = new ArrayList<>();
         mounts.add(uMount);
         mMount.put(uMount.getId(), uMount);
+    }
+
+    public void removePet(long id) {
+        UserPetEntity rm = mPet.remove(id);
+        if (rm != null && pets != null) {
+            pets.remove(rm);
+        }
+    }
+
+    public void removeMount(long id) {
+        UserMountEntity rm = mMount.remove(id);
+        if (rm != null && mounts != null) {
+            mounts.remove(rm);
+        }
     }
 
     public UserSkinEntity getSkin(long id) {

@@ -81,6 +81,61 @@ public class CfgCraft {
         return cfg.expByRank.get(rank);
     }
 
+    /**
+     * Điểm priceTreasure khi gắn nguyên liệu thành công.
+     * @param resRank {@code res_material.tier} (1..4)
+     * @param userTier {@code user_material.tier} (1..4)
+     */
+    public static int getPriceTreasurePoints(int resRank, int userTier) {
+        if (resRank < 1 || resRank > 4 || userTier < 1 || userTier > 4) {
+            return 0;
+        }
+        int minTier = 5 - resRank;
+        if (userTier < minTier) {
+            return 0;
+        }
+        return userTier + resRank - 4;
+    }
+
+    public static long getTreasureBuyPrice(int buyIndex) {
+        if (buyIndex < 0 || cfg.treasureBuyPrices == null || buyIndex >= cfg.treasureBuyPrices.size()) {
+            return 0;
+        }
+        return cfg.treasureBuyPrices.get(buyIndex);
+    }
+
+    /** Roll res_artifact.rank (1..4) theo treasureArtifactRates. */
+    public static int rollTreasureArtifactRank() {
+        List<Integer> rates = cfg.treasureArtifactRates;
+        if (rates == null || rates.isEmpty()) {
+            return 1;
+        }
+        int total = 0;
+        for (int r : rates) {
+            total += Math.max(0, r);
+        }
+        if (total <= 0) {
+            return 1;
+        }
+        int roll = NumberUtil.getRandom(total);
+        int acc = 0;
+        for (int i = 0; i < rates.size() && i < 4; i++) {
+            acc += Math.max(0, rates.get(i));
+            if (roll < acc) {
+                return i + 1;
+            }
+        }
+        return Math.min(4, rates.size());
+    }
+
+    public static List<Integer> getTreasureBuyPrices() {
+        return cfg.treasureBuyPrices == null ? List.of() : cfg.treasureBuyPrices;
+    }
+
+    public static List<Integer> getTreasureArtifactRates() {
+        return cfg.treasureArtifactRates == null ? List.of() : cfg.treasureArtifactRates;
+    }
+
     public static boolean grantsCraftExp(int craftLevel, int materialRank) {
         if (craftLevel < cfg.minCraftLevelForRankExpGate) {
             return true;
@@ -235,6 +290,12 @@ public class CfgCraft {
         if (loaded.transformTiers != null && !loaded.transformTiers.isEmpty()) {
             cfg.transformTiers = loaded.transformTiers;
         }
+        if (loaded.treasureBuyPrices != null && !loaded.treasureBuyPrices.isEmpty()) {
+            cfg.treasureBuyPrices = loaded.treasureBuyPrices;
+        }
+        if (loaded.treasureArtifactRates != null && !loaded.treasureArtifactRates.isEmpty()) {
+            cfg.treasureArtifactRates = loaded.treasureArtifactRates;
+        }
     }
 
     private static Map<Integer, TargetConfig> buildTargetMap(DataConfig data) {
@@ -272,6 +333,8 @@ public class CfgCraft {
                 target(4, 12, "gem", false, 0, 500, 1000, 1500, 2000),
                 target(5, 12, "item_point", false, 0, 1000, 2000, 3000, 4000)
         );
+        d.treasureBuyPrices = List.of(200, 500, 1000, 2000);
+        d.treasureArtifactRates = List.of(30, 25, 25, 20);
         return d;
     }
 
@@ -313,6 +376,10 @@ public class CfgCraft {
         List<TargetConfig> targets = new ArrayList<>();
         int transformRate = 20;
         List<TransformTierConfig> transformTiers = new ArrayList<>();
+        /** Giá mua artifact bằng cổ vật — index 0..3 = tier 1..4. */
+        List<Integer> treasureBuyPrices = new ArrayList<>();
+        /** Tỉ lệ random res_artifact.rank khi mua (rank 1..4). */
+        List<Integer> treasureArtifactRates = new ArrayList<>();
     }
 
     @Data
