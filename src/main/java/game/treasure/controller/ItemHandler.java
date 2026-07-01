@@ -3,6 +3,7 @@ package game.treasure.controller;
 import game.config.CfgChat;
 import game.config.CfgItem;
 import game.config.CfgMaterial;
+import game.config.CfgMob;
 import game.config.aEnum.*;
 import game.config.lang.Lang;
 import game.treasure.mapping.UserEntity;
@@ -10,6 +11,7 @@ import game.treasure.mapping.UserEquipmentEntity;
 import game.treasure.mapping.UserItemEntity;
 import game.treasure.mapping.UserItemPointEntity;
 import game.treasure.mapping.UserMaterialEntity;
+import game.treasure.mapping.UserMobEntity;
 import game.treasure.mapping.main.ResItemEntity;
 import game.treasure.mapping.main.ResItemEquipmentEntity;
 import game.treasure.server.IAction;
@@ -309,6 +311,25 @@ public class ItemHandler extends AHandler {
             }
             return;
         }
+        if (bonusType == Bonus.BONUS_MOB) {
+            UserMobEntity mob = mUser.getResources().getMob(id);
+            if (mob == null) {
+                addErrResponse(getLang(Lang.item_not_own));
+                return;
+            }
+            List<Long> price = CfgMob.getPriceSellMob(mob);
+            if (price.isEmpty()) {
+                addErrResponse(getLang(Lang.err_params));
+                return;
+            }
+            if (!MobHandler.removeUserMob(mUser, mob)) {
+                addErrResponse();
+                return;
+            }
+            addBonusToast(Bonus.receiveListItem(mUser, DetailActionType.SELL_ITEM.getKey(mob.getMobId()), price));
+            addResponse(getCommonVector(id, 1L));
+            return;
+        }
         addErrParam();
     }
 
@@ -388,6 +409,16 @@ public class ItemHandler extends AHandler {
             mUser.getResources().removeMaterial(id);
             SellBatchResult result = new SellBatchResult();
             result.priceBonus = CfgMaterial.getPriceSellMaterial(material);
+            return result;
+        }
+        if (bonusType == Bonus.BONUS_MOB) {
+            UserMobEntity mob = mUser.getResources().getMob(id);
+            if (mob == null)
+                return null;
+            if (!MobHandler.removeUserMob(mUser, mob))
+                return null;
+            SellBatchResult result = new SellBatchResult();
+            result.priceBonus = CfgMob.getPriceSellMob(mob);
             return result;
         }
         return null;

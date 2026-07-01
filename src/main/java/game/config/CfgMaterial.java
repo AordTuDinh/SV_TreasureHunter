@@ -303,20 +303,20 @@ public class CfgMaterial {
         return total;
     }
 
-    /** Ngưỡng 100% lên rank minRank+1. */
-    public static double upgradeThreshold(int minRank) {
-        if (minRank < 1 || minRank >= TIER_COUNT) {
-            return 0;
+    /** Điểm rate — chỉ tính rank, bỏ qua level. */
+    public static double sumMergeRankPoints(List<UserMaterialEntity> gems) {
+        double total = 0;
+        for (UserMaterialEntity g : gems) {
+            if (g == null) {
+                continue;
+            }
+            double pt = rankPointValue(g.getTier());
+            if (pt <= 0) {
+                return 0;
+            }
+            total += pt;
         }
-        return Math.pow(RANK_POINT_BASE, minRank);
-    }
-
-    /** Ngưỡng 100% giữ cùng rank R (need = R+1 viên cùng rank). */
-    public static double sameRankThreshold(int rank) {
-        if (rank < 1 || rank > TIER_COUNT) {
-            return 0;
-        }
-        return (rank + 1) * rankPointValue(rank);
+        return total;
     }
 
     static int pointsToRatePercent(double points, double threshold) {
@@ -326,12 +326,19 @@ public class CfgMaterial {
         return (int) Math.min(100, Math.floor(points / threshold * 100.0));
     }
 
+    /** Ngưỡng 100% rate: upgradeMinCount × 7^(outputRank-2) — 6 viên cùng rank Lv1 = 100%. */
+    static double mergeRateThreshold(int outputRank) {
+        if (outputRank < RANK_RARE || outputRank > RANK_LEGEND) {
+            return 0;
+        }
+        return mergeCfg.upgradeMinCount * Math.pow(RANK_POINT_BASE, outputRank - 2);
+    }
+
     public static MergePlan buildMergePlan(List<UserMaterialEntity> gems) {
         if (gems == null || gems.size() < mergeCfg.minMaterials || gems.size() > mergeCfg.maxMaterials) {
             return null;
         }
         int count = gems.size();
-        Map<Integer, Integer> rankCount = new HashMap<>();
         Map<Integer, Integer> materialCount = new HashMap<>();
         int minRank = TIER_COUNT;
         int maxRank = 0;
@@ -340,23 +347,9 @@ public class CfgMaterial {
             if (r < RANK_COMMON || r > RANK_LEGEND) {
                 return null;
             }
-            rankCount.merge(r, 1, Integer::sum);
             materialCount.merge(g.getMaterialId(), 1, Integer::sum);
             minRank = Math.min(minRank, r);
             maxRank = Math.max(maxRank, r);
-        }
-
-        LegendRecipeRow legend = matchLegendRecipe(rankCount, count);
-        if (legend != null) {
-            int rate = Math.min(100, legend.rate + calcLegendLevelBonusPercent(gems));
-            return new MergePlan(legend.outputRank, rate, true, materialCount, gems);
-        }
-
-        if (maxRank - minRank > 1) {
-            return null;
-        }
-        if (minRank >= RANK_LEGEND) {
-            return null;
         }
 
         double totalPoints = sumMergePoints(gems);
@@ -364,53 +357,43 @@ public class CfgMaterial {
             return null;
         }
 
-        boolean upgradePath = shouldUseUpgradePath(minRank, maxRank, count, totalPoints);
-        int outputRank;
-        int rate;
-        if (upgradePath) {
-            outputRank = minRank + 1;
-            rate = pointsToRatePercent(totalPoints, upgradeThreshold(minRank));
-        } else {
-            outputRank = maxRank;
-            rate = pointsToRatePercent(totalPoints, sameRankThreshold(maxRank));
-        }
+        int outputRank = resolveMergeOutputRank(totalPoints, minRank, maxRank, count);
+        double ratePoints = sumMergeRankPoints(gems);
+        int rate = pointsToRatePercent(ratePoints, mergeRateThreshold(outputRank));
         if (rate <= 0) {
             return null;
         }
         return new MergePlan(outputRank, rate, false, materialCount, gems);
     }
 
-    /** Mixed rank → lên bậc; cùng rank → lên bậc khi đủ điểm 7^minRank hoặc ≥ upgradeMinCount viên. */
-    static boolean shouldUseUpgradePath(int minRank, int maxRank, int count, double totalPoints) {
-        if (minRank != maxRank) {
-            return true;
-        }
-        if (totalPoints >= upgradeThreshold(minRank)) {
-            return true;
-        }
-        return count >= mergeCfg.upgradeMinCount;
-    }
-
-    /** Level đã góp vào T; legend cộng thêm % từ phần level qua ngưỡng rank 2. */
-    static int calcLegendLevelBonusPercent(List<UserMaterialEntity> gems) {
-        double levelPoints = 0;
-        for (UserMaterialEntity g : gems) {
-            int tier = g.getTier();
-            int level = Math.max(1, g.getLevel());
-            if (tier < 1 || tier > TIER_COUNT) {
-                continue;
+    /**
+     * Rank đích từ tổng điểm: rank cao nhất R (2..4) với T ≥ 7^(R-1).
+     * Cùng rank và ≥ upgradeMinCount viên → ít nhất minRank+1.
+     */
+    static int resolveMergeOutputRank(double totalPoints, int minRank, int maxRank, int count) {
+        int fromPoints = RANK_RARE;
+        for (int r = RANK_LEGEND; r >= RANK_RARE; r--) {
+            if (totalPoints >= rankPointValue(r)) {
+                fromPoints = r;
+                break;
             }
-            levelPoints += (level - 1) * rankPointValue(tier) * mergeCfg.levelPointMult;
         }
-        double threshold = upgradeThreshold(RANK_RARE);
-        if (threshold <= 0) {
-            return 0;
+        if (minRank == maxRank && count >= mergeCfg.upgradeMinCount && minRank < RANK_LEGEND) {
+            fromPoints = Math.max(fromPoints, minRank + 1);
         }
-        return (int) Math.floor(levelPoints / threshold * 100.0);
+        return Math.min(RANK_LEGEND, Math.max(RANK_RARE, fromPoints));
     }
 
     public static int calcMergeSuccessPercent(MergePlan plan) {
         return Math.min(100, Math.max(0, plan.baseRate));
+    }
+
+    /** Roll pass → outputRank; fail → viên mới rank thấp hơn 1 bậc (tối thiểu Common). */
+    public static int resolveMergeResultRank(MergePlan plan, boolean success) {
+        if (success) {
+            return plan.outputRank;
+        }
+        return Math.max(RANK_COMMON, plan.outputRank - 1);
     }
 
     public static int pickMergeOutputMaterialId(Map<Integer, Integer> materialCount) {
@@ -424,36 +407,6 @@ public class CfgMaterial {
             }
         }
         return ids.get(NumberUtil.getRandom(ids.size()));
-    }
-
-    public static UserMaterialEntity pickMergeFailReturnGem(List<UserMaterialEntity> gems) {
-        int maxRank = 0;
-        for (UserMaterialEntity g : gems) {
-            maxRank = Math.max(maxRank, g.getTier());
-        }
-        UserMaterialEntity best = null;
-        for (UserMaterialEntity g : gems) {
-            if (g.getTier() == maxRank) {
-                if (best == null || g.getLevel() > best.getLevel()) {
-                    best = g;
-                }
-            }
-        }
-        return best;
-    }
-
-    private static LegendRecipeRow matchLegendRecipe(Map<Integer, Integer> rankCount, int total) {
-        int rare = rankCount.getOrDefault(2, 0);
-        int epic = rankCount.getOrDefault(3, 0);
-        if (mergeCfg.legendRecipes == null) {
-            return null;
-        }
-        for (LegendRecipeRow r : mergeCfg.legendRecipes) {
-            if (rare == r.rareCount && epic == r.epicCount && rare + epic == total) {
-                return r;
-            }
-        }
-        return null;
     }
 
     private static void applyMergeConfig(MergeDataConfig loaded) {

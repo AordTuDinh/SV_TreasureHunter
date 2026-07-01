@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /** Quản lý user_data.item_slot — flat [bonusType, rowId, ...]; ô trống = [0, 0].
- * bonusType = wire Bonus.java (4=BONUS_ITEM, 9=BONUS_PET, 10=BONUS_MOUNT, 12=BONUS_EQUIPMENT, ...), không phải res_item.type. */
+ * bonusType = wire Bonus.java (4=BONUS_ITEM, 9=BONUS_PET, 10=BONUS_MOUNT, 14=BONUS_MOB, 12=BONUS_EQUIPMENT, ...), không phải res_item.type. */
 public final class ItemSlotHelper {
     public static final int EMPTY_TYPE = 0;
     public static final long EMPTY_ID = 0;

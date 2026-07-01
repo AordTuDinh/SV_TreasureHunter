@@ -16,6 +16,7 @@ import game.treasure.service.item.EquipmentStatRollService;
 import game.treasure.service.resource.ResItem;
 import game.treasure.service.resource.ResItemPoint;
 import game.treasure.service.resource.ResMount;
+import game.treasure.service.resource.ResMob;
 import game.object.MyUser;
 import ozudo.base.database.DBJPA;
 import ozudo.base.helper.GsonUtil;
@@ -38,6 +39,7 @@ public class Bonus {
     public static final int BONUS_MATERIAL = 11;
     public static final int BONUS_EQUIPMENT = 12;
     public static final int BONUS_ITEM_POINT = 13;
+    public static final int BONUS_MOB = 14;
 
     public static final Map<Integer, Integer> mTypeLength = new HashMap<>() {{
         put(BONUS_GOLD, 1);
@@ -53,10 +55,11 @@ public class Bonus {
         put(BONUS_MATERIAL, 2);
         put(BONUS_EQUIPMENT, 2);
         put(BONUS_ITEM_POINT, 2);
+        put(BONUS_MOB, 2);
     }};
 
     public static List<Integer> bonusSinger = Arrays.asList(
-            BONUS_ITEM, BONUS_EQUIPMENT, BONUS_ARTIFACT, BONUS_PET, BONUS_MOUNT,
+            BONUS_ITEM, BONUS_EQUIPMENT, BONUS_ARTIFACT, BONUS_PET, BONUS_MOUNT, BONUS_MOB,
             BONUS_SKIN, BONUS_EFFECT_SKIN, BONUS_MATERIAL, BONUS_ITEM_POINT);
 
     public static boolean isBonusSinger(int type) {
@@ -109,6 +112,15 @@ public class Bonus {
 
     public static List<Long> viewMount(int mountId) {
         return viewMount(mountId, 1);
+    }
+
+    public static List<Long> viewMob(int mobId, int tier) {
+        int t = tier > 0 ? Math.min(tier, 4) : 1;
+        return view(BONUS_MOB, mobId, t);
+    }
+
+    public static List<Long> viewMob(int mobId) {
+        return viewMob(mobId, 1);
     }
 
     public static List<Long> viewMaterial(int materialId, int rank) {
@@ -212,7 +224,7 @@ public class Bonus {
         return v == BONUS_GOLD || v == BONUS_GEM || v == BONUS_RUBY || v == BONUS_ITEM
                 || v == BONUS_EQUIPMENT || v == BONUS_ARTIFACT || v == BONUS_SKIN
                 || v == BONUS_EFFECT_SKIN || v == BONUS_VIP_EXP
-                || v == BONUS_PET || v == BONUS_MOUNT || v == BONUS_MATERIAL
+                || v == BONUS_PET || v == BONUS_MOUNT || v == BONUS_MOB || v == BONUS_MATERIAL
                 || v == BONUS_ITEM_POINT;
     }
 
@@ -260,7 +272,7 @@ public class Bonus {
             return itemApplyPayloadLength(bonus, index);
         if (type == BONUS_EQUIPMENT)
             return equipmentApplyPayloadLength(bonus, index);
-        if (type == BONUS_PET || type == BONUS_MOUNT)
+        if (type == BONUS_PET || type == BONUS_MOUNT || type == BONUS_MOB)
             return petMountApplyPayloadLength(bonus, index);
         return mTypeLength.getOrDefault(type, 0);
     }
@@ -340,6 +352,7 @@ public class Bonus {
             case BONUS_EFFECT_SKIN -> addEffectSkin(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
             case BONUS_PET -> addPet(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
             case BONUS_MOUNT -> addMount(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
+            case BONUS_MOB -> applyUserMobChunk(mUser, chunk, detailAction);
             case BONUS_MATERIAL -> addMaterial(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
             case BONUS_ITEM_POINT -> addItemPoint(mUser, chunk.get(1).intValue(), chunk.get(2), detailAction);
             default -> new ArrayList<>();
@@ -364,6 +377,30 @@ public class Bonus {
         if (chunk.size() == 3)
             return addItemArtifact(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
         return new ArrayList<>();
+    }
+
+    /** Preview grant [14,mobId,tier] | remove [14,rowId,-mobId,tier]. */
+    static List<Long> applyUserMobChunk(MyUser mUser, List<Long> chunk, String detailAction) {
+        if (chunk.size() == 3)
+            return addMob(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
+        if (chunk.size() == 4)
+            return removeUserMobRow(mUser, chunk.get(1), chunk.get(2).intValue(), chunk.get(3).intValue(), detailAction);
+        return new ArrayList<>();
+    }
+
+    static List<Long> removeUserMobRow(MyUser mUser, long rowId, int mobId, int tier, String detailAction) {
+        UserMobEntity uMob = mUser.getResources().getMob(rowId);
+        if (uMob == null || uMob.getMobId() != Math.abs(mobId))
+            return new ArrayList<>();
+        Bonus.clearItemFromSlot(mUser, BONUS_MOB, rowId);
+        if (!uMob.deleteFromDb())
+            return new ArrayList<>();
+        mUser.getResources().removeMob(rowId);
+        if (CfgServer.isRealServer()) {
+            Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
+                    "type", "mob_remove", "id", rowId, "mobId", uMob.getMobId(), "tier", tier);
+        }
+        return Arrays.asList((long) BONUS_MOB, rowId, (long) -uMob.getMobId(), (long) tier);
     }
 
     /** Preview grant [12,itemKey,tier] | remove [12,rowId,itemKey,tier]. */
@@ -619,6 +656,29 @@ public class Bonus {
                         "type", "mount", "id", uMount.getId(), "mountId", mountId, "tier", tier);
             }
             return Arrays.asList((long) BONUS_MOUNT, uMount.getId(), (long) mountId, (long) tier);
+        }
+        return new ArrayList<>();
+    }
+
+    static List<Long> addMob(MyUser mUser, int mobId, int tier, String detailAction) {
+        if (tier <= 0)
+            tier = 1;
+        if (ResMob.getMob(mobId) == null)
+            return new ArrayList<>();
+        if (!mUser.getResources().prepareNewItemSlot(BONUS_MOB, 0))
+            return new ArrayList<>();
+        UserMobEntity uMob = new UserMobEntity(mUser.getUser(), mobId, tier);
+        if (DBJPA.save(uMob)) {
+            if (!mUser.getResources().prepareNewItemSlot(BONUS_MOB, uMob.getId())) {
+                DBJPA.delete("user_mob", "id", uMob.getId(), "user_id", uMob.getUserId());
+                return new ArrayList<>();
+            }
+            mUser.getResources().addMob(uMob);
+            if (CfgServer.isRealServer()) {
+                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
+                        "type", "mob", "id", uMob.getId(), "mobId", mobId, "tier", tier);
+            }
+            return Arrays.asList((long) BONUS_MOB, uMob.getId(), (long) mobId, (long) tier);
         }
         return new ArrayList<>();
     }
@@ -1003,7 +1063,7 @@ public class Bonus {
     /** item_slot: consum (BONUS_ITEM), equip, pet, mount, artifact — không gồm event/currency. */
     public static boolean usesItemSlotBonusType(int bonusType) {
         return bonusType == BONUS_ITEM || bonusType == BONUS_EQUIPMENT
-                || bonusType == BONUS_PET || bonusType == BONUS_MOUNT
+                || bonusType == BONUS_PET || bonusType == BONUS_MOUNT || bonusType == BONUS_MOB
                 || bonusType == BONUS_ARTIFACT;
     }
 
@@ -1046,6 +1106,8 @@ public class Bonus {
                 return mUser.getResources().getPet(rowId) != null;
             case BONUS_MOUNT:
                 return mUser.getResources().getMount(rowId) != null;
+            case BONUS_MOB:
+                return mUser.getResources().getMob(rowId) != null;
             case BONUS_ARTIFACT:
                 return mUser.getResources().getArtifact(rowId) != null;
             default:
@@ -1053,7 +1115,7 @@ public class Bonus {
         }
     }
 
-    /** Gán ô túi UI — bonusType ∈ {4 consum, 12 equip, 9 pet, 10 mount, 5 artifact}. rowId=0 chỉ check còn chỗ. */
+    /** Gán ô túi UI — bonusType ∈ {4 consum, 12 equip, 9 pet, 10 mount, 14 mob, 5 artifact}. rowId=0 chỉ check còn chỗ. */
     public static boolean prepareNewItemSlot(MyUser mUser, int bonusType, long rowId) {
         if (!usesItemSlotBonusType(bonusType))
             return true;

@@ -1,9 +1,13 @@
 package game.battle.model;
 
-import game.battle.object.*;
+import game.battle.object.BonusKillEnemy;
+import game.battle.object.Coroutine;
+import game.battle.object.Point;
+import game.battle.object.Pos;
 import game.battle.type.AnimationType;
 import game.battle.type.RoomState;
 import game.battle.type.UnitType;
+import game.config.CfgMob;
 import game.treasure.BattleConfig;
 import game.treasure.mapping.main.ResMobEntity;
 import game.treasure.service.resource.ResMob;
@@ -25,6 +29,8 @@ public class Enemy extends Unit implements Serializable {
     public int forcePush;
     long damage;
     int skillNormal = 0;
+    int spawnTier = 1;
+    float tierMult = 1f;
     Unit targetAttack;
     long timeLastChaseRefresh;
     Pos lastMoveCheckPos;
@@ -33,14 +39,26 @@ public class Enemy extends Unit implements Serializable {
     static final int STUCK_MOVE_TICKS = 32; // ~0.5s @ 16ms/tick
 
     public Enemy(int enemyKey, Unit player, Pos pos) {
+        this(enemyKey, player, pos, 1);
+    }
+
+    public Enemy(int enemyKey, Unit player, Pos pos, int tier) {
         setRoom(player.getRoom());
         setPanelMap(player.getPanelMap());
         this.model = enemyKey;
         this.clanId = -1;
         this.pos = pos;
         this.instancePos = pos.clone();
+        this.spawnTier = tier > 0 ? Math.min(tier, 4) : 1;
+        this.tierMult = CfgMob.getTierMult(spawnTier);
         ResMobEntity mob = ResMob.getMob(enemyKey);
         this.point = mob.getPoint();
+        if (tierMult != 1f) {
+            point.setBaseHp(CfgMob.scaleStat((int) point.get(Point.HP), spawnTier));
+            point.setBaseAttack(CfgMob.scaleStat((int) point.get(Point.ATTACK), spawnTier));
+            point.setBaseDef(CfgMob.scaleStat((int) point.get(Point.DEFENSE), spawnTier));
+            point.calculatorPower();
+        }
         this.name = mob.getName();
         float mobRange = mob.getRangeAttack();
         this.rangeAttack = mobRange > 0 ? mobRange : BattleConfig.M_rangeAttack;
@@ -102,11 +120,17 @@ public class Enemy extends Unit implements Serializable {
             if (bm.getBonus().get(0).intValue() == Bonus.BONUS_GOLD) {
                 int num = bm.getMax() == 1 ? 1 : NumberUtil.getRandom(bm.getMin(), bm.getMax());
                 num += num * perBuff.get(1) / 100f;
+                if (tierMult != 1f)
+                    num = (int) CfgMob.scaleBonusAmount(num, spawnTier);
                 result.setGold(num);
             } else {
                 int rand = NumberUtil.getRandom(1000);
-                if (rand < bm.getRate() + perBuff.get(0) / 10)
-                    result.getBonus().addAll(Bonus.viewXNumber(new ArrayList<>(bm.getBonus()), NumberUtil.getRandom(bm.getMin(), bm.getMax())));
+                if (rand < bm.getRate() + perBuff.get(0) / 10) {
+                    int roll = NumberUtil.getRandom(bm.getMin(), bm.getMax());
+                    if (tierMult != 1f)
+                        roll = (int) CfgMob.scaleBonusAmount(roll, spawnTier);
+                    result.getBonus().addAll(Bonus.viewXNumber(new ArrayList<>(bm.getBonus()), roll));
+                }
             }
         }
         return result;

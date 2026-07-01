@@ -86,8 +86,7 @@ public class MaterialHandler extends AHandler {
             addErrResponse(err);
             return;
         }
-        List<Long> aBonus = Bonus.receiveListItem(mUser,
-                DetailActionType.UPGRADE_MATERIAL.getKey(gem.getId()), fee);
+        List<Long> aBonus = Bonus.receiveListItem(mUser, DetailActionType.UPGRADE_MATERIAL.getKey(gem.getId()), fee);
         if (aBonus.isEmpty()) {
             addErrSystem();
             return;
@@ -101,6 +100,7 @@ public class MaterialHandler extends AHandler {
             gem.setSocketRate(newSocketRate);
             addBonusToast(aBonus);
             addResponse(gem.toProto().build());
+            System.out.println("aBonus = " + aBonus);
         } else {
             Bonus.receiveListItem(mUser, DetailActionType.UPDATE_FAIL.getKey(), Bonus.reverseBonus(fee));
             addErrSystem();
@@ -108,8 +108,8 @@ public class MaterialHandler extends AHandler {
     }
 
     /**
-     * Request: [gemRowId1, gemRowId2, ...] (2–8 viên, mixed rank OK nếu chênh ≤ 1 bậc)
-     * Response MATERIAL_MERGE: {@link protocol.Pbmethod.PbMaterial} (viên kết quả; fail = trả 1 viên rank cao nhất)
+     * Request: [gemRowId1, gemRowId2, ...] (2–8 viên, mixed rank OK — rank đích từ tổng điểm)
+     * Response MATERIAL_MERGE: {@link protocol.Pbmethod.PbMaterial} (viên mới level 1; fail = rank đích − 1)
      */
     private void mergeMaterial() {
         List<Long> inputs = getInputALong();
@@ -168,25 +168,14 @@ public class MaterialHandler extends AHandler {
 
         int successRate = CfgMaterial.calcMergeSuccessPercent(plan);
         boolean success = NumberUtil.getRandom(100) < successRate;
-
-        UserMaterialEntity output;
-        if (success) {
-            int materialId = CfgMaterial.pickMergeOutputMaterialId(plan.materialCount);
-            if (CfgMaterial.get(materialId) == null) {
-                Bonus.receiveListItem(mUser, DetailActionType.UPDATE_FAIL.getKey(), Bonus.reverseBonus(fee));
-                addErrParam();
-                return;
-            }
-            output = new UserMaterialEntity(mUser.getUser().getId(), materialId, plan.outputRank);
-        } else {
-            UserMaterialEntity refund = CfgMaterial.pickMergeFailReturnGem(gems);
-            if (refund == null) {
-                Bonus.receiveListItem(mUser, DetailActionType.UPDATE_FAIL.getKey(), Bonus.reverseBonus(fee));
-                addErrSystem();
-                return;
-            }
-            output = UserMaterialEntity.cloneFrom(refund);
+        int resultRank = CfgMaterial.resolveMergeResultRank(plan, success);
+        int materialId = CfgMaterial.pickMergeOutputMaterialId(plan.materialCount);
+        if (CfgMaterial.get(materialId) == null) {
+            Bonus.receiveListItem(mUser, DetailActionType.UPDATE_FAIL.getKey(), Bonus.reverseBonus(fee));
+            addErrParam();
+            return;
         }
+        UserMaterialEntity output = new UserMaterialEntity(mUser.getUser().getId(), materialId, resultRank);
 
         if (!DBJPA.save(output)) {
             Bonus.receiveListItem(mUser, DetailActionType.UPDATE_FAIL.getKey(), Bonus.reverseBonus(fee));

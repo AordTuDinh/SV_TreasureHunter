@@ -293,6 +293,7 @@ public class MyUser implements Serializable {
             } else if (bonusType == Bonus.BONUS_EQUIPMENT
                     || bonusType == Bonus.BONUS_PET
                     || bonusType == Bonus.BONUS_MOUNT
+                    || bonusType == Bonus.BONUS_MOB
                     || bonusType == Bonus.BONUS_ARTIFACT) {
                 numBag++;
             } else if (bonusType == Bonus.BONUS_MATERIAL) {

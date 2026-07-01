@@ -49,6 +49,18 @@ public class ResMapEntity extends BaseEntity implements Serializable {
     Map<Integer, ChunkObject> mChunk = new HashMap<>();
     @Transient
     Map<Integer, MapData.ChunkDto> chunkMetaById = new HashMap<>();
+    @Transient
+    List<CampFireCache> campFireCacheList = new ArrayList<>();
+    @Transient
+    Map<Integer, List<CampFireCache>> campFiresByChunk = new HashMap<>();
+
+    public static class CampFireCache {
+        public int id;
+        public float x;
+        public float y;
+        public float radius;
+        public int chunkId;
+    }
 
 
     public void init() {
@@ -73,6 +85,7 @@ public class ResMapEntity extends BaseEntity implements Serializable {
         }
 
         applyChunkMeta();
+        buildCampFireCache();
 
         // parse map object
         for (MapData.CellDto c : mapData.cells) {
@@ -129,6 +142,44 @@ public class ResMapEntity extends BaseEntity implements Serializable {
     public int getTypeDrop(int chunkId) {
         MapData.ChunkDto dto = chunkMetaById.get(chunkId);
         return dto != null ? dto.typeDrop : 0;
+    }
+
+    void buildCampFireCache() {
+        campFireCacheList.clear();
+        campFiresByChunk.clear();
+        if (mapData == null || mapData.campFires == null) return;
+
+        for (MapData.CampFire cf : mapData.campFires) {
+            if (cf == null) continue;
+            CampFireCache cache = new CampFireCache();
+            cache.id = cf.id;
+            cache.x = cf.x;
+            cache.y = cf.y;
+            cache.radius = cf.radius;
+            int chunkX = MapService.worldToChunkX(this, cf.x);
+            int chunkY = MapService.worldToChunkY(this, cf.y);
+            cache.chunkId = MapService.chunkPosToId(this, chunkX, chunkY);
+            campFireCacheList.add(cache);
+            campFiresByChunk.computeIfAbsent(cache.chunkId, k -> new ArrayList<>()).add(cache);
+        }
+    }
+
+    public boolean isInCampFireSafeZone(Pos pos) {
+        if (pos == null || campFiresByChunk.isEmpty()) return false;
+
+        int chunkId = MapService.worldPosToChunkId(this, pos);
+        List<CampFireCache> list = campFiresByChunk.get(chunkId);
+        if (list == null) return false;
+
+        float px = pos.getX();
+        float py = pos.getY();
+        for (CampFireCache cf : list) {
+            float dx = px - cf.x;
+            float dy = py - cf.y;
+            float radiusSq = cf.radius * cf.radius;
+            if (dx * dx + dy * dy <= radiusSq) return true;
+        }
+        return false;
     }
 
     void applyChunkMeta() {

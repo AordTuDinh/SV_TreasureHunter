@@ -8,6 +8,7 @@ public class MapData implements Serializable {
     public List<CellDto> cells = new ArrayList<>();
     public List<ChunkDto> chunks = new ArrayList<>();
     public List<Integer> chunkNoAttack = new ArrayList<>();
+    public List<CampFire> campFires = new ArrayList<>();
     public  int sizeX;
     public  int sizeY;
     public  int chunkX;
@@ -17,6 +18,13 @@ public class MapData implements Serializable {
         public int x;
         public int y;
         public int type;
+    }
+
+    public static class CampFire{
+        public int id;
+        public float radius;
+        public float x;
+        public float y;
     }
 
     public static class ChunkDto {

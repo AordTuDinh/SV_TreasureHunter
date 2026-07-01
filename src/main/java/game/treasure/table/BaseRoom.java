@@ -362,6 +362,10 @@ public abstract class BaseRoom extends MonoRoom {
                 if (unit == null) return;
                 if (!unit.isAlive()) return;
                 if (player.getClanId() != 0 && player.getClanId() == unit.getClanId()) return;
+                if (unit.isPlayer()) {
+                    if (mapInfo.isInCampFireSafeZone(player.getPos())
+                            || mapInfo.isInCampFireSafeZone(unit.getPos())) return;
+                }
 
                 // giống nhánh OBJECT: chống spam theo tick bằng attackSpeed
                 if (!player.hasAttack() || !player.targetInSizeAttack(unit)) return;

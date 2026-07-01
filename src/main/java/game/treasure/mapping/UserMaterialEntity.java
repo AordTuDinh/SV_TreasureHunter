@@ -36,7 +36,6 @@ public class UserMaterialEntity implements Serializable {
         this.value = res != null ? CfgMaterial.rollValue(res, tier) : 0f;
     }
 
-    /** Giữ stat/rate khi merge fail — trả 1 viên rank cao nhất. */
     public static UserMaterialEntity cloneFrom(UserMaterialEntity src) {
         UserMaterialEntity c = new UserMaterialEntity();
         c.userId = src.userId;

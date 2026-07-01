@@ -230,17 +230,15 @@ public class CraftHandler extends AHandler {
             boolean consumed = false;
             if (targetType == CraftTargetType.ARTIFACT) {
                 socketOk = true;
-                if (removeMaterial(gem)) {
-                    consumed = true;
-                    if (CfgCraft.grantsCraftExp(craftLevel, gem.getTier())) {
-                        totalExpGain += CfgCraft.getCraftExpByRank(gem.getTier());
-                    }
+                consumed = true;
+                if (CfgCraft.grantsCraftExp(craftLevel, gem.getTier())) {
+                    totalExpGain += CfgCraft.getCraftExpByRank(gem.getTier());
                 }
             } else {
                 socketOk = NumberUtil.getRandom(100) < gem.getSocketSuccessPercent();
                 if (socketOk) {
                     boolean statApplied = applySocketStat(targetType, targetId, gem);
-                    if (statApplied && removeMaterial(gem)) {
+                    if (statApplied) {
                         consumed = true;
                         if (CfgCraft.grantsCraftExp(craftLevel, gem.getTier())) {
                             totalExpGain += CfgCraft.getCraftExpByRank(gem.getTier());
@@ -253,6 +251,7 @@ public class CraftHandler extends AHandler {
                     }
                 }
             }
+            removeMaterial(gem);
             resp.add(gem.getId());
             resp.add(socketOk ? 1L : 0L);
             resp.add(consumed ? 1L : 0L);

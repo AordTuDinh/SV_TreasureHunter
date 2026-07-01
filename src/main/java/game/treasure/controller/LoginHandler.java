@@ -485,6 +485,9 @@ public class LoginHandler extends AHandler {
             List<UserMountEntity> mounts = session.createNativeQuery("select * from user_mount where user_id = " + userId, UserMountEntity.class).getResultList();
             mUser.getResources().setMounts(mounts);
 
+            List<UserMobEntity> mobs = session.createNativeQuery("select * from user_mob where user_id = " + userId, UserMobEntity.class).getResultList();
+            mUser.getResources().setMobs(mobs);
+
             List<UserPackEntity> packs = session.createNativeQuery("select * from user_pack where user_id = " + userId, UserPackEntity.class).getResultList();
             mUser.getResources().setPacks(packs);
 

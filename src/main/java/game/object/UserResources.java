@@ -33,6 +33,8 @@ public class UserResources implements Serializable {
     @Setter
     List<UserMountEntity> mounts;
     @Setter
+    List<UserMobEntity> mobs;
+    @Setter
     List<UserPackEntity> packs;
     @Setter
     List<UserMaterialEntity> materials;
@@ -51,6 +53,8 @@ public class UserResources implements Serializable {
     Map<Long, UserArtifactEntity> mArtifact = new HashMap<>();
     @Getter
     Map<Long, UserMountEntity> mMount = new HashMap<>();
+    @Getter
+    Map<Long, UserMobEntity> mMob = new HashMap<>();
     @Getter
     Map<Integer, UserPackEntity> mPacks = new HashMap<>();
     @Getter
@@ -120,6 +124,13 @@ public class UserResources implements Serializable {
                 changed = true;
             }
         }
+        for (UserMobEntity mob : mMob.values()) {
+            Integer s = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
+            if (s != null) {
+                ItemSlotHelper.setPair(slots, s, Bonus.BONUS_MOB, mob.getId());
+                changed = true;
+            }
+        }
         for (UserArtifactEntity artifact : mArtifact.values()) {
             Integer s = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
             if (s != null) {
@@ -181,6 +192,9 @@ public class UserResources implements Serializable {
             }
             if (mounts != null) {
                 mounts.forEach(item -> mMount.put(item.getId(), item));
+            }
+            if (mobs != null) {
+                mobs.forEach(mob -> mMob.put(mob.getId(), mob));
             }
             if (materials != null) {
                 materials.forEach(mat -> mMaterial.put(mat.getId(), mat));
@@ -446,6 +460,22 @@ public class UserResources implements Serializable {
         if (rm != null && mounts != null) {
             mounts.remove(rm);
         }
+    }
+
+    public UserMobEntity getMob(long id) {
+        return mMob.get(id);
+    }
+
+    public void addMob(UserMobEntity uMob) {
+        if (mobs == null) mobs = new ArrayList<>();
+        mobs.add(uMob);
+        mMob.put(uMob.getId(), uMob);
+    }
+
+    public void removeMob(long id) {
+        UserMobEntity rm = mMob.remove(id);
+        if (rm != null && mobs != null)
+            mobs.remove(rm);
     }
 
     public UserSkinEntity getSkin(long id) {

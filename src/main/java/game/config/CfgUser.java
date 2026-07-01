@@ -19,7 +19,6 @@ public class CfgUser {
 
     public static class DataConfig {
         public int freeSlotBag;
-        public int maxSlotBag = 16;
         public int freeSlotMaterial;
         public int freeSlotEvent;
     }

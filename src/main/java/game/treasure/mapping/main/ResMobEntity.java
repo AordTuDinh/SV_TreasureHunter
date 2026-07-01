@@ -21,7 +21,7 @@ public class ResMobEntity extends BaseEntity implements Serializable {
     @Getter
     String name;
     @Getter
-    int hp, atk, def,moveSpeed;
+    int hp, atk, def, moveSpeed, price;
     @Getter
     float rangeAttack;
     String data;
