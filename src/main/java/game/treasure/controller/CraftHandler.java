@@ -95,6 +95,18 @@ public class CraftHandler extends AHandler {
             return;
         }
 
+        if (targetType == CraftTargetType.EQUIPMENT) {
+            UserEquipmentEntity equip = mUser.getResources().getItemEquipment(targetId);
+            if (equip == null) {
+                addErrResponse(getLang(Lang.err_item_equip_not_found));
+                return;
+            }
+            if (equip.getIsCraft() == 1) {
+                addErrResponse(getLang(Lang.err_params));
+                return;
+            }
+        }
+
         if (targetType == CraftTargetType.PET) {
             UserPetEntity pet = mUser.getResources().getPet(targetId);
             if (pet == null) {
