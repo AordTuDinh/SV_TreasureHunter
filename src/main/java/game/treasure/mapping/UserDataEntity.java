@@ -330,6 +330,11 @@ public class UserDataEntity implements Serializable {
             pb.addAMount(mounts.getValue().toProto());
         }
 
+        // mob
+        for (Map.Entry<Long, UserMobEntity> mobs : mUser.getResources().getMMob().entrySet()) {
+            pb.addAMob(mobs.getValue().toProto());
+        }
+
         // item equipment in hero
         List<Integer> lstEquipId = mUser.getUser().getListIdEquipmentEquip();
         for (int i = 0; i < lstEquipId.size(); i++) {

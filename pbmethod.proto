@@ -301,6 +301,7 @@ message  PbUserData{
   optional  PbListArtifact aArtifact = 30;
   optional  PbListItemPoint aItemPoint = 31;
   optional  int64 timeActiveArtifact = 32;
+  repeated PbMob aMob = 33;
 }
 
 message PbListItem{
@@ -337,6 +338,12 @@ message PbMount{
   optional int32  priceTreasure = 8;
   optional string data = 9;
   optional int32 isEquip = 10;
+}
+
+message PbMob{
+  optional int64 id = 1;
+  optional int32 mobId = 2;
+  optional int32 tier = 3;
 }
 
 

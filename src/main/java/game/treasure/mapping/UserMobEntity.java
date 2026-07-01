@@ -39,4 +39,12 @@ public class UserMobEntity implements Serializable {
     public boolean update(List<Object> lst) {
         return DBJPA.update("user_mob", lst, List.of("id", id));
     }
+
+    public protocol.Pbmethod.PbMob toProto() {
+        protocol.Pbmethod.PbMob.Builder pb = protocol.Pbmethod.PbMob.newBuilder();
+        pb.setId(id);
+        pb.setMobId(mobId);
+        pb.setTier(tier > 0 ? tier : 1);
+        return pb.build();
+    }
 }

@@ -25815,6 +25815,31 @@ public final class Pbmethod {
      * <code>optional int64 timeActiveArtifact = 32;</code>
      */
     long getTimeActiveArtifact();
+
+    // repeated .pbdson.PbMob aMob = 33;
+    /**
+     * <code>repeated .pbdson.PbMob aMob = 33;</code>
+     */
+    java.util.List<protocol.Pbmethod.PbMob> 
+        getAMobList();
+    /**
+     * <code>repeated .pbdson.PbMob aMob = 33;</code>
+     */
+    protocol.Pbmethod.PbMob getAMob(int index);
+    /**
+     * <code>repeated .pbdson.PbMob aMob = 33;</code>
+     */
+    int getAMobCount();
+    /**
+     * <code>repeated .pbdson.PbMob aMob = 33;</code>
+     */
+    java.util.List<? extends protocol.Pbmethod.PbMobOrBuilder> 
+        getAMobOrBuilderList();
+    /**
+     * <code>repeated .pbdson.PbMob aMob = 33;</code>
+     */
+    protocol.Pbmethod.PbMobOrBuilder getAMobOrBuilder(
+        int index);
   }
   /**
    * Protobuf type {@code pbdson.PbUserData}
@@ -26131,6 +26156,14 @@ public final class Pbmethod {
               timeActiveArtifact_ = input.readInt64();
               break;
             }
+            case 266: {
+              if (!((mutable_bitField0_ & 0x08000000) == 0x08000000)) {
+                aMob_ = new java.util.ArrayList<protocol.Pbmethod.PbMob>();
+                mutable_bitField0_ |= 0x08000000;
+              }
+              aMob_.add(input.readMessage(protocol.Pbmethod.PbMob.PARSER, extensionRegistry));
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -26162,6 +26195,9 @@ public final class Pbmethod {
         }
         if (((mutable_bitField0_ & 0x00200000) == 0x00200000)) {
           itemSlot_ = java.util.Collections.unmodifiableList(itemSlot_);
+        }
+        if (((mutable_bitField0_ & 0x08000000) == 0x08000000)) {
+          aMob_ = java.util.Collections.unmodifiableList(aMob_);
         }
         this.unknownFields = unknownFields.build();
         makeExtensionsImmutable();
@@ -26764,6 +26800,42 @@ public final class Pbmethod {
       return timeActiveArtifact_;
     }
 
+    // repeated .pbdson.PbMob aMob = 33;
+    public static final int AMOB_FIELD_NUMBER = 33;
+    private java.util.List<protocol.Pbmethod.PbMob> aMob_;
+    /**
+     * <code>repeated .pbdson.PbMob aMob = 33;</code>
+     */
+    public java.util.List<protocol.Pbmethod.PbMob> getAMobList() {
+      return aMob_;
+    }
+    /**
+     * <code>repeated .pbdson.PbMob aMob = 33;</code>
+     */
+    public java.util.List<? extends protocol.Pbmethod.PbMobOrBuilder> 
+        getAMobOrBuilderList() {
+      return aMob_;
+    }
+    /**
+     * <code>repeated .pbdson.PbMob aMob = 33;</code>
+     */
+    public int getAMobCount() {
+      return aMob_.size();
+    }
+    /**
+     * <code>repeated .pbdson.PbMob aMob = 33;</code>
+     */
+    public protocol.Pbmethod.PbMob getAMob(int index) {
+      return aMob_.get(index);
+    }
+    /**
+     * <code>repeated .pbdson.PbMob aMob = 33;</code>
+     */
+    public protocol.Pbmethod.PbMobOrBuilder getAMobOrBuilder(
+        int index) {
+      return aMob_.get(index);
+    }
+
     private void initFields() {
       slogBagUI_ = 0;
       slotMaterial_ = 0;
@@ -26792,6 +26864,7 @@ public final class Pbmethod {
       aArtifact_ = protocol.Pbmethod.PbListArtifact.getDefaultInstance();
       aItemPoint_ = protocol.Pbmethod.PbListItemPoint.getDefaultInstance();
       timeActiveArtifact_ = 0L;
+      aMob_ = java.util.Collections.emptyList();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -26885,6 +26958,9 @@ public final class Pbmethod {
       }
       if (((bitField0_ & 0x00040000) == 0x00040000)) {
         output.writeInt64(32, timeActiveArtifact_);
+      }
+      for (int i = 0; i < aMob_.size(); i++) {
+        output.writeMessage(33, aMob_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -27028,6 +27104,10 @@ public final class Pbmethod {
         size += com.google.protobuf.CodedOutputStream
           .computeInt64Size(32, timeActiveArtifact_);
       }
+      for (int i = 0; i < aMob_.size(); i++) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(33, aMob_.get(i));
+      }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
       return size;
@@ -27144,6 +27224,7 @@ public final class Pbmethod {
           getEquipmentsFieldBuilder();
           getAArtifactFieldBuilder();
           getAItemPointFieldBuilder();
+          getAMobFieldBuilder();
         }
       }
       private static Builder create() {
@@ -27238,6 +27319,12 @@ public final class Pbmethod {
         bitField0_ = (bitField0_ & ~0x02000000);
         timeActiveArtifact_ = 0L;
         bitField0_ = (bitField0_ & ~0x04000000);
+        if (aMobBuilder_ == null) {
+          aMob_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x08000000);
+        } else {
+          aMobBuilder_.clear();
+        }
         return this;
       }
 
@@ -27414,6 +27501,15 @@ public final class Pbmethod {
           to_bitField0_ |= 0x00040000;
         }
         result.timeActiveArtifact_ = timeActiveArtifact_;
+        if (aMobBuilder_ == null) {
+          if (((bitField0_ & 0x08000000) == 0x08000000)) {
+            aMob_ = java.util.Collections.unmodifiableList(aMob_);
+            bitField0_ = (bitField0_ & ~0x08000000);
+          }
+          result.aMob_ = aMob_;
+        } else {
+          result.aMob_ = aMobBuilder_.build();
+        }
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -27614,6 +27710,32 @@ public final class Pbmethod {
         }
         if (other.hasTimeActiveArtifact()) {
           setTimeActiveArtifact(other.getTimeActiveArtifact());
+        }
+        if (aMobBuilder_ == null) {
+          if (!other.aMob_.isEmpty()) {
+            if (aMob_.isEmpty()) {
+              aMob_ = other.aMob_;
+              bitField0_ = (bitField0_ & ~0x08000000);
+            } else {
+              ensureAMobIsMutable();
+              aMob_.addAll(other.aMob_);
+            }
+            onChanged();
+          }
+        } else {
+          if (!other.aMob_.isEmpty()) {
+            if (aMobBuilder_.isEmpty()) {
+              aMobBuilder_.dispose();
+              aMobBuilder_ = null;
+              aMob_ = other.aMob_;
+              bitField0_ = (bitField0_ & ~0x08000000);
+              aMobBuilder_ = 
+                com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders ?
+                   getAMobFieldBuilder() : null;
+            } else {
+              aMobBuilder_.addAllMessages(other.aMob_);
+            }
+          }
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -29765,6 +29887,246 @@ public final class Pbmethod {
         timeActiveArtifact_ = 0L;
         onChanged();
         return this;
+      }
+
+      // repeated .pbdson.PbMob aMob = 33;
+      private java.util.List<protocol.Pbmethod.PbMob> aMob_ =
+        java.util.Collections.emptyList();
+      private void ensureAMobIsMutable() {
+        if (!((bitField0_ & 0x08000000) == 0x08000000)) {
+          aMob_ = new java.util.ArrayList<protocol.Pbmethod.PbMob>(aMob_);
+          bitField0_ |= 0x08000000;
+         }
+      }
+
+      private com.google.protobuf.RepeatedFieldBuilder<
+          protocol.Pbmethod.PbMob, protocol.Pbmethod.PbMob.Builder, protocol.Pbmethod.PbMobOrBuilder> aMobBuilder_;
+
+      /**
+       * <code>repeated .pbdson.PbMob aMob = 33;</code>
+       */
+      public java.util.List<protocol.Pbmethod.PbMob> getAMobList() {
+        if (aMobBuilder_ == null) {
+          return java.util.Collections.unmodifiableList(aMob_);
+        } else {
+          return aMobBuilder_.getMessageList();
+        }
+      }
+      /**
+       * <code>repeated .pbdson.PbMob aMob = 33;</code>
+       */
+      public int getAMobCount() {
+        if (aMobBuilder_ == null) {
+          return aMob_.size();
+        } else {
+          return aMobBuilder_.getCount();
+        }
+      }
+      /**
+       * <code>repeated .pbdson.PbMob aMob = 33;</code>
+       */
+      public protocol.Pbmethod.PbMob getAMob(int index) {
+        if (aMobBuilder_ == null) {
+          return aMob_.get(index);
+        } else {
+          return aMobBuilder_.getMessage(index);
+        }
+      }
+      /**
+       * <code>repeated .pbdson.PbMob aMob = 33;</code>
+       */
+      public Builder setAMob(
+          int index, protocol.Pbmethod.PbMob value) {
+        if (aMobBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureAMobIsMutable();
+          aMob_.set(index, value);
+          onChanged();
+        } else {
+          aMobBuilder_.setMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pbdson.PbMob aMob = 33;</code>
+       */
+      public Builder setAMob(
+          int index, protocol.Pbmethod.PbMob.Builder builderForValue) {
+        if (aMobBuilder_ == null) {
+          ensureAMobIsMutable();
+          aMob_.set(index, builderForValue.build());
+          onChanged();
+        } else {
+          aMobBuilder_.setMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pbdson.PbMob aMob = 33;</code>
+       */
+      public Builder addAMob(protocol.Pbmethod.PbMob value) {
+        if (aMobBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureAMobIsMutable();
+          aMob_.add(value);
+          onChanged();
+        } else {
+          aMobBuilder_.addMessage(value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pbdson.PbMob aMob = 33;</code>
+       */
+      public Builder addAMob(
+          int index, protocol.Pbmethod.PbMob value) {
+        if (aMobBuilder_ == null) {
+          if (value == null) {
+            throw new NullPointerException();
+          }
+          ensureAMobIsMutable();
+          aMob_.add(index, value);
+          onChanged();
+        } else {
+          aMobBuilder_.addMessage(index, value);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pbdson.PbMob aMob = 33;</code>
+       */
+      public Builder addAMob(
+          protocol.Pbmethod.PbMob.Builder builderForValue) {
+        if (aMobBuilder_ == null) {
+          ensureAMobIsMutable();
+          aMob_.add(builderForValue.build());
+          onChanged();
+        } else {
+          aMobBuilder_.addMessage(builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pbdson.PbMob aMob = 33;</code>
+       */
+      public Builder addAMob(
+          int index, protocol.Pbmethod.PbMob.Builder builderForValue) {
+        if (aMobBuilder_ == null) {
+          ensureAMobIsMutable();
+          aMob_.add(index, builderForValue.build());
+          onChanged();
+        } else {
+          aMobBuilder_.addMessage(index, builderForValue.build());
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pbdson.PbMob aMob = 33;</code>
+       */
+      public Builder addAllAMob(
+          java.lang.Iterable<? extends protocol.Pbmethod.PbMob> values) {
+        if (aMobBuilder_ == null) {
+          ensureAMobIsMutable();
+          super.addAll(values, aMob_);
+          onChanged();
+        } else {
+          aMobBuilder_.addAllMessages(values);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pbdson.PbMob aMob = 33;</code>
+       */
+      public Builder clearAMob() {
+        if (aMobBuilder_ == null) {
+          aMob_ = java.util.Collections.emptyList();
+          bitField0_ = (bitField0_ & ~0x08000000);
+          onChanged();
+        } else {
+          aMobBuilder_.clear();
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pbdson.PbMob aMob = 33;</code>
+       */
+      public Builder removeAMob(int index) {
+        if (aMobBuilder_ == null) {
+          ensureAMobIsMutable();
+          aMob_.remove(index);
+          onChanged();
+        } else {
+          aMobBuilder_.remove(index);
+        }
+        return this;
+      }
+      /**
+       * <code>repeated .pbdson.PbMob aMob = 33;</code>
+       */
+      public protocol.Pbmethod.PbMob.Builder getAMobBuilder(
+          int index) {
+        return getAMobFieldBuilder().getBuilder(index);
+      }
+      /**
+       * <code>repeated .pbdson.PbMob aMob = 33;</code>
+       */
+      public protocol.Pbmethod.PbMobOrBuilder getAMobOrBuilder(
+          int index) {
+        if (aMobBuilder_ == null) {
+          return aMob_.get(index);  } else {
+          return aMobBuilder_.getMessageOrBuilder(index);
+        }
+      }
+      /**
+       * <code>repeated .pbdson.PbMob aMob = 33;</code>
+       */
+      public java.util.List<? extends protocol.Pbmethod.PbMobOrBuilder> 
+           getAMobOrBuilderList() {
+        if (aMobBuilder_ != null) {
+          return aMobBuilder_.getMessageOrBuilderList();
+        } else {
+          return java.util.Collections.unmodifiableList(aMob_);
+        }
+      }
+      /**
+       * <code>repeated .pbdson.PbMob aMob = 33;</code>
+       */
+      public protocol.Pbmethod.PbMob.Builder addAMobBuilder() {
+        return getAMobFieldBuilder().addBuilder(
+            protocol.Pbmethod.PbMob.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .pbdson.PbMob aMob = 33;</code>
+       */
+      public protocol.Pbmethod.PbMob.Builder addAMobBuilder(
+          int index) {
+        return getAMobFieldBuilder().addBuilder(
+            index, protocol.Pbmethod.PbMob.getDefaultInstance());
+      }
+      /**
+       * <code>repeated .pbdson.PbMob aMob = 33;</code>
+       */
+      public java.util.List<protocol.Pbmethod.PbMob.Builder> 
+           getAMobBuilderList() {
+        return getAMobFieldBuilder().getBuilderList();
+      }
+      private com.google.protobuf.RepeatedFieldBuilder<
+          protocol.Pbmethod.PbMob, protocol.Pbmethod.PbMob.Builder, protocol.Pbmethod.PbMobOrBuilder> 
+          getAMobFieldBuilder() {
+        if (aMobBuilder_ == null) {
+          aMobBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
+              protocol.Pbmethod.PbMob, protocol.Pbmethod.PbMob.Builder, protocol.Pbmethod.PbMobOrBuilder>(
+                  aMob_,
+                  ((bitField0_ & 0x08000000) == 0x08000000),
+                  getParentForChildren(),
+                  isClean());
+          aMob_ = null;
+        }
+        return aMobBuilder_;
       }
 
       // @@protoc_insertion_point(builder_scope:pbdson.PbUserData)
@@ -34544,6 +34906,564 @@ public final class Pbmethod {
     }
 
     // @@protoc_insertion_point(class_scope:pbdson.PbMount)
+  }
+
+  public interface PbMobOrBuilder
+      extends com.google.protobuf.MessageOrBuilder {
+
+    // optional int64 id = 1;
+    /**
+     * <code>optional int64 id = 1;</code>
+     */
+    boolean hasId();
+    /**
+     * <code>optional int64 id = 1;</code>
+     */
+    long getId();
+
+    // optional int32 mobId = 2;
+    /**
+     * <code>optional int32 mobId = 2;</code>
+     */
+    boolean hasMobId();
+    /**
+     * <code>optional int32 mobId = 2;</code>
+     */
+    int getMobId();
+
+    // optional int32 tier = 3;
+    /**
+     * <code>optional int32 tier = 3;</code>
+     */
+    boolean hasTier();
+    /**
+     * <code>optional int32 tier = 3;</code>
+     */
+    int getTier();
+  }
+  /**
+   * Protobuf type {@code pbdson.PbMob}
+   */
+  public static final class PbMob extends
+      com.google.protobuf.GeneratedMessage
+      implements PbMobOrBuilder {
+    // Use PbMob.newBuilder() to construct.
+    private PbMob(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+      super(builder);
+      this.unknownFields = builder.getUnknownFields();
+    }
+    private PbMob(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+    private static final PbMob defaultInstance;
+    public static PbMob getDefaultInstance() {
+      return defaultInstance;
+    }
+
+    public PbMob getDefaultInstanceForType() {
+      return defaultInstance;
+    }
+
+    private final com.google.protobuf.UnknownFieldSet unknownFields;
+    @java.lang.Override
+    public final com.google.protobuf.UnknownFieldSet
+        getUnknownFields() {
+      return this.unknownFields;
+    }
+    private PbMob(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      initFields();
+      int mutable_bitField0_ = 0;
+      com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+          com.google.protobuf.UnknownFieldSet.newBuilder();
+      try {
+        boolean done = false;
+        while (!done) {
+          int tag = input.readTag();
+          switch (tag) {
+            case 0:
+              done = true;
+              break;
+            default: {
+              if (!parseUnknownField(input, unknownFields,
+                                     extensionRegistry, tag)) {
+                done = true;
+              }
+              break;
+            }
+            case 8: {
+              bitField0_ |= 0x00000001;
+              id_ = input.readInt64();
+              break;
+            }
+            case 16: {
+              bitField0_ |= 0x00000002;
+              mobId_ = input.readInt32();
+              break;
+            }
+            case 24: {
+              bitField0_ |= 0x00000004;
+              tier_ = input.readInt32();
+              break;
+            }
+          }
+        }
+      } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+        throw e.setUnfinishedMessage(this);
+      } catch (java.io.IOException e) {
+        throw new com.google.protobuf.InvalidProtocolBufferException(
+            e.getMessage()).setUnfinishedMessage(this);
+      } finally {
+        this.unknownFields = unknownFields.build();
+        makeExtensionsImmutable();
+      }
+    }
+    public static final com.google.protobuf.Descriptors.Descriptor
+        getDescriptor() {
+      return protocol.Pbmethod.internal_static_pbdson_PbMob_descriptor;
+    }
+
+    protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+        internalGetFieldAccessorTable() {
+      return protocol.Pbmethod.internal_static_pbdson_PbMob_fieldAccessorTable
+          .ensureFieldAccessorsInitialized(
+              protocol.Pbmethod.PbMob.class, protocol.Pbmethod.PbMob.Builder.class);
+    }
+
+    public static com.google.protobuf.Parser<PbMob> PARSER =
+        new com.google.protobuf.AbstractParser<PbMob>() {
+      public PbMob parsePartialFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws com.google.protobuf.InvalidProtocolBufferException {
+        return new PbMob(input, extensionRegistry);
+      }
+    };
+
+    @java.lang.Override
+    public com.google.protobuf.Parser<PbMob> getParserForType() {
+      return PARSER;
+    }
+
+    private int bitField0_;
+    // optional int64 id = 1;
+    public static final int ID_FIELD_NUMBER = 1;
+    private long id_;
+    /**
+     * <code>optional int64 id = 1;</code>
+     */
+    public boolean hasId() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>optional int64 id = 1;</code>
+     */
+    public long getId() {
+      return id_;
+    }
+
+    // optional int32 mobId = 2;
+    public static final int MOBID_FIELD_NUMBER = 2;
+    private int mobId_;
+    /**
+     * <code>optional int32 mobId = 2;</code>
+     */
+    public boolean hasMobId() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional int32 mobId = 2;</code>
+     */
+    public int getMobId() {
+      return mobId_;
+    }
+
+    // optional int32 tier = 3;
+    public static final int TIER_FIELD_NUMBER = 3;
+    private int tier_;
+    /**
+     * <code>optional int32 tier = 3;</code>
+     */
+    public boolean hasTier() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional int32 tier = 3;</code>
+     */
+    public int getTier() {
+      return tier_;
+    }
+
+    private void initFields() {
+      id_ = 0L;
+      mobId_ = 0;
+      tier_ = 0;
+    }
+    private byte memoizedIsInitialized = -1;
+    public final boolean isInitialized() {
+      byte isInitialized = memoizedIsInitialized;
+      if (isInitialized != -1) return isInitialized == 1;
+
+      memoizedIsInitialized = 1;
+      return true;
+    }
+
+    public void writeTo(com.google.protobuf.CodedOutputStream output)
+                        throws java.io.IOException {
+      getSerializedSize();
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeInt64(1, id_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeInt32(2, mobId_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeInt32(3, tier_);
+      }
+      getUnknownFields().writeTo(output);
+    }
+
+    private int memoizedSerializedSize = -1;
+    public int getSerializedSize() {
+      int size = memoizedSerializedSize;
+      if (size != -1) return size;
+
+      size = 0;
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt64Size(1, id_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(2, mobId_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(3, tier_);
+      }
+      size += getUnknownFields().getSerializedSize();
+      memoizedSerializedSize = size;
+      return size;
+    }
+
+    private static final long serialVersionUID = 0L;
+    @java.lang.Override
+    protected java.lang.Object writeReplace()
+        throws java.io.ObjectStreamException {
+      return super.writeReplace();
+    }
+
+    public static protocol.Pbmethod.PbMob parseFrom(
+        com.google.protobuf.ByteString data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static protocol.Pbmethod.PbMob parseFrom(
+        com.google.protobuf.ByteString data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static protocol.Pbmethod.PbMob parseFrom(byte[] data)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data);
+    }
+    public static protocol.Pbmethod.PbMob parseFrom(
+        byte[] data,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws com.google.protobuf.InvalidProtocolBufferException {
+      return PARSER.parseFrom(data, extensionRegistry);
+    }
+    public static protocol.Pbmethod.PbMob parseFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static protocol.Pbmethod.PbMob parseFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+    public static protocol.Pbmethod.PbMob parseDelimitedFrom(java.io.InputStream input)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input);
+    }
+    public static protocol.Pbmethod.PbMob parseDelimitedFrom(
+        java.io.InputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseDelimitedFrom(input, extensionRegistry);
+    }
+    public static protocol.Pbmethod.PbMob parseFrom(
+        com.google.protobuf.CodedInputStream input)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input);
+    }
+    public static protocol.Pbmethod.PbMob parseFrom(
+        com.google.protobuf.CodedInputStream input,
+        com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+        throws java.io.IOException {
+      return PARSER.parseFrom(input, extensionRegistry);
+    }
+
+    public static Builder newBuilder() { return Builder.create(); }
+    public Builder newBuilderForType() { return newBuilder(); }
+    public static Builder newBuilder(protocol.Pbmethod.PbMob prototype) {
+      return newBuilder().mergeFrom(prototype);
+    }
+    public Builder toBuilder() { return newBuilder(this); }
+
+    @java.lang.Override
+    protected Builder newBuilderForType(
+        com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+      Builder builder = new Builder(parent);
+      return builder;
+    }
+    /**
+     * Protobuf type {@code pbdson.PbMob}
+     */
+    public static final class Builder extends
+        com.google.protobuf.GeneratedMessage.Builder<Builder>
+       implements protocol.Pbmethod.PbMobOrBuilder {
+      public static final com.google.protobuf.Descriptors.Descriptor
+          getDescriptor() {
+        return protocol.Pbmethod.internal_static_pbdson_PbMob_descriptor;
+      }
+
+      protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+          internalGetFieldAccessorTable() {
+        return protocol.Pbmethod.internal_static_pbdson_PbMob_fieldAccessorTable
+            .ensureFieldAccessorsInitialized(
+                protocol.Pbmethod.PbMob.class, protocol.Pbmethod.PbMob.Builder.class);
+      }
+
+      // Construct using protocol.Pbmethod.PbMob.newBuilder()
+      private Builder() {
+        maybeForceBuilderInitialization();
+      }
+
+      private Builder(
+          com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+        super(parent);
+        maybeForceBuilderInitialization();
+      }
+      private void maybeForceBuilderInitialization() {
+        if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+        }
+      }
+      private static Builder create() {
+        return new Builder();
+      }
+
+      public Builder clear() {
+        super.clear();
+        id_ = 0L;
+        bitField0_ = (bitField0_ & ~0x00000001);
+        mobId_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000002);
+        tier_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000004);
+        return this;
+      }
+
+      public Builder clone() {
+        return create().mergeFrom(buildPartial());
+      }
+
+      public com.google.protobuf.Descriptors.Descriptor
+          getDescriptorForType() {
+        return protocol.Pbmethod.internal_static_pbdson_PbMob_descriptor;
+      }
+
+      public protocol.Pbmethod.PbMob getDefaultInstanceForType() {
+        return protocol.Pbmethod.PbMob.getDefaultInstance();
+      }
+
+      public protocol.Pbmethod.PbMob build() {
+        protocol.Pbmethod.PbMob result = buildPartial();
+        if (!result.isInitialized()) {
+          throw newUninitializedMessageException(result);
+        }
+        return result;
+      }
+
+      public protocol.Pbmethod.PbMob buildPartial() {
+        protocol.Pbmethod.PbMob result = new protocol.Pbmethod.PbMob(this);
+        int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
+        if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.id_ = id_;
+        if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.mobId_ = mobId_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.tier_ = tier_;
+        result.bitField0_ = to_bitField0_;
+        onBuilt();
+        return result;
+      }
+
+      public Builder mergeFrom(com.google.protobuf.Message other) {
+        if (other instanceof protocol.Pbmethod.PbMob) {
+          return mergeFrom((protocol.Pbmethod.PbMob)other);
+        } else {
+          super.mergeFrom(other);
+          return this;
+        }
+      }
+
+      public Builder mergeFrom(protocol.Pbmethod.PbMob other) {
+        if (other == protocol.Pbmethod.PbMob.getDefaultInstance()) return this;
+        if (other.hasId()) {
+          setId(other.getId());
+        }
+        if (other.hasMobId()) {
+          setMobId(other.getMobId());
+        }
+        if (other.hasTier()) {
+          setTier(other.getTier());
+        }
+        this.mergeUnknownFields(other.getUnknownFields());
+        return this;
+      }
+
+      public final boolean isInitialized() {
+        return true;
+      }
+
+      public Builder mergeFrom(
+          com.google.protobuf.CodedInputStream input,
+          com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+          throws java.io.IOException {
+        protocol.Pbmethod.PbMob parsedMessage = null;
+        try {
+          parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+        } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+          parsedMessage = (protocol.Pbmethod.PbMob) e.getUnfinishedMessage();
+          throw e;
+        } finally {
+          if (parsedMessage != null) {
+            mergeFrom(parsedMessage);
+          }
+        }
+        return this;
+      }
+      private int bitField0_;
+
+      // optional int64 id = 1;
+      private long id_ ;
+      /**
+       * <code>optional int64 id = 1;</code>
+       */
+      public boolean hasId() {
+        return ((bitField0_ & 0x00000001) == 0x00000001);
+      }
+      /**
+       * <code>optional int64 id = 1;</code>
+       */
+      public long getId() {
+        return id_;
+      }
+      /**
+       * <code>optional int64 id = 1;</code>
+       */
+      public Builder setId(long value) {
+        bitField0_ |= 0x00000001;
+        id_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int64 id = 1;</code>
+       */
+      public Builder clearId() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        id_ = 0L;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 mobId = 2;
+      private int mobId_ ;
+      /**
+       * <code>optional int32 mobId = 2;</code>
+       */
+      public boolean hasMobId() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>optional int32 mobId = 2;</code>
+       */
+      public int getMobId() {
+        return mobId_;
+      }
+      /**
+       * <code>optional int32 mobId = 2;</code>
+       */
+      public Builder setMobId(int value) {
+        bitField0_ |= 0x00000002;
+        mobId_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 mobId = 2;</code>
+       */
+      public Builder clearMobId() {
+        bitField0_ = (bitField0_ & ~0x00000002);
+        mobId_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 tier = 3;
+      private int tier_ ;
+      /**
+       * <code>optional int32 tier = 3;</code>
+       */
+      public boolean hasTier() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional int32 tier = 3;</code>
+       */
+      public int getTier() {
+        return tier_;
+      }
+      /**
+       * <code>optional int32 tier = 3;</code>
+       */
+      public Builder setTier(int value) {
+        bitField0_ |= 0x00000004;
+        tier_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 tier = 3;</code>
+       */
+      public Builder clearTier() {
+        bitField0_ = (bitField0_ & ~0x00000004);
+        tier_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // @@protoc_insertion_point(builder_scope:pbdson.PbMob)
+    }
+
+    static {
+      defaultInstance = new PbMob(true);
+      defaultInstance.initFields();
+    }
+
+    // @@protoc_insertion_point(class_scope:pbdson.PbMob)
   }
 
   public interface PbListPetOrBuilder
@@ -86604,6 +87524,11 @@ public final class Pbmethod {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_pbdson_PbMount_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_pbdson_PbMob_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_pbdson_PbMob_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_pbdson_PbListPet_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -86930,7 +87855,7 @@ public final class Pbmethod {
       "point\030\023 \003(\003\022\026\n\016timeLastAction\030\024 \001(\003\022\r\n\005h" +
       "onor\030\025 \001(\005\022\r\n\005power\030\026 \001(\003\022\021\n\titemEquip\030\027" +
       " \003(\005\022\017\n\007channel\030\030 \003(\005\022\014\n\004ruby\030\033 \001(\003\022\013\n\003p" +
-      "et\030\034 \003(\005\"\315\005\n\nPbUserData\022\021\n\tslogBagUI\030\001 \001" +
+      "et\030\034 \003(\005\"\352\005\n\nPbUserData\022\021\n\tslogBagUI\030\001 \001" +
       "(\005\022\024\n\014slotMaterial\030\002 \001(\005\022\025\n\rslotItemEven",
       "t\030\003 \001(\005\022\022\n\nlvTraining\030\004 \001(\005\022\025\n\rmaxlvTrai" +
       "ning\030\005 \001(\005\022\025\n\rnumPointLevel\030\006 \001(\005\022!\n\005ite" +
@@ -86948,198 +87873,200 @@ public final class Pbmethod {
       "tected\030\035 \001(\003\022)\n\taArtifact\030\036 \001(\0132\026.pbdson" +
       ".PbListArtifact\022+\n\naItemPoint\030\037 \001(\0132\027.pb" +
       "dson.PbListItemPoint\022\032\n\022timeActiveArtifa" +
-      "ct\030  \001(\003\"*\n\nPbListItem\022\034\n\004item\030\001 \003(\0132\016.p" +
-      "bdson.PbItem\"9\n\017PbListEquipment\022&\n\tequip" +
-      "ment\030\001 \003(\0132\023.pbdson.PbEquipment\"7\n\016PbLis" +
-      "tMaterial\022%\n\tmaterials\030\001 \003(\0132\022.pbdson.Pb",
-      "Material\".\n\013PbListMount\022\037\n\006mounts\030\001 \003(\0132" +
-      "\017.pbdson.PbMount\"O\n\006PbSkin\022\n\n\002id\030\001 \001(\003\022\014" +
-      "\n\004type\030\002 \001(\005\022\016\n\006skinId\030\003 \001(\005\022\014\n\004tier\030\004 \001" +
-      "(\005\022\r\n\005point\030\005 \003(\003\"\247\001\n\007PbMount\022\n\n\002id\030\001 \001(" +
-      "\003\022\r\n\005point\030\002 \003(\003\022\017\n\007mountId\030\003 \001(\005\022\r\n\005lev" +
-      "el\030\004 \001(\005\022\014\n\004tier\030\005 \001(\005\022\017\n\007isCraft\030\006 \001(\005\022" +
-      "\014\n\004icon\030\007 \001(\005\022\025\n\rpriceTreasure\030\010 \001(\005\022\014\n\004" +
-      "data\030\t \001(\t\022\017\n\007isEquip\030\n \001(\005\"(\n\tPbListPet" +
-      "\022\033\n\004pets\030\001 \003(\0132\r.pbdson.PbPet\"\243\001\n\005PbPet\022" +
-      "\n\n\002id\030\001 \001(\003\022\r\n\005point\030\002 \003(\003\022\r\n\005petId\030\003 \001(",
-      "\005\022\r\n\005level\030\004 \001(\005\022\014\n\004tier\030\005 \001(\005\022\017\n\007isCraf" +
-      "t\030\006 \001(\005\022\014\n\004icon\030\007 \001(\005\022\025\n\rpriceTreasure\030\010" +
-      " \001(\005\022\014\n\004data\030\t \001(\t\022\017\n\007isEquip\030\n \001(\005\":\n\017P" +
-      "bListItemPoint\022\'\n\nitemPoints\030\001 \003(\0132\023.pbd" +
-      "son.PbItemPoint\"+\n\nPbListChat\022\035\n\005aChat\030\001" +
-      " \003(\0132\016.pbdson.PbChat\"\211\001\n\006PbChat\022\017\n\007reqTi" +
-      "me\030\001 \001(\003\022\017\n\007message\030\002 \001(\t\022\014\n\004type\030\003 \001(\005\022" +
-      "\034\n\004user\030\004 \001(\0132\016.pbdson.PbUser\022\"\n\004info\030\005 " +
-      "\001(\0132\024.pbdson.CommonVector\022\r\n\005point\030\006 \003(\003" +
-      "\"7\n\020PbListChatFriend\022#\n\005chats\030\001 \003(\0132\024.pb",
-      "dson.PbChatFriend\"i\n\014PbChatFriend\022\016\n\006use" +
-      "rId\030\001 \001(\005\022\017\n\007message\030\002 \001(\t\022\r\n\005skins\030\003 \003(" +
-      "\005\022\014\n\004name\030\004 \001(\t\022\014\n\004time\030\005 \001(\003\022\r\n\005level\030\006" +
-      " \001(\005\"v\n\006PbShop\022\"\n\006tabSet\030\001 \003(\0132\022.pbdson." +
-      "PbItemShop\022#\n\007tabDeal\030\002 \003(\0132\022.pbdson.PbI" +
-      "temShop\022#\n\007tabMisc\030\003 \003(\0132\022.pbdson.PbItem" +
-      "Shop\"\245\001\n\nPbItemShop\022\n\n\002id\030\001 \001(\005\022\013\n\003tab\030\002" +
-      " \001(\005\022\014\n\004name\030\003 \001(\t\022\014\n\004desc\030\004 \001(\t\022\014\n\004item" +
-      "\030\005 \003(\003\022\r\n\005price\030\006 \003(\003\022\r\n\005image\030\007 \001(\t\022\016\n\006" +
-      "status\030\010 \001(\005\022\022\n\ndescStatus\030\t \001(\t\022\022\n\ntime",
-      "Remain\030\n \001(\003\"l\n\nPbMaterial\022\n\n\002id\030\001 \001(\003\022\022" +
-      "\n\nmaterialId\030\002 \001(\005\022\014\n\004tier\030\003 \001(\005\022\r\n\005leve" +
-      "l\030\004 \001(\005\022\r\n\005value\030\005 \001(\002\022\022\n\nsocketRate\030\006 \001" +
-      "(\002\"\271\001\n\nPbArtifact\022\n\n\002id\030\001 \001(\003\022\022\n\nartifac" +
-      "tId\030\002 \001(\005\022\r\n\005level\030\003 \001(\005\022\014\n\004tier\030\004 \001(\005\022\014" +
-      "\n\004time\030\005 \001(\002\022\020\n\010cooldown\030\006 \001(\002\022\017\n\007pointI" +
-      "D\030\007 \001(\002\022\r\n\005value\030\010 \001(\002\022\r\n\005range\030\t \001(\002\022\016\n" +
-      "\006person\030\n \001(\002\022\017\n\007isCraft\030\013 \001(\005\"7\n\016PbList" +
-      "Artifact\022%\n\tartifacts\030\001 \003(\0132\022.pbdson.PbA" +
-      "rtifact\"h\n\006PbItem\022\n\n\002id\030\001 \001(\003\022\017\n\007itemKey",
-      "\030\002 \001(\005\022\r\n\005level\030\003 \001(\005\022\023\n\013lockDestroy\030\004 \001" +
-      "(\010\022\014\n\004data\030\006 \001(\t\022\017\n\007isCraft\030\007 \001(\005\"\240\001\n\013Pb" +
-      "Equipment\022\n\n\002id\030\001 \001(\003\022\017\n\007itemKey\030\002 \001(\005\022\r" +
-      "\n\005level\030\003 \001(\005\022\023\n\013lockDestroy\030\004 \001(\010\022\014\n\004ti" +
-      "er\030\005 \001(\005\022\014\n\004data\030\006 \001(\t\022\017\n\007isCraft\030\007 \001(\005\022" +
-      "\014\n\004icon\030\010 \001(\005\022\025\n\rpriceTreasure\030\t \001(\005\"<\n\013" +
-      "PbItemPoint\022\017\n\007itemKey\030\001 \001(\005\022\016\n\006number\030\002" +
-      " \001(\003\022\014\n\004data\030\003 \001(\t\"/\n\nListAction\022!\n\007aAct" +
-      "ion\030\001 \003(\0132\020.pbdson.PbAction\"*\n\010PbAction\022" +
-      "\020\n\010actionId\030\001 \001(\005\022\014\n\004data\030\002 \001(\014\".\n\014Commo",
-      "nVector\022\r\n\005aLong\030\001 \003(\003\022\017\n\007aString\030\002 \003(\t\"" +
-      "9\n\020ListCommonVector\022%\n\007aVector\030\001 \003(\0132\024.p" +
-      "bdson.CommonVector\"f\n\017PbCharacterInfo\022\n\n" +
-      "\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\014\n\004team\030\003 \001(\005\022\r\n" +
-      "\005skins\030\004 \003(\005\022\r\n\005aItem\030\005 \003(\005\022\r\n\005point\030\006 \003" +
-      "(\003\"+\n\nPbListMail\022\035\n\005aMail\030\001 \003(\0132\016.pbdson" +
-      ".PbMail\"\210\001\n\006PbMail\022\n\n\002id\030\001 \001(\005\022\r\n\005title\030" +
-      "\002 \001(\t\022\017\n\007message\030\003 \001(\t\022\r\n\005bonus\030\004 \003(\005\022\017\n" +
-      "\007receive\030\005 \001(\005\022\014\n\004time\030\006 \001(\003\022\020\n\010senderId" +
-      "\030\007 \001(\005\022\022\n\nsenderName\030\010 \001(\t\"\257\001\n\tPbEndGame",
-      "\022\017\n\007popupId\030\001 \001(\005\022\021\n\tbattleKey\030\002 \001(\t\022\r\n\005" +
-      "isWin\030\003 \001(\010\022\017\n\007message\030\004 \001(\t\022\r\n\005bonus\030\005 " +
-      "\003(\003\022\014\n\004time\030\006 \001(\005\022\017\n\007perDame\030\007 \001(\005\022\014\n\004st" +
-      "ar\030\010 \001(\005\022\"\n\004info\030\t \001(\0132\024.pbdson.CommonVe" +
-      "ctor\"{\n\nPbRoomInfo\022\020\n\010roomType\030\001 \001(\005\022\017\n\007" +
-      "service\030\002 \001(\005\022!\n\003cmm\030\003 \001(\0132\024.pbdson.Comm" +
-      "onVector\022\'\n\005lstCm\030\004 \001(\0132\030.pbdson.ListCom" +
-      "monVector\"Z\n\017PbListMiniLotte\022\020\n\010allBonus" +
-      "\030\001 \003(\003\022\020\n\010luckyNum\030\002 \003(\005\022#\n\006aLotte\030\003 \003(\013" +
-      "2\023.pbdson.PbMiniLotte\"C\n\013PbMiniLotte\022\021\n\t",
-      "numChoose\030\001 \003(\005\022\022\n\nprizeIndex\030\002 \001(\005\022\r\n\005b" +
-      "onus\030\003 \003(\005\"B\n\024PbListLotteryHistory\022*\n\010aL" +
-      "ottery\030\001 \003(\0132\030.pbdson.PbLotteryHistory\"\247" +
-      "\001\n\020PbLotteryHistory\022\017\n\007eventId\030\001 \001(\005\022\014\n\004" +
-      "type\030\002 \001(\005\022\020\n\010luckyNum\030\003 \001(\005\022\016\n\006number\030\004" +
-      " \003(\005\022\014\n\004time\030\005 \001(\003\022\r\n\005bonus\030\006 \003(\003\022\016\n\006sta" +
-      "tus\030\007 \001(\005\022\021\n\tlistBonus\030\010 \003(\003\022\022\n\nlistResu" +
-      "lt\030\t \003(\005\"*\n\014PbUnitUpdate\022\014\n\004type\030\001 \001(\005\022\014" +
-      "\n\004data\030\002 \001(\014\"\213\001\n\tPbUnitPos\022\n\n\002id\030\001 \001(\003\022\r" +
-      "\n\005speed\030\002 \001(\005\022\024\n\014lastInputSeq\030\003 \001(\003\022\032\n\003p",
-      "os\030\004 \001(\0132\r.pbdson.PbPos\022 \n\tdirection\030\005 \001" +
-      "(\0132\r.pbdson.PbPos\022\017\n\007chunkId\030\006 \001(\005\"1\n\014Pb" +
-      "ListBullet\022!\n\007bullets\030\001 \003(\0132\020.pbdson.PbB" +
-      "ullet\"@\n\010PbBullet\022\n\n\002id\030\001 \001(\005\022\032\n\003pos\030\002 \001" +
-      "(\0132\r.pbdson.PbPos\022\014\n\004info\030\003 \003(\005\"(\n\tPbLis" +
-      "tTab\022\033\n\004tabs\030\001 \003(\0132\r.pbdson.PbTab\"Z\n\005PbT" +
-      "ab\022\r\n\005tabId\030\001 \001(\005\022\025\n\reventTemplate\030\002 \001(\005" +
-      "\022\r\n\005image\030\003 \001(\t\022\014\n\004name\030\004 \001(\t\022\016\n\006notify\030" +
-      "\005 \001(\010\"\255\002\n\017PbEventBuyMonth\022\021\n\teventName\030\001" +
-      " \001(\t\022\023\n\013imageBanner\030\002 \001(\t\022\022\n\ntextBanner\030",
-      "\003 \001(\t\022\r\n\005level\030\004 \001(\005\022\020\n\010curPoint\030\005 \001(\005\022\020" +
-      "\n\010maxPoint\030\006 \001(\005\022\025\n\rbuttonAddGoto\030\007 \001(\005\022" +
-      "\017\n\007keyHelp\030\010 \001(\t\022\016\n\006timeCD\030\t \001(\003\022\021\n\tstat" +
-      "usBuy\030\n \001(\005\022\r\n\005price\030\013 \003(\003\022\022\n\nnormalName" +
-      "\030\014 \001(\t\022\017\n\007vipName\030\r \001(\t\022,\n\005cells\030\016 \003(\0132\035" +
-      ".pbdson.PbCellPanelEventMonth\"\315\001\n\014PbEven" +
-      "tTimer\022\n\n\002id\030\001 \001(\005\022\016\n\006status\030\002 \001(\005\022\022\n\nti" +
-      "meRemain\030\003 \001(\003\022\r\n\005bonus\030\004 \003(\003\022\r\n\005price\030\005" +
-      " \003(\003\022\020\n\010oldPrice\030\006 \003(\003\022\014\n\004name\030\007 \001(\t\022\014\n\004" +
-      "desc\030\010 \001(\t\022\014\n\004sale\030\t \001(\t\022\017\n\007bgrPath\030\n \001(",
-      "\t\022\"\n\004info\030\013 \001(\0132\024.pbdson.CommonVector\"w\n" +
-      "\025PbCellPanelEventMonth\022\r\n\005level\030\001 \001(\005\022\013\n" +
-      "\003exp\030\002 \001(\005\022\016\n\006status\030\003 \001(\005\022\021\n\tstatusVip\030" +
-      "\004 \001(\005\022\r\n\005bonus\030\005 \003(\003\022\020\n\010bonusVip\030\006 \003(\003\"\221" +
-      "\001\n\023PbPanelEventTabCell\022\021\n\teventName\030\001 \001(" +
-      "\t\022\023\n\013imageBanner\030\002 \001(\t\022\022\n\ntextBanner\030\003 \001" +
-      "(\t\022\016\n\006timeCD\030\t \001(\003\022.\n\005cells\030\016 \003(\0132\037.pbds" +
-      "on.PbCellPanelEventTabCell\"i\n\027PbCellPane" +
-      "lEventTabCell\022\n\n\002id\030\001 \001(\005\022\020\n\010cellName\030\002 " +
-      "\001(\t\022\r\n\005bonus\030\003 \003(\003\022\013\n\003per\030\004 \001(\t\022\024\n\014butto",
-      "nStatus\030\005 \001(\005\"\237\001\n\tPbWelfare\022\017\n\007eventId\030\001" +
-      " \001(\005\022\016\n\006notify\030\002 \001(\010\022%\n\006banner\030\003 \001(\0132\025.p" +
-      "bdson.PbBannerEvent\022&\n\010tabEvent\030\004 \003(\0132\024." +
-      "pbdson.PbTabWelfare\022\017\n\007keyHelp\030\005 \001(\t\022\021\n\t" +
-      "countdown\030\006 \001(\003\"b\n\014PbTabWelfare\022\r\n\005tabId" +
-      "\030\001 \001(\005\022\017\n\007tabName\030\002 \001(\t\022\"\n\005cells\030\003 \003(\0132\023" +
-      ".pbdson.PbCellEvent\022\016\n\006notify\030\004 \001(\010\"\263\001\n\r" +
-      "PbBannerEvent\022\022\n\npathBanner\030\001 \001(\t\022\014\n\004tex" +
-      "t\030\002 \001(\t\022\022\n\nbonusImage\030\003 \001(\t\022\021\n\tboxStatus" +
-      "\030\004 \001(\005\022\020\n\010bonusBox\030\005 \003(\005\022\014\n\004desc\030\006 \001(\t\022\021",
-      "\n\tpathTitle\030\007 \001(\t\022&\n\004info\030\010 \001(\0132\030.pbdson" +
-      ".ListCommonVector\"\353\001\n\013PbCellEvent\022\n\n\002id\030" +
-      "\001 \001(\005\022\r\n\005image\030\002 \001(\t\022\r\n\005bonus\030\003 \003(\005\022\020\n\010n" +
-      "ameCell\030\004 \001(\t\022\020\n\010textCell\030\005 \001(\t\022\020\n\010textD" +
-      "esc\030\006 \001(\t\022\016\n\006numBuy\030\007 \001(\005\022\r\n\005limit\030\010 \001(\005" +
-      "\022\r\n\005price\030\t \003(\003\022\024\n\014buttonStatus\030\n \001(\005\022\020\n" +
-      "\010bonusDay\030\013 \003(\005\022\022\n\ntimeRemain\030\014 \001(\003\022\022\n\nt" +
-      "imeExpire\030\r \001(\003\"\225\001\n\013PbEvent7Day\022&\n\004days\030" +
-      "\001 \003(\0132\030.pbdson.PbPanelEvent7Day\022\022\n\ntimeR" +
-      "emain\030\002 \001(\003\022\020\n\010curValue\030\003 \001(\005\022\020\n\010maxValu",
-      "e\030\004 \001(\005\022&\n\tposReward\030\005 \003(\0132\023.pbdson.PbPo" +
-      "sReward\"U\n\013PbPosReward\022\n\n\002id\030\001 \001(\005\022\014\n\004na" +
-      "me\030\002 \001(\t\022\r\n\005point\030\003 \001(\003\022\r\n\005bonus\030\004 \003(\003\022\016" +
-      "\n\006status\030\005 \001(\005\"R\n\016PbTabEvent7Day\022\n\n\002id\030\001" +
-      " \001(\005\022\014\n\004name\030\002 \001(\t\022&\n\005cells\030\003 \003(\0132\027.pbds" +
-      "on.PbCellEvent7Day\"\272\001\n\020PbPanelEvent7Day\022" +
-      "$\n\004tab1\030\001 \001(\0132\026.pbdson.PbTabEvent7Day\022$\n" +
-      "\004tab2\030\002 \001(\0132\026.pbdson.PbTabEvent7Day\022$\n\004t" +
-      "ab3\030\003 \001(\0132\026.pbdson.PbTabEvent7Day\022$\n\004tab" +
-      "4\030\004 \001(\0132\026.pbdson.PbTabEvent7Day\022\016\n\006isLoc",
-      "k\030\005 \001(\010\"\306\001\n\017PbCellEvent7Day\022\n\n\002id\030\001 \001(\005\022" +
-      "\014\n\004name\030\002 \001(\t\022\014\n\004desc\030\003 \001(\t\022\020\n\010curValue\030" +
-      "\004 \001(\005\022\020\n\010maxValue\030\005 \001(\005\022\r\n\005bonus\030\006 \003(\003\022\024" +
-      "\n\014buttonStatus\030\007 \001(\005\022\022\n\nbuttonGoto\030\010 \001(\005" +
-      "\022\020\n\010oldPrice\030\t \003(\003\022\020\n\010newPrice\030\n \003(\003\022\n\n\002" +
-      "xu\030\013 \001(\005\"\'\n\tPbListIAP\022\032\n\003iap\030\001 \003(\0132\r.pbd" +
-      "son.PpIAP\"\264\001\n\005PpIAP\022\n\n\002id\030\001 \001(\005\022\030\n\020produ" +
-      "ctIdAndroid\030\002 \001(\t\022\024\n\014productIdIos\030\003 \001(\t\022" +
-      "\014\n\004name\030\004 \001(\t\022\r\n\005price\030\005 \001(\t\022\r\n\005bonus\030\006 " +
-      "\003(\003\022\020\n\010addBonus\030\007 \003(\003\022\020\n\010addTitle\030\010 \001(\t\022",
-      "\016\n\006vipExp\030\t \001(\005\022\017\n\007priceQr\030\n \001(\t*!\n\tCell" +
-      "State\022\n\n\006ACTIVE\020\001\022\010\n\004HIDE\020\002*\231\002\n\014SubState" +
-      "Type\022\r\n\tADD_BONUS\020\001\022\007\n\003DIE\020\002\022\n\n\006REVIVE\020\003" +
-      "\022\r\n\tPLAY_ANIM\020\004\022\r\n\tBE_DAMAGE\020\005\022\017\n\013EFFECT" +
-      "_BODY\020\006\022\t\n\005RE_HP\020\007\022\025\n\021UPDATE_CHAT_FRAME\020" +
-      "\010\022\020\n\014UPDATE_TRIAL\020\t\022\024\n\020UPDATE_ITEM_SLOT\020" +
-      "\n\022\024\n\020UPDATE_TEXT_DAME\020\013\022\026\n\022UPDATE_MULTI_" +
-      "POINT\020\014\022\021\n\rUSE_ITEM_SLOT\020\r\022\024\n\020UPDATE_DIR" +
-      "ECTION\020\016\022\025\n\021UPDATE_ITEM_EQUIP\020\017*Y\n\tState" +
-      "Type\022\023\n\017TYPE_ADD_REMOVE\020\001\022\014\n\010TYPE_POS\020\002\022",
-      "\023\n\017TYPE_UNIT_STATE\020\003\022\024\n\020TYPE_CHUNK_STATE" +
-      "\020\004*y\n\016CellObjectType\022\010\n\004ROCK\020\001\022\010\n\004SIGN\020\002" +
-      "\022\n\n\006CACTUS\020\003\022\n\n\006FLOWER\020\004\022\t\n\005SKULL\020\005\022\t\n\005C" +
-      "HEST\020\006\022\t\n\005BONES\020\007\022\016\n\nGRAVESTONE\020\010\022\n\n\006HEL" +
-      "MET\020\t*f\n\007ItemKey\022\016\n\nBINH_MAU_1\020\001\022\016\n\nBINH" +
-      "_MAU_2\020\002\022\016\n\nBINH_MAU_3\020\003\022\016\n\nBINH_MAU_4\020\004" +
-      "\022\010\n\004GOLD\020\005\022\007\n\003GEM\020\006\022\010\n\004RUBY\020\007*\224\001\n\014ItemPo" +
-      "intKey\022\n\n\006CO_VAT\020\001\022\017\n\013TICKER_MINI\020\002\022\021\n\rT" +
-      "ICKER_NORMAL\020\003\022\022\n\016TICKER_SPECIAL\020\004\022\010\n\004CH" +
-      "IP\020\005\022\021\n\rBONG_LINH_THU\020\006\022\021\n\rBONG_SIEU_THU",
-      "\020\007\022\020\n\014LOA_THE_GIOI\020\010*&\n\010ItemType\022\014\n\010POSI" +
-      "TION\020\001\022\014\n\010CURRENCY\020\002*0\n\rItemPointType\022\t\n" +
-      "\005EVENT\020\001\022\007\n\003USE\020\002\022\013\n\007SPEAKER\020\003*;\n\014Target" +
-      "Attack\022\n\n\006OBJECT\020\000\022\t\n\005ENEMY\020\001\022\010\n\004BOSS\020\002\022" +
-      "\n\n\006PLAYER\020\003*1\n\010SkinType\022\010\n\004HAIR\020\000\022\010\n\004FAC" +
-      "E\020\001\022\007\n\003EYE\020\002\022\010\n\004BODY\020\003*q\n\rEquipSlotType\022" +
-      "\010\n\004NULL\020\000\022\n\n\006WEAPON\020\001\022\007\n\003HAT\020\002\022\t\n\005ARMOR\020" +
-      "\003\022\t\n\005CLOAK\020\004\022\t\n\005SHOES\020\005\022\014\n\010TREASURE\020\006\022\007\n" +
-      "\003PET\020\007\022\t\n\005MOUNT\020\010*\346\002\n\010AutoSell\022\022\n\016AUTO_S" +
-      "ELL_HP_1\020\000\022\022\n\016AUTO_SELL_HP_2\020\001\022\022\n\016AUTO_S",
-      "ELL_HP_3\020\002\022\022\n\016AUTO_SELL_HP_4\020\003\022\025\n\021AUTO_S" +
-      "ELL_EQUIP_1\020\004\022\025\n\021AUTO_SELL_EQUIP_2\020\005\022\025\n\021" +
-      "AUTO_SELL_EQUIP_3\020\006\022\025\n\021AUTO_SELL_EQUIP_4" +
-      "\020\007\022\025\n\021AUTO_SELL_MOUNT_1\020\010\022\025\n\021AUTO_SELL_M" +
-      "OUNT_2\020\t\022\025\n\021AUTO_SELL_MOUNT_3\020\n\022\025\n\021AUTO_" +
-      "SELL_MOUNT_4\020\013\022\023\n\017AUTO_SELL_PET_1\020\014\022\023\n\017A" +
-      "UTO_SELL_PET_2\020\r\022\023\n\017AUTO_SELL_PET_3\020\016\022\023\n" +
-      "\017AUTO_SELL_PET_4\020\017B\024\n\010protocolB\010Pbmethod"
+      "ct\030  \001(\003\022\033\n\004aMob\030! \003(\0132\r.pbdson.PbMob\"*\n" +
+      "\nPbListItem\022\034\n\004item\030\001 \003(\0132\016.pbdson.PbIte" +
+      "m\"9\n\017PbListEquipment\022&\n\tequipment\030\001 \003(\0132" +
+      "\023.pbdson.PbEquipment\"7\n\016PbListMaterial\022%",
+      "\n\tmaterials\030\001 \003(\0132\022.pbdson.PbMaterial\".\n" +
+      "\013PbListMount\022\037\n\006mounts\030\001 \003(\0132\017.pbdson.Pb" +
+      "Mount\"O\n\006PbSkin\022\n\n\002id\030\001 \001(\003\022\014\n\004type\030\002 \001(" +
+      "\005\022\016\n\006skinId\030\003 \001(\005\022\014\n\004tier\030\004 \001(\005\022\r\n\005point" +
+      "\030\005 \003(\003\"\247\001\n\007PbMount\022\n\n\002id\030\001 \001(\003\022\r\n\005point\030" +
+      "\002 \003(\003\022\017\n\007mountId\030\003 \001(\005\022\r\n\005level\030\004 \001(\005\022\014\n" +
+      "\004tier\030\005 \001(\005\022\017\n\007isCraft\030\006 \001(\005\022\014\n\004icon\030\007 \001" +
+      "(\005\022\025\n\rpriceTreasure\030\010 \001(\005\022\014\n\004data\030\t \001(\t\022" +
+      "\017\n\007isEquip\030\n \001(\005\"0\n\005PbMob\022\n\n\002id\030\001 \001(\003\022\r\n" +
+      "\005mobId\030\002 \001(\005\022\014\n\004tier\030\003 \001(\005\"(\n\tPbListPet\022",
+      "\033\n\004pets\030\001 \003(\0132\r.pbdson.PbPet\"\243\001\n\005PbPet\022\n" +
+      "\n\002id\030\001 \001(\003\022\r\n\005point\030\002 \003(\003\022\r\n\005petId\030\003 \001(\005" +
+      "\022\r\n\005level\030\004 \001(\005\022\014\n\004tier\030\005 \001(\005\022\017\n\007isCraft" +
+      "\030\006 \001(\005\022\014\n\004icon\030\007 \001(\005\022\025\n\rpriceTreasure\030\010 " +
+      "\001(\005\022\014\n\004data\030\t \001(\t\022\017\n\007isEquip\030\n \001(\005\":\n\017Pb" +
+      "ListItemPoint\022\'\n\nitemPoints\030\001 \003(\0132\023.pbds" +
+      "on.PbItemPoint\"+\n\nPbListChat\022\035\n\005aChat\030\001 " +
+      "\003(\0132\016.pbdson.PbChat\"\211\001\n\006PbChat\022\017\n\007reqTim" +
+      "e\030\001 \001(\003\022\017\n\007message\030\002 \001(\t\022\014\n\004type\030\003 \001(\005\022\034" +
+      "\n\004user\030\004 \001(\0132\016.pbdson.PbUser\022\"\n\004info\030\005 \001",
+      "(\0132\024.pbdson.CommonVector\022\r\n\005point\030\006 \003(\003\"" +
+      "7\n\020PbListChatFriend\022#\n\005chats\030\001 \003(\0132\024.pbd" +
+      "son.PbChatFriend\"i\n\014PbChatFriend\022\016\n\006user" +
+      "Id\030\001 \001(\005\022\017\n\007message\030\002 \001(\t\022\r\n\005skins\030\003 \003(\005" +
+      "\022\014\n\004name\030\004 \001(\t\022\014\n\004time\030\005 \001(\003\022\r\n\005level\030\006 " +
+      "\001(\005\"v\n\006PbShop\022\"\n\006tabSet\030\001 \003(\0132\022.pbdson.P" +
+      "bItemShop\022#\n\007tabDeal\030\002 \003(\0132\022.pbdson.PbIt" +
+      "emShop\022#\n\007tabMisc\030\003 \003(\0132\022.pbdson.PbItemS" +
+      "hop\"\245\001\n\nPbItemShop\022\n\n\002id\030\001 \001(\005\022\013\n\003tab\030\002 " +
+      "\001(\005\022\014\n\004name\030\003 \001(\t\022\014\n\004desc\030\004 \001(\t\022\014\n\004item\030",
+      "\005 \003(\003\022\r\n\005price\030\006 \003(\003\022\r\n\005image\030\007 \001(\t\022\016\n\006s" +
+      "tatus\030\010 \001(\005\022\022\n\ndescStatus\030\t \001(\t\022\022\n\ntimeR" +
+      "emain\030\n \001(\003\"l\n\nPbMaterial\022\n\n\002id\030\001 \001(\003\022\022\n" +
+      "\nmaterialId\030\002 \001(\005\022\014\n\004tier\030\003 \001(\005\022\r\n\005level" +
+      "\030\004 \001(\005\022\r\n\005value\030\005 \001(\002\022\022\n\nsocketRate\030\006 \001(" +
+      "\002\"\271\001\n\nPbArtifact\022\n\n\002id\030\001 \001(\003\022\022\n\nartifact" +
+      "Id\030\002 \001(\005\022\r\n\005level\030\003 \001(\005\022\014\n\004tier\030\004 \001(\005\022\014\n" +
+      "\004time\030\005 \001(\002\022\020\n\010cooldown\030\006 \001(\002\022\017\n\007pointID" +
+      "\030\007 \001(\002\022\r\n\005value\030\010 \001(\002\022\r\n\005range\030\t \001(\002\022\016\n\006" +
+      "person\030\n \001(\002\022\017\n\007isCraft\030\013 \001(\005\"7\n\016PbListA",
+      "rtifact\022%\n\tartifacts\030\001 \003(\0132\022.pbdson.PbAr" +
+      "tifact\"h\n\006PbItem\022\n\n\002id\030\001 \001(\003\022\017\n\007itemKey\030" +
+      "\002 \001(\005\022\r\n\005level\030\003 \001(\005\022\023\n\013lockDestroy\030\004 \001(" +
+      "\010\022\014\n\004data\030\006 \001(\t\022\017\n\007isCraft\030\007 \001(\005\"\240\001\n\013PbE" +
+      "quipment\022\n\n\002id\030\001 \001(\003\022\017\n\007itemKey\030\002 \001(\005\022\r\n" +
+      "\005level\030\003 \001(\005\022\023\n\013lockDestroy\030\004 \001(\010\022\014\n\004tie" +
+      "r\030\005 \001(\005\022\014\n\004data\030\006 \001(\t\022\017\n\007isCraft\030\007 \001(\005\022\014" +
+      "\n\004icon\030\010 \001(\005\022\025\n\rpriceTreasure\030\t \001(\005\"<\n\013P" +
+      "bItemPoint\022\017\n\007itemKey\030\001 \001(\005\022\016\n\006number\030\002 " +
+      "\001(\003\022\014\n\004data\030\003 \001(\t\"/\n\nListAction\022!\n\007aActi",
+      "on\030\001 \003(\0132\020.pbdson.PbAction\"*\n\010PbAction\022\020" +
+      "\n\010actionId\030\001 \001(\005\022\014\n\004data\030\002 \001(\014\".\n\014Common" +
+      "Vector\022\r\n\005aLong\030\001 \003(\003\022\017\n\007aString\030\002 \003(\t\"9" +
+      "\n\020ListCommonVector\022%\n\007aVector\030\001 \003(\0132\024.pb" +
+      "dson.CommonVector\"f\n\017PbCharacterInfo\022\n\n\002" +
+      "id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\014\n\004team\030\003 \001(\005\022\r\n\005" +
+      "skins\030\004 \003(\005\022\r\n\005aItem\030\005 \003(\005\022\r\n\005point\030\006 \003(" +
+      "\003\"+\n\nPbListMail\022\035\n\005aMail\030\001 \003(\0132\016.pbdson." +
+      "PbMail\"\210\001\n\006PbMail\022\n\n\002id\030\001 \001(\005\022\r\n\005title\030\002" +
+      " \001(\t\022\017\n\007message\030\003 \001(\t\022\r\n\005bonus\030\004 \003(\005\022\017\n\007",
+      "receive\030\005 \001(\005\022\014\n\004time\030\006 \001(\003\022\020\n\010senderId\030" +
+      "\007 \001(\005\022\022\n\nsenderName\030\010 \001(\t\"\257\001\n\tPbEndGame\022" +
+      "\017\n\007popupId\030\001 \001(\005\022\021\n\tbattleKey\030\002 \001(\t\022\r\n\005i" +
+      "sWin\030\003 \001(\010\022\017\n\007message\030\004 \001(\t\022\r\n\005bonus\030\005 \003" +
+      "(\003\022\014\n\004time\030\006 \001(\005\022\017\n\007perDame\030\007 \001(\005\022\014\n\004sta" +
+      "r\030\010 \001(\005\022\"\n\004info\030\t \001(\0132\024.pbdson.CommonVec" +
+      "tor\"{\n\nPbRoomInfo\022\020\n\010roomType\030\001 \001(\005\022\017\n\007s" +
+      "ervice\030\002 \001(\005\022!\n\003cmm\030\003 \001(\0132\024.pbdson.Commo" +
+      "nVector\022\'\n\005lstCm\030\004 \001(\0132\030.pbdson.ListComm" +
+      "onVector\"Z\n\017PbListMiniLotte\022\020\n\010allBonus\030",
+      "\001 \003(\003\022\020\n\010luckyNum\030\002 \003(\005\022#\n\006aLotte\030\003 \003(\0132" +
+      "\023.pbdson.PbMiniLotte\"C\n\013PbMiniLotte\022\021\n\tn" +
+      "umChoose\030\001 \003(\005\022\022\n\nprizeIndex\030\002 \001(\005\022\r\n\005bo" +
+      "nus\030\003 \003(\005\"B\n\024PbListLotteryHistory\022*\n\010aLo" +
+      "ttery\030\001 \003(\0132\030.pbdson.PbLotteryHistory\"\247\001" +
+      "\n\020PbLotteryHistory\022\017\n\007eventId\030\001 \001(\005\022\014\n\004t" +
+      "ype\030\002 \001(\005\022\020\n\010luckyNum\030\003 \001(\005\022\016\n\006number\030\004 " +
+      "\003(\005\022\014\n\004time\030\005 \001(\003\022\r\n\005bonus\030\006 \003(\003\022\016\n\006stat" +
+      "us\030\007 \001(\005\022\021\n\tlistBonus\030\010 \003(\003\022\022\n\nlistResul" +
+      "t\030\t \003(\005\"*\n\014PbUnitUpdate\022\014\n\004type\030\001 \001(\005\022\014\n",
+      "\004data\030\002 \001(\014\"\213\001\n\tPbUnitPos\022\n\n\002id\030\001 \001(\003\022\r\n" +
+      "\005speed\030\002 \001(\005\022\024\n\014lastInputSeq\030\003 \001(\003\022\032\n\003po" +
+      "s\030\004 \001(\0132\r.pbdson.PbPos\022 \n\tdirection\030\005 \001(" +
+      "\0132\r.pbdson.PbPos\022\017\n\007chunkId\030\006 \001(\005\"1\n\014PbL" +
+      "istBullet\022!\n\007bullets\030\001 \003(\0132\020.pbdson.PbBu" +
+      "llet\"@\n\010PbBullet\022\n\n\002id\030\001 \001(\005\022\032\n\003pos\030\002 \001(" +
+      "\0132\r.pbdson.PbPos\022\014\n\004info\030\003 \003(\005\"(\n\tPbList" +
+      "Tab\022\033\n\004tabs\030\001 \003(\0132\r.pbdson.PbTab\"Z\n\005PbTa" +
+      "b\022\r\n\005tabId\030\001 \001(\005\022\025\n\reventTemplate\030\002 \001(\005\022" +
+      "\r\n\005image\030\003 \001(\t\022\014\n\004name\030\004 \001(\t\022\016\n\006notify\030\005",
+      " \001(\010\"\255\002\n\017PbEventBuyMonth\022\021\n\teventName\030\001 " +
+      "\001(\t\022\023\n\013imageBanner\030\002 \001(\t\022\022\n\ntextBanner\030\003" +
+      " \001(\t\022\r\n\005level\030\004 \001(\005\022\020\n\010curPoint\030\005 \001(\005\022\020\n" +
+      "\010maxPoint\030\006 \001(\005\022\025\n\rbuttonAddGoto\030\007 \001(\005\022\017" +
+      "\n\007keyHelp\030\010 \001(\t\022\016\n\006timeCD\030\t \001(\003\022\021\n\tstatu" +
+      "sBuy\030\n \001(\005\022\r\n\005price\030\013 \003(\003\022\022\n\nnormalName\030" +
+      "\014 \001(\t\022\017\n\007vipName\030\r \001(\t\022,\n\005cells\030\016 \003(\0132\035." +
+      "pbdson.PbCellPanelEventMonth\"\315\001\n\014PbEvent" +
+      "Timer\022\n\n\002id\030\001 \001(\005\022\016\n\006status\030\002 \001(\005\022\022\n\ntim" +
+      "eRemain\030\003 \001(\003\022\r\n\005bonus\030\004 \003(\003\022\r\n\005price\030\005 ",
+      "\003(\003\022\020\n\010oldPrice\030\006 \003(\003\022\014\n\004name\030\007 \001(\t\022\014\n\004d" +
+      "esc\030\010 \001(\t\022\014\n\004sale\030\t \001(\t\022\017\n\007bgrPath\030\n \001(\t" +
+      "\022\"\n\004info\030\013 \001(\0132\024.pbdson.CommonVector\"w\n\025" +
+      "PbCellPanelEventMonth\022\r\n\005level\030\001 \001(\005\022\013\n\003" +
+      "exp\030\002 \001(\005\022\016\n\006status\030\003 \001(\005\022\021\n\tstatusVip\030\004" +
+      " \001(\005\022\r\n\005bonus\030\005 \003(\003\022\020\n\010bonusVip\030\006 \003(\003\"\221\001" +
+      "\n\023PbPanelEventTabCell\022\021\n\teventName\030\001 \001(\t" +
+      "\022\023\n\013imageBanner\030\002 \001(\t\022\022\n\ntextBanner\030\003 \001(" +
+      "\t\022\016\n\006timeCD\030\t \001(\003\022.\n\005cells\030\016 \003(\0132\037.pbdso" +
+      "n.PbCellPanelEventTabCell\"i\n\027PbCellPanel",
+      "EventTabCell\022\n\n\002id\030\001 \001(\005\022\020\n\010cellName\030\002 \001" +
+      "(\t\022\r\n\005bonus\030\003 \003(\003\022\013\n\003per\030\004 \001(\t\022\024\n\014button" +
+      "Status\030\005 \001(\005\"\237\001\n\tPbWelfare\022\017\n\007eventId\030\001 " +
+      "\001(\005\022\016\n\006notify\030\002 \001(\010\022%\n\006banner\030\003 \001(\0132\025.pb" +
+      "dson.PbBannerEvent\022&\n\010tabEvent\030\004 \003(\0132\024.p" +
+      "bdson.PbTabWelfare\022\017\n\007keyHelp\030\005 \001(\t\022\021\n\tc" +
+      "ountdown\030\006 \001(\003\"b\n\014PbTabWelfare\022\r\n\005tabId\030" +
+      "\001 \001(\005\022\017\n\007tabName\030\002 \001(\t\022\"\n\005cells\030\003 \003(\0132\023." +
+      "pbdson.PbCellEvent\022\016\n\006notify\030\004 \001(\010\"\263\001\n\rP" +
+      "bBannerEvent\022\022\n\npathBanner\030\001 \001(\t\022\014\n\004text",
+      "\030\002 \001(\t\022\022\n\nbonusImage\030\003 \001(\t\022\021\n\tboxStatus\030" +
+      "\004 \001(\005\022\020\n\010bonusBox\030\005 \003(\005\022\014\n\004desc\030\006 \001(\t\022\021\n" +
+      "\tpathTitle\030\007 \001(\t\022&\n\004info\030\010 \001(\0132\030.pbdson." +
+      "ListCommonVector\"\353\001\n\013PbCellEvent\022\n\n\002id\030\001" +
+      " \001(\005\022\r\n\005image\030\002 \001(\t\022\r\n\005bonus\030\003 \003(\005\022\020\n\010na" +
+      "meCell\030\004 \001(\t\022\020\n\010textCell\030\005 \001(\t\022\020\n\010textDe" +
+      "sc\030\006 \001(\t\022\016\n\006numBuy\030\007 \001(\005\022\r\n\005limit\030\010 \001(\005\022" +
+      "\r\n\005price\030\t \003(\003\022\024\n\014buttonStatus\030\n \001(\005\022\020\n\010" +
+      "bonusDay\030\013 \003(\005\022\022\n\ntimeRemain\030\014 \001(\003\022\022\n\nti" +
+      "meExpire\030\r \001(\003\"\225\001\n\013PbEvent7Day\022&\n\004days\030\001",
+      " \003(\0132\030.pbdson.PbPanelEvent7Day\022\022\n\ntimeRe" +
+      "main\030\002 \001(\003\022\020\n\010curValue\030\003 \001(\005\022\020\n\010maxValue" +
+      "\030\004 \001(\005\022&\n\tposReward\030\005 \003(\0132\023.pbdson.PbPos" +
+      "Reward\"U\n\013PbPosReward\022\n\n\002id\030\001 \001(\005\022\014\n\004nam" +
+      "e\030\002 \001(\t\022\r\n\005point\030\003 \001(\003\022\r\n\005bonus\030\004 \003(\003\022\016\n" +
+      "\006status\030\005 \001(\005\"R\n\016PbTabEvent7Day\022\n\n\002id\030\001 " +
+      "\001(\005\022\014\n\004name\030\002 \001(\t\022&\n\005cells\030\003 \003(\0132\027.pbdso" +
+      "n.PbCellEvent7Day\"\272\001\n\020PbPanelEvent7Day\022$" +
+      "\n\004tab1\030\001 \001(\0132\026.pbdson.PbTabEvent7Day\022$\n\004" +
+      "tab2\030\002 \001(\0132\026.pbdson.PbTabEvent7Day\022$\n\004ta",
+      "b3\030\003 \001(\0132\026.pbdson.PbTabEvent7Day\022$\n\004tab4" +
+      "\030\004 \001(\0132\026.pbdson.PbTabEvent7Day\022\016\n\006isLock" +
+      "\030\005 \001(\010\"\306\001\n\017PbCellEvent7Day\022\n\n\002id\030\001 \001(\005\022\014" +
+      "\n\004name\030\002 \001(\t\022\014\n\004desc\030\003 \001(\t\022\020\n\010curValue\030\004" +
+      " \001(\005\022\020\n\010maxValue\030\005 \001(\005\022\r\n\005bonus\030\006 \003(\003\022\024\n" +
+      "\014buttonStatus\030\007 \001(\005\022\022\n\nbuttonGoto\030\010 \001(\005\022" +
+      "\020\n\010oldPrice\030\t \003(\003\022\020\n\010newPrice\030\n \003(\003\022\n\n\002x" +
+      "u\030\013 \001(\005\"\'\n\tPbListIAP\022\032\n\003iap\030\001 \003(\0132\r.pbds" +
+      "on.PpIAP\"\264\001\n\005PpIAP\022\n\n\002id\030\001 \001(\005\022\030\n\020produc" +
+      "tIdAndroid\030\002 \001(\t\022\024\n\014productIdIos\030\003 \001(\t\022\014",
+      "\n\004name\030\004 \001(\t\022\r\n\005price\030\005 \001(\t\022\r\n\005bonus\030\006 \003" +
+      "(\003\022\020\n\010addBonus\030\007 \003(\003\022\020\n\010addTitle\030\010 \001(\t\022\016" +
+      "\n\006vipExp\030\t \001(\005\022\017\n\007priceQr\030\n \001(\t*!\n\tCellS" +
+      "tate\022\n\n\006ACTIVE\020\001\022\010\n\004HIDE\020\002*\231\002\n\014SubStateT" +
+      "ype\022\r\n\tADD_BONUS\020\001\022\007\n\003DIE\020\002\022\n\n\006REVIVE\020\003\022" +
+      "\r\n\tPLAY_ANIM\020\004\022\r\n\tBE_DAMAGE\020\005\022\017\n\013EFFECT_" +
+      "BODY\020\006\022\t\n\005RE_HP\020\007\022\025\n\021UPDATE_CHAT_FRAME\020\010" +
+      "\022\020\n\014UPDATE_TRIAL\020\t\022\024\n\020UPDATE_ITEM_SLOT\020\n" +
+      "\022\024\n\020UPDATE_TEXT_DAME\020\013\022\026\n\022UPDATE_MULTI_P" +
+      "OINT\020\014\022\021\n\rUSE_ITEM_SLOT\020\r\022\024\n\020UPDATE_DIRE",
+      "CTION\020\016\022\025\n\021UPDATE_ITEM_EQUIP\020\017*Y\n\tStateT" +
+      "ype\022\023\n\017TYPE_ADD_REMOVE\020\001\022\014\n\010TYPE_POS\020\002\022\023" +
+      "\n\017TYPE_UNIT_STATE\020\003\022\024\n\020TYPE_CHUNK_STATE\020" +
+      "\004*y\n\016CellObjectType\022\010\n\004ROCK\020\001\022\010\n\004SIGN\020\002\022" +
+      "\n\n\006CACTUS\020\003\022\n\n\006FLOWER\020\004\022\t\n\005SKULL\020\005\022\t\n\005CH" +
+      "EST\020\006\022\t\n\005BONES\020\007\022\016\n\nGRAVESTONE\020\010\022\n\n\006HELM" +
+      "ET\020\t*f\n\007ItemKey\022\016\n\nBINH_MAU_1\020\001\022\016\n\nBINH_" +
+      "MAU_2\020\002\022\016\n\nBINH_MAU_3\020\003\022\016\n\nBINH_MAU_4\020\004\022" +
+      "\010\n\004GOLD\020\005\022\007\n\003GEM\020\006\022\010\n\004RUBY\020\007*\224\001\n\014ItemPoi" +
+      "ntKey\022\n\n\006CO_VAT\020\001\022\017\n\013TICKER_MINI\020\002\022\021\n\rTI",
+      "CKER_NORMAL\020\003\022\022\n\016TICKER_SPECIAL\020\004\022\010\n\004CHI" +
+      "P\020\005\022\021\n\rBONG_LINH_THU\020\006\022\021\n\rBONG_SIEU_THU\020" +
+      "\007\022\020\n\014LOA_THE_GIOI\020\010*&\n\010ItemType\022\014\n\010POSIT" +
+      "ION\020\001\022\014\n\010CURRENCY\020\002*0\n\rItemPointType\022\t\n\005" +
+      "EVENT\020\001\022\007\n\003USE\020\002\022\013\n\007SPEAKER\020\003*;\n\014TargetA" +
+      "ttack\022\n\n\006OBJECT\020\000\022\t\n\005ENEMY\020\001\022\010\n\004BOSS\020\002\022\n" +
+      "\n\006PLAYER\020\003*1\n\010SkinType\022\010\n\004HAIR\020\000\022\010\n\004FACE" +
+      "\020\001\022\007\n\003EYE\020\002\022\010\n\004BODY\020\003*q\n\rEquipSlotType\022\010" +
+      "\n\004NULL\020\000\022\n\n\006WEAPON\020\001\022\007\n\003HAT\020\002\022\t\n\005ARMOR\020\003" +
+      "\022\t\n\005CLOAK\020\004\022\t\n\005SHOES\020\005\022\014\n\010TREASURE\020\006\022\007\n\003",
+      "PET\020\007\022\t\n\005MOUNT\020\010*\346\002\n\010AutoSell\022\022\n\016AUTO_SE" +
+      "LL_HP_1\020\000\022\022\n\016AUTO_SELL_HP_2\020\001\022\022\n\016AUTO_SE" +
+      "LL_HP_3\020\002\022\022\n\016AUTO_SELL_HP_4\020\003\022\025\n\021AUTO_SE" +
+      "LL_EQUIP_1\020\004\022\025\n\021AUTO_SELL_EQUIP_2\020\005\022\025\n\021A" +
+      "UTO_SELL_EQUIP_3\020\006\022\025\n\021AUTO_SELL_EQUIP_4\020" +
+      "\007\022\025\n\021AUTO_SELL_MOUNT_1\020\010\022\025\n\021AUTO_SELL_MO" +
+      "UNT_2\020\t\022\025\n\021AUTO_SELL_MOUNT_3\020\n\022\025\n\021AUTO_S" +
+      "ELL_MOUNT_4\020\013\022\023\n\017AUTO_SELL_PET_1\020\014\022\023\n\017AU" +
+      "TO_SELL_PET_2\020\r\022\023\n\017AUTO_SELL_PET_3\020\016\022\023\n\017" +
+      "AUTO_SELL_PET_4\020\017B\024\n\010protocolB\010Pbmethod"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -87265,7 +88192,7 @@ public final class Pbmethod {
           internal_static_pbdson_PbUserData_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbUserData_descriptor,
-              new java.lang.String[] { "SlogBagUI", "SlotMaterial", "SlotItemEvent", "LvTraining", "MaxlvTraining", "NumPointLevel", "Items", "ItemEquipments", "ASkin", "AMaterial", "APet", "AMount", "Tutorial", "DameSkins", "DameSkinEquip", "ChatFrames", "ChatFrameEquip", "Trials", "TrialEquip", "CraftLevel", "CraftExp", "ItemSlot", "Equipments", "TimeProtected", "AArtifact", "AItemPoint", "TimeActiveArtifact", });
+              new java.lang.String[] { "SlogBagUI", "SlotMaterial", "SlotItemEvent", "LvTraining", "MaxlvTraining", "NumPointLevel", "Items", "ItemEquipments", "ASkin", "AMaterial", "APet", "AMount", "Tutorial", "DameSkins", "DameSkinEquip", "ChatFrames", "ChatFrameEquip", "Trials", "TrialEquip", "CraftLevel", "CraftExp", "ItemSlot", "Equipments", "TimeProtected", "AArtifact", "AItemPoint", "TimeActiveArtifact", "AMob", });
           internal_static_pbdson_PbListItem_descriptor =
             getDescriptor().getMessageTypes().get(20);
           internal_static_pbdson_PbListItem_fieldAccessorTable = new
@@ -87302,302 +88229,308 @@ public final class Pbmethod {
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbMount_descriptor,
               new java.lang.String[] { "Id", "Point", "MountId", "Level", "Tier", "IsCraft", "Icon", "PriceTreasure", "Data", "IsEquip", });
-          internal_static_pbdson_PbListPet_descriptor =
+          internal_static_pbdson_PbMob_descriptor =
             getDescriptor().getMessageTypes().get(26);
+          internal_static_pbdson_PbMob_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_pbdson_PbMob_descriptor,
+              new java.lang.String[] { "Id", "MobId", "Tier", });
+          internal_static_pbdson_PbListPet_descriptor =
+            getDescriptor().getMessageTypes().get(27);
           internal_static_pbdson_PbListPet_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListPet_descriptor,
               new java.lang.String[] { "Pets", });
           internal_static_pbdson_PbPet_descriptor =
-            getDescriptor().getMessageTypes().get(27);
+            getDescriptor().getMessageTypes().get(28);
           internal_static_pbdson_PbPet_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbPet_descriptor,
               new java.lang.String[] { "Id", "Point", "PetId", "Level", "Tier", "IsCraft", "Icon", "PriceTreasure", "Data", "IsEquip", });
           internal_static_pbdson_PbListItemPoint_descriptor =
-            getDescriptor().getMessageTypes().get(28);
+            getDescriptor().getMessageTypes().get(29);
           internal_static_pbdson_PbListItemPoint_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListItemPoint_descriptor,
               new java.lang.String[] { "ItemPoints", });
           internal_static_pbdson_PbListChat_descriptor =
-            getDescriptor().getMessageTypes().get(29);
+            getDescriptor().getMessageTypes().get(30);
           internal_static_pbdson_PbListChat_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListChat_descriptor,
               new java.lang.String[] { "AChat", });
           internal_static_pbdson_PbChat_descriptor =
-            getDescriptor().getMessageTypes().get(30);
+            getDescriptor().getMessageTypes().get(31);
           internal_static_pbdson_PbChat_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbChat_descriptor,
               new java.lang.String[] { "ReqTime", "Message", "Type", "User", "Info", "Point", });
           internal_static_pbdson_PbListChatFriend_descriptor =
-            getDescriptor().getMessageTypes().get(31);
+            getDescriptor().getMessageTypes().get(32);
           internal_static_pbdson_PbListChatFriend_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListChatFriend_descriptor,
               new java.lang.String[] { "Chats", });
           internal_static_pbdson_PbChatFriend_descriptor =
-            getDescriptor().getMessageTypes().get(32);
+            getDescriptor().getMessageTypes().get(33);
           internal_static_pbdson_PbChatFriend_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbChatFriend_descriptor,
               new java.lang.String[] { "UserId", "Message", "Skins", "Name", "Time", "Level", });
           internal_static_pbdson_PbShop_descriptor =
-            getDescriptor().getMessageTypes().get(33);
+            getDescriptor().getMessageTypes().get(34);
           internal_static_pbdson_PbShop_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbShop_descriptor,
               new java.lang.String[] { "TabSet", "TabDeal", "TabMisc", });
           internal_static_pbdson_PbItemShop_descriptor =
-            getDescriptor().getMessageTypes().get(34);
+            getDescriptor().getMessageTypes().get(35);
           internal_static_pbdson_PbItemShop_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbItemShop_descriptor,
               new java.lang.String[] { "Id", "Tab", "Name", "Desc", "Item", "Price", "Image", "Status", "DescStatus", "TimeRemain", });
           internal_static_pbdson_PbMaterial_descriptor =
-            getDescriptor().getMessageTypes().get(35);
+            getDescriptor().getMessageTypes().get(36);
           internal_static_pbdson_PbMaterial_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbMaterial_descriptor,
               new java.lang.String[] { "Id", "MaterialId", "Tier", "Level", "Value", "SocketRate", });
           internal_static_pbdson_PbArtifact_descriptor =
-            getDescriptor().getMessageTypes().get(36);
+            getDescriptor().getMessageTypes().get(37);
           internal_static_pbdson_PbArtifact_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbArtifact_descriptor,
               new java.lang.String[] { "Id", "ArtifactId", "Level", "Tier", "Time", "Cooldown", "PointID", "Value", "Range", "Person", "IsCraft", });
           internal_static_pbdson_PbListArtifact_descriptor =
-            getDescriptor().getMessageTypes().get(37);
+            getDescriptor().getMessageTypes().get(38);
           internal_static_pbdson_PbListArtifact_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListArtifact_descriptor,
               new java.lang.String[] { "Artifacts", });
           internal_static_pbdson_PbItem_descriptor =
-            getDescriptor().getMessageTypes().get(38);
+            getDescriptor().getMessageTypes().get(39);
           internal_static_pbdson_PbItem_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbItem_descriptor,
               new java.lang.String[] { "Id", "ItemKey", "Level", "LockDestroy", "Data", "IsCraft", });
           internal_static_pbdson_PbEquipment_descriptor =
-            getDescriptor().getMessageTypes().get(39);
+            getDescriptor().getMessageTypes().get(40);
           internal_static_pbdson_PbEquipment_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbEquipment_descriptor,
               new java.lang.String[] { "Id", "ItemKey", "Level", "LockDestroy", "Tier", "Data", "IsCraft", "Icon", "PriceTreasure", });
           internal_static_pbdson_PbItemPoint_descriptor =
-            getDescriptor().getMessageTypes().get(40);
+            getDescriptor().getMessageTypes().get(41);
           internal_static_pbdson_PbItemPoint_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbItemPoint_descriptor,
               new java.lang.String[] { "ItemKey", "Number", "Data", });
           internal_static_pbdson_ListAction_descriptor =
-            getDescriptor().getMessageTypes().get(41);
+            getDescriptor().getMessageTypes().get(42);
           internal_static_pbdson_ListAction_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_ListAction_descriptor,
               new java.lang.String[] { "AAction", });
           internal_static_pbdson_PbAction_descriptor =
-            getDescriptor().getMessageTypes().get(42);
+            getDescriptor().getMessageTypes().get(43);
           internal_static_pbdson_PbAction_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbAction_descriptor,
               new java.lang.String[] { "ActionId", "Data", });
           internal_static_pbdson_CommonVector_descriptor =
-            getDescriptor().getMessageTypes().get(43);
+            getDescriptor().getMessageTypes().get(44);
           internal_static_pbdson_CommonVector_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_CommonVector_descriptor,
               new java.lang.String[] { "ALong", "AString", });
           internal_static_pbdson_ListCommonVector_descriptor =
-            getDescriptor().getMessageTypes().get(44);
+            getDescriptor().getMessageTypes().get(45);
           internal_static_pbdson_ListCommonVector_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_ListCommonVector_descriptor,
               new java.lang.String[] { "AVector", });
           internal_static_pbdson_PbCharacterInfo_descriptor =
-            getDescriptor().getMessageTypes().get(45);
+            getDescriptor().getMessageTypes().get(46);
           internal_static_pbdson_PbCharacterInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbCharacterInfo_descriptor,
               new java.lang.String[] { "Id", "Name", "Team", "Skins", "AItem", "Point", });
           internal_static_pbdson_PbListMail_descriptor =
-            getDescriptor().getMessageTypes().get(46);
+            getDescriptor().getMessageTypes().get(47);
           internal_static_pbdson_PbListMail_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListMail_descriptor,
               new java.lang.String[] { "AMail", });
           internal_static_pbdson_PbMail_descriptor =
-            getDescriptor().getMessageTypes().get(47);
+            getDescriptor().getMessageTypes().get(48);
           internal_static_pbdson_PbMail_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbMail_descriptor,
               new java.lang.String[] { "Id", "Title", "Message", "Bonus", "Receive", "Time", "SenderId", "SenderName", });
           internal_static_pbdson_PbEndGame_descriptor =
-            getDescriptor().getMessageTypes().get(48);
+            getDescriptor().getMessageTypes().get(49);
           internal_static_pbdson_PbEndGame_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbEndGame_descriptor,
               new java.lang.String[] { "PopupId", "BattleKey", "IsWin", "Message", "Bonus", "Time", "PerDame", "Star", "Info", });
           internal_static_pbdson_PbRoomInfo_descriptor =
-            getDescriptor().getMessageTypes().get(49);
+            getDescriptor().getMessageTypes().get(50);
           internal_static_pbdson_PbRoomInfo_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbRoomInfo_descriptor,
               new java.lang.String[] { "RoomType", "Service", "Cmm", "LstCm", });
           internal_static_pbdson_PbListMiniLotte_descriptor =
-            getDescriptor().getMessageTypes().get(50);
+            getDescriptor().getMessageTypes().get(51);
           internal_static_pbdson_PbListMiniLotte_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListMiniLotte_descriptor,
               new java.lang.String[] { "AllBonus", "LuckyNum", "ALotte", });
           internal_static_pbdson_PbMiniLotte_descriptor =
-            getDescriptor().getMessageTypes().get(51);
+            getDescriptor().getMessageTypes().get(52);
           internal_static_pbdson_PbMiniLotte_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbMiniLotte_descriptor,
               new java.lang.String[] { "NumChoose", "PrizeIndex", "Bonus", });
           internal_static_pbdson_PbListLotteryHistory_descriptor =
-            getDescriptor().getMessageTypes().get(52);
+            getDescriptor().getMessageTypes().get(53);
           internal_static_pbdson_PbListLotteryHistory_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListLotteryHistory_descriptor,
               new java.lang.String[] { "ALottery", });
           internal_static_pbdson_PbLotteryHistory_descriptor =
-            getDescriptor().getMessageTypes().get(53);
+            getDescriptor().getMessageTypes().get(54);
           internal_static_pbdson_PbLotteryHistory_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbLotteryHistory_descriptor,
               new java.lang.String[] { "EventId", "Type", "LuckyNum", "Number", "Time", "Bonus", "Status", "ListBonus", "ListResult", });
           internal_static_pbdson_PbUnitUpdate_descriptor =
-            getDescriptor().getMessageTypes().get(54);
+            getDescriptor().getMessageTypes().get(55);
           internal_static_pbdson_PbUnitUpdate_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbUnitUpdate_descriptor,
               new java.lang.String[] { "Type", "Data", });
           internal_static_pbdson_PbUnitPos_descriptor =
-            getDescriptor().getMessageTypes().get(55);
+            getDescriptor().getMessageTypes().get(56);
           internal_static_pbdson_PbUnitPos_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbUnitPos_descriptor,
               new java.lang.String[] { "Id", "Speed", "LastInputSeq", "Pos", "Direction", "ChunkId", });
           internal_static_pbdson_PbListBullet_descriptor =
-            getDescriptor().getMessageTypes().get(56);
+            getDescriptor().getMessageTypes().get(57);
           internal_static_pbdson_PbListBullet_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListBullet_descriptor,
               new java.lang.String[] { "Bullets", });
           internal_static_pbdson_PbBullet_descriptor =
-            getDescriptor().getMessageTypes().get(57);
+            getDescriptor().getMessageTypes().get(58);
           internal_static_pbdson_PbBullet_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbBullet_descriptor,
               new java.lang.String[] { "Id", "Pos", "Info", });
           internal_static_pbdson_PbListTab_descriptor =
-            getDescriptor().getMessageTypes().get(58);
+            getDescriptor().getMessageTypes().get(59);
           internal_static_pbdson_PbListTab_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListTab_descriptor,
               new java.lang.String[] { "Tabs", });
           internal_static_pbdson_PbTab_descriptor =
-            getDescriptor().getMessageTypes().get(59);
+            getDescriptor().getMessageTypes().get(60);
           internal_static_pbdson_PbTab_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbTab_descriptor,
               new java.lang.String[] { "TabId", "EventTemplate", "Image", "Name", "Notify", });
           internal_static_pbdson_PbEventBuyMonth_descriptor =
-            getDescriptor().getMessageTypes().get(60);
+            getDescriptor().getMessageTypes().get(61);
           internal_static_pbdson_PbEventBuyMonth_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbEventBuyMonth_descriptor,
               new java.lang.String[] { "EventName", "ImageBanner", "TextBanner", "Level", "CurPoint", "MaxPoint", "ButtonAddGoto", "KeyHelp", "TimeCD", "StatusBuy", "Price", "NormalName", "VipName", "Cells", });
           internal_static_pbdson_PbEventTimer_descriptor =
-            getDescriptor().getMessageTypes().get(61);
+            getDescriptor().getMessageTypes().get(62);
           internal_static_pbdson_PbEventTimer_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbEventTimer_descriptor,
               new java.lang.String[] { "Id", "Status", "TimeRemain", "Bonus", "Price", "OldPrice", "Name", "Desc", "Sale", "BgrPath", "Info", });
           internal_static_pbdson_PbCellPanelEventMonth_descriptor =
-            getDescriptor().getMessageTypes().get(62);
+            getDescriptor().getMessageTypes().get(63);
           internal_static_pbdson_PbCellPanelEventMonth_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbCellPanelEventMonth_descriptor,
               new java.lang.String[] { "Level", "Exp", "Status", "StatusVip", "Bonus", "BonusVip", });
           internal_static_pbdson_PbPanelEventTabCell_descriptor =
-            getDescriptor().getMessageTypes().get(63);
+            getDescriptor().getMessageTypes().get(64);
           internal_static_pbdson_PbPanelEventTabCell_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbPanelEventTabCell_descriptor,
               new java.lang.String[] { "EventName", "ImageBanner", "TextBanner", "TimeCD", "Cells", });
           internal_static_pbdson_PbCellPanelEventTabCell_descriptor =
-            getDescriptor().getMessageTypes().get(64);
+            getDescriptor().getMessageTypes().get(65);
           internal_static_pbdson_PbCellPanelEventTabCell_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbCellPanelEventTabCell_descriptor,
               new java.lang.String[] { "Id", "CellName", "Bonus", "Per", "ButtonStatus", });
           internal_static_pbdson_PbWelfare_descriptor =
-            getDescriptor().getMessageTypes().get(65);
+            getDescriptor().getMessageTypes().get(66);
           internal_static_pbdson_PbWelfare_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbWelfare_descriptor,
               new java.lang.String[] { "EventId", "Notify", "Banner", "TabEvent", "KeyHelp", "Countdown", });
           internal_static_pbdson_PbTabWelfare_descriptor =
-            getDescriptor().getMessageTypes().get(66);
+            getDescriptor().getMessageTypes().get(67);
           internal_static_pbdson_PbTabWelfare_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbTabWelfare_descriptor,
               new java.lang.String[] { "TabId", "TabName", "Cells", "Notify", });
           internal_static_pbdson_PbBannerEvent_descriptor =
-            getDescriptor().getMessageTypes().get(67);
+            getDescriptor().getMessageTypes().get(68);
           internal_static_pbdson_PbBannerEvent_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbBannerEvent_descriptor,
               new java.lang.String[] { "PathBanner", "Text", "BonusImage", "BoxStatus", "BonusBox", "Desc", "PathTitle", "Info", });
           internal_static_pbdson_PbCellEvent_descriptor =
-            getDescriptor().getMessageTypes().get(68);
+            getDescriptor().getMessageTypes().get(69);
           internal_static_pbdson_PbCellEvent_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbCellEvent_descriptor,
               new java.lang.String[] { "Id", "Image", "Bonus", "NameCell", "TextCell", "TextDesc", "NumBuy", "Limit", "Price", "ButtonStatus", "BonusDay", "TimeRemain", "TimeExpire", });
           internal_static_pbdson_PbEvent7Day_descriptor =
-            getDescriptor().getMessageTypes().get(69);
+            getDescriptor().getMessageTypes().get(70);
           internal_static_pbdson_PbEvent7Day_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbEvent7Day_descriptor,
               new java.lang.String[] { "Days", "TimeRemain", "CurValue", "MaxValue", "PosReward", });
           internal_static_pbdson_PbPosReward_descriptor =
-            getDescriptor().getMessageTypes().get(70);
+            getDescriptor().getMessageTypes().get(71);
           internal_static_pbdson_PbPosReward_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbPosReward_descriptor,
               new java.lang.String[] { "Id", "Name", "Point", "Bonus", "Status", });
           internal_static_pbdson_PbTabEvent7Day_descriptor =
-            getDescriptor().getMessageTypes().get(71);
+            getDescriptor().getMessageTypes().get(72);
           internal_static_pbdson_PbTabEvent7Day_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbTabEvent7Day_descriptor,
               new java.lang.String[] { "Id", "Name", "Cells", });
           internal_static_pbdson_PbPanelEvent7Day_descriptor =
-            getDescriptor().getMessageTypes().get(72);
+            getDescriptor().getMessageTypes().get(73);
           internal_static_pbdson_PbPanelEvent7Day_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbPanelEvent7Day_descriptor,
               new java.lang.String[] { "Tab1", "Tab2", "Tab3", "Tab4", "IsLock", });
           internal_static_pbdson_PbCellEvent7Day_descriptor =
-            getDescriptor().getMessageTypes().get(73);
+            getDescriptor().getMessageTypes().get(74);
           internal_static_pbdson_PbCellEvent7Day_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbCellEvent7Day_descriptor,
               new java.lang.String[] { "Id", "Name", "Desc", "CurValue", "MaxValue", "Bonus", "ButtonStatus", "ButtonGoto", "OldPrice", "NewPrice", "Xu", });
           internal_static_pbdson_PbListIAP_descriptor =
-            getDescriptor().getMessageTypes().get(74);
+            getDescriptor().getMessageTypes().get(75);
           internal_static_pbdson_PbListIAP_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbListIAP_descriptor,
               new java.lang.String[] { "Iap", });
           internal_static_pbdson_PpIAP_descriptor =
-            getDescriptor().getMessageTypes().get(75);
+            getDescriptor().getMessageTypes().get(76);
           internal_static_pbdson_PpIAP_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PpIAP_descriptor,
