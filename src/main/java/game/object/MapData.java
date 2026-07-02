@@ -29,8 +29,9 @@ public class MapData implements Serializable {
 
     public static class ChunkDto {
         public int id;
-        public int typeDrop;  // config từ 1 - 5 loại vật liệu
+        public int typeDrop;
         public int typeRoom;
+        public int typeEvent ; // từ 1 -> 5 loại item sự kiện
     }
 }
 

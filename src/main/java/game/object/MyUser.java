@@ -280,14 +280,13 @@ public class MyUser implements Serializable {
             int bonusType = chunk.get(0).intValue();
             if (bonusType == Bonus.BONUS_ITEM) {
                 int itemKey = chunk.get(1).intValue();
-                if (itemKey < 0) continue;
                 Pbmethod.ItemType storageType = Bonus.resolveStorageType(itemKey);
                 if (Bonus.usesItemSlotForUserItem(storageType)) {
                     numBag++;
                 }
             } else if (bonusType == Bonus.BONUS_ITEM_POINT) {
                 int pointId = chunk.get(1).intValue();
-                if (chunk.size() >= 3 && chunk.get(2) > 0 && Bonus.usesEventBagPoint(pointId)
+                if (chunk.get(2) > 0 && Bonus.usesEventBagPoint(pointId)
                         && resources.getItemPointNumber(pointId) <= 0)
                     numEvent++;
             } else if (bonusType == Bonus.BONUS_EQUIPMENT
@@ -298,6 +297,16 @@ public class MyUser implements Serializable {
                 numBag++;
             } else if (bonusType == Bonus.BONUS_MATERIAL) {
                 numMaterial++;
+            } else if (bonusType == Bonus.BONUS_CHANGE_OWNER) {
+                int innerType = chunk.get(1).intValue();
+                if (innerType == Bonus.BONUS_EQUIPMENT
+                        || innerType == Bonus.BONUS_PET
+                        || innerType == Bonus.BONUS_MOUNT
+                        || innerType == Bonus.BONUS_MOB
+                        || innerType == Bonus.BONUS_ARTIFACT)
+                    numBag++;
+                else if (innerType == Bonus.BONUS_MATERIAL)
+                    numMaterial++;
             }
         }
         if (numBag > 0 && !resources.canAddBagItem(numBag)) return false;

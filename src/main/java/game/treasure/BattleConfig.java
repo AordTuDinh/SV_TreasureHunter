@@ -49,4 +49,7 @@ public class BattleConfig {
 
     public static int timeReviveObject = 5;  // sau 3s thì revive object
 
+    /** user_id tạm khi đồ PvP chờ nhận thư (không load lúc login). */
+    public static final int P_escrowUserId = -1;
+
 }

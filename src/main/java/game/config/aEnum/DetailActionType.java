@@ -19,6 +19,8 @@ public enum DetailActionType {
     CASINO_REFRESH("casino_refresh"),// Làm mới spine
     RECEIVE_TUTORIAL_QUEST("receive_tutorial_quest_id_"),// Nhận quà tutorial quest
     REVIVE_PLAYER("revive_player"),// Hồi sinh
+    DEATH_PENALTY("death_penalty"),
+    PVP_KILL_LOOT("pvp_kill_loot_"),
     CAMPAIGN_CONQUER("campaign_conquer_"),// Nhận bonus campaign conquer map id
     CAMPAIGN_SMART("campaign_smart_"),// Càn quét map id , number
     BUY_LOTTERY_MINI("buy_lottery_mini"),// Mua vé số nhỏ

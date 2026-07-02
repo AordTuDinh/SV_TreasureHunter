@@ -61,6 +61,8 @@ enum SubStateType {
   USE_ITEM_SLOT = 13;     // slot
   UPDATE_DIRECTION = 14; // update direction for unit
   UPDATE_ITEM_EQUIP = 15; // 8 itemKey dang mac (theo EquipSlotType)
+  REMOVE_EQUIPMENT = 16;  // rowId user_equipment
+  REMOVE_MATERIAL = 17;   // rowId user_material
 }
 
 enum StateType {

@@ -509,12 +509,6 @@ public class ItemHandler extends AHandler {
             addErrResponse(getLang(Lang.item_not_own));
             return;
         }
-        List<Long> fee = item.viewBonusItem(-number);
-        String err = Bonus.checkMoney(mUser, fee);
-        if (err != null) {
-            addErrResponse(err);
-            return;
-        }
         ResItemEntity resItem = item.getRes();
         switch (resItem.getItemType()) {
 //            case ITEM_OPEN: {

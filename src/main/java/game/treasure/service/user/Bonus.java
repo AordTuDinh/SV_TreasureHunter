@@ -40,6 +40,7 @@ public class Bonus {
     public static final int BONUS_EQUIPMENT = 12;
     public static final int BONUS_ITEM_POINT = 13;
     public static final int BONUS_MOB = 14;
+    public static final int BONUS_CHANGE_OWNER = 15;
 
     public static final Map<Integer, Integer> mTypeLength = new HashMap<>() {{
         put(BONUS_GOLD, 1);
@@ -56,11 +57,12 @@ public class Bonus {
         put(BONUS_EQUIPMENT, 2);
         put(BONUS_ITEM_POINT, 2);
         put(BONUS_MOB, 2);
+        put(BONUS_CHANGE_OWNER, 3);
     }};
 
     public static List<Integer> bonusSinger = Arrays.asList(
             BONUS_ITEM, BONUS_EQUIPMENT, BONUS_ARTIFACT, BONUS_PET, BONUS_MOUNT, BONUS_MOB,
-            BONUS_SKIN, BONUS_EFFECT_SKIN, BONUS_MATERIAL, BONUS_ITEM_POINT);
+            BONUS_SKIN, BONUS_EFFECT_SKIN, BONUS_MATERIAL, BONUS_ITEM_POINT, BONUS_CHANGE_OWNER);
 
     public static boolean isBonusSinger(int type) {
         return bonusSinger.contains(type);
@@ -70,26 +72,13 @@ public class Bonus {
         return view(BONUS_GOLD, number);
     }
 
-    /** Preview/receive item by config key (consum / currency). Item point → viewItemPoint. */
+    /** Preview/grant item by config key. Item point → viewItemPoint. Xóa row — handler gọi ResItem.removeUserItemRow. */
     public static List<Long> viewItem(int itemKey, long number) {
         if (ItemPointKey.isPointKey(itemKey))
             return viewItemPoint(itemKey, number);
-        if (number < 0) {
-            List<Long> ret = new ArrayList<>();
-            for (int i = 0; i < -number; i++)
-                ret.addAll(view(BONUS_ITEM, -itemKey));
-            return ret;
-        }
+        if (number <= 0)
+            return new ArrayList<>();
         return viewXNumber(view(BONUS_ITEM, itemKey), (int) number);
-    }
-
-    /** Apply/cost input — [4, rowId, -itemKey]; output receive wire vẫn [4, rowId, -itemKey]. */
-    public static List<Long> viewItemRemove(long userItemId, int itemKey, int count) {
-        List<Long> ret = new ArrayList<>();
-        List<Long> one = view(BONUS_ITEM, userItemId, -itemKey);
-        for (int i = 0; i < count; i++)
-            ret.addAll(one);
-        return ret;
     }
 
     public static List<Long> viewItemMaterial(MaterialType type, long number) {
@@ -152,14 +141,6 @@ public class Bonus {
         return viewItemEquipment(itemId, 1);
     }
 
-    public static List<Long> viewItemEquipmentRemove(long userEquipId, int itemKey, int tier, int count) {
-        List<Long> ret = new ArrayList<>();
-        List<Long> one = view(BONUS_EQUIPMENT, userEquipId, itemKey, tier);
-        for (int i = 0; i < count; i++)
-            ret.addAll(one);
-        return ret;
-    }
-
     public static List<Long> viewItemArtifact(int artifactId, int tier) {
         int t = tier > 0 ? Math.min(tier, 4) : 1;
         return view(BONUS_ARTIFACT, artifactId, t);
@@ -197,9 +178,9 @@ public class Bonus {
         int type = Math.toIntExact(bonus.get(0));
         switch (type) {
             case BONUS_ITEM -> {
-                // preview [4, itemKey] | receive [4, rowId, itemKey]
+                // preview [4, itemKey] | receive remove [4, rowId, -itemKey]
                 return bonus.size() == 3
-                        ? Math.toIntExact(bonus.get(2))
+                        ? Math.toIntExact(Math.abs(bonus.get(2)))
                         : Math.toIntExact(bonus.get(1));
             }
             case BONUS_EQUIPMENT -> {
@@ -218,63 +199,6 @@ public class Bonus {
             case BONUS_EFFECT_SKIN -> Math.toIntExact(bonus.get(2));
         }
         return 0;
-    }
-
-    static boolean isBonusWireType(int v) {
-        return v == BONUS_GOLD || v == BONUS_GEM || v == BONUS_RUBY || v == BONUS_ITEM
-                || v == BONUS_EQUIPMENT || v == BONUS_ARTIFACT || v == BONUS_SKIN
-                || v == BONUS_EFFECT_SKIN || v == BONUS_VIP_EXP
-                || v == BONUS_PET || v == BONUS_MOUNT || v == BONUS_MOB || v == BONUS_MATERIAL
-                || v == BONUS_ITEM_POINT;
-    }
-
-  /** Apply wire payload sau type — ITEM preview [itemKey], deduct [-itemKey], remove [rowId, ±itemKey]. */
-    static int itemApplyPayloadLength(List<Long> bonus, int index) {
-        if (index >= bonus.size())
-            return 0;
-        if (bonus.get(index) < 0)
-            return 1;
-        if (index + 1 >= bonus.size())
-            return 1;
-        if (isBonusWireType(bonus.get(index + 1).intValue()))
-            return 1;
-        return 2;
-    }
-
-    /** Apply wire payload sau type — EQUIP preview [itemKey,tier], remove [rowId,itemKey,tier]. */
-    static int equipmentApplyPayloadLength(List<Long> bonus, int index) {
-        if (index >= bonus.size())
-            return 0;
-        if (index + 1 >= bonus.size())
-            return Math.max(0, bonus.size() - index);
-        if (index + 2 >= bonus.size())
-            return Math.max(0, bonus.size() - index);
-        if (isBonusWireType(bonus.get(index + 2).intValue()))
-            return 2;
-        return 3;
-    }
-
-    /** Apply wire payload sau type — PET/MOUNT preview [configId,tier], remove [rowId,configId,tier]. */
-    static int petMountApplyPayloadLength(List<Long> bonus, int index) {
-        if (index >= bonus.size())
-            return 0;
-        if (index + 1 >= bonus.size())
-            return Math.max(0, bonus.size() - index);
-        if (index + 2 >= bonus.size())
-            return Math.max(0, bonus.size() - index);
-        if (isBonusWireType(bonus.get(index + 2).intValue()))
-            return 2;
-        return 3;
-    }
-
-    static int applyPayloadLength(List<Long> bonus, int index, int type) {
-        if (type == BONUS_ITEM)
-            return itemApplyPayloadLength(bonus, index);
-        if (type == BONUS_EQUIPMENT)
-            return equipmentApplyPayloadLength(bonus, index);
-        if (type == BONUS_PET || type == BONUS_MOUNT || type == BONUS_MOB)
-            return petMountApplyPayloadLength(bonus, index);
-        return mTypeLength.getOrDefault(type, 0);
     }
 
     public static Pbmethod.ItemType resolveStorageType(int itemKey) {
@@ -312,7 +236,7 @@ public class Bonus {
         for (List<Long> chunk : applied) {
             if (chunk == null || chunk.isEmpty())
                 continue;
-            if (chunk.get(0).intValue() == BONUS_ITEM_POINT && chunk.size() >= 4) {
+            if (chunk.get(0).intValue() == BONUS_ITEM_POINT) {
                 int pointId = chunk.get(1).intValue();
                 long delta = chunk.get(2);
                 long cur = chunk.get(3);
@@ -331,9 +255,9 @@ public class Bonus {
         return ret;
     }
 
-    /** Tách flat wire apply — preview grant (parse cố định) + deduct/remove (payload biến). */
+    /** Tách flat wire apply — cố định mTypeLength (giống parse preview). */
     static List<List<Long>> parseForApply(List<Long> bonus) {
-        return parseCost(bonus);
+        return parse(bonus);
     }
 
     static List<Long> applyBonusChunk(MyUser mUser, List<Long> chunk, String detailAction) {
@@ -344,71 +268,31 @@ public class Bonus {
             case BONUS_GOLD -> addGold(mUser, chunk.get(1), detailAction);
             case BONUS_GEM -> addGem(mUser, chunk.get(1), detailAction);
             case BONUS_RUBY -> addRuby(mUser, chunk.get(1), detailAction);
-            case BONUS_ITEM -> applyUserItemChunk(mUser, chunk, detailAction);
-            case BONUS_EQUIPMENT -> applyUserEquipmentChunk(mUser, chunk, detailAction);
-            case BONUS_ARTIFACT -> applyUserArtifactChunk(mUser, chunk, detailAction);
+            case BONUS_ITEM -> grantUserItem(mUser, chunk.get(1).intValue(), detailAction);
+            case BONUS_EQUIPMENT -> grantUserEquipment(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
+            case BONUS_ARTIFACT -> addItemArtifact(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
             case BONUS_VIP_EXP -> addVipExp(mUser, chunk.get(1).intValue(), detailAction);
             case BONUS_SKIN -> addCharacterSkin(mUser, chunk.get(1).intValue(), detailAction);
             case BONUS_EFFECT_SKIN -> addEffectSkin(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
             case BONUS_PET -> addPet(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
             case BONUS_MOUNT -> addMount(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
-            case BONUS_MOB -> applyUserMobChunk(mUser, chunk, detailAction);
+            case BONUS_MOB -> addMob(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
             case BONUS_MATERIAL -> addMaterial(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
             case BONUS_ITEM_POINT -> addItemPoint(mUser, chunk.get(1).intValue(), chunk.get(2), detailAction);
+            case BONUS_CHANGE_OWNER -> applyChangeOwnerChunk(mUser, chunk, detailAction);
             default -> new ArrayList<>();
         };
     }
 
-    /** Preview grant [4,itemKey] | deduct [4,-itemKey] | remove [4,rowId,-itemKey]. */
-    static List<Long> applyUserItemChunk(MyUser mUser, List<Long> chunk, String detailAction) {
-        if (chunk.size() == 2) {
-            int itemKey = chunk.get(1).intValue();
-            if (itemKey < 0)
-                return deductUserItemByKey(mUser, -itemKey, detailAction);
-            return grantUserItem(mUser, itemKey, detailAction);
-        }
-        if (chunk.size() == 3)
-            return removeUserItemRow(mUser, chunk.get(1), Math.abs(chunk.get(2).intValue()), detailAction);
-        return new ArrayList<>();
-    }
-
-    /** Preview grant [5,itemKey,tier]. */
-    static List<Long> applyUserArtifactChunk(MyUser mUser, List<Long> chunk, String detailAction) {
-        if (chunk.size() == 3)
-            return addItemArtifact(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
-        return new ArrayList<>();
-    }
-
-    /** Preview grant [14,mobId,tier] | remove [14,rowId,-mobId,tier]. */
-    static List<Long> applyUserMobChunk(MyUser mUser, List<Long> chunk, String detailAction) {
-        if (chunk.size() == 3)
-            return addMob(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
-        if (chunk.size() == 4)
-            return removeUserMobRow(mUser, chunk.get(1), chunk.get(2).intValue(), chunk.get(3).intValue(), detailAction);
-        return new ArrayList<>();
-    }
-
-    static List<Long> removeUserMobRow(MyUser mUser, long rowId, int mobId, int tier, String detailAction) {
-        UserMobEntity uMob = mUser.getResources().getMob(rowId);
-        if (uMob == null || uMob.getMobId() != Math.abs(mobId))
-            return new ArrayList<>();
-        Bonus.clearItemFromSlot(mUser, BONUS_MOB, rowId);
-        if (!uMob.deleteFromDb())
-            return new ArrayList<>();
-        mUser.getResources().removeMob(rowId);
-        if (CfgServer.isRealServer()) {
-            Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
-                    "type", "mob_remove", "id", rowId, "mobId", uMob.getMobId(), "tier", tier);
-        }
-        return Arrays.asList((long) BONUS_MOB, rowId, (long) -uMob.getMobId(), (long) tier);
-    }
-
-    /** Preview grant [12,itemKey,tier] | remove [12,rowId,itemKey,tier]. */
-    static List<Long> applyUserEquipmentChunk(MyUser mUser, List<Long> chunk, String detailAction) {
-        if (chunk.size() == 3)
-            return grantUserEquipment(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
-        if (chunk.size() == 4)
-            return removeUserEquipmentRow(mUser, chunk.get(1), chunk.get(2).intValue(), chunk.get(3).intValue(), detailAction);
+    /** Apply [15, typeBonus, rowId, itemKey] — đổi chủ row escrow → receive [12|11, rowId, itemKey, tier]. */
+    static List<Long> applyChangeOwnerChunk(MyUser mUser, List<Long> chunk, String detailAction) {
+        int typeBonus = chunk.get(1).intValue();
+        long rowId = chunk.get(2);
+        int itemKey = chunk.get(3).intValue();
+        if (typeBonus == BONUS_EQUIPMENT)
+            return claimEscrowEquipment(mUser, rowId, itemKey, detailAction);
+        if (typeBonus == BONUS_MATERIAL)
+            return claimEscrowMaterial(mUser, rowId, itemKey, detailAction);
         return new ArrayList<>();
     }
 
@@ -454,16 +338,6 @@ public class Bonus {
             return Arrays.asList((long) BONUS_EFFECT_SKIN, (long) type, (long) skinId);
         }
         return new ArrayList<>();
-    }
-
-    static List<Long> deductUserItemByKey(MyUser mUser, int itemKey, String detailAction) {
-        List<UserItemEntity> rows = mUser.getResources().listByItemKey(itemKey);
-        if (rows.isEmpty())
-            return new ArrayList<>();
-        long rowId = rows.get(0).getId();
-        if (!mUser.getResources().removeItemsByItemKey(itemKey, 1))
-            return new ArrayList<>();
-        return Arrays.asList((long) BONUS_ITEM, rowId, (long) -itemKey);
     }
 
     static List<Long> grantUserItem(MyUser mUser, int itemKey, String detailAction) {
@@ -524,35 +398,50 @@ public class Bonus {
         return new ArrayList<>();
     }
 
-    static List<Long> removeUserItemRow(MyUser mUser, long userItemId, int itemKey, String detailAction) {
-        UserItemEntity uItem = mUser.getResources().getItem(userItemId);
-        if (uItem == null || uItem.getItemId() != itemKey)
+    static List<Long> claimEscrowEquipment(MyUser mUser, long rowId, int itemKey, String detailAction) {
+        int escrowId = game.treasure.BattleConfig.P_escrowUserId;
+        if (mUser.getResources().getEquipment(rowId) != null)
             return new ArrayList<>();
-        clearItemFromSlot(mUser, BONUS_ITEM, userItemId);
-        if (!uItem.deleteFromDb()) {
-            return new ArrayList<>();
-        }
-        mUser.getResources().removeItem(userItemId);
-        if (CfgServer.isRealServer()) {
-            Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
-                    "type", "user_item_remove", "id", userItemId, "itemId", itemKey);
-        }
-        return Arrays.asList((long) BONUS_ITEM, userItemId, (long) -itemKey);
-    }
-
-    static List<Long> removeUserEquipmentRow(MyUser mUser, long userEquipId, int itemKey, int tier, String detailAction) {
-        UserEquipmentEntity uEquip = mUser.getResources().getEquipment(userEquipId);
+        UserEquipmentEntity uEquip = (UserEquipmentEntity) DBJPA.getUnique(
+                "user_equipment", UserEquipmentEntity.class, "id", rowId, "user_id", escrowId);
         if (uEquip == null || uEquip.getItemId() != itemKey)
             return new ArrayList<>();
-        clearItemFromSlot(mUser, BONUS_EQUIPMENT, userEquipId);
-        if (!uEquip.deleteFromDb())
+        if (!mUser.getResources().prepareNewItemSlot(BONUS_EQUIPMENT, 0))
             return new ArrayList<>();
-        mUser.getResources().removeEquipment(userEquipId);
+        int killerId = mUser.getUser().getId();
+        uEquip.setUserId(killerId);
+        if (!uEquip.update(List.of("user_id", killerId)))
+            return new ArrayList<>();
+        if (!mUser.getResources().prepareNewItemSlot(BONUS_EQUIPMENT, rowId))
+            return new ArrayList<>();
+        mUser.getResources().addEquipment(uEquip);
         if (CfgServer.isRealServer()) {
             Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
-                    "type", "user_equipment_remove", "id", userEquipId, "itemId", itemKey, "tier", tier);
+                    "type", "user_equipment_claim", "id", rowId, "itemId", itemKey, "tier", uEquip.getTier());
         }
-        return Arrays.asList((long) BONUS_EQUIPMENT, userEquipId, (long) -itemKey, (long) uEquip.getTier());
+        return Arrays.asList((long) BONUS_EQUIPMENT, rowId, (long) itemKey, (long) uEquip.getTier());
+    }
+
+    static List<Long> claimEscrowMaterial(MyUser mUser, long rowId, int materialId, String detailAction) {
+        int escrowId = game.treasure.BattleConfig.P_escrowUserId;
+        if (mUser.getResources().getMaterial(rowId) != null)
+            return new ArrayList<>();
+        UserMaterialEntity uMaterial = (UserMaterialEntity) DBJPA.getUnique(
+                "user_material", UserMaterialEntity.class, "id", rowId, "user_id", escrowId);
+        if (uMaterial == null || uMaterial.getMaterialId() != materialId)
+            return new ArrayList<>();
+        if (!mUser.getResources().canAddMaterial(1))
+            return new ArrayList<>();
+        int killerId = mUser.getUser().getId();
+        uMaterial.setUserId(killerId);
+        if (!uMaterial.update(List.of("user_id", killerId)))
+            return new ArrayList<>();
+        mUser.getResources().addMaterial(uMaterial);
+        if (CfgServer.isRealServer()) {
+            Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
+                    "type", "user_material_claim", "id", rowId, "materialId", materialId, "tier", uMaterial.getTier());
+        }
+        return Arrays.asList((long) BONUS_MATERIAL, rowId, (long) materialId, (long) uMaterial.getTier());
     }
 
     static List<Long> addItemArtifact(MyUser mUser, int artifactId, int configTier, String detailAction) {
@@ -755,7 +644,6 @@ public class Bonus {
     }
 
     public static String checkMoney(MyUser mUser, List<Long> aBonus) {
-        Map<Integer, Integer> itemDeduct = new HashMap<>();
         Map<Integer, Long> pointDeduct = new HashMap<>();
         for (List<Long> chunk : parseCost(aBonus)) {
             int type = chunk.get(0).intValue();
@@ -772,45 +660,11 @@ public class Bonus {
                     if (mUser.getUser().getRuby() + chunk.get(1) < 0)
                         return Lang.instance(mUser).get(Lang.err_not_enough_ruby);
                     break;
-                case BONUS_ITEM:
-                    if (chunk.size() == 2 && chunk.get(1) < 0) {
-                        itemDeduct.merge((int) (-chunk.get(1)), 1, Integer::sum);
-                    } else if (chunk.size() == 3) {
-                        long userItemId = chunk.get(1);
-                        int itemKey = Math.abs(chunk.get(2).intValue());
-                        UserItemEntity uItem = mUser.getResources().getItem(userItemId);
-                        ResItemEntity resItem = ResItem.getItem(itemKey);
-                        String name = resItem != null ? resItem.getName() : "?";
-                        if (uItem == null || uItem.getItemId() != itemKey)
-                            return String.format(Lang.instance(mUser).get(Lang.err_not_enough_item), name);
-                    } else {
-                        return Lang.instance(mUser).get(Lang.err_params);
-                    }
-                    break;
-                case BONUS_EQUIPMENT:
-                    if (chunk.size() != 4)
-                        return Lang.instance(mUser).get(Lang.err_params);
-                    long userEquipId = chunk.get(1);
-                    int itemKey = chunk.get(2).intValue();
-                    UserEquipmentEntity uEquip = mUser.getResources().getEquipment(userEquipId);
-                    String name = ResItem.getItemEquipment(itemKey) != null
-                            ? ResItem.getItemEquipment(itemKey).getName() : "?";
-                    if (uEquip == null || uEquip.getItemId() != itemKey)
-                        return String.format(Lang.instance(mUser).get(Lang.err_not_enough_item), name);
-                    break;
                 case BONUS_ITEM_POINT:
-                    if (chunk.size() != 3)
-                        return Lang.instance(mUser).get(Lang.err_params);
                     if (chunk.get(2) < 0)
                         pointDeduct.merge(chunk.get(1).intValue(), chunk.get(2), Long::sum);
                     break;
             }
-        }
-        for (Map.Entry<Integer, Integer> entry : itemDeduct.entrySet()) {
-            ResItemEntity resItem = ResItem.getItem(entry.getKey());
-            String name = resItem != null ? resItem.getName() : "?";
-            if (mUser.getResources().countByItemKey(entry.getKey()) < entry.getValue())
-                return String.format(Lang.instance(mUser).get(Lang.err_not_enough_item), name);
         }
         for (Map.Entry<Integer, Long> entry : pointDeduct.entrySet()) {
             game.treasure.mapping.main.ResItemPointEntity res = ResItemPoint.get(entry.getKey());
@@ -869,31 +723,16 @@ public class Bonus {
         return result;
     }
 
-    /** Parse apply wire — preview grant (len cố định) + deduct/remove (payload biến). */
+    /** Parse apply wire — cố định mTypeLength (alias parse). */
     public static List<List<Long>> parseCost(List<Long> bonus) {
-        List<List<Long>> result = new ArrayList<>();
-        if (bonus == null || bonus.isEmpty())
-            return result;
-        int index = 0;
-        while (index < bonus.size()) {
-            int type = bonus.get(index++).intValue();
-            int payloadIndex = index;
-            int length = applyPayloadLength(bonus, payloadIndex, type);
-            List<Long> tmp = new ArrayList<>();
-            tmp.add((long) type);
-            for (int i = 0; i < length; i++)
-                tmp.add(bonus.get(payloadIndex + i));
-            result.add(tmp);
-            index = payloadIndex + length;
-        }
-        return result;
+        return parse(bonus);
     }
 
     public static List<Long> reverseBonus(List<Long> bonus) {
         List<Long> ret = new ArrayList<>();
         List<List<Long>> aBonus = parse(bonus);
         for (List<Long> bm : aBonus) {
-            if (bm.get(0).intValue() == BONUS_ITEM_POINT && bm.size() >= 3) {
+            if (bm.get(0).intValue() == BONUS_ITEM_POINT) {
                 List<Long> copy = new ArrayList<>(bm);
                 copy.set(2, -copy.get(2));
                 ret.addAll(copy);
