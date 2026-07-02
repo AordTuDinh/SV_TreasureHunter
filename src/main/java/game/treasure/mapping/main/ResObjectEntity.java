@@ -1,7 +1,5 @@
 package game.treasure.mapping.main;
 
-import game.object.BonusConfig;
-import game.treasure.service.resource.ResItem;
 import game.treasure.service.user.Bonus;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,14 +20,14 @@ import java.util.List;
 public class ResObjectEntity extends BaseEntity implements Serializable {
     private static final int RATE_OPTION_TOTAL = 1000;
     private static final int RATE_INNER_TOTAL = 100;
-    private static final int MATERIAL_ID_MIN = 1;
-    private static final int MATERIAL_ID_MAX = 23;
+    private static final int EVENT_MATERIAL_TIER = 1;
 
     private static final int CAT_HP = 0;
     private static final int CAT_EQUIP = 1;
     private static final int CAT_MOB = 2;
     private static final int CAT_GOLD = 3;
     private static final int CAT_MATERIAL = 4;
+    private static final int CAT_ITEM_EVENT = 5;
 
     @Getter
     @Id
@@ -72,9 +70,9 @@ public class ResObjectEntity extends BaseEntity implements Serializable {
     }
 
     /**
-     * Roll 2 lần: (1) loại drop theo {@code rate_option} /1000, (2) id/tier theo rate /100 trong từng loại.
+     * Roll category theo {@code rate_option} /1000; material/event id từ cell, equip random từ {@code equipment}.
      */
-    public List<Long> randomBonus() {
+    public List<Long> randomBonus(int materialId, int itemEventId) {
         if (rateOptionParsed == null || rateOptionParsed.isEmpty()) return new ArrayList<>();
         int cat = pickIndexByRate(rateOptionParsed, RATE_OPTION_TOTAL);
         return switch (cat) {
@@ -82,7 +80,8 @@ public class ResObjectEntity extends BaseEntity implements Serializable {
             case CAT_EQUIP -> randomEquipBonus();
             case CAT_MOB -> randomMobBonus();
             case CAT_GOLD -> randomGoldBonus();
-            case CAT_MATERIAL -> randomMaterialBonus();
+            case CAT_MATERIAL -> randomMaterialBonus(materialId);
+            case CAT_ITEM_EVENT -> itemEventBonus(itemEventId);
             default -> new ArrayList<>();
         };
     }
@@ -113,10 +112,15 @@ public class ResObjectEntity extends BaseEntity implements Serializable {
         return Bonus.viewGold(NumberUtil.getRandom(min, max));
     }
 
-    private List<Long> randomMaterialBonus() {
-        int materialId = NumberUtil.getRandom(MATERIAL_ID_MIN, MATERIAL_ID_MAX);
+    private List<Long> randomMaterialBonus(int materialId) {
+        if (materialId <= 0) return new ArrayList<>();
         int tier = pickTier(materialRateParsed);
         return Bonus.viewMaterial(materialId, tier);
+    }
+
+    private static List<Long> itemEventBonus(int itemEventId) {
+        if (itemEventId <= 0) return new ArrayList<>();
+        return Bonus.viewMaterial(itemEventId, EVENT_MATERIAL_TIER);
     }
 
     private static int pickTier(List<Integer> tierRates) {

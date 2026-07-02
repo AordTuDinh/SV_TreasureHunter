@@ -34,15 +34,21 @@ public class CellObject {
     int curHp;
     long timeBeAttack;
     int resObjectType;
+    /** {@code chunk.typeDrop} — material nhận khi roll {@code CAT_MATERIAL}. */
+    int materialId;
+    /** {@code 23 + chunk.typeEvent} — material sự kiện khi roll {@code CAT_ITEM_EVENT}. */
+    int itemEventId;
 
 
-    public CellObject(Pos pos, int type, int chunkId, int id) {
+    public CellObject(Pos pos, int type, int chunkId, int id, int materialId, int itemEventId) {
         this.pos = pos;
         this.chunkId = chunkId;
         this.state = Pbmethod.CellState.ACTIVE;
         this.objectType = Pbmethod.CellObjectType.valueOf(type);
         this.id = id;
         this.resObjectType = type;
+        this.materialId = materialId;
+        this.itemEventId = itemEventId;
         ResObjectEntity resObject = ResMap.getResObject(type);
         this.curHp = resObject.getHp();
         this.baseHp = resObject.getHp();
@@ -52,7 +58,7 @@ public class CellObject {
     public List<Long> getBonusKillMe() {
         ResObjectEntity resObject = ResMap.getResObject(resObjectType);
         if (resObject == null) return new ArrayList<>();
-        return resObject.randomBonus();
+        return resObject.randomBonus(materialId, itemEventId);
     }
 
     /** Mỗi lần đánh trừ 1 máu, không dùng damage của player. */

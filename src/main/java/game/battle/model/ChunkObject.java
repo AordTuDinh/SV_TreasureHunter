@@ -14,6 +14,7 @@ public class ChunkObject {
     Pos pos;
     int typeDrop;
     int typeRoom;
+    int typeEvent;
 
     public ChunkObject(int chunkId, Pos pos, Map<Integer, CellObject> cells) {
         this.chunkId = chunkId;

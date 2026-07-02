@@ -104,7 +104,10 @@ public class ResMapEntity extends BaseEntity implements Serializable {
             int chunkId = MapService.chunkPosToId(this, chunkX, chunkY);
             Pos pos = new Pos(worldX, worldY);
             int cellId = MapService.worldCellPosToGlobalCellId(this, worldX, worldY);
-            CellObject cell = new CellObject(pos, c.type, chunkId, cellId);
+            int materialId = getTypeDrop(chunkId);
+            int typeEvent = getTypeEvent(chunkId);
+            int itemEventId = typeEvent > 0 ? mapTypeEventToItemEventMaterialId(typeEvent) : 0;
+            CellObject cell = new CellObject(pos, c.type, chunkId, cellId, materialId, itemEventId);
             if (chunkX < minChunkX || chunkX > maxChunkX
                     || chunkY < minChunkY || chunkY > maxChunkY) {
                 System.out.println("[MapLoad] skip out-of-bound cell: x=" + worldX + ", y=" + worldY
@@ -142,6 +145,15 @@ public class ResMapEntity extends BaseEntity implements Serializable {
     public int getTypeDrop(int chunkId) {
         MapData.ChunkDto dto = chunkMetaById.get(chunkId);
         return dto != null ? dto.typeDrop : 0;
+    }
+
+    public int getTypeEvent(int chunkId) {
+        MapData.ChunkDto dto = chunkMetaById.get(chunkId);
+        return dto != null ? dto.typeEvent : 0;
+    }
+
+    public static int mapTypeEventToItemEventMaterialId(int typeEvent) {
+        return 23 + typeEvent;
     }
 
     void buildCampFireCache() {
@@ -192,6 +204,7 @@ public class ResMapEntity extends BaseEntity implements Serializable {
             if (chunk != null) {
                 chunk.setTypeDrop(dto.typeDrop);
                 chunk.setTypeRoom(dto.typeRoom);
+                chunk.setTypeEvent(dto.typeEvent);
             }
         }
     }
