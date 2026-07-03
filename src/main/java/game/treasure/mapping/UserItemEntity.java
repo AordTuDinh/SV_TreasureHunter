@@ -33,6 +33,7 @@ public class UserItemEntity implements Serializable {
     int level;
     int lockDestroy;
     int isCraft;
+    int icon;
     String data;
 
     @Transient
@@ -49,6 +50,7 @@ public class UserItemEntity implements Serializable {
         level = 1;
         lockDestroy = 0;
         isCraft = 0;
+        icon = ResItem.resolveIcon(itemId);
         data = "[]";
     }
 
@@ -167,6 +169,15 @@ public class UserItemEntity implements Serializable {
         setData("[]");
     }
 
+    public int getEffectiveIcon() {
+        if (icon > 0)
+            return icon;
+        ResItemEntity res = getRes();
+        if (res != null && res.getIcon() > 0)
+            return res.getIcon();
+        return itemId;
+    }
+
     public Pbmethod.PbItem.Builder toProto() {
         Pbmethod.PbItem.Builder pb = Pbmethod.PbItem.newBuilder();
         pb.setId(id);
@@ -174,6 +185,7 @@ public class UserItemEntity implements Serializable {
         pb.setLevel(level);
         pb.setLockDestroy(lockDestroy == 1);
         pb.setIsCraft(isCraft);
+        pb.setIcon(getEffectiveIcon());
         if (data != null && !data.isEmpty() && !"[]".equals(data))
             pb.setData(data);
         return pb;

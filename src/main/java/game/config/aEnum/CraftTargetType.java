@@ -7,7 +7,8 @@ public enum CraftTargetType {
     MOUNT(2),
     PET(3),
     SKIN(4),
-    ARTIFACT(5);
+    ARTIFACT(5),
+    CONSUMABLE(6);
 
     public final int id;
 
@@ -33,6 +34,6 @@ public enum CraftTargetType {
     }
 
     public boolean usesGoldFee() {
-        return this == EQUIPMENT;
+        return this == EQUIPMENT || this == CONSUMABLE;
     }
 }

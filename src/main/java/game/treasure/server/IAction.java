@@ -181,6 +181,7 @@ public class IAction {
     public static final int MATERIAL_UPGRADE = 458;
     public static final int CRAFT_EXECUTE = 459;
     public static final int CRAFT_UPDATE = 460;
+    public static final int CRAFT_CONSUMABLE_INFO = 461;
     public static final int MATERIAL_MERGE = 461;
     public static final int ARTIFACT_UPGRADE = 462;
     public static final int ARTIFACT_EQUIP = 463;

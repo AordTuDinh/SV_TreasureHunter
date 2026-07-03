@@ -135,6 +135,9 @@ public class CfgItem {
 
 
     public static List<Long> getUpgradeFee(UserItemEntity item) {
+        List<Long> poisonFee = CfgPoisonUpgrade.tryGetUpgradeFee(item);
+        if (poisonFee != null)
+            return poisonFee;
         long fee = getUpgradeFeeGold(item);
         if (fee <= 0) return new ArrayList<>();
         return Bonus.viewGold(-fee);

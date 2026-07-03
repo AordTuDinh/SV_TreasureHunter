@@ -47396,6 +47396,16 @@ public final class Pbmethod {
      * <code>optional int32 isCraft = 7;</code>
      */
     int getIsCraft();
+
+    // optional int32 icon = 8;
+    /**
+     * <code>optional int32 icon = 8;</code>
+     */
+    boolean hasIcon();
+    /**
+     * <code>optional int32 icon = 8;</code>
+     */
+    int getIcon();
   }
   /**
    * Protobuf type {@code pbdson.PbItem}
@@ -47476,6 +47486,11 @@ public final class Pbmethod {
             case 56: {
               bitField0_ |= 0x00000020;
               isCraft_ = input.readInt32();
+              break;
+            }
+            case 64: {
+              bitField0_ |= 0x00000040;
+              icon_ = input.readInt32();
               break;
             }
           }
@@ -47641,6 +47656,22 @@ public final class Pbmethod {
       return isCraft_;
     }
 
+    // optional int32 icon = 8;
+    public static final int ICON_FIELD_NUMBER = 8;
+    private int icon_;
+    /**
+     * <code>optional int32 icon = 8;</code>
+     */
+    public boolean hasIcon() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional int32 icon = 8;</code>
+     */
+    public int getIcon() {
+      return icon_;
+    }
+
     private void initFields() {
       id_ = 0L;
       itemKey_ = 0;
@@ -47648,6 +47679,7 @@ public final class Pbmethod {
       lockDestroy_ = false;
       data_ = "";
       isCraft_ = 0;
+      icon_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -47678,6 +47710,9 @@ public final class Pbmethod {
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         output.writeInt32(7, isCraft_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeInt32(8, icon_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -47711,6 +47746,10 @@ public final class Pbmethod {
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(7, isCraft_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(8, icon_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -47840,6 +47879,8 @@ public final class Pbmethod {
         bitField0_ = (bitField0_ & ~0x00000010);
         isCraft_ = 0;
         bitField0_ = (bitField0_ & ~0x00000020);
+        icon_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000040);
         return this;
       }
 
@@ -47892,6 +47933,10 @@ public final class Pbmethod {
           to_bitField0_ |= 0x00000020;
         }
         result.isCraft_ = isCraft_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.icon_ = icon_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -47927,6 +47972,9 @@ public final class Pbmethod {
         }
         if (other.hasIsCraft()) {
           setIsCraft(other.getIsCraft());
+        }
+        if (other.hasIcon()) {
+          setIcon(other.getIcon());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -48190,6 +48238,39 @@ public final class Pbmethod {
       public Builder clearIsCraft() {
         bitField0_ = (bitField0_ & ~0x00000020);
         isCraft_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 icon = 8;
+      private int icon_ ;
+      /**
+       * <code>optional int32 icon = 8;</code>
+       */
+      public boolean hasIcon() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>optional int32 icon = 8;</code>
+       */
+      public int getIcon() {
+        return icon_;
+      }
+      /**
+       * <code>optional int32 icon = 8;</code>
+       */
+      public Builder setIcon(int value) {
+        bitField0_ |= 0x00000040;
+        icon_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 icon = 8;</code>
+       */
+      public Builder clearIcon() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        icon_ = 0;
         onChanged();
         return this;
       }
@@ -87952,157 +88033,157 @@ public final class Pbmethod {
       "\030\007 \001(\002\022\r\n\005value\030\010 \001(\002\022\r\n\005range\030\t \001(\002\022\016\n\006" +
       "person\030\n \001(\002\022\017\n\007isCraft\030\013 \001(\005\"7\n\016PbListA",
       "rtifact\022%\n\tartifacts\030\001 \003(\0132\022.pbdson.PbAr" +
-      "tifact\"h\n\006PbItem\022\n\n\002id\030\001 \001(\003\022\017\n\007itemKey\030" +
+      "tifact\"v\n\006PbItem\022\n\n\002id\030\001 \001(\003\022\017\n\007itemKey\030" +
       "\002 \001(\005\022\r\n\005level\030\003 \001(\005\022\023\n\013lockDestroy\030\004 \001(" +
-      "\010\022\014\n\004data\030\006 \001(\t\022\017\n\007isCraft\030\007 \001(\005\"\240\001\n\013PbE" +
-      "quipment\022\n\n\002id\030\001 \001(\003\022\017\n\007itemKey\030\002 \001(\005\022\r\n" +
-      "\005level\030\003 \001(\005\022\023\n\013lockDestroy\030\004 \001(\010\022\014\n\004tie" +
-      "r\030\005 \001(\005\022\014\n\004data\030\006 \001(\t\022\017\n\007isCraft\030\007 \001(\005\022\014" +
-      "\n\004icon\030\010 \001(\005\022\025\n\rpriceTreasure\030\t \001(\005\"<\n\013P" +
-      "bItemPoint\022\017\n\007itemKey\030\001 \001(\005\022\016\n\006number\030\002 " +
-      "\001(\003\022\014\n\004data\030\003 \001(\t\"/\n\nListAction\022!\n\007aActi",
-      "on\030\001 \003(\0132\020.pbdson.PbAction\"*\n\010PbAction\022\020" +
-      "\n\010actionId\030\001 \001(\005\022\014\n\004data\030\002 \001(\014\".\n\014Common" +
-      "Vector\022\r\n\005aLong\030\001 \003(\003\022\017\n\007aString\030\002 \003(\t\"9" +
-      "\n\020ListCommonVector\022%\n\007aVector\030\001 \003(\0132\024.pb" +
-      "dson.CommonVector\"f\n\017PbCharacterInfo\022\n\n\002" +
-      "id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\014\n\004team\030\003 \001(\005\022\r\n\005" +
-      "skins\030\004 \003(\005\022\r\n\005aItem\030\005 \003(\005\022\r\n\005point\030\006 \003(" +
-      "\003\"+\n\nPbListMail\022\035\n\005aMail\030\001 \003(\0132\016.pbdson." +
-      "PbMail\"\210\001\n\006PbMail\022\n\n\002id\030\001 \001(\005\022\r\n\005title\030\002" +
-      " \001(\t\022\017\n\007message\030\003 \001(\t\022\r\n\005bonus\030\004 \003(\005\022\017\n\007",
-      "receive\030\005 \001(\005\022\014\n\004time\030\006 \001(\003\022\020\n\010senderId\030" +
-      "\007 \001(\005\022\022\n\nsenderName\030\010 \001(\t\"\257\001\n\tPbEndGame\022" +
-      "\017\n\007popupId\030\001 \001(\005\022\021\n\tbattleKey\030\002 \001(\t\022\r\n\005i" +
-      "sWin\030\003 \001(\010\022\017\n\007message\030\004 \001(\t\022\r\n\005bonus\030\005 \003" +
-      "(\003\022\014\n\004time\030\006 \001(\005\022\017\n\007perDame\030\007 \001(\005\022\014\n\004sta" +
-      "r\030\010 \001(\005\022\"\n\004info\030\t \001(\0132\024.pbdson.CommonVec" +
-      "tor\"{\n\nPbRoomInfo\022\020\n\010roomType\030\001 \001(\005\022\017\n\007s" +
-      "ervice\030\002 \001(\005\022!\n\003cmm\030\003 \001(\0132\024.pbdson.Commo" +
-      "nVector\022\'\n\005lstCm\030\004 \001(\0132\030.pbdson.ListComm" +
-      "onVector\"Z\n\017PbListMiniLotte\022\020\n\010allBonus\030",
-      "\001 \003(\003\022\020\n\010luckyNum\030\002 \003(\005\022#\n\006aLotte\030\003 \003(\0132" +
-      "\023.pbdson.PbMiniLotte\"C\n\013PbMiniLotte\022\021\n\tn" +
-      "umChoose\030\001 \003(\005\022\022\n\nprizeIndex\030\002 \001(\005\022\r\n\005bo" +
-      "nus\030\003 \003(\005\"B\n\024PbListLotteryHistory\022*\n\010aLo" +
-      "ttery\030\001 \003(\0132\030.pbdson.PbLotteryHistory\"\247\001" +
-      "\n\020PbLotteryHistory\022\017\n\007eventId\030\001 \001(\005\022\014\n\004t" +
-      "ype\030\002 \001(\005\022\020\n\010luckyNum\030\003 \001(\005\022\016\n\006number\030\004 " +
-      "\003(\005\022\014\n\004time\030\005 \001(\003\022\r\n\005bonus\030\006 \003(\003\022\016\n\006stat" +
-      "us\030\007 \001(\005\022\021\n\tlistBonus\030\010 \003(\003\022\022\n\nlistResul" +
-      "t\030\t \003(\005\"*\n\014PbUnitUpdate\022\014\n\004type\030\001 \001(\005\022\014\n",
-      "\004data\030\002 \001(\014\"\213\001\n\tPbUnitPos\022\n\n\002id\030\001 \001(\003\022\r\n" +
-      "\005speed\030\002 \001(\005\022\024\n\014lastInputSeq\030\003 \001(\003\022\032\n\003po" +
-      "s\030\004 \001(\0132\r.pbdson.PbPos\022 \n\tdirection\030\005 \001(" +
-      "\0132\r.pbdson.PbPos\022\017\n\007chunkId\030\006 \001(\005\"1\n\014PbL" +
-      "istBullet\022!\n\007bullets\030\001 \003(\0132\020.pbdson.PbBu" +
-      "llet\"@\n\010PbBullet\022\n\n\002id\030\001 \001(\005\022\032\n\003pos\030\002 \001(" +
-      "\0132\r.pbdson.PbPos\022\014\n\004info\030\003 \003(\005\"(\n\tPbList" +
-      "Tab\022\033\n\004tabs\030\001 \003(\0132\r.pbdson.PbTab\"Z\n\005PbTa" +
-      "b\022\r\n\005tabId\030\001 \001(\005\022\025\n\reventTemplate\030\002 \001(\005\022" +
-      "\r\n\005image\030\003 \001(\t\022\014\n\004name\030\004 \001(\t\022\016\n\006notify\030\005",
-      " \001(\010\"\255\002\n\017PbEventBuyMonth\022\021\n\teventName\030\001 " +
-      "\001(\t\022\023\n\013imageBanner\030\002 \001(\t\022\022\n\ntextBanner\030\003" +
-      " \001(\t\022\r\n\005level\030\004 \001(\005\022\020\n\010curPoint\030\005 \001(\005\022\020\n" +
-      "\010maxPoint\030\006 \001(\005\022\025\n\rbuttonAddGoto\030\007 \001(\005\022\017" +
-      "\n\007keyHelp\030\010 \001(\t\022\016\n\006timeCD\030\t \001(\003\022\021\n\tstatu" +
-      "sBuy\030\n \001(\005\022\r\n\005price\030\013 \003(\003\022\022\n\nnormalName\030" +
-      "\014 \001(\t\022\017\n\007vipName\030\r \001(\t\022,\n\005cells\030\016 \003(\0132\035." +
-      "pbdson.PbCellPanelEventMonth\"\315\001\n\014PbEvent" +
-      "Timer\022\n\n\002id\030\001 \001(\005\022\016\n\006status\030\002 \001(\005\022\022\n\ntim" +
-      "eRemain\030\003 \001(\003\022\r\n\005bonus\030\004 \003(\003\022\r\n\005price\030\005 ",
-      "\003(\003\022\020\n\010oldPrice\030\006 \003(\003\022\014\n\004name\030\007 \001(\t\022\014\n\004d" +
-      "esc\030\010 \001(\t\022\014\n\004sale\030\t \001(\t\022\017\n\007bgrPath\030\n \001(\t" +
-      "\022\"\n\004info\030\013 \001(\0132\024.pbdson.CommonVector\"w\n\025" +
-      "PbCellPanelEventMonth\022\r\n\005level\030\001 \001(\005\022\013\n\003" +
-      "exp\030\002 \001(\005\022\016\n\006status\030\003 \001(\005\022\021\n\tstatusVip\030\004" +
-      " \001(\005\022\r\n\005bonus\030\005 \003(\003\022\020\n\010bonusVip\030\006 \003(\003\"\221\001" +
-      "\n\023PbPanelEventTabCell\022\021\n\teventName\030\001 \001(\t" +
-      "\022\023\n\013imageBanner\030\002 \001(\t\022\022\n\ntextBanner\030\003 \001(" +
-      "\t\022\016\n\006timeCD\030\t \001(\003\022.\n\005cells\030\016 \003(\0132\037.pbdso" +
-      "n.PbCellPanelEventTabCell\"i\n\027PbCellPanel",
-      "EventTabCell\022\n\n\002id\030\001 \001(\005\022\020\n\010cellName\030\002 \001" +
-      "(\t\022\r\n\005bonus\030\003 \003(\003\022\013\n\003per\030\004 \001(\t\022\024\n\014button" +
-      "Status\030\005 \001(\005\"\237\001\n\tPbWelfare\022\017\n\007eventId\030\001 " +
-      "\001(\005\022\016\n\006notify\030\002 \001(\010\022%\n\006banner\030\003 \001(\0132\025.pb" +
-      "dson.PbBannerEvent\022&\n\010tabEvent\030\004 \003(\0132\024.p" +
-      "bdson.PbTabWelfare\022\017\n\007keyHelp\030\005 \001(\t\022\021\n\tc" +
-      "ountdown\030\006 \001(\003\"b\n\014PbTabWelfare\022\r\n\005tabId\030" +
-      "\001 \001(\005\022\017\n\007tabName\030\002 \001(\t\022\"\n\005cells\030\003 \003(\0132\023." +
-      "pbdson.PbCellEvent\022\016\n\006notify\030\004 \001(\010\"\263\001\n\rP" +
-      "bBannerEvent\022\022\n\npathBanner\030\001 \001(\t\022\014\n\004text",
-      "\030\002 \001(\t\022\022\n\nbonusImage\030\003 \001(\t\022\021\n\tboxStatus\030" +
-      "\004 \001(\005\022\020\n\010bonusBox\030\005 \003(\005\022\014\n\004desc\030\006 \001(\t\022\021\n" +
-      "\tpathTitle\030\007 \001(\t\022&\n\004info\030\010 \001(\0132\030.pbdson." +
-      "ListCommonVector\"\353\001\n\013PbCellEvent\022\n\n\002id\030\001" +
-      " \001(\005\022\r\n\005image\030\002 \001(\t\022\r\n\005bonus\030\003 \003(\005\022\020\n\010na" +
-      "meCell\030\004 \001(\t\022\020\n\010textCell\030\005 \001(\t\022\020\n\010textDe" +
-      "sc\030\006 \001(\t\022\016\n\006numBuy\030\007 \001(\005\022\r\n\005limit\030\010 \001(\005\022" +
-      "\r\n\005price\030\t \003(\003\022\024\n\014buttonStatus\030\n \001(\005\022\020\n\010" +
-      "bonusDay\030\013 \003(\005\022\022\n\ntimeRemain\030\014 \001(\003\022\022\n\nti" +
-      "meExpire\030\r \001(\003\"\225\001\n\013PbEvent7Day\022&\n\004days\030\001",
-      " \003(\0132\030.pbdson.PbPanelEvent7Day\022\022\n\ntimeRe" +
-      "main\030\002 \001(\003\022\020\n\010curValue\030\003 \001(\005\022\020\n\010maxValue" +
-      "\030\004 \001(\005\022&\n\tposReward\030\005 \003(\0132\023.pbdson.PbPos" +
-      "Reward\"U\n\013PbPosReward\022\n\n\002id\030\001 \001(\005\022\014\n\004nam" +
-      "e\030\002 \001(\t\022\r\n\005point\030\003 \001(\003\022\r\n\005bonus\030\004 \003(\003\022\016\n" +
-      "\006status\030\005 \001(\005\"R\n\016PbTabEvent7Day\022\n\n\002id\030\001 " +
-      "\001(\005\022\014\n\004name\030\002 \001(\t\022&\n\005cells\030\003 \003(\0132\027.pbdso" +
-      "n.PbCellEvent7Day\"\272\001\n\020PbPanelEvent7Day\022$" +
-      "\n\004tab1\030\001 \001(\0132\026.pbdson.PbTabEvent7Day\022$\n\004" +
-      "tab2\030\002 \001(\0132\026.pbdson.PbTabEvent7Day\022$\n\004ta",
-      "b3\030\003 \001(\0132\026.pbdson.PbTabEvent7Day\022$\n\004tab4" +
-      "\030\004 \001(\0132\026.pbdson.PbTabEvent7Day\022\016\n\006isLock" +
-      "\030\005 \001(\010\"\306\001\n\017PbCellEvent7Day\022\n\n\002id\030\001 \001(\005\022\014" +
-      "\n\004name\030\002 \001(\t\022\014\n\004desc\030\003 \001(\t\022\020\n\010curValue\030\004" +
-      " \001(\005\022\020\n\010maxValue\030\005 \001(\005\022\r\n\005bonus\030\006 \003(\003\022\024\n" +
-      "\014buttonStatus\030\007 \001(\005\022\022\n\nbuttonGoto\030\010 \001(\005\022" +
-      "\020\n\010oldPrice\030\t \003(\003\022\020\n\010newPrice\030\n \003(\003\022\n\n\002x" +
-      "u\030\013 \001(\005\"\'\n\tPbListIAP\022\032\n\003iap\030\001 \003(\0132\r.pbds" +
-      "on.PpIAP\"\264\001\n\005PpIAP\022\n\n\002id\030\001 \001(\005\022\030\n\020produc" +
-      "tIdAndroid\030\002 \001(\t\022\024\n\014productIdIos\030\003 \001(\t\022\014",
-      "\n\004name\030\004 \001(\t\022\r\n\005price\030\005 \001(\t\022\r\n\005bonus\030\006 \003" +
-      "(\003\022\020\n\010addBonus\030\007 \003(\003\022\020\n\010addTitle\030\010 \001(\t\022\016" +
-      "\n\006vipExp\030\t \001(\005\022\017\n\007priceQr\030\n \001(\t*!\n\tCellS" +
-      "tate\022\n\n\006ACTIVE\020\001\022\010\n\004HIDE\020\002*\304\002\n\014SubStateT" +
-      "ype\022\r\n\tADD_BONUS\020\001\022\007\n\003DIE\020\002\022\n\n\006REVIVE\020\003\022" +
-      "\r\n\tPLAY_ANIM\020\004\022\r\n\tBE_DAMAGE\020\005\022\017\n\013EFFECT_" +
-      "BODY\020\006\022\t\n\005RE_HP\020\007\022\025\n\021UPDATE_CHAT_FRAME\020\010" +
-      "\022\020\n\014UPDATE_TRIAL\020\t\022\024\n\020UPDATE_ITEM_SLOT\020\n" +
-      "\022\024\n\020UPDATE_TEXT_DAME\020\013\022\026\n\022UPDATE_MULTI_P" +
-      "OINT\020\014\022\021\n\rUSE_ITEM_SLOT\020\r\022\024\n\020UPDATE_DIRE",
-      "CTION\020\016\022\025\n\021UPDATE_ITEM_EQUIP\020\017\022\024\n\020REMOVE" +
-      "_EQUIPMENT\020\020\022\023\n\017REMOVE_MATERIAL\020\021*Y\n\tSta" +
-      "teType\022\023\n\017TYPE_ADD_REMOVE\020\001\022\014\n\010TYPE_POS\020" +
-      "\002\022\023\n\017TYPE_UNIT_STATE\020\003\022\024\n\020TYPE_CHUNK_STA" +
-      "TE\020\004*y\n\016CellObjectType\022\010\n\004ROCK\020\001\022\010\n\004SIGN" +
-      "\020\002\022\n\n\006CACTUS\020\003\022\n\n\006FLOWER\020\004\022\t\n\005SKULL\020\005\022\t\n" +
-      "\005CHEST\020\006\022\t\n\005BONES\020\007\022\016\n\nGRAVESTONE\020\010\022\n\n\006H" +
-      "ELMET\020\t*f\n\007ItemKey\022\016\n\nBINH_MAU_1\020\001\022\016\n\nBI" +
-      "NH_MAU_2\020\002\022\016\n\nBINH_MAU_3\020\003\022\016\n\nBINH_MAU_4" +
-      "\020\004\022\010\n\004GOLD\020\005\022\007\n\003GEM\020\006\022\010\n\004RUBY\020\007*\224\001\n\014Item",
-      "PointKey\022\n\n\006CO_VAT\020\001\022\017\n\013TICKER_MINI\020\002\022\021\n" +
-      "\rTICKER_NORMAL\020\003\022\022\n\016TICKER_SPECIAL\020\004\022\010\n\004" +
-      "CHIP\020\005\022\021\n\rBONG_LINH_THU\020\006\022\021\n\rBONG_SIEU_T" +
-      "HU\020\007\022\020\n\014LOA_THE_GIOI\020\010*&\n\010ItemType\022\014\n\010PO" +
-      "SITION\020\001\022\014\n\010CURRENCY\020\002*0\n\rItemPointType\022" +
-      "\t\n\005EVENT\020\001\022\007\n\003USE\020\002\022\013\n\007SPEAKER\020\003*;\n\014Targ" +
-      "etAttack\022\n\n\006OBJECT\020\000\022\t\n\005ENEMY\020\001\022\010\n\004BOSS\020" +
-      "\002\022\n\n\006PLAYER\020\003*1\n\010SkinType\022\010\n\004HAIR\020\000\022\010\n\004F" +
-      "ACE\020\001\022\007\n\003EYE\020\002\022\010\n\004BODY\020\003*q\n\rEquipSlotTyp" +
-      "e\022\010\n\004NULL\020\000\022\n\n\006WEAPON\020\001\022\007\n\003HAT\020\002\022\t\n\005ARMO",
-      "R\020\003\022\t\n\005CLOAK\020\004\022\t\n\005SHOES\020\005\022\014\n\010TREASURE\020\006\022" +
-      "\007\n\003PET\020\007\022\t\n\005MOUNT\020\010*\346\002\n\010AutoSell\022\022\n\016AUTO" +
-      "_SELL_HP_1\020\000\022\022\n\016AUTO_SELL_HP_2\020\001\022\022\n\016AUTO" +
-      "_SELL_HP_3\020\002\022\022\n\016AUTO_SELL_HP_4\020\003\022\025\n\021AUTO" +
-      "_SELL_EQUIP_1\020\004\022\025\n\021AUTO_SELL_EQUIP_2\020\005\022\025" +
-      "\n\021AUTO_SELL_EQUIP_3\020\006\022\025\n\021AUTO_SELL_EQUIP" +
-      "_4\020\007\022\025\n\021AUTO_SELL_MOUNT_1\020\010\022\025\n\021AUTO_SELL" +
-      "_MOUNT_2\020\t\022\025\n\021AUTO_SELL_MOUNT_3\020\n\022\025\n\021AUT" +
-      "O_SELL_MOUNT_4\020\013\022\023\n\017AUTO_SELL_PET_1\020\014\022\023\n" +
-      "\017AUTO_SELL_PET_2\020\r\022\023\n\017AUTO_SELL_PET_3\020\016\022",
-      "\023\n\017AUTO_SELL_PET_4\020\017B\024\n\010protocolB\010Pbmeth" +
-      "od"
+      "\010\022\014\n\004data\030\006 \001(\t\022\017\n\007isCraft\030\007 \001(\005\022\014\n\004icon" +
+      "\030\010 \001(\005\"\240\001\n\013PbEquipment\022\n\n\002id\030\001 \001(\003\022\017\n\007it" +
+      "emKey\030\002 \001(\005\022\r\n\005level\030\003 \001(\005\022\023\n\013lockDestro" +
+      "y\030\004 \001(\010\022\014\n\004tier\030\005 \001(\005\022\014\n\004data\030\006 \001(\t\022\017\n\007i" +
+      "sCraft\030\007 \001(\005\022\014\n\004icon\030\010 \001(\005\022\025\n\rpriceTreas" +
+      "ure\030\t \001(\005\"<\n\013PbItemPoint\022\017\n\007itemKey\030\001 \001(" +
+      "\005\022\016\n\006number\030\002 \001(\003\022\014\n\004data\030\003 \001(\t\"/\n\nListA",
+      "ction\022!\n\007aAction\030\001 \003(\0132\020.pbdson.PbAction" +
+      "\"*\n\010PbAction\022\020\n\010actionId\030\001 \001(\005\022\014\n\004data\030\002" +
+      " \001(\014\".\n\014CommonVector\022\r\n\005aLong\030\001 \003(\003\022\017\n\007a" +
+      "String\030\002 \003(\t\"9\n\020ListCommonVector\022%\n\007aVec" +
+      "tor\030\001 \003(\0132\024.pbdson.CommonVector\"f\n\017PbCha" +
+      "racterInfo\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\014\n\004" +
+      "team\030\003 \001(\005\022\r\n\005skins\030\004 \003(\005\022\r\n\005aItem\030\005 \003(\005" +
+      "\022\r\n\005point\030\006 \003(\003\"+\n\nPbListMail\022\035\n\005aMail\030\001" +
+      " \003(\0132\016.pbdson.PbMail\"\210\001\n\006PbMail\022\n\n\002id\030\001 " +
+      "\001(\005\022\r\n\005title\030\002 \001(\t\022\017\n\007message\030\003 \001(\t\022\r\n\005b",
+      "onus\030\004 \003(\005\022\017\n\007receive\030\005 \001(\005\022\014\n\004time\030\006 \001(" +
+      "\003\022\020\n\010senderId\030\007 \001(\005\022\022\n\nsenderName\030\010 \001(\t\"" +
+      "\257\001\n\tPbEndGame\022\017\n\007popupId\030\001 \001(\005\022\021\n\tbattle" +
+      "Key\030\002 \001(\t\022\r\n\005isWin\030\003 \001(\010\022\017\n\007message\030\004 \001(" +
+      "\t\022\r\n\005bonus\030\005 \003(\003\022\014\n\004time\030\006 \001(\005\022\017\n\007perDam" +
+      "e\030\007 \001(\005\022\014\n\004star\030\010 \001(\005\022\"\n\004info\030\t \001(\0132\024.pb" +
+      "dson.CommonVector\"{\n\nPbRoomInfo\022\020\n\010roomT" +
+      "ype\030\001 \001(\005\022\017\n\007service\030\002 \001(\005\022!\n\003cmm\030\003 \001(\0132" +
+      "\024.pbdson.CommonVector\022\'\n\005lstCm\030\004 \001(\0132\030.p" +
+      "bdson.ListCommonVector\"Z\n\017PbListMiniLott",
+      "e\022\020\n\010allBonus\030\001 \003(\003\022\020\n\010luckyNum\030\002 \003(\005\022#\n" +
+      "\006aLotte\030\003 \003(\0132\023.pbdson.PbMiniLotte\"C\n\013Pb" +
+      "MiniLotte\022\021\n\tnumChoose\030\001 \003(\005\022\022\n\nprizeInd" +
+      "ex\030\002 \001(\005\022\r\n\005bonus\030\003 \003(\005\"B\n\024PbListLottery" +
+      "History\022*\n\010aLottery\030\001 \003(\0132\030.pbdson.PbLot" +
+      "teryHistory\"\247\001\n\020PbLotteryHistory\022\017\n\007even" +
+      "tId\030\001 \001(\005\022\014\n\004type\030\002 \001(\005\022\020\n\010luckyNum\030\003 \001(" +
+      "\005\022\016\n\006number\030\004 \003(\005\022\014\n\004time\030\005 \001(\003\022\r\n\005bonus" +
+      "\030\006 \003(\003\022\016\n\006status\030\007 \001(\005\022\021\n\tlistBonus\030\010 \003(" +
+      "\003\022\022\n\nlistResult\030\t \003(\005\"*\n\014PbUnitUpdate\022\014\n",
+      "\004type\030\001 \001(\005\022\014\n\004data\030\002 \001(\014\"\213\001\n\tPbUnitPos\022" +
+      "\n\n\002id\030\001 \001(\003\022\r\n\005speed\030\002 \001(\005\022\024\n\014lastInputS" +
+      "eq\030\003 \001(\003\022\032\n\003pos\030\004 \001(\0132\r.pbdson.PbPos\022 \n\t" +
+      "direction\030\005 \001(\0132\r.pbdson.PbPos\022\017\n\007chunkI" +
+      "d\030\006 \001(\005\"1\n\014PbListBullet\022!\n\007bullets\030\001 \003(\013" +
+      "2\020.pbdson.PbBullet\"@\n\010PbBullet\022\n\n\002id\030\001 \001" +
+      "(\005\022\032\n\003pos\030\002 \001(\0132\r.pbdson.PbPos\022\014\n\004info\030\003" +
+      " \003(\005\"(\n\tPbListTab\022\033\n\004tabs\030\001 \003(\0132\r.pbdson" +
+      ".PbTab\"Z\n\005PbTab\022\r\n\005tabId\030\001 \001(\005\022\025\n\reventT" +
+      "emplate\030\002 \001(\005\022\r\n\005image\030\003 \001(\t\022\014\n\004name\030\004 \001",
+      "(\t\022\016\n\006notify\030\005 \001(\010\"\255\002\n\017PbEventBuyMonth\022\021" +
+      "\n\teventName\030\001 \001(\t\022\023\n\013imageBanner\030\002 \001(\t\022\022" +
+      "\n\ntextBanner\030\003 \001(\t\022\r\n\005level\030\004 \001(\005\022\020\n\010cur" +
+      "Point\030\005 \001(\005\022\020\n\010maxPoint\030\006 \001(\005\022\025\n\rbuttonA" +
+      "ddGoto\030\007 \001(\005\022\017\n\007keyHelp\030\010 \001(\t\022\016\n\006timeCD\030" +
+      "\t \001(\003\022\021\n\tstatusBuy\030\n \001(\005\022\r\n\005price\030\013 \003(\003\022" +
+      "\022\n\nnormalName\030\014 \001(\t\022\017\n\007vipName\030\r \001(\t\022,\n\005" +
+      "cells\030\016 \003(\0132\035.pbdson.PbCellPanelEventMon" +
+      "th\"\315\001\n\014PbEventTimer\022\n\n\002id\030\001 \001(\005\022\016\n\006statu" +
+      "s\030\002 \001(\005\022\022\n\ntimeRemain\030\003 \001(\003\022\r\n\005bonus\030\004 \003",
+      "(\003\022\r\n\005price\030\005 \003(\003\022\020\n\010oldPrice\030\006 \003(\003\022\014\n\004n" +
+      "ame\030\007 \001(\t\022\014\n\004desc\030\010 \001(\t\022\014\n\004sale\030\t \001(\t\022\017\n" +
+      "\007bgrPath\030\n \001(\t\022\"\n\004info\030\013 \001(\0132\024.pbdson.Co" +
+      "mmonVector\"w\n\025PbCellPanelEventMonth\022\r\n\005l" +
+      "evel\030\001 \001(\005\022\013\n\003exp\030\002 \001(\005\022\016\n\006status\030\003 \001(\005\022" +
+      "\021\n\tstatusVip\030\004 \001(\005\022\r\n\005bonus\030\005 \003(\003\022\020\n\010bon" +
+      "usVip\030\006 \003(\003\"\221\001\n\023PbPanelEventTabCell\022\021\n\te" +
+      "ventName\030\001 \001(\t\022\023\n\013imageBanner\030\002 \001(\t\022\022\n\nt" +
+      "extBanner\030\003 \001(\t\022\016\n\006timeCD\030\t \001(\003\022.\n\005cells" +
+      "\030\016 \003(\0132\037.pbdson.PbCellPanelEventTabCell\"",
+      "i\n\027PbCellPanelEventTabCell\022\n\n\002id\030\001 \001(\005\022\020" +
+      "\n\010cellName\030\002 \001(\t\022\r\n\005bonus\030\003 \003(\003\022\013\n\003per\030\004" +
+      " \001(\t\022\024\n\014buttonStatus\030\005 \001(\005\"\237\001\n\tPbWelfare" +
+      "\022\017\n\007eventId\030\001 \001(\005\022\016\n\006notify\030\002 \001(\010\022%\n\006ban" +
+      "ner\030\003 \001(\0132\025.pbdson.PbBannerEvent\022&\n\010tabE" +
+      "vent\030\004 \003(\0132\024.pbdson.PbTabWelfare\022\017\n\007keyH" +
+      "elp\030\005 \001(\t\022\021\n\tcountdown\030\006 \001(\003\"b\n\014PbTabWel" +
+      "fare\022\r\n\005tabId\030\001 \001(\005\022\017\n\007tabName\030\002 \001(\t\022\"\n\005" +
+      "cells\030\003 \003(\0132\023.pbdson.PbCellEvent\022\016\n\006noti" +
+      "fy\030\004 \001(\010\"\263\001\n\rPbBannerEvent\022\022\n\npathBanner",
+      "\030\001 \001(\t\022\014\n\004text\030\002 \001(\t\022\022\n\nbonusImage\030\003 \001(\t" +
+      "\022\021\n\tboxStatus\030\004 \001(\005\022\020\n\010bonusBox\030\005 \003(\005\022\014\n" +
+      "\004desc\030\006 \001(\t\022\021\n\tpathTitle\030\007 \001(\t\022&\n\004info\030\010" +
+      " \001(\0132\030.pbdson.ListCommonVector\"\353\001\n\013PbCel" +
+      "lEvent\022\n\n\002id\030\001 \001(\005\022\r\n\005image\030\002 \001(\t\022\r\n\005bon" +
+      "us\030\003 \003(\005\022\020\n\010nameCell\030\004 \001(\t\022\020\n\010textCell\030\005" +
+      " \001(\t\022\020\n\010textDesc\030\006 \001(\t\022\016\n\006numBuy\030\007 \001(\005\022\r" +
+      "\n\005limit\030\010 \001(\005\022\r\n\005price\030\t \003(\003\022\024\n\014buttonSt" +
+      "atus\030\n \001(\005\022\020\n\010bonusDay\030\013 \003(\005\022\022\n\ntimeRema" +
+      "in\030\014 \001(\003\022\022\n\ntimeExpire\030\r \001(\003\"\225\001\n\013PbEvent",
+      "7Day\022&\n\004days\030\001 \003(\0132\030.pbdson.PbPanelEvent" +
+      "7Day\022\022\n\ntimeRemain\030\002 \001(\003\022\020\n\010curValue\030\003 \001" +
+      "(\005\022\020\n\010maxValue\030\004 \001(\005\022&\n\tposReward\030\005 \003(\0132" +
+      "\023.pbdson.PbPosReward\"U\n\013PbPosReward\022\n\n\002i" +
+      "d\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\r\n\005point\030\003 \001(\003\022\r\n\005" +
+      "bonus\030\004 \003(\003\022\016\n\006status\030\005 \001(\005\"R\n\016PbTabEven" +
+      "t7Day\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022&\n\005cells" +
+      "\030\003 \003(\0132\027.pbdson.PbCellEvent7Day\"\272\001\n\020PbPa" +
+      "nelEvent7Day\022$\n\004tab1\030\001 \001(\0132\026.pbdson.PbTa" +
+      "bEvent7Day\022$\n\004tab2\030\002 \001(\0132\026.pbdson.PbTabE",
+      "vent7Day\022$\n\004tab3\030\003 \001(\0132\026.pbdson.PbTabEve" +
+      "nt7Day\022$\n\004tab4\030\004 \001(\0132\026.pbdson.PbTabEvent" +
+      "7Day\022\016\n\006isLock\030\005 \001(\010\"\306\001\n\017PbCellEvent7Day" +
+      "\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\014\n\004desc\030\003 \001(\t" +
+      "\022\020\n\010curValue\030\004 \001(\005\022\020\n\010maxValue\030\005 \001(\005\022\r\n\005" +
+      "bonus\030\006 \003(\003\022\024\n\014buttonStatus\030\007 \001(\005\022\022\n\nbut" +
+      "tonGoto\030\010 \001(\005\022\020\n\010oldPrice\030\t \003(\003\022\020\n\010newPr" +
+      "ice\030\n \003(\003\022\n\n\002xu\030\013 \001(\005\"\'\n\tPbListIAP\022\032\n\003ia" +
+      "p\030\001 \003(\0132\r.pbdson.PpIAP\"\264\001\n\005PpIAP\022\n\n\002id\030\001" +
+      " \001(\005\022\030\n\020productIdAndroid\030\002 \001(\t\022\024\n\014produc",
+      "tIdIos\030\003 \001(\t\022\014\n\004name\030\004 \001(\t\022\r\n\005price\030\005 \001(" +
+      "\t\022\r\n\005bonus\030\006 \003(\003\022\020\n\010addBonus\030\007 \003(\003\022\020\n\010ad" +
+      "dTitle\030\010 \001(\t\022\016\n\006vipExp\030\t \001(\005\022\017\n\007priceQr\030" +
+      "\n \001(\t*!\n\tCellState\022\n\n\006ACTIVE\020\001\022\010\n\004HIDE\020\002" +
+      "*\304\002\n\014SubStateType\022\r\n\tADD_BONUS\020\001\022\007\n\003DIE\020" +
+      "\002\022\n\n\006REVIVE\020\003\022\r\n\tPLAY_ANIM\020\004\022\r\n\tBE_DAMAG" +
+      "E\020\005\022\017\n\013EFFECT_BODY\020\006\022\t\n\005RE_HP\020\007\022\025\n\021UPDAT" +
+      "E_CHAT_FRAME\020\010\022\020\n\014UPDATE_TRIAL\020\t\022\024\n\020UPDA" +
+      "TE_ITEM_SLOT\020\n\022\024\n\020UPDATE_TEXT_DAME\020\013\022\026\n\022" +
+      "UPDATE_MULTI_POINT\020\014\022\021\n\rUSE_ITEM_SLOT\020\r\022",
+      "\024\n\020UPDATE_DIRECTION\020\016\022\025\n\021UPDATE_ITEM_EQU" +
+      "IP\020\017\022\024\n\020REMOVE_EQUIPMENT\020\020\022\023\n\017REMOVE_MAT" +
+      "ERIAL\020\021*Y\n\tStateType\022\023\n\017TYPE_ADD_REMOVE\020" +
+      "\001\022\014\n\010TYPE_POS\020\002\022\023\n\017TYPE_UNIT_STATE\020\003\022\024\n\020" +
+      "TYPE_CHUNK_STATE\020\004*y\n\016CellObjectType\022\010\n\004" +
+      "ROCK\020\001\022\010\n\004SIGN\020\002\022\n\n\006CACTUS\020\003\022\n\n\006FLOWER\020\004" +
+      "\022\t\n\005SKULL\020\005\022\t\n\005CHEST\020\006\022\t\n\005BONES\020\007\022\016\n\nGRA" +
+      "VESTONE\020\010\022\n\n\006HELMET\020\t*f\n\007ItemKey\022\016\n\nBINH" +
+      "_MAU_1\020\001\022\016\n\nBINH_MAU_2\020\002\022\016\n\nBINH_MAU_3\020\003" +
+      "\022\016\n\nBINH_MAU_4\020\004\022\010\n\004GOLD\020\005\022\007\n\003GEM\020\006\022\010\n\004R",
+      "UBY\020\007*\224\001\n\014ItemPointKey\022\n\n\006CO_VAT\020\001\022\017\n\013TI" +
+      "CKER_MINI\020\002\022\021\n\rTICKER_NORMAL\020\003\022\022\n\016TICKER" +
+      "_SPECIAL\020\004\022\010\n\004CHIP\020\005\022\021\n\rBONG_LINH_THU\020\006\022" +
+      "\021\n\rBONG_SIEU_THU\020\007\022\020\n\014LOA_THE_GIOI\020\010*&\n\010" +
+      "ItemType\022\014\n\010POSITION\020\001\022\014\n\010CURRENCY\020\002*0\n\r" +
+      "ItemPointType\022\t\n\005EVENT\020\001\022\007\n\003USE\020\002\022\013\n\007SPE" +
+      "AKER\020\003*;\n\014TargetAttack\022\n\n\006OBJECT\020\000\022\t\n\005EN" +
+      "EMY\020\001\022\010\n\004BOSS\020\002\022\n\n\006PLAYER\020\003*1\n\010SkinType\022" +
+      "\010\n\004HAIR\020\000\022\010\n\004FACE\020\001\022\007\n\003EYE\020\002\022\010\n\004BODY\020\003*q" +
+      "\n\rEquipSlotType\022\010\n\004NULL\020\000\022\n\n\006WEAPON\020\001\022\007\n",
+      "\003HAT\020\002\022\t\n\005ARMOR\020\003\022\t\n\005CLOAK\020\004\022\t\n\005SHOES\020\005\022" +
+      "\014\n\010TREASURE\020\006\022\007\n\003PET\020\007\022\t\n\005MOUNT\020\010*\346\002\n\010Au" +
+      "toSell\022\022\n\016AUTO_SELL_HP_1\020\000\022\022\n\016AUTO_SELL_" +
+      "HP_2\020\001\022\022\n\016AUTO_SELL_HP_3\020\002\022\022\n\016AUTO_SELL_" +
+      "HP_4\020\003\022\025\n\021AUTO_SELL_EQUIP_1\020\004\022\025\n\021AUTO_SE" +
+      "LL_EQUIP_2\020\005\022\025\n\021AUTO_SELL_EQUIP_3\020\006\022\025\n\021A" +
+      "UTO_SELL_EQUIP_4\020\007\022\025\n\021AUTO_SELL_MOUNT_1\020" +
+      "\010\022\025\n\021AUTO_SELL_MOUNT_2\020\t\022\025\n\021AUTO_SELL_MO" +
+      "UNT_3\020\n\022\025\n\021AUTO_SELL_MOUNT_4\020\013\022\023\n\017AUTO_S" +
+      "ELL_PET_1\020\014\022\023\n\017AUTO_SELL_PET_2\020\r\022\023\n\017AUTO",
+      "_SELL_PET_3\020\016\022\023\n\017AUTO_SELL_PET_4\020\017B\024\n\010pr" +
+      "otocolB\010Pbmethod"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -88348,7 +88429,7 @@ public final class Pbmethod {
           internal_static_pbdson_PbItem_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbItem_descriptor,
-              new java.lang.String[] { "Id", "ItemKey", "Level", "LockDestroy", "Data", "IsCraft", });
+              new java.lang.String[] { "Id", "ItemKey", "Level", "LockDestroy", "Data", "IsCraft", "Icon", });
           internal_static_pbdson_PbEquipment_descriptor =
             getDescriptor().getMessageTypes().get(40);
           internal_static_pbdson_PbEquipment_fieldAccessorTable = new

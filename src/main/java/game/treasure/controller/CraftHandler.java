@@ -1,6 +1,7 @@
 package game.treasure.controller;
 
 import game.battle.calculate.IMath;
+import game.battle.object.Point;
 import game.config.CfgArtifact;
 import game.config.CfgCraft;
 import game.config.aEnum.CraftTargetType;
@@ -20,6 +21,7 @@ import game.treasure.mapping.main.ResMountEntity;
 import game.treasure.mapping.main.ResPetEntity;
 import game.treasure.server.IAction;
 import game.treasure.service.item.CraftPointDataUtil;
+import game.treasure.service.resource.ResItem;
 import game.treasure.service.user.Bonus;
 import io.netty.channel.Channel;
 import ozudo.base.helper.GsonUtil;
@@ -102,6 +104,22 @@ public class CraftHandler extends AHandler {
                 return;
             }
             if (equip.getIsCraft() == 1) {
+                addErrResponse(getLang(Lang.err_params));
+                return;
+            }
+        }
+
+        if (targetType == CraftTargetType.CONSUMABLE) {
+            UserItemEntity item = mUser.getResources().getItem(targetId);
+            if (item == null) {
+                addErrResponse(getLang(Lang.err_item_equip_not_found));
+                return;
+            }
+            if (item.getIsCraft() == 1) {
+                addErrResponse(getLang(Lang.err_params));
+                return;
+            }
+            if (item.getType() != Pbmethod.ItemType.POSITION.getNumber()) {
                 addErrResponse(getLang(Lang.err_params));
                 return;
             }
@@ -211,13 +229,24 @@ public class CraftHandler extends AHandler {
 
         if (!craftOk) {
             if (targetType.losesTargetOnCraftFail()) {
-                destroyEquipment(targetId);
+                destroyCraftTarget(targetType, targetId);
             }
             resp.add(-1L);
             resp.add(0L);
             appendCraftStatus(resp, targetType, uData);
             addResponse(getCommonVector(resp));
             return;
+        }
+
+        float consumableHpOriginal = 0f;
+        if (targetType == CraftTargetType.CONSUMABLE) {
+            UserItemEntity item = mUser.getResources().getItem(targetId);
+            if (item == null) {
+                Bonus.receiveListItem(mUser, DetailActionType.UPDATE_FAIL.getKey(), Bonus.reverseBonus(fee));
+                addErrSystem();
+                return;
+            }
+            consumableHpOriginal = CraftPointDataUtil.readHpBaseFromData(item.getData());
         }
 
         if (!resetTargetLevel(targetType, targetId)) {
@@ -275,6 +304,8 @@ public class CraftHandler extends AHandler {
 
         if (targetType == CraftTargetType.EQUIPMENT) {
             applyEquipmentTransform(targetId);
+        } else if (targetType == CraftTargetType.CONSUMABLE) {
+            applyConsumableTransform(targetId, consumableHpOriginal);
         } else if (targetType == CraftTargetType.PET) {
             applyPetTransform(targetId);
         } else if (targetType == CraftTargetType.MOUNT) {
@@ -319,6 +350,11 @@ public class CraftHandler extends AHandler {
             UserArtifactEntity artifact = mUser.getResources().getArtifact(targetId);
             if (artifact != null) {
                 addResponse(artifact.toProto().build());
+            }
+        } else if (targetType == CraftTargetType.CONSUMABLE) {
+            UserItemEntity item = mUser.getResources().getItem(targetId);
+            if (item != null) {
+                addResponse(IAction.CRAFT_CONSUMABLE_INFO, item.toProto().build());
             }
         }
     }
@@ -387,6 +423,12 @@ public class CraftHandler extends AHandler {
                 return -1;
             return mount.getTier() > 0 ? mount.getTier() : 1;
         }
+        if (type == CraftTargetType.CONSUMABLE) {
+            UserItemEntity item = mUser.getResources().getItem(targetId);
+            if (item == null)
+                return -1;
+            return item.getLevel() > 0 ? item.getLevel() : 1;
+        }
         return -1;
     }
 
@@ -454,7 +496,38 @@ public class CraftHandler extends AHandler {
             }
             return false;
         }
+        if (type == CraftTargetType.CONSUMABLE) {
+            UserItemEntity item = mUser.getResources().getItem(targetId);
+            if (item == null)
+                return false;
+            if (item.getIsCraft() == 1)
+                return true;
+            if (item.update(List.of("is_craft", 1))) {
+                item.setIsCraft(1);
+                return true;
+            }
+            return false;
+        }
         return true;
+    }
+
+    private void destroyCraftTarget(CraftTargetType type, long targetId) {
+        if (type == CraftTargetType.EQUIPMENT) {
+            destroyEquipment(targetId);
+        } else if (type == CraftTargetType.CONSUMABLE) {
+            destroyConsumable(targetId);
+        }
+    }
+
+    private void destroyConsumable(long itemRowId) {
+        UserItemEntity item = mUser.getResources().getItem(itemRowId);
+        if (item == null) {
+            return;
+        }
+        if (item.getLockDestroy() == 1) {
+            return;
+        }
+        ResItem.removeUserItemRow(mUser, item, DetailActionType.CRAFT_EXECUTE.getKey(itemRowId));
     }
 
     private void destroyEquipment(long equipId) {
@@ -477,6 +550,9 @@ public class CraftHandler extends AHandler {
         }
         int pointId = res.getPointId();
         float addValue = gem.getValue();
+        if (type == CraftTargetType.CONSUMABLE) {
+            addValue = addValue / 4f;
+        }
 
         if (type == CraftTargetType.EQUIPMENT) {
             UserEquipmentEntity equip = mUser.getResources().getItemEquipment(targetId);
@@ -518,7 +594,38 @@ public class CraftHandler extends AHandler {
             }
             return false;
         }
+        if (type == CraftTargetType.CONSUMABLE) {
+            UserItemEntity item = mUser.getResources().getItem(targetId);
+            if (item == null)
+                return false;
+            List<Float> merged = CraftPointDataUtil.mergePointPair(
+                    CraftPointDataUtil.parseDataFloats(item.getData()), pointId, addValue);
+            String dataJson = StringHelper.toDBString(merged);
+            if (item.update(List.of("data", dataJson))) {
+                item.setData(dataJson);
+                return true;
+            }
+            return false;
+        }
         return false;
+    }
+
+    private void applyConsumableTransform(long targetId, float hpOriginal) {
+        UserItemEntity item = mUser.getResources().getItem(targetId);
+        if (item == null)
+            return;
+        int tier = CfgCraft.rollConsumableTransformTier();
+        if (tier <= 0)
+            return;
+        int iconId = CfgCraft.getConsumableTransformIcon(tier);
+        if (iconId <= 0)
+            return;
+        float mul = CfgCraft.getConsumableHpMul(tier);
+        String dataJson = CraftPointDataUtil.applyHpTransform(item.getData(), hpOriginal, mul);
+        if (item.update(Arrays.asList("data", dataJson, "icon", iconId))) {
+            item.setData(dataJson);
+            item.setIcon(iconId);
+        }
     }
 
     private void applyEquipmentTransform(long targetId) {

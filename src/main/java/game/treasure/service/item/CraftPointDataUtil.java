@@ -1,5 +1,6 @@
 package game.treasure.service.item;
 
+import game.battle.object.Point;
 import game.config.CfgItem;
 import ozudo.base.helper.GsonUtil;
 import ozudo.base.helper.StringHelper;
@@ -43,5 +44,29 @@ public final class CraftPointDataUtil {
             scaled.add(CfgItem.formatPointStat(pointId, value));
         }
         return StringHelper.toDBString(scaled);
+    }
+
+    public static float readHpBaseFromData(String data) {
+        List<Float> raw = parseDataFloats(data);
+        for (int i = 0; i + 1 < raw.size(); i += 2) {
+            if (Math.round(raw.get(i)) == Point.HP)
+                return raw.get(i + 1);
+        }
+        return 0f;
+    }
+
+    /** Set HP trong data = hpOriginal × mul; giữ các point khác. */
+    public static String applyHpTransform(String data, float hpOriginal, float mul) {
+        float newHp = CfgItem.formatPointStat(Point.HP, hpOriginal * mul);
+        List<Float> merged = new ArrayList<>(parseDataFloats(data));
+        for (int i = 0; i + 1 < merged.size(); i += 2) {
+            if (Math.round(merged.get(i)) == Point.HP) {
+                merged.set(i + 1, newHp);
+                return StringHelper.toDBString(merged);
+            }
+        }
+        merged.add((float) Point.HP);
+        merged.add(newHp);
+        return StringHelper.toDBString(merged);
     }
 }

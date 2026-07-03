@@ -250,6 +250,39 @@ public class CfgCraft {
         return 1f;
     }
 
+    public static final int CONSUMABLE_TRANSFORM_ICON_BASE = 1000;
+
+    /** Consumable craft: always hóa hình — roll tier 1..6. */
+    public static int rollConsumableTransformTier() {
+        List<TransformTierConfig> tiers = cfg.consumableTransformTiers;
+        if (tiers == null || tiers.isEmpty())
+            return 0;
+        int roll = NumberUtil.getRandom(100);
+        int acc = 0;
+        for (TransformTierConfig tier : tiers) {
+            acc += tier.rate;
+            if (roll < acc)
+                return tier.tier;
+        }
+        return tiers.get(tiers.size() - 1).tier;
+    }
+
+    public static int getConsumableTransformIcon(int tier) {
+        if (tier <= 0)
+            return 0;
+        return CONSUMABLE_TRANSFORM_ICON_BASE + tier - 1;
+    }
+
+    public static float getConsumableHpMul(int tier) {
+        if (cfg.consumableTransformTiers == null || tier <= 0)
+            return 1f;
+        for (TransformTierConfig t : cfg.consumableTransformTiers) {
+            if (t.tier == tier)
+                return t.statMul > 0 ? t.statMul : 1f;
+        }
+        return 1f;
+    }
+
     private static void mergeConfig(DataConfig loaded) {
         if (loaded.maxCraftLevel > 0) {
             cfg.maxCraftLevel = loaded.maxCraftLevel;
@@ -290,6 +323,9 @@ public class CfgCraft {
         if (loaded.transformTiers != null && !loaded.transformTiers.isEmpty()) {
             cfg.transformTiers = loaded.transformTiers;
         }
+        if (loaded.consumableTransformTiers != null && !loaded.consumableTransformTiers.isEmpty()) {
+            cfg.consumableTransformTiers = loaded.consumableTransformTiers;
+        }
         if (loaded.treasureBuyPrices != null && !loaded.treasureBuyPrices.isEmpty()) {
             cfg.treasureBuyPrices = loaded.treasureBuyPrices;
         }
@@ -326,12 +362,21 @@ public class CfgCraft {
                 transformTier(2, 35, 1.35f),
                 transformTier(3, 15, 1.5f)
         );
+        d.consumableTransformTiers = List.of(
+                transformTier(1, 35, 2f),
+                transformTier(2, 25, 2.5f),
+                transformTier(3, 15, 3f),
+                transformTier(4, 12, 3.5f),
+                transformTier(5, 8, 4f),
+                transformTier(6, 5, 4.5f)
+        );
         d.targets = List.of(
                 target(1, 8, "gold", true, 0, 50, 100, 150, 200),
                 target(2, 12, "gem", false, 0, 100, 200, 300, 400),
                 target(3, 12, "gem", false, 0, 50, 100, 150, 200),
                 target(4, 12, "gem", false, 0, 500, 1000, 1500, 2000),
-                target(5, 12, "item_point", false, 0, 1000, 2000, 3000, 4000)
+                target(5, 12, "item_point", false, 0, 1000, 2000, 3000, 4000),
+                target(6, 8, "gold", true, 0, 50, 100, 150, 200)
         );
         d.treasureBuyPrices = List.of(200, 500, 1000, 2000);
         d.treasureArtifactRates = List.of(30, 25, 25, 20);
@@ -376,6 +421,8 @@ public class CfgCraft {
         List<TargetConfig> targets = new ArrayList<>();
         int transformRate = 20;
         List<TransformTierConfig> transformTiers = new ArrayList<>();
+        /** Hóa hình consumable type 1 — 6 mốc, luôn roll khi craft OK. */
+        List<TransformTierConfig> consumableTransformTiers = new ArrayList<>();
         /** Giá mua artifact bằng cổ vật — index 0..3 = tier 1..4. */
         List<Integer> treasureBuyPrices = new ArrayList<>();
         /** Tỉ lệ random res_artifact.rank khi mua (rank 1..4). */

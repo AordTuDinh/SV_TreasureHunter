@@ -448,6 +448,7 @@ message  PbItem{
   optional  bool lockDestroy = 4;
   optional  string data = 6;
   optional  int32 isCraft = 7;
+  optional  int32 icon = 8;
 }
 
 message  PbEquipment{

@@ -42,6 +42,14 @@ public class ResItem {
         return mItem.get(itemId);
     }
 
+    /** Icon hiển thị — từ res_item.icon, fallback itemId. */
+    public static int resolveIcon(int itemId) {
+        ResItemEntity res = getItem(itemId);
+        if (res != null && res.getIcon() > 0)
+            return res.getIcon();
+        return itemId;
+    }
+
     public static ResMaterialEntity getMaterial(int materialId) {
         return mMaterial.get(materialId);
     }
