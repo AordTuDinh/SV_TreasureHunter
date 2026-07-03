@@ -50,6 +50,7 @@ public class IAction {
     public static final int USE_GIFT_CODE = 54;
     public static final int SET_AUTO = 55;
     public static final int UPDATE_BAG = 56;
+    public static final int SET_AUTO_RANGE = 57;
 
     // chat
     public static final int CHAT_SERVER = 70;

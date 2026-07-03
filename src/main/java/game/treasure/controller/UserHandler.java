@@ -36,7 +36,7 @@ public class UserHandler extends AHandler {
         List<Integer> actions = Arrays.asList(CREATE_NAME, USER_INFO, DAME_SKIN_EQUIP, CHANGE_LANG,
                 CHAT_FRAME_EQUIP, USE_GIFT_CODE, TRIAL_EQUIP, BUFF_INFO, RANKING_STATUS, TUTORIAL_STATUS,
                 TUTORIAL_QUEST_RECEIVE, TUTORIAL_GO_TO, TUTORIAL_QUEST_STATUS, RANKING_INFO, SEND_MAIL,
-                HELP_VALUE, CHANGE_NAME, SKIN_EQUIP, USER_DATA_INFO, UPDATE_NEXT_DAY, SET_AUTO, CANCEL_PROTECT);
+                HELP_VALUE, CHANGE_NAME, SKIN_EQUIP, USER_DATA_INFO, UPDATE_NEXT_DAY, SET_AUTO, SET_AUTO_RANGE, CANCEL_PROTECT);
         actions.forEach(action -> mHandler.put(action, this));
     }
 
@@ -80,6 +80,7 @@ public class UserHandler extends AHandler {
                 case BUFF_INFO -> buffInfo(mUser);
                 case CHANGE_LANG -> changeLang(getInputString());
                 case SET_AUTO -> setAuto();
+                case SET_AUTO_RANGE -> setAutoRange();
                 case CANCEL_PROTECT -> cancelProtect();
             }
         } catch (Exception ex) {
@@ -150,6 +151,34 @@ public class UserHandler extends AHandler {
             return;
         }
         addResponse(getCommonVector(type, autoId, value));
+    }
+
+    private void setAutoRange() {
+        List<Long> input = getInputALong();
+        if (input.size() < 2) {
+            addErrParam();
+            return;
+        }
+
+        int attackRange = input.get(0).intValue();
+        int hpRange = input.get(1).intValue();
+        if (attackRange < 2 || attackRange > 10 || hpRange < 10 || hpRange > 100) {
+            addErrParam();
+            return;
+        }
+
+        UserSettingsEntity uSetting = mUser.getUSetting();
+        List<Integer> list = uSetting.getAutoRangeList();
+        if (list.get(0) != attackRange || list.get(1) != hpRange) {
+            list.set(0, attackRange);
+            list.set(1, hpRange);
+            if (!uSetting.updateAutoRange(StringHelper.toDBString(list))) {
+                addErrSystem();
+                return;
+            }
+        }
+
+        addResponse(getCommonVector(attackRange, hpRange));
     }
 
     private void changeLang(String inputString) {
