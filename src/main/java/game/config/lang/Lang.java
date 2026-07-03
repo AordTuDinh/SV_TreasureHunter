@@ -130,6 +130,7 @@ public abstract class Lang implements Serializable {
     public static String err_friend_send_bonus_all = "err_friend_send_bonus_all"; // Bạn đã gửi quà cho tất cả bạn bè rồi!
     // upgrade
     public static String upgrade_done = "upgrade_done";// Nâng cấp thành công !
+    public static String craft_success = "craft_success"; // Chế tạo thành công!
     public static String no_upgrade_now = "no_upgrade_now";// Không thể nâng cấp thêm !
     public static String invalid_location = "invalid_location";// Vị trí không hợp lệ !
     public static String equip_done = "equip_done";// Trang bị thành công!

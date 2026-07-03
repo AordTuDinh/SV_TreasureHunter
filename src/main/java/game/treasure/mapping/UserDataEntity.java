@@ -45,6 +45,10 @@ public class UserDataEntity implements Serializable {
     int dameSkinEquip, chatFrameEquip, trialEquip, effInit, craftLevel, craftExp;
     long timeProtected;
     long timeActiveArtifact;
+    /** Vị trí HOME lần logout gần nhất — JSON [x, y]. */
+    String lastPos;
+    /** 1 = logout lúc đang chết trên HOME. */
+    int lastDead;
 
     @Transient
     int maxLvTraining = 60;
@@ -74,6 +78,8 @@ public class UserDataEntity implements Serializable {
         this.craftExp = 0;
         this.buff = "[]";
         this.itemSlot = buildEmptyItemSlot(CfgUser.getSlotBagInit());
+        this.lastPos = "[0,0]";
+        this.lastDead = 0;
     }
 
     static String buildEmptyItemSlot(int bagCount) {

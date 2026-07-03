@@ -6,6 +6,7 @@ import game.config.CfgArtifact;
 import game.config.CfgCraft;
 import game.config.aEnum.CraftTargetType;
 import game.config.aEnum.DetailActionType;
+import game.config.aEnum.ToastType;
 import game.config.lang.Lang;
 import game.treasure.mapping.UserArtifactEntity;
 import game.treasure.mapping.UserDataEntity;
@@ -219,7 +220,15 @@ public class CraftHandler extends AHandler {
         }
         addBonusPrivate(feeBonus);
 
-        int craftPercent = CfgCraft.getCraftSuccessPercent(targetType, maxGemRank, itemLevel, craftLevel);
+        int craftPercent;
+        if (targetType == CraftTargetType.CONSUMABLE) {
+            UserItemEntity consumable = mUser.getResources().getItem(targetId);
+            int resTier = consumable != null ? consumable.getTier() : 1;
+            int userLevel = consumable != null && consumable.getLevel() > 0 ? consumable.getLevel() : 1;
+            craftPercent = CfgCraft.getCraftSuccessPercent(targetType, resTier, userLevel, craftLevel);
+        } else {
+            craftPercent = CfgCraft.getCraftSuccessPercent(targetType, maxGemRank, itemLevel, craftLevel);
+        }
         boolean craftOk = NumberUtil.getRandom(100) < craftPercent;
 
         List<Long> resp = new ArrayList<>();
@@ -235,6 +244,7 @@ public class CraftHandler extends AHandler {
             resp.add(0L);
             appendCraftStatus(resp, targetType, uData);
             addResponse(getCommonVector(resp));
+            addToast(ToastType.FAIL, "");
             return;
         }
 
@@ -320,6 +330,7 @@ public class CraftHandler extends AHandler {
 
         appendCraftStatus(resp, targetType, uData);
         addResponse(getCommonVector(resp));
+        addToast(ToastType.SUCCESS, getLang(Lang.craft_success));
 
         if (craftLeveled) {
             pushCraftUpdate(uData);

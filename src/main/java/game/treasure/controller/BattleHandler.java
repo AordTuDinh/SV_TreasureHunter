@@ -117,8 +117,21 @@ public class BattleHandler extends AHandler implements Serializable {
             room = (BaseRoom) TaskMonitor.getInstance().getRoom(keyRoom);
         }
         // check có room hay chưa, có rồi thì join
-        player.clearDataForChangeRoom(posInit);
-        player.resetData();
+        boolean restoreHome = mapType == MapType.HOME && posInit.equals(Pos.zero());
+        boolean wasDead = restoreHome && mUser.isLastHomeDead();
+        Pos spawn = posInit;
+        if (restoreHome) {
+            spawn = mUser.getLastHomePos();
+        }
+        if (restoreHome) {
+            player.clearDataForHomeRejoin(spawn, wasDead);
+            if (!wasDead) {
+                player.resetData();
+            }
+        } else {
+            player.clearDataForChangeRoom(posInit);
+            player.resetData();
+        }
         if (room == null) {
             switch (mapType) {
                 case HOME:
@@ -143,11 +156,16 @@ public class BattleHandler extends AHandler implements Serializable {
             return;
         }
         mUser.getPlayer().setJoinMap(curRoom);
-        curRoom.joinRoom(this, mUser.getPlayer());
+        Player player = mUser.getPlayer();
+        curRoom.joinRoom(this, player);
+        if (!player.isAlive()) {
+            player.protoStatus(protocol.Pbmethod.SubStateType.DIE);
+        }
     }
 
     void revivePlayer() {
         Player player = ((MyUser) ChUtil.get(channel, ChUtil.KEY_M_USER)).getPlayer();
+        mUser.clearLastHomeState();
         player.revive();
         initMapByTypeId(MapType.HOME, Pos.zero(), PopupType.NULL);
         player.getPoint().resetHpPercent(BattleConfig.P_reviveHpPercent);

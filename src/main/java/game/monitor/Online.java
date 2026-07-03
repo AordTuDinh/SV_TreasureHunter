@@ -138,8 +138,10 @@ public class Online {
         try {
             MyUser mUser = ChUtil.getMUser(channel);
             BaseRoom room = ChUtil.getRoom(channel);
-            if (room != null && mUser != null) {
-                room.removeUnit(mUser.getPlayer().getId());
+            if (mUser != null) {
+                if (room != null) {
+                    room.removeUnit(mUser.getPlayer().getId());
+                }
                 mUser.userLogout();
             }
             if(mUser!=null) Online.removeChannel(mUser.getUser().getServer(), mUser.getUser().getId());

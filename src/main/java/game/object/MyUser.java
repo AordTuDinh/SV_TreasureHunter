@@ -6,6 +6,9 @@ import game.battle.model.Player;
 import game.battle.object.Pos;
 import game.config.*;
 import game.config.aEnum.*;
+import game.treasure.BattleConfig;
+import game.treasure.mapping.main.ResMapEntity;
+import game.treasure.table.BaseRoom;
 import game.treasure.controller.UserHandler;
 import game.treasure.mapping.*;
 import game.treasure.server.IAction;
@@ -17,6 +20,7 @@ import game.protocol.CommonProto;
 import io.netty.channel.Channel;
 import lombok.Data;
 import ozudo.base.database.DBJPA;
+import ozudo.base.helper.ChUtil;
 import ozudo.base.helper.GUtil;
 import ozudo.base.helper.NumberUtil;
 import ozudo.base.helper.StringHelper;
@@ -226,6 +230,47 @@ public class MyUser implements Serializable {
         return cachePos==null? Pos.zero():cachePos;
     }
 
+    /** Lưu vị trí HOME khi logout (kể cả đang chết). */
+    public void saveLastHomePos() {
+        Player player = getPlayer();
+        BaseRoom room = player.getRoom();
+        if (room == null && channel != null) {
+            room = ChUtil.getRoom(channel);
+        }
+        if (room == null || room.getRoomType() != MapType.HOME) return;
+
+        ResMapEntity map = room.getMapInfo();
+        Pos pos = Pos.capPos(
+                player.getPos().round(),
+                map.getBotLeftP(), map.getTopRightP(),
+                BattleConfig.P_Width / 2f
+        );
+        boolean wasDead = !player.isAlive() || player.getPoint().getCurHP() <= 0;
+        String posStr = StringHelper.toDBString(List.of(pos.getX(), pos.getY()));
+        uData.setLastPos(posStr);
+        uData.setLastDead(wasDead ? 1 : 0);
+        uData.update(List.of("last_pos", posStr, "last_dead", uData.getLastDead()));
+    }
+
+    public Pos getLastHomePos() {
+        if (StringHelper.isEmpty(uData.getLastPos())) return Pos.zero();
+        try {
+            return new Pos(uData.getLastPos()).round();
+        } catch (Exception e) {
+            return Pos.zero();
+        }
+    }
+
+    public boolean isLastHomeDead() {
+        return uData.getLastDead() == 1;
+    }
+
+    public void clearLastHomeState() {
+        uData.setLastPos("[0,0]");
+        uData.setLastDead(0);
+        uData.update(List.of("last_pos", "[0,0]", "last_dead", 0));
+    }
+
     public Player getPlayer() {
         if (player == null) {
             player = new Player(this, user.getClan());
@@ -324,6 +369,7 @@ public class MyUser implements Serializable {
 
     public void userLogout() {
         long curTime = System.currentTimeMillis();
+        saveLastHomePos();
         uData.flushItemSlotIfDirty();
         getUser().update(Arrays.asList("logout", Calendar.getInstance().getTime()));
         UserAchievementEntity uAchie = Services.userDAO.getUserAchievement(this);

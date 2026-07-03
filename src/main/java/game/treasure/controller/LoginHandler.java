@@ -119,8 +119,10 @@ public class LoginHandler extends AHandler {
         BaseRoom room = (BaseRoom) ChUtil.get(channel, ChUtil.KEY_ROOM);
         String name = mUser.getUser().getUsername().split("_")[1];
         JCache.getInstance().removeValue("s:" + name);
-        if (room != null && mUser != null) {
-            room.removeUnit(mUser.getPlayer().getId());
+        if (mUser != null) {
+            if (room != null) {
+                room.removeUnit(mUser.getPlayer().getId());
+            }
             mUser.userLogout();
         }
         addResponse(getCommonVector(1));
@@ -184,8 +186,10 @@ public class LoginHandler extends AHandler {
         int loginType = (int) cmm.getALong(1);
         if (loginType == 1) {
             BaseRoom room = (BaseRoom) ChUtil.get(channel, ChUtil.KEY_ROOM);
-            if (room != null && mUser != null) {
-                room.removeUnit(mUser.getPlayer().getId());
+            if (mUser != null) {
+                if (room != null) {
+                    room.removeUnit(mUser.getPlayer().getId());
+                }
                 mUser.userLogout();
             }
         }
@@ -371,6 +375,8 @@ public class LoginHandler extends AHandler {
         lstCmm.addAVector(getCommonIntVector(CfgItem.SELL_PRICE_BASE_T1));
         // artifact coeffs: baseCost, upgradeMult×1000, sellMult×1000, craftCostPerTier
         lstCmm.addAVector(getCommonIntVector(CfgArtifact.getGameConfigCoeffs()));
+        // auto range: [tầm đánh, tầm dùng item buff máu]
+        lstCmm.addAVector(getCommonIntVector(uSet.getAutoRangeList()));
         // ret
         addResponse(IAction.GAME_CONFIG, lstCmm.build());
     }

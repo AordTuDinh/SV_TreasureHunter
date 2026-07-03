@@ -143,9 +143,11 @@ public class CfgCraft {
         return materialRank >= cfg.minMaterialRankForExp;
     }
 
-    public static int getCraftSuccessPercent(CraftTargetType type, int maxGemRank, int itemLevel, int craftLevel) {
-        int base = craftSuccessBase(maxGemRank);
-        int levelBonus = Math.max(0, effectiveItemLevel(itemLevel) - 1);
+    public static int getCraftSuccessPercent(CraftTargetType type, int baseRank, int itemLevel, int craftLevel) {
+        // Equip: baseRank = max gem rank. Consumable: baseRank = res_item.tier.
+        int base = craftSuccessBase(baseRank);
+        int safeLevel = Math.max(1, itemLevel);
+        int levelBonus = Math.max(0, safeLevel - 1);
         int smithBonus = getCraftLevelBonusPercent(craftLevel);
         return Math.min(100, base + levelBonus + smithBonus);
     }
@@ -155,10 +157,6 @@ public class CfgCraft {
             return 0;
         }
         return cfg.craftSuccessBaseByRank.get(rank);
-    }
-
-    public static int effectiveItemLevel(int storedLevel) {
-        return Math.max(1, storedLevel + cfg.itemLevelOffset);
     }
 
     public static boolean losesTargetOnCraftFail(CraftTargetType type) {
@@ -299,9 +297,6 @@ public class CfgCraft {
         if (loaded.craftLevelBonusPerLevel > 0) {
             cfg.craftLevelBonusPerLevel = loaded.craftLevelBonusPerLevel;
         }
-        if (loaded.itemLevelOffset != 0) {
-            cfg.itemLevelOffset = loaded.itemLevelOffset;
-        }
         if (loaded.expToNext != null && !loaded.expToNext.isEmpty()) {
             cfg.expToNext = loaded.expToNext;
         }
@@ -351,7 +346,6 @@ public class CfgCraft {
         d.minMaterialRankForExp = 3;
         d.craftLevelBonusFromLevel = 5;
         d.craftLevelBonusPerLevel = 5;
-        d.itemLevelOffset = 1;
         d.expToNext = List.of(5, 15, 30, 45, 50, 75, 100, 125, 150, 175);
         d.lockedSocket = List.of(4, 3, 2, 1, 0, 0, 0, 0, 0, 0);
         d.craftSuccessBaseByRank = List.of(0, 75, 70, 65, 60);
@@ -411,8 +405,6 @@ public class CfgCraft {
         int minMaterialRankForExp = 3;
         int craftLevelBonusFromLevel = 5;
         int craftLevelBonusPerLevel = 5;
-        /** effectiveLevel = storedLevel + itemLevelOffset */
-        int itemLevelOffset = 1;
         List<Integer> expToNext = new ArrayList<>();
         List<Integer> lockedSocket = new ArrayList<>();
         /** index = material rank (1..4) */

@@ -94,6 +94,28 @@ public class Player extends Unit implements Serializable {
         }
     }
 
+    /** Vào lại HOME từ last_pos đã lưu; giữ trạng thái chết nếu logout lúc đang chết. */
+    public void clearDataForHomeRejoin(Pos spawnPos, boolean wasDead) {
+        mUser.setCachePos();
+        this.ready = false;
+        this.pos = spawnPos != null ? spawnPos : Pos.zero();
+        this.indexLastInputSeq = -1;
+        skillSlotNext = 0;
+        timeBeHit = 0;
+        beDameInfo = new HashMap<>();
+        targetMove = Pos.zero();
+        if (wasDead) {
+            this.alive = false;
+            point.setCurHp(0);
+        } else {
+            point.initDefault();
+            this.alive = true;
+        }
+        if (petUse != null) {
+            petUse.setPos(Pos.randomPos(this.pos, 1f, 1f));
+        }
+    }
+
 
 
     public void addNumKillMonster(Unit beKill) {
