@@ -375,7 +375,7 @@ public class LoginHandler extends AHandler {
         lstCmm.addAVector(getCommonIntVector(CfgItem.SELL_PRICE_BASE_T1));
         // artifact coeffs: baseCost, upgradeMult×1000, sellMult×1000, craftCostPerTier
         lstCmm.addAVector(getCommonIntVector(CfgArtifact.getGameConfigCoeffs()));
-        // auto range: [tầm đánh, tầm dùng item buff máu]
+        // auto range: [tầm đánh, tầm buff HP, autoAttackMob, auto_buff]
         lstCmm.addAVector(getCommonIntVector(uSet.getAutoRangeList()));
         // ret
         addResponse(IAction.GAME_CONFIG, lstCmm.build());

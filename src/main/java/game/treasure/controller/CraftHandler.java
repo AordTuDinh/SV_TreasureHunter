@@ -458,15 +458,24 @@ public class CraftHandler extends AHandler {
         return true;
     }
 
+    private String resolveCrafterName() {
+        if (mUser == null || mUser.getUser() == null)
+            return "";
+        String name = mUser.getUser().getName();
+        return name != null ? name : "";
+    }
+
     private boolean markTargetCrafted(CraftTargetType type, long targetId) {
+        String crafter = resolveCrafterName();
         if (type == CraftTargetType.EQUIPMENT) {
             UserEquipmentEntity equip = mUser.getResources().getItemEquipment(targetId);
             if (equip == null)
                 return false;
             if (equip.getIsCraft() == 1)
                 return true;
-            if (equip.update(List.of("is_craft", 1))) {
+            if (equip.update(List.of("is_craft", 1, "craft_by", crafter))) {
                 equip.setIsCraft(1);
+                equip.setCraftBy(crafter);
                 return true;
             }
             return false;
@@ -477,8 +486,9 @@ public class CraftHandler extends AHandler {
                 return false;
             if (pet.getIsCraft() == 1)
                 return true;
-            if (pet.update(List.of("is_craft", 1))) {
+            if (pet.update(List.of("is_craft", 1, "craft_by", crafter))) {
                 pet.setIsCraft(1);
+                pet.setCraftBy(crafter);
                 return true;
             }
             return false;
@@ -489,8 +499,9 @@ public class CraftHandler extends AHandler {
                 return false;
             if (mount.getIsCraft() == 1)
                 return true;
-            if (mount.update(List.of("is_craft", 1))) {
+            if (mount.update(List.of("is_craft", 1, "craft_by", crafter))) {
                 mount.setIsCraft(1);
+                mount.setCraftBy(crafter);
                 return true;
             }
             return false;
@@ -501,8 +512,9 @@ public class CraftHandler extends AHandler {
                 return false;
             if (artifact.getIsCraft() == 1)
                 return true;
-            if (artifact.update(List.of("is_craft", 1))) {
+            if (artifact.update(List.of("is_craft", 1, "craft_by", crafter))) {
                 artifact.setIsCraft(1);
+                artifact.setCraftBy(crafter);
                 return true;
             }
             return false;
@@ -513,8 +525,9 @@ public class CraftHandler extends AHandler {
                 return false;
             if (item.getIsCraft() == 1)
                 return true;
-            if (item.update(List.of("is_craft", 1))) {
+            if (item.update(List.of("is_craft", 1, "craft_by", crafter))) {
                 item.setIsCraft(1);
+                item.setCraftBy(crafter);
                 return true;
             }
             return false;

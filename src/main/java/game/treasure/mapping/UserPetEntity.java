@@ -29,6 +29,7 @@ public class UserPetEntity implements Serializable {
     int icon;
     int server;
     int priceTreasure;
+    String craftBy;
     String data;
 
     @Transient
@@ -83,6 +84,8 @@ public class UserPetEntity implements Serializable {
         pb.setPriceTreasure(priceTreasure);
         if (icon > 0)
             pb.setIcon(icon);
+        if (craftBy != null && !craftBy.isEmpty())
+            pb.setCraftBy(craftBy);
         return pb;
     }
 

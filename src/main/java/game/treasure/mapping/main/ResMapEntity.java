@@ -108,6 +108,7 @@ public class ResMapEntity extends BaseEntity implements Serializable {
             int typeEvent = getTypeEvent(chunkId);
             int itemEventId = typeEvent > 0 ? mapTypeEventToItemEventMaterialId(typeEvent) : 0;
             CellObject cell = new CellObject(pos, c.type, chunkId, cellId, materialId, itemEventId);
+            cell.setCampFire(isInCampFireSafeZone(pos));
             if (chunkX < minChunkX || chunkX > maxChunkX
                     || chunkY < minChunkY || chunkY > maxChunkY) {
                 System.out.println("[MapLoad] skip out-of-bound cell: x=" + worldX + ", y=" + worldY

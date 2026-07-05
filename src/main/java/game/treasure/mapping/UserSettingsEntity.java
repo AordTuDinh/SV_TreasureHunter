@@ -26,7 +26,7 @@ public class UserSettingsEntity implements Serializable {
     @Id
     int userId;
     String blockChat, chatSetting; //chatSetting s;ize 2
-    String autoSellItem,autoSellMaterial,auto_range; //auto_range : 5 -50, tầm đánh và tầm dùngitem buff máu
+    String autoSellItem, autoSellMaterial, autoRange; // auto_range DB: [tầm đánh, tầm buff HP, autoAttackMob, auto_buff]
 
 
     public UserSettingsEntity(int userId) {
@@ -35,7 +35,7 @@ public class UserSettingsEntity implements Serializable {
         this.chatSetting = StringHelper.toDBString(NumberUtil.genListInt(2, 50));
         this.autoSellItem = StringHelper.toDBString(NumberUtil.genListInt(Pbmethod.AutoSell.values().length, 0));
         this.autoSellMaterial = StringHelper.toDBString(NumberUtil.genListInt(CfgMaterial.getAutoSellMaterialSize(), 0));
-        this.auto_range = "[5,50]";
+        this.autoRange = "[5,50,0,0]";
     }
 
 
@@ -108,18 +108,21 @@ public class UserSettingsEntity implements Serializable {
     }
 
     public List<Integer> getAutoRangeList() {
-        List<Integer> list = StringHelper.isEmpty(auto_range)
+        List<Integer> list = StringHelper.isEmpty(autoRange)
                 ? new ArrayList<>()
-                : new ArrayList<>(GsonUtil.strToListInt(auto_range));
+                : new ArrayList<>(GsonUtil.strToListInt(autoRange));
         while (list.size() < 2) {
             list.add(list.isEmpty() ? 5 : 50);
+        }
+        while (list.size() < 4) {
+            list.add(0);
         }
         return list;
     }
 
-    public boolean updateAutoRange(String autoRange) {
-        if (update(Arrays.asList("auto_range", autoRange))) {
-            this.auto_range = autoRange;
+    public boolean updateAutoRange(String autoRangeJson) {
+        if (update(Arrays.asList("auto_range", autoRangeJson))) {
+            this.autoRange = autoRangeJson;
             return true;
         }
         return false;

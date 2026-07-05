@@ -12,6 +12,7 @@ import ozudo.base.helper.DateTime;
 import protocol.Pbmethod;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -23,6 +24,8 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class CellObject {
+    private static final List<Integer> CAMPFIRE_MOB_RATE_PAIRS = Arrays.asList(5, 40, 6, 30, 7, 30);
+
     @EqualsAndHashCode.Include
     int id;
     Pos pos;
@@ -38,6 +41,8 @@ public class CellObject {
     int materialId;
     /** {@code 23 + chunk.typeEvent} — material sự kiện khi roll {@code CAT_ITEM_EVENT}. */
     int itemEventId;
+    /** Cell nằm trong vùng lửa trại (chunk có campfire + trong bán kính). */
+    boolean isCampFire;
 
 
     public CellObject(Pos pos, int type, int chunkId, int id, int materialId, int itemEventId) {
@@ -58,7 +63,14 @@ public class CellObject {
     public List<Long> getBonusKillMe() {
         ResObjectEntity resObject = ResMap.getResObject(resObjectType);
         if (resObject == null) return new ArrayList<>();
-        return resObject.randomBonus(materialId, itemEventId);
+        List<Long> bonus = resObject.randomBonus(materialId, itemEventId);
+        if (isCampFire && bonus.size() >= 2 && bonus.get(0) == -1L) {
+            int mobId = ResObjectEntity.pickIdByRatePairs(CAMPFIRE_MOB_RATE_PAIRS);
+            if (mobId > 0) {
+                bonus = Arrays.asList(-1L, (long) mobId);
+            }
+        }
+        return bonus;
     }
 
     /** Mỗi lần đánh trừ 1 máu, không dùng damage của player. */

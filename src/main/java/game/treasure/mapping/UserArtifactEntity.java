@@ -29,6 +29,7 @@ public class UserArtifactEntity implements Serializable {
     int level;
     int tier;
     int isCraft;
+    String craftBy;
     String data;
 
     @Transient
@@ -115,6 +116,8 @@ public class UserArtifactEntity implements Serializable {
         pb.setRange(getBaseSlot(ArtifactDataSlot.IDX_RANGE));
         pb.setPerson(getBaseSlot(ArtifactDataSlot.IDX_PERSON));
         pb.setIsCraft(isCraft);
+        if (craftBy != null && !craftBy.isEmpty())
+            pb.setCraftBy(craftBy);
         return pb;
     }
 

@@ -155,30 +155,40 @@ public class UserHandler extends AHandler {
 
     private void setAutoRange() {
         List<Long> input = getInputALong();
-        if (input.size() < 2) {
+        if (input.size() < 4) {
             addErrParam();
             return;
         }
 
         int attackRange = input.get(0).intValue();
         int hpRange = input.get(1).intValue();
+        int autoAttackMob = input.get(2).intValue();
+        int autoBuff = input.get(3).intValue();
         if (attackRange < 2 || attackRange > 10 || hpRange < 10 || hpRange > 100) {
+            addErrParam();
+            return;
+        }
+        if ((autoAttackMob != 0 && autoAttackMob != 1) || (autoBuff != 0 && autoBuff != 1)) {
             addErrParam();
             return;
         }
 
         UserSettingsEntity uSetting = mUser.getUSetting();
         List<Integer> list = uSetting.getAutoRangeList();
-        if (list.get(0) != attackRange || list.get(1) != hpRange) {
+        boolean changed = list.get(0) != attackRange || list.get(1) != hpRange
+                || list.get(2) != autoAttackMob || list.get(3) != autoBuff;
+        if (changed) {
             list.set(0, attackRange);
             list.set(1, hpRange);
+            list.set(2, autoAttackMob);
+            list.set(3, autoBuff);
             if (!uSetting.updateAutoRange(StringHelper.toDBString(list))) {
                 addErrSystem();
                 return;
             }
         }
 
-        addResponse(getCommonVector(attackRange, hpRange));
+        addResponse(getCommonVector(attackRange, hpRange, autoAttackMob, autoBuff));
     }
 
     private void changeLang(String inputString) {

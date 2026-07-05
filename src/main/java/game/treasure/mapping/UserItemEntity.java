@@ -34,6 +34,7 @@ public class UserItemEntity implements Serializable {
     int lockDestroy;
     int isCraft;
     int icon;
+    String craftBy;
     String data;
 
     @Transient
@@ -188,6 +189,8 @@ public class UserItemEntity implements Serializable {
         pb.setIcon(getEffectiveIcon());
         if (data != null && !data.isEmpty() && !"[]".equals(data))
             pb.setData(data);
+        if (craftBy != null && !craftBy.isEmpty())
+            pb.setCraftBy(craftBy);
         return pb;
     }
 

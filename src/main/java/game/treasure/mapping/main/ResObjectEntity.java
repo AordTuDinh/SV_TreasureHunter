@@ -129,7 +129,7 @@ public class ResObjectEntity extends BaseEntity implements Serializable {
     }
 
     /** {@code pairs}: [id, rate, id, rate, ...]} — rate cộng dồn theo {@code totalRate}. */
-    static int pickIdByRatePairs(List<Integer> pairs) {
+    public static int pickIdByRatePairs(List<Integer> pairs) {
         if (pairs == null || pairs.size() < 2) return 0;
         int total = 0;
         for (int i = 1; i < pairs.size(); i += 2) total += pairs.get(i);

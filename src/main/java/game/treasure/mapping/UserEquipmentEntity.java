@@ -34,6 +34,7 @@ public class UserEquipmentEntity implements Serializable {
     int isCraft;
     int icon;
     int priceTreasure;
+    String craftBy;
     String data;
 
     @Transient
@@ -124,6 +125,8 @@ public class UserEquipmentEntity implements Serializable {
         pb.setPriceTreasure(priceTreasure);
         if (data != null && !data.isEmpty() && !"[]".equals(data))
             pb.setData(data);
+        if (craftBy != null && !craftBy.isEmpty())
+            pb.setCraftBy(craftBy);
         return pb;
     }
 

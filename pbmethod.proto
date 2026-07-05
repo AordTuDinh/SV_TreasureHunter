@@ -340,6 +340,7 @@ message PbMount{
   optional int32  priceTreasure = 8;
   optional string data = 9;
   optional int32 isEquip = 10;
+  optional string craftBy = 11;
 }
 
 message PbMob{
@@ -364,6 +365,7 @@ message PbPet{
   optional int32 priceTreasure = 8;
   optional string data = 9;
   optional int32 isEquip = 10;
+  optional string craftBy = 11;
 }
 
 message PbListItemPoint{
@@ -435,6 +437,7 @@ message PbArtifact{
   optional float  range = 9;
   optional float  person = 10;
   optional int32 isCraft = 11;
+  optional string craftBy = 12;
 }
 
 message PbListArtifact{
@@ -449,6 +452,7 @@ message  PbItem{
   optional  string data = 6;
   optional  int32 isCraft = 7;
   optional  int32 icon = 8;
+  optional string craftBy = 9;
 }
 
 message  PbEquipment{
@@ -461,6 +465,7 @@ message  PbEquipment{
   optional  int32 isCraft = 7;
   optional  int32 icon = 8;
   optional int32  priceTreasure = 9;
+  optional string craftBy = 10;
 }
 
 message  PbItemPoint{
