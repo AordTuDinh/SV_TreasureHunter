@@ -30,6 +30,9 @@ public class UserSkinEntity implements Serializable {
     String data;
     int type;
     int tier;
+    int isCraft;
+    int isTrading;
+    int inMarket;
     @Temporal(TemporalType.TIMESTAMP)
     Date dateCreated;
 
@@ -46,7 +49,18 @@ public class UserSkinEntity implements Serializable {
         return ResAvatar.getSkin(skinId);
     }
 
-    public protocol.Pbmethod.PbSkin.Builder toProto() {
+    public protocol.Pbmethod.PbSkin toProto() {
+        try {
+            protocol.Pbmethod.PbSkin.Builder pb = toProtoBuilder();
+            byte[] bytes = pb.build().toByteArray();
+            bytes = game.treasure.service.item.ProtoTradingWire.appendSkinTrading(bytes, isCraft, isTrading, inMarket);
+            return protocol.Pbmethod.PbSkin.parseFrom(bytes);
+        } catch (Exception ex) {
+            return toProtoBuilder().build();
+        }
+    }
+
+    public protocol.Pbmethod.PbSkin.Builder toProtoBuilder() {
         protocol.Pbmethod.PbSkin.Builder pb = protocol.Pbmethod.PbSkin.newBuilder();
         pb.setId(id);
         pb.setTier(tier);
@@ -56,7 +70,7 @@ public class UserSkinEntity implements Serializable {
         return pb;
     }
 
-    public List<Long> getData(){
+    public List<Long> getData() {
         return GsonUtil.strToListLong(data);
     }
 

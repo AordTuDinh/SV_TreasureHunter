@@ -58,6 +58,11 @@ public class CfgPoisonUpgrade {
         return item != null && isTransformedPoison(item.getEffectiveIcon());
     }
 
+    /** Poison đủ điều kiện add túi trading / đăng bán (icon 1003–1005). */
+    public static boolean isListingPoisonIcon(int icon) {
+        return icon >= 1003 && icon <= 1005;
+    }
+
     /** HH tier 1..6 từ icon 1000..1005. */
     public static int getHhTier(int icon) {
         return icon - iconMin + 1;

@@ -196,6 +196,16 @@ public class IAction {
     public static final int TREASURE_BUY = 471;
     public static final int MOB_USE = 472;
 
+    // player trading marketplace
+    public static final int TRADING_MARKET_LIST = 473;
+    public static final int TRADING_WALLET_ADD = 474;
+    public static final int TRADING_WALLET_REMOVE = 475;
+    public static final int TRADING_UNLOCK_SLOT = 476;
+    public static final int TRADING_POST = 477;
+    public static final int TRADING_CANCEL = 478;
+    public static final int TRADING_BUY = 479;
+    public static final int TRADING_SYNC = 480;
+
     // Event
     public static final int RPS_SEND_RQ = 600;
     public static final int RPS_RECEIVE_RQ = 601;

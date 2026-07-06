@@ -31,6 +31,8 @@ public class UserArtifactEntity implements Serializable {
     int isCraft;
     String craftBy;
     String data;
+    int isTrading;
+    int inMarket;
 
     @Transient
     int bagSlot = -1;
@@ -119,6 +121,16 @@ public class UserArtifactEntity implements Serializable {
         if (craftBy != null && !craftBy.isEmpty())
             pb.setCraftBy(craftBy);
         return pb;
+    }
+
+    public protocol.Pbmethod.PbArtifact toProtoWire() {
+        try {
+            byte[] bytes = toProto().build().toByteArray();
+            bytes = game.treasure.service.item.ProtoTradingWire.appendArtifactTrading(bytes, isTrading, inMarket);
+            return protocol.Pbmethod.PbArtifact.parseFrom(bytes);
+        } catch (Exception ex) {
+            return toProto().build();
+        }
     }
 
     public boolean update(List<Object> updateData) {

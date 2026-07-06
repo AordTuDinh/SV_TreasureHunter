@@ -304,6 +304,8 @@ message  PbUserData{
   optional  PbListItemPoint aItemPoint = 31;
   optional  int64 timeActiveArtifact = 32;
   repeated PbMob aMob = 33;
+  optional int32 slotTrading1 = 34;
+  optional int32 slotTrading2 = 35;
 }
 
 message PbListItem{
@@ -327,6 +329,9 @@ message PbSkin{
   optional int32 skinId = 3;
   optional int32 tier = 4;
   repeated int64 point = 5;
+  optional int32 isCraft = 6;
+  optional int32 isTrading = 7;
+  optional int32 inMarket = 8;
 }
 
 message PbMount{
@@ -341,12 +346,16 @@ message PbMount{
   optional string data = 9;
   optional int32 isEquip = 10;
   optional string craftBy = 11;
+  optional int32 isTrading = 12;
+  optional int32 inMarket = 13;
 }
 
 message PbMob{
   optional int64 id = 1;
   optional int32 mobId = 2;
   optional int32 tier = 3;
+  optional int32 isTrading = 4;
+  optional int32 inMarket = 5;
 }
 
 
@@ -366,6 +375,8 @@ message PbPet{
   optional string data = 9;
   optional int32 isEquip = 10;
   optional string craftBy = 11;
+  optional int32 isTrading = 12;
+  optional int32 inMarket = 13;
 }
 
 message PbListItemPoint{
@@ -423,6 +434,8 @@ message PbMaterial{
   optional  int32 level = 4;
   optional float value = 5;
   optional float socketRate = 6;
+  optional int32 isTrading = 7;
+  optional int32 inMarket = 8;
 }
 
 message PbArtifact{
@@ -438,6 +451,8 @@ message PbArtifact{
   optional float  person = 10;
   optional int32 isCraft = 11;
   optional string craftBy = 12;
+  optional int32 isTrading = 13;
+  optional int32 inMarket = 14;
 }
 
 message PbListArtifact{
@@ -453,6 +468,8 @@ message  PbItem{
   optional  int32 isCraft = 7;
   optional  int32 icon = 8;
   optional string craftBy = 9;
+  optional int32 isTrading = 10;
+  optional int32 inMarket = 11;
 }
 
 message  PbEquipment{
@@ -466,6 +483,8 @@ message  PbEquipment{
   optional  int32 icon = 8;
   optional int32  priceTreasure = 9;
   optional string craftBy = 10;
+  optional int32 isTrading = 11;
+  optional int32 inMarket = 12;
 }
 
 message  PbItemPoint{

@@ -158,7 +158,29 @@ public class UserDataEntity implements Serializable {
     public List<Integer> getSlot() {
         List<Integer> slot = GsonUtil.strToListInt(numSlot);
         while (slot.size() < 3) slot.add(8);
+        while (slot.size() < 5) {
+            if (slot.size() == 3) slot.add(CfgUser.getDefaultSlotTrading1());
+            else slot.add(CfgUser.getDefaultSlotTrading2());
+        }
         return slot;
+    }
+
+    public int getSlotTrading1() {
+        return getSlot().get(3);
+    }
+
+    public int getSlotTrading2() {
+        return getSlot().get(4);
+    }
+
+    public boolean saveSlotTrading(int tab, int unlocked) {
+        List<Integer> slot = getSlot();
+        if (tab == game.config.CfgTrading.TAB_ITEM)
+            slot.set(3, unlocked);
+        else
+            slot.set(4, unlocked);
+        numSlot = StringHelper.toDBString(slot);
+        return update(Arrays.asList("num_slot", numSlot));
     }
 
     /** Số ô slotBagUI — gộp item type 1 (consumable) + type 2 (equipment chưa mặc). */
@@ -291,7 +313,7 @@ public class UserDataEntity implements Serializable {
         Pbmethod.PbListItem.Builder lstItem = Pbmethod.PbListItem.newBuilder();
         for (Map.Entry<Long, UserItemEntity> item : mUser.getResources().getMItem().entrySet()) {
             UserItemEntity uItem = item.getValue();
-            Pbmethod.PbItem.Builder itemPb = uItem.toProto();
+            Pbmethod.PbItem itemPb = uItem.toProtoWire();
             if (itemPb != null) {
                 lstItem.addItem(itemPb);
             }
@@ -300,7 +322,7 @@ public class UserDataEntity implements Serializable {
 
         Pbmethod.PbListEquipment.Builder lstEquip = Pbmethod.PbListEquipment.newBuilder();
         for (Map.Entry<Long, UserEquipmentEntity> eq : mUser.getResources().getMEquipment().entrySet()) {
-            Pbmethod.PbEquipment.Builder eqPb = eq.getValue().toProto();
+            Pbmethod.PbEquipment eqPb = eq.getValue().toProtoWire();
             if (eqPb != null)
                 lstEquip.addEquipment(eqPb);
         }
@@ -309,14 +331,14 @@ public class UserDataEntity implements Serializable {
         // material
         Pbmethod.PbListMaterial.Builder lstMat = Pbmethod.PbListMaterial.newBuilder();
         for (Map.Entry<Long, UserMaterialEntity> mat : mUser.getResources().getMMaterial().entrySet()) {
-            Pbmethod.PbMaterial.Builder matPb = mat.getValue().toProto();
+            Pbmethod.PbMaterial matPb = mat.getValue().toProtoWire();
             if (matPb != null) lstMat.addMaterials(matPb);
         }
         pb.setAMaterial(lstMat);
         // artifact
         Pbmethod.PbListArtifact.Builder lstArtifact = Pbmethod.PbListArtifact.newBuilder();
         for (Map.Entry<Long, UserArtifactEntity> artifact : mUser.getResources().getMArtifact().entrySet()) {
-            Pbmethod.PbArtifact.Builder artifactPb = artifact.getValue().toProto();
+            Pbmethod.PbArtifact artifactPb = artifact.getValue().toProtoWire();
             if (artifactPb != null)
                 lstArtifact.addArtifacts(artifactPb);
         }
@@ -361,7 +383,14 @@ public class UserDataEntity implements Serializable {
         if (lstItemPoint.getItemPointsCount() > 0)
             pb.setAItemPoint(lstItemPoint);
 
-        return pb.build();
+        try {
+            byte[] bytes = pb.build().toByteArray();
+            bytes = game.treasure.service.item.ProtoUserDataWire.appendSlotTrading(bytes,
+                    getSlotTrading1(), getSlotTrading2());
+            return Pbmethod.PbUserData.parseFrom(bytes);
+        } catch (Exception ex) {
+            return pb.build();
+        }
     }
 
     public boolean updateCheckIn(String checkinData) {

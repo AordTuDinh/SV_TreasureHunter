@@ -29,6 +29,8 @@ public class UserMountEntity implements Serializable {
     int isCraft;
     int icon;
     int server;
+    int isTrading;
+    int inMarket;
     String craftBy;
     String data;
 
@@ -93,6 +95,7 @@ public class UserMountEntity implements Serializable {
         try {
             byte[] bytes = ProtoPetMountWire.appendDataAndIsEquip(
                     toProtoBuilder().build().toByteArray(), data, isEquip);
+            bytes = game.treasure.service.item.ProtoTradingWire.appendPetMountTrading(bytes, isTrading, inMarket);
             return protocol.Pbmethod.PbMount.parseFrom(bytes);
         } catch (Exception ex) {
             return toProtoBuilder().build();

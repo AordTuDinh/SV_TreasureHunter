@@ -20,6 +20,13 @@ public abstract class Lang implements Serializable {
     public static String err_not_enough_gem = "err_not_enough_gem"; // Không đủ kim cương
     public static String no_need_refresh = "no_need_refresh"; // Không cần làm mới
     public static String err_not_enough_ruby = "err_not_enough_ruby"; // Không đủ Ruby
+
+    public static String err_trading_wallet_full = "err_trading_wallet_full"; // Túi giao dịch không còn ô trống
+    public static String err_trading_waiting = "err_trading_waiting"; // Vật phẩm đang chờ xác minh, chưa thể mua
+    public static String err_trading_need_craft = "err_trading_need_craft"; // Vật phẩm cần được chế tạo trước khi đăng bán
+    public static String err_trading_poison_not_ready = "err_trading_poison_not_ready"; // Thuốc độc chưa đủ điều kiện đăng bán
+    public static String err_trading_material_not_ready = "err_trading_material_not_ready"; // Nguyên liệu cần tier 4 và cấp 10 mới được đăng bán
+    public static String err_bag_full = "err_bag_full"; // Túi chính không còn ô trống
     public static String err_not_enough_weapon = "err_not_enough_weapon"; // Không đủ vũ khí
     public static String err_not_enough_piece = "err_not_enough_piece"; // Không đủ mảnh
     public static String user_name_exist = "user_name_exist"; //Tên đã tồn tại

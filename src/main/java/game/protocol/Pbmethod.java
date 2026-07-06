@@ -25874,6 +25874,26 @@ public final class Pbmethod {
      */
     protocol.Pbmethod.PbMobOrBuilder getAMobOrBuilder(
         int index);
+
+    // optional int32 slotTrading1 = 34;
+    /**
+     * <code>optional int32 slotTrading1 = 34;</code>
+     */
+    boolean hasSlotTrading1();
+    /**
+     * <code>optional int32 slotTrading1 = 34;</code>
+     */
+    int getSlotTrading1();
+
+    // optional int32 slotTrading2 = 35;
+    /**
+     * <code>optional int32 slotTrading2 = 35;</code>
+     */
+    boolean hasSlotTrading2();
+    /**
+     * <code>optional int32 slotTrading2 = 35;</code>
+     */
+    int getSlotTrading2();
   }
   /**
    * Protobuf type {@code pbdson.PbUserData}
@@ -26196,6 +26216,16 @@ public final class Pbmethod {
                 mutable_bitField0_ |= 0x08000000;
               }
               aMob_.add(input.readMessage(protocol.Pbmethod.PbMob.PARSER, extensionRegistry));
+              break;
+            }
+            case 272: {
+              bitField0_ |= 0x00080000;
+              slotTrading1_ = input.readInt32();
+              break;
+            }
+            case 280: {
+              bitField0_ |= 0x00100000;
+              slotTrading2_ = input.readInt32();
               break;
             }
           }
@@ -26870,6 +26900,38 @@ public final class Pbmethod {
       return aMob_.get(index);
     }
 
+    // optional int32 slotTrading1 = 34;
+    public static final int SLOTTRADING1_FIELD_NUMBER = 34;
+    private int slotTrading1_;
+    /**
+     * <code>optional int32 slotTrading1 = 34;</code>
+     */
+    public boolean hasSlotTrading1() {
+      return ((bitField0_ & 0x00080000) == 0x00080000);
+    }
+    /**
+     * <code>optional int32 slotTrading1 = 34;</code>
+     */
+    public int getSlotTrading1() {
+      return slotTrading1_;
+    }
+
+    // optional int32 slotTrading2 = 35;
+    public static final int SLOTTRADING2_FIELD_NUMBER = 35;
+    private int slotTrading2_;
+    /**
+     * <code>optional int32 slotTrading2 = 35;</code>
+     */
+    public boolean hasSlotTrading2() {
+      return ((bitField0_ & 0x00100000) == 0x00100000);
+    }
+    /**
+     * <code>optional int32 slotTrading2 = 35;</code>
+     */
+    public int getSlotTrading2() {
+      return slotTrading2_;
+    }
+
     private void initFields() {
       slogBagUI_ = 0;
       slotMaterial_ = 0;
@@ -26899,6 +26961,8 @@ public final class Pbmethod {
       aItemPoint_ = protocol.Pbmethod.PbListItemPoint.getDefaultInstance();
       timeActiveArtifact_ = 0L;
       aMob_ = java.util.Collections.emptyList();
+      slotTrading1_ = 0;
+      slotTrading2_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -26995,6 +27059,12 @@ public final class Pbmethod {
       }
       for (int i = 0; i < aMob_.size(); i++) {
         output.writeMessage(33, aMob_.get(i));
+      }
+      if (((bitField0_ & 0x00080000) == 0x00080000)) {
+        output.writeInt32(34, slotTrading1_);
+      }
+      if (((bitField0_ & 0x00100000) == 0x00100000)) {
+        output.writeInt32(35, slotTrading2_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -27141,6 +27211,14 @@ public final class Pbmethod {
       for (int i = 0; i < aMob_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
           .computeMessageSize(33, aMob_.get(i));
+      }
+      if (((bitField0_ & 0x00080000) == 0x00080000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(34, slotTrading1_);
+      }
+      if (((bitField0_ & 0x00100000) == 0x00100000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(35, slotTrading2_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -27359,6 +27437,10 @@ public final class Pbmethod {
         } else {
           aMobBuilder_.clear();
         }
+        slotTrading1_ = 0;
+        bitField0_ = (bitField0_ & ~0x10000000);
+        slotTrading2_ = 0;
+        bitField0_ = (bitField0_ & ~0x20000000);
         return this;
       }
 
@@ -27544,6 +27626,14 @@ public final class Pbmethod {
         } else {
           result.aMob_ = aMobBuilder_.build();
         }
+        if (((from_bitField0_ & 0x10000000) == 0x10000000)) {
+          to_bitField0_ |= 0x00080000;
+        }
+        result.slotTrading1_ = slotTrading1_;
+        if (((from_bitField0_ & 0x20000000) == 0x20000000)) {
+          to_bitField0_ |= 0x00100000;
+        }
+        result.slotTrading2_ = slotTrading2_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -27770,6 +27860,12 @@ public final class Pbmethod {
               aMobBuilder_.addAllMessages(other.aMob_);
             }
           }
+        }
+        if (other.hasSlotTrading1()) {
+          setSlotTrading1(other.getSlotTrading1());
+        }
+        if (other.hasSlotTrading2()) {
+          setSlotTrading2(other.getSlotTrading2());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -30161,6 +30257,72 @@ public final class Pbmethod {
           aMob_ = null;
         }
         return aMobBuilder_;
+      }
+
+      // optional int32 slotTrading1 = 34;
+      private int slotTrading1_ ;
+      /**
+       * <code>optional int32 slotTrading1 = 34;</code>
+       */
+      public boolean hasSlotTrading1() {
+        return ((bitField0_ & 0x10000000) == 0x10000000);
+      }
+      /**
+       * <code>optional int32 slotTrading1 = 34;</code>
+       */
+      public int getSlotTrading1() {
+        return slotTrading1_;
+      }
+      /**
+       * <code>optional int32 slotTrading1 = 34;</code>
+       */
+      public Builder setSlotTrading1(int value) {
+        bitField0_ |= 0x10000000;
+        slotTrading1_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 slotTrading1 = 34;</code>
+       */
+      public Builder clearSlotTrading1() {
+        bitField0_ = (bitField0_ & ~0x10000000);
+        slotTrading1_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 slotTrading2 = 35;
+      private int slotTrading2_ ;
+      /**
+       * <code>optional int32 slotTrading2 = 35;</code>
+       */
+      public boolean hasSlotTrading2() {
+        return ((bitField0_ & 0x20000000) == 0x20000000);
+      }
+      /**
+       * <code>optional int32 slotTrading2 = 35;</code>
+       */
+      public int getSlotTrading2() {
+        return slotTrading2_;
+      }
+      /**
+       * <code>optional int32 slotTrading2 = 35;</code>
+       */
+      public Builder setSlotTrading2(int value) {
+        bitField0_ |= 0x20000000;
+        slotTrading2_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 slotTrading2 = 35;</code>
+       */
+      public Builder clearSlotTrading2() {
+        bitField0_ = (bitField0_ & ~0x20000000);
+        slotTrading2_ = 0;
+        onChanged();
+        return this;
       }
 
       // @@protoc_insertion_point(builder_scope:pbdson.PbUserData)
@@ -32926,6 +33088,36 @@ public final class Pbmethod {
      * <code>repeated int64 point = 5;</code>
      */
     long getPoint(int index);
+
+    // optional int32 isCraft = 6;
+    /**
+     * <code>optional int32 isCraft = 6;</code>
+     */
+    boolean hasIsCraft();
+    /**
+     * <code>optional int32 isCraft = 6;</code>
+     */
+    int getIsCraft();
+
+    // optional int32 isTrading = 7;
+    /**
+     * <code>optional int32 isTrading = 7;</code>
+     */
+    boolean hasIsTrading();
+    /**
+     * <code>optional int32 isTrading = 7;</code>
+     */
+    int getIsTrading();
+
+    // optional int32 inMarket = 8;
+    /**
+     * <code>optional int32 inMarket = 8;</code>
+     */
+    boolean hasInMarket();
+    /**
+     * <code>optional int32 inMarket = 8;</code>
+     */
+    int getInMarket();
   }
   /**
    * Protobuf type {@code pbdson.PbSkin}
@@ -33017,6 +33209,21 @@ public final class Pbmethod {
                 point_.add(input.readInt64());
               }
               input.popLimit(limit);
+              break;
+            }
+            case 48: {
+              bitField0_ |= 0x00000010;
+              isCraft_ = input.readInt32();
+              break;
+            }
+            case 56: {
+              bitField0_ |= 0x00000020;
+              isTrading_ = input.readInt32();
+              break;
+            }
+            case 64: {
+              bitField0_ |= 0x00000040;
+              inMarket_ = input.readInt32();
               break;
             }
           }
@@ -33149,12 +33356,63 @@ public final class Pbmethod {
       return point_.get(index);
     }
 
+    // optional int32 isCraft = 6;
+    public static final int ISCRAFT_FIELD_NUMBER = 6;
+    private int isCraft_;
+    /**
+     * <code>optional int32 isCraft = 6;</code>
+     */
+    public boolean hasIsCraft() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional int32 isCraft = 6;</code>
+     */
+    public int getIsCraft() {
+      return isCraft_;
+    }
+
+    // optional int32 isTrading = 7;
+    public static final int ISTRADING_FIELD_NUMBER = 7;
+    private int isTrading_;
+    /**
+     * <code>optional int32 isTrading = 7;</code>
+     */
+    public boolean hasIsTrading() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional int32 isTrading = 7;</code>
+     */
+    public int getIsTrading() {
+      return isTrading_;
+    }
+
+    // optional int32 inMarket = 8;
+    public static final int INMARKET_FIELD_NUMBER = 8;
+    private int inMarket_;
+    /**
+     * <code>optional int32 inMarket = 8;</code>
+     */
+    public boolean hasInMarket() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional int32 inMarket = 8;</code>
+     */
+    public int getInMarket() {
+      return inMarket_;
+    }
+
     private void initFields() {
       id_ = 0L;
       type_ = 0;
       skinId_ = 0;
       tier_ = 0;
       point_ = java.util.Collections.emptyList();
+      isCraft_ = 0;
+      isTrading_ = 0;
+      inMarket_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -33182,6 +33440,15 @@ public final class Pbmethod {
       }
       for (int i = 0; i < point_.size(); i++) {
         output.writeInt64(5, point_.get(i));
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeInt32(6, isCraft_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeInt32(7, isTrading_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeInt32(8, inMarket_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -33216,6 +33483,18 @@ public final class Pbmethod {
         }
         size += dataSize;
         size += 1 * getPointList().size();
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(6, isCraft_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(7, isTrading_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(8, inMarket_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -33343,6 +33622,12 @@ public final class Pbmethod {
         bitField0_ = (bitField0_ & ~0x00000008);
         point_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000010);
+        isCraft_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000020);
+        isTrading_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000040);
+        inMarket_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000080);
         return this;
       }
 
@@ -33392,6 +33677,18 @@ public final class Pbmethod {
           bitField0_ = (bitField0_ & ~0x00000010);
         }
         result.point_ = point_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.isCraft_ = isCraft_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.isTrading_ = isTrading_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.inMarket_ = inMarket_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -33429,6 +33726,15 @@ public final class Pbmethod {
             point_.addAll(other.point_);
           }
           onChanged();
+        }
+        if (other.hasIsCraft()) {
+          setIsCraft(other.getIsCraft());
+        }
+        if (other.hasIsTrading()) {
+          setIsTrading(other.getIsTrading());
+        }
+        if (other.hasInMarket()) {
+          setInMarket(other.getInMarket());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -33655,6 +33961,105 @@ public final class Pbmethod {
         return this;
       }
 
+      // optional int32 isCraft = 6;
+      private int isCraft_ ;
+      /**
+       * <code>optional int32 isCraft = 6;</code>
+       */
+      public boolean hasIsCraft() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional int32 isCraft = 6;</code>
+       */
+      public int getIsCraft() {
+        return isCraft_;
+      }
+      /**
+       * <code>optional int32 isCraft = 6;</code>
+       */
+      public Builder setIsCraft(int value) {
+        bitField0_ |= 0x00000020;
+        isCraft_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 isCraft = 6;</code>
+       */
+      public Builder clearIsCraft() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        isCraft_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 isTrading = 7;
+      private int isTrading_ ;
+      /**
+       * <code>optional int32 isTrading = 7;</code>
+       */
+      public boolean hasIsTrading() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>optional int32 isTrading = 7;</code>
+       */
+      public int getIsTrading() {
+        return isTrading_;
+      }
+      /**
+       * <code>optional int32 isTrading = 7;</code>
+       */
+      public Builder setIsTrading(int value) {
+        bitField0_ |= 0x00000040;
+        isTrading_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 isTrading = 7;</code>
+       */
+      public Builder clearIsTrading() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        isTrading_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 inMarket = 8;
+      private int inMarket_ ;
+      /**
+       * <code>optional int32 inMarket = 8;</code>
+       */
+      public boolean hasInMarket() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      /**
+       * <code>optional int32 inMarket = 8;</code>
+       */
+      public int getInMarket() {
+        return inMarket_;
+      }
+      /**
+       * <code>optional int32 inMarket = 8;</code>
+       */
+      public Builder setInMarket(int value) {
+        bitField0_ |= 0x00000080;
+        inMarket_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 inMarket = 8;</code>
+       */
+      public Builder clearInMarket() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        inMarket_ = 0;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:pbdson.PbSkin)
     }
 
@@ -33792,6 +34197,26 @@ public final class Pbmethod {
      */
     com.google.protobuf.ByteString
         getCraftByBytes();
+
+    // optional int32 isTrading = 12;
+    /**
+     * <code>optional int32 isTrading = 12;</code>
+     */
+    boolean hasIsTrading();
+    /**
+     * <code>optional int32 isTrading = 12;</code>
+     */
+    int getIsTrading();
+
+    // optional int32 inMarket = 13;
+    /**
+     * <code>optional int32 inMarket = 13;</code>
+     */
+    boolean hasInMarket();
+    /**
+     * <code>optional int32 inMarket = 13;</code>
+     */
+    int getInMarket();
   }
   /**
    * Protobuf type {@code pbdson.PbMount}
@@ -33913,6 +34338,16 @@ public final class Pbmethod {
             case 90: {
               bitField0_ |= 0x00000200;
               craftBy_ = input.readBytes();
+              break;
+            }
+            case 96: {
+              bitField0_ |= 0x00000400;
+              isTrading_ = input.readInt32();
+              break;
+            }
+            case 104: {
+              bitField0_ |= 0x00000800;
+              inMarket_ = input.readInt32();
               break;
             }
           }
@@ -34195,6 +34630,38 @@ public final class Pbmethod {
       }
     }
 
+    // optional int32 isTrading = 12;
+    public static final int ISTRADING_FIELD_NUMBER = 12;
+    private int isTrading_;
+    /**
+     * <code>optional int32 isTrading = 12;</code>
+     */
+    public boolean hasIsTrading() {
+      return ((bitField0_ & 0x00000400) == 0x00000400);
+    }
+    /**
+     * <code>optional int32 isTrading = 12;</code>
+     */
+    public int getIsTrading() {
+      return isTrading_;
+    }
+
+    // optional int32 inMarket = 13;
+    public static final int INMARKET_FIELD_NUMBER = 13;
+    private int inMarket_;
+    /**
+     * <code>optional int32 inMarket = 13;</code>
+     */
+    public boolean hasInMarket() {
+      return ((bitField0_ & 0x00000800) == 0x00000800);
+    }
+    /**
+     * <code>optional int32 inMarket = 13;</code>
+     */
+    public int getInMarket() {
+      return inMarket_;
+    }
+
     private void initFields() {
       id_ = 0L;
       point_ = java.util.Collections.emptyList();
@@ -34207,6 +34674,8 @@ public final class Pbmethod {
       data_ = "";
       isEquip_ = 0;
       craftBy_ = "";
+      isTrading_ = 0;
+      inMarket_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -34252,6 +34721,12 @@ public final class Pbmethod {
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         output.writeBytes(11, getCraftByBytes());
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        output.writeInt32(12, isTrading_);
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        output.writeInt32(13, inMarket_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -34310,6 +34785,14 @@ public final class Pbmethod {
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(11, getCraftByBytes());
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(12, isTrading_);
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(13, inMarket_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -34449,6 +34932,10 @@ public final class Pbmethod {
         bitField0_ = (bitField0_ & ~0x00000200);
         craftBy_ = "";
         bitField0_ = (bitField0_ & ~0x00000400);
+        isTrading_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000800);
+        inMarket_ = 0;
+        bitField0_ = (bitField0_ & ~0x00001000);
         return this;
       }
 
@@ -34522,6 +35009,14 @@ public final class Pbmethod {
           to_bitField0_ |= 0x00000200;
         }
         result.craftBy_ = craftBy_;
+        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+          to_bitField0_ |= 0x00000400;
+        }
+        result.isTrading_ = isTrading_;
+        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
+          to_bitField0_ |= 0x00000800;
+        }
+        result.inMarket_ = inMarket_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -34581,6 +35076,12 @@ public final class Pbmethod {
           bitField0_ |= 0x00000400;
           craftBy_ = other.craftBy_;
           onChanged();
+        }
+        if (other.hasIsTrading()) {
+          setIsTrading(other.getIsTrading());
+        }
+        if (other.hasInMarket()) {
+          setInMarket(other.getInMarket());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -35087,6 +35588,72 @@ public final class Pbmethod {
         return this;
       }
 
+      // optional int32 isTrading = 12;
+      private int isTrading_ ;
+      /**
+       * <code>optional int32 isTrading = 12;</code>
+       */
+      public boolean hasIsTrading() {
+        return ((bitField0_ & 0x00000800) == 0x00000800);
+      }
+      /**
+       * <code>optional int32 isTrading = 12;</code>
+       */
+      public int getIsTrading() {
+        return isTrading_;
+      }
+      /**
+       * <code>optional int32 isTrading = 12;</code>
+       */
+      public Builder setIsTrading(int value) {
+        bitField0_ |= 0x00000800;
+        isTrading_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 isTrading = 12;</code>
+       */
+      public Builder clearIsTrading() {
+        bitField0_ = (bitField0_ & ~0x00000800);
+        isTrading_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 inMarket = 13;
+      private int inMarket_ ;
+      /**
+       * <code>optional int32 inMarket = 13;</code>
+       */
+      public boolean hasInMarket() {
+        return ((bitField0_ & 0x00001000) == 0x00001000);
+      }
+      /**
+       * <code>optional int32 inMarket = 13;</code>
+       */
+      public int getInMarket() {
+        return inMarket_;
+      }
+      /**
+       * <code>optional int32 inMarket = 13;</code>
+       */
+      public Builder setInMarket(int value) {
+        bitField0_ |= 0x00001000;
+        inMarket_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 inMarket = 13;</code>
+       */
+      public Builder clearInMarket() {
+        bitField0_ = (bitField0_ & ~0x00001000);
+        inMarket_ = 0;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:pbdson.PbMount)
     }
 
@@ -35130,6 +35697,26 @@ public final class Pbmethod {
      * <code>optional int32 tier = 3;</code>
      */
     int getTier();
+
+    // optional int32 isTrading = 4;
+    /**
+     * <code>optional int32 isTrading = 4;</code>
+     */
+    boolean hasIsTrading();
+    /**
+     * <code>optional int32 isTrading = 4;</code>
+     */
+    int getIsTrading();
+
+    // optional int32 inMarket = 5;
+    /**
+     * <code>optional int32 inMarket = 5;</code>
+     */
+    boolean hasInMarket();
+    /**
+     * <code>optional int32 inMarket = 5;</code>
+     */
+    int getInMarket();
   }
   /**
    * Protobuf type {@code pbdson.PbMob}
@@ -35195,6 +35782,16 @@ public final class Pbmethod {
             case 24: {
               bitField0_ |= 0x00000004;
               tier_ = input.readInt32();
+              break;
+            }
+            case 32: {
+              bitField0_ |= 0x00000008;
+              isTrading_ = input.readInt32();
+              break;
+            }
+            case 40: {
+              bitField0_ |= 0x00000010;
+              inMarket_ = input.readInt32();
               break;
             }
           }
@@ -35285,10 +35882,44 @@ public final class Pbmethod {
       return tier_;
     }
 
+    // optional int32 isTrading = 4;
+    public static final int ISTRADING_FIELD_NUMBER = 4;
+    private int isTrading_;
+    /**
+     * <code>optional int32 isTrading = 4;</code>
+     */
+    public boolean hasIsTrading() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional int32 isTrading = 4;</code>
+     */
+    public int getIsTrading() {
+      return isTrading_;
+    }
+
+    // optional int32 inMarket = 5;
+    public static final int INMARKET_FIELD_NUMBER = 5;
+    private int inMarket_;
+    /**
+     * <code>optional int32 inMarket = 5;</code>
+     */
+    public boolean hasInMarket() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional int32 inMarket = 5;</code>
+     */
+    public int getInMarket() {
+      return inMarket_;
+    }
+
     private void initFields() {
       id_ = 0L;
       mobId_ = 0;
       tier_ = 0;
+      isTrading_ = 0;
+      inMarket_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -35311,6 +35942,12 @@ public final class Pbmethod {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeInt32(3, tier_);
       }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeInt32(4, isTrading_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeInt32(5, inMarket_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -35331,6 +35968,14 @@ public final class Pbmethod {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeInt32Size(3, tier_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(4, isTrading_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(5, inMarket_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -35454,6 +36099,10 @@ public final class Pbmethod {
         bitField0_ = (bitField0_ & ~0x00000002);
         tier_ = 0;
         bitField0_ = (bitField0_ & ~0x00000004);
+        isTrading_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        inMarket_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000010);
         return this;
       }
 
@@ -35494,6 +36143,14 @@ public final class Pbmethod {
           to_bitField0_ |= 0x00000004;
         }
         result.tier_ = tier_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.isTrading_ = isTrading_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.inMarket_ = inMarket_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -35518,6 +36175,12 @@ public final class Pbmethod {
         }
         if (other.hasTier()) {
           setTier(other.getTier());
+        }
+        if (other.hasIsTrading()) {
+          setIsTrading(other.getIsTrading());
+        }
+        if (other.hasInMarket()) {
+          setInMarket(other.getInMarket());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -35641,6 +36304,72 @@ public final class Pbmethod {
       public Builder clearTier() {
         bitField0_ = (bitField0_ & ~0x00000004);
         tier_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 isTrading = 4;
+      private int isTrading_ ;
+      /**
+       * <code>optional int32 isTrading = 4;</code>
+       */
+      public boolean hasIsTrading() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional int32 isTrading = 4;</code>
+       */
+      public int getIsTrading() {
+        return isTrading_;
+      }
+      /**
+       * <code>optional int32 isTrading = 4;</code>
+       */
+      public Builder setIsTrading(int value) {
+        bitField0_ |= 0x00000008;
+        isTrading_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 isTrading = 4;</code>
+       */
+      public Builder clearIsTrading() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        isTrading_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 inMarket = 5;
+      private int inMarket_ ;
+      /**
+       * <code>optional int32 inMarket = 5;</code>
+       */
+      public boolean hasInMarket() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>optional int32 inMarket = 5;</code>
+       */
+      public int getInMarket() {
+        return inMarket_;
+      }
+      /**
+       * <code>optional int32 inMarket = 5;</code>
+       */
+      public Builder setInMarket(int value) {
+        bitField0_ |= 0x00000010;
+        inMarket_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 inMarket = 5;</code>
+       */
+      public Builder clearInMarket() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        inMarket_ = 0;
         onChanged();
         return this;
       }
@@ -36456,6 +37185,26 @@ public final class Pbmethod {
      */
     com.google.protobuf.ByteString
         getCraftByBytes();
+
+    // optional int32 isTrading = 12;
+    /**
+     * <code>optional int32 isTrading = 12;</code>
+     */
+    boolean hasIsTrading();
+    /**
+     * <code>optional int32 isTrading = 12;</code>
+     */
+    int getIsTrading();
+
+    // optional int32 inMarket = 13;
+    /**
+     * <code>optional int32 inMarket = 13;</code>
+     */
+    boolean hasInMarket();
+    /**
+     * <code>optional int32 inMarket = 13;</code>
+     */
+    int getInMarket();
   }
   /**
    * Protobuf type {@code pbdson.PbPet}
@@ -36577,6 +37326,16 @@ public final class Pbmethod {
             case 90: {
               bitField0_ |= 0x00000200;
               craftBy_ = input.readBytes();
+              break;
+            }
+            case 96: {
+              bitField0_ |= 0x00000400;
+              isTrading_ = input.readInt32();
+              break;
+            }
+            case 104: {
+              bitField0_ |= 0x00000800;
+              inMarket_ = input.readInt32();
               break;
             }
           }
@@ -36859,6 +37618,38 @@ public final class Pbmethod {
       }
     }
 
+    // optional int32 isTrading = 12;
+    public static final int ISTRADING_FIELD_NUMBER = 12;
+    private int isTrading_;
+    /**
+     * <code>optional int32 isTrading = 12;</code>
+     */
+    public boolean hasIsTrading() {
+      return ((bitField0_ & 0x00000400) == 0x00000400);
+    }
+    /**
+     * <code>optional int32 isTrading = 12;</code>
+     */
+    public int getIsTrading() {
+      return isTrading_;
+    }
+
+    // optional int32 inMarket = 13;
+    public static final int INMARKET_FIELD_NUMBER = 13;
+    private int inMarket_;
+    /**
+     * <code>optional int32 inMarket = 13;</code>
+     */
+    public boolean hasInMarket() {
+      return ((bitField0_ & 0x00000800) == 0x00000800);
+    }
+    /**
+     * <code>optional int32 inMarket = 13;</code>
+     */
+    public int getInMarket() {
+      return inMarket_;
+    }
+
     private void initFields() {
       id_ = 0L;
       point_ = java.util.Collections.emptyList();
@@ -36871,6 +37662,8 @@ public final class Pbmethod {
       data_ = "";
       isEquip_ = 0;
       craftBy_ = "";
+      isTrading_ = 0;
+      inMarket_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -36916,6 +37709,12 @@ public final class Pbmethod {
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         output.writeBytes(11, getCraftByBytes());
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        output.writeInt32(12, isTrading_);
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        output.writeInt32(13, inMarket_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -36974,6 +37773,14 @@ public final class Pbmethod {
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(11, getCraftByBytes());
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(12, isTrading_);
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(13, inMarket_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -37113,6 +37920,10 @@ public final class Pbmethod {
         bitField0_ = (bitField0_ & ~0x00000200);
         craftBy_ = "";
         bitField0_ = (bitField0_ & ~0x00000400);
+        isTrading_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000800);
+        inMarket_ = 0;
+        bitField0_ = (bitField0_ & ~0x00001000);
         return this;
       }
 
@@ -37186,6 +37997,14 @@ public final class Pbmethod {
           to_bitField0_ |= 0x00000200;
         }
         result.craftBy_ = craftBy_;
+        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+          to_bitField0_ |= 0x00000400;
+        }
+        result.isTrading_ = isTrading_;
+        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
+          to_bitField0_ |= 0x00000800;
+        }
+        result.inMarket_ = inMarket_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -37245,6 +38064,12 @@ public final class Pbmethod {
           bitField0_ |= 0x00000400;
           craftBy_ = other.craftBy_;
           onChanged();
+        }
+        if (other.hasIsTrading()) {
+          setIsTrading(other.getIsTrading());
+        }
+        if (other.hasInMarket()) {
+          setInMarket(other.getInMarket());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -37747,6 +38572,72 @@ public final class Pbmethod {
   }
   bitField0_ |= 0x00000400;
         craftBy_ = value;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 isTrading = 12;
+      private int isTrading_ ;
+      /**
+       * <code>optional int32 isTrading = 12;</code>
+       */
+      public boolean hasIsTrading() {
+        return ((bitField0_ & 0x00000800) == 0x00000800);
+      }
+      /**
+       * <code>optional int32 isTrading = 12;</code>
+       */
+      public int getIsTrading() {
+        return isTrading_;
+      }
+      /**
+       * <code>optional int32 isTrading = 12;</code>
+       */
+      public Builder setIsTrading(int value) {
+        bitField0_ |= 0x00000800;
+        isTrading_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 isTrading = 12;</code>
+       */
+      public Builder clearIsTrading() {
+        bitField0_ = (bitField0_ & ~0x00000800);
+        isTrading_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 inMarket = 13;
+      private int inMarket_ ;
+      /**
+       * <code>optional int32 inMarket = 13;</code>
+       */
+      public boolean hasInMarket() {
+        return ((bitField0_ & 0x00001000) == 0x00001000);
+      }
+      /**
+       * <code>optional int32 inMarket = 13;</code>
+       */
+      public int getInMarket() {
+        return inMarket_;
+      }
+      /**
+       * <code>optional int32 inMarket = 13;</code>
+       */
+      public Builder setInMarket(int value) {
+        bitField0_ |= 0x00001000;
+        inMarket_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 inMarket = 13;</code>
+       */
+      public Builder clearInMarket() {
+        bitField0_ = (bitField0_ & ~0x00001000);
+        inMarket_ = 0;
         onChanged();
         return this;
       }
@@ -45022,6 +45913,26 @@ public final class Pbmethod {
      * <code>optional float socketRate = 6;</code>
      */
     float getSocketRate();
+
+    // optional int32 isTrading = 7;
+    /**
+     * <code>optional int32 isTrading = 7;</code>
+     */
+    boolean hasIsTrading();
+    /**
+     * <code>optional int32 isTrading = 7;</code>
+     */
+    int getIsTrading();
+
+    // optional int32 inMarket = 8;
+    /**
+     * <code>optional int32 inMarket = 8;</code>
+     */
+    boolean hasInMarket();
+    /**
+     * <code>optional int32 inMarket = 8;</code>
+     */
+    int getInMarket();
   }
   /**
    * Protobuf type {@code pbdson.PbMaterial}
@@ -45102,6 +46013,16 @@ public final class Pbmethod {
             case 53: {
               bitField0_ |= 0x00000020;
               socketRate_ = input.readFloat();
+              break;
+            }
+            case 56: {
+              bitField0_ |= 0x00000040;
+              isTrading_ = input.readInt32();
+              break;
+            }
+            case 64: {
+              bitField0_ |= 0x00000080;
+              inMarket_ = input.readInt32();
               break;
             }
           }
@@ -45240,6 +46161,38 @@ public final class Pbmethod {
       return socketRate_;
     }
 
+    // optional int32 isTrading = 7;
+    public static final int ISTRADING_FIELD_NUMBER = 7;
+    private int isTrading_;
+    /**
+     * <code>optional int32 isTrading = 7;</code>
+     */
+    public boolean hasIsTrading() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional int32 isTrading = 7;</code>
+     */
+    public int getIsTrading() {
+      return isTrading_;
+    }
+
+    // optional int32 inMarket = 8;
+    public static final int INMARKET_FIELD_NUMBER = 8;
+    private int inMarket_;
+    /**
+     * <code>optional int32 inMarket = 8;</code>
+     */
+    public boolean hasInMarket() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>optional int32 inMarket = 8;</code>
+     */
+    public int getInMarket() {
+      return inMarket_;
+    }
+
     private void initFields() {
       id_ = 0L;
       materialId_ = 0;
@@ -45247,6 +46200,8 @@ public final class Pbmethod {
       level_ = 0;
       value_ = 0F;
       socketRate_ = 0F;
+      isTrading_ = 0;
+      inMarket_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -45277,6 +46232,12 @@ public final class Pbmethod {
       }
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         output.writeFloat(6, socketRate_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeInt32(7, isTrading_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeInt32(8, inMarket_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -45310,6 +46271,14 @@ public final class Pbmethod {
       if (((bitField0_ & 0x00000020) == 0x00000020)) {
         size += com.google.protobuf.CodedOutputStream
           .computeFloatSize(6, socketRate_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(7, isTrading_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(8, inMarket_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -45439,6 +46408,10 @@ public final class Pbmethod {
         bitField0_ = (bitField0_ & ~0x00000010);
         socketRate_ = 0F;
         bitField0_ = (bitField0_ & ~0x00000020);
+        isTrading_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000040);
+        inMarket_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000080);
         return this;
       }
 
@@ -45491,6 +46464,14 @@ public final class Pbmethod {
           to_bitField0_ |= 0x00000020;
         }
         result.socketRate_ = socketRate_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.isTrading_ = isTrading_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.inMarket_ = inMarket_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -45524,6 +46505,12 @@ public final class Pbmethod {
         }
         if (other.hasSocketRate()) {
           setSocketRate(other.getSocketRate());
+        }
+        if (other.hasIsTrading()) {
+          setIsTrading(other.getIsTrading());
+        }
+        if (other.hasInMarket()) {
+          setInMarket(other.getInMarket());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -45750,6 +46737,72 @@ public final class Pbmethod {
         return this;
       }
 
+      // optional int32 isTrading = 7;
+      private int isTrading_ ;
+      /**
+       * <code>optional int32 isTrading = 7;</code>
+       */
+      public boolean hasIsTrading() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>optional int32 isTrading = 7;</code>
+       */
+      public int getIsTrading() {
+        return isTrading_;
+      }
+      /**
+       * <code>optional int32 isTrading = 7;</code>
+       */
+      public Builder setIsTrading(int value) {
+        bitField0_ |= 0x00000040;
+        isTrading_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 isTrading = 7;</code>
+       */
+      public Builder clearIsTrading() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        isTrading_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 inMarket = 8;
+      private int inMarket_ ;
+      /**
+       * <code>optional int32 inMarket = 8;</code>
+       */
+      public boolean hasInMarket() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      /**
+       * <code>optional int32 inMarket = 8;</code>
+       */
+      public int getInMarket() {
+        return inMarket_;
+      }
+      /**
+       * <code>optional int32 inMarket = 8;</code>
+       */
+      public Builder setInMarket(int value) {
+        bitField0_ |= 0x00000080;
+        inMarket_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 inMarket = 8;</code>
+       */
+      public Builder clearInMarket() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        inMarket_ = 0;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:pbdson.PbMaterial)
     }
 
@@ -45888,6 +46941,26 @@ public final class Pbmethod {
      */
     com.google.protobuf.ByteString
         getCraftByBytes();
+
+    // optional int32 isTrading = 13;
+    /**
+     * <code>optional int32 isTrading = 13;</code>
+     */
+    boolean hasIsTrading();
+    /**
+     * <code>optional int32 isTrading = 13;</code>
+     */
+    int getIsTrading();
+
+    // optional int32 inMarket = 14;
+    /**
+     * <code>optional int32 inMarket = 14;</code>
+     */
+    boolean hasInMarket();
+    /**
+     * <code>optional int32 inMarket = 14;</code>
+     */
+    int getInMarket();
   }
   /**
    * Protobuf type {@code pbdson.PbArtifact}
@@ -45998,6 +47071,16 @@ public final class Pbmethod {
             case 98: {
               bitField0_ |= 0x00000800;
               craftBy_ = input.readBytes();
+              break;
+            }
+            case 104: {
+              bitField0_ |= 0x00001000;
+              isTrading_ = input.readInt32();
+              break;
+            }
+            case 112: {
+              bitField0_ |= 0x00002000;
+              inMarket_ = input.readInt32();
               break;
             }
           }
@@ -46259,6 +47342,38 @@ public final class Pbmethod {
       }
     }
 
+    // optional int32 isTrading = 13;
+    public static final int ISTRADING_FIELD_NUMBER = 13;
+    private int isTrading_;
+    /**
+     * <code>optional int32 isTrading = 13;</code>
+     */
+    public boolean hasIsTrading() {
+      return ((bitField0_ & 0x00001000) == 0x00001000);
+    }
+    /**
+     * <code>optional int32 isTrading = 13;</code>
+     */
+    public int getIsTrading() {
+      return isTrading_;
+    }
+
+    // optional int32 inMarket = 14;
+    public static final int INMARKET_FIELD_NUMBER = 14;
+    private int inMarket_;
+    /**
+     * <code>optional int32 inMarket = 14;</code>
+     */
+    public boolean hasInMarket() {
+      return ((bitField0_ & 0x00002000) == 0x00002000);
+    }
+    /**
+     * <code>optional int32 inMarket = 14;</code>
+     */
+    public int getInMarket() {
+      return inMarket_;
+    }
+
     private void initFields() {
       id_ = 0L;
       artifactId_ = 0;
@@ -46272,6 +47387,8 @@ public final class Pbmethod {
       person_ = 0F;
       isCraft_ = 0;
       craftBy_ = "";
+      isTrading_ = 0;
+      inMarket_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -46320,6 +47437,12 @@ public final class Pbmethod {
       }
       if (((bitField0_ & 0x00000800) == 0x00000800)) {
         output.writeBytes(12, getCraftByBytes());
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        output.writeInt32(13, isTrading_);
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        output.writeInt32(14, inMarket_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -46377,6 +47500,14 @@ public final class Pbmethod {
       if (((bitField0_ & 0x00000800) == 0x00000800)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(12, getCraftByBytes());
+      }
+      if (((bitField0_ & 0x00001000) == 0x00001000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(13, isTrading_);
+      }
+      if (((bitField0_ & 0x00002000) == 0x00002000)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(14, inMarket_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -46518,6 +47649,10 @@ public final class Pbmethod {
         bitField0_ = (bitField0_ & ~0x00000400);
         craftBy_ = "";
         bitField0_ = (bitField0_ & ~0x00000800);
+        isTrading_ = 0;
+        bitField0_ = (bitField0_ & ~0x00001000);
+        inMarket_ = 0;
+        bitField0_ = (bitField0_ & ~0x00002000);
         return this;
       }
 
@@ -46594,6 +47729,14 @@ public final class Pbmethod {
           to_bitField0_ |= 0x00000800;
         }
         result.craftBy_ = craftBy_;
+        if (((from_bitField0_ & 0x00001000) == 0x00001000)) {
+          to_bitField0_ |= 0x00001000;
+        }
+        result.isTrading_ = isTrading_;
+        if (((from_bitField0_ & 0x00002000) == 0x00002000)) {
+          to_bitField0_ |= 0x00002000;
+        }
+        result.inMarket_ = inMarket_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -46647,6 +47790,12 @@ public final class Pbmethod {
           bitField0_ |= 0x00000800;
           craftBy_ = other.craftBy_;
           onChanged();
+        }
+        if (other.hasIsTrading()) {
+          setIsTrading(other.getIsTrading());
+        }
+        if (other.hasInMarket()) {
+          setInMarket(other.getInMarket());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -47108,6 +48257,72 @@ public final class Pbmethod {
   }
   bitField0_ |= 0x00000800;
         craftBy_ = value;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 isTrading = 13;
+      private int isTrading_ ;
+      /**
+       * <code>optional int32 isTrading = 13;</code>
+       */
+      public boolean hasIsTrading() {
+        return ((bitField0_ & 0x00001000) == 0x00001000);
+      }
+      /**
+       * <code>optional int32 isTrading = 13;</code>
+       */
+      public int getIsTrading() {
+        return isTrading_;
+      }
+      /**
+       * <code>optional int32 isTrading = 13;</code>
+       */
+      public Builder setIsTrading(int value) {
+        bitField0_ |= 0x00001000;
+        isTrading_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 isTrading = 13;</code>
+       */
+      public Builder clearIsTrading() {
+        bitField0_ = (bitField0_ & ~0x00001000);
+        isTrading_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 inMarket = 14;
+      private int inMarket_ ;
+      /**
+       * <code>optional int32 inMarket = 14;</code>
+       */
+      public boolean hasInMarket() {
+        return ((bitField0_ & 0x00002000) == 0x00002000);
+      }
+      /**
+       * <code>optional int32 inMarket = 14;</code>
+       */
+      public int getInMarket() {
+        return inMarket_;
+      }
+      /**
+       * <code>optional int32 inMarket = 14;</code>
+       */
+      public Builder setInMarket(int value) {
+        bitField0_ |= 0x00002000;
+        inMarket_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 inMarket = 14;</code>
+       */
+      public Builder clearInMarket() {
+        bitField0_ = (bitField0_ & ~0x00002000);
+        inMarket_ = 0;
         onChanged();
         return this;
       }
@@ -47889,6 +49104,26 @@ public final class Pbmethod {
      */
     com.google.protobuf.ByteString
         getCraftByBytes();
+
+    // optional int32 isTrading = 10;
+    /**
+     * <code>optional int32 isTrading = 10;</code>
+     */
+    boolean hasIsTrading();
+    /**
+     * <code>optional int32 isTrading = 10;</code>
+     */
+    int getIsTrading();
+
+    // optional int32 inMarket = 11;
+    /**
+     * <code>optional int32 inMarket = 11;</code>
+     */
+    boolean hasInMarket();
+    /**
+     * <code>optional int32 inMarket = 11;</code>
+     */
+    int getInMarket();
   }
   /**
    * Protobuf type {@code pbdson.PbItem}
@@ -47979,6 +49214,16 @@ public final class Pbmethod {
             case 74: {
               bitField0_ |= 0x00000080;
               craftBy_ = input.readBytes();
+              break;
+            }
+            case 80: {
+              bitField0_ |= 0x00000100;
+              isTrading_ = input.readInt32();
+              break;
+            }
+            case 88: {
+              bitField0_ |= 0x00000200;
+              inMarket_ = input.readInt32();
               break;
             }
           }
@@ -48203,6 +49448,38 @@ public final class Pbmethod {
       }
     }
 
+    // optional int32 isTrading = 10;
+    public static final int ISTRADING_FIELD_NUMBER = 10;
+    private int isTrading_;
+    /**
+     * <code>optional int32 isTrading = 10;</code>
+     */
+    public boolean hasIsTrading() {
+      return ((bitField0_ & 0x00000100) == 0x00000100);
+    }
+    /**
+     * <code>optional int32 isTrading = 10;</code>
+     */
+    public int getIsTrading() {
+      return isTrading_;
+    }
+
+    // optional int32 inMarket = 11;
+    public static final int INMARKET_FIELD_NUMBER = 11;
+    private int inMarket_;
+    /**
+     * <code>optional int32 inMarket = 11;</code>
+     */
+    public boolean hasInMarket() {
+      return ((bitField0_ & 0x00000200) == 0x00000200);
+    }
+    /**
+     * <code>optional int32 inMarket = 11;</code>
+     */
+    public int getInMarket() {
+      return inMarket_;
+    }
+
     private void initFields() {
       id_ = 0L;
       itemKey_ = 0;
@@ -48212,6 +49489,8 @@ public final class Pbmethod {
       isCraft_ = 0;
       icon_ = 0;
       craftBy_ = "";
+      isTrading_ = 0;
+      inMarket_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -48248,6 +49527,12 @@ public final class Pbmethod {
       }
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         output.writeBytes(9, getCraftByBytes());
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        output.writeInt32(10, isTrading_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        output.writeInt32(11, inMarket_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -48289,6 +49574,14 @@ public final class Pbmethod {
       if (((bitField0_ & 0x00000080) == 0x00000080)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(9, getCraftByBytes());
+      }
+      if (((bitField0_ & 0x00000100) == 0x00000100)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(10, isTrading_);
+      }
+      if (((bitField0_ & 0x00000200) == 0x00000200)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(11, inMarket_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -48422,6 +49715,10 @@ public final class Pbmethod {
         bitField0_ = (bitField0_ & ~0x00000040);
         craftBy_ = "";
         bitField0_ = (bitField0_ & ~0x00000080);
+        isTrading_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000100);
+        inMarket_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
 
@@ -48482,6 +49779,14 @@ public final class Pbmethod {
           to_bitField0_ |= 0x00000080;
         }
         result.craftBy_ = craftBy_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000100;
+        }
+        result.isTrading_ = isTrading_;
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000200;
+        }
+        result.inMarket_ = inMarket_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -48525,6 +49830,12 @@ public final class Pbmethod {
           bitField0_ |= 0x00000080;
           craftBy_ = other.craftBy_;
           onChanged();
+        }
+        if (other.hasIsTrading()) {
+          setIsTrading(other.getIsTrading());
+        }
+        if (other.hasInMarket()) {
+          setInMarket(other.getInMarket());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -48899,6 +50210,72 @@ public final class Pbmethod {
         return this;
       }
 
+      // optional int32 isTrading = 10;
+      private int isTrading_ ;
+      /**
+       * <code>optional int32 isTrading = 10;</code>
+       */
+      public boolean hasIsTrading() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      /**
+       * <code>optional int32 isTrading = 10;</code>
+       */
+      public int getIsTrading() {
+        return isTrading_;
+      }
+      /**
+       * <code>optional int32 isTrading = 10;</code>
+       */
+      public Builder setIsTrading(int value) {
+        bitField0_ |= 0x00000100;
+        isTrading_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 isTrading = 10;</code>
+       */
+      public Builder clearIsTrading() {
+        bitField0_ = (bitField0_ & ~0x00000100);
+        isTrading_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 inMarket = 11;
+      private int inMarket_ ;
+      /**
+       * <code>optional int32 inMarket = 11;</code>
+       */
+      public boolean hasInMarket() {
+        return ((bitField0_ & 0x00000200) == 0x00000200);
+      }
+      /**
+       * <code>optional int32 inMarket = 11;</code>
+       */
+      public int getInMarket() {
+        return inMarket_;
+      }
+      /**
+       * <code>optional int32 inMarket = 11;</code>
+       */
+      public Builder setInMarket(int value) {
+        bitField0_ |= 0x00000200;
+        inMarket_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 inMarket = 11;</code>
+       */
+      public Builder clearInMarket() {
+        bitField0_ = (bitField0_ & ~0x00000200);
+        inMarket_ = 0;
+        onChanged();
+        return this;
+      }
+
       // @@protoc_insertion_point(builder_scope:pbdson.PbItem)
     }
 
@@ -49022,6 +50399,26 @@ public final class Pbmethod {
      */
     com.google.protobuf.ByteString
         getCraftByBytes();
+
+    // optional int32 isTrading = 11;
+    /**
+     * <code>optional int32 isTrading = 11;</code>
+     */
+    boolean hasIsTrading();
+    /**
+     * <code>optional int32 isTrading = 11;</code>
+     */
+    int getIsTrading();
+
+    // optional int32 inMarket = 12;
+    /**
+     * <code>optional int32 inMarket = 12;</code>
+     */
+    boolean hasInMarket();
+    /**
+     * <code>optional int32 inMarket = 12;</code>
+     */
+    int getInMarket();
   }
   /**
    * Protobuf type {@code pbdson.PbEquipment}
@@ -49122,6 +50519,16 @@ public final class Pbmethod {
             case 82: {
               bitField0_ |= 0x00000200;
               craftBy_ = input.readBytes();
+              break;
+            }
+            case 88: {
+              bitField0_ |= 0x00000400;
+              isTrading_ = input.readInt32();
+              break;
+            }
+            case 96: {
+              bitField0_ |= 0x00000800;
+              inMarket_ = input.readInt32();
               break;
             }
           }
@@ -49378,6 +50785,38 @@ public final class Pbmethod {
       }
     }
 
+    // optional int32 isTrading = 11;
+    public static final int ISTRADING_FIELD_NUMBER = 11;
+    private int isTrading_;
+    /**
+     * <code>optional int32 isTrading = 11;</code>
+     */
+    public boolean hasIsTrading() {
+      return ((bitField0_ & 0x00000400) == 0x00000400);
+    }
+    /**
+     * <code>optional int32 isTrading = 11;</code>
+     */
+    public int getIsTrading() {
+      return isTrading_;
+    }
+
+    // optional int32 inMarket = 12;
+    public static final int INMARKET_FIELD_NUMBER = 12;
+    private int inMarket_;
+    /**
+     * <code>optional int32 inMarket = 12;</code>
+     */
+    public boolean hasInMarket() {
+      return ((bitField0_ & 0x00000800) == 0x00000800);
+    }
+    /**
+     * <code>optional int32 inMarket = 12;</code>
+     */
+    public int getInMarket() {
+      return inMarket_;
+    }
+
     private void initFields() {
       id_ = 0L;
       itemKey_ = 0;
@@ -49389,6 +50828,8 @@ public final class Pbmethod {
       icon_ = 0;
       priceTreasure_ = 0;
       craftBy_ = "";
+      isTrading_ = 0;
+      inMarket_ = 0;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -49431,6 +50872,12 @@ public final class Pbmethod {
       }
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         output.writeBytes(10, getCraftByBytes());
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        output.writeInt32(11, isTrading_);
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        output.writeInt32(12, inMarket_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -49480,6 +50927,14 @@ public final class Pbmethod {
       if (((bitField0_ & 0x00000200) == 0x00000200)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(10, getCraftByBytes());
+      }
+      if (((bitField0_ & 0x00000400) == 0x00000400)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(11, isTrading_);
+      }
+      if (((bitField0_ & 0x00000800) == 0x00000800)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(12, inMarket_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -49617,6 +51072,10 @@ public final class Pbmethod {
         bitField0_ = (bitField0_ & ~0x00000100);
         craftBy_ = "";
         bitField0_ = (bitField0_ & ~0x00000200);
+        isTrading_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000400);
+        inMarket_ = 0;
+        bitField0_ = (bitField0_ & ~0x00000800);
         return this;
       }
 
@@ -49685,6 +51144,14 @@ public final class Pbmethod {
           to_bitField0_ |= 0x00000200;
         }
         result.craftBy_ = craftBy_;
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000400;
+        }
+        result.isTrading_ = isTrading_;
+        if (((from_bitField0_ & 0x00000800) == 0x00000800)) {
+          to_bitField0_ |= 0x00000800;
+        }
+        result.inMarket_ = inMarket_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -49734,6 +51201,12 @@ public final class Pbmethod {
           bitField0_ |= 0x00000200;
           craftBy_ = other.craftBy_;
           onChanged();
+        }
+        if (other.hasIsTrading()) {
+          setIsTrading(other.getIsTrading());
+        }
+        if (other.hasInMarket()) {
+          setInMarket(other.getInMarket());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -50170,6 +51643,72 @@ public final class Pbmethod {
   }
   bitField0_ |= 0x00000200;
         craftBy_ = value;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 isTrading = 11;
+      private int isTrading_ ;
+      /**
+       * <code>optional int32 isTrading = 11;</code>
+       */
+      public boolean hasIsTrading() {
+        return ((bitField0_ & 0x00000400) == 0x00000400);
+      }
+      /**
+       * <code>optional int32 isTrading = 11;</code>
+       */
+      public int getIsTrading() {
+        return isTrading_;
+      }
+      /**
+       * <code>optional int32 isTrading = 11;</code>
+       */
+      public Builder setIsTrading(int value) {
+        bitField0_ |= 0x00000400;
+        isTrading_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 isTrading = 11;</code>
+       */
+      public Builder clearIsTrading() {
+        bitField0_ = (bitField0_ & ~0x00000400);
+        isTrading_ = 0;
+        onChanged();
+        return this;
+      }
+
+      // optional int32 inMarket = 12;
+      private int inMarket_ ;
+      /**
+       * <code>optional int32 inMarket = 12;</code>
+       */
+      public boolean hasInMarket() {
+        return ((bitField0_ & 0x00000800) == 0x00000800);
+      }
+      /**
+       * <code>optional int32 inMarket = 12;</code>
+       */
+      public int getInMarket() {
+        return inMarket_;
+      }
+      /**
+       * <code>optional int32 inMarket = 12;</code>
+       */
+      public Builder setInMarket(int value) {
+        bitField0_ |= 0x00000800;
+        inMarket_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional int32 inMarket = 12;</code>
+       */
+      public Builder clearInMarket() {
+        bitField0_ = (bitField0_ & ~0x00000800);
+        inMarket_ = 0;
         onChanged();
         return this;
       }
@@ -88750,7 +90289,7 @@ public final class Pbmethod {
       "point\030\023 \003(\003\022\026\n\016timeLastAction\030\024 \001(\003\022\r\n\005h" +
       "onor\030\025 \001(\005\022\r\n\005power\030\026 \001(\003\022\021\n\titemEquip\030\027" +
       " \003(\005\022\017\n\007channel\030\030 \003(\005\022\014\n\004ruby\030\033 \001(\003\022\013\n\003p" +
-      "et\030\034 \003(\005\"\352\005\n\nPbUserData\022\021\n\tslogBagUI\030\001 \001" +
+      "et\030\034 \003(\005\"\226\006\n\nPbUserData\022\021\n\tslogBagUI\030\001 \001" +
       "(\005\022\024\n\014slotMaterial\030\002 \001(\005\022\025\n\rslotItemEven",
       "t\030\003 \001(\005\022\022\n\nlvTraining\030\004 \001(\005\022\025\n\rmaxlvTrai" +
       "ning\030\005 \001(\005\022\025\n\rnumPointLevel\030\006 \001(\005\022!\n\005ite" +
@@ -88768,204 +90307,213 @@ public final class Pbmethod {
       "tected\030\035 \001(\003\022)\n\taArtifact\030\036 \001(\0132\026.pbdson" +
       ".PbListArtifact\022+\n\naItemPoint\030\037 \001(\0132\027.pb" +
       "dson.PbListItemPoint\022\032\n\022timeActiveArtifa" +
-      "ct\030  \001(\003\022\033\n\004aMob\030! \003(\0132\r.pbdson.PbMob\"*\n" +
-      "\nPbListItem\022\034\n\004item\030\001 \003(\0132\016.pbdson.PbIte" +
-      "m\"9\n\017PbListEquipment\022&\n\tequipment\030\001 \003(\0132" +
-      "\023.pbdson.PbEquipment\"7\n\016PbListMaterial\022%",
-      "\n\tmaterials\030\001 \003(\0132\022.pbdson.PbMaterial\".\n" +
-      "\013PbListMount\022\037\n\006mounts\030\001 \003(\0132\017.pbdson.Pb" +
-      "Mount\"O\n\006PbSkin\022\n\n\002id\030\001 \001(\003\022\014\n\004type\030\002 \001(" +
-      "\005\022\016\n\006skinId\030\003 \001(\005\022\014\n\004tier\030\004 \001(\005\022\r\n\005point" +
-      "\030\005 \003(\003\"\270\001\n\007PbMount\022\n\n\002id\030\001 \001(\003\022\r\n\005point\030" +
-      "\002 \003(\003\022\017\n\007mountId\030\003 \001(\005\022\r\n\005level\030\004 \001(\005\022\014\n" +
-      "\004tier\030\005 \001(\005\022\017\n\007isCraft\030\006 \001(\005\022\014\n\004icon\030\007 \001" +
-      "(\005\022\025\n\rpriceTreasure\030\010 \001(\005\022\014\n\004data\030\t \001(\t\022" +
-      "\017\n\007isEquip\030\n \001(\005\022\017\n\007craftBy\030\013 \001(\t\"0\n\005PbM" +
-      "ob\022\n\n\002id\030\001 \001(\003\022\r\n\005mobId\030\002 \001(\005\022\014\n\004tier\030\003 ",
-      "\001(\005\"(\n\tPbListPet\022\033\n\004pets\030\001 \003(\0132\r.pbdson." +
-      "PbPet\"\264\001\n\005PbPet\022\n\n\002id\030\001 \001(\003\022\r\n\005point\030\002 \003" +
-      "(\003\022\r\n\005petId\030\003 \001(\005\022\r\n\005level\030\004 \001(\005\022\014\n\004tier" +
-      "\030\005 \001(\005\022\017\n\007isCraft\030\006 \001(\005\022\014\n\004icon\030\007 \001(\005\022\025\n" +
-      "\rpriceTreasure\030\010 \001(\005\022\014\n\004data\030\t \001(\t\022\017\n\007is" +
-      "Equip\030\n \001(\005\022\017\n\007craftBy\030\013 \001(\t\":\n\017PbListIt" +
-      "emPoint\022\'\n\nitemPoints\030\001 \003(\0132\023.pbdson.PbI" +
-      "temPoint\"+\n\nPbListChat\022\035\n\005aChat\030\001 \003(\0132\016." +
-      "pbdson.PbChat\"\211\001\n\006PbChat\022\017\n\007reqTime\030\001 \001(" +
-      "\003\022\017\n\007message\030\002 \001(\t\022\014\n\004type\030\003 \001(\005\022\034\n\004user",
-      "\030\004 \001(\0132\016.pbdson.PbUser\022\"\n\004info\030\005 \001(\0132\024.p" +
-      "bdson.CommonVector\022\r\n\005point\030\006 \003(\003\"7\n\020PbL" +
-      "istChatFriend\022#\n\005chats\030\001 \003(\0132\024.pbdson.Pb" +
-      "ChatFriend\"i\n\014PbChatFriend\022\016\n\006userId\030\001 \001" +
-      "(\005\022\017\n\007message\030\002 \001(\t\022\r\n\005skins\030\003 \003(\005\022\014\n\004na" +
-      "me\030\004 \001(\t\022\014\n\004time\030\005 \001(\003\022\r\n\005level\030\006 \001(\005\"v\n" +
-      "\006PbShop\022\"\n\006tabSet\030\001 \003(\0132\022.pbdson.PbItemS" +
-      "hop\022#\n\007tabDeal\030\002 \003(\0132\022.pbdson.PbItemShop" +
-      "\022#\n\007tabMisc\030\003 \003(\0132\022.pbdson.PbItemShop\"\245\001" +
-      "\n\nPbItemShop\022\n\n\002id\030\001 \001(\005\022\013\n\003tab\030\002 \001(\005\022\014\n",
-      "\004name\030\003 \001(\t\022\014\n\004desc\030\004 \001(\t\022\014\n\004item\030\005 \003(\003\022" +
-      "\r\n\005price\030\006 \003(\003\022\r\n\005image\030\007 \001(\t\022\016\n\006status\030" +
-      "\010 \001(\005\022\022\n\ndescStatus\030\t \001(\t\022\022\n\ntimeRemain\030" +
-      "\n \001(\003\"l\n\nPbMaterial\022\n\n\002id\030\001 \001(\003\022\022\n\nmater" +
-      "ialId\030\002 \001(\005\022\014\n\004tier\030\003 \001(\005\022\r\n\005level\030\004 \001(\005" +
-      "\022\r\n\005value\030\005 \001(\002\022\022\n\nsocketRate\030\006 \001(\002\"\312\001\n\n" +
-      "PbArtifact\022\n\n\002id\030\001 \001(\003\022\022\n\nartifactId\030\002 \001" +
-      "(\005\022\r\n\005level\030\003 \001(\005\022\014\n\004tier\030\004 \001(\005\022\014\n\004time\030" +
-      "\005 \001(\002\022\020\n\010cooldown\030\006 \001(\002\022\017\n\007pointID\030\007 \001(\002" +
-      "\022\r\n\005value\030\010 \001(\002\022\r\n\005range\030\t \001(\002\022\016\n\006person",
-      "\030\n \001(\002\022\017\n\007isCraft\030\013 \001(\005\022\017\n\007craftBy\030\014 \001(\t" +
-      "\"7\n\016PbListArtifact\022%\n\tartifacts\030\001 \003(\0132\022." +
-      "pbdson.PbArtifact\"\207\001\n\006PbItem\022\n\n\002id\030\001 \001(\003" +
-      "\022\017\n\007itemKey\030\002 \001(\005\022\r\n\005level\030\003 \001(\005\022\023\n\013lock" +
-      "Destroy\030\004 \001(\010\022\014\n\004data\030\006 \001(\t\022\017\n\007isCraft\030\007" +
-      " \001(\005\022\014\n\004icon\030\010 \001(\005\022\017\n\007craftBy\030\t \001(\t\"\261\001\n\013" +
-      "PbEquipment\022\n\n\002id\030\001 \001(\003\022\017\n\007itemKey\030\002 \001(\005" +
-      "\022\r\n\005level\030\003 \001(\005\022\023\n\013lockDestroy\030\004 \001(\010\022\014\n\004" +
-      "tier\030\005 \001(\005\022\014\n\004data\030\006 \001(\t\022\017\n\007isCraft\030\007 \001(" +
-      "\005\022\014\n\004icon\030\010 \001(\005\022\025\n\rpriceTreasure\030\t \001(\005\022\017",
-      "\n\007craftBy\030\n \001(\t\"<\n\013PbItemPoint\022\017\n\007itemKe" +
-      "y\030\001 \001(\005\022\016\n\006number\030\002 \001(\003\022\014\n\004data\030\003 \001(\t\"/\n" +
-      "\nListAction\022!\n\007aAction\030\001 \003(\0132\020.pbdson.Pb" +
-      "Action\"*\n\010PbAction\022\020\n\010actionId\030\001 \001(\005\022\014\n\004" +
-      "data\030\002 \001(\014\".\n\014CommonVector\022\r\n\005aLong\030\001 \003(" +
-      "\003\022\017\n\007aString\030\002 \003(\t\"9\n\020ListCommonVector\022%" +
-      "\n\007aVector\030\001 \003(\0132\024.pbdson.CommonVector\"f\n" +
-      "\017PbCharacterInfo\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001" +
-      "(\t\022\014\n\004team\030\003 \001(\005\022\r\n\005skins\030\004 \003(\005\022\r\n\005aItem" +
-      "\030\005 \003(\005\022\r\n\005point\030\006 \003(\003\"+\n\nPbListMail\022\035\n\005a",
-      "Mail\030\001 \003(\0132\016.pbdson.PbMail\"\210\001\n\006PbMail\022\n\n" +
-      "\002id\030\001 \001(\005\022\r\n\005title\030\002 \001(\t\022\017\n\007message\030\003 \001(" +
-      "\t\022\r\n\005bonus\030\004 \003(\005\022\017\n\007receive\030\005 \001(\005\022\014\n\004tim" +
-      "e\030\006 \001(\003\022\020\n\010senderId\030\007 \001(\005\022\022\n\nsenderName\030" +
-      "\010 \001(\t\"\257\001\n\tPbEndGame\022\017\n\007popupId\030\001 \001(\005\022\021\n\t" +
-      "battleKey\030\002 \001(\t\022\r\n\005isWin\030\003 \001(\010\022\017\n\007messag" +
-      "e\030\004 \001(\t\022\r\n\005bonus\030\005 \003(\003\022\014\n\004time\030\006 \001(\005\022\017\n\007" +
-      "perDame\030\007 \001(\005\022\014\n\004star\030\010 \001(\005\022\"\n\004info\030\t \001(" +
-      "\0132\024.pbdson.CommonVector\"{\n\nPbRoomInfo\022\020\n" +
-      "\010roomType\030\001 \001(\005\022\017\n\007service\030\002 \001(\005\022!\n\003cmm\030",
-      "\003 \001(\0132\024.pbdson.CommonVector\022\'\n\005lstCm\030\004 \001" +
-      "(\0132\030.pbdson.ListCommonVector\"Z\n\017PbListMi" +
-      "niLotte\022\020\n\010allBonus\030\001 \003(\003\022\020\n\010luckyNum\030\002 " +
-      "\003(\005\022#\n\006aLotte\030\003 \003(\0132\023.pbdson.PbMiniLotte" +
-      "\"C\n\013PbMiniLotte\022\021\n\tnumChoose\030\001 \003(\005\022\022\n\npr" +
-      "izeIndex\030\002 \001(\005\022\r\n\005bonus\030\003 \003(\005\"B\n\024PbListL" +
-      "otteryHistory\022*\n\010aLottery\030\001 \003(\0132\030.pbdson" +
-      ".PbLotteryHistory\"\247\001\n\020PbLotteryHistory\022\017" +
-      "\n\007eventId\030\001 \001(\005\022\014\n\004type\030\002 \001(\005\022\020\n\010luckyNu" +
-      "m\030\003 \001(\005\022\016\n\006number\030\004 \003(\005\022\014\n\004time\030\005 \001(\003\022\r\n",
-      "\005bonus\030\006 \003(\003\022\016\n\006status\030\007 \001(\005\022\021\n\tlistBonu" +
-      "s\030\010 \003(\003\022\022\n\nlistResult\030\t \003(\005\"*\n\014PbUnitUpd" +
-      "ate\022\014\n\004type\030\001 \001(\005\022\014\n\004data\030\002 \001(\014\"\213\001\n\tPbUn" +
-      "itPos\022\n\n\002id\030\001 \001(\003\022\r\n\005speed\030\002 \001(\005\022\024\n\014last" +
-      "InputSeq\030\003 \001(\003\022\032\n\003pos\030\004 \001(\0132\r.pbdson.PbP" +
-      "os\022 \n\tdirection\030\005 \001(\0132\r.pbdson.PbPos\022\017\n\007" +
-      "chunkId\030\006 \001(\005\"1\n\014PbListBullet\022!\n\007bullets" +
-      "\030\001 \003(\0132\020.pbdson.PbBullet\"@\n\010PbBullet\022\n\n\002" +
-      "id\030\001 \001(\005\022\032\n\003pos\030\002 \001(\0132\r.pbdson.PbPos\022\014\n\004" +
-      "info\030\003 \003(\005\"(\n\tPbListTab\022\033\n\004tabs\030\001 \003(\0132\r.",
-      "pbdson.PbTab\"Z\n\005PbTab\022\r\n\005tabId\030\001 \001(\005\022\025\n\r" +
-      "eventTemplate\030\002 \001(\005\022\r\n\005image\030\003 \001(\t\022\014\n\004na" +
-      "me\030\004 \001(\t\022\016\n\006notify\030\005 \001(\010\"\255\002\n\017PbEventBuyM" +
-      "onth\022\021\n\teventName\030\001 \001(\t\022\023\n\013imageBanner\030\002" +
-      " \001(\t\022\022\n\ntextBanner\030\003 \001(\t\022\r\n\005level\030\004 \001(\005\022" +
-      "\020\n\010curPoint\030\005 \001(\005\022\020\n\010maxPoint\030\006 \001(\005\022\025\n\rb" +
-      "uttonAddGoto\030\007 \001(\005\022\017\n\007keyHelp\030\010 \001(\t\022\016\n\006t" +
-      "imeCD\030\t \001(\003\022\021\n\tstatusBuy\030\n \001(\005\022\r\n\005price\030" +
-      "\013 \003(\003\022\022\n\nnormalName\030\014 \001(\t\022\017\n\007vipName\030\r \001" +
-      "(\t\022,\n\005cells\030\016 \003(\0132\035.pbdson.PbCellPanelEv",
-      "entMonth\"\315\001\n\014PbEventTimer\022\n\n\002id\030\001 \001(\005\022\016\n" +
-      "\006status\030\002 \001(\005\022\022\n\ntimeRemain\030\003 \001(\003\022\r\n\005bon" +
-      "us\030\004 \003(\003\022\r\n\005price\030\005 \003(\003\022\020\n\010oldPrice\030\006 \003(" +
-      "\003\022\014\n\004name\030\007 \001(\t\022\014\n\004desc\030\010 \001(\t\022\014\n\004sale\030\t " +
-      "\001(\t\022\017\n\007bgrPath\030\n \001(\t\022\"\n\004info\030\013 \001(\0132\024.pbd" +
-      "son.CommonVector\"w\n\025PbCellPanelEventMont" +
-      "h\022\r\n\005level\030\001 \001(\005\022\013\n\003exp\030\002 \001(\005\022\016\n\006status\030" +
-      "\003 \001(\005\022\021\n\tstatusVip\030\004 \001(\005\022\r\n\005bonus\030\005 \003(\003\022" +
-      "\020\n\010bonusVip\030\006 \003(\003\"\221\001\n\023PbPanelEventTabCel" +
-      "l\022\021\n\teventName\030\001 \001(\t\022\023\n\013imageBanner\030\002 \001(",
-      "\t\022\022\n\ntextBanner\030\003 \001(\t\022\016\n\006timeCD\030\t \001(\003\022.\n" +
-      "\005cells\030\016 \003(\0132\037.pbdson.PbCellPanelEventTa" +
-      "bCell\"i\n\027PbCellPanelEventTabCell\022\n\n\002id\030\001" +
-      " \001(\005\022\020\n\010cellName\030\002 \001(\t\022\r\n\005bonus\030\003 \003(\003\022\013\n" +
-      "\003per\030\004 \001(\t\022\024\n\014buttonStatus\030\005 \001(\005\"\237\001\n\tPbW" +
-      "elfare\022\017\n\007eventId\030\001 \001(\005\022\016\n\006notify\030\002 \001(\010\022" +
-      "%\n\006banner\030\003 \001(\0132\025.pbdson.PbBannerEvent\022&" +
-      "\n\010tabEvent\030\004 \003(\0132\024.pbdson.PbTabWelfare\022\017" +
-      "\n\007keyHelp\030\005 \001(\t\022\021\n\tcountdown\030\006 \001(\003\"b\n\014Pb" +
-      "TabWelfare\022\r\n\005tabId\030\001 \001(\005\022\017\n\007tabName\030\002 \001",
-      "(\t\022\"\n\005cells\030\003 \003(\0132\023.pbdson.PbCellEvent\022\016" +
-      "\n\006notify\030\004 \001(\010\"\263\001\n\rPbBannerEvent\022\022\n\npath" +
-      "Banner\030\001 \001(\t\022\014\n\004text\030\002 \001(\t\022\022\n\nbonusImage" +
-      "\030\003 \001(\t\022\021\n\tboxStatus\030\004 \001(\005\022\020\n\010bonusBox\030\005 " +
-      "\003(\005\022\014\n\004desc\030\006 \001(\t\022\021\n\tpathTitle\030\007 \001(\t\022&\n\004" +
-      "info\030\010 \001(\0132\030.pbdson.ListCommonVector\"\353\001\n" +
-      "\013PbCellEvent\022\n\n\002id\030\001 \001(\005\022\r\n\005image\030\002 \001(\t\022" +
-      "\r\n\005bonus\030\003 \003(\005\022\020\n\010nameCell\030\004 \001(\t\022\020\n\010text" +
-      "Cell\030\005 \001(\t\022\020\n\010textDesc\030\006 \001(\t\022\016\n\006numBuy\030\007" +
-      " \001(\005\022\r\n\005limit\030\010 \001(\005\022\r\n\005price\030\t \003(\003\022\024\n\014bu",
-      "ttonStatus\030\n \001(\005\022\020\n\010bonusDay\030\013 \003(\005\022\022\n\nti" +
-      "meRemain\030\014 \001(\003\022\022\n\ntimeExpire\030\r \001(\003\"\225\001\n\013P" +
-      "bEvent7Day\022&\n\004days\030\001 \003(\0132\030.pbdson.PbPane" +
-      "lEvent7Day\022\022\n\ntimeRemain\030\002 \001(\003\022\020\n\010curVal" +
-      "ue\030\003 \001(\005\022\020\n\010maxValue\030\004 \001(\005\022&\n\tposReward\030" +
-      "\005 \003(\0132\023.pbdson.PbPosReward\"U\n\013PbPosRewar" +
-      "d\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\r\n\005point\030\003 \001" +
-      "(\003\022\r\n\005bonus\030\004 \003(\003\022\016\n\006status\030\005 \001(\005\"R\n\016PbT" +
-      "abEvent7Day\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022&\n" +
-      "\005cells\030\003 \003(\0132\027.pbdson.PbCellEvent7Day\"\272\001",
-      "\n\020PbPanelEvent7Day\022$\n\004tab1\030\001 \001(\0132\026.pbdso" +
-      "n.PbTabEvent7Day\022$\n\004tab2\030\002 \001(\0132\026.pbdson." +
-      "PbTabEvent7Day\022$\n\004tab3\030\003 \001(\0132\026.pbdson.Pb" +
-      "TabEvent7Day\022$\n\004tab4\030\004 \001(\0132\026.pbdson.PbTa" +
-      "bEvent7Day\022\016\n\006isLock\030\005 \001(\010\"\306\001\n\017PbCellEve" +
-      "nt7Day\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\014\n\004desc" +
-      "\030\003 \001(\t\022\020\n\010curValue\030\004 \001(\005\022\020\n\010maxValue\030\005 \001" +
-      "(\005\022\r\n\005bonus\030\006 \003(\003\022\024\n\014buttonStatus\030\007 \001(\005\022" +
-      "\022\n\nbuttonGoto\030\010 \001(\005\022\020\n\010oldPrice\030\t \003(\003\022\020\n" +
-      "\010newPrice\030\n \003(\003\022\n\n\002xu\030\013 \001(\005\"\'\n\tPbListIAP",
-      "\022\032\n\003iap\030\001 \003(\0132\r.pbdson.PpIAP\"\264\001\n\005PpIAP\022\n" +
-      "\n\002id\030\001 \001(\005\022\030\n\020productIdAndroid\030\002 \001(\t\022\024\n\014" +
-      "productIdIos\030\003 \001(\t\022\014\n\004name\030\004 \001(\t\022\r\n\005pric" +
-      "e\030\005 \001(\t\022\r\n\005bonus\030\006 \003(\003\022\020\n\010addBonus\030\007 \003(\003" +
-      "\022\020\n\010addTitle\030\010 \001(\t\022\016\n\006vipExp\030\t \001(\005\022\017\n\007pr" +
-      "iceQr\030\n \001(\t*!\n\tCellState\022\n\n\006ACTIVE\020\001\022\010\n\004" +
-      "HIDE\020\002*\304\002\n\014SubStateType\022\r\n\tADD_BONUS\020\001\022\007" +
-      "\n\003DIE\020\002\022\n\n\006REVIVE\020\003\022\r\n\tPLAY_ANIM\020\004\022\r\n\tBE" +
-      "_DAMAGE\020\005\022\017\n\013EFFECT_BODY\020\006\022\t\n\005RE_HP\020\007\022\025\n" +
-      "\021UPDATE_CHAT_FRAME\020\010\022\020\n\014UPDATE_TRIAL\020\t\022\024",
-      "\n\020UPDATE_ITEM_SLOT\020\n\022\024\n\020UPDATE_TEXT_DAME" +
-      "\020\013\022\026\n\022UPDATE_MULTI_POINT\020\014\022\021\n\rUSE_ITEM_S" +
-      "LOT\020\r\022\024\n\020UPDATE_DIRECTION\020\016\022\025\n\021UPDATE_IT" +
-      "EM_EQUIP\020\017\022\024\n\020REMOVE_EQUIPMENT\020\020\022\023\n\017REMO" +
-      "VE_MATERIAL\020\021*Y\n\tStateType\022\023\n\017TYPE_ADD_R" +
-      "EMOVE\020\001\022\014\n\010TYPE_POS\020\002\022\023\n\017TYPE_UNIT_STATE" +
-      "\020\003\022\024\n\020TYPE_CHUNK_STATE\020\004*y\n\016CellObjectTy" +
-      "pe\022\010\n\004ROCK\020\001\022\010\n\004SIGN\020\002\022\n\n\006CACTUS\020\003\022\n\n\006FL" +
-      "OWER\020\004\022\t\n\005SKULL\020\005\022\t\n\005CHEST\020\006\022\t\n\005BONES\020\007\022" +
-      "\016\n\nGRAVESTONE\020\010\022\n\n\006HELMET\020\t*f\n\007ItemKey\022\016",
-      "\n\nBINH_MAU_1\020\001\022\016\n\nBINH_MAU_2\020\002\022\016\n\nBINH_M" +
-      "AU_3\020\003\022\016\n\nBINH_MAU_4\020\004\022\010\n\004GOLD\020\005\022\007\n\003GEM\020" +
-      "\006\022\010\n\004RUBY\020\007*\224\001\n\014ItemPointKey\022\n\n\006CO_VAT\020\001" +
-      "\022\017\n\013TICKER_MINI\020\002\022\021\n\rTICKER_NORMAL\020\003\022\022\n\016" +
-      "TICKER_SPECIAL\020\004\022\010\n\004CHIP\020\005\022\021\n\rBONG_LINH_" +
-      "THU\020\006\022\021\n\rBONG_SIEU_THU\020\007\022\020\n\014LOA_THE_GIOI" +
-      "\020\010*&\n\010ItemType\022\014\n\010POSITION\020\001\022\014\n\010CURRENCY" +
-      "\020\002*0\n\rItemPointType\022\t\n\005EVENT\020\001\022\007\n\003USE\020\002\022" +
-      "\013\n\007SPEAKER\020\003*;\n\014TargetAttack\022\n\n\006OBJECT\020\000" +
-      "\022\t\n\005ENEMY\020\001\022\010\n\004BOSS\020\002\022\n\n\006PLAYER\020\003*1\n\010Ski",
-      "nType\022\010\n\004HAIR\020\000\022\010\n\004FACE\020\001\022\007\n\003EYE\020\002\022\010\n\004BO" +
-      "DY\020\003*q\n\rEquipSlotType\022\010\n\004NULL\020\000\022\n\n\006WEAPO" +
-      "N\020\001\022\007\n\003HAT\020\002\022\t\n\005ARMOR\020\003\022\t\n\005CLOAK\020\004\022\t\n\005SH" +
-      "OES\020\005\022\014\n\010TREASURE\020\006\022\007\n\003PET\020\007\022\t\n\005MOUNT\020\010*" +
-      "\346\002\n\010AutoSell\022\022\n\016AUTO_SELL_HP_1\020\000\022\022\n\016AUTO" +
-      "_SELL_HP_2\020\001\022\022\n\016AUTO_SELL_HP_3\020\002\022\022\n\016AUTO" +
-      "_SELL_HP_4\020\003\022\025\n\021AUTO_SELL_EQUIP_1\020\004\022\025\n\021A" +
-      "UTO_SELL_EQUIP_2\020\005\022\025\n\021AUTO_SELL_EQUIP_3\020" +
-      "\006\022\025\n\021AUTO_SELL_EQUIP_4\020\007\022\025\n\021AUTO_SELL_MO" +
-      "UNT_1\020\010\022\025\n\021AUTO_SELL_MOUNT_2\020\t\022\025\n\021AUTO_S",
-      "ELL_MOUNT_3\020\n\022\025\n\021AUTO_SELL_MOUNT_4\020\013\022\023\n\017" +
-      "AUTO_SELL_PET_1\020\014\022\023\n\017AUTO_SELL_PET_2\020\r\022\023" +
-      "\n\017AUTO_SELL_PET_3\020\016\022\023\n\017AUTO_SELL_PET_4\020\017" +
-      "B\024\n\010protocolB\010Pbmethod"
+      "ct\030  \001(\003\022\033\n\004aMob\030! \003(\0132\r.pbdson.PbMob\022\024\n" +
+      "\014slotTrading1\030\" \001(\005\022\024\n\014slotTrading2\030# \001(" +
+      "\005\"*\n\nPbListItem\022\034\n\004item\030\001 \003(\0132\016.pbdson.P" +
+      "bItem\"9\n\017PbListEquipment\022&\n\tequipment\030\001 ",
+      "\003(\0132\023.pbdson.PbEquipment\"7\n\016PbListMateri" +
+      "al\022%\n\tmaterials\030\001 \003(\0132\022.pbdson.PbMateria" +
+      "l\".\n\013PbListMount\022\037\n\006mounts\030\001 \003(\0132\017.pbdso" +
+      "n.PbMount\"\205\001\n\006PbSkin\022\n\n\002id\030\001 \001(\003\022\014\n\004type" +
+      "\030\002 \001(\005\022\016\n\006skinId\030\003 \001(\005\022\014\n\004tier\030\004 \001(\005\022\r\n\005" +
+      "point\030\005 \003(\003\022\017\n\007isCraft\030\006 \001(\005\022\021\n\tisTradin" +
+      "g\030\007 \001(\005\022\020\n\010inMarket\030\010 \001(\005\"\335\001\n\007PbMount\022\n\n" +
+      "\002id\030\001 \001(\003\022\r\n\005point\030\002 \003(\003\022\017\n\007mountId\030\003 \001(" +
+      "\005\022\r\n\005level\030\004 \001(\005\022\014\n\004tier\030\005 \001(\005\022\017\n\007isCraf" +
+      "t\030\006 \001(\005\022\014\n\004icon\030\007 \001(\005\022\025\n\rpriceTreasure\030\010",
+      " \001(\005\022\014\n\004data\030\t \001(\t\022\017\n\007isEquip\030\n \001(\005\022\017\n\007c" +
+      "raftBy\030\013 \001(\t\022\021\n\tisTrading\030\014 \001(\005\022\020\n\010inMar" +
+      "ket\030\r \001(\005\"U\n\005PbMob\022\n\n\002id\030\001 \001(\003\022\r\n\005mobId\030" +
+      "\002 \001(\005\022\014\n\004tier\030\003 \001(\005\022\021\n\tisTrading\030\004 \001(\005\022\020" +
+      "\n\010inMarket\030\005 \001(\005\"(\n\tPbListPet\022\033\n\004pets\030\001 " +
+      "\003(\0132\r.pbdson.PbPet\"\331\001\n\005PbPet\022\n\n\002id\030\001 \001(\003" +
+      "\022\r\n\005point\030\002 \003(\003\022\r\n\005petId\030\003 \001(\005\022\r\n\005level\030" +
+      "\004 \001(\005\022\014\n\004tier\030\005 \001(\005\022\017\n\007isCraft\030\006 \001(\005\022\014\n\004" +
+      "icon\030\007 \001(\005\022\025\n\rpriceTreasure\030\010 \001(\005\022\014\n\004dat" +
+      "a\030\t \001(\t\022\017\n\007isEquip\030\n \001(\005\022\017\n\007craftBy\030\013 \001(",
+      "\t\022\021\n\tisTrading\030\014 \001(\005\022\020\n\010inMarket\030\r \001(\005\":" +
+      "\n\017PbListItemPoint\022\'\n\nitemPoints\030\001 \003(\0132\023." +
+      "pbdson.PbItemPoint\"+\n\nPbListChat\022\035\n\005aCha" +
+      "t\030\001 \003(\0132\016.pbdson.PbChat\"\211\001\n\006PbChat\022\017\n\007re" +
+      "qTime\030\001 \001(\003\022\017\n\007message\030\002 \001(\t\022\014\n\004type\030\003 \001" +
+      "(\005\022\034\n\004user\030\004 \001(\0132\016.pbdson.PbUser\022\"\n\004info" +
+      "\030\005 \001(\0132\024.pbdson.CommonVector\022\r\n\005point\030\006 " +
+      "\003(\003\"7\n\020PbListChatFriend\022#\n\005chats\030\001 \003(\0132\024" +
+      ".pbdson.PbChatFriend\"i\n\014PbChatFriend\022\016\n\006" +
+      "userId\030\001 \001(\005\022\017\n\007message\030\002 \001(\t\022\r\n\005skins\030\003",
+      " \003(\005\022\014\n\004name\030\004 \001(\t\022\014\n\004time\030\005 \001(\003\022\r\n\005leve" +
+      "l\030\006 \001(\005\"v\n\006PbShop\022\"\n\006tabSet\030\001 \003(\0132\022.pbds" +
+      "on.PbItemShop\022#\n\007tabDeal\030\002 \003(\0132\022.pbdson." +
+      "PbItemShop\022#\n\007tabMisc\030\003 \003(\0132\022.pbdson.PbI" +
+      "temShop\"\245\001\n\nPbItemShop\022\n\n\002id\030\001 \001(\005\022\013\n\003ta" +
+      "b\030\002 \001(\005\022\014\n\004name\030\003 \001(\t\022\014\n\004desc\030\004 \001(\t\022\014\n\004i" +
+      "tem\030\005 \003(\003\022\r\n\005price\030\006 \003(\003\022\r\n\005image\030\007 \001(\t\022" +
+      "\016\n\006status\030\010 \001(\005\022\022\n\ndescStatus\030\t \001(\t\022\022\n\nt" +
+      "imeRemain\030\n \001(\003\"\221\001\n\nPbMaterial\022\n\n\002id\030\001 \001" +
+      "(\003\022\022\n\nmaterialId\030\002 \001(\005\022\014\n\004tier\030\003 \001(\005\022\r\n\005",
+      "level\030\004 \001(\005\022\r\n\005value\030\005 \001(\002\022\022\n\nsocketRate" +
+      "\030\006 \001(\002\022\021\n\tisTrading\030\007 \001(\005\022\020\n\010inMarket\030\010 " +
+      "\001(\005\"\357\001\n\nPbArtifact\022\n\n\002id\030\001 \001(\003\022\022\n\nartifa" +
+      "ctId\030\002 \001(\005\022\r\n\005level\030\003 \001(\005\022\014\n\004tier\030\004 \001(\005\022" +
+      "\014\n\004time\030\005 \001(\002\022\020\n\010cooldown\030\006 \001(\002\022\017\n\007point" +
+      "ID\030\007 \001(\002\022\r\n\005value\030\010 \001(\002\022\r\n\005range\030\t \001(\002\022\016" +
+      "\n\006person\030\n \001(\002\022\017\n\007isCraft\030\013 \001(\005\022\017\n\007craft" +
+      "By\030\014 \001(\t\022\021\n\tisTrading\030\r \001(\005\022\020\n\010inMarket\030" +
+      "\016 \001(\005\"7\n\016PbListArtifact\022%\n\tartifacts\030\001 \003" +
+      "(\0132\022.pbdson.PbArtifact\"\254\001\n\006PbItem\022\n\n\002id\030",
+      "\001 \001(\003\022\017\n\007itemKey\030\002 \001(\005\022\r\n\005level\030\003 \001(\005\022\023\n" +
+      "\013lockDestroy\030\004 \001(\010\022\014\n\004data\030\006 \001(\t\022\017\n\007isCr" +
+      "aft\030\007 \001(\005\022\014\n\004icon\030\010 \001(\005\022\017\n\007craftBy\030\t \001(\t" +
+      "\022\021\n\tisTrading\030\n \001(\005\022\020\n\010inMarket\030\013 \001(\005\"\326\001" +
+      "\n\013PbEquipment\022\n\n\002id\030\001 \001(\003\022\017\n\007itemKey\030\002 \001" +
+      "(\005\022\r\n\005level\030\003 \001(\005\022\023\n\013lockDestroy\030\004 \001(\010\022\014" +
+      "\n\004tier\030\005 \001(\005\022\014\n\004data\030\006 \001(\t\022\017\n\007isCraft\030\007 " +
+      "\001(\005\022\014\n\004icon\030\010 \001(\005\022\025\n\rpriceTreasure\030\t \001(\005" +
+      "\022\017\n\007craftBy\030\n \001(\t\022\021\n\tisTrading\030\013 \001(\005\022\020\n\010" +
+      "inMarket\030\014 \001(\005\"<\n\013PbItemPoint\022\017\n\007itemKey",
+      "\030\001 \001(\005\022\016\n\006number\030\002 \001(\003\022\014\n\004data\030\003 \001(\t\"/\n\n" +
+      "ListAction\022!\n\007aAction\030\001 \003(\0132\020.pbdson.PbA" +
+      "ction\"*\n\010PbAction\022\020\n\010actionId\030\001 \001(\005\022\014\n\004d" +
+      "ata\030\002 \001(\014\".\n\014CommonVector\022\r\n\005aLong\030\001 \003(\003" +
+      "\022\017\n\007aString\030\002 \003(\t\"9\n\020ListCommonVector\022%\n" +
+      "\007aVector\030\001 \003(\0132\024.pbdson.CommonVector\"f\n\017" +
+      "PbCharacterInfo\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(" +
+      "\t\022\014\n\004team\030\003 \001(\005\022\r\n\005skins\030\004 \003(\005\022\r\n\005aItem\030" +
+      "\005 \003(\005\022\r\n\005point\030\006 \003(\003\"+\n\nPbListMail\022\035\n\005aM" +
+      "ail\030\001 \003(\0132\016.pbdson.PbMail\"\210\001\n\006PbMail\022\n\n\002",
+      "id\030\001 \001(\005\022\r\n\005title\030\002 \001(\t\022\017\n\007message\030\003 \001(\t" +
+      "\022\r\n\005bonus\030\004 \003(\005\022\017\n\007receive\030\005 \001(\005\022\014\n\004time" +
+      "\030\006 \001(\003\022\020\n\010senderId\030\007 \001(\005\022\022\n\nsenderName\030\010" +
+      " \001(\t\"\257\001\n\tPbEndGame\022\017\n\007popupId\030\001 \001(\005\022\021\n\tb" +
+      "attleKey\030\002 \001(\t\022\r\n\005isWin\030\003 \001(\010\022\017\n\007message" +
+      "\030\004 \001(\t\022\r\n\005bonus\030\005 \003(\003\022\014\n\004time\030\006 \001(\005\022\017\n\007p" +
+      "erDame\030\007 \001(\005\022\014\n\004star\030\010 \001(\005\022\"\n\004info\030\t \001(\013" +
+      "2\024.pbdson.CommonVector\"{\n\nPbRoomInfo\022\020\n\010" +
+      "roomType\030\001 \001(\005\022\017\n\007service\030\002 \001(\005\022!\n\003cmm\030\003" +
+      " \001(\0132\024.pbdson.CommonVector\022\'\n\005lstCm\030\004 \001(",
+      "\0132\030.pbdson.ListCommonVector\"Z\n\017PbListMin" +
+      "iLotte\022\020\n\010allBonus\030\001 \003(\003\022\020\n\010luckyNum\030\002 \003" +
+      "(\005\022#\n\006aLotte\030\003 \003(\0132\023.pbdson.PbMiniLotte\"" +
+      "C\n\013PbMiniLotte\022\021\n\tnumChoose\030\001 \003(\005\022\022\n\npri" +
+      "zeIndex\030\002 \001(\005\022\r\n\005bonus\030\003 \003(\005\"B\n\024PbListLo" +
+      "tteryHistory\022*\n\010aLottery\030\001 \003(\0132\030.pbdson." +
+      "PbLotteryHistory\"\247\001\n\020PbLotteryHistory\022\017\n" +
+      "\007eventId\030\001 \001(\005\022\014\n\004type\030\002 \001(\005\022\020\n\010luckyNum" +
+      "\030\003 \001(\005\022\016\n\006number\030\004 \003(\005\022\014\n\004time\030\005 \001(\003\022\r\n\005" +
+      "bonus\030\006 \003(\003\022\016\n\006status\030\007 \001(\005\022\021\n\tlistBonus",
+      "\030\010 \003(\003\022\022\n\nlistResult\030\t \003(\005\"*\n\014PbUnitUpda" +
+      "te\022\014\n\004type\030\001 \001(\005\022\014\n\004data\030\002 \001(\014\"\213\001\n\tPbUni" +
+      "tPos\022\n\n\002id\030\001 \001(\003\022\r\n\005speed\030\002 \001(\005\022\024\n\014lastI" +
+      "nputSeq\030\003 \001(\003\022\032\n\003pos\030\004 \001(\0132\r.pbdson.PbPo" +
+      "s\022 \n\tdirection\030\005 \001(\0132\r.pbdson.PbPos\022\017\n\007c" +
+      "hunkId\030\006 \001(\005\"1\n\014PbListBullet\022!\n\007bullets\030" +
+      "\001 \003(\0132\020.pbdson.PbBullet\"@\n\010PbBullet\022\n\n\002i" +
+      "d\030\001 \001(\005\022\032\n\003pos\030\002 \001(\0132\r.pbdson.PbPos\022\014\n\004i" +
+      "nfo\030\003 \003(\005\"(\n\tPbListTab\022\033\n\004tabs\030\001 \003(\0132\r.p" +
+      "bdson.PbTab\"Z\n\005PbTab\022\r\n\005tabId\030\001 \001(\005\022\025\n\re",
+      "ventTemplate\030\002 \001(\005\022\r\n\005image\030\003 \001(\t\022\014\n\004nam" +
+      "e\030\004 \001(\t\022\016\n\006notify\030\005 \001(\010\"\255\002\n\017PbEventBuyMo" +
+      "nth\022\021\n\teventName\030\001 \001(\t\022\023\n\013imageBanner\030\002 " +
+      "\001(\t\022\022\n\ntextBanner\030\003 \001(\t\022\r\n\005level\030\004 \001(\005\022\020" +
+      "\n\010curPoint\030\005 \001(\005\022\020\n\010maxPoint\030\006 \001(\005\022\025\n\rbu" +
+      "ttonAddGoto\030\007 \001(\005\022\017\n\007keyHelp\030\010 \001(\t\022\016\n\006ti" +
+      "meCD\030\t \001(\003\022\021\n\tstatusBuy\030\n \001(\005\022\r\n\005price\030\013" +
+      " \003(\003\022\022\n\nnormalName\030\014 \001(\t\022\017\n\007vipName\030\r \001(" +
+      "\t\022,\n\005cells\030\016 \003(\0132\035.pbdson.PbCellPanelEve" +
+      "ntMonth\"\315\001\n\014PbEventTimer\022\n\n\002id\030\001 \001(\005\022\016\n\006",
+      "status\030\002 \001(\005\022\022\n\ntimeRemain\030\003 \001(\003\022\r\n\005bonu" +
+      "s\030\004 \003(\003\022\r\n\005price\030\005 \003(\003\022\020\n\010oldPrice\030\006 \003(\003" +
+      "\022\014\n\004name\030\007 \001(\t\022\014\n\004desc\030\010 \001(\t\022\014\n\004sale\030\t \001" +
+      "(\t\022\017\n\007bgrPath\030\n \001(\t\022\"\n\004info\030\013 \001(\0132\024.pbds" +
+      "on.CommonVector\"w\n\025PbCellPanelEventMonth" +
+      "\022\r\n\005level\030\001 \001(\005\022\013\n\003exp\030\002 \001(\005\022\016\n\006status\030\003" +
+      " \001(\005\022\021\n\tstatusVip\030\004 \001(\005\022\r\n\005bonus\030\005 \003(\003\022\020" +
+      "\n\010bonusVip\030\006 \003(\003\"\221\001\n\023PbPanelEventTabCell" +
+      "\022\021\n\teventName\030\001 \001(\t\022\023\n\013imageBanner\030\002 \001(\t" +
+      "\022\022\n\ntextBanner\030\003 \001(\t\022\016\n\006timeCD\030\t \001(\003\022.\n\005",
+      "cells\030\016 \003(\0132\037.pbdson.PbCellPanelEventTab" +
+      "Cell\"i\n\027PbCellPanelEventTabCell\022\n\n\002id\030\001 " +
+      "\001(\005\022\020\n\010cellName\030\002 \001(\t\022\r\n\005bonus\030\003 \003(\003\022\013\n\003" +
+      "per\030\004 \001(\t\022\024\n\014buttonStatus\030\005 \001(\005\"\237\001\n\tPbWe" +
+      "lfare\022\017\n\007eventId\030\001 \001(\005\022\016\n\006notify\030\002 \001(\010\022%" +
+      "\n\006banner\030\003 \001(\0132\025.pbdson.PbBannerEvent\022&\n" +
+      "\010tabEvent\030\004 \003(\0132\024.pbdson.PbTabWelfare\022\017\n" +
+      "\007keyHelp\030\005 \001(\t\022\021\n\tcountdown\030\006 \001(\003\"b\n\014PbT" +
+      "abWelfare\022\r\n\005tabId\030\001 \001(\005\022\017\n\007tabName\030\002 \001(" +
+      "\t\022\"\n\005cells\030\003 \003(\0132\023.pbdson.PbCellEvent\022\016\n",
+      "\006notify\030\004 \001(\010\"\263\001\n\rPbBannerEvent\022\022\n\npathB" +
+      "anner\030\001 \001(\t\022\014\n\004text\030\002 \001(\t\022\022\n\nbonusImage\030" +
+      "\003 \001(\t\022\021\n\tboxStatus\030\004 \001(\005\022\020\n\010bonusBox\030\005 \003" +
+      "(\005\022\014\n\004desc\030\006 \001(\t\022\021\n\tpathTitle\030\007 \001(\t\022&\n\004i" +
+      "nfo\030\010 \001(\0132\030.pbdson.ListCommonVector\"\353\001\n\013" +
+      "PbCellEvent\022\n\n\002id\030\001 \001(\005\022\r\n\005image\030\002 \001(\t\022\r" +
+      "\n\005bonus\030\003 \003(\005\022\020\n\010nameCell\030\004 \001(\t\022\020\n\010textC" +
+      "ell\030\005 \001(\t\022\020\n\010textDesc\030\006 \001(\t\022\016\n\006numBuy\030\007 " +
+      "\001(\005\022\r\n\005limit\030\010 \001(\005\022\r\n\005price\030\t \003(\003\022\024\n\014but" +
+      "tonStatus\030\n \001(\005\022\020\n\010bonusDay\030\013 \003(\005\022\022\n\ntim",
+      "eRemain\030\014 \001(\003\022\022\n\ntimeExpire\030\r \001(\003\"\225\001\n\013Pb" +
+      "Event7Day\022&\n\004days\030\001 \003(\0132\030.pbdson.PbPanel" +
+      "Event7Day\022\022\n\ntimeRemain\030\002 \001(\003\022\020\n\010curValu" +
+      "e\030\003 \001(\005\022\020\n\010maxValue\030\004 \001(\005\022&\n\tposReward\030\005" +
+      " \003(\0132\023.pbdson.PbPosReward\"U\n\013PbPosReward" +
+      "\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\r\n\005point\030\003 \001(" +
+      "\003\022\r\n\005bonus\030\004 \003(\003\022\016\n\006status\030\005 \001(\005\"R\n\016PbTa" +
+      "bEvent7Day\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022&\n\005" +
+      "cells\030\003 \003(\0132\027.pbdson.PbCellEvent7Day\"\272\001\n" +
+      "\020PbPanelEvent7Day\022$\n\004tab1\030\001 \001(\0132\026.pbdson",
+      ".PbTabEvent7Day\022$\n\004tab2\030\002 \001(\0132\026.pbdson.P" +
+      "bTabEvent7Day\022$\n\004tab3\030\003 \001(\0132\026.pbdson.PbT" +
+      "abEvent7Day\022$\n\004tab4\030\004 \001(\0132\026.pbdson.PbTab" +
+      "Event7Day\022\016\n\006isLock\030\005 \001(\010\"\306\001\n\017PbCellEven" +
+      "t7Day\022\n\n\002id\030\001 \001(\005\022\014\n\004name\030\002 \001(\t\022\014\n\004desc\030" +
+      "\003 \001(\t\022\020\n\010curValue\030\004 \001(\005\022\020\n\010maxValue\030\005 \001(" +
+      "\005\022\r\n\005bonus\030\006 \003(\003\022\024\n\014buttonStatus\030\007 \001(\005\022\022" +
+      "\n\nbuttonGoto\030\010 \001(\005\022\020\n\010oldPrice\030\t \003(\003\022\020\n\010" +
+      "newPrice\030\n \003(\003\022\n\n\002xu\030\013 \001(\005\"\'\n\tPbListIAP\022" +
+      "\032\n\003iap\030\001 \003(\0132\r.pbdson.PpIAP\"\264\001\n\005PpIAP\022\n\n",
+      "\002id\030\001 \001(\005\022\030\n\020productIdAndroid\030\002 \001(\t\022\024\n\014p" +
+      "roductIdIos\030\003 \001(\t\022\014\n\004name\030\004 \001(\t\022\r\n\005price" +
+      "\030\005 \001(\t\022\r\n\005bonus\030\006 \003(\003\022\020\n\010addBonus\030\007 \003(\003\022" +
+      "\020\n\010addTitle\030\010 \001(\t\022\016\n\006vipExp\030\t \001(\005\022\017\n\007pri" +
+      "ceQr\030\n \001(\t*!\n\tCellState\022\n\n\006ACTIVE\020\001\022\010\n\004H" +
+      "IDE\020\002*\304\002\n\014SubStateType\022\r\n\tADD_BONUS\020\001\022\007\n" +
+      "\003DIE\020\002\022\n\n\006REVIVE\020\003\022\r\n\tPLAY_ANIM\020\004\022\r\n\tBE_" +
+      "DAMAGE\020\005\022\017\n\013EFFECT_BODY\020\006\022\t\n\005RE_HP\020\007\022\025\n\021" +
+      "UPDATE_CHAT_FRAME\020\010\022\020\n\014UPDATE_TRIAL\020\t\022\024\n" +
+      "\020UPDATE_ITEM_SLOT\020\n\022\024\n\020UPDATE_TEXT_DAME\020",
+      "\013\022\026\n\022UPDATE_MULTI_POINT\020\014\022\021\n\rUSE_ITEM_SL" +
+      "OT\020\r\022\024\n\020UPDATE_DIRECTION\020\016\022\025\n\021UPDATE_ITE" +
+      "M_EQUIP\020\017\022\024\n\020REMOVE_EQUIPMENT\020\020\022\023\n\017REMOV" +
+      "E_MATERIAL\020\021*Y\n\tStateType\022\023\n\017TYPE_ADD_RE" +
+      "MOVE\020\001\022\014\n\010TYPE_POS\020\002\022\023\n\017TYPE_UNIT_STATE\020" +
+      "\003\022\024\n\020TYPE_CHUNK_STATE\020\004*y\n\016CellObjectTyp" +
+      "e\022\010\n\004ROCK\020\001\022\010\n\004SIGN\020\002\022\n\n\006CACTUS\020\003\022\n\n\006FLO" +
+      "WER\020\004\022\t\n\005SKULL\020\005\022\t\n\005CHEST\020\006\022\t\n\005BONES\020\007\022\016" +
+      "\n\nGRAVESTONE\020\010\022\n\n\006HELMET\020\t*f\n\007ItemKey\022\016\n" +
+      "\nBINH_MAU_1\020\001\022\016\n\nBINH_MAU_2\020\002\022\016\n\nBINH_MA",
+      "U_3\020\003\022\016\n\nBINH_MAU_4\020\004\022\010\n\004GOLD\020\005\022\007\n\003GEM\020\006" +
+      "\022\010\n\004RUBY\020\007*\224\001\n\014ItemPointKey\022\n\n\006CO_VAT\020\001\022" +
+      "\017\n\013TICKER_MINI\020\002\022\021\n\rTICKER_NORMAL\020\003\022\022\n\016T" +
+      "ICKER_SPECIAL\020\004\022\010\n\004CHIP\020\005\022\021\n\rBONG_LINH_T" +
+      "HU\020\006\022\021\n\rBONG_SIEU_THU\020\007\022\020\n\014LOA_THE_GIOI\020" +
+      "\010*&\n\010ItemType\022\014\n\010POSITION\020\001\022\014\n\010CURRENCY\020" +
+      "\002*0\n\rItemPointType\022\t\n\005EVENT\020\001\022\007\n\003USE\020\002\022\013" +
+      "\n\007SPEAKER\020\003*;\n\014TargetAttack\022\n\n\006OBJECT\020\000\022" +
+      "\t\n\005ENEMY\020\001\022\010\n\004BOSS\020\002\022\n\n\006PLAYER\020\003*1\n\010Skin" +
+      "Type\022\010\n\004HAIR\020\000\022\010\n\004FACE\020\001\022\007\n\003EYE\020\002\022\010\n\004BOD",
+      "Y\020\003*q\n\rEquipSlotType\022\010\n\004NULL\020\000\022\n\n\006WEAPON" +
+      "\020\001\022\007\n\003HAT\020\002\022\t\n\005ARMOR\020\003\022\t\n\005CLOAK\020\004\022\t\n\005SHO" +
+      "ES\020\005\022\014\n\010TREASURE\020\006\022\007\n\003PET\020\007\022\t\n\005MOUNT\020\010*\346" +
+      "\002\n\010AutoSell\022\022\n\016AUTO_SELL_HP_1\020\000\022\022\n\016AUTO_" +
+      "SELL_HP_2\020\001\022\022\n\016AUTO_SELL_HP_3\020\002\022\022\n\016AUTO_" +
+      "SELL_HP_4\020\003\022\025\n\021AUTO_SELL_EQUIP_1\020\004\022\025\n\021AU" +
+      "TO_SELL_EQUIP_2\020\005\022\025\n\021AUTO_SELL_EQUIP_3\020\006" +
+      "\022\025\n\021AUTO_SELL_EQUIP_4\020\007\022\025\n\021AUTO_SELL_MOU" +
+      "NT_1\020\010\022\025\n\021AUTO_SELL_MOUNT_2\020\t\022\025\n\021AUTO_SE" +
+      "LL_MOUNT_3\020\n\022\025\n\021AUTO_SELL_MOUNT_4\020\013\022\023\n\017A",
+      "UTO_SELL_PET_1\020\014\022\023\n\017AUTO_SELL_PET_2\020\r\022\023\n" +
+      "\017AUTO_SELL_PET_3\020\016\022\023\n\017AUTO_SELL_PET_4\020\017B" +
+      "\024\n\010protocolB\010Pbmethod"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -89091,7 +90639,7 @@ public final class Pbmethod {
           internal_static_pbdson_PbUserData_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbUserData_descriptor,
-              new java.lang.String[] { "SlogBagUI", "SlotMaterial", "SlotItemEvent", "LvTraining", "MaxlvTraining", "NumPointLevel", "Items", "ItemEquipments", "ASkin", "AMaterial", "APet", "AMount", "Tutorial", "DameSkins", "DameSkinEquip", "ChatFrames", "ChatFrameEquip", "Trials", "TrialEquip", "CraftLevel", "CraftExp", "ItemSlot", "Equipments", "TimeProtected", "AArtifact", "AItemPoint", "TimeActiveArtifact", "AMob", });
+              new java.lang.String[] { "SlogBagUI", "SlotMaterial", "SlotItemEvent", "LvTraining", "MaxlvTraining", "NumPointLevel", "Items", "ItemEquipments", "ASkin", "AMaterial", "APet", "AMount", "Tutorial", "DameSkins", "DameSkinEquip", "ChatFrames", "ChatFrameEquip", "Trials", "TrialEquip", "CraftLevel", "CraftExp", "ItemSlot", "Equipments", "TimeProtected", "AArtifact", "AItemPoint", "TimeActiveArtifact", "AMob", "SlotTrading1", "SlotTrading2", });
           internal_static_pbdson_PbListItem_descriptor =
             getDescriptor().getMessageTypes().get(20);
           internal_static_pbdson_PbListItem_fieldAccessorTable = new
@@ -89121,19 +90669,19 @@ public final class Pbmethod {
           internal_static_pbdson_PbSkin_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbSkin_descriptor,
-              new java.lang.String[] { "Id", "Type", "SkinId", "Tier", "Point", });
+              new java.lang.String[] { "Id", "Type", "SkinId", "Tier", "Point", "IsCraft", "IsTrading", "InMarket", });
           internal_static_pbdson_PbMount_descriptor =
             getDescriptor().getMessageTypes().get(25);
           internal_static_pbdson_PbMount_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbMount_descriptor,
-              new java.lang.String[] { "Id", "Point", "MountId", "Level", "Tier", "IsCraft", "Icon", "PriceTreasure", "Data", "IsEquip", "CraftBy", });
+              new java.lang.String[] { "Id", "Point", "MountId", "Level", "Tier", "IsCraft", "Icon", "PriceTreasure", "Data", "IsEquip", "CraftBy", "IsTrading", "InMarket", });
           internal_static_pbdson_PbMob_descriptor =
             getDescriptor().getMessageTypes().get(26);
           internal_static_pbdson_PbMob_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbMob_descriptor,
-              new java.lang.String[] { "Id", "MobId", "Tier", });
+              new java.lang.String[] { "Id", "MobId", "Tier", "IsTrading", "InMarket", });
           internal_static_pbdson_PbListPet_descriptor =
             getDescriptor().getMessageTypes().get(27);
           internal_static_pbdson_PbListPet_fieldAccessorTable = new
@@ -89145,7 +90693,7 @@ public final class Pbmethod {
           internal_static_pbdson_PbPet_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbPet_descriptor,
-              new java.lang.String[] { "Id", "Point", "PetId", "Level", "Tier", "IsCraft", "Icon", "PriceTreasure", "Data", "IsEquip", "CraftBy", });
+              new java.lang.String[] { "Id", "Point", "PetId", "Level", "Tier", "IsCraft", "Icon", "PriceTreasure", "Data", "IsEquip", "CraftBy", "IsTrading", "InMarket", });
           internal_static_pbdson_PbListItemPoint_descriptor =
             getDescriptor().getMessageTypes().get(29);
           internal_static_pbdson_PbListItemPoint_fieldAccessorTable = new
@@ -89193,13 +90741,13 @@ public final class Pbmethod {
           internal_static_pbdson_PbMaterial_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbMaterial_descriptor,
-              new java.lang.String[] { "Id", "MaterialId", "Tier", "Level", "Value", "SocketRate", });
+              new java.lang.String[] { "Id", "MaterialId", "Tier", "Level", "Value", "SocketRate", "IsTrading", "InMarket", });
           internal_static_pbdson_PbArtifact_descriptor =
             getDescriptor().getMessageTypes().get(37);
           internal_static_pbdson_PbArtifact_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbArtifact_descriptor,
-              new java.lang.String[] { "Id", "ArtifactId", "Level", "Tier", "Time", "Cooldown", "PointID", "Value", "Range", "Person", "IsCraft", "CraftBy", });
+              new java.lang.String[] { "Id", "ArtifactId", "Level", "Tier", "Time", "Cooldown", "PointID", "Value", "Range", "Person", "IsCraft", "CraftBy", "IsTrading", "InMarket", });
           internal_static_pbdson_PbListArtifact_descriptor =
             getDescriptor().getMessageTypes().get(38);
           internal_static_pbdson_PbListArtifact_fieldAccessorTable = new
@@ -89211,13 +90759,13 @@ public final class Pbmethod {
           internal_static_pbdson_PbItem_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbItem_descriptor,
-              new java.lang.String[] { "Id", "ItemKey", "Level", "LockDestroy", "Data", "IsCraft", "Icon", "CraftBy", });
+              new java.lang.String[] { "Id", "ItemKey", "Level", "LockDestroy", "Data", "IsCraft", "Icon", "CraftBy", "IsTrading", "InMarket", });
           internal_static_pbdson_PbEquipment_descriptor =
             getDescriptor().getMessageTypes().get(40);
           internal_static_pbdson_PbEquipment_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_pbdson_PbEquipment_descriptor,
-              new java.lang.String[] { "Id", "ItemKey", "Level", "LockDestroy", "Tier", "Data", "IsCraft", "Icon", "PriceTreasure", "CraftBy", });
+              new java.lang.String[] { "Id", "ItemKey", "Level", "LockDestroy", "Tier", "Data", "IsCraft", "Icon", "PriceTreasure", "CraftBy", "IsTrading", "InMarket", });
           internal_static_pbdson_PbItemPoint_descriptor =
             getDescriptor().getMessageTypes().get(41);
           internal_static_pbdson_PbItemPoint_fieldAccessorTable = new

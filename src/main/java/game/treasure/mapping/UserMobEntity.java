@@ -21,6 +21,8 @@ public class UserMobEntity implements Serializable {
     int userId;
     int mobId;
     int tier = 1;
+    int isTrading;
+    int inMarket;
 
     public UserMobEntity(UserEntity user, int mobId, int tier) {
         this.userId = user.getId();
@@ -41,10 +43,20 @@ public class UserMobEntity implements Serializable {
     }
 
     public protocol.Pbmethod.PbMob toProto() {
+        try {
+            byte[] bytes = toProtoBuilder().build().toByteArray();
+            bytes = game.treasure.service.item.ProtoTradingWire.appendMobTrading(bytes, isTrading, inMarket);
+            return protocol.Pbmethod.PbMob.parseFrom(bytes);
+        } catch (Exception ex) {
+            return toProtoBuilder().build();
+        }
+    }
+
+    public protocol.Pbmethod.PbMob.Builder toProtoBuilder() {
         protocol.Pbmethod.PbMob.Builder pb = protocol.Pbmethod.PbMob.newBuilder();
         pb.setId(id);
         pb.setMobId(mobId);
         pb.setTier(tier > 0 ? tier : 1);
-        return pb.build();
+        return pb;
     }
 }

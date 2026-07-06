@@ -495,6 +495,12 @@ public class UserResources implements Serializable {
         mSkin.put(uSkin.getId(), uSkin);
     }
 
+    public void removeSkin(long id) {
+        UserSkinEntity rm = mSkin.remove(id);
+        if (rm != null && skins != null)
+            skins.remove(rm);
+    }
+
     /** Lưu item_slot in-memory; flush response sẽ gửi UPDATE_BAG. */
     public boolean saveItemSlot(List<Long> slots) {
         if (!mUser.getUData().saveItemSlot(slots))

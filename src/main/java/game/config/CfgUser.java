@@ -14,12 +14,23 @@ public class CfgUser {
     }
 
     public static String getSlotBagInit(){
-        return "[" + config.freeSlotBag + "," + config.freeSlotMaterial + "," + config.freeSlotEvent + "]";
+        return "[" + config.freeSlotBag + "," + config.freeSlotMaterial + "," + config.freeSlotEvent
+                + "," + getDefaultSlotTrading1() + "," + getDefaultSlotTrading2() + "]";
+    }
+
+    public static int getDefaultSlotTrading1() {
+        return config != null && config.freeSlotTrading1 > 0 ? config.freeSlotTrading1 : 20;
+    }
+
+    public static int getDefaultSlotTrading2() {
+        return config != null ? config.freeSlotTrading2 : 0;
     }
 
     public static class DataConfig {
         public int freeSlotBag;
         public int freeSlotMaterial;
         public int freeSlotEvent;
+        public int freeSlotTrading1 = 20;
+        public int freeSlotTrading2 = 0;
     }
 }

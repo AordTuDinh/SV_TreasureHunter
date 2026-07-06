@@ -25,6 +25,8 @@ public class UserMaterialEntity implements Serializable {
     int level;
     float value;
     float socketRate;
+    int isTrading;
+    int inMarket;
 
     public UserMaterialEntity(int userId, int materialId, int tier) {
         this.userId = userId;
@@ -64,6 +66,16 @@ public class UserMaterialEntity implements Serializable {
         pb.setLevel(level);
         pb.setSocketRate(socketRate);
         return pb;
+    }
+
+    public protocol.Pbmethod.PbMaterial toProtoWire() {
+        try {
+            byte[] bytes = toProto().build().toByteArray();
+            bytes = game.treasure.service.item.ProtoTradingWire.appendMaterialTrading(bytes, isTrading, inMarket);
+            return protocol.Pbmethod.PbMaterial.parseFrom(bytes);
+        } catch (Exception ex) {
+            return toProto().build();
+        }
     }
 
     public boolean update(List<Object> updateData) {

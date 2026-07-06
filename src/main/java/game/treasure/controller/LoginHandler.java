@@ -431,10 +431,17 @@ public class LoginHandler extends AHandler {
 
     MyUser initUser(UserEntity user) {
         MyUser mUser = new MyUser(user);
-        if (dbInitUser(mUser) && mUser.getResources().isOk()) {
-            return mUser;
+        if (!dbInitUser(mUser) || !mUser.getResources().isOk()) {
+            return null;
         }
-        return null;
+        EntityManager session = null;
+        try {
+            session = DBJPA.getEntityManager();
+            ResAvatar.ensureDefaultSkins(mUser, session);
+        } finally {
+            closeSession(session);
+        }
+        return mUser;
     }
 
     boolean dbInitUser(MyUser mUser) {
@@ -505,8 +512,6 @@ public class LoginHandler extends AHandler {
 
             List<UserItemPointEntity> itemPoints = session.createNativeQuery("select * from user_item_point where user_id = " + userId, UserItemPointEntity.class).getResultList();
             mUser.getResources().setItemPoints(itemPoints);
-
-            ResAvatar.ensureDefaultSkins(mUser, session);
 
             mUser.setInitUData(uData, mUser.getUser());
             mUser.setUSetting(uSetting);

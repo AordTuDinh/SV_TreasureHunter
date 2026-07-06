@@ -36,6 +36,8 @@ public class UserItemEntity implements Serializable {
     int icon;
     String craftBy;
     String data;
+    int isTrading;
+    int inMarket;
 
     @Transient
     int bagSlot = -1;
@@ -192,6 +194,16 @@ public class UserItemEntity implements Serializable {
         if (craftBy != null && !craftBy.isEmpty())
             pb.setCraftBy(craftBy);
         return pb;
+    }
+
+    public Pbmethod.PbItem toProtoWire() {
+        try {
+            byte[] bytes = toProto().build().toByteArray();
+            bytes = game.treasure.service.item.ProtoTradingWire.appendItemTrading(bytes, isTrading, inMarket);
+            return Pbmethod.PbItem.parseFrom(bytes);
+        } catch (Exception ex) {
+            return toProto().build();
+        }
     }
 
     public Pbmethod.ItemType getResItemType() {
