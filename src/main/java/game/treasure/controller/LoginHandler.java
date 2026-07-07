@@ -290,8 +290,6 @@ public class LoginHandler extends AHandler {
         if (mainUser.update(List.of("server_ids", StringHelper.toDBString(serverIds)))) {
             mainUser.setServerIds(serverIds.toString());
         }
-        UserPartyEntity uParty = user.getParty();
-        if (uParty != null) uParty.addChannel(mUser);
         // notify
         CompletableFuture.runAsync(() -> Services.userService.afterLogin(mUser));
     }

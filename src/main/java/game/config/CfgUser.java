@@ -26,11 +26,35 @@ public class CfgUser {
         return config != null ? config.freeSlotTrading2 : 0;
     }
 
+    /** Số cup tối thiểu (sàn), dưới mức này không trừ thêm. */
+    public static int getCupFloor() {
+        return config != null ? config.cupFloor : 0;
+    }
+
+    /**
+     * Tính cup chuyển khi killer hạ victim.
+     * gain = clamp(round(cupBase + (victimCup - killerCup) / cupScale), cupMin, cupMax)
+     */
+    public static int calcPvpCupAmount(int victimCup, int killerCup) {
+        int base = config != null ? config.cupBase : 2;
+        int scale = config != null && config.cupScale > 0 ? config.cupScale : 300;
+        int min = config != null ? config.cupMin : 1;
+        int max = config != null ? config.cupMax : 3;
+        double raw = base + (victimCup - killerCup) / (double) scale;
+        return Math.max(min, Math.min(max, (int) Math.round(raw)));
+    }
+
     public static class DataConfig {
         public int freeSlotBag;
         public int freeSlotMaterial;
         public int freeSlotEvent;
         public int freeSlotTrading1 = 20;
         public int freeSlotTrading2 = 0;
+        /** Công thức PvP cup: clamp(round(cupBase + diff/cupScale), cupMin, cupMax) */
+        public int cupBase = 2;
+        public int cupScale = 300;
+        public int cupMin = 1;
+        public int cupMax = 3;
+        public int cupFloor = 0;
     }
 }

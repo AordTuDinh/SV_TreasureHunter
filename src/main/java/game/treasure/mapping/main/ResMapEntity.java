@@ -8,6 +8,7 @@ import game.battle.model.ChunkObject;
 import game.battle.model.MapService;
 import game.battle.object.Pos;
 import game.object.MapData;
+import game.treasure.debug.HealZoneDebug;
 import lombok.Getter;
 import protocol.Pbmethod;
 
@@ -53,6 +54,8 @@ public class ResMapEntity extends BaseEntity implements Serializable {
     List<CampFireCache> campFireCacheList = new ArrayList<>();
     @Transient
     Map<Integer, List<CampFireCache>> campFiresByChunk = new HashMap<>();
+    @Transient
+    CampFireCache heathZoneCache;
 
     public static class CampFireCache {
         public int id;
@@ -86,6 +89,7 @@ public class ResMapEntity extends BaseEntity implements Serializable {
 
         applyChunkMeta();
         buildCampFireCache();
+        buildHeathZoneCache();
 
         // parse map object
         for (MapData.CellDto c : mapData.cells) {
@@ -193,6 +197,41 @@ public class ResMapEntity extends BaseEntity implements Serializable {
             if (dx * dx + dy * dy <= radiusSq) return true;
         }
         return false;
+    }
+
+    void buildHeathZoneCache() {
+        heathZoneCache = null;
+        if (mapData != null && mapData.heath != null && mapData.heath.radius > 0) {
+            MapData.CampFire hf = mapData.heath;
+            CampFireCache cache = new CampFireCache();
+            cache.id = hf.id;
+            cache.x = hf.x;
+            cache.y = hf.y;
+            cache.radius = hf.radius;
+            heathZoneCache = cache;
+            HealZoneDebug.log(String.format("buildHeathZoneCache from mapdata: (%.1f,%.1f) r=%.1f mapId=%d", cache.x, cache.y, cache.radius, id));
+            return;
+        }
+        // Fallback map home khi JSON/db chưa có field heath (MapCampFireLayout)
+        if (id == 0) {
+            CampFireCache cache = new CampFireCache();
+            cache.id = 0;
+            cache.x = 11f;
+            cache.y = 14f;
+            cache.radius = 4f;
+            heathZoneCache = cache;
+            HealZoneDebug.log("buildHeathZoneCache fallback home: (11,14) r=4");
+        } else {
+            HealZoneDebug.log("buildHeathZoneCache: no heath mapId=" + id);
+        }
+    }
+
+    public boolean isInHeathZone(Pos pos) {
+        if (pos == null || heathZoneCache == null) return false;
+        float dx = pos.getX() - heathZoneCache.x;
+        float dy = pos.getY() - heathZoneCache.y;
+        float radiusSq = heathZoneCache.radius * heathZoneCache.radius;
+        return dx * dx + dy * dy <= radiusSq;
     }
 
     void applyChunkMeta() {

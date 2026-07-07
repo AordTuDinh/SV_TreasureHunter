@@ -94,9 +94,10 @@ public class Player extends Unit implements Serializable {
         }
     }
 
-    /** Vào lại HOME từ last_pos đã lưu; giữ trạng thái chết nếu logout lúc đang chết. */
+    /** Vào lại HOME từ last_pos đã lưu; giữ trạng thái chết và HP đã cache nếu logout lúc còn sống. */
     public void clearDataForHomeRejoin(Pos spawnPos, boolean wasDead) {
         mUser.setCachePos();
+        long cachedHp = wasDead ? 0 : Math.min(point.getCurHP(), point.getMaxHp());
         this.ready = false;
         this.pos = spawnPos != null ? spawnPos : Pos.zero();
         this.indexLastInputSeq = -1;
@@ -110,6 +111,9 @@ public class Player extends Unit implements Serializable {
         } else {
             point.initDefault();
             this.alive = true;
+            if (cachedHp > 0) {
+                point.setCurHp(cachedHp);
+            }
         }
         if (petUse != null) {
             petUse.setPos(Pos.randomPos(this.pos, 1f, 1f));

@@ -40,7 +40,6 @@ public class ResponseMessage {
         MiniEventHandler.getInstance().initAction(mHandler);
         EventHandler.getInstance().initAction(mHandler);
         EventLuaHandler.getInstance().initAction(mHandler);
-        PartyHandler.getInstance().initAction(mHandler);
         LotteryHandler.getInstance().initAction(mHandler);
         LuckySpineHandler.getInstance().initAction(mHandler);
 //        HeroHandler.getInstance().initAction(mHandler);

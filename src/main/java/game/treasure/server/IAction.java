@@ -276,16 +276,6 @@ public class IAction {
     // event lua
     public static final int EVENT_LUA_LIST = 700;
     public static final int EVENT_LUA_STATUS = 701;
-    // party
-    public static final int PARTY_INVITE_MEMBER = 751;
-    public static final int PARTY_REMOVE_MEMBER = 752;
-    public static final int PARTY_LEAVE = 753;
-    public static final int PARTY_INFO = 754;
-    public static final int PARTY_CHANGE_LEADER = 755;
-    public static final int PARTY_NEW_INVITE = 756;
-    public static final int PARTY_ACCEPT = 757;
-    public static final int PARTY_UPDATE_INFO = 758;
-    public static final int PARTY_UPDATE_AUTO= 759;
 
 
     public static final int PING_IDLE = 10003;

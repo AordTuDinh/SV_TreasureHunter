@@ -19,6 +19,7 @@ import game.treasure.mapping.UserMaterialEntity;
 import game.treasure.service.resource.ResItem;
 import game.object.TaskMonitor;
 import game.treasure.controller.AHandler;
+import game.treasure.debug.HealZoneDebug;
 import game.treasure.mapping.main.ResMapEntity;
 import game.treasure.server.Constans;
 import game.treasure.server.IAction;
@@ -321,6 +322,18 @@ public abstract class BaseRoom extends MonoRoom {
     }
 
     public void handleClientInput(Player player, NInput input) {
+        if (input.typeId == NInput.ADD_ZONE_HEATH || input.typeId == NInput.REMOVE_ZONE_HEATH) {
+            if (this instanceof HomeRoom && player != null && player.isAlive()
+                    && player.getRoom() != null && player.getRoom().getRoomState() == RoomState.ACTIVE) {
+                ((HomeRoom) this).handleZoneHeathInput(player, input);
+            } else {
+                HealZoneDebug.log(String.format("zone input dropped type=%d homeRoom=%s alive=%s roomState=%s",
+                        input.typeId, this instanceof HomeRoom,
+                        player != null && player.isAlive(),
+                        player != null && player.getRoom() != null ? player.getRoom().getRoomState() : null));
+            }
+            return;
+        }
         if (!player.isAlive() || !player.isReady() || player.getRoom() == null || player.getRoom().getRoomState() != RoomState.ACTIVE)
             return;
         // check Idle

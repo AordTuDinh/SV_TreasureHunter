@@ -126,7 +126,7 @@ public class BattleHandler extends AHandler implements Serializable {
         if (restoreHome) {
             player.clearDataForHomeRejoin(spawn, wasDead);
             if (!wasDead) {
-                player.resetData();
+                player.resetDataKeepHp();
             }
         } else {
             player.clearDataForChangeRoom(posInit);

@@ -63,6 +63,7 @@ enum SubStateType {
   UPDATE_ITEM_EQUIP = 15; // 8 itemKey dang mac (theo EquipSlotType)
   REMOVE_EQUIPMENT = 16;  // rowId user_equipment
   REMOVE_MATERIAL = 17;   // rowId user_material
+  IN_HEAL_ZONE = 18;      // 0 = ngoài zone hồi máu, 1 = trong zone
 }
 
 enum StateType {
@@ -93,6 +94,7 @@ enum ItemKey {
   GOLD = 5;
   GEM = 6;
   RUBY = 7;
+  CUP = 8;
 }
 
 enum  ItemPointKey {
@@ -273,6 +275,7 @@ message PbUser {
   repeated  int32 channel = 24;
   optional  int64  ruby = 27;
   repeated  int32 pet = 28;
+  optional  int64  cup = 29;
 }
 
 message  PbUserData{

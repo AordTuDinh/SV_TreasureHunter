@@ -20,6 +20,7 @@ public abstract class Lang implements Serializable {
     public static String err_not_enough_gem = "err_not_enough_gem"; // Không đủ kim cương
     public static String no_need_refresh = "no_need_refresh"; // Không cần làm mới
     public static String err_not_enough_ruby = "err_not_enough_ruby"; // Không đủ Ruby
+    public static String err_not_enough_cup = "err_not_enough_cup"; // Không đủ Cup
 
     public static String err_trading_wallet_full = "err_trading_wallet_full"; // Túi giao dịch không còn ô trống
     public static String err_trading_waiting = "err_trading_waiting"; // Vật phẩm đang chờ xác minh, chưa thể mua

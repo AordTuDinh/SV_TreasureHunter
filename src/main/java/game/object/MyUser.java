@@ -3,6 +3,7 @@ package game.object;
 import com.google.protobuf.AbstractMessage;
 import game.battle.model.Pet;
 import game.battle.model.Player;
+import game.battle.object.Point;
 import game.battle.object.Pos;
 import game.config.*;
 import game.config.aEnum.*;
@@ -230,7 +231,7 @@ public class MyUser implements Serializable {
         return cachePos==null? Pos.zero():cachePos;
     }
 
-    /** Lưu vị trí HOME khi logout (kể cả đang chết). */
+    /** Lưu vị trí HOME và HP hiện tại khi logout (kể cả đang chết). */
     public void saveLastHomePos() {
         Player player = getPlayer();
         BaseRoom room = player.getRoom();
@@ -250,6 +251,13 @@ public class MyUser implements Serializable {
         uData.setLastPos(posStr);
         uData.setLastDead(wasDead ? 1 : 0);
         uData.update(List.of("last_pos", posStr, "last_dead", uData.getLastDead()));
+        cachePointData(player.getPoint());
+    }
+
+    /** Ghi HP và chỉ số hiện tại vào point_data để khôi phục khi login lại. */
+    public void cachePointData(Point point) {
+        if (point == null) return;
+        user.setPointData(StringHelper.toDBString(point.getValues()));
     }
 
     public Pos getLastHomePos() {
@@ -370,6 +378,7 @@ public class MyUser implements Serializable {
     public void userLogout() {
         long curTime = System.currentTimeMillis();
         saveLastHomePos();
+        cachePointData(getPlayer().getPoint());
         uData.flushItemSlotIfDirty();
         getUser().update(Arrays.asList("logout", Calendar.getInstance().getTime()));
         UserAchievementEntity uAchie = Services.userDAO.getUserAchievement(this);
@@ -377,7 +386,7 @@ public class MyUser implements Serializable {
         EntityManager session = DBJPA.getEntityManager();
         try {
             session.getTransaction().begin();
-            session.createNativeQuery("update user set logout = now(), point_data='" + StringHelper.toDBString(player.getPoint().getValues()) + "' where id = " + user.getId()).executeUpdate();
+            session.createNativeQuery("update user set logout = now(), point_data='" + StringHelper.toDBString(getPlayer().getPoint().getValues()) + "' where id = " + user.getId()).executeUpdate();
             int timeAdd = (int) ((Calendar.getInstance().getTime().getTime() - getUser().getLastLogin().getTime()) / 1000);
             session.createNativeQuery("update user_daily set login_time =" + timeAdd + "+login_time, data_int= '" + StringHelper.toDBString(getUserDaily().getUDaily().aInt) + "' where user_id = " + user.getId()).executeUpdate();
             session.getTransaction().commit();

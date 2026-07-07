@@ -41,11 +41,13 @@ public class Bonus {
     public static final int BONUS_ITEM_POINT = 13;
     public static final int BONUS_MOB = 14;
     public static final int BONUS_CHANGE_OWNER = 15;
+    public static final int BONUS_CUP = 16;
 
     public static final Map<Integer, Integer> mTypeLength = new HashMap<>() {{
         put(BONUS_GOLD, 1);
         put(BONUS_GEM, 1);
         put(BONUS_RUBY, 1);
+        put(BONUS_CUP, 1);
         put(BONUS_ITEM, 1);
         put(BONUS_ARTIFACT, 2);
         put(BONUS_SKIN, 1);
@@ -158,6 +160,10 @@ public class Bonus {
         return view(BONUS_RUBY, number);
     }
 
+    public static List<Long> viewCup(int number) {
+        return view(BONUS_CUP, number);
+    }
+
     public static List<Long> viewVipExp(long number) {
         return view(BONUS_VIP_EXP, number);
     }
@@ -268,6 +274,7 @@ public class Bonus {
             case BONUS_GOLD -> addGold(mUser, chunk.get(1), detailAction);
             case BONUS_GEM -> addGem(mUser, chunk.get(1), detailAction);
             case BONUS_RUBY -> addRuby(mUser, chunk.get(1), detailAction);
+            case BONUS_CUP -> addCup(mUser, chunk.get(1), detailAction);
             case BONUS_ITEM -> grantUserItem(mUser, chunk.get(1).intValue(), detailAction);
             case BONUS_EQUIPMENT -> grantUserEquipment(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
             case BONUS_ARTIFACT -> addItemArtifact(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
@@ -631,6 +638,16 @@ public class Bonus {
         return new ArrayList<>();
     }
 
+    static List<Long> addCup(MyUser mUser, long value, String detailAction) {
+        if (dbAddCup(mUser.getUser(), value)) {
+            mUser.getUser().addCup(value);
+            if (CfgServer.isRealServer())
+                Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "cup", "value", mUser.getUser().getCup(), "addValue", value);
+            return Arrays.asList((long) BONUS_CUP, (long) mUser.getUser().getCup(), value);
+        }
+        return new ArrayList<>();
+    }
+
     static boolean dbAddGold(UserEntity user, long addGold) {
         return DBJPA.update("user", Arrays.asList("gem", user.getGem(), "gold", user.getGold() + addGold), Arrays.asList("id", user.getId()));
     }
@@ -641,6 +658,10 @@ public class Bonus {
 
     static boolean dbAddRuby(UserEntity user, long addRuby) {
         return DBJPA.update("user", Arrays.asList("ruby", user.getRuby() + addRuby), Arrays.asList("id", user.getId()));
+    }
+
+    static boolean dbAddCup(UserEntity user, long addCup) {
+        return DBJPA.update("user", Arrays.asList("cup", user.getCup() + addCup), Arrays.asList("id", user.getId()));
     }
 
     public static String checkMoney(MyUser mUser, List<Long> aBonus) {
@@ -659,6 +680,10 @@ public class Bonus {
                 case BONUS_RUBY:
                     if (mUser.getUser().getRuby() + chunk.get(1) < 0)
                         return Lang.instance(mUser).get(Lang.err_not_enough_ruby);
+                    break;
+                case BONUS_CUP:
+                    if (mUser.getUser().getCup() + chunk.get(1) < 0)
+                        return Lang.instance(mUser).get(Lang.err_not_enough_cup);
                     break;
                 case BONUS_ITEM_POINT:
                     if (chunk.get(2) < 0)

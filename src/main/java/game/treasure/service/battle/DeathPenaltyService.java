@@ -48,6 +48,9 @@ public final class DeathPenaltyService {
                 victim.protoStatus(Pbmethod.SubStateType.ADD_BONUS, goldWire);
         }
 
+        if (killer != null && killer.isPlayer())
+            PvpCupService.apply(victim, killer.getPlayer());
+
         DropSelection drop = rollItemDrop(victimUser, typeRoom);
         if (drop == null) {
             if (killer != null && killer.isPlayer() && goldPenalty > 0)

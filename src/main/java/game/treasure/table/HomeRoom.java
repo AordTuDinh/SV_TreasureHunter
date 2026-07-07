@@ -1,12 +1,26 @@
 package game.treasure.table;
 
 import game.battle.model.ChunkObject;
+import game.battle.model.Player;
+import game.battle.model.Unit;
+import game.battle.object.NInput;
 import game.battle.type.RoomState;
+import game.treasure.debug.HealZoneDebug;
 import game.treasure.mapping.main.ResMapEntity;
+import protocol.Pbmethod;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 public class HomeRoom extends BaseBattleRoom {
+    private static final int HEAL_PER_SECOND = 20;
+    private static final int VERIFY_INTERVAL_SECONDS = 30;
+
+    private final Set<Long> healZonePlayers = new HashSet<>();
+    private int healZoneVerifyCounter;
+
     public HomeRoom(ResMapEntity mapInfo, Map<Integer, ChunkObject> mChunk, String keyRoom) {
         super(mapInfo, mChunk, keyRoom);
     }
@@ -15,5 +29,102 @@ public class HomeRoom extends BaseBattleRoom {
     protected void startInit() {
         super.startInit();
         roomState = RoomState.ACTIVE;
+    }
+
+    public void handleZoneHeathInput(Player player, NInput input) {
+        if (player == null || !player.isAlive()) {
+            HealZoneDebug.log("handleZoneHeathInput skip: player null or dead");
+            return;
+        }
+
+        boolean wantIn = input.typeId == NInput.ADD_ZONE_HEATH;
+        boolean inZone = mapInfo.isInHeathZone(player.getPos());
+        HealZoneDebug.log(String.format("handleZoneHeathInput player=%d wantIn=%s serverPos=(%.2f,%.2f) inZone=%s listSize=%d",
+                player.getId(), wantIn, player.getPos().getX(), player.getPos().getY(), inZone, healZonePlayers.size()));
+
+        if (wantIn) {
+            if (!inZone) {
+                HealZoneDebug.log("ADD rejected: server pos outside heath zone");
+                pushHealZoneStatus(player, 0);
+                return;
+            }
+            healZonePlayers.add(player.getId());
+            HealZoneDebug.log("ADD ok → status=1");
+            pushHealZoneStatus(player, 1);
+            return;
+        }
+
+        if (inZone) {
+            HealZoneDebug.log("REMOVE rejected: still in zone → status=1");
+            pushHealZoneStatus(player, 1);
+            return;
+        }
+        healZonePlayers.remove(player.getId());
+        HealZoneDebug.log("REMOVE ok → status=0");
+        pushHealZoneStatus(player, 0);
+    }
+
+    void pushHealZoneStatus(Player player, int status) {
+        player.protoStatus(Pbmethod.SubStateType.IN_HEAL_ZONE, (long) status);
+    }
+
+    @Override
+    public void Update1s() {
+        super.Update1s();
+        processHealZoneTick();
+    }
+
+    void processHealZoneTick() {
+        healZoneVerifyCounter++;
+        boolean doVerify = healZoneVerifyCounter >= VERIFY_INTERVAL_SECONDS;
+        if (doVerify) healZoneVerifyCounter = 0;
+
+        Iterator<Long> it = healZonePlayers.iterator();
+        while (it.hasNext()) {
+            Long playerId = it.next();
+            Player player = (Player) getPlayerId(playerId);
+            if (player == null) {
+                it.remove();
+                continue;
+            }
+            if (!player.isAlive()) {
+                it.remove();
+                pushHealZoneStatus(player, 0);
+                continue;
+            }
+
+            if (doVerify && !mapInfo.isInHeathZone(player.getPos())) {
+                it.remove();
+                pushHealZoneStatus(player, 0);
+                continue;
+            }
+
+            healPlayer(player);
+        }
+    }
+
+    void healPlayer(Player player) {
+        if (!player.isAlive()) return;
+        long cur = player.getPoint().getCurHP();
+        long max = player.getPoint().getMaxHp();
+        if (cur >= max) return;
+
+        int heal = (int) Math.min(HEAL_PER_SECOND, max - cur);
+        HealZoneDebug.log(String.format("healPlayer player=%d +%d hp (cur=%d max=%d)", player.getId(), heal, cur, max));
+        player.reHpFixed(heal);
+    }
+
+    @Override
+    public void removeUnit(long idInMap) {
+        healZonePlayers.remove(idInMap);
+        super.removeUnit(idInMap);
+    }
+
+    @Override
+    public void characterDie(Unit unit) {
+        super.characterDie(unit);
+        if (unit == null || !unit.isPlayer()) return;
+        if (!healZonePlayers.remove(unit.getId())) return;
+        pushHealZoneStatus(unit.getPlayer(), 0);
     }
 }

@@ -12,6 +12,8 @@ public class NInput {
     public static final int PING_GAME = 2;
     public static final int ATTACK = 3;
     public static final int USE_ITEM = 4;
+    public static final int ADD_ZONE_HEATH = 5;
+    public static final int REMOVE_ZONE_HEATH = 6;
     //endregion
     //
 

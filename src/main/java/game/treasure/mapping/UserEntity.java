@@ -5,8 +5,6 @@ import game.battle.object.Point;
 import game.config.aEnum.*;
 import game.config.lang.Lang;
 import game.treasure.service.resource.ResEvent;
-import game.treasure.service.resource.ResParty;
-import game.treasure.mapping.UserSkinEntity;
 import game.monitor.ClanManager;
 import game.monitor.Online;
 import game.object.MyUser;
@@ -34,7 +32,7 @@ public class UserEntity implements Serializable {
     String itemEquipment; // id - key - level
     int server, vip, vipExp, userRank;
     long gold, gem, ruby, power;
-    int numberFriend, rr, party;
+    int numberFriend, rr, cup;
     int blockType;
     int numDayLogin;
     long lastAction;
@@ -77,6 +75,7 @@ public class UserEntity implements Serializable {
         builder.setGold(gold);
         builder.setRuby(ruby);
         builder.setGem(gem);
+        builder.setCup(cup);
         builder.addAllSkins(getSkins());
         builder.addAllVip(getVipInfo());
         builder.setRank(userRank);
@@ -184,10 +183,6 @@ public class UserEntity implements Serializable {
         return ret;
     }
 
-    public UserPartyEntity getParty() {
-        return ResParty.getParty(party);
-    }
-
     public Point reCalculatePoint(MyUser mUser) {
         // tính lại point thì set lại def team arena, nhưng sau 3p ms set db
         if (DateTime.isAfterTime(lastUpdateDefTeam, DateTime.MIN_SECOND * 3)) {
@@ -209,12 +204,14 @@ public class UserEntity implements Serializable {
 
     public Point getInitPoint(MyUser mUser) { // chỉ lấy từ lúc init player
         Point point = getCachePoint();
-        // lấy lại cache hp và mp   
         long cacheHp = point.getCurHP();
-        // tính lại point
         point = IMath.calculatePoint(mUser, true);
         game.treasure.service.user.UserBuff.applyActiveToPoint(mUser, point);
-        point.setCurHp(cacheHp <= 0 ? point.getMaxHp() : cacheHp);
+        if (mUser.isLastHomeDead()) {
+            point.setCurHp(0);
+        } else {
+            point.setCurHp(cacheHp <= 0 ? point.getMaxHp() : Math.min(cacheHp, point.getMaxHp()));
+        }
         return point;
     }
 
@@ -253,6 +250,7 @@ public class UserEntity implements Serializable {
         pb.setName(getName());
         pb.setGold(gold);
         pb.setGem(gem);
+        pb.setCup(cup);
         pb.addAllSkins(getSkins());
         pb.addAllVip(getVipInfo());
         pb.setRank(userRank);
@@ -365,6 +363,10 @@ public class UserEntity implements Serializable {
 
     public synchronized void addRuby(long value) {
         ruby += value;
+    }
+
+    public synchronized void addCup(long value) {
+        cup += (int) value;
     }
 
     public synchronized void addGold(long value) {

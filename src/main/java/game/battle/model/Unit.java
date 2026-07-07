@@ -218,6 +218,18 @@ public abstract class Unit {
 
     public Point resetData() {
         point.resetHp();
+        return resetCombatState();
+    }
+
+    /** Reset trạng thái combat khi đổi map, giữ nguyên HP đã cache lúc logout. */
+    public Point resetDataKeepHp() {
+        long curHp = Math.min(point.getCurHP(), point.getMaxHp());
+        resetCombatState();
+        point.setCurHp(curHp);
+        return point;
+    }
+
+    private Point resetCombatState() {
         alive = true;
         hasBonusKillMe = true;
         targetMove = null;
@@ -279,6 +291,19 @@ public abstract class Unit {
         List<PointBuff> buffs = new ArrayList<>();
         buffs.add(new PointBuff(Point.CUR_HP, addNum));
         protoBuffPoint(buffs);
+    }
+
+    /** Hồi máu cố định — không áp dụng CHANGE_HEATH (zone hồi máu home). */
+    public void reHpFixed(int addNum) {
+        if (!alive || addNum <= 0) return;
+        long cur = point.getCurHP();
+        long max = point.getMaxHp();
+        if (cur >= max) return;
+        int actual = (int) Math.min(addNum, max - cur);
+        point.setCurHp(cur + actual);
+        protoStatus(Pbmethod.SubStateType.EFFECT_BODY, (long) EffectBodyType.HEALING.value, 0L);
+        protoStatus(Pbmethod.SubStateType.RE_HP, (long) actual);
+        protoUpdatePoint((long) Point.CUR_HP, point.getCurHP());
     }
 
     public void reHpNoEff(int addNum) {
