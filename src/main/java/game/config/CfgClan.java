@@ -12,8 +12,12 @@ import java.util.List;
 
 public class CfgClan {
     public static final int NUM_ATTACK_BOSS = 3;
+    public static final int ASSASSIN_CLAN_ID = -1;
+    public static final String ASSASSIN_CLAN_NAME = "Sát thủ";
+    public static final int assassinMoveSpeedBonus = 10;
     public static DataConfig config;
     public static long timeWaitLeave = 12 * DateTime.HOUR_MILLI_SECOND;
+    public static long timeWaitLeaveAssassin = 8 * DateTime.HOUR_MILLI_SECOND;
     public static List<Integer> CLAN_RULE = Arrays.asList(ClanPosition.LEADER.value, ClanPosition.CO_LEADER.value);
     public static List<Integer> slotClanBoss = Arrays.asList(0, 1, 2, 3, 4, 5);
 

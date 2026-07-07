@@ -15,42 +15,50 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Point {
-    public static final int POWER = 0;
-    public static final int CUR_HP = 1;
-    public static final int ATTACK = 2;
+    public static final int POWER = 0; // done
+    public static final int CUR_HP = 1;// done
+    public static final int ATTACK = 2;// done
     public static final int P_ATTACK = 3;
-    public static final int HP = 4;
+    public static final int HP = 4;// done
     public static final int P_HP = 5;
-    public static final int MOVE_SPEED = 6;
+    public static final int MOVE_SPEED = 6;// done
     public static final int P_MOVE_SPEED = 7;
-    public static final int DEFENSE = 8;
+    public static final int DEFENSE = 8;// done
     public static final int P_DEFENSE = 9;
-    public static final int CRIT = 10;
-    public static final int CRIT_DAMAGE = 11;
+    public static final int CRIT = 10;// done
+    public static final int CRIT_DAMAGE = 11;// done
     public static final int COUNTER_ATTACK = 12;
     public static final int LIFE_STEAL = 13;
     public static final int ACCURACY = 14;
     public static final int HEALING = 15;
     public static final int P_ITEM_DROP_INCREASE = 16;
     public static final int P_GOLD_INCREASE = 17;
-    public static final int DOGE = 18;
+    public static final int DOGE = 18;              //done
     public static final int DOT = 19;
     public static final int FREEZE = 20;
     public static final int POISON = 21;
     public static final int MULTI_ATTACK = 22;
+    public static final int SLOT_BAG_UI = 23;// done
+    public static final int SLOT_BAG_MATERIAL = 24;// done
+    public static final int ATTACK_SPEED = 25;
+    public static final int WIND = 26;
+    public static final int SUMMON = 27;
+    public static final int P_GEM_INCREASE = 28;
+    public static final int P_MATERIAL_INCREASE = 29;
 
     // CHANGE
-    public static final int CHANGE_ATTACK = 23;
-    public static final int CHANGE_DEFENSE = 24;
-    public static final int CHANGE_MAGIC_RESIST = 25;
-    public static final int CHANGE_AGILITY = 26;
-    public static final int CHANGE_HEATH = 27;
-    public static final int CHANGE_CRIT = 28;
-    public static final int CHANGE_CRIT_DAMAGE = 29;
-    public static final int CHANGE_MOVE_SPEED = 30;
+    public static final int CHANGE_ATTACK = 30;
+    public static final int CHANGE_DEFENSE = 31;
+    public static final int CHANGE_MAGIC_RESIST = 32;
+    public static final int CHANGE_AGILITY = 33;
+    public static final int CHANGE_HEATH = 34;
+    public static final int CHANGE_CRIT = 35;
+    public static final int CHANGE_CRIT_DAMAGE = 36;
+    public static final int CHANGE_MOVE_SPEED = 37;
+    public static final int CHANGE_ATTACK_SPEED = 38;
     // EFFECT
-    public static final int BLOCK_PARALYZE = 31;
-    public static final int STUN = 32;
+    public static final int BLOCK_PARALYZE = 39;
+    public static final int STUN = 40;
 
     @Setter
     @Getter

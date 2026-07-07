@@ -32,7 +32,7 @@ public class ClanHandler extends AHandler {
                 CLAN_DYNAMIC_REWARD_BOX, CLAN_FINDING, CLAN_SET_JOIN_RULE, CLAN_SET_POSITION, CLAN_USER_UPDATE_STATE, CLAN_MAIL_TO_MEMBER,
                 CLAN_CHANGE_NAME, CLAN_CHAT, CLAN_CHANGE_AVATAR_INTRO, CLAN_CHAT_LIST, CLAN_START_QUEST, CLAN_LIST_QUEST, CLAN_UPGRADE_QUEST,
                 CLAN_RECEIVE_QUEST, CLAN_CONTRIBUTE_INFO, CLAN_CONTRIBUTE, CLAN_CONTRIBUTE_TOP, CLAN_UP_LEVEL, CLAN_HONOR_STATUS, CLAN_HONOR,
-                CLAN_HONOR_GET_BONUS);
+                CLAN_HONOR_GET_BONUS, CLAN_ASSASIN_JOIN, CLAN_ASSASIN_LEAVE);
         actions.forEach(action -> mHandler.put(action, this));
     }
 
@@ -72,8 +72,10 @@ public class ClanHandler extends AHandler {
                 case IAction.CLAN_MEMBER_LIST -> memberList();
                 case IAction.CLAN_REQ -> sendClanReq();
                 case IAction.CLAN_FINDING -> findClan();
+                case IAction.CLAN_ASSASIN_JOIN -> joinAssassinClan();
+                case IAction.CLAN_ASSASIN_LEAVE -> leaveAssassinClan();
                 default -> {
-                    if (user.getClan() == 0) {
+                    if (user.getClan() <= 0) {
 //                        addErrResponse(getLang(Lang.clan_no_clan));
                         return;
                     }
@@ -243,8 +245,12 @@ public class ClanHandler extends AHandler {
             addErrResponse(getLang(Lang.clan_name_min_length));
             return;
         }
-        if (user.getClan() > 0) {
-            addErrResponse(String.format(getLang(Lang.clan_leave_first), ClanManager.getInstance(user.getClan()).getClan().getName()));
+        if (user.getClan() != 0) {
+            if (user.getClan() == CfgClan.ASSASSIN_CLAN_ID) {
+                addErrResponse(String.format(getLang(Lang.clan_leave_first), CfgClan.ASSASSIN_CLAN_NAME));
+            } else {
+                addErrResponse(String.format(getLang(Lang.clan_leave_first), ClanManager.getInstance(user.getClan()).getClan().getName()));
+            }
             return;
         }
         ClanEntity findClan = Services.clanDAO.getClan(name);
@@ -293,9 +299,13 @@ public class ClanHandler extends AHandler {
     void sendClanReq() {
         int clanId = CommonProto.parseCommonVector(requestData).getALongList().get(0).intValue();
 
-        if (user.getClan() > 0) {
-            ClanEntity clan = ClanManager.getInstance(user.getClan()).getClan();
-            addErrResponse(String.format(getLang(Lang.clan_leave_first), clan.getName()));
+        if (user.getClan() != 0) {
+            if (user.getClan() == CfgClan.ASSASSIN_CLAN_ID) {
+                addErrResponse(String.format(getLang(Lang.clan_leave_first), CfgClan.ASSASSIN_CLAN_NAME));
+            } else {
+                ClanEntity clan = ClanManager.getInstance(user.getClan()).getClan();
+                addErrResponse(String.format(getLang(Lang.clan_leave_first), clan.getName()));
+            }
             return;
         }
         String key = ClanHandler.KEY_CLAN_LEAVE + user.getId();
@@ -389,7 +399,7 @@ public class ClanHandler extends AHandler {
                 return;
             }
 
-            if (memberUser.getClan() > 0 || dbUser.getClan() > 0) {
+            if (memberUser.getClan() != 0 || dbUser.getClan() != 0) {
                 addErrResponse(getLang(Lang.user_in_clan) + " 3");
                 addResponse(getCommonVector(0));
                 return;
@@ -927,5 +937,52 @@ public class ClanHandler extends AHandler {
         protocol.Pbmethod.PbListChat.Builder builder = protocol.Pbmethod.PbListChat.newBuilder();
         aChat.forEach(chat -> builder.addAChat(chat.toProto()));
         return builder.build();
+    }
+
+    boolean hasClanLeaveCooldown(long waitMillis) {
+        String key = ClanHandler.KEY_CLAN_LEAVE + user.getId();
+        Long timeLeave = JCache.getInstance().getLongValue(key);
+        if (timeLeave == null) return false;
+        long timeRemain = waitMillis + timeLeave - System.currentTimeMillis();
+        if (timeRemain > 0) {
+            addErrResponse(String.format(getLang(Lang.clan_wait_leave1), DateTime.formatTime(timeRemain / 1000)));
+            return true;
+        }
+        return false;
+    }
+
+    void joinAssassinClan() {
+        if (user.getClan() != 0) {
+            addErrResponse(getLang(Lang.user_in_clan));
+            return;
+        }
+        if (hasClanLeaveCooldown(CfgClan.timeWaitLeaveAssassin)) return;
+        if (!dao.joinAssassinClan(user)) {
+            addErrResponse(getLang(Lang.err_system_down));
+            return;
+        }
+        mUser.reCalculatePoint();
+        Pbmethod.CommonVector.Builder cmm = Pbmethod.CommonVector.newBuilder();
+        cmm.addALong(CfgClan.ASSASSIN_CLAN_ID);
+        cmm.addAString(CfgClan.ASSASSIN_CLAN_NAME);
+        addResponse(IAction.CLAN_ASSASIN_JOIN, cmm.build());
+        if (CfgServer.isRealServer()) Actions.save(user, "clan", "join_assassin");
+    }
+
+    void leaveAssassinClan() {
+        if (user.getClan() != CfgClan.ASSASSIN_CLAN_ID) {
+            addErrResponse(getLang(Lang.clan_no_clan));
+            return;
+        }
+        if (!dao.leaveAssassinClan(user)) {
+            addErrResponse(getLang(Lang.err_system_down));
+            return;
+        }
+        mUser.reCalculatePoint();
+        Pbmethod.CommonVector.Builder cmm = Pbmethod.CommonVector.newBuilder();
+        cmm.addALong(0);
+        cmm.addAString("");
+        addResponse(IAction.CLAN_ASSASIN_LEAVE, cmm.build());
+        if (CfgServer.isRealServer()) Actions.save(user, "clan", "leave_assassin");
     }
 }

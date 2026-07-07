@@ -14,6 +14,7 @@ import game.treasure.mapping.UserMaterialEntity;
 import game.treasure.mapping.main.ResItemEquipmentEntity;
 import game.treasure.mapping.main.ResMapEntity;
 import game.treasure.service.user.Bonus;
+import game.treasure.service.user.EquipSlotBonus;
 import game.treasure.table.BaseRoom;
 import game.treasure.task.dbcache.MailCreatorCache;
 import ozudo.base.helper.NumberUtil;
@@ -58,9 +59,11 @@ public final class DeathPenaltyService {
             return;
         }
 
+        int oldBonusBag = EquipSlotBonus.bagBonus(victimUser);
+        int oldBonusMat = EquipSlotBonus.materialBonus(victimUser);
         boolean wasEquipped = detachDropFromVictim(victimUser, drop);
         if (wasEquipped)
-            syncVictimAfterUnequip(victim);
+            syncVictimAfterUnequip(victim, oldBonusBag, oldBonusMat);
 
         if (killer != null && killer.isPlayer()) {
             escrowDropForMail(drop);
@@ -228,8 +231,13 @@ public final class DeathPenaltyService {
             victim.protoStatus(Pbmethod.SubStateType.REMOVE_MATERIAL, drop.rowId);
     }
 
-    static void syncVictimAfterUnequip(Player victim) {
-        victim.getMUser().reCalculatePoint();
+    static void syncVictimAfterUnequip(Player victim, int oldBonusBag, int oldBonusMat) {
+        MyUser mUser = victim.getMUser();
+        if (mUser == null)
+            return;
+        if (mUser.getUData() != null)
+            mUser.getUData().syncSlotsAfterEquipmentChange(mUser, oldBonusBag, oldBonusMat);
+        mUser.reCalculatePoint();
         List<Integer> equipList = victim.getMUser().getUser().normalizeItemEquipList();
         if (equipList == null || equipList.isEmpty())
             return;

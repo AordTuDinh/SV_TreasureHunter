@@ -5,7 +5,6 @@ import game.battle.model.Player;
 import game.battle.model.Unit;
 import game.battle.object.NInput;
 import game.battle.type.RoomState;
-import game.treasure.debug.HealZoneDebug;
 import game.treasure.mapping.main.ResMapEntity;
 import protocol.Pbmethod;
 
@@ -33,34 +32,27 @@ public class HomeRoom extends BaseBattleRoom {
 
     public void handleZoneHeathInput(Player player, NInput input) {
         if (player == null || !player.isAlive()) {
-            HealZoneDebug.log("handleZoneHeathInput skip: player null or dead");
             return;
         }
 
         boolean wantIn = input.typeId == NInput.ADD_ZONE_HEATH;
         boolean inZone = mapInfo.isInHeathZone(player.getPos());
-        HealZoneDebug.log(String.format("handleZoneHeathInput player=%d wantIn=%s serverPos=(%.2f,%.2f) inZone=%s listSize=%d",
-                player.getId(), wantIn, player.getPos().getX(), player.getPos().getY(), inZone, healZonePlayers.size()));
 
         if (wantIn) {
             if (!inZone) {
-                HealZoneDebug.log("ADD rejected: server pos outside heath zone");
                 pushHealZoneStatus(player, 0);
                 return;
             }
             healZonePlayers.add(player.getId());
-            HealZoneDebug.log("ADD ok → status=1");
             pushHealZoneStatus(player, 1);
             return;
         }
 
         if (inZone) {
-            HealZoneDebug.log("REMOVE rejected: still in zone → status=1");
             pushHealZoneStatus(player, 1);
             return;
         }
         healZonePlayers.remove(player.getId());
-        HealZoneDebug.log("REMOVE ok → status=0");
         pushHealZoneStatus(player, 0);
     }
 
@@ -110,7 +102,6 @@ public class HomeRoom extends BaseBattleRoom {
         if (cur >= max) return;
 
         int heal = (int) Math.min(HEAL_PER_SECOND, max - cur);
-        HealZoneDebug.log(String.format("healPlayer player=%d +%d hp (cur=%d max=%d)", player.getId(), heal, cur, max));
         player.reHpFixed(heal);
     }
 

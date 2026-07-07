@@ -8,7 +8,6 @@ import game.battle.model.ChunkObject;
 import game.battle.model.MapService;
 import game.battle.object.Pos;
 import game.object.MapData;
-import game.treasure.debug.HealZoneDebug;
 import lombok.Getter;
 import protocol.Pbmethod;
 
@@ -209,7 +208,6 @@ public class ResMapEntity extends BaseEntity implements Serializable {
             cache.y = hf.y;
             cache.radius = hf.radius;
             heathZoneCache = cache;
-            HealZoneDebug.log(String.format("buildHeathZoneCache from mapdata: (%.1f,%.1f) r=%.1f mapId=%d", cache.x, cache.y, cache.radius, id));
             return;
         }
         // Fallback map home khi JSON/db chưa có field heath (MapCampFireLayout)
@@ -220,9 +218,6 @@ public class ResMapEntity extends BaseEntity implements Serializable {
             cache.y = 14f;
             cache.radius = 4f;
             heathZoneCache = cache;
-            HealZoneDebug.log("buildHeathZoneCache fallback home: (11,14) r=4");
-        } else {
-            HealZoneDebug.log("buildHeathZoneCache: no heath mapId=" + id);
         }
     }
 

@@ -11,6 +11,7 @@ import game.treasure.mapping.main.*;
 import game.treasure.server.IAction;
 import game.treasure.service.resource.ResAvatar;
 import game.treasure.service.resource.ResQuest;
+import game.treasure.service.user.EquipSlotBonus;
 import game.treasure.service.user.ItemSlotHelper;
 import game.treasure.service.user.Bonus;
 import game.protocol.CommonProto;
@@ -45,9 +46,13 @@ public class UserDataEntity implements Serializable {
     int dameSkinEquip, chatFrameEquip, trialEquip, effInit, craftLevel, craftExp;
     long timeProtected;
     long timeActiveArtifact;
-    /** Vị trí HOME lần logout gần nhất — JSON [x, y]. */
+    /**
+     * Vị trí HOME lần logout gần nhất — JSON [x, y].
+     */
     String lastPos;
-    /** 1 = logout lúc đang chết trên HOME. */
+    /**
+     * 1 = logout lúc đang chết trên HOME.
+     */
     int lastDead;
 
     @Transient
@@ -56,7 +61,9 @@ public class UserDataEntity implements Serializable {
     UserInt uInt;
     @Transient
     long lastClanChat;
-    /** item_slot đổi in-memory; flush khi logout hoặc piggyback uData.update(). */
+    /**
+     * item_slot đổi in-memory; flush khi logout hoặc piggyback uData.update().
+     */
     @Transient
     boolean itemSlotDirty;
 
@@ -94,7 +101,9 @@ public class UserDataEntity implements Serializable {
         return buildEmptyItemSlot(caps.get(0));
     }
 
-    /** Khởi tạo item_slot rỗng theo số ô bag/event hiện tại của user. */
+    /**
+     * Khởi tạo item_slot rỗng theo số ô bag/event hiện tại của user.
+     */
     public void ensureItemSlotInitialized() {
         if (itemSlot != null && !itemSlot.isEmpty())
             return;
@@ -107,7 +116,9 @@ public class UserDataEntity implements Serializable {
         return slots;
     }
 
-    /** Ghi item_slot in-memory; DB flush qua {@link #flushItemSlotIfDirty()} hoặc {@link #update(List)}. */
+    /**
+     * Ghi item_slot in-memory; DB flush qua {@link #flushItemSlotIfDirty()} hoặc {@link #update(List)}.
+     */
     public boolean saveItemSlot(List<Long> slots) {
         itemSlot = ItemSlotHelper.serialize(slots);
         itemSlotDirty = true;
@@ -157,7 +168,6 @@ public class UserDataEntity implements Serializable {
 
     public List<Integer> getSlot() {
         List<Integer> slot = GsonUtil.strToListInt(numSlot);
-        while (slot.size() < 3) slot.add(8);
         while (slot.size() < 5) {
             if (slot.size() == 3) slot.add(CfgUser.getDefaultSlotTrading1());
             else slot.add(CfgUser.getDefaultSlotTrading2());
@@ -183,17 +193,90 @@ public class UserDataEntity implements Serializable {
         return update(Arrays.asList("num_slot", numSlot));
     }
 
-    /** Số ô slotBagUI — gộp item type 1 (consumable) + type 2 (equipment chưa mặc). */
+    /**
+     * Số ô slotBagUI — gộp item type 1 (consumable) + type 2 (equipment chưa mặc).
+     * {@code num_slot[0]} lưu tổng (base + bonus trang bị point 23).
+     */
     public int getSlotBagUI() {
         return getSlot().get(0);
     }
 
-    /** Số ô material. */
+    /**
+     * Số ô material — {@code num_slot[1]} lưu tổng (base + bonus trang bị point 24).
+     */
     public int getSlotMaterial() {
         return getSlot().get(1);
     }
 
-    /** Số ô item sự kiện — user_item type 4. */
+    /**
+     * Login: chuẩn hóa {@code num_slot} — tách base từ giá trị cũ (nếu đã cộng bonus) rồi cộng lại bonus hiện tại.
+     */
+    public boolean reconcileSlotsOnLogin(MyUser mUser) {
+        return applySlotTotals(mUser, true);
+    }
+
+    /**
+     * Sau equip / unequip / bán / nâng cấp trang bị đang mặc — cập nhật {@code num_slot} theo bonus mới.
+     */
+    public boolean syncSlotsAfterEquipmentChange(MyUser mUser, int oldBonusBag, int oldBonusMat) {
+        return applySlotTotals(mUser, false, oldBonusBag, oldBonusMat);
+    }
+
+    boolean applySlotTotals(MyUser mUser, boolean loginReconcile) {
+        return applySlotTotals(mUser, loginReconcile, EquipSlotBonus.bagBonus(mUser), EquipSlotBonus.materialBonus(mUser));
+    }
+
+    boolean applySlotTotals(MyUser mUser, boolean loginReconcile, int oldBonusBag, int oldBonusMat) {
+        int newBonusBag = EquipSlotBonus.bagBonus(mUser);
+        int newBonusMat = EquipSlotBonus.materialBonus(mUser);
+        List<Integer> slot = getSlot();
+        int minBag = CfgUser.getFreeSlotBag();
+        int minMat = CfgUser.getFreeSlotMaterial();
+
+        int baseBag;
+        int baseMat;
+        if (loginReconcile) {
+            baseBag = slot.get(0);
+            if (newBonusBag > 0 && baseBag - newBonusBag >= minBag)
+                baseBag -= newBonusBag;
+            baseMat = slot.get(1);
+            if (newBonusMat > 0 && baseMat - newBonusMat >= minMat)
+                baseMat -= newBonusMat;
+        } else {
+            baseBag = slot.get(0) - oldBonusBag;
+            baseMat = slot.get(1) - oldBonusMat;
+        }
+
+        int newBag = Math.max(baseBag + newBonusBag, minBag);
+        int newMat = Math.max(baseMat + newBonusMat, minMat);
+        if (newBag == slot.get(0) && newMat == slot.get(1))
+            return false;
+
+        slot.set(0, newBag);
+        slot.set(1, newMat);
+        numSlot = StringHelper.toDBString(slot);
+        resizeItemSlotForBagCount(newBag);
+        List<Object> fields = new ArrayList<>(Arrays.asList("num_slot", numSlot));
+        if (itemSlotDirty)
+            fields.addAll(Arrays.asList("item_slot", itemSlot));
+        if (!update(fields))
+            return false;
+        itemSlotDirty = false;
+        if (mUser != null && mUser.getResources() != null)
+            mUser.getResources().notifyBagSlotCountChanged();
+        return true;
+    }
+
+    void resizeItemSlotForBagCount(int bagCount) {
+        List<Long> slots = ItemSlotHelper.parse(itemSlot);
+        ItemSlotHelper.ensureBagCapacity(slots, bagCount);
+        itemSlot = ItemSlotHelper.serialize(slots);
+        itemSlotDirty = true;
+    }
+
+    /**
+     * Số ô item sự kiện — user_item type 4.
+     */
     public int getSlotEvent() {
         return getSlot().get(2);
     }
@@ -208,12 +291,6 @@ public class UserDataEntity implements Serializable {
         List<Integer> chatFrame = GsonUtil.strToListInt(this.chatFrame);
         if (!chatFrame.contains(0)) chatFrame.add(0);
         return chatFrame;
-    }
-
-    /** @deprecated dùng {@link #getSlotBagUI()} */
-    @Deprecated
-    public int getNumSlot() {
-        return getSlotBagUI();
     }
 
     public List<Integer> getListIntTrial() {

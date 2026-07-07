@@ -17,6 +17,7 @@ import game.treasure.mapping.main.ResItemEquipmentEntity;
 import game.treasure.server.IAction;
 import game.treasure.service.resource.ResItem;
 import game.treasure.service.user.Bonus;
+import game.treasure.service.user.EquipSlotBonus;
 import game.monitor.Online;
 import game.object.MyUser;
 import game.protocol.CommonProto;
@@ -145,6 +146,8 @@ public class ItemHandler extends AHandler {
         }
 
         mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.USE_ITEM_EQUIP, 1);
+        int oldBonusBag = EquipSlotBonus.bagBonus(mUser);
+        int oldBonusMat = EquipSlotBonus.materialBonus(mUser);
         List<UserEquipmentEntity> slotUpdates = new ArrayList<>();
         List<Integer> lst = mUser.getUser().normalizeItemEquipList();
         int oldId = lst.get(slotIndex);
@@ -178,7 +181,7 @@ public class ItemHandler extends AHandler {
             return;
         }
         iEquip.setEquip(true);
-        finishEquipChange(slotUpdates);
+        finishEquipChange(slotUpdates, oldBonusBag, oldBonusMat);
     }
 
     void unEquipItem() {
@@ -210,6 +213,8 @@ public class ItemHandler extends AHandler {
             addErrResponse(getLang(Lang.err_max_slot));
             return;
         }
+        int oldBonusBag = EquipSlotBonus.bagBonus(mUser);
+        int oldBonusMat = EquipSlotBonus.materialBonus(mUser);
         List<Integer> equipBackup = new ArrayList<>(lst);
         lst.set(slotIndex, 0);
         lst.set(slotIndex + 1, 0);
@@ -226,10 +231,11 @@ public class ItemHandler extends AHandler {
         }
         iEquip.unEquip();
         slotUpdates.add(iEquip);
-        finishEquipChange(slotUpdates);
+        finishEquipChange(slotUpdates, oldBonusBag, oldBonusMat);
     }
 
-    private void finishEquipChange(List<UserEquipmentEntity> slotUpdates) {
+    private void finishEquipChange(List<UserEquipmentEntity> slotUpdates, int oldBonusBag, int oldBonusMat) {
+        mUser.getUData().syncSlotsAfterEquipmentChange(mUser, oldBonusBag, oldBonusMat);
         Pbmethod.ListCommonVector.Builder pb = Pbmethod.ListCommonVector.newBuilder();
         pb.addAVector(user.reCalculatePoint(mUser).toCommonVector());
         pb.addAVector(getCommonIntVector(mUser.getUser().normalizeItemEquipList()));
@@ -341,6 +347,8 @@ public class ItemHandler extends AHandler {
         List<Long> allPriceBonus = new ArrayList<>();
         List<Long> soldResponse = new ArrayList<>();
         boolean needEquipRecalc = false;
+        int oldBonusBag = EquipSlotBonus.bagBonus(mUser);
+        int oldBonusMat = EquipSlotBonus.materialBonus(mUser);
 
         for (int i = 0; i < pairs.size(); i += 2) {
             int bonusType = pairs.get(i).intValue();
@@ -363,6 +371,7 @@ public class ItemHandler extends AHandler {
         addBonusPrivate(Bonus.receiveListItem(mUser, DetailActionType.SELL_ITEM.getKey(-1), merged));
 
         if (needEquipRecalc) {
+            mUser.getUData().syncSlotsAfterEquipmentChange(mUser, oldBonusBag, oldBonusMat);
             Pbmethod.ListCommonVector.Builder pb = Pbmethod.ListCommonVector.newBuilder();
             pb.addAVector(getCommonVector(soldResponse));
             pb.addAVector(user.reCalculatePoint(mUser).toCommonVector());
@@ -450,6 +459,8 @@ public class ItemHandler extends AHandler {
             addErrResponse(getLang(Lang.err_item_lock_in_bag));
             return;
         }
+        int oldBonusBag = EquipSlotBonus.bagBonus(mUser);
+        int oldBonusMat = EquipSlotBonus.materialBonus(mUser);
         boolean wasEquipped = equip.isEquip() || mUser.getUser().getListIdEquipmentEquip().contains((int) id);
         if (wasEquipped) {
             if (!clearItemFromEquipList((int) id, equip)) {
@@ -464,6 +475,7 @@ public class ItemHandler extends AHandler {
             List<Long> bonus = CfgItem.getPriceSellItem(equip);
             addBonusToast(Bonus.receiveListItem(mUser, DetailActionType.SELL_ITEM.getKey(equip.getItemId()), bonus));
             if (wasEquipped) {
+                mUser.getUData().syncSlotsAfterEquipmentChange(mUser, oldBonusBag, oldBonusMat);
                 Pbmethod.ListCommonVector.Builder pb = Pbmethod.ListCommonVector.newBuilder();
                 pb.addAVector(getCommonVector(id, 1L));
                 pb.addAVector(user.reCalculatePoint(mUser).toCommonVector());
@@ -661,8 +673,10 @@ public class ItemHandler extends AHandler {
             addErrResponse();
             return;
         }
-        equip.setLevel(newLevel);
         boolean syncEquip = equip.isEquip() || mUser.getUser().getListIdEquipmentEquip().contains((int) id);
+        int oldBonusBag = syncEquip ? EquipSlotBonus.bagBonus(mUser) : 0;
+        int oldBonusMat = syncEquip ? EquipSlotBonus.materialBonus(mUser) : 0;
+        equip.setLevel(newLevel);
         if (syncEquip) {
             if (!updateEquipSlotLevel((int) id, newLevel)) {
                 Bonus.receiveListItem(mUser, DetailActionType.UPDATE_FAIL.getKey(), Bonus.reverseBonus(fee));
@@ -675,6 +689,7 @@ public class ItemHandler extends AHandler {
         }
         addBonusToast(paid);
         if (syncEquip) {
+            mUser.getUData().syncSlotsAfterEquipmentChange(mUser, oldBonusBag, oldBonusMat);
             Pbmethod.ListCommonVector.Builder pb = Pbmethod.ListCommonVector.newBuilder();
             pb.addAVector(getCommonVector(id, (long) newLevel));
             pb.addAVector(user.reCalculatePoint(mUser).toCommonVector());
@@ -771,6 +786,7 @@ public class ItemHandler extends AHandler {
         List<Channel> channels = Online.getUserInServer(user.getServer());
         Util.sendSliderChat(channels, msg);
         addBonusPrivate(bonus);
+        addResponseSuccess();
     }
 
 

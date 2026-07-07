@@ -601,6 +601,8 @@ public class Bonus {
     }
 
     static List<Long> addGold(MyUser mUser, long value, String detailAction) {
+        if (value > 0)
+            value = scaleGoldByIncrease(mUser, value);
         if (detailAction.equals(DetailActionType.BONUS_KILL_ENEMY)) {
             mUser.getUser().addGold(value);
             CfgAchievement.addListAchievement(mUser, 5, CfgAchievement.addGold, (int) value);
@@ -614,6 +616,22 @@ public class Bonus {
             }
             return new ArrayList<>();
         }
+    }
+
+    /** Point 17 — tăng vàng nhận thêm theo % (chỉ khi value > 0). */
+    static long scaleGoldByIncrease(MyUser mUser, long baseGold) {
+        if (baseGold <= 0 || mUser == null)
+            return baseGold;
+        int percent = resolveGoldIncreasePercent(mUser);
+        if (percent <= 0)
+            return baseGold;
+        return baseGold + (long) Math.floor(baseGold * percent / 100f);
+    }
+
+    static int resolveGoldIncreasePercent(MyUser mUser) {
+        if (mUser.getPlayer() == null || mUser.getPlayer().getPoint() == null)
+            return 0;
+        return mUser.getPlayer().getPoint().getBuffGold();
     }
 
     static List<Long> addGem(MyUser mUser, long value, String detailAction) {

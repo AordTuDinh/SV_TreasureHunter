@@ -278,4 +278,56 @@ public class ClanDAO extends AbstractDAO {
         }
         return -1;
     }
+
+    public boolean joinAssassinClan(UserEntity user) {
+        EntityManager session = null;
+        try {
+            session = DBJPA.getEntityManager();
+            session.getTransaction().begin();
+            Query query = session.createNativeQuery(
+                    "update user set clan=:clanId, clan_avatar=0, clan_position=0, clan_name=:clanName where id=" + user.getId());
+            query.setParameter("clanId", CfgClan.ASSASSIN_CLAN_ID);
+            query.setParameter("clanName", CfgClan.ASSASSIN_CLAN_NAME);
+            query.executeUpdate();
+            session.getTransaction().commit();
+            user.setClan(CfgClan.ASSASSIN_CLAN_ID);
+            user.setClanName(CfgClan.ASSASSIN_CLAN_NAME);
+            user.setClanPosition(0);
+            user.setClanAvatar(0);
+            user.setClanRank(0);
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            getLogger().error(GUtil.exToString(ex));
+        } finally {
+            closeSession(session);
+        }
+        return false;
+    }
+
+    public boolean leaveAssassinClan(UserEntity user) {
+        EntityManager session = null;
+        try {
+            session = DBJPA.getEntityManager();
+            session.getTransaction().begin();
+            session.createNativeQuery(
+                    "update user set clan=0, clan_avatar=0, clan_name='', clan_position=0 where id=" + user.getId())
+                    .executeUpdate();
+            session.getTransaction().commit();
+            user.setClan(0);
+            user.setClanName("");
+            user.setClanPosition(0);
+            user.setClanAvatar(0);
+            user.setClanRank(0);
+            String key = ClanHandler.KEY_CLAN_LEAVE + user.getId();
+            JCache.getInstance().setValue(key, System.currentTimeMillis() + "", JCache.EXPIRE_1H * 8);
+            return true;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            getLogger().error(GUtil.exToString(ex));
+        } finally {
+            closeSession(session);
+        }
+        return false;
+    }
 }

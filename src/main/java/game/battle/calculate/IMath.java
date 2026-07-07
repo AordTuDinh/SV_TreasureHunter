@@ -115,6 +115,8 @@ public class IMath {
                     if (welfare.point > 0) addPointData(pt, welfare.point, welfare.num / 100f);
                 }
             }
+        } else if (mUser.getUser().getClan() == CfgClan.ASSASSIN_CLAN_ID) {
+            addPointData(pt, Point.CHANGE_MOVE_SPEED, CfgClan.assassinMoveSpeedBonus);
         }
         if (hasItemEquip)
             addEquippedItemPoints(mUser, pt);

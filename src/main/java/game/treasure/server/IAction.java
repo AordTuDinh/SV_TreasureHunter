@@ -136,6 +136,8 @@ public class IAction {
     public static final int CLAN_HONOR_STATUS = 352;
     public static final int CLAN_HONOR_GET_BONUS = 353;
     public static final int CLAN_HONOR = 354;
+    public static final int CLAN_ASSASIN_JOIN = 355;
+    public static final int CLAN_ASSASIN_LEAVE = 356;
 
     // Friend
     public static final int FRIEND_STATUS = 330;

@@ -512,6 +512,7 @@ public class LoginHandler extends AHandler {
             mUser.getResources().setItemPoints(itemPoints);
 
             mUser.setInitUData(uData, mUser.getUser());
+            uData.reconcileSlotsOnLogin(mUser);
             mUser.setUSetting(uSetting);
             mUser.setUEvent(uEvent);
             return true;

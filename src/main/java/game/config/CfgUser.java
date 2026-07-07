@@ -26,6 +26,14 @@ public class CfgUser {
         return config != null ? config.freeSlotTrading2 : 0;
     }
 
+    public static int getFreeSlotBag() {
+        return config != null ? config.freeSlotBag : 8;
+    }
+
+    public static int getFreeSlotMaterial() {
+        return config != null ? config.freeSlotMaterial : 15;
+    }
+
     /** Số cup tối thiểu (sàn), dưới mức này không trừ thêm. */
     public static int getCupFloor() {
         return config != null ? config.cupFloor : 0;
