@@ -345,7 +345,7 @@ public class ResMapEntity extends BaseEntity implements Serializable {
     }
 
     public Pos clampToJailZone(Pos pos) {
-        if (pos == null || jailZoneCache == null) return pos;
+        if (pos == null || jailZoneCache == null || !isInJailChunk(pos)) return pos;
         float minX = jailZoneCache.minX + game.treasure.BattleConfig.P_Width / 2f;
         float maxX = jailZoneCache.maxX - game.treasure.BattleConfig.P_Width / 2f;
         float minY = jailZoneCache.minY;
@@ -355,6 +355,75 @@ public class ResMapEntity extends BaseEntity implements Serializable {
         if (pos.getY() > maxY) pos.setY(maxY);
         if (pos.getY() < minY) pos.setY(minY);
         return pos.round();
+    }
+
+    boolean isInJailChunk(Pos pos) {
+        if (pos == null || jailZoneCache == null) return false;
+        return MapService.worldPosToChunkId(this, pos) == jailZoneCache.chunkId;
+    }
+
+    boolean playerOverlapsJail(Pos pos) {
+        if (pos == null || jailZoneCache == null) return false;
+        float halfW = game.treasure.BattleConfig.P_Width / 2f;
+        float height = game.treasure.BattleConfig.P_Height;
+        float px = pos.getX();
+        float py = pos.getY();
+        return px - halfW < jailZoneCache.maxX && px + halfW > jailZoneCache.minX
+                && py < jailZoneCache.maxY && py + height > jailZoneCache.minY;
+    }
+
+    /** Player thường không được vào nhà giam — đẩy tâm player ra ngoài theo hitbox. */
+    public Pos pushOutOfJailZone(Pos pos) {
+        if (pos == null || jailZoneCache == null || !playerOverlapsJail(pos)) return pos;
+
+        float halfW = game.treasure.BattleConfig.P_Width / 2f;
+        float height = game.treasure.BattleConfig.P_Height;
+        float edgeEps = 0.05f;
+        float px = pos.getX();
+        float py = pos.getY();
+
+        float outLeftX = jailZoneCache.minX - halfW - edgeEps;
+        float outRightX = jailZoneCache.maxX + halfW + edgeEps;
+        float outBottomY = jailZoneCache.minY - height - edgeEps;
+        float outTopY = jailZoneCache.maxY + edgeEps;
+
+        float dLeft = Math.abs(px - outLeftX);
+        float dRight = Math.abs(px - outRightX);
+        float dBottom = Math.abs(py - outBottomY);
+        float dTop = Math.abs(py - outTopY);
+
+        int edge = 0;
+        float min = dLeft;
+        if (dRight < min) {
+            min = dRight;
+            edge = 1;
+        }
+        if (dBottom < min) {
+            min = dBottom;
+            edge = 2;
+        }
+        if (dTop < min) edge = 3;
+
+        if (edge == 0) pos.setX(outLeftX);
+        else if (edge == 1) pos.setX(outRightX);
+        else if (edge == 2) pos.setY(outBottomY);
+        else pos.setY(outTopY);
+        return pos.round();
+    }
+
+    /** Chặn player thường bước vào nhà giam — trượt dọc tường nếu có thể. */
+    public Pos blockJailEntry(Pos prevPos, Pos nextPos) {
+        if (nextPos == null || jailZoneCache == null || !isInJailChunk(nextPos)) return nextPos;
+        if (!playerOverlapsJail(nextPos)) return nextPos;
+
+        if (prevPos != null) {
+            Pos tryX = new Pos(nextPos.getX(), prevPos.getY());
+            if (!playerOverlapsJail(tryX)) return tryX.round();
+
+            Pos tryY = new Pos(prevPos.getX(), nextPos.getY());
+            if (!playerOverlapsJail(tryY)) return tryY.round();
+        }
+        return pushOutOfJailZone(nextPos);
     }
 
     void applyChunkMeta() {

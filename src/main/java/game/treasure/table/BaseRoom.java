@@ -345,9 +345,12 @@ public abstract class BaseRoom extends MonoRoom {
             player.setTimeLastProcessInput(System.currentTimeMillis());
             player.setIndexLastInputSeq(lastInputSeq);
             if (player.isAlive()) {
+                Pos prevPos = player.getPos();
                 Pos movePos = input.playerPos;
                 if (player.getMUser().getUser().getBlockType() == BlockType.BLOCK_ACTION) {
                     movePos = mapInfo.clampToJailZone(movePos);
+                } else {
+                    movePos = mapInfo.blockJailEntry(prevPos, movePos);
                 }
                 player.setPosAndDirection(movePos, input.playerDirection);
             }
