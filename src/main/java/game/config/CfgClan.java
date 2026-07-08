@@ -14,10 +14,23 @@ public class CfgClan {
     public static final int NUM_ATTACK_BOSS = 3;
     public static final int ASSASSIN_CLAN_ID = -1;
     public static final String ASSASSIN_CLAN_NAME = "Sát thủ";
+    public static final int WARRIOR_CLAN_ID = -2;
+    public static final String WARRIOR_CLAN_NAME = "Chiến binh";
     public static final int assassinMoveSpeedBonus = 10;
+    public static final int warriorHpBonus = 10;
     public static DataConfig config;
     public static long timeWaitLeave = 12 * DateTime.HOUR_MILLI_SECOND;
-    public static long timeWaitLeaveAssassin = 8 * DateTime.HOUR_MILLI_SECOND;
+    public static long timeWaitLeaveSystemClan = 8 * DateTime.HOUR_MILLI_SECOND;
+
+    public static boolean isSystemClan(int clanId) {
+        return clanId == ASSASSIN_CLAN_ID || clanId == WARRIOR_CLAN_ID;
+    }
+
+    public static String getSystemClanName(int clanId) {
+        if (clanId == ASSASSIN_CLAN_ID) return ASSASSIN_CLAN_NAME;
+        if (clanId == WARRIOR_CLAN_ID) return WARRIOR_CLAN_NAME;
+        return "";
+    }
     public static List<Integer> CLAN_RULE = Arrays.asList(ClanPosition.LEADER.value, ClanPosition.CO_LEADER.value);
     public static List<Integer> slotClanBoss = Arrays.asList(0, 1, 2, 3, 4, 5);
 

@@ -122,6 +122,10 @@ public class BattleHandler extends AHandler implements Serializable {
         Pos spawn = posInit;
         if (restoreHome) {
             spawn = mUser.getLastHomePos();
+            if (mUser.getUser().getBlockType() == BlockType.BLOCK_ACTION) {
+                Pos jailSpawn = map.getJailSpawnPos();
+                if (jailSpawn != null) spawn = jailSpawn;
+            }
         }
         if (restoreHome) {
             player.clearDataForHomeRejoin(spawn, wasDead);

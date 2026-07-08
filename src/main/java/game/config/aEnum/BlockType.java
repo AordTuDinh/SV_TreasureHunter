@@ -6,6 +6,7 @@ import java.util.Map;
 public enum BlockType {
     NULL(0),
     BLOCK_LOGIN(1), // khóa tài khoản
+    BLOCK_ACTION(2), // Vào trại giam
 
     ;
 

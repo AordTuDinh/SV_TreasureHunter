@@ -269,13 +269,13 @@ message PbUser {
   optional  int64  pointRank = 17;
   repeated int64 point = 19;
   optional  int64  timeLastAction = 20;
-  optional  int32  honor = 21;
   optional  int64 power = 22;
   repeated  int32 itemEquip = 23;
   repeated  int32 channel = 24;
   optional  int64  ruby = 27;
   repeated  int32 pet = 28;
   optional  int64  cup = 29;
+  optional  int32  blockType = 30;
 }
 
 message  PbUserData{

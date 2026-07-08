@@ -279,19 +279,19 @@ public class ClanDAO extends AbstractDAO {
         return -1;
     }
 
-    public boolean joinAssassinClan(UserEntity user) {
+    public boolean joinSystemClan(UserEntity user, int clanId, String clanName) {
         EntityManager session = null;
         try {
             session = DBJPA.getEntityManager();
             session.getTransaction().begin();
             Query query = session.createNativeQuery(
                     "update user set clan=:clanId, clan_avatar=0, clan_position=0, clan_name=:clanName where id=" + user.getId());
-            query.setParameter("clanId", CfgClan.ASSASSIN_CLAN_ID);
-            query.setParameter("clanName", CfgClan.ASSASSIN_CLAN_NAME);
+            query.setParameter("clanId", clanId);
+            query.setParameter("clanName", clanName);
             query.executeUpdate();
             session.getTransaction().commit();
-            user.setClan(CfgClan.ASSASSIN_CLAN_ID);
-            user.setClanName(CfgClan.ASSASSIN_CLAN_NAME);
+            user.setClan(clanId);
+            user.setClanName(clanName);
             user.setClanPosition(0);
             user.setClanAvatar(0);
             user.setClanRank(0);
@@ -305,7 +305,7 @@ public class ClanDAO extends AbstractDAO {
         return false;
     }
 
-    public boolean leaveAssassinClan(UserEntity user) {
+    public boolean leaveSystemClan(UserEntity user) {
         EntityManager session = null;
         try {
             session = DBJPA.getEntityManager();

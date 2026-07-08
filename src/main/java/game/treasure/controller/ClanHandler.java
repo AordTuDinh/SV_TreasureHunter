@@ -32,7 +32,7 @@ public class ClanHandler extends AHandler {
                 CLAN_DYNAMIC_REWARD_BOX, CLAN_FINDING, CLAN_SET_JOIN_RULE, CLAN_SET_POSITION, CLAN_USER_UPDATE_STATE, CLAN_MAIL_TO_MEMBER,
                 CLAN_CHANGE_NAME, CLAN_CHAT, CLAN_CHANGE_AVATAR_INTRO, CLAN_CHAT_LIST, CLAN_START_QUEST, CLAN_LIST_QUEST, CLAN_UPGRADE_QUEST,
                 CLAN_RECEIVE_QUEST, CLAN_CONTRIBUTE_INFO, CLAN_CONTRIBUTE, CLAN_CONTRIBUTE_TOP, CLAN_UP_LEVEL, CLAN_HONOR_STATUS, CLAN_HONOR,
-                CLAN_HONOR_GET_BONUS, CLAN_ASSASIN_JOIN, CLAN_ASSASIN_LEAVE);
+                CLAN_HONOR_GET_BONUS, CLAN_SYSTEM_JOIN, CLAN_SYSTEM_LEAVE);
         actions.forEach(action -> mHandler.put(action, this));
     }
 
@@ -72,8 +72,8 @@ public class ClanHandler extends AHandler {
                 case IAction.CLAN_MEMBER_LIST -> memberList();
                 case IAction.CLAN_REQ -> sendClanReq();
                 case IAction.CLAN_FINDING -> findClan();
-                case IAction.CLAN_ASSASIN_JOIN -> joinAssassinClan();
-                case IAction.CLAN_ASSASIN_LEAVE -> leaveAssassinClan();
+                case IAction.CLAN_SYSTEM_JOIN -> joinSystemClan();
+                case IAction.CLAN_SYSTEM_LEAVE -> leaveSystemClan();
                 default -> {
                     if (user.getClan() <= 0) {
 //                        addErrResponse(getLang(Lang.clan_no_clan));
@@ -246,8 +246,8 @@ public class ClanHandler extends AHandler {
             return;
         }
         if (user.getClan() != 0) {
-            if (user.getClan() == CfgClan.ASSASSIN_CLAN_ID) {
-                addErrResponse(String.format(getLang(Lang.clan_leave_first), CfgClan.ASSASSIN_CLAN_NAME));
+            if (CfgClan.isSystemClan(user.getClan())) {
+                addErrResponse(String.format(getLang(Lang.clan_leave_first), CfgClan.getSystemClanName(user.getClan())));
             } else {
                 addErrResponse(String.format(getLang(Lang.clan_leave_first), ClanManager.getInstance(user.getClan()).getClan().getName()));
             }
@@ -300,8 +300,8 @@ public class ClanHandler extends AHandler {
         int clanId = CommonProto.parseCommonVector(requestData).getALongList().get(0).intValue();
 
         if (user.getClan() != 0) {
-            if (user.getClan() == CfgClan.ASSASSIN_CLAN_ID) {
-                addErrResponse(String.format(getLang(Lang.clan_leave_first), CfgClan.ASSASSIN_CLAN_NAME));
+            if (CfgClan.isSystemClan(user.getClan())) {
+                addErrResponse(String.format(getLang(Lang.clan_leave_first), CfgClan.getSystemClanName(user.getClan())));
             } else {
                 ClanEntity clan = ClanManager.getInstance(user.getClan()).getClan();
                 addErrResponse(String.format(getLang(Lang.clan_leave_first), clan.getName()));
@@ -951,30 +951,37 @@ public class ClanHandler extends AHandler {
         return false;
     }
 
-    void joinAssassinClan() {
+    void joinSystemClan() {
+        int clanId = getInputInt();
+        if (!CfgClan.isSystemClan(clanId)) {
+            addErrParam();
+            return;
+        }
         if (user.getClan() != 0) {
             addErrResponse(getLang(Lang.user_in_clan));
             return;
         }
-        if (hasClanLeaveCooldown(CfgClan.timeWaitLeaveAssassin)) return;
-        if (!dao.joinAssassinClan(user)) {
+        if (hasClanLeaveCooldown(CfgClan.timeWaitLeaveSystemClan)) return;
+        String clanName = CfgClan.getSystemClanName(clanId);
+        if (!dao.joinSystemClan(user, clanId, clanName)) {
             addErrResponse(getLang(Lang.err_system_down));
             return;
         }
         mUser.reCalculatePoint();
         Pbmethod.CommonVector.Builder cmm = Pbmethod.CommonVector.newBuilder();
-        cmm.addALong(CfgClan.ASSASSIN_CLAN_ID);
-        cmm.addAString(CfgClan.ASSASSIN_CLAN_NAME);
-        addResponse(IAction.CLAN_ASSASIN_JOIN, cmm.build());
-        if (CfgServer.isRealServer()) Actions.save(user, "clan", "join_assassin");
+        cmm.addALong(clanId);
+        cmm.addAString(clanName);
+        addResponse(IAction.CLAN_SYSTEM_JOIN, cmm.build());
+        if (CfgServer.isRealServer()) Actions.save(user, "clan", "join_system", "clanId", clanId);
     }
 
-    void leaveAssassinClan() {
-        if (user.getClan() != CfgClan.ASSASSIN_CLAN_ID) {
+    void leaveSystemClan() {
+        int clanId = getInputInt();
+        if (!CfgClan.isSystemClan(user.getClan()) || user.getClan() != clanId) {
             addErrResponse(getLang(Lang.clan_no_clan));
             return;
         }
-        if (!dao.leaveAssassinClan(user)) {
+        if (!dao.leaveSystemClan(user)) {
             addErrResponse(getLang(Lang.err_system_down));
             return;
         }
@@ -982,7 +989,7 @@ public class ClanHandler extends AHandler {
         Pbmethod.CommonVector.Builder cmm = Pbmethod.CommonVector.newBuilder();
         cmm.addALong(0);
         cmm.addAString("");
-        addResponse(IAction.CLAN_ASSASIN_LEAVE, cmm.build());
-        if (CfgServer.isRealServer()) Actions.save(user, "clan", "leave_assassin");
+        addResponse(IAction.CLAN_SYSTEM_LEAVE, cmm.build());
+        if (CfgServer.isRealServer()) Actions.save(user, "clan", "leave_system", "clanId", clanId);
     }
 }

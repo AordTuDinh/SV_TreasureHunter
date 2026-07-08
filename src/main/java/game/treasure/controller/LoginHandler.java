@@ -260,7 +260,7 @@ public class LoginHandler extends AHandler {
         Pbmethod.PbLoginGame.Builder builder = Pbmethod.PbLoginGame.newBuilder();
         builder.setSession(session);
         // get clan
-        if (user.getClan() != 0) {
+        if (user.getClan() > 0) {
             ClanEntity myClan = ClanManager.getInstance(user.getClan()).getClan();
             addResponse(CLAN_INFO, myClan.toProto());
         }

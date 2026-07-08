@@ -9,6 +9,7 @@ import game.battle.type.RoomState;
 import game.config.CfgItem;
 import game.config.CfgMaterial;
 import game.config.CfgServer;
+import game.config.aEnum.BlockType;
 import game.config.aEnum.DetailActionType;
 import protocol.Pbmethod;
 import game.config.aEnum.MapType;
@@ -343,7 +344,13 @@ public abstract class BaseRoom extends MonoRoom {
             float timeTravel = System.currentTimeMillis() - player.getTimeLastProcessInput();
             player.setTimeLastProcessInput(System.currentTimeMillis());
             player.setIndexLastInputSeq(lastInputSeq);
-            if (player.isAlive()) player.setPosAndDirection(input.playerPos, input.playerDirection);
+            if (player.isAlive()) {
+                Pos movePos = input.playerPos;
+                if (player.getMUser().getUser().getBlockType() == BlockType.BLOCK_ACTION) {
+                    movePos = mapInfo.clampToJailZone(movePos);
+                }
+                player.setPosAndDirection(movePos, input.playerDirection);
+            }
         } else if (input.typeId == NInput.PING_GAME) {
             Util.sendProtoData(player.getMUser().getChannel(), null, IAction.PING_GAME);
         } else if (input.typeId == NInput.USE_ITEM) {
@@ -372,6 +379,8 @@ public abstract class BaseRoom extends MonoRoom {
                 if (unit.isPlayer()) {
                     if (mapInfo.isInCampFireSafeZone(player.getPos())
                             || mapInfo.isInCampFireSafeZone(unit.getPos())) return;
+                    if (mapInfo.isInBlockedPvpZone(player.getPos())
+                            || mapInfo.isInBlockedPvpZone(unit.getPos())) return;
                 }
 
                 // giống nhánh OBJECT: chống spam theo tick bằng attackSpeed

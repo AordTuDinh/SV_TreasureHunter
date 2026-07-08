@@ -9,6 +9,7 @@ public class MapData implements Serializable {
     public List<ChunkDto> chunks = new ArrayList<>();
     public List<Integer> chunkNoAttack = new ArrayList<>();
     public List<CampFire> campFires = new ArrayList<>();
+    public List<Zone> zones = new ArrayList<>();
     public CampFire heath = new CampFire();
     public  int sizeX;
     public  int sizeY;
@@ -29,7 +30,7 @@ public class MapData implements Serializable {
     }
 
     public static class Zone {
-        public int type;  // =0 là có thể đánh nhau mà k trừ cup  =1 là không đánh nhau
+        public int type;  // =0 là có thể đánh nhau mà k trừ cup  =1 là không đánh nhau, =2 nhà giam
         public float minX;
         public float minY;
         public float maxX;

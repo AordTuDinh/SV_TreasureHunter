@@ -22,6 +22,10 @@ import java.util.Map;
 
 @Entity
 public class ResMapEntity extends BaseEntity implements Serializable {
+    public static final int ZONE_TYPE_NO_CUP_LOSS = 0;
+    public static final int ZONE_TYPE_NO_PVP = 1;
+    public static final int ZONE_TYPE_JAIL = 2;
+
     @Id
     @Getter
     int id;
@@ -55,12 +59,27 @@ public class ResMapEntity extends BaseEntity implements Serializable {
     Map<Integer, List<CampFireCache>> campFiresByChunk = new HashMap<>();
     @Transient
     CampFireCache heathZoneCache;
+    @Transient
+    List<ZoneCache> zoneCacheList = new ArrayList<>();
+    @Transient
+    Map<Integer, List<ZoneCache>> zonesByChunk = new HashMap<>();
+    @Transient
+    ZoneCache jailZoneCache;
 
     public static class CampFireCache {
         public int id;
         public float x;
         public float y;
         public float radius;
+        public int chunkId;
+    }
+
+    public static class ZoneCache {
+        public int type;
+        public float minX;
+        public float minY;
+        public float maxX;
+        public float maxY;
         public int chunkId;
     }
 
@@ -89,6 +108,7 @@ public class ResMapEntity extends BaseEntity implements Serializable {
         applyChunkMeta();
         buildCampFireCache();
         buildHeathZoneCache();
+        buildZoneCache();
 
         // parse map object
         for (MapData.CellDto c : mapData.cells) {
@@ -227,6 +247,114 @@ public class ResMapEntity extends BaseEntity implements Serializable {
         float dy = pos.getY() - heathZoneCache.y;
         float radiusSq = heathZoneCache.radius * heathZoneCache.radius;
         return dx * dx + dy * dy <= radiusSq;
+    }
+
+    void buildZoneCache() {
+        zoneCacheList.clear();
+        zonesByChunk.clear();
+        jailZoneCache = null;
+        if (mapData == null || mapData.zones == null) return;
+
+        for (MapData.Zone zone : mapData.zones) {
+            if (zone == null) continue;
+
+            ZoneCache cache = new ZoneCache();
+            cache.type = zone.type;
+            cache.minX = Math.min(zone.minX, zone.maxX);
+            cache.minY = Math.min(zone.minY, zone.maxY);
+            cache.maxX = Math.max(zone.minX, zone.maxX);
+            cache.maxY = Math.max(zone.minY, zone.maxY);
+
+            float centerX = (cache.minX + cache.maxX) * 0.5f;
+            float centerY = (cache.minY + cache.maxY) * 0.5f;
+            int centerChunkX = MapService.worldToChunkX(this, centerX);
+            int centerChunkY = MapService.worldToChunkY(this, centerY);
+            cache.chunkId = MapService.chunkPosToId(this, centerChunkX, centerChunkY);
+
+            if (!isZoneInsideSingleChunk(cache, cache.chunkId)) {
+                System.out.println("[MapLoad] zone spans multiple chunks: mapId=" + id
+                        + ", type=" + cache.type
+                        + ", rect=[" + cache.minX + "," + cache.minY + "," + cache.maxX + "," + cache.maxY + "]"
+                        + ", centerChunk=" + cache.chunkId);
+            }
+
+            if (cache.type == ZONE_TYPE_JAIL) {
+                if (jailZoneCache != null) {
+                    System.out.println("[MapLoad] multiple jail zones on mapId=" + id + " — using first only");
+                } else {
+                    jailZoneCache = cache;
+                }
+            }
+
+            zoneCacheList.add(cache);
+            zonesByChunk.computeIfAbsent(cache.chunkId, k -> new ArrayList<>()).add(cache);
+        }
+    }
+
+    boolean isZoneInsideSingleChunk(ZoneCache zone, int chunkId) {
+        return zoneChunkId(zone.minX, zone.minY) == chunkId
+                && zoneChunkId(zone.minX, zone.maxY) == chunkId
+                && zoneChunkId(zone.maxX, zone.minY) == chunkId
+                && zoneChunkId(zone.maxX, zone.maxY) == chunkId;
+    }
+
+    int zoneChunkId(float x, float y) {
+        int chunkX = MapService.worldToChunkX(this, x);
+        int chunkY = MapService.worldToChunkY(this, y);
+        return MapService.chunkPosToId(this, chunkX, chunkY);
+    }
+
+    public boolean isInZone(Pos pos, int type) {
+        if (pos == null || zonesByChunk.isEmpty()) return false;
+
+        int chunkId = MapService.worldPosToChunkId(this, pos);
+        List<ZoneCache> list = zonesByChunk.get(chunkId);
+        if (list == null) return false;
+
+        float px = pos.getX();
+        float py = pos.getY();
+        for (ZoneCache zone : list) {
+            if (zone.type != type) continue;
+            if (px >= zone.minX && px <= zone.maxX && py >= zone.minY && py <= zone.maxY)
+                return true;
+        }
+        return false;
+    }
+
+    public boolean isInNoCupLossZone(Pos pos) {
+        return isInZone(pos, ZONE_TYPE_NO_CUP_LOSS);
+    }
+
+    public boolean isInNoPvpZone(Pos pos) {
+        return isInZone(pos, ZONE_TYPE_NO_PVP);
+    }
+
+    public boolean isInJailZone(Pos pos) {
+        return isInZone(pos, ZONE_TYPE_JAIL);
+    }
+
+    public boolean isInBlockedPvpZone(Pos pos) {
+        return isInNoPvpZone(pos) || isInJailZone(pos);
+    }
+
+    public Pos getJailSpawnPos() {
+        if (jailZoneCache == null) return null;
+        float centerX = (jailZoneCache.minX + jailZoneCache.maxX) * 0.5f;
+        float centerY = (jailZoneCache.minY + jailZoneCache.maxY) * 0.5f;
+        return clampToJailZone(new Pos(centerX, centerY));
+    }
+
+    public Pos clampToJailZone(Pos pos) {
+        if (pos == null || jailZoneCache == null) return pos;
+        float minX = jailZoneCache.minX + game.treasure.BattleConfig.P_Width / 2f;
+        float maxX = jailZoneCache.maxX - game.treasure.BattleConfig.P_Width / 2f;
+        float minY = jailZoneCache.minY;
+        float maxY = jailZoneCache.maxY - game.treasure.BattleConfig.P_Height;
+        if (pos.getX() > maxX) pos.setX(maxX);
+        if (pos.getX() < minX) pos.setX(minX);
+        if (pos.getY() > maxY) pos.setY(maxY);
+        if (pos.getY() < minY) pos.setY(minY);
+        return pos.round();
     }
 
     void applyChunkMeta() {

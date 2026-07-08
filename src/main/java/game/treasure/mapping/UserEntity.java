@@ -76,6 +76,7 @@ public class UserEntity implements Serializable {
         builder.setRuby(ruby);
         builder.setGem(gem);
         builder.setCup(cup);
+        builder.setBlockType(blockType);
         builder.addAllSkins(getSkins());
         builder.addAllVip(getVipInfo());
         builder.setRank(userRank);
@@ -112,7 +113,6 @@ public class UserEntity implements Serializable {
         builder.addAllPoint(StringHelper.isEmpty(name) ? new Point().toProto() : mUser.getPlayer().getPoint().toProto());
         builder.addAllItemEquip(getAllInfoItemEquip());
         // caculator data
-        builder.setHonor(0);
         builder.addAllPet(getPet(mUser));
         checkRank();
         builder.setClanInfo(protocol.Pbmethod.CommonVector.newBuilder().addAString(clanName).addALong(clan).addALong(clanPosition).addALong(clanRank).addALong(clanAvatar).build());
@@ -251,6 +251,7 @@ public class UserEntity implements Serializable {
         pb.setGold(gold);
         pb.setGem(gem);
         pb.setCup(cup);
+        pb.setBlockType(blockType);
         pb.addAllSkins(getSkins());
         pb.addAllVip(getVipInfo());
         pb.setRank(userRank);

@@ -116,7 +116,9 @@ public class IMath {
                 }
             }
         } else if (mUser.getUser().getClan() == CfgClan.ASSASSIN_CLAN_ID) {
-            addPointData(pt, Point.CHANGE_MOVE_SPEED, CfgClan.assassinMoveSpeedBonus);
+            addPointData(pt, Point.P_MOVE_SPEED, CfgClan.assassinMoveSpeedBonus);
+        } else if (mUser.getUser().getClan() == CfgClan.WARRIOR_CLAN_ID) {
+            addPointData(pt, Point.P_HP, CfgClan.warriorHpBonus);
         }
         if (hasItemEquip)
             addEquippedItemPoints(mUser, pt);

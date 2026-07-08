@@ -49,7 +49,7 @@ public final class DeathPenaltyService {
                 victim.protoStatus(Pbmethod.SubStateType.ADD_BONUS, goldWire);
         }
 
-        if (killer != null && killer.isPlayer())
+        if (killer != null && killer.isPlayer() && !isNoCupLossZone(victim))
             PvpCupService.apply(victim, killer.getPlayer());
 
         DropSelection drop = rollItemDrop(victimUser, typeRoom);
@@ -83,6 +83,12 @@ public final class DeathPenaltyService {
         int chunkId = room.worldPosToChunkId(victim.getPos());
         int typeRoom = map.getTypeRoom(chunkId);
         return typeRoom > 0 ? typeRoom : 1;
+    }
+
+    static boolean isNoCupLossZone(Player victim) {
+        BaseRoom room = victim.getRoom();
+        ResMapEntity map = room.getMapInfo();
+        return map != null && map.isInNoCupLossZone(victim.getPos());
     }
 
     static long calcGoldPenalty(long currentGold, int typeRoom) {
