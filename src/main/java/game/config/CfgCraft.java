@@ -248,6 +248,15 @@ public class CfgCraft {
         return 1f;
     }
 
+    /**
+     * Wire hh: 0 = chưa craft, 1 = craft không HH, 2+ = craft + HH tier (tier 1 → hh 2).
+     */
+    public static int hhFromTransformTier(int transformTier) {
+        if (transformTier <= 0)
+            return 1;
+        return 1 + transformTier;
+    }
+
     public static final int CONSUMABLE_TRANSFORM_ICON_BASE = 1000;
 
     /** Consumable craft: always hóa hình — roll tier 1..6. */
@@ -366,10 +375,10 @@ public class CfgCraft {
         );
         d.targets = List.of(
                 target(1, 8, "gold", true, 0, 50, 100, 150, 200),
-                target(2, 12, "gem", false, 0, 100, 200, 300, 400),
-                target(3, 12, "gem", false, 0, 50, 100, 150, 200),
-                target(4, 12, "gem", false, 0, 500, 1000, 1500, 2000),
-                target(5, 12, "item_point", false, 0, 1000, 2000, 3000, 4000),
+                target(2, 12, "gem", true, 0, 100, 200, 300, 400),
+                target(3, 12, "gem", true, 0, 50, 100, 150, 200),
+                target(4, 12, "gem", true, 0, 500, 1000, 1500, 2000),
+                target(5, 12, "item_point", true, 0, 1000, 2000, 3000, 4000),
                 target(6, 8, "gold", true, 0, 50, 100, 150, 200)
         );
         d.treasureBuyPrices = List.of(200, 500, 1000, 2000);

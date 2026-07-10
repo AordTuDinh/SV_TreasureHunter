@@ -70,7 +70,7 @@ public class UserEventEntity implements Serializable {
         this.status_14_day = NumberUtil.genListStringInt(CfgEvent.maxDayE14, 0);
         this.quaNapTien = NumberUtil.genListStringInt(CfgEvent.maxDayQuaNapTien, StatusType.PROCESSING.value);
         this.quest = "[]"; // [id,curNum,status] x5
-        this.vipBonus = NumberUtil.genListStringInt(ResEvent.lengthVip, StatusType.PROCESSING.value); // 4 trạng thái của 4 vip, ban đầu được nhận luôn
+        this.vipBonus = NumberUtil.genListStringInt(ResEvent.lengthVip, StatusType.PROCESSING.value); //  trạng thái của vip
         this.numReset = "[]"; // day,num
         this.quyTruongThanh = NumberUtil.genListStringInt(CfgEvent.maxQuyTruongThanh, StatusType.PROCESSING.value);
         this.firstPurchase = 0;

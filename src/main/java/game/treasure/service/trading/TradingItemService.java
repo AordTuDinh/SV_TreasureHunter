@@ -34,7 +34,6 @@ public final class TradingItemService {
         if (entity instanceof UserPetEntity e) return e.getIsTrading();
         if (entity instanceof UserMountEntity e) return e.getIsTrading();
         if (entity instanceof UserItemEntity e) return e.getIsTrading();
-        if (entity instanceof UserEquipmentEntity e) return e.getIsTrading();
         if (entity instanceof UserMaterialEntity e) return e.getIsTrading();
         if (entity instanceof UserMobEntity e) return e.getIsTrading();
         if (entity instanceof UserArtifactEntity e) return e.getIsTrading();
@@ -46,7 +45,6 @@ public final class TradingItemService {
         if (entity instanceof UserPetEntity e) return e.getInMarket();
         if (entity instanceof UserMountEntity e) return e.getInMarket();
         if (entity instanceof UserItemEntity e) return e.getInMarket();
-        if (entity instanceof UserEquipmentEntity e) return e.getInMarket();
         if (entity instanceof UserMaterialEntity e) return e.getInMarket();
         if (entity instanceof UserMobEntity e) return e.getInMarket();
         if (entity instanceof UserArtifactEntity e) return e.getInMarket();
@@ -54,9 +52,15 @@ public final class TradingItemService {
         return 0;
     }
 
+    public static boolean isBlockedFromCraft(Object entity) {
+        return getIsTrading(entity) == 1 || getInMarket(entity) == 1;
+    }
+
     public static boolean setTradingFlags(MyUser mUser, int bonusType, long rowId, int isTrading, int inMarket) {
         Object entity = getOwned(mUser, bonusType, rowId);
         if (entity == null)
+            return false;
+        if (bonusType == Bonus.BONUS_EQUIPMENT)
             return false;
         String table = tableName(bonusType);
         if (table == null)
@@ -73,6 +77,11 @@ public final class TradingItemService {
         String table = tableName(bonusType);
         if (table == null)
             return false;
+        if (bonusType == Bonus.BONUS_EQUIPMENT) {
+            return DBJPA.update(table,
+                    Arrays.asList("user_id", toUserId),
+                    Arrays.asList("id", rowId, "user_id", fromUserId));
+        }
         return DBJPA.update(table,
                 Arrays.asList("user_id", toUserId, "is_trading", isTrading, "in_market", inMarket),
                 Arrays.asList("id", rowId, "user_id", fromUserId));
@@ -86,9 +95,6 @@ public final class TradingItemService {
             e.setIsTrading(isTrading);
             e.setInMarket(inMarket);
         } else if (entity instanceof UserItemEntity e) {
-            e.setIsTrading(isTrading);
-            e.setInMarket(inMarket);
-        } else if (entity instanceof UserEquipmentEntity e) {
             e.setIsTrading(isTrading);
             e.setInMarket(inMarket);
         } else if (entity instanceof UserMaterialEntity e) {
@@ -126,7 +132,6 @@ public final class TradingItemService {
         count += countTab(res.getMPet().values(), tab, Bonus.BONUS_PET);
         count += countTab(res.getMMount().values(), tab, Bonus.BONUS_MOUNT);
         count += countTab(res.getMItem().values(), tab, Bonus.BONUS_ITEM);
-        count += countTab(res.getMEquipment().values(), tab, Bonus.BONUS_EQUIPMENT);
         count += countTab(res.getMMaterial().values(), tab, Bonus.BONUS_MATERIAL);
         count += countTab(res.getMMob().values(), tab, Bonus.BONUS_MOB);
         count += countTab(res.getMArtifact().values(), tab, Bonus.BONUS_ARTIFACT);
@@ -183,7 +188,8 @@ public final class TradingItemService {
         Object row = loadFromDb(bonusType, rowId, buyer.getUser().getId());
         if (row == null)
             return;
-        applyFlags(row, 1, 0);
+        if (bonusType != Bonus.BONUS_EQUIPMENT)
+            applyFlags(row, 1, 0);
         UserResources res = buyer.getResources();
         if (row instanceof UserPetEntity e) res.addPet(e);
         else if (row instanceof UserMountEntity e) res.addMount(e);

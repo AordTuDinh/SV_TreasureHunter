@@ -33,6 +33,7 @@ public class UserItemEntity implements Serializable {
     int level;
     int lockDestroy;
     int isCraft;
+    int hh;
     int icon;
     String craftBy;
     String data;
@@ -53,6 +54,7 @@ public class UserItemEntity implements Serializable {
         level = 1;
         lockDestroy = 0;
         isCraft = 0;
+        hh = 0;
         icon = ResItem.resolveIcon(itemId);
         data = "[]";
     }
@@ -188,6 +190,7 @@ public class UserItemEntity implements Serializable {
         pb.setLevel(level);
         pb.setLockDestroy(lockDestroy == 1);
         pb.setIsCraft(isCraft);
+        pb.setHh(hh);
         pb.setIcon(getEffectiveIcon());
         if (data != null && !data.isEmpty() && !"[]".equals(data))
             pb.setData(data);

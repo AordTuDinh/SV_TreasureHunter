@@ -18,10 +18,6 @@ public final class ProtoTradingWire {
         return appendInt32Pair(base, 10, isTrading, 11, inMarket);
     }
 
-    public static byte[] appendEquipmentTrading(byte[] base, int isTrading, int inMarket) {
-        return appendInt32Pair(base, 11, isTrading, 12, inMarket);
-    }
-
     public static byte[] appendMaterialTrading(byte[] base, int isTrading, int inMarket) {
         return appendInt32Pair(base, 7, isTrading, 8, inMarket);
     }

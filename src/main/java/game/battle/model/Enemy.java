@@ -169,6 +169,16 @@ public class Enemy extends Unit implements Serializable {
         return inRankAttackMelee() && hasActionAttack() && alive && targetAttack.isAlive();
     }
 
+    @Override
+    public boolean beBlock() {
+        return super.beBlock() || isAttackBlockingMove();
+    }
+
+    /** Đang trong animation attack — không cho move (khớp {@link BattleConfig#E_timeDelayAttackToMove}). */
+    private boolean isAttackBlockingMove() {
+        return !DateTime.isAfterTime(timeActionAttack, BattleConfig.E_timeDelayAttackToMove);
+    }
+
     private boolean hasActionAttack() {
         return DateTime.isAfterTime(timeActionAttack, BattleConfig.M_attackSpeed) && !isMove()
                 && DateTime.isAfterTime(timeActionMove, 0.3f);

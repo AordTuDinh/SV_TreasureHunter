@@ -505,7 +505,12 @@ public class Bonus {
 
     static List<Long> addVipExp(MyUser mUser, int addExp, String detailAction) {
         UserEntity user = mUser.getUser();
-        mUser.getUser().addVipExp(addExp);
+        int oldVip = user.getVip();
+        user.addVipExp(addExp);
+        int newVip = user.getVip();
+        if (newVip > oldVip) {
+            VipService.applyLevelUpBonuses(mUser, oldVip + 1, newVip);
+        }
         if (DBJPA.update("user", Arrays.asList("vip_exp", user.getVipExp(), "vip", user.getVip()), Arrays.asList("id", user.getId()))) {
             Actions.save(user, Actions.GRECEIVE, detailAction, "type", "vip_exp", "vip", user.getVip(), "exp", user.getVipExp(), "addExp", addExp);
             return Arrays.asList((long) BONUS_VIP_EXP, (long) user.getVipExp(), (long) addExp, (long) user.getVip());
@@ -953,48 +958,168 @@ public class Bonus {
         return storageType == Pbmethod.ItemType.POSITION;
     }
 
-    /** Xóa ô item_slot trỏ tới row không còn tồn tại hoặc không thuộc túi UI. */
-    public static void reconcileItemSlots(MyUser mUser) {
-        List<Long> slots = mUser.getUData().getItemSlotList();
-        int bagCount = mUser.getUData().getSlotBagUI();
-        boolean changed = false;
-        for (int s = 0; s < bagCount; s++) {
-            if (ItemSlotHelper.isEmpty(slots, s))
-                continue;
-            int bt = ItemSlotHelper.getBonusType(slots, s);
-            long rowId = ItemSlotHelper.getRowId(slots, s);
-            if (!slotRowExists(mUser, bt, rowId)) {
-                ItemSlotHelper.clearPair(slots, s);
-                changed = true;
-            }
-        }
-        if (changed)
-            mUser.getResources().saveItemSlot(slots);
+    public static boolean isBlockedFromBagSlot(int isTrading, int inMarket) {
+        return isTrading == 1 || inMarket == 1;
     }
 
-    static boolean slotRowExists(MyUser mUser, int bonusType, long rowId) {
-        if (rowId <= 0)
+    static String slotOccupancyKey(int bonusType, long rowId) {
+        return bonusType + ":" + rowId;
+    }
+
+    static boolean isAlreadySlotted(List<Long> slots, int bagCount, int bonusType, long rowId) {
+        return ItemSlotHelper.findSlotOf(slots, 0, bagCount, bonusType, rowId) != null;
+    }
+
+    /** Ô item_slot còn trỏ tới row hợp lệ cho túi UI (tồn tại, chưa mặc, chưa kẹt ví/chợ). */
+    static boolean slotRowValid(MyUser mUser, int bonusType, long rowId) {
+        if (rowId <= 0 || !usesItemSlotBonusType(bonusType))
             return false;
         switch (bonusType) {
             case BONUS_ITEM: {
                 UserItemEntity u = mUser.getResources().getItem(rowId);
-                return u != null && usesItemSlotForUserItem(Pbmethod.ItemType.valueOf(u.getType()));
+                return u != null
+                        && usesItemSlotForUserItem(Pbmethod.ItemType.valueOf(u.getType()))
+                        && !isBlockedFromBagSlot(u.getIsTrading(), u.getInMarket());
             }
             case BONUS_EQUIPMENT: {
                 UserEquipmentEntity e = mUser.getResources().getEquipment(rowId);
                 return e != null && !e.isEquip();
             }
-            case BONUS_PET:
-                return mUser.getResources().getPet(rowId) != null;
-            case BONUS_MOUNT:
-                return mUser.getResources().getMount(rowId) != null;
-            case BONUS_MOB:
-                return mUser.getResources().getMob(rowId) != null;
-            case BONUS_ARTIFACT:
-                return mUser.getResources().getArtifact(rowId) != null;
+            case BONUS_PET: {
+                UserPetEntity pet = mUser.getResources().getPet(rowId);
+                return pet != null && !pet.isEquip()
+                        && !isBlockedFromBagSlot(pet.getIsTrading(), pet.getInMarket());
+            }
+            case BONUS_MOUNT: {
+                UserMountEntity mount = mUser.getResources().getMount(rowId);
+                return mount != null && !mount.isEquip()
+                        && !isBlockedFromBagSlot(mount.getIsTrading(), mount.getInMarket());
+            }
+            case BONUS_MOB: {
+                UserMobEntity mob = mUser.getResources().getMob(rowId);
+                return mob != null && !isBlockedFromBagSlot(mob.getIsTrading(), mob.getInMarket());
+            }
+            case BONUS_ARTIFACT: {
+                UserArtifactEntity artifact = mUser.getResources().getArtifact(rowId);
+                return artifact != null && !isArtifactEquipped(mUser, rowId)
+                        && !isBlockedFromBagSlot(artifact.getIsTrading(), artifact.getInMarket());
+            }
             default:
                 return false;
         }
+    }
+
+    static boolean slotRowExists(MyUser mUser, int bonusType, long rowId) {
+        return slotRowValid(mUser, bonusType, rowId);
+    }
+
+    /** Xóa ô invalid/trùng; tùy chọn gán item hợp lệ chưa có ô vào chỗ trống. */
+    public static void verifyItemSlots(MyUser mUser, boolean backfillOrphans) {
+        List<Long> slots = mUser.getUData().getItemSlotList();
+        int bagCount = mUser.getUData().getSlotBagUI();
+        boolean changed = reconcileItemSlotPairs(mUser, slots, bagCount);
+        if (backfillOrphans)
+            changed |= backfillOrphanedItemSlots(mUser, slots, bagCount);
+        if (changed)
+            mUser.getResources().saveItemSlot(slots);
+    }
+
+    static boolean reconcileItemSlotPairs(MyUser mUser, List<Long> slots, int bagCount) {
+        boolean changed = false;
+        Set<String> seen = new HashSet<>();
+        for (int s = 0; s < bagCount; s++) {
+            if (ItemSlotHelper.isEmpty(slots, s))
+                continue;
+            int bt = ItemSlotHelper.getBonusType(slots, s);
+            long rowId = ItemSlotHelper.getRowId(slots, s);
+            String key = slotOccupancyKey(bt, rowId);
+            if (!usesItemSlotBonusType(bt) || !slotRowValid(mUser, bt, rowId) || seen.contains(key)) {
+                ItemSlotHelper.clearPair(slots, s);
+                changed = true;
+                continue;
+            }
+            seen.add(key);
+        }
+        return changed;
+    }
+
+    static boolean backfillOrphanedItemSlots(MyUser mUser, List<Long> slots, int bagCount) {
+        boolean changed = false;
+        for (UserItemEntity item : mUser.getResources().getMItem().values()) {
+            if (!usesItemSlotForUserItem(Pbmethod.ItemType.valueOf(item.getType())))
+                continue;
+            if (isBlockedFromBagSlot(item.getIsTrading(), item.getInMarket()))
+                continue;
+            if (isAlreadySlotted(slots, bagCount, BONUS_ITEM, item.getId()))
+                continue;
+            Integer s = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
+            if (s == null)
+                return changed;
+            ItemSlotHelper.setPair(slots, s, BONUS_ITEM, item.getId());
+            changed = true;
+        }
+        for (UserEquipmentEntity equip : mUser.getResources().getMEquipment().values()) {
+            if (equip.isEquip())
+                continue;
+            if (isAlreadySlotted(slots, bagCount, BONUS_EQUIPMENT, equip.getId()))
+                continue;
+            Integer s = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
+            if (s == null)
+                return changed;
+            ItemSlotHelper.setPair(slots, s, BONUS_EQUIPMENT, equip.getId());
+            changed = true;
+        }
+        for (UserPetEntity pet : mUser.getResources().getMPet().values()) {
+            if (pet.isEquip() || isBlockedFromBagSlot(pet.getIsTrading(), pet.getInMarket()))
+                continue;
+            if (isAlreadySlotted(slots, bagCount, BONUS_PET, pet.getId()))
+                continue;
+            Integer s = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
+            if (s == null)
+                return changed;
+            ItemSlotHelper.setPair(slots, s, BONUS_PET, pet.getId());
+            changed = true;
+        }
+        for (UserMountEntity mount : mUser.getResources().getMMount().values()) {
+            if (mount.isEquip() || isBlockedFromBagSlot(mount.getIsTrading(), mount.getInMarket()))
+                continue;
+            if (isAlreadySlotted(slots, bagCount, BONUS_MOUNT, mount.getId()))
+                continue;
+            Integer s = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
+            if (s == null)
+                return changed;
+            ItemSlotHelper.setPair(slots, s, BONUS_MOUNT, mount.getId());
+            changed = true;
+        }
+        for (UserMobEntity mob : mUser.getResources().getMMob().values()) {
+            if (isBlockedFromBagSlot(mob.getIsTrading(), mob.getInMarket()))
+                continue;
+            if (isAlreadySlotted(slots, bagCount, BONUS_MOB, mob.getId()))
+                continue;
+            Integer s = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
+            if (s == null)
+                return changed;
+            ItemSlotHelper.setPair(slots, s, BONUS_MOB, mob.getId());
+            changed = true;
+        }
+        for (UserArtifactEntity artifact : mUser.getResources().getMArtifact().values()) {
+            if (isArtifactEquipped(mUser, artifact.getId())
+                    || isBlockedFromBagSlot(artifact.getIsTrading(), artifact.getInMarket()))
+                continue;
+            if (isAlreadySlotted(slots, bagCount, BONUS_ARTIFACT, artifact.getId()))
+                continue;
+            Integer s = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
+            if (s == null)
+                return changed;
+            ItemSlotHelper.setPair(slots, s, BONUS_ARTIFACT, artifact.getId());
+            changed = true;
+        }
+        return changed;
+    }
+
+    /** Xóa ô item_slot trỏ tới row không còn tồn tại hoặc không thuộc túi UI. */
+    public static void reconcileItemSlots(MyUser mUser) {
+        verifyItemSlots(mUser, false);
     }
 
     /** Gán ô túi UI — bonusType ∈ {4 consum, 12 equip, 9 pet, 10 mount, 14 mob, 5 artifact}. rowId=0 chỉ check còn chỗ. */

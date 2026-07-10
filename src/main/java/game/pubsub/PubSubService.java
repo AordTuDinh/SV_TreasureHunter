@@ -19,6 +19,8 @@ public enum PubSubService {
     DELAY_RESTART_SERVER(10), // hẹn giờ restart server
     DELAY_MAINTENANCE(11), // hẹn giờ bảo trì - countdown
     MAINTENANCE_START(12), // bắt đầu bảo trì - kick player
+    KICK_USER(13), // kick player khi bị block từ CMS
+    UNBLOCK_USER(14), // mở khóa player từ CMS — tele home nếu đang block type 2
     ;
 
     public int id;

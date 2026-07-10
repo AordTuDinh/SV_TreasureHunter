@@ -135,6 +135,13 @@ public abstract class AHandler extends IAction {
             addResponse(UPDATE_BAG, mUser.getResources().buildUpdateBagPayload());
     }
 
+    public void flushVipData() {
+        if (mUser == null || mUser.getUSetting() == null)
+            return;
+        if (mUser.drainVipDataPending())
+            addResponse(UPDATE_VIP_DATA, getCommonIntVector(mUser.getUSetting().getVipDataList()));
+    }
+
     public void addErrResponse() {
         addResponse(MSG_TOAST, ToastType.NORMAL.retToast(getLang(Lang.err_send_data)));
     }

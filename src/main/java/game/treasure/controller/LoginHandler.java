@@ -4,7 +4,6 @@ import game.cache.JCache;
 import game.cache.JCachePubSub;
 import game.config.*;
 import game.config.aEnum.BlockType;
-import game.config.aEnum.NotifyType;
 import game.config.aEnum.PopupType;
 import game.config.lang.Lang;
 import game.treasure.BattleConfig;
@@ -159,12 +158,7 @@ public class LoginHandler extends AHandler {
 
     void checkNotifyFirst() { // Chỉ dùng cho gọi lần đầu
         if (mUser == null) return;
-        protocol.Pbmethod.CommonVector.Builder cmm = protocol.Pbmethod.CommonVector.newBuilder();
-        if (Services.mailDAO.hasMail(mUser.getUser().getId())) {
-            cmm.addALong(NotifyType.MAIL.value); // has mail
-        }
-        cmm.addAllALong(mUser.checkNotify());
-        addResponse(IAction.NOTIFY, cmm.build());
+        addResponse(IAction.NOTIFY, CommonProto.getCommonVectorProto(mUser.buildNotifyList()));
     }
 
     void changeServer() {
@@ -290,8 +284,13 @@ public class LoginHandler extends AHandler {
         if (mainUser.update(List.of("server_ids", StringHelper.toDBString(serverIds)))) {
             mainUser.setServerIds(serverIds.toString());
         }
-        // notify
-        CompletableFuture.runAsync(() -> Services.userService.afterLogin(mUser));
+        // notify — afterLogin có thể tạo mail (system/thẻ); gửi lại NOTIFY khi xong
+        CompletableFuture.runAsync(() -> {
+            Services.userService.afterLogin(mUser);
+            if (mUser != null && mUser.getChannel() != null) {
+                mUser.sendNotify();
+            }
+        });
     }
     //region logic
 
@@ -375,6 +374,8 @@ public class LoginHandler extends AHandler {
         lstCmm.addAVector(getCommonIntVector(CfgArtifact.getGameConfigCoeffs()));
         // auto range: [tầm đánh, tầm buff HP, autoAttackMob, auto_buff]
         lstCmm.addAVector(getCommonIntVector(uSet.getAutoRangeList()));
+        // vip data: [26 int tích lũy theo VipType index]
+        lstCmm.addAVector(getCommonIntVector(uSet.getVipDataList()));
         // ret
         addResponse(IAction.GAME_CONFIG, lstCmm.build());
     }

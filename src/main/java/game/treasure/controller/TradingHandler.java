@@ -114,7 +114,7 @@ public class TradingHandler extends AHandler {
             return;
         }
         if (TradingItemService.getIsTrading(entity) == 1 || TradingItemService.getInMarket(entity) == 1) {
-            addErrResponse(getLang(Lang.err_params));
+            addErrParam();
             return;
         }
         String errKey = CfgTrading.validateWalletAdd(bonusType, entity, mUser);

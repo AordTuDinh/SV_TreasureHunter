@@ -86,62 +86,6 @@ public class UserResources implements Serializable {
         }
     }
 
-    void rebuildItemSlotIfNeeded() {
-        Bonus.reconcileItemSlots(mUser);
-        List<Long> slots = mUser.getUData().getItemSlotList();
-        int bagCount = mUser.getUData().getSlotBagUI();
-        if (ItemSlotHelper.countOccupied(slots, 0, bagCount) > 0)
-            return;
-        boolean changed = false;
-        for (UserItemEntity item : mItem.values()) {
-            if (!Bonus.usesItemSlotForUserItem(Pbmethod.ItemType.valueOf(item.getType())))
-                continue;
-            Integer s = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
-            if (s != null) {
-                ItemSlotHelper.setPair(slots, s, Bonus.BONUS_ITEM, item.getId());
-                changed = true;
-            }
-        }
-        for (UserEquipmentEntity equip : mEquipment.values()) {
-            if (equip.isEquip()) continue;
-            Integer s = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
-            if (s != null) {
-                ItemSlotHelper.setPair(slots, s, Bonus.BONUS_EQUIPMENT, equip.getId());
-                changed = true;
-            }
-        }
-        for (UserPetEntity pet : mPet.values()) {
-            Integer s = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
-            if (s != null) {
-                ItemSlotHelper.setPair(slots, s, Bonus.BONUS_PET, pet.getId());
-                changed = true;
-            }
-        }
-        for (UserMountEntity mount : mMount.values()) {
-            Integer s = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
-            if (s != null) {
-                ItemSlotHelper.setPair(slots, s, Bonus.BONUS_MOUNT, mount.getId());
-                changed = true;
-            }
-        }
-        for (UserMobEntity mob : mMob.values()) {
-            Integer s = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
-            if (s != null) {
-                ItemSlotHelper.setPair(slots, s, Bonus.BONUS_MOB, mob.getId());
-                changed = true;
-            }
-        }
-        for (UserArtifactEntity artifact : mArtifact.values()) {
-            Integer s = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
-            if (s != null) {
-                ItemSlotHelper.setPair(slots, s, Bonus.BONUS_ARTIFACT, artifact.getId());
-                changed = true;
-            }
-        }
-        if (changed)
-            saveItemSlot(slots);
-    }
-
     void applyItemSlotsFromUserData() {
         List<Long> slots = mUser.getUData().getItemSlotList();
         int bagCount = mUser.getUData().getSlotBagUI();
@@ -206,8 +150,9 @@ public class UserResources implements Serializable {
                 itemPoints.forEach(row -> mItemPoint.put(row.getPointId(), row));
             }
             syncEquipFlagsFromUser();
-            rebuildItemSlotIfNeeded();
+            Bonus.verifyItemSlots(mUser, true);
             applyItemSlotsFromUserData();
+            mUser.getUData().flushItemSlotIfDirty();
             return true;
         } catch (Exception ex) {
             Logs.error(ex);
@@ -284,7 +229,13 @@ public class UserResources implements Serializable {
     }
 
     public int getNumMaterial() {
-        return mMaterial.size();
+        int n = 0;
+        for (UserMaterialEntity m : mMaterial.values()) {
+            if (Bonus.isBlockedFromBagSlot(m.getIsTrading(), m.getInMarket()))
+                continue;
+            n++;
+        }
+        return n;
     }
 
     public int getNumEquipment() {

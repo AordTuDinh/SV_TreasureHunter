@@ -27,6 +27,8 @@ public abstract class Lang implements Serializable {
     public static String err_trading_need_craft = "err_trading_need_craft"; // Vật phẩm cần được chế tạo trước khi đăng bán
     public static String err_trading_poison_not_ready = "err_trading_poison_not_ready"; // Thuốc độc chưa đủ điều kiện đăng bán
     public static String err_trading_material_not_ready = "err_trading_material_not_ready"; // Nguyên liệu cần tier 4 và cấp 10 mới được đăng bán
+    public static String err_trading_equipment_not_tradable = "err_trading_equipment_not_tradable"; // Trang bị không thể giao dịch
+    public static String err_item_in_trading = "err_item_in_trading"; // Vật phẩm đang trong túi giao dịch hoặc đang bán trên chợ
     public static String err_bag_full = "err_bag_full"; // Túi chính không còn ô trống
     public static String err_not_enough_weapon = "err_not_enough_weapon"; // Không đủ vũ khí
     public static String err_not_enough_piece = "err_not_enough_piece"; // Không đủ mảnh

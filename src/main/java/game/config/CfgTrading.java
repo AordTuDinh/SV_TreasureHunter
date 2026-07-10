@@ -73,12 +73,8 @@ public class CfgTrading {
                 return "err_params";
             return null;
         }
-        if (bonusType == Bonus.BONUS_EQUIPMENT) {
-            UserEquipmentEntity equip = (UserEquipmentEntity) entity;
-            if (equip.isEquip() || equip.getLockDestroy() == 1)
-                return "err_item_equip";
-            return null;
-        }
+        if (bonusType == Bonus.BONUS_EQUIPMENT)
+            return "err_trading_equipment_not_tradable";
         if (bonusType == Bonus.BONUS_MATERIAL) {
             UserMaterialEntity mat = (UserMaterialEntity) entity;
             if (mat.getTier() < 4)

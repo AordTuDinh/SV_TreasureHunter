@@ -1,6 +1,7 @@
 package game.treasure.mapping;
 
 import game.config.CfgMaterial;
+import game.config.aEnum.VipType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ozudo.base.database.DBJPA;
@@ -27,7 +28,10 @@ public class UserSettingsEntity implements Serializable {
     int userId;
     String blockChat, chatSetting; //chatSetting s;ize 2
     String autoSellItem, autoSellMaterial, autoRange; // auto_range DB: [tầm đánh, tầm buff HP, autoAttackMob, auto_buff]
+    String vipData;
 
+    @Transient
+    UserVip uVip;
 
     public UserSettingsEntity(int userId) {
         this.userId = userId;
@@ -36,6 +40,22 @@ public class UserSettingsEntity implements Serializable {
         this.autoSellItem = StringHelper.toDBString(NumberUtil.genListInt(Pbmethod.AutoSell.values().length, 0));
         this.autoSellMaterial = StringHelper.toDBString(NumberUtil.genListInt(CfgMaterial.getAutoSellMaterialSize(), 0));
         this.autoRange = "[5,50,0,0]";
+        this.vipData = StringHelper.toDBString(NumberUtil.genListInt(VipType.COUNT, 0));
+    }
+
+    public UserVip getUVip() {
+        if (uVip == null) {
+            uVip = new UserVip(vipData, userId);
+        }
+        return uVip;
+    }
+
+    public List<Integer> getVipDataList() {
+        return getUVip().getList();
+    }
+
+    public void syncVipData(List<Integer> list) {
+        this.vipData = StringHelper.toDBString(list);
     }
 
 

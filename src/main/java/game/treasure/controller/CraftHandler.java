@@ -15,6 +15,7 @@ import game.treasure.mapping.UserItemEntity;
 import game.treasure.mapping.UserMaterialEntity;
 import game.treasure.mapping.UserMountEntity;
 import game.treasure.mapping.UserPetEntity;
+import game.treasure.mapping.UserSkinEntity;
 import game.treasure.mapping.main.ResArtifactEntity;
 import game.treasure.mapping.main.ResItemEquipmentEntity;
 import game.treasure.mapping.main.ResMaterialEntity;
@@ -23,8 +24,10 @@ import game.treasure.mapping.main.ResPetEntity;
 import game.treasure.server.IAction;
 import game.treasure.service.item.CraftPointDataUtil;
 import game.treasure.service.resource.ResItem;
+import game.treasure.service.trading.TradingItemService;
 import game.treasure.service.user.Bonus;
 import io.netty.channel.Channel;
+import ozudo.base.database.DBJPA;
 import ozudo.base.helper.GsonUtil;
 import ozudo.base.helper.NumberUtil;
 import ozudo.base.helper.StringHelper;
@@ -170,6 +173,16 @@ public class CraftHandler extends AHandler {
             }
         }
 
+        Object craftTarget = resolveCraftTargetEntity(targetType, targetId, craftArtifact);
+        if (craftTarget == null) {
+            addErrResponse(getLang(Lang.err_item_equip_not_found));
+            return;
+        }
+        if (TradingItemService.isBlockedFromCraft(craftTarget)) {
+            addErrResponse(getLang(Lang.err_item_in_trading));
+            return;
+        }
+
         List<UserMaterialEntity> gems = new ArrayList<>();
         List<Integer> gemRanks = new ArrayList<>();
         int maxGemRank = 0;
@@ -183,6 +196,10 @@ public class CraftHandler extends AHandler {
             ResMaterialEntity gemRes = gem.getRes();
             if (gemRes == null) {
                 addErrParam();
+                return;
+            }
+            if (TradingItemService.isBlockedFromCraft(gem)) {
+                addErrResponse(getLang(Lang.err_item_in_trading));
                 return;
             }
             if (targetType == CraftTargetType.ARTIFACT) {
@@ -411,6 +428,20 @@ public class CraftHandler extends AHandler {
         ));
     }
 
+    private Object resolveCraftTargetEntity(CraftTargetType type, long targetId, UserArtifactEntity craftArtifact) {
+        if (type == CraftTargetType.EQUIPMENT)
+            return mUser.getResources().getItemEquipment(targetId);
+        if (type == CraftTargetType.CONSUMABLE)
+            return mUser.getResources().getItem(targetId);
+        if (type == CraftTargetType.PET)
+            return mUser.getResources().getPet(targetId);
+        if (type == CraftTargetType.MOUNT)
+            return mUser.getResources().getMount(targetId);
+        if (type == CraftTargetType.ARTIFACT)
+            return craftArtifact != null ? craftArtifact : mUser.getResources().getArtifact(targetId);
+        return null;
+    }
+
     private int resolveItemLevel(CraftTargetType type, long targetId) {
         if (type == CraftTargetType.EQUIPMENT) {
             UserEquipmentEntity equip = mUser.getResources().getItemEquipment(targetId);
@@ -473,9 +504,9 @@ public class CraftHandler extends AHandler {
                 return false;
             if (equip.getIsCraft() == 1)
                 return true;
-            if (equip.update(List.of("is_craft", 1, "craft_by", crafter))) {
+            if (equip.update(List.of("is_craft", 1, "hh", 1))) {
                 equip.setIsCraft(1);
-                equip.setCraftBy(crafter);
+                equip.setHh(1);
                 return true;
             }
             return false;
@@ -486,9 +517,10 @@ public class CraftHandler extends AHandler {
                 return false;
             if (pet.getIsCraft() == 1)
                 return true;
-            if (pet.update(List.of("is_craft", 1, "craft_by", crafter))) {
+            if (pet.update(List.of("is_craft", 1, "craft_by", crafter, "hh", 1))) {
                 pet.setIsCraft(1);
                 pet.setCraftBy(crafter);
+                pet.setHh(1);
                 return true;
             }
             return false;
@@ -499,9 +531,10 @@ public class CraftHandler extends AHandler {
                 return false;
             if (mount.getIsCraft() == 1)
                 return true;
-            if (mount.update(List.of("is_craft", 1, "craft_by", crafter))) {
+            if (mount.update(List.of("is_craft", 1, "craft_by", crafter, "hh", 1))) {
                 mount.setIsCraft(1);
                 mount.setCraftBy(crafter);
+                mount.setHh(1);
                 return true;
             }
             return false;
@@ -512,9 +545,10 @@ public class CraftHandler extends AHandler {
                 return false;
             if (artifact.getIsCraft() == 1)
                 return true;
-            if (artifact.update(List.of("is_craft", 1, "craft_by", crafter))) {
+            if (artifact.update(List.of("is_craft", 1, "craft_by", crafter, "hh", 1))) {
                 artifact.setIsCraft(1);
                 artifact.setCraftBy(crafter);
+                artifact.setHh(1);
                 return true;
             }
             return false;
@@ -525,9 +559,10 @@ public class CraftHandler extends AHandler {
                 return false;
             if (item.getIsCraft() == 1)
                 return true;
-            if (item.update(List.of("is_craft", 1, "craft_by", crafter))) {
+            if (item.update(List.of("is_craft", 1, "craft_by", crafter, "hh", 1))) {
                 item.setIsCraft(1);
                 item.setCraftBy(crafter);
+                item.setHh(1);
                 return true;
             }
             return false;
@@ -540,6 +575,14 @@ public class CraftHandler extends AHandler {
             destroyEquipment(targetId);
         } else if (type == CraftTargetType.CONSUMABLE) {
             destroyConsumable(targetId);
+        } else if (type == CraftTargetType.PET) {
+            destroyPet(targetId);
+        } else if (type == CraftTargetType.MOUNT) {
+            destroyMount(targetId);
+        } else if (type == CraftTargetType.ARTIFACT) {
+            destroyArtifact(targetId);
+        } else if (type == CraftTargetType.SKIN) {
+            destroySkin(targetId);
         }
     }
 
@@ -564,6 +607,60 @@ public class CraftHandler extends AHandler {
         }
         if (equip.deleteFromDb()) {
             mUser.getResources().removeItemEquip(List.of(equip));
+        }
+    }
+
+    private void destroyPet(long petId) {
+        UserPetEntity pet = mUser.getResources().getPet(petId);
+        if (pet == null) {
+            return;
+        }
+        pet.syncEquipFlag(mUser);
+        if (pet.isEquip()) {
+            return;
+        }
+        Bonus.clearItemFromSlot(mUser, Bonus.BONUS_PET, petId);
+        if (pet.deleteFromDb()) {
+            mUser.getResources().removePet(petId);
+        }
+    }
+
+    private void destroyMount(long mountId) {
+        UserMountEntity mount = mUser.getResources().getMount(mountId);
+        if (mount == null) {
+            return;
+        }
+        mount.syncEquipFlag(mUser);
+        if (mount.isEquip()) {
+            return;
+        }
+        Bonus.clearItemFromSlot(mUser, Bonus.BONUS_MOUNT, mountId);
+        if (mount.deleteFromDb()) {
+            mUser.getResources().removeMount(mountId);
+        }
+    }
+
+    private void destroyArtifact(long rowId) {
+        UserArtifactEntity artifact = mUser.getResources().getArtifact(rowId);
+        if (artifact == null) {
+            return;
+        }
+        if (Bonus.isArtifactEquipped(mUser, rowId) && !Bonus.clearTreasureEquipSlot(mUser)) {
+            return;
+        }
+        Bonus.clearItemFromSlot(mUser, Bonus.BONUS_ARTIFACT, rowId);
+        if (artifact.deleteFromDb()) {
+            mUser.getResources().removeArtifact(rowId);
+        }
+    }
+
+    private void destroySkin(long skinId) {
+        UserSkinEntity skin = mUser.getResources().getSkin(skinId);
+        if (skin == null) {
+            return;
+        }
+        if (DBJPA.delete("user_skin", "id", skinId, "user_id", skin.getUserId())) {
+            mUser.getResources().removeSkin(skinId);
         }
     }
 
@@ -639,16 +736,22 @@ public class CraftHandler extends AHandler {
         if (item == null)
             return;
         int tier = CfgCraft.rollConsumableTransformTier();
-        if (tier <= 0)
+        int hh = CfgCraft.hhFromTransformTier(tier);
+        if (tier <= 0) {
+            if (item.update(List.of("hh", hh))) {
+                item.setHh(hh);
+            }
             return;
+        }
         int iconId = CfgCraft.getConsumableTransformIcon(tier);
         if (iconId <= 0)
             return;
         float mul = CfgCraft.getConsumableHpMul(tier);
         String dataJson = CraftPointDataUtil.applyHpTransform(item.getData(), hpOriginal, mul);
-        if (item.update(Arrays.asList("data", dataJson, "icon", iconId))) {
+        if (item.update(Arrays.asList("data", dataJson, "icon", iconId, "hh", hh))) {
             item.setData(dataJson);
             item.setIcon(iconId);
+            item.setHh(hh);
         }
     }
 
@@ -657,10 +760,11 @@ public class CraftHandler extends AHandler {
                 mUser.getResources().getItemEquipment(targetId),
                 equip -> equip == null ? null : equip.getResEquipment(),
                 ResItemEquipmentEntity::getTransformIcon,
-                (equip, dataJson, iconId) -> {
-                    if (equip.update(Arrays.asList("data", dataJson, "icon", iconId))) {
+                (equip, dataJson, iconId, hh) -> {
+                    if (equip.update(Arrays.asList("data", dataJson, "icon", iconId, "hh", hh))) {
                         equip.setData(dataJson);
                         equip.setIcon(iconId);
+                        equip.setHh(hh);
                         return true;
                     }
                     return false;
@@ -673,10 +777,11 @@ public class CraftHandler extends AHandler {
                 mUser.getResources().getPet(targetId),
                 pet -> pet == null ? null : pet.getResPet(),
                 ResPetEntity::getTransformIcon,
-                (pet, dataJson, iconId) -> {
-                    if (pet.update(Arrays.asList("data", dataJson, "icon", iconId))) {
+                (pet, dataJson, iconId, hh) -> {
+                    if (pet.update(Arrays.asList("data", dataJson, "icon", iconId, "hh", hh))) {
                         pet.setData(dataJson);
                         pet.setIcon(iconId);
+                        pet.setHh(hh);
                         return true;
                     }
                     return false;
@@ -689,10 +794,11 @@ public class CraftHandler extends AHandler {
                 mUser.getResources().getMount(targetId),
                 mount -> mount == null ? null : mount.getRes(),
                 ResMountEntity::getTransformIcon,
-                (mount, dataJson, iconId) -> {
-                    if (mount.update(Arrays.asList("data", dataJson, "icon", iconId))) {
+                (mount, dataJson, iconId, hh) -> {
+                    if (mount.update(Arrays.asList("data", dataJson, "icon", iconId, "hh", hh))) {
                         mount.setData(dataJson);
                         mount.setIcon(iconId);
+                        mount.setHh(hh);
                         return true;
                     }
                     return false;
@@ -707,7 +813,7 @@ public class CraftHandler extends AHandler {
 
     @FunctionalInterface
     private interface TransformUpdater<T> {
-        boolean update(T target, String dataJson, int iconId);
+        boolean update(T target, String dataJson, int iconId, int hh);
     }
 
     @FunctionalInterface
@@ -731,8 +837,9 @@ public class CraftHandler extends AHandler {
         if (iconId <= 0)
             return;
         float mul = CfgCraft.getTransformStatMul(tier);
+        int hh = CfgCraft.hhFromTransformTier(tier);
         String dataJson = CraftPointDataUtil.scaleData(dataGetter.get(target), mul);
-        updater.update(target, dataJson, iconId);
+        updater.update(target, dataJson, iconId, hh);
     }
 
     private boolean removeMaterial(UserMaterialEntity gem) {

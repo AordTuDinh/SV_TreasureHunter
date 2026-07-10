@@ -25,10 +25,7 @@ public enum BlockType {
         }
     }
 
-    public static BlockType get(int rangeAttack) {
-        int type = 0;
-        if (rangeAttack > 0 && rangeAttack <= 1) type = 1;
-        else if (rangeAttack > 1) type = 2;
+    public static BlockType get(int type) {
         return lookup.get(type);
     }
 }

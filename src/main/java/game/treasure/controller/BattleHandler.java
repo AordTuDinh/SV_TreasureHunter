@@ -9,6 +9,7 @@ import game.config.lang.Lang;
 import game.treasure.BattleConfig;
 import game.treasure.mapping.main.*;
 import game.treasure.service.resource.ResMap;
+import game.treasure.server.IAction;
 import game.treasure.table.*;
 import game.object.MyUser;
 import game.object.TaskMonitor;
@@ -92,39 +93,48 @@ public class BattleHandler extends AHandler implements Serializable {
 
 
     public void initMapByTypeId(MapType mapType, Pos posInit, PopupType popupType) {
-        ResMapEntity map = ResMap.getMap(mapType);
-        if (map == null) {
-            addErrParam();
-            return;
-        }
         BaseRoom curRoom = (BaseRoom) ChUtil.get(channel, ChUtil.KEY_ROOM);
-        String curKeyRoom = curRoom != null ? TaskMonitor.mBattleIdToKey.get(curRoom.getBattleId()) : "";
-        String keyRoom = CfgBattle.getKeyRoom(mUser, mapType.value);
         if (curRoom != null && !curRoom.allowChangeChanel()) {
             addErrResponse(getLang(Lang.err_unauthorized));
             return;
         }
-        // xóa khỏi room cũ
+        com.google.protobuf.AbstractMessage initMap = prepareInitMap(channel, mUser, mapType, posInit, popupType);
+        if (initMap == null) {
+            addErrParam();
+            return;
+        }
+        addResponse(INIT_MAP, initMap);
+    }
+
+    /** Chuyển player sang map mới; trả payload INIT_MAP nếu thành công. */
+    private static com.google.protobuf.AbstractMessage prepareInitMap(
+            Channel channel, MyUser mUser, MapType mapType, Pos posInit, PopupType popupType) {
+        ResMapEntity map = ResMap.getMap(mapType);
+        if (map == null) {
+            return null;
+        }
+        BaseRoom curRoom = (BaseRoom) ChUtil.get(channel, ChUtil.KEY_ROOM);
+        String curKeyRoom = curRoom != null ? TaskMonitor.mBattleIdToKey.get(curRoom.getBattleId()) : "";
+        String keyRoom = CfgBattle.getKeyRoom(mUser, mapType.value);
         Player player = mUser.getPlayer();
         if (curRoom != null && curRoom.hasPlayer(player.getId())) {
             curRoom.removeUnit(player.getId());
         }
-        // tìm room thỏa mãn điều kiện max player room
         BaseRoom room = (BaseRoom) TaskMonitor.getInstance().getRoom(keyRoom);
         while (room != null && room.isMaxPlayer()) {
             keyRoom = CfgBattle.getKeyRoom(mUser, mapType.value);
             if (curKeyRoom.equals(keyRoom)) continue;
             room = (BaseRoom) TaskMonitor.getInstance().getRoom(keyRoom);
         }
-        // check có room hay chưa, có rồi thì join
         boolean restoreHome = mapType == MapType.HOME && posInit.equals(Pos.zero());
         boolean wasDead = restoreHome && mUser.isLastHomeDead();
         Pos spawn = posInit;
         if (restoreHome) {
-            spawn = mUser.getLastHomePos();
             if (mUser.getUser().getBlockType() == BlockType.BLOCK_ACTION) {
                 Pos jailSpawn = map.getJailSpawnPos();
-                if (jailSpawn != null) spawn = jailSpawn;
+                spawn = jailSpawn != null ? jailSpawn : Pos.zero();
+            } else {
+                spawn = mUser.getLastHomePos();
             }
         }
         if (restoreHome) {
@@ -145,10 +155,25 @@ public class BattleHandler extends AHandler implements Serializable {
             TaskMonitor.getInstance().addRoom(room);
         }
         ChUtil.set(channel, ChUtil.KEY_ROOM, room);
-        // tra ve id teleport next
-        addResponse(INIT_MAP, CfgBattle.genInitMap(mapType.value, popupType));
         if (mapType == MapType.HOME) {
             mUser.sendNotify();
+        }
+        return CfgBattle.genInitMap(mapType.value, popupType);
+    }
+
+    private static void reviveToHome(Channel channel, MyUser mUser, boolean pushToClient, BattleHandler responseHandler) {
+        mUser.clearLastHomeState();
+        Player player = mUser.getPlayer();
+        player.revive();
+        com.google.protobuf.AbstractMessage initMap = prepareInitMap(channel, mUser, MapType.HOME, Pos.zero(), PopupType.NULL);
+        player.getPoint().resetHpPercent(BattleConfig.P_reviveHpPercent);
+        if (initMap == null) {
+            return;
+        }
+        if (pushToClient) {
+            Util.sendProtoData(channel, initMap, IAction.INIT_MAP);
+        } else if (responseHandler != null) {
+            responseHandler.addResponse(INIT_MAP, initMap);
         }
     }
 
@@ -168,10 +193,13 @@ public class BattleHandler extends AHandler implements Serializable {
     }
 
     void revivePlayer() {
-        Player player = ((MyUser) ChUtil.get(channel, ChUtil.KEY_M_USER)).getPlayer();
-        mUser.clearLastHomeState();
-        player.revive();
-        initMapByTypeId(MapType.HOME, Pos.zero(), PopupType.NULL);
-        player.getPoint().resetHpPercent(BattleConfig.P_reviveHpPercent);
+        reviveToHome(channel, mUser, false, this);
+    }
+
+    public static void teleportHomeOnUnblock(MyUser mUser, Channel channel) {
+        if (mUser == null || mUser.getUser() == null || channel == null || !channel.isActive()) return;
+        if (mUser.getUser().getBlockType() != BlockType.BLOCK_ACTION) return;
+        mUser.getUser().setBlockType(0);
+        reviveToHome(channel, mUser, true, null);
     }
 }

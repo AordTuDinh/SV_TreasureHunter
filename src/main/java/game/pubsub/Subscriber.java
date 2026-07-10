@@ -69,6 +69,8 @@ public class Subscriber extends JedisPubSub {
                     case DELAY_RESTART_SERVER -> delayRestartServer(message);
                     case DELAY_MAINTENANCE -> delayMaintenanceServer(message);
                     case MAINTENANCE_START -> maintenanceStart(message);
+                    case KICK_USER -> kickUserBlock(message);
+                    case UNBLOCK_USER -> unblockUser(message);
                 }
             }
         } catch (Exception ex) {
@@ -328,6 +330,27 @@ public class Subscriber extends JedisPubSub {
             Util.sendProtoData(ch, CommonProto.getErrorMsg(kickMsg), IAction.LOGIN_GAME_BLOCK);
             Online.logoutChannel(ch);
             ch.close();
+        } catch (Exception ex) {
+            getLogger().error(GUtil.exToString(ex));
+        }
+    }
+
+    void kickUserBlock(String msg) {
+        try {
+            String[] parts = msg.split("_");
+            if (parts.length < 2) return;
+            int userId = Integer.parseInt(parts[0]);
+            int blockType = Integer.parseInt(parts[1]);
+            Online.kickUser(userId, blockType);
+        } catch (Exception ex) {
+            getLogger().error(GUtil.exToString(ex));
+        }
+    }
+
+    void unblockUser(String msg) {
+        try {
+            int userId = Integer.parseInt(msg.trim());
+            Online.unblockUser(userId);
         } catch (Exception ex) {
             getLogger().error(GUtil.exToString(ex));
         }

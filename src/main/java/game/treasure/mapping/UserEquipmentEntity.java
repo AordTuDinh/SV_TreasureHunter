@@ -32,12 +32,10 @@ public class UserEquipmentEntity implements Serializable {
     int lockDestroy;
     int tier;
     int isCraft;
+    int hh;
     int icon;
     int priceTreasure;
-    String craftBy;
     String data;
-    int isTrading;
-    int inMarket;
 
     @Transient
     boolean isEquip;
@@ -54,6 +52,7 @@ public class UserEquipmentEntity implements Serializable {
         priceTreasure = 0;
         tier = 1;
         isCraft = 0;
+        hh = 0;
         icon = itemId;
         data = "[]";
     }
@@ -123,23 +122,16 @@ public class UserEquipmentEntity implements Serializable {
         pb.setLockDestroy(lockDestroy == 1);
         pb.setTier(tier);
         pb.setIsCraft(isCraft);
+        pb.setHh(hh);
         pb.setIcon(icon);
         pb.setPriceTreasure(priceTreasure);
         if (data != null && !data.isEmpty() && !"[]".equals(data))
             pb.setData(data);
-        if (craftBy != null && !craftBy.isEmpty())
-            pb.setCraftBy(craftBy);
         return pb;
     }
 
     public Pbmethod.PbEquipment toProtoWire() {
-        try {
-            byte[] bytes = toProto().build().toByteArray();
-            bytes = game.treasure.service.item.ProtoTradingWire.appendEquipmentTrading(bytes, isTrading, inMarket);
-            return Pbmethod.PbEquipment.parseFrom(bytes);
-        } catch (Exception ex) {
-            return toProto().build();
-        }
+        return toProto().build();
     }
 
     public ResItemEquipmentEntity getResEquipment() {

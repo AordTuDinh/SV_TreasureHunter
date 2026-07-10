@@ -26,6 +26,7 @@ public class UserPetEntity implements Serializable {
     int level;
     int tier = 1;
     int isCraft;
+    int hh;
     int icon;
     int server;
     int priceTreasure;
@@ -44,6 +45,7 @@ public class UserPetEntity implements Serializable {
         this.level = 1;
         this.tier = tier;
         this.isCraft = 0;
+        this.hh = 0;
         this.priceTreasure = 0;
         this.icon = petId;
         this.data = getResPet().getPointData(tier);
@@ -83,6 +85,7 @@ public class UserPetEntity implements Serializable {
         pb.setLevel(level);
         pb.setTier(tier > 0 ? tier : 1);
         pb.setIsCraft(isCraft);
+        pb.setHh(hh);
         pb.setPriceTreasure(priceTreasure);
         if (icon > 0)
             pb.setIcon(icon);

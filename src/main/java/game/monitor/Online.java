@@ -4,7 +4,13 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import game.cache.JCache;
+import game.config.CfgServer;
+import game.config.lang.Lang;
+import game.protocol.CommonProto;
+import game.config.aEnum.BlockType;
+import game.treasure.controller.BattleHandler;
 import game.treasure.mapping.UserEntity;
+import game.treasure.server.IAction;
 import game.treasure.table.BaseRoom;
 import game.object.MyUser;
 import io.netty.channel.Channel;
@@ -160,5 +166,41 @@ public class Online {
 
         }
         return lstChanel;
+    }
+
+    public static void kickUser(int userId, int blockType) {
+        if (blockType != 1 && blockType != 2) return;
+        Channel ch = getChannel(userId);
+        if (ch == null || !ch.isActive()) return;
+        try {
+            MyUser mUser = getMUser(ch);
+            if (mUser != null && mUser.getUser() != null) {
+                mUser.getUser().setBlockType(blockType);
+                String username = mUser.getUser().getUsername();
+                String name = username.contains("_")
+                        ? username.substring(username.indexOf("_") + 1)
+                        : username;
+                JCache.getInstance().removeValue("s:" + name);
+            }
+            String kickMsg = Lang.getTitle(CfgServer.config.mainLanguage, Lang.err_user_block);
+            if (blockType == 1) {
+                Util.sendProtoData(ch, CommonProto.getErrorMsg(kickMsg), IAction.LOGIN_GAME_BLOCK);
+            } else {
+                Util.sendProtoData(ch, CommonProto.getCommonVector(kickMsg), IAction.DISCONNECT_MSG);
+            }
+            logoutChannel(ch);
+            ch.close();
+        } catch (Exception ex) {
+            slib_Logger.root().error(Util.exToString(ex));
+        }
+    }
+
+    public static void unblockUser(int userId) {
+        Channel ch = getChannel(userId);
+        if (ch == null || !ch.isActive()) return;
+        MyUser mUser = getMUser(ch);
+        if (mUser == null || mUser.getUser() == null) return;
+        if (mUser.getUser().getBlockType() != BlockType.BLOCK_ACTION) return;
+        BattleHandler.teleportHomeOnUnblock(mUser, ch);
     }
 }

@@ -61,6 +61,7 @@ public class MyUser implements Serializable {
     List<Pbmethod.PbPointItemUpdate> itemPointUpdates = new ArrayList<>();
     boolean updateBagPending;
     boolean userDataInfoPending;
+    boolean vipDataPending;
 
     public void queueUpdateBag() {
         updateBagPending = true;
@@ -81,6 +82,17 @@ public class MyUser implements Serializable {
         if (!userDataInfoPending)
             return false;
         userDataInfoPending = false;
+        return true;
+    }
+
+    public void queueVipDataSync() {
+        vipDataPending = true;
+    }
+
+    public boolean drainVipDataPending() {
+        if (!vipDataPending)
+            return false;
+        vipDataPending = false;
         return true;
     }
 
@@ -172,6 +184,16 @@ public class MyUser implements Serializable {
         return ret;
     }
 
+    /** Mail chưa nhận + toàn bộ notify event — dùng khi login / refresh NOTIFY. */
+    public List<Long> buildNotifyList() {
+        List<Long> ret = new ArrayList<>();
+        if (user != null && Services.mailDAO.hasMail(user.getId())) {
+            ret.add((long) NotifyType.MAIL.value);
+        }
+        ret.addAll(checkNotify());
+        return ret;
+    }
+
     private boolean notifyPhucLoi(DataDaily uIntDaily) {
         // Nhận hỗ trợ
         if (CfgEvent.isNotifySupport(uIntDaily)) return true;
@@ -220,7 +242,7 @@ public class MyUser implements Serializable {
     }
 
     public void sendNotify() {
-        Util.sendProtoData(channel, CommonProto.getCommonVectorProto(checkNotify()), IAction.NOTIFY);
+        Util.sendProtoData(channel, CommonProto.getCommonVectorProto(buildNotifyList()), IAction.NOTIFY);
     }
 
     public void addNotify(NotifyType notifyType) {
@@ -233,6 +255,12 @@ public class MyUser implements Serializable {
 
     /** Lưu vị trí HOME và HP hiện tại khi logout (kể cả đang chết). */
     public void saveLastHomePos() {
+        if (user.getBlockType() == BlockType.BLOCK_ACTION) {
+            uData.setLastPos("[0,0]");
+            uData.update(List.of("last_pos", "[0,0]"));
+            return;
+        }
+
         Player player = getPlayer();
         BaseRoom room = player.getRoom();
         if (room == null && channel != null) {
@@ -261,9 +289,12 @@ public class MyUser implements Serializable {
     }
 
     public Pos getLastHomePos() {
+        if (user.getBlockType() == BlockType.BLOCK_ACTION) return Pos.zero();
         if (StringHelper.isEmpty(uData.getLastPos())) return Pos.zero();
         try {
-            return new Pos(uData.getLastPos()).round();
+            Pos pos = new Pos(uData.getLastPos()).round();
+            if (pos.x == 0f && pos.y == 0f) return Pos.zero();
+            return pos;
         } catch (Exception e) {
             return Pos.zero();
         }

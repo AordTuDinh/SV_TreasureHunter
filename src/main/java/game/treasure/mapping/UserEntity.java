@@ -4,6 +4,7 @@ import game.battle.calculate.IMath;
 import game.battle.object.Point;
 import game.config.aEnum.*;
 import game.config.lang.Lang;
+import game.treasure.mapping.main.ResVipEntity;
 import game.treasure.service.resource.ResEvent;
 import game.monitor.ClanManager;
 import game.monitor.Online;
@@ -375,16 +376,20 @@ public class UserEntity implements Serializable {
     }
 
     public synchronized void addVipExp(long value) {
-        if (vip >= ResEvent.lengthVip) return; // max vip k tăng exp nữa
+        if (vip >= ResEvent.lengthVip - 1) return;
         vipExp += value;
-        int maxExp = ResEvent.getResVip(vip + 1).getExp();
+        ResVipEntity nextRes = ResEvent.getResVip(vip + 1);
+        if (nextRes == null) return;
+        int maxExp = nextRes.getExp();
         while (vipExp >= maxExp) {
             vipExp -= maxExp;
             vip++;
-            maxExp = ResEvent.getResVip(vip + 1).getExp();
-            if (vip >= ResEvent.lengthVip) break;
+            if (vip >= ResEvent.lengthVip - 1) break;
+            nextRes = ResEvent.getResVip(vip + 1);
+            if (nextRes == null) break;
+            maxExp = nextRes.getExp();
         }
-        if (vip == ResEvent.lengthVip) vipExp = 0; // max level vip thì exp  vip = 0;
+        if (vip >= ResEvent.lengthVip - 1) vipExp = 0;
     }
 
 

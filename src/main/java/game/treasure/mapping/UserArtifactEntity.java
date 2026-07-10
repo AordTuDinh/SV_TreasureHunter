@@ -29,6 +29,7 @@ public class UserArtifactEntity implements Serializable {
     int level;
     int tier;
     int isCraft;
+    int hh;
     String craftBy;
     String data;
     int isTrading;
@@ -46,6 +47,7 @@ public class UserArtifactEntity implements Serializable {
         this.artifactId = artifactId;
         this.level = 1;
         this.isCraft = 0;
+        this.hh = 0;
         this.tier = tier > 0 ? Math.min(tier, 4) : 1;
         this.data = rollDataFromRes(artifactId, this.tier);
     }
@@ -118,6 +120,7 @@ public class UserArtifactEntity implements Serializable {
         pb.setRange(getBaseSlot(ArtifactDataSlot.IDX_RANGE));
         pb.setPerson(getBaseSlot(ArtifactDataSlot.IDX_PERSON));
         pb.setIsCraft(isCraft);
+        pb.setHh(hh);
         if (craftBy != null && !craftBy.isEmpty())
             pb.setCraftBy(craftBy);
         return pb;

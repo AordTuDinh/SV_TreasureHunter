@@ -6,6 +6,7 @@ import game.config.lang.Lang;
 import game.treasure.mapping.UserMaterialEntity;
 import game.treasure.mapping.main.ResMaterialEntity;
 import game.treasure.server.IAction;
+import game.treasure.service.trading.TradingItemService;
 import game.treasure.service.user.Bonus;
 import io.netty.channel.Channel;
 import ozudo.base.database.DBJPA;
@@ -63,6 +64,10 @@ public class MaterialHandler extends AHandler {
         UserMaterialEntity gem = mUser.getResources().getMaterial(materialRowId);
         if (gem == null) {
             addErrResponse(getLang(Lang.err_item_equip_not_found));
+            return;
+        }
+        if (TradingItemService.isBlockedFromCraft(gem)) {
+            addErrResponse(getLang(Lang.err_item_in_trading));
             return;
         }
         ResMaterialEntity res = gem.getRes();
@@ -136,6 +141,10 @@ public class MaterialHandler extends AHandler {
             }
             if (gem.getRes() == null) {
                 addErrParam();
+                return;
+            }
+            if (TradingItemService.isBlockedFromCraft(gem)) {
+                addErrResponse(getLang(Lang.err_item_in_trading));
                 return;
             }
             gems.add(gem);

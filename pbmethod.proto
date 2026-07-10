@@ -351,6 +351,8 @@ message PbMount{
   optional string craftBy = 11;
   optional int32 isTrading = 12;
   optional int32 inMarket = 13;
+  /** 0=chưa craft, 1=craft không HH, 2+=craft+HH tier */
+  optional int32 hh = 14;
 }
 
 message PbMob{
@@ -380,6 +382,8 @@ message PbPet{
   optional string craftBy = 11;
   optional int32 isTrading = 12;
   optional int32 inMarket = 13;
+  /** 0=chưa craft, 1=craft không HH, 2+=craft+HH tier */
+  optional int32 hh = 14;
 }
 
 message PbListItemPoint{
@@ -456,6 +460,8 @@ message PbArtifact{
   optional string craftBy = 12;
   optional int32 isTrading = 13;
   optional int32 inMarket = 14;
+  /** 0=chưa craft, 1=craft không HH, 2+=craft+HH tier */
+  optional int32 hh = 15;
 }
 
 message PbListArtifact{
@@ -473,6 +479,8 @@ message  PbItem{
   optional string craftBy = 9;
   optional int32 isTrading = 10;
   optional int32 inMarket = 11;
+  /** 0=chưa craft, 1=craft không HH, 2+=craft+HH tier */
+  optional int32 hh = 12;
 }
 
 message  PbEquipment{
@@ -485,9 +493,8 @@ message  PbEquipment{
   optional  int32 isCraft = 7;
   optional  int32 icon = 8;
   optional int32  priceTreasure = 9;
-  optional string craftBy = 10;
-  optional int32 isTrading = 11;
-  optional int32 inMarket = 12;
+  /** 0=chưa craft, 1=craft không HH, 2+=craft+HH tier */
+  optional int32 hh = 10;
 }
 
 message  PbItemPoint{
