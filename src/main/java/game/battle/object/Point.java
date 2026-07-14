@@ -5,6 +5,7 @@ import game.battle.calculate.IMath;
 import game.battle.model.Unit;
 import game.object.PointBuff;
 import game.protocol.CommonProto;
+import game.config.CfgStats;
 import game.treasure.BattleConfig;
 import lombok.Getter;
 import lombok.Setter;
@@ -32,7 +33,7 @@ public class Point {
     public static final int ACCURACY = 14;
     public static final int HEALING = 15;
     public static final int P_ITEM_DROP_INCREASE = 16;
-    public static final int P_GOLD_INCREASE = 17;
+    public static final int P_GOLD_DROP_INCREASE = 17;
     public static final int DOGE = 18;              //done
     public static final int DOT = 19;
     public static final int FREEZE = 20;
@@ -45,20 +46,21 @@ public class Point {
     public static final int SUMMON = 27;
     public static final int P_GEM_INCREASE = 28;
     public static final int P_MATERIAL_INCREASE = 29;
+    public static final int RESISTANCE = 30;
 
     // CHANGE
-    public static final int CHANGE_ATTACK = 30;
-    public static final int CHANGE_DEFENSE = 31;
-    public static final int CHANGE_MAGIC_RESIST = 32;
-    public static final int CHANGE_AGILITY = 33;
-    public static final int CHANGE_HEATH = 34;
-    public static final int CHANGE_CRIT = 35;
-    public static final int CHANGE_CRIT_DAMAGE = 36;
-    public static final int CHANGE_MOVE_SPEED = 37;
-    public static final int CHANGE_ATTACK_SPEED = 38;
+    public static final int CHANGE_ATTACK = 40;
+    public static final int CHANGE_DEFENSE = 41;
+    public static final int CHANGE_MAGIC_RESIST = 42;
+    public static final int CHANGE_AGILITY = 43;
+    public static final int CHANGE_HEATH = 44;
+    public static final int CHANGE_CRIT = 45;
+    public static final int CHANGE_CRIT_DAMAGE = 46;
+    public static final int CHANGE_MOVE_SPEED = 47;
+    public static final int CHANGE_ATTACK_SPEED = 48;
     // EFFECT
-    public static final int BLOCK_PARALYZE = 39;
-    public static final int STUN = 40;
+    public static final int BLOCK_PARALYZE = 49;
+    public static final int STUN = 50;
 
     @Setter
     @Getter
@@ -77,6 +79,7 @@ public class Point {
     public void initDefault() {
         // set 1 số chỉ số mặc định
         values[CHANGE_MOVE_SPEED] = 100;
+        values[CHANGE_ATTACK_SPEED] = 100;
         values[CHANGE_DEFENSE] = 100;
         values[CHANGE_MAGIC_RESIST] = 100;
         values[CHANGE_AGILITY] = 100;
@@ -166,6 +169,23 @@ public class Point {
         }
     }
 
+    public void addFreezeEnd(long durationMs) {
+        long newFreeze = System.currentTimeMillis() + durationMs;
+        setFreezeEnd(newFreeze);
+    }
+
+    public void setFreezeEnd(long endMs) {
+        if (values[FREEZE] < endMs) {
+            values[FREEZE] = endMs;
+        }
+    }
+
+    public long getFreezeStat() {
+        long v = values[FREEZE];
+        long now = System.currentTimeMillis();
+        return v > now ? 0 : v;
+    }
+
     public void setBaseDef(int value) {
         values[DEFENSE] = value;
     }
@@ -248,6 +268,34 @@ public class Point {
         return values[DOGE];
     }
 
+    public long getCounterAttack() {
+        return values[COUNTER_ATTACK];
+    }
+
+    public long getMultiAttack() {
+        return values[MULTI_ATTACK];
+    }
+
+    public long getPoison() {
+        return values[POISON];
+    }
+
+    public long getWind() {
+        return values[WIND];
+    }
+
+    public long getFire() {
+        return values[DOT];
+    }
+
+    public long getResistance() {
+        return values[RESISTANCE];
+    }
+
+    public long getHealing() {
+        return values[HEALING];
+    }
+
 
     public long getMoveSpeed() {
         long baseValue = values[MOVE_SPEED];
@@ -284,8 +332,17 @@ public class Point {
         return values[ACCURACY];
     }
 
+    public long getLifeSteal() {
+        return values[LIFE_STEAL];
+    }
+
     public float getAttackSpeed() {
-        return BattleConfig.attackSpeed;
+        float interval = CfgStats.calcAttackInterval(BattleConfig.attackSpeed, values[ATTACK_SPEED]);
+        long changeAtkSpeed = values[CHANGE_ATTACK_SPEED];
+        if (changeAtkSpeed <= 0) {
+            changeAtkSpeed = 100;
+        }
+        return interval * (100f / changeAtkSpeed);
     }
 
     public int getBuffDrop() {
@@ -293,7 +350,7 @@ public class Point {
     }
 
     public int getBuffGold() {
-        return (int) (values[P_GOLD_INCREASE]);
+        return (int) (values[P_GOLD_DROP_INCREASE]);
     }
 
     public long getDefense() {
@@ -347,7 +404,7 @@ public class Point {
         power += getAttackDamage() * 0.5f;
         power += getAttackDamage() * perItemWeaponEquip;
         power += getMaxHp() * 0.5f;
-        power += getAttackSpeed() * 5f;
+        power += values[ATTACK_SPEED] * 0.005f;
         power += getMoveSpeed() * 2f;
         power += getDefense() * 2f;
         power += getCrit() * level * 0.02f;
@@ -360,7 +417,7 @@ public class Point {
         int power = 0;
         power += getAttackDamage() * 0.5f;
         power += getMaxHp() * 0.5f;
-        power += getAttackSpeed() * 5f;
+        power += values[ATTACK_SPEED] * 0.005f;
         power += getMoveSpeed() * 2f;
         power += getDefense() * 2f;
         power += getCritDamage() * 0.02f;

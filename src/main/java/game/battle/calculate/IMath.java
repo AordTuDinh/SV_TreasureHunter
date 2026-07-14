@@ -4,6 +4,7 @@ import game.battle.object.Point;
 import game.battle.object.Pos;
 import game.battle.model.Unit;
 import game.config.CfgClan;
+import game.config.CfgStats;
 import game.treasure.mapping.*;
 import game.treasure.mapping.main.*;
 import game.treasure.service.Services;
@@ -12,14 +13,13 @@ import game.object.*;
 import ozudo.base.helper.NumberUtil;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 public class IMath {
 
-    public static final List<Integer> POINT_X100 = List.of(Point.CRIT);
-
+    public static final List<Integer> POINT_X100 = List.of();
 
     public static float randomBetweenFloat(float max, float min) {
         float random = min + new Random().nextFloat() * (max - min);
@@ -43,61 +43,165 @@ public class IMath {
 
 
     public static boolean isCrit(long crit) {
-        float rawCrit = crit / 100f;
-        float finalCrit = rawCrit / (1f + rawCrit / 100f);
-        if (finalCrit == 0) return false;
-        return NumberUtil.getRandom(10000) < (int) (finalCrit * 100f);
+        return CfgStats.rollSuccess(CfgStats.getEffectiveStatForSuccess(crit));
+    }
+
+    /** Roll né: success(D), D = Né − Chính Xác (cap statCap / referenceEffective). */
+    public static boolean rollDodge(Unit target, Unit attacker) {
+        if (target == null) {
+            return false;
+        }
+        long accuracy = attacker != null ? attacker.getPoint().getAccuracy() : 0;
+        long effectiveDodge = CfgStats.getEffectiveDodge(target.getPoint().getDoge(), accuracy);
+        return CfgStats.rollSuccess(effectiveDodge);
     }
 
     public static Pos getDirection(Pos from, Pos to) {
         return new Pos(to.x - from.x, to.y - from.y).normalized();
     }
 
+    /** Đa mục tiêu: 75 điểm = +1 mục tiêu, tối đa 7. */
+    public static int calcMaxAttackTargets(long multiAttackStat) {
+        long stat = Math.max(0, multiAttackStat);
+        return Math.min(7, 1 + (int) (stat / 75));
+    }
 
-    public static long[] calculateDamage(Unit attacker, Unit target) {// crit,atk,matk
+
+    public static long[] calculateDamage(Unit attacker, Unit target) {// crit, normalDame, critDame
         return calculateDamage(attacker, target, attacker.getPoint().getAttackDamage());
     }
 
     public static long[] calculateDamage(Unit attacker, Unit target, long atkDame) {
         int status = 0;
-        // check doge
-        long dodge = target.getPoint().getDoge();
-        long acc = attacker != null ? attacker.getPoint().getAccuracy() : 0;
-
-        dodge = Math.min(dodge, 450);
-        acc = Math.min(acc, 450);
-        if (dodge > 0) {
-            float dodgeChance =  (dodge * 1f) / (dodge + acc);
-            if (NumberUtil.getRandom(1000) < (int) (dodgeChance * 1000f)) {
-                return new long[]{status, 0};
-            }
+        if (rollDodge(target, attacker)) {
+            return new long[]{status, 0, 0};
         }
 
-        float critPer = 1f;
+        int normalDame = calculateDamageBase(atkDame, target, null, attacker);
+        long critDame = 0;
         if (isCrit(attacker.getPoint().getCrit())) {
             status = 1;
-            float bonus = attacker.getPoint().getCritDamage() - 200f; // nếu critDamage đang chứa total%
-            float finalCritDamagePercent = 200f + Math.max(0f, bonus);
-            critPer = finalCritDamagePercent / 100f;
+            critDame = calcCritBonusDamage(attacker);
         }
-        int dame = calculateDamageBase(atkDame, target, critPer, null, attacker);
-        return new long[]{status, dame};
+        return new long[]{status, normalDame, critDame};
+    }
+
+    /**
+     * Phản đòn (point 12): proc 450→60% (trần 65%), phản 100% sát thương chuẩn vừa nhận,
+     * rồi giảm theo Né nạn nhân (450 Né → 25%, trần 30%).
+     */
+    public static boolean tryCounterAttack(Unit counterer, Unit victim, long normalDamageReceived) {
+        if (counterer == null || victim == null || !counterer.isAlive() || !victim.isAlive()) {
+            return false;
+        }
+        if (normalDamageReceived <= 0) {
+            return false;
+        }
+        if (!CfgStats.rollCounterProc(counterer.getPoint().getCounterAttack())) {
+            return false;
+        }
+        int counterDmg = calculateCounterDamage(counterer, victim, normalDamageReceived);
+        if (counterDmg <= 0) {
+            return false;
+        }
+        victim.beAttackDamage(counterer, counterDmg);
+        victim.protoStatus(protocol.Pbmethod.SubStateType.BE_DAMAGE,
+                Arrays.asList(counterer.getId(), 0L, -(long) counterDmg, 0L));
+        return true;
+    }
+
+    public static int calculateCounterDamage(Unit counterer, Unit victim, long normalDamageReceived) {
+        int baseDmg = (int) normalDamageReceived;
+        long effectiveDodge = CfgStats.getEffectiveDodge(
+                victim.getPoint().getDoge(),
+                counterer.getPoint().getAccuracy()
+        );
+        return CfgStats.calcCounterDamageTaken(baseDmg, effectiveDodge);
+    }
+
+    /** Sát thương crit riêng = chỉ số crit damage × 2, trừ thẳng vào máu (không qua giáp). */
+    public static long calcCritBonusDamage(Unit attacker) {
+        if (attacker == null) {
+            return 0;
+        }
+        return Math.max(0, attacker.getPoint().getCritDamage()) * 2L;
+    }
+
+    /** Hồi máu theo % sát thương đã gây (450 hút → 40%, trần 45%). */
+    public static void applyLifeSteal(Unit attacker, long damageDealt) {
+        if (attacker == null || damageDealt <= 0 || !attacker.isAlive()) {
+            return;
+        }
+        int heal = CfgStats.calcLifeStealHeal(attacker.getPoint().getLifeSteal(), damageDealt);
+        if (heal > 0) {
+            attacker.reHpFixed(heal);
+        }
+    }
+
+    /** Độc: chỉ số bị Kháng target trừ %, roll success khi đòn trúng (không miss). */
+    public static void tryApplyPoison(Unit attacker, Unit target) {
+        if (attacker == null || target == null || !attacker.isAlive() || !target.isAlive()) {
+            return;
+        }
+        long poison = CfgStats.getEffectiveElementAfterResist(
+                attacker.getPoint().getPoison(), target.getPoint().getResistance());
+        if (poison <= 0 || !CfgStats.rollPoisonProc(poison)) {
+            return;
+        }
+        target.applyPoison(attacker, poison);
+    }
+
+    /** Gió: chỉ số bị Kháng trừ %, proc success; trúng thì giảm Né / Chính Xác theo successRate(Gió). */
+    public static void tryApplyWind(Unit attacker, Unit target) {
+        if (attacker == null || target == null || !attacker.isAlive() || !target.isAlive()) {
+            return;
+        }
+        long wind = CfgStats.getEffectiveElementAfterResist(
+                attacker.getPoint().getWind(), target.getPoint().getResistance());
+        if (wind <= 0 || !CfgStats.rollWindProc(wind)) {
+            return;
+        }
+        target.applyWind(wind);
+    }
+
+    /** Lửa: chỉ số bị Kháng trừ %, roll success khi đòn trúng; tick sau 1s, damage = Lửa/2 trừ thẳng máu. */
+    public static void tryApplyFire(Unit attacker, Unit target) {
+        if (attacker == null || target == null || !attacker.isAlive() || !target.isAlive()) {
+            return;
+        }
+        long fire = CfgStats.getEffectiveElementAfterResist(
+                attacker.getPoint().getFire(), target.getPoint().getResistance());
+        if (fire <= 0 || !CfgStats.rollFireProc(fire)) {
+            return;
+        }
+        target.applyFire(attacker, fire);
+    }
+
+    /** Băng: chỉ số bị Kháng trừ %, roll success khi đòn trúng (không miss). */
+    public static void tryApplyFreeze(Unit attacker, Unit target) {
+        if (attacker == null || target == null || !attacker.isAlive() || !target.isAlive()) {
+            return;
+        }
+        long freezeStat = CfgStats.getEffectiveElementAfterResist(
+                attacker.getPoint().getFreezeStat(), target.getPoint().getResistance());
+        if (freezeStat <= 0 || !CfgStats.rollFreezeProc(freezeStat)) {
+            return;
+        }
+        target.applyFreeze(attacker, freezeStat);
     }
 
     // Hàm gốc - tất cả đều tính qua hàm này
-    public static int calculateDamageBase(long atkDame, Unit beAttacker, float critPer, PointBuff buff, Unit attacker) {
-        // Lưu ý : Sát thương chuẩn sẽ mạnh hơn giảm dame trực tiếp
+    public static int calculateDamageBase(long atkDame, Unit beAttacker, PointBuff buff, Unit attacker) {
         long def = beAttacker.getPoint().getDefense();
         if (buff != null && buff.getPointId() == Point.DEFENSE) {
             def += buff.getValue();
         }
 
-        // tinh dame
-        float atkF = (float) atkDame;
-        float defF = (float) def;
-        int dmg = (int) ((atkF * atkF) / (atkF + defF + 0.0001f)); // tránh chia 0
-
-        dmg = (int) (dmg  * critPer);
+        long accuracy = attacker != null ? attacker.getPoint().getAccuracy() : 0;
+        def = CfgStats.calcDefenseAfterAccuracy(def, accuracy, beAttacker.getPoint().getDoge());
+        float reduceRate = CfgStats.calcSuccessRate(CfgStats.getEffectiveStatForSuccess(def));
+        float dmgF = atkDame * (1f - reduceRate);
+        int dmg = (int) dmgF;
         if (dmg <= 0) dmg = 1;
         return dmg;
     }

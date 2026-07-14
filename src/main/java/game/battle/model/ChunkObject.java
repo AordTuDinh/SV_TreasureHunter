@@ -38,6 +38,8 @@ public class ChunkObject {
         Pbmethod.PbChunk.Builder pb = Pbmethod.PbChunk.newBuilder();
         pb.setId(chunkId);
         pb.setIsAdd(true);
+        // Ensure pos on partial updates (revive) — tránh chunk spawn lệch (0,0)
+        pb.setPos(pos.toProto());
         for (Map.Entry<Integer, CellObject> entry : mCells.entrySet()) {
             if( ids.contains(entry.getKey())) pb.addCells(entry.getValue().toProto());
         }

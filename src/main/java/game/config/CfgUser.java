@@ -47,7 +47,7 @@ public class CfgUser {
         int base = config != null ? config.cupBase : 2;
         int scale = config != null && config.cupScale > 0 ? config.cupScale : 300;
         int min = config != null ? config.cupMin : 1;
-        int max = config != null ? config.cupMax : 3;
+        int max = config != null ? config.cupMax : 6;
         double raw = base + (victimCup - killerCup) / (double) scale;
         return Math.max(min, Math.min(max, (int) Math.round(raw)));
     }
@@ -62,7 +62,7 @@ public class CfgUser {
         public int cupBase = 2;
         public int cupScale = 300;
         public int cupMin = 1;
-        public int cupMax = 3;
+        public int cupMax = 6;
         public int cupFloor = 0;
     }
 }

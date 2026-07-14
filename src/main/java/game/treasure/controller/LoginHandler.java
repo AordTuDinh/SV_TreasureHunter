@@ -13,6 +13,7 @@ import game.treasure.mapping.main.MainUserEntity;
 import game.treasure.server.Constans;
 import game.treasure.server.IAction;
 import game.treasure.service.Services;
+import game.treasure.service.battle.PvpCupService;
 import game.treasure.service.resource.ResIAP;
 import game.treasure.service.user.Actions;
 import game.treasure.table.BaseRoom;
@@ -262,6 +263,10 @@ public class LoginHandler extends AHandler {
         loadGameConfig(mUser);
         // battleConfig
         loadBattleConfig();
+        // qua ngày + 0 cup → tặng 1 cup (trước user proto để client nhận cup đúng)
+        List<Long> dailyCup = PvpCupService.grantDailyFloorIfNeeded(mUser);
+        if (!dailyCup.isEmpty())
+            addBonusToastPlus(dailyCup);
         // user info
         builder.setUser(user.toProto(mUser));
         this.user = user;

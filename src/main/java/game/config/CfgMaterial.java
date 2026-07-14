@@ -25,19 +25,26 @@ public class CfgMaterial {
     public static final int RANK_RARE = 2;
     public static final int RANK_EPIC = 3;
     public static final int RANK_LEGEND = 4;
-    public static final int TIER_COUNT = 4;
+    /** Số hàng res_material.tier (loại nguyên liệu: 1–4). */
+    public static final int RES_TIER_COUNT = 4;
     public static final int AUTO_SELL_TYPE_ITEM = 1;
     public static final int AUTO_SELL_TYPE_MATERIAL = 2;
 
     public static final int MAX_LEVEL = 10;
     public static final double COST_LEVEL_MULT = 1.5;
+    /** Rank > 4: base cost / stat mul = rank trước × 1.25 (khi không khai báo trong config). */
+    public static final double RANK_STEP_MULT = 1.25;
+    public static final int DEFAULT_MAX_MATERIAL_RANK = 5;
     public static final float SOCKET_RATE_MIN = 0.30f;
     public static final float SOCKET_RATE_MAX = 0.36f;
     public static final double SOCKET_LEVEL_MULT = 1.1;
+    /** Thu hồi khi bán material = % tổng chi phí nâng đã bỏ ra (config: sellRecoveryRate). */
+    public static final double DEFAULT_SELL_RECOVERY_RATE = 0.5;
 
     private static long[][] upgradeBaseCost = defaultUpgradeBaseCost();
     private static MergeDataConfig mergeCfg = defaultMergeConfig();
-    private static final List<Integer> SELL_PRICE_BASE_T1 = List.of(5, 10, 16, 25, 38, 57, 83, 120, 172, 246);
+    private static double sellRecoveryRate = DEFAULT_SELL_RECOVERY_RATE;
+    private static int maxMaterialRank = DEFAULT_MAX_MATERIAL_RANK;
 
     // --- load config ---
 
@@ -50,13 +57,19 @@ public class CfgMaterial {
             return;
         }
         if (root.upgradeBaseCost != null && !root.upgradeBaseCost.isEmpty()) {
-            upgradeBaseCost = new long[4][4];
             for (UpgradeBaseCostRow row : root.upgradeBaseCost) {
-                if (row.tier < 1 || row.tier > 4 || row.rank < 1 || row.rank > 4) {
+                if (row.tier < 1 || row.tier > RES_TIER_COUNT || row.rank < 1 || row.cost <= 0) {
                     continue;
                 }
-                upgradeBaseCost[row.tier - 1][row.rank - 1] = row.cost;
+                setUpgradeBaseCost(row.tier, row.rank, row.cost);
+                maxMaterialRank = Math.max(maxMaterialRank, row.rank);
             }
+        }
+        if (root.maxMaterialRank > 0) {
+            maxMaterialRank = root.maxMaterialRank;
+        }
+        if (root.sellRecoveryRate > 0) {
+            sellRecoveryRate = root.sellRecoveryRate;
         }
         if (root.merge != null) {
             applyMergeConfig(root.merge);
@@ -82,25 +95,38 @@ public class CfgMaterial {
         return ResItem.getMaterial(materialId);
     }
 
+    public static int getMaxMaterialRank() {
+        return maxMaterialRank;
+    }
+
     public static int getAutoSellMaterialSize() {
-        return ResItem.getMaterialCount() * TIER_COUNT;
+        return ResItem.getMaterialCount() * getMaxMaterialRank();
     }
 
     public static boolean isValidAutoSellMaterialIndex(int index) {
         return index >= 0 && index < getAutoSellMaterialSize();
     }
 
-    public static int toAutoSellMaterialIndex(int materialId, int tier) {
+    /** @param materialRank user_material.tier (rank Common..N) */
+    public static int toAutoSellMaterialIndex(int materialId, int materialRank) {
         List<Integer> ids = ResItem.getSortedMaterialIds();
         int materialIndex = ids.indexOf(materialId);
-        if (materialIndex < 0 || tier < RANK_COMMON || tier > RANK_LEGEND) {
+        if (materialIndex < 0 || materialRank < RANK_COMMON || materialRank > getMaxMaterialRank()) {
             return -1;
         }
-        return materialIndex * TIER_COUNT + (tier - 1);
+        return materialIndex * getMaxMaterialRank() + (materialRank - 1);
     }
 
     public static boolean canUpgrade(int level) {
         return level > 0 && level < MAX_LEVEL;
+    }
+
+    /** Làm tròn xuống bội số 4 — khớp bảng phí nâng material (vd. 18→16, 27→24). */
+    static long floorTo4(double value) {
+        if (value <= 0) {
+            return 0;
+        }
+        return ((long) value / 4) * 4;
     }
 
     public static long getUpgradeCost(int tier, int rank, int currentLevel) {
@@ -108,7 +134,19 @@ public class CfgMaterial {
         if (base <= 0 || currentLevel < 1) {
             return 0;
         }
-        return Math.round(base * Math.pow(COST_LEVEL_MULT, currentLevel - 1));
+        return floorTo4(base * Math.pow(COST_LEVEL_MULT, currentLevel - 1));
+    }
+
+    /** Tổng phí nâng từ lv1 đến trước level hiện tại (đã đầu tư). */
+    public static long sumUpgradeCost(int tier, int rank, int level) {
+        if (level <= 1) {
+            return 0;
+        }
+        long sum = 0;
+        for (int l = 1; l < level; l++) {
+            sum += getUpgradeCost(tier, rank, l);
+        }
+        return sum;
     }
 
     public static List<Long> getUpgradeFee(int tier, int rank, int currentLevel) {
@@ -122,50 +160,51 @@ public class CfgMaterial {
         return Bonus.viewGem((int) -cost);
     }
 
-    /** Giá bán material — res_material.tier × base[level]; tier 1–2 vàng, tier 3–4 kim cương. */
+    /**
+     * Giá bán material — max(sàn, floorTo4(tổng phí nâng × sellRecoveryRate)).
+     * Sàn: rank (tier 3–4 gem) hoặc rank×2 (tier 1–2 vàng).
+     */
     public static long getSellPrice(UserMaterialEntity gem) {
         if (gem == null)
             return 0;
         ResMaterialEntity res = gem.getRes();
         if (res == null)
             return 0;
-        int gemTier = res.getTier();
-        if (gemTier < 1)
-            gemTier = 1;
+        int resTier = res.getTier();
+        if (resTier < 1)
+            resTier = 1;
+        int rank = gem.getTier();
+        if (rank < 1)
+            rank = 1;
         int level = gem.getLevel();
         if (level < 1)
             level = 1;
-        int idx = Math.min(level, SELL_PRICE_BASE_T1.size()) - 1;
-        return (long) gemTier * SELL_PRICE_BASE_T1.get(idx);
+        long floorSell = resTier <= 2 ? (long) rank * 2 : rank;
+        long invested = sumUpgradeCost(resTier, rank, level);
+        long recovery = floorTo4(invested * sellRecoveryRate);
+        return Math.max(floorSell, recovery);
     }
 
     public static List<Long> getPriceSellMaterial(UserMaterialEntity gem) {
-        return getPriceSellByTierAndLevel(getSellTier(gem), getSellLevel(gem));
-    }
-
-    static int getSellTier(UserMaterialEntity gem) {
         if (gem == null)
-            return 0;
-        ResMaterialEntity res = gem.getRes();
-        if (res == null)
-            return 0;
-        int gemTier = res.getTier();
-        return gemTier < 1 ? 1 : gemTier;
-    }
-
-    static int getSellLevel(UserMaterialEntity gem) {
-        if (gem == null)
-            return 1;
-        int level = gem.getLevel();
-        return level < 1 ? 1 : level;
-    }
-
-    /** Giá bán theo material tier × base[level] — tier 1–2 vàng, tier 3–4 gem. */
-    public static List<Long> getPriceSellByTierAndLevel(int tier, int level) {
-        if (tier < 1 || level < 1)
             return new ArrayList<>();
-        int idx = Math.min(level, SELL_PRICE_BASE_T1.size()) - 1;
-        long price = (long) tier * SELL_PRICE_BASE_T1.get(idx);
+        long price = getSellPrice(gem);
+        if (price <= 0)
+            return new ArrayList<>();
+        ResMaterialEntity res = gem.getRes();
+        int resTier = res != null && res.getTier() >= 1 ? res.getTier() : 1;
+        if (resTier <= 2)
+            return Bonus.viewGold(price);
+        return Bonus.viewGem((int) price);
+    }
+
+    /** Giá bán preview — tier 1–2 vàng, tier 3–4 gem. */
+    public static List<Long> getPriceSellByTierRankAndLevel(int tier, int rank, int level) {
+        if (tier < 1 || rank < 1 || level < 1)
+            return new ArrayList<>();
+        long floorSell = tier <= 2 ? (long) rank * 2 : rank;
+        long recovery = floorTo4(sumUpgradeCost(tier, rank, level) * sellRecoveryRate);
+        long price = Math.max(floorSell, recovery);
         if (price <= 0)
             return new ArrayList<>();
         if (tier <= 2)
@@ -202,12 +241,30 @@ public class CfgMaterial {
     }
 
     public static double getMultiplier(ResMaterialEntity res, int rank) {
-        return switch (rank) {
-            case RANK_RARE -> res.getRare();
-            case RANK_EPIC -> res.getEpic();
-            case RANK_LEGEND -> res.getLegend();
-            default -> 1d;
-        };
+        if (res == null || rank < RANK_COMMON) {
+            return 1d;
+        }
+        if (rank == RANK_COMMON) {
+            return 1d;
+        }
+        if (rank == RANK_RARE) {
+            return positiveOr1(res.getRare());
+        }
+        if (rank == RANK_EPIC) {
+            return positiveOr1(res.getEpic());
+        }
+        if (rank == RANK_LEGEND) {
+            return positiveOr1(res.getLegend());
+        }
+        double mul = positiveOr1(res.getLegend());
+        for (int r = RANK_LEGEND + 1; r <= rank; r++) {
+            mul *= RANK_STEP_MULT;
+        }
+        return mul;
+    }
+
+    static double positiveOr1(double v) {
+        return v > 0 ? v : 1d;
     }
 
     public static double[] parseBasePoint(ResMaterialEntity res) {
@@ -223,11 +280,58 @@ public class CfgMaterial {
         return new double[]{min, max};
     }
 
-    static long getBaseCost(int tier, int rank) {
-        if (tier < 1 || tier > 4 || rank < 1 || rank > 4) {
+    static long getBaseCost(int resTier, int rank) {
+        if (resTier < 1 || resTier > RES_TIER_COUNT || rank < 1) {
             return 0;
         }
-        return upgradeBaseCost[tier - 1][rank - 1];
+        long cost = getConfiguredBaseCost(resTier, 1);
+        if (cost <= 0) {
+            return 0;
+        }
+        for (int r = 2; r <= rank; r++) {
+            long explicit = getConfiguredBaseCost(resTier, r);
+            if (explicit > 0) {
+                cost = explicit;
+            } else {
+                cost = scaleRankCostStep(cost);
+            }
+        }
+        return cost;
+    }
+
+    static long scaleRankCostStep(long prev) {
+        return Math.round(prev * RANK_STEP_MULT);
+    }
+
+    static long getConfiguredBaseCost(int resTier, int rank) {
+        if (resTier < 1 || resTier > upgradeBaseCost.length) {
+            return 0;
+        }
+        long[] row = upgradeBaseCost[resTier - 1];
+        if (rank < 1 || rank > row.length) {
+            return 0;
+        }
+        return row[rank - 1];
+    }
+
+    static void setUpgradeBaseCost(int resTier, int rank, long cost) {
+        ensureUpgradeMatrix(resTier, rank);
+        upgradeBaseCost[resTier - 1][rank - 1] = cost;
+    }
+
+    static void ensureUpgradeMatrix(int resTier, int rank) {
+        while (upgradeBaseCost.length < resTier) {
+            long[][] next = new long[upgradeBaseCost.length + 1][];
+            System.arraycopy(upgradeBaseCost, 0, next, 0, upgradeBaseCost.length);
+            next[upgradeBaseCost.length] = new long[Math.max(rank, 4)];
+            upgradeBaseCost = next;
+        }
+        long[] row = upgradeBaseCost[resTier - 1];
+        if (row.length < rank) {
+            long[] expanded = new long[rank];
+            System.arraycopy(row, 0, expanded, 0, row.length);
+            upgradeBaseCost[resTier - 1] = expanded;
+        }
     }
 
     static long[][] defaultUpgradeBaseCost() {
@@ -251,11 +355,11 @@ public class CfgMaterial {
         return mergeCfg.maxMaterials;
     }
 
-    public static long getMergeSellPrice(int tier, int level) {
-        if (tier < 1 || tier > 4) {
+    public static long getMergeSellPrice(int resTier, int level) {
+        if (resTier < 1 || resTier > RES_TIER_COUNT) {
             return 0;
         }
-        long base = mergeCfg.sellBase[tier - 1][tier - 1];
+        long base = mergeCfg.sellBase[resTier - 1][resTier - 1];
         return base * Math.max(1, level);
     }
 
@@ -270,23 +374,23 @@ public class CfgMaterial {
     }
 
     /** Điểm rank: 7^(tier-1). Level: (level-1) × rankPt × levelPointMult. */
-    public static double rankPointValue(int tier) {
-        if (tier < 1 || tier > TIER_COUNT) {
+    public static double rankPointValue(int rank) {
+        if (rank < 1) {
             return 0;
         }
-        return Math.pow(RANK_POINT_BASE, tier - 1);
+        return Math.pow(RANK_POINT_BASE, rank - 1);
     }
 
     public static double gemMergePoints(UserMaterialEntity gem) {
         if (gem == null) {
             return 0;
         }
-        int tier = gem.getTier();
-        if (tier < 1 || tier > TIER_COUNT) {
+        int rank = gem.getTier();
+        if (rank < RANK_COMMON) {
             return 0;
         }
         int level = Math.max(1, gem.getLevel());
-        double rankPt = rankPointValue(tier);
+        double rankPt = rankPointValue(rank);
         double levelPt = (level - 1) * rankPt * mergeCfg.levelPointMult;
         return rankPt + levelPt;
     }
@@ -328,7 +432,7 @@ public class CfgMaterial {
 
     /** Ngưỡng 100% rate: upgradeMinCount × 7^(outputRank-2) — 6 viên cùng rank Lv1 = 100%. */
     static double mergeRateThreshold(int outputRank) {
-        if (outputRank < RANK_RARE || outputRank > RANK_LEGEND) {
+        if (outputRank < RANK_RARE) {
             return 0;
         }
         return mergeCfg.upgradeMinCount * Math.pow(RANK_POINT_BASE, outputRank - 2);
@@ -340,11 +444,11 @@ public class CfgMaterial {
         }
         int count = gems.size();
         Map<Integer, Integer> materialCount = new HashMap<>();
-        int minRank = TIER_COUNT;
+        int minRank = getMaxMaterialRank();
         int maxRank = 0;
         for (UserMaterialEntity g : gems) {
             int r = g.getTier();
-            if (r < RANK_COMMON || r > RANK_LEGEND) {
+            if (r < RANK_COMMON) {
                 return null;
             }
             materialCount.merge(g.getMaterialId(), 1, Integer::sum);
@@ -367,21 +471,22 @@ public class CfgMaterial {
     }
 
     /**
-     * Rank đích từ tổng điểm: rank cao nhất R (2..4) với T ≥ 7^(R-1).
+     * Rank đích từ tổng điểm: rank cao nhất R với T ≥ 7^(R-1).
      * Cùng rank và ≥ upgradeMinCount viên → ít nhất minRank+1.
      */
     static int resolveMergeOutputRank(double totalPoints, int minRank, int maxRank, int count) {
+        int cap = getMaxMaterialRank();
         int fromPoints = RANK_RARE;
-        for (int r = RANK_LEGEND; r >= RANK_RARE; r--) {
+        for (int r = cap; r >= RANK_RARE; r--) {
             if (totalPoints >= rankPointValue(r)) {
                 fromPoints = r;
                 break;
             }
         }
-        if (minRank == maxRank && count >= mergeCfg.upgradeMinCount && minRank < RANK_LEGEND) {
+        if (minRank == maxRank && count >= mergeCfg.upgradeMinCount && minRank < cap) {
             fromPoints = Math.max(fromPoints, minRank + 1);
         }
-        return Math.min(RANK_LEGEND, Math.max(RANK_RARE, fromPoints));
+        return Math.min(cap, Math.max(RANK_RARE, fromPoints));
     }
 
     public static int calcMergeSuccessPercent(MergePlan plan) {
@@ -490,6 +595,10 @@ public class CfgMaterial {
     public static class MaterialRootConfig extends MergeDataConfig {
         public List<UpgradeBaseCostRow> upgradeBaseCost;
         public MergeDataConfig merge;
+        /** Thu hồi khi bán = tổng phí nâng × rate (mặc định 0.5). */
+        public double sellRecoveryRate;
+        /** Rank material tối đa (auto-sell, merge cap). Mặc định 5. */
+        public int maxMaterialRank;
 
         MergeDataConfig toMergeConfig() {
             MergeDataConfig m = new MergeDataConfig();

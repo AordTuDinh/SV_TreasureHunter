@@ -50,7 +50,7 @@ enum SubStateType {
   DIE = 2;                // faction
   REVIVE = 3;
   PLAY_ANIM = 4;
-  BE_DAMAGE = 5;          // attackerId - crit - atkDame - magDame
+  BE_DAMAGE = 5;          // attackerId - crit - atkDame - critDame
   EFFECT_BODY = 6;        // effect Id, time
   RE_HP = 7;              // recovery hp
   UPDATE_CHAT_FRAME = 8;
@@ -95,6 +95,7 @@ enum ItemKey {
   GEM = 6;
   RUBY = 7;
   CUP = 8;
+  TREASURE_KEY = 9;
 }
 
 enum  ItemPointKey {
@@ -112,6 +113,7 @@ enum  ItemPointKey {
 enum ItemType {
   POSITION = 1;
   CURRENCY = 2;
+  KEY = 3; // chìa khóa runtime (treasure)
 }
 
 enum ItemPointType {
@@ -495,6 +497,8 @@ message  PbEquipment{
   optional int32  priceTreasure = 9;
   /** 0=chưa craft, 1=craft không HH, 2+=craft+HH tier */
   optional int32 hh = 10;
+  /** -1=vĩnh viễn, >0=unix timestamp (giây) hết hạn */
+  optional int64 timeExpire = 11;
 }
 
 message  PbItemPoint{

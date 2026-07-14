@@ -75,10 +75,15 @@ public class CfgCraft {
     }
 
     public static int getCraftExpByRank(int rank) {
-        if (rank < 1 || rank >= cfg.expByRank.size()) {
+        if (rank < 1 || cfg.expByRank == null || cfg.expByRank.size() < 2) {
             return 0;
         }
-        return cfg.expByRank.get(rank);
+        if (rank < cfg.expByRank.size()) {
+            return cfg.expByRank.get(rank);
+        }
+        int last = cfg.expByRank.size() - 1;
+        int delta = cfg.expByRank.get(last) - cfg.expByRank.get(last - 1);
+        return Math.max(0, cfg.expByRank.get(last) + delta * (rank - last));
     }
 
     /**
@@ -153,10 +158,15 @@ public class CfgCraft {
     }
 
     public static int craftSuccessBase(int rank) {
-        if (rank < 1 || rank >= cfg.craftSuccessBaseByRank.size()) {
+        if (rank < 1 || cfg.craftSuccessBaseByRank == null || cfg.craftSuccessBaseByRank.size() < 2) {
             return 0;
         }
-        return cfg.craftSuccessBaseByRank.get(rank);
+        if (rank < cfg.craftSuccessBaseByRank.size()) {
+            return cfg.craftSuccessBaseByRank.get(rank);
+        }
+        int last = cfg.craftSuccessBaseByRank.size() - 1;
+        int delta = cfg.craftSuccessBaseByRank.get(last) - cfg.craftSuccessBaseByRank.get(last - 1);
+        return Math.max(0, cfg.craftSuccessBaseByRank.get(last) + delta * (rank - last));
     }
 
     public static boolean losesTargetOnCraftFail(CraftTargetType type) {
@@ -166,10 +176,15 @@ public class CfgCraft {
 
     public static long getFeeAmount(CraftTargetType type, int rank) {
         TargetConfig t = type == null ? null : targetByType.get(type.id);
-        if (t == null || rank < 1 || rank >= t.feeByRank.size()) {
+        if (t == null || rank < 1 || t.feeByRank == null || t.feeByRank.size() < 2) {
             return 0;
         }
-        return t.feeByRank.get(rank);
+        if (rank < t.feeByRank.size()) {
+            return t.feeByRank.get(rank);
+        }
+        int last = t.feeByRank.size() - 1;
+        long delta = t.feeByRank.get(last) - t.feeByRank.get(last - 1);
+        return t.feeByRank.get(last) + delta * (rank - last);
     }
 
     public static List<Long> getCraftFee(CraftTargetType type, int rank) {
@@ -357,8 +372,8 @@ public class CfgCraft {
         d.craftLevelBonusPerLevel = 5;
         d.expToNext = List.of(5, 15, 30, 45, 50, 75, 100, 125, 150, 175);
         d.lockedSocket = List.of(4, 3, 2, 1, 0, 0, 0, 0, 0, 0);
-        d.craftSuccessBaseByRank = List.of(0, 75, 70, 65, 60);
-        d.expByRank = List.of(0, 1, 2, 3, 4);
+        d.craftSuccessBaseByRank = List.of(0, 75, 70, 65, 60, 55);
+        d.expByRank = List.of(0, 1, 2, 3, 4, 5);
         d.transformRate = 20;
         d.transformTiers = List.of(
                 transformTier(1, 50, 1.2f),
@@ -374,12 +389,12 @@ public class CfgCraft {
                 transformTier(6, 5, 4.5f)
         );
         d.targets = List.of(
-                target(1, 8, "gold", true, 0, 50, 100, 150, 200),
-                target(2, 12, "gem", true, 0, 100, 200, 300, 400),
-                target(3, 12, "gem", true, 0, 50, 100, 150, 200),
-                target(4, 12, "gem", true, 0, 500, 1000, 1500, 2000),
-                target(5, 12, "item_point", true, 0, 1000, 2000, 3000, 4000),
-                target(6, 8, "gold", true, 0, 50, 100, 150, 200)
+                target(1, 8, "gold", true, 0, 50, 100, 150, 200, 250),
+                target(2, 12, "gem", true, 0, 100, 200, 300, 400, 500),
+                target(3, 12, "gem", true, 0, 50, 100, 150, 200, 250),
+                target(4, 12, "gem", true, 0, 500, 1000, 1500, 2000, 2500),
+                target(5, 12, "item_point", true, 0, 1000, 2000, 3000, 4000, 5000),
+                target(6, 8, "gold", true, 0, 50, 100, 150, 200, 250)
         );
         d.treasureBuyPrices = List.of(200, 500, 1000, 2000);
         d.treasureArtifactRates = List.of(30, 25, 25, 20);

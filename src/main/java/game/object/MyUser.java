@@ -14,6 +14,7 @@ import game.treasure.controller.UserHandler;
 import game.treasure.mapping.*;
 import game.treasure.server.IAction;
 import game.treasure.service.Services;
+import game.treasure.service.battle.TreasureEventService;
 import game.treasure.service.resource.ResItem;
 import game.treasure.service.user.Bonus;
 import game.monitor.ClanManager;
@@ -62,6 +63,26 @@ public class MyUser implements Serializable {
     boolean updateBagPending;
     boolean userDataInfoPending;
     boolean vipDataPending;
+    /** Cache rate tăng drop (phần nghìn) — sync khi reCalculatePoint. 100 = +10%. */
+    int rateDropGold;
+    int rateDropGem;
+    int rateDropItem;
+
+    /**
+     * Đồng bộ rate drop từ Point (point 17 vàng, 28 gem, 29 item).
+     * 600 điểm → 100 phần nghìn (CfgStats.calcDropIncreaseRate).
+     */
+    public void syncDropRates(Point point) {
+        if (point == null) {
+            rateDropGold = 0;
+            rateDropGem = 0;
+            rateDropItem = 0;
+            return;
+        }
+        rateDropGold = CfgStats.calcDropIncreaseRate(point.get(Point.P_GOLD_DROP_INCREASE));
+        rateDropGem = CfgStats.calcDropIncreaseRate(point.get(Point.P_GEM_INCREASE));
+        rateDropItem = CfgStats.calcDropIncreaseRate(point.get(Point.P_MATERIAL_INCREASE));
+    }
 
     public void queueUpdateBag() {
         updateBagPending = true;
@@ -407,6 +428,7 @@ public class MyUser implements Serializable {
     }
 
     public void userLogout() {
+        TreasureEventService.clearKeyOnLogout(this);
         long curTime = System.currentTimeMillis();
         saveLastHomePos();
         cachePointData(getPlayer().getPoint());

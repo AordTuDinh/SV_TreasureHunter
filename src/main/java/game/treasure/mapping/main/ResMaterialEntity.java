@@ -32,4 +32,6 @@ public class ResMaterialEntity implements Serializable {
     double legend;
     @Getter
     int tier;
+    @Getter
+    int maxPoint;
 }

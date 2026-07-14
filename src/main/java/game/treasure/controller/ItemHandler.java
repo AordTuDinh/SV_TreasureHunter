@@ -4,6 +4,7 @@ import game.config.CfgChat;
 import game.config.CfgItem;
 import game.config.CfgMaterial;
 import game.config.CfgMob;
+import game.config.CfgTreasure;
 import game.config.aEnum.*;
 import game.config.lang.Lang;
 import game.treasure.mapping.UserEntity;
@@ -15,6 +16,8 @@ import game.treasure.mapping.UserMobEntity;
 import game.treasure.mapping.main.ResItemEntity;
 import game.treasure.mapping.main.ResItemEquipmentEntity;
 import game.treasure.server.IAction;
+import game.treasure.service.battle.TreasureEventService;
+import game.treasure.service.item.EquipmentExpireService;
 import game.treasure.service.resource.ResItem;
 import game.treasure.service.user.Bonus;
 import game.treasure.service.user.EquipSlotBonus;
@@ -132,6 +135,11 @@ public class ItemHandler extends AHandler {
         }
         if (iEquip.isEquip() || mUser.getUser().getListIdEquipmentEquip().contains(itemId)) {
             addErrResponse(getLang(Lang.err_use_item_equip));
+            return;
+        }
+        if (iEquip.isExpired()) {
+            EquipmentExpireService.unequipAndClearBag(mUser, iEquip);
+            addErrResponse(getLang(Lang.err_item_expire));
             return;
         }
         ResItemEquipmentEntity resEquip = iEquip.getResEquipment();
@@ -275,6 +283,20 @@ public class ItemHandler extends AHandler {
         }
         int bonusType = req.get(0).intValue();
         long id = req.get(1);
+        if (bonusType == Bonus.BONUS_ITEM && TreasureEventService.isRuntimeKeySell(id)) {
+            if (!TreasureEventService.clearKeyForSell(mUser)) {
+                addErrResponse(getLang(Lang.item_not_own));
+                return;
+            }
+            List<Long> bonus = CfgTreasure.keySellGem() > 0
+                    ? Bonus.viewGem(CfgTreasure.keySellGem())
+                    : new ArrayList<>();
+            if (!bonus.isEmpty()) {
+                addBonusToast(Bonus.receiveListItem(mUser, DetailActionType.SELL_ITEM.getKey(CfgTreasure.keyItemId()), bonus));
+            }
+            addResponse(getCommonVector(id, 1L));
+            return;
+        }
         if (bonusType == Bonus.BONUS_EQUIPMENT) {
             UserEquipmentEntity equip = mUser.getResources().getEquipment(id);
             if (equip == null) {

@@ -112,7 +112,7 @@ public class App {
         List<ConfigEntity> listConfig = DBJPA.getList(CfgServer.getCfgTable(), ConfigEntity.class);
         String keyCell = CfgServer.isRealServer() ? "test:server_list" : "aord:server_list";
         ConfigEntity configServerList = (ConfigEntity) DBJPA.getUnique(CfgServer.DB_MAIN + "config_api", ConfigEntity.class, "k", keyCell);
-       // CfgServer.setServerList(configServerList.getV());
+        CfgServer.setServerList(configServerList.getV());
         listConfig.forEach(localConfig -> setConfig(localConfig.getK(), localConfig.getV()));
         loadResource();
     }

@@ -4,6 +4,7 @@ import game.config.CfgAchievement;
 import game.config.aEnum.*;
 import game.treasure.mapping.*;
 import game.protocol.CommonProto;
+import game.treasure.service.item.EquipmentExpireService;
 import game.treasure.service.user.Bonus;
 import game.treasure.service.user.ItemSlotHelper;
 import protocol.Pbmethod;
@@ -150,6 +151,7 @@ public class UserResources implements Serializable {
                 itemPoints.forEach(row -> mItemPoint.put(row.getPointId(), row));
             }
             syncEquipFlagsFromUser();
+            EquipmentExpireService.purgeExpiredOnLogin(mUser);
             Bonus.verifyItemSlots(mUser, true);
             applyItemSlotsFromUserData();
             mUser.getUData().flushItemSlotIfDirty();

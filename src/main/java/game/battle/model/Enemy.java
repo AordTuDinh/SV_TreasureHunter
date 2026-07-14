@@ -261,6 +261,7 @@ public class Enemy extends Unit implements Serializable {
 
     @Override
     public void Update() {
+        super.Update();
         if (room.getRoomState() != RoomState.ACTIVE) return;
         enemyProcess();
     }

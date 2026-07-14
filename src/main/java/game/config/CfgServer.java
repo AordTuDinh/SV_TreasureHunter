@@ -1,6 +1,8 @@
 package game.config;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import game.battle.object.ServerObject;
 import game.cache.JCache;
 import game.treasure.mapping.UserEntity;
 import game.treasure.mapping.main.SystemMailEntity;
@@ -37,6 +39,7 @@ public class CfgServer {
         return serverType.equals(SIMULATE);
     }
 
+    public static List<ServerObject> serverObjects = new ArrayList<>();
     public static List<Integer> serverOpens = new ArrayList<>();
     public static int maxServerOpen;
 
@@ -48,15 +51,15 @@ public class CfgServer {
     
 
 
-//    public static void setServerList(String json) {
-//        serverObjects = new Gson().fromJson(json, new TypeToken<List<ServerObject>>() {
-//        }.getType());
-//        for (int i = 0; i < serverObjects.size(); i++) {
-//            int id = serverObjects.get(i).id;
-//            if (!serverOpens.contains(id)) serverOpens.add(id);
-//        }
-//        maxServerOpen = serverOpens.size();
-//    }
+    public static void setServerList(String json) {
+        serverObjects = new Gson().fromJson(json, new TypeToken<List<ServerObject>>() {
+        }.getType());
+        for (int i = 0; i < serverObjects.size(); i++) {
+            int id = serverObjects.get(i).id;
+            if (!serverOpens.contains(id)) serverOpens.add(id);
+        }
+        maxServerOpen = serverOpens.size();
+    }
 
 
     public static long getSlowSQLTime() {
@@ -111,6 +114,7 @@ public class CfgServer {
     public static String getKeyCCU() {
         return "ccu_" + serverId;
     }
+
 
     public class DataConfig {
         public String publicKey;

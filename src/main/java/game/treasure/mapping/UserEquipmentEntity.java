@@ -4,6 +4,7 @@ import game.battle.object.Point;
 import game.config.CfgItem;
 import game.treasure.mapping.main.ResItemEntity;
 import game.treasure.mapping.main.ResItemEquipmentEntity;
+import game.treasure.service.item.EquipmentExpireService;
 import game.treasure.service.resource.ResItem;
 import game.treasure.service.user.Bonus;
 import protocol.Pbmethod;
@@ -35,6 +36,9 @@ public class UserEquipmentEntity implements Serializable {
     int hh;
     int icon;
     int priceTreasure;
+    /** -1=vĩnh viễn, >0=unix timestamp (giây) hết hạn */
+    @Column(name = "time_expire")
+    long timeExpire = -1;
     String data;
 
     @Transient
@@ -55,6 +59,21 @@ public class UserEquipmentEntity implements Serializable {
         hh = 0;
         icon = itemId;
         data = "[]";
+        timeExpire = EquipmentExpireService.defaultExpireAt();
+    }
+
+    public boolean isPermanent() {
+        return timeExpire == -1;
+    }
+
+    public boolean isExpired() {
+        if (timeExpire == -1)
+            return false;
+        if (timeExpire == 0)
+            return true;
+        if (timeExpire < 0)
+            return true;
+        return timeExpire < EquipmentExpireService.nowSeconds();
     }
 
     public List<Long> getPoint() {
@@ -125,6 +144,7 @@ public class UserEquipmentEntity implements Serializable {
         pb.setHh(hh);
         pb.setIcon(icon);
         pb.setPriceTreasure(priceTreasure);
+        pb.setTimeExpire(timeExpire);
         if (data != null && !data.isEmpty() && !"[]".equals(data))
             pb.setData(data);
         return pb;

@@ -60,17 +60,20 @@ public class CellObject {
     }
 
 
-    public List<Long> getBonusKillMe() {
+    public ResObjectEntity.ObjectDropResult getBonusKillMe(int rateDropGold, int rateDropGem, int rateDropItem) {
         ResObjectEntity resObject = ResMap.getResObject(resObjectType);
-        if (resObject == null) return new ArrayList<>();
-        List<Long> bonus = resObject.randomBonus(materialId, itemEventId);
+        if (resObject == null) return ResObjectEntity.ObjectDropResult.of(new ArrayList<>());
+        ResObjectEntity.ObjectDropResult result =
+                resObject.randomBonus(materialId, itemEventId, rateDropGold, rateDropGem, rateDropItem);
+        List<Long> bonus = result.bonus;
         if (isCampFire && bonus.size() >= 2 && bonus.get(0) == -1L) {
             int mobId = ResObjectEntity.pickIdByRatePairs(CAMPFIRE_MOB_RATE_PAIRS);
             if (mobId > 0) {
                 bonus = Arrays.asList(-1L, (long) mobId);
+                return ResObjectEntity.ObjectDropResult.of(bonus);
             }
         }
-        return bonus;
+        return result.fullMiss ? result : ResObjectEntity.ObjectDropResult.of(bonus);
     }
 
     /** Mỗi lần đánh trừ 1 máu, không dùng damage của player. */

@@ -1,0 +1,14 @@
+{
+  "rateDropChest": 10,
+  "rateDropKey": 5,
+  "keyTtlSec": 300,
+  "chestTtlSec": 1200,
+  "openChannelSec": 10,
+  "keySellGem": 5,
+  "keyItemId": 9,
+  "openGemMin": 20,
+  "openGemMax": 80,
+  "openMaterialIdMin": 1,
+  "openMaterialIdMax": 23,
+  "openMaterialTier": 4
+}

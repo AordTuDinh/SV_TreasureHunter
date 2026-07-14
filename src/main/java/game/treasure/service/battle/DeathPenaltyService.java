@@ -38,6 +38,10 @@ public final class DeathPenaltyService {
         if (victim == null || victim.getMUser() == null || victim.getRoom() == null || victim.getPos() == null)
             return;
 
+        if (killer != null && killer.isPlayer()) {
+            TreasureEventService.transferKeyOnPvpKill(victim, killer.getPlayer());
+        }
+
         MyUser victimUser = victim.getMUser();
         int typeRoom = resolveTypeRoom(victim);
         long goldPenalty = calcGoldPenalty(victimUser.getUser().getGold(), typeRoom);

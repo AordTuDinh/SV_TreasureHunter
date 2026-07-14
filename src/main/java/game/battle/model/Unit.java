@@ -4,6 +4,7 @@ import game.battle.calculate.IMath;
 import game.battle.calculate.MathLab;
 import game.battle.object.*;
 import game.battle.type.*;
+import game.config.CfgStats;
 import game.treasure.BattleConfig;
 import game.treasure.mapping.main.ResMapEntity;
 import game.treasure.table.BaseBattleRoom;
@@ -59,6 +60,24 @@ public abstract class Unit {
     boolean sendDie = true;
     /** Thời điểm (ms) hết bảo vệ sau khi chết — 0 = không bảo vệ. */
     long timeProtectedEnd;
+    Unit poisonOwner;
+    long poisonEndMs;
+    long poisonNextTickMs;
+    int poisonDamagePerTick;
+    int poisonMoveSlowApplied;
+    long freezeStatBackup;
+    long freezeEndMs;
+    int freezeAttackSlowApplied;
+    long windDodgeBackup;
+    long windAccuracyBackup;
+    float windReduceRate;
+    long windEndMs;
+    Unit fireOwner;
+    long fireEndMs;
+    long fireNextTickMs;
+    int fireDamagePerTick;
+    /** Đếm giây (Update1s) tới lần hồi máu tiếp theo. */
+    int healSecondCounter;
 
 
     public boolean isProtected() {
@@ -97,10 +116,42 @@ public abstract class Unit {
     }
 
 
-    public void attackUnit(Unit target) {
+    public void attackUnit(Unit primaryTarget) {
+        if (room == null) {
+            attackSingleUnit(primaryTarget);
+            return;
+        }
+        for (Unit target : room.collectAttackTargets(this, primaryTarget)) {
+            attackSingleUnit(target);
+        }
+    }
+
+    void attackSingleUnit(Unit target) {
+        if (target == null) {
+            return;
+        }
         long[] damage = IMath.calculateDamage(this, target);
-        target.beAttackDamage(this, damage[1]);
-        target.protoStatus(Pbmethod.SubStateType.BE_DAMAGE, Arrays.asList(damage[0], -damage[1]));
+        long normalDame = damage[1];
+        long critDame = damage[2];
+        long totalDame = normalDame + critDame;
+        boolean hitLanded = totalDame > 0;
+        if (hitLanded) {
+            target.beAttackDamage(this, totalDame);
+            IMath.applyLifeSteal(this, totalDame);
+            IMath.tryApplyPoison(this, target);
+            IMath.tryApplyFreeze(this, target);
+            IMath.tryApplyWind(this, target);
+            IMath.tryApplyFire(this, target);
+        }
+        target.protoStatus(Pbmethod.SubStateType.BE_DAMAGE,
+                Arrays.asList(id, damage[0], -normalDame, -critDame));
+        if (hitLanded && target.isAlive()) {
+            IMath.tryCounterAttack(target, this, normalDame);
+        }
+    }
+
+    public boolean targetInSizeAttack(Unit target) {
+        return target != null && pos.distance(target.pos) < rangeAttack;
     }
 
 
@@ -108,6 +159,7 @@ public abstract class Unit {
     public void beAttackDamage(Unit ownerDamage, long atkDame) {
         updateHp(ownerDamage, -atkDame);
         if (!alive) {
+            clearCombatEffects();
             timeDie = System.currentTimeMillis();
             protoDie(ownerDamage);
             if (checkHasBonusKill()) bonusKillMe(ownerDamage);
@@ -159,6 +211,324 @@ public abstract class Unit {
 
 
     public void Update() {
+        processPoison();
+        processFire();
+        processFreeze();
+        processWind();
+    }
+
+    /** Tick 1s — hồi máu passive (không chạy mỗi frame). */
+    public void Update1s() {
+        processHealRegen();
+    }
+
+    /** Apply/refresh poison: damage % max HP mỗi giây, slow move speed, duration theo giáp target. */
+    public void applyPoison(Unit owner, long poisonStat) {
+        if (!alive || poisonStat <= 0) {
+            return;
+        }
+        clearPoisonSlow();
+        poisonOwner = owner;
+        poisonDamagePerTick = Math.max(1, (int) (point.getMaxHp() * CfgStats.calcPoisonHpDamageRate(poisonStat)));
+        long now = System.currentTimeMillis();
+        poisonEndMs = now + CfgStats.calcPoisonDurationSeconds(point.getDefense()) * 1000L;
+        poisonNextTickMs = now + 1000L;
+        applyPoisonSlow(CfgStats.calcPoisonMoveSlowPercent(poisonStat));
+        protoStatus(Pbmethod.SubStateType.EFFECT_BODY, (long) EffectBodyType.POISON.value, 0L);
+    }
+
+    /** Lửa: Lửa/2 máu mỗi giây (true damage), proc successRate, thời gian 10s + Giáp/100. */
+    public void applyFire(Unit owner, long fireStat) {
+        if (!alive || fireStat <= 0) {
+            return;
+        }
+        int damagePerTick = CfgStats.calcFireDamagePerTick(fireStat);
+        if (damagePerTick <= 0) {
+            return;
+        }
+        long now = System.currentTimeMillis();
+        long durationMs = CfgStats.calcFireDurationSeconds(point.getDefense()) * 1000L;
+        long newEnd = now + durationMs;
+        boolean wasActive = fireEndMs > now;
+        if (wasActive) {
+            newEnd = Math.max(newEnd, fireEndMs);
+            fireDamagePerTick = Math.max(fireDamagePerTick, damagePerTick);
+        } else {
+            fireOwner = owner;
+            fireDamagePerTick = damagePerTick;
+            fireNextTickMs = now + 1000L;
+        }
+        fireEndMs = newEnd;
+        long remainingMs = fireEndMs - now;
+        protoStatus(Pbmethod.SubStateType.EFFECT_BODY, (long) EffectBodyType.DOT_FIRE.value, remainingMs);
+    }
+
+    /** Đóng băng: đứng im (beBlock), giảm tốc đánh, thời gian theo Băng − Giáp. */
+    public void applyFreeze(Unit owner, long freezeStat) {
+        if (!alive || freezeStat <= 0) {
+            return;
+        }
+        int durationSec = CfgStats.calcFreezeDurationSeconds(freezeStat, point.getDefense());
+        if (durationSec <= 0) {
+            return;
+        }
+        long durationMs = durationSec * 1000L;
+        long now = System.currentTimeMillis();
+        long newEnd = now + durationMs;
+        if (freezeEndMs > now) {
+            newEnd = Math.max(newEnd, freezeEndMs);
+        } else {
+            freezeStatBackup = point.getFreezeStat();
+        }
+        if (newEnd <= freezeEndMs && freezeEndMs > now) {
+            return;
+        }
+        freezeEndMs = newEnd;
+        point.setFreezeEnd(freezeEndMs);
+        clearFreezeAttackSlow();
+        applyFreezeAttackSlow(CfgStats.calcFreezeAttackSlowPercent(freezeStat));
+        setMove(false);
+        protoStatus(Pbmethod.SubStateType.EFFECT_BODY, (long) EffectBodyType.SLOW.value, durationMs);
+        protoUpdatePoint((long) Point.FREEZE, point.get(Point.FREEZE));
+    }
+
+    /** Gió: giảm Né / Chính Xác theo successRate(Gió), mặc định 10s. */
+    public void applyWind(long windStat) {
+        if (!alive || windStat <= 0) {
+            return;
+        }
+        float reduceRate = CfgStats.calcWindReduceRate(windStat);
+        if (reduceRate <= 0f) {
+            return;
+        }
+        long now = System.currentTimeMillis();
+        long durationMs = CfgStats.calcWindDurationSeconds() * 1000L;
+        long newEnd = now + durationMs;
+        boolean wasActive = windEndMs > now;
+        if (!wasActive) {
+            windDodgeBackup = point.getDoge();
+            windAccuracyBackup = point.getAccuracy();
+            windReduceRate = reduceRate;
+        } else {
+            windReduceRate = Math.max(windReduceRate, reduceRate);
+            newEnd = Math.max(newEnd, windEndMs);
+        }
+        windEndMs = newEnd;
+        applyWindReducedStats();
+        protoUpdatePoint((long) Point.DOGE, point.get(Point.DOGE));
+        protoUpdatePoint((long) Point.ACCURACY, point.get(Point.ACCURACY));
+    }
+
+    private void processWind() {
+        if (windEndMs <= 0) {
+            return;
+        }
+        if (!alive || System.currentTimeMillis() >= windEndMs) {
+            clearWind();
+        }
+    }
+
+    private void applyWindReducedStats() {
+        long newDodge = Math.max(0, (long) (windDodgeBackup * (1f - windReduceRate)));
+        long newAccuracy = Math.max(0, (long) (windAccuracyBackup * (1f - windReduceRate)));
+        point.getValues()[Point.DOGE] = newDodge;
+        point.getValues()[Point.ACCURACY] = newAccuracy;
+    }
+
+    private void clearWind() {
+        if (windEndMs <= 0) {
+            return;
+        }
+        point.getValues()[Point.DOGE] = windDodgeBackup;
+        point.getValues()[Point.ACCURACY] = windAccuracyBackup;
+        windDodgeBackup = 0;
+        windAccuracyBackup = 0;
+        windReduceRate = 0f;
+        windEndMs = 0;
+        protoUpdatePoint((long) Point.DOGE, point.get(Point.DOGE));
+        protoUpdatePoint((long) Point.ACCURACY, point.get(Point.ACCURACY));
+    }
+
+    private void processFreeze() {
+        if (freezeEndMs <= 0) {
+            return;
+        }
+        if (!alive || System.currentTimeMillis() >= freezeEndMs) {
+            clearFreeze();
+        }
+    }
+
+    private void applyFreezeAttackSlow(int slowPercent) {
+        if (slowPercent <= 0) {
+            freezeAttackSlowApplied = 0;
+            return;
+        }
+        long currentChange = point.get(Point.CHANGE_ATTACK_SPEED);
+        if (currentChange <= 0) {
+            currentChange = 100;
+        }
+        long minChange = Math.max(0, 100 - Math.round(CfgStats.getFreezeSlowMax() * 100f));
+        int actualSlow = (int) Math.min(slowPercent, Math.max(0, currentChange - minChange));
+        if (actualSlow <= 0) {
+            freezeAttackSlowApplied = 0;
+            return;
+        }
+        freezeAttackSlowApplied = actualSlow;
+        point.add(Point.CHANGE_ATTACK_SPEED, -actualSlow);
+        protoUpdatePoint((long) Point.CHANGE_ATTACK_SPEED, point.get(Point.CHANGE_ATTACK_SPEED));
+    }
+
+    private void clearFreeze() {
+        clearFreezeAttackSlow();
+        freezeEndMs = 0;
+        point.getValues()[Point.FREEZE] = freezeStatBackup;
+        freezeStatBackup = 0;
+        protoUpdatePoint((long) Point.FREEZE, point.get(Point.FREEZE));
+    }
+
+    private void clearFreezeAttackSlow() {
+        if (freezeAttackSlowApplied <= 0) {
+            return;
+        }
+        point.add(Point.CHANGE_ATTACK_SPEED, freezeAttackSlowApplied);
+        freezeAttackSlowApplied = 0;
+        protoUpdatePoint((long) Point.CHANGE_ATTACK_SPEED, point.get(Point.CHANGE_ATTACK_SPEED));
+    }
+
+    private void processPoison() {
+        if (poisonEndMs <= 0) {
+            return;
+        }
+        long now = System.currentTimeMillis();
+        if (!alive || now >= poisonEndMs) {
+            clearPoison();
+            return;
+        }
+        if (now < poisonNextTickMs) {
+            return;
+        }
+        poisonNextTickMs += 1000L;
+        Unit owner = poisonOwner != null ? poisonOwner : this;
+        beAttackDamage(owner, poisonDamagePerTick);
+        protoStatus(Pbmethod.SubStateType.BE_DAMAGE,
+                Arrays.asList(owner.getId(), 0L, -(long) poisonDamagePerTick, 0L));
+        if (!alive) {
+            clearPoison();
+        }
+    }
+
+    private void processFire() {
+        if (fireEndMs <= 0) {
+            return;
+        }
+        long now = System.currentTimeMillis();
+        if (!alive || now >= fireEndMs) {
+            clearFire();
+            return;
+        }
+        if (now < fireNextTickMs) {
+            return;
+        }
+        fireNextTickMs += 1000L;
+        Unit owner = fireOwner != null ? fireOwner : this;
+        applyFireTickDamage(owner, fireDamagePerTick);
+        if (!alive) {
+            clearFire();
+        }
+    }
+
+    /** Tick Lửa: trừ thẳng máu, không phản đòn / hút máu. */
+    private void applyFireTickDamage(Unit owner, int damage) {
+        if (damage <= 0 || !alive) {
+            return;
+        }
+        updateHp(owner, -damage);
+        protoStatus(Pbmethod.SubStateType.BE_DAMAGE,
+                Arrays.asList(owner.getId(), 0L, -(long) damage, 0L));
+        if (!alive) {
+            clearCombatEffects();
+            timeDie = System.currentTimeMillis();
+            protoDie(owner);
+            if (checkHasBonusKill()) {
+                bonusKillMe(owner);
+            }
+        }
+    }
+
+    private void clearFire() {
+        fireOwner = null;
+        fireEndMs = 0;
+        fireNextTickMs = 0;
+        fireDamagePerTick = 0;
+    }
+
+    /**
+     * Hồi máu passive (point 15): mỗi 10s (Update1s) hồi floor(min(stat,600)/10) HP qua reHpFixed.
+     * Không hồi nếu chết, full máu, dưới 10 điểm, hoặc bị stun/đóng băng.
+     */
+    private void processHealRegen() {
+        if (!alive || point == null) {
+            return;
+        }
+        int healAmount = CfgStats.calcHealPerTick(point.getHealing());
+        if (healAmount <= 0) {
+            healSecondCounter = 0;
+            return;
+        }
+        int intervalSec = Math.max(1, CfgStats.calcHealIntervalSeconds());
+        healSecondCounter++;
+        if (healSecondCounter < intervalSec) {
+            return;
+        }
+        healSecondCounter = 0;
+        if (beBlock()) {
+            return;
+        }
+        if (point.getCurHP() >= point.getMaxHp()) {
+            return;
+        }
+        reHpFixed(healAmount);
+    }
+
+    private void applyPoisonSlow(int slowPercent) {
+        if (slowPercent <= 0) {
+            poisonMoveSlowApplied = 0;
+            return;
+        }
+        long currentChange = point.get(Point.CHANGE_MOVE_SPEED);
+        long minChange = Math.max(0, 100 - Math.round(CfgStats.getPoisonSlowMax() * 100f));
+        int actualSlow = (int) Math.min(slowPercent, Math.max(0, currentChange - minChange));
+        if (actualSlow <= 0) {
+            poisonMoveSlowApplied = 0;
+            return;
+        }
+        poisonMoveSlowApplied = actualSlow;
+        point.add(Point.CHANGE_MOVE_SPEED, -actualSlow);
+        protoUpdatePoint((long) Point.CHANGE_MOVE_SPEED, point.get(Point.CHANGE_MOVE_SPEED));
+    }
+
+    private void clearPoison() {
+        clearPoisonSlow();
+        poisonOwner = null;
+        poisonEndMs = 0;
+        poisonNextTickMs = 0;
+        poisonDamagePerTick = 0;
+    }
+
+    private void clearCombatEffects() {
+        clearPoison();
+        clearFire();
+        clearFreeze();
+        clearWind();
+    }
+
+    private void clearPoisonSlow() {
+        if (poisonMoveSlowApplied <= 0) {
+            return;
+        }
+        point.add(Point.CHANGE_MOVE_SPEED, poisonMoveSlowApplied);
+        poisonMoveSlowApplied = 0;
+        protoUpdatePoint((long) Point.CHANGE_MOVE_SPEED, point.get(Point.CHANGE_MOVE_SPEED));
     }
 
     public boolean sameTeam(Unit other) {
@@ -230,6 +600,8 @@ public abstract class Unit {
     }
 
     private Point resetCombatState() {
+        clearCombatEffects();
+        healSecondCounter = 0;
         alive = true;
         hasBonusKillMe = true;
         targetMove = null;

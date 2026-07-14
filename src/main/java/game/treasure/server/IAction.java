@@ -53,6 +53,13 @@ public class IAction {
     public static final int SET_AUTO_RANGE = 57;
     public static final int UPDATE_VIP_DATA = 58;
 
+    /** Treasure key: [hasKey, remainMs, itemId, rowId, posX, posY, holderUserId] — broadcast server. */
+    public static final int TREASURE_KEY_STATE = 59;
+    /** [hasChest, posX, posY, remainMs, globalCellId] */
+    public static final int TREASURE_CHEST_STATE = 60;
+    /** [isOpening, remainMs] */
+    public static final int TREASURE_OPENING = 61;
+
     // chat
     public static final int CHAT_SERVER = 70;
     public static final int CHAT_MAP = 71;
@@ -284,6 +291,6 @@ public class IAction {
     public static final int PING_IDLE = 10003;
     //endregion
     public static List<Integer> loginServices = Arrays.asList(LOGIN_GAME, LOGOUT);
-    public static List<Integer> notDebug = Arrays.asList(PING_GAME, TUTORIAL_QUEST_UPDATE);
+    public static List<Integer> notDebug = Arrays.asList(PING_GAME, TUTORIAL_QUEST_UPDATE, TREASURE_OPENING);
 }
 

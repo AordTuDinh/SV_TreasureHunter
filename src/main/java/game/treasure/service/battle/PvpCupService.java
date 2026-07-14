@@ -5,6 +5,7 @@ import game.config.CfgServer;
 import game.config.CfgUser;
 import game.config.aEnum.DetailActionType;
 import game.monitor.Online;
+import game.object.DataDaily;
 import game.object.MyUser;
 import game.treasure.mapping.UserEntity;
 import game.treasure.service.user.Actions;
@@ -13,15 +14,37 @@ import ozudo.base.database.DBJPA;
 import protocol.Pbmethod;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
  * Chuyển cup khi player hạ player khác.
  * Online: ADD_BONUS (BONUS_CUP) → BattleUI textBonus.
  * Offline: chỉ cập nhật cột cup bảng user.
+ * Login qua ngày: nếu đang 0 cup thì tặng 1 cup (một lần/ngày).
  */
 public final class PvpCupService {
     private PvpCupService() {
+    }
+
+    /**
+     * Login qua ngày: nếu cup == 0 thì tặng 1 cup (đánh dấu daily để không lặp trong ngày).
+     * @return wire bonus đã nhận, hoặc empty nếu không tặng
+     */
+    public static List<Long> grantDailyFloorIfNeeded(MyUser mUser) {
+        if (mUser == null || mUser.getUser() == null || mUser.getUserDaily() == null)
+            return Collections.emptyList();
+        DataDaily data = mUser.getUserDaily().getUDaily();
+        if (data.getValue(DataDaily.GET_CUP_FLOOR) != 0)
+            return Collections.emptyList();
+        if (mUser.getUser().getCup() > 0) {
+            data.setValueAndUpdate(DataDaily.GET_CUP_FLOOR, 1);
+            return Collections.emptyList();
+        }
+        List<Long> wire = Bonus.receiveListItem(mUser, DetailActionType.DAILY_CUP_FLOOR.getKey(), Bonus.viewCup(1));
+        if (!wire.isEmpty())
+            data.setValueAndUpdate(DataDaily.GET_CUP_FLOOR, 1);
+        return wire;
     }
 
     public static void apply(Player victim, Player killer) {

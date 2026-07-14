@@ -1,6 +1,7 @@
 package game.treasure.table;
 
 import com.google.protobuf.AbstractMessage;
+import game.battle.calculate.IMath;
 import game.battle.model.*;
 import game.battle.model.Unit;
 import game.battle.object.*;
@@ -21,8 +22,10 @@ import game.treasure.service.resource.ResItem;
 import game.object.TaskMonitor;
 import game.treasure.controller.AHandler;
 import game.treasure.mapping.main.ResMapEntity;
+import game.treasure.mapping.main.ResObjectEntity;
 import game.treasure.server.Constans;
 import game.treasure.server.IAction;
+import game.treasure.service.battle.TreasureEventService;
 import game.treasure.service.user.Bonus;
 import game.object.MyUser;
 import game.protocol.ProtoState;
@@ -282,9 +285,82 @@ public abstract class BaseRoom extends MonoRoom {
         return mUnit.getOrDefault(id, null);
     }
 
+    /** Kiểm tra attacker có được đánh target trong phạm vi và luật PvP. */
+    public boolean canAttackTarget(Unit attacker, Unit target) {
+        if (attacker == null || target == null || !target.isAlive()) {
+            return false;
+        }
+        if (attacker.getId() == target.getId()) {
+            return false;
+        }
+        if (attacker.getClanId() != 0 && attacker.getClanId() == target.getClanId()) {
+            return false;
+        }
+        if (!attacker.targetInSizeAttack(target)) {
+            return false;
+        }
+        if (target.isPlayer()) {
+            if (mapInfo.isInCampFireSafeZone(attacker.getPos())
+                    || mapInfo.isInCampFireSafeZone(target.getPos())) {
+                return false;
+            }
+            if (mapInfo.isInBlockedPvpZone(attacker.getPos())
+                    || mapInfo.isInBlockedPvpZone(target.getPos())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Thu thập mục tiêu trong phạm vi đánh: mục tiêu chính + thêm theo point 22 (75 = +1, max 7).
+     */
+    public List<Unit> collectAttackTargets(Unit attacker, Unit primaryTarget) {
+        int maxTargets = IMath.calcMaxAttackTargets(attacker.getPoint().getMultiAttack());
+        List<Unit> targets = new ArrayList<>();
+        if (primaryTarget != null && canAttackTarget(attacker, primaryTarget)) {
+            targets.add(primaryTarget);
+        }
+        if (maxTargets <= 1 || targets.isEmpty()) {
+            return targets;
+        }
+
+        List<Unit> nearby = new ArrayList<>();
+        for (Unit unit : mUnit.values()) {
+            if (unit.getId() == attacker.getId()) {
+                continue;
+            }
+            boolean alreadySelected = false;
+            for (Unit picked : targets) {
+                if (picked.getId() == unit.getId()) {
+                    alreadySelected = true;
+                    break;
+                }
+            }
+            if (alreadySelected || !canAttackTarget(attacker, unit)) {
+                continue;
+            }
+            nearby.add(unit);
+        }
+        nearby.sort(Comparator.comparingDouble(u -> attacker.getPos().distance(u.getPos())));
+        for (Unit unit : nearby) {
+            if (targets.size() >= maxTargets) {
+                break;
+            }
+            targets.add(unit);
+        }
+        return targets;
+    }
+
     @Override
     public void Update1s() {
         ProcessReviveCell();
+        mUnit.forEach((k, u) -> {
+            u.Update1s();
+            if (u.isPlayer()) {
+                TreasureEventService.tickPlayer(u.getPlayer());
+            }
+        });
     }
 
     @Override
@@ -353,6 +429,7 @@ public abstract class BaseRoom extends MonoRoom {
                     movePos = mapInfo.blockJailEntry(prevPos, movePos);
                 }
                 player.setPosAndDirection(movePos, input.playerDirection);
+                TreasureEventService.onPlayerMoved(player);
             }
         } else if (input.typeId == NInput.PING_GAME) {
             Util.sendProtoData(player.getMUser().getChannel(), null, IAction.PING_GAME);
@@ -360,6 +437,8 @@ public abstract class BaseRoom extends MonoRoom {
             game.treasure.service.resource.ResItem.useBuffItemInRoom(player, input.useItemId);
         } else if (input.typeId == NInput.ATTACK) {
             if (!player.canAttack()) return;
+            // Ưu tiên mở rương: đứng ô chest + chìa → không cho đánh
+            if (TreasureEventService.blocksAttackForTreasureOpen(player)) return;
             if (input.targetAttack == Pbmethod.TargetAttack.OBJECT) {
                 int globalCellId = (int) input.idAttack;
                 int chunkId = MapService.globalCellIdToChunkId(mapInfo, globalCellId);
@@ -371,7 +450,14 @@ public abstract class BaseRoom extends MonoRoom {
                     player.protoStatus(Pbmethod.SubStateType.PLAY_ANIM, (long) AnimationType.ATTACK.value);
                     if (cellDie) {
                         addCellDie(cellObject);
-                        applyCellKillBonus(player, cellObject.getBonusKillMe());
+                        MyUser mUser = player.getMUser();
+                        ResObjectEntity.ObjectDropResult dropResult = cellObject.getBonusKillMe(
+                                mUser.getRateDropGold(), mUser.getRateDropGem(), mUser.getRateDropItem());
+                        if (dropResult.fullMiss) {
+                            TreasureEventService.tryDropOnFullMiss(player, cellObject);
+                        } else {
+                            applyCellKillBonus(player, dropResult.bonus);
+                        }
                     }
                 }
             } else { // Đánh unit
@@ -565,6 +651,7 @@ public abstract class BaseRoom extends MonoRoom {
             }
         }
         handler.addResponse(IAction.JOIN_MAP, pbInit.build());
+        TreasureEventService.syncOnJoin(player);
     }
 
     public void sendDataAllUser(int service, AbstractMessage data) {

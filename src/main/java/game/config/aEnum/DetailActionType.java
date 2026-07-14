@@ -5,6 +5,7 @@ import java.util.Map;
 
 public enum DetailActionType {
     KILL_CELL("kill_cell"),
+    TREASURE_CHEST_OPEN("treasure_chest_open"),
 
 
 
@@ -21,6 +22,7 @@ public enum DetailActionType {
     REVIVE_PLAYER("revive_player"),// Hồi sinh
     DEATH_PENALTY("death_penalty"),
     PVP_KILL_LOOT("pvp_kill_loot_"),
+    DAILY_CUP_FLOOR("daily_cup_floor"), // Login qua ngày khi 0 cup → tặng 1 cup
     CAMPAIGN_CONQUER("campaign_conquer_"),// Nhận bonus campaign conquer map id
     CAMPAIGN_SMART("campaign_smart_"),// Càn quét map id , number
     BUY_LOTTERY_MINI("buy_lottery_mini"),// Mua vé số nhỏ

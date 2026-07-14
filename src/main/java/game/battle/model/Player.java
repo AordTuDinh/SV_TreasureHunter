@@ -173,12 +173,12 @@ public class Player extends Unit implements Serializable {
 
     @Override
     public void Update() {
-
+        super.Update();
     }
 
 
     public boolean targetInSizeAttack(Unit target) {
-        return pos.distance(target.pos) < rangeAttack;
+        return target != null && pos.distance(target.pos) < rangeAttack;
     }
 
     @Override

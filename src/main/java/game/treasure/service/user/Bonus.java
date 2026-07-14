@@ -1059,7 +1059,7 @@ public class Bonus {
             changed = true;
         }
         for (UserEquipmentEntity equip : mUser.getResources().getMEquipment().values()) {
-            if (equip.isEquip())
+            if (equip.isEquip() || equip.isExpired())
                 continue;
             if (isAlreadySlotted(slots, bagCount, BONUS_EQUIPMENT, equip.getId()))
                 continue;

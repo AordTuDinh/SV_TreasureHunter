@@ -18,6 +18,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 public class ResObjectEntity extends BaseEntity implements Serializable {
+    private static final int RATE_DROP_TOTAL = 1000;
     private static final int RATE_OPTION_TOTAL = 1000;
     private static final int RATE_INNER_TOTAL = 100;
     private static final int EVENT_MATERIAL_TIER = 1;
@@ -36,6 +37,8 @@ public class ResObjectEntity extends BaseEntity implements Serializable {
     String name;
     @Getter
     int hp;
+    @Getter
+    int rateDrop;
     String rateOption;
     String itemHp;
     String equipment;
@@ -70,12 +73,21 @@ public class ResObjectEntity extends BaseEntity implements Serializable {
     }
 
     /**
-     * Roll category theo {@code rate_option} /1000; material/event id từ cell, equip random từ {@code equipment}.
+     * Gate {@code rateDrop}/1000 trước; pass mới roll category theo {@code rate_option}/1000.
+     * Hụt gate → roll miss bonus; vẫn trống → {@code fullMiss=true} (caller roll treasure).
      */
-    public List<Long> randomBonus(int materialId, int itemEventId) {
-        if (rateOptionParsed == null || rateOptionParsed.isEmpty()) return new ArrayList<>();
+    public ObjectDropResult randomBonus(int materialId, int itemEventId,
+                                        int rateDropGold, int rateDropGem, int rateDropItem) {
+        if (rateDrop <= 0 || NumberUtil.getRandom(RATE_DROP_TOTAL) >= rateDrop) {
+            if (rateDropGold <= 0 && rateDropGem <= 0 && rateDropItem <= 0) {
+                return ObjectDropResult.fullMiss();
+            }
+            List<Long> miss = randomMissBonus(materialId, rateDropGold, rateDropGem, rateDropItem);
+            return miss.isEmpty() ? ObjectDropResult.fullMiss() : ObjectDropResult.of(miss);
+        }
+        if (rateOptionParsed == null || rateOptionParsed.isEmpty()) return ObjectDropResult.of(new ArrayList<>());
         int cat = pickIndexByRate(rateOptionParsed, RATE_OPTION_TOTAL);
-        return switch (cat) {
+        List<Long> bonus = switch (cat) {
             case CAT_HP -> randomHpBonus();
             case CAT_EQUIP -> randomEquipBonus();
             case CAT_MOB -> randomMobBonus();
@@ -84,6 +96,39 @@ public class ResObjectEntity extends BaseEntity implements Serializable {
             case CAT_ITEM_EVENT -> itemEventBonus(itemEventId);
             default -> new ArrayList<>();
         };
+        return ObjectDropResult.of(bonus);
+    }
+
+    public static final class ObjectDropResult {
+        public final List<Long> bonus;
+        public final boolean fullMiss;
+
+        private ObjectDropResult(List<Long> bonus, boolean fullMiss) {
+            this.bonus = bonus != null ? bonus : new ArrayList<>();
+            this.fullMiss = fullMiss;
+        }
+
+        public static ObjectDropResult of(List<Long> bonus) {
+            return new ObjectDropResult(bonus, false);
+        }
+
+        public static ObjectDropResult fullMiss() {
+            return new ObjectDropResult(new ArrayList<>(), true);
+        }
+    }
+
+    /**
+     * Drop hụt: {@code x = random(1000)}; bucket cộng dồn gold → gem(1) → material(tier {@code materialRate}).
+     */
+    private List<Long> randomMissBonus(int materialId, int rateDropGold, int rateDropGem, int rateDropItem) {
+        int goldRate = Math.max(0, rateDropGold);
+        int gemRate = Math.max(0, rateDropGem);
+        int itemRate = Math.max(0, rateDropItem);
+        int x = NumberUtil.getRandom(RATE_DROP_TOTAL);
+        if (x < goldRate) return randomGoldBonus();
+        if (x < goldRate + gemRate) return Bonus.viewGem(1);
+        if (x < goldRate + gemRate + itemRate) return randomMaterialBonus(materialId);
+        return new ArrayList<>();
     }
 
     private List<Long> randomHpBonus() {
@@ -128,7 +173,9 @@ public class ResObjectEntity extends BaseEntity implements Serializable {
         return pickIndexByRate(tierRates, RATE_INNER_TOTAL) + 1;
     }
 
-    /** {@code pairs}: [id, rate, id, rate, ...]} — rate cộng dồn theo {@code totalRate}. */
+    /**
+     * {@code pairs}: [id, rate, id, rate, ...]} — rate cộng dồn theo {@code totalRate}.
+     */
     public static int pickIdByRatePairs(List<Integer> pairs) {
         if (pairs == null || pairs.size() < 2) return 0;
         int total = 0;
