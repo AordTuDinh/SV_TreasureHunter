@@ -215,6 +215,7 @@ public class IAction {
     public static final int TRADING_CANCEL = 478;
     public static final int TRADING_BUY = 479;
     public static final int TRADING_SYNC = 480;
+    public static final int TRADING_EDIT = 481;
 
     // Event
     public static final int RPS_SEND_RQ = 600;

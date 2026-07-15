@@ -75,7 +75,7 @@ public final class TreasureEventService {
         }
     }
 
-    /** Đang channel mở rương (đã qua idle 1s, đang đếm openChannel). */
+    /** Đang channel mở rương (đã qua idle 0.5s, đang đếm openChannel). */
     public static boolean isOpening(Player player) {
         if (player == null || player.getMUser() == null || player.getMUser().getUser() == null)
             return false;
@@ -88,7 +88,7 @@ public final class TreasureEventService {
 
     /**
      * Ưu tiên mở rương: holder đứng cùng ô chest + có chìa → chặn attack.
-     * (dwell 1s + channel 10s đều nằm trong điều kiện này)
+     * (dwell 0.5s + channel 10s đều nằm trong điều kiện này)
      */
     public static boolean blocksAttackForTreasureOpen(Player player) {
         if (player == null || player.getMUser() == null || player.getPos() == null
@@ -255,7 +255,7 @@ public final class TreasureEventService {
         broadcastKey(serverId, true, remainMs(st.keyExpireAt), x, y, st.holderUserId);
     }
 
-    private static final long IDLE_BEFORE_OPEN_MS = 1000L;
+    private static final long IDLE_BEFORE_OPEN_MS = 500L;
 
     private static void tickOpenChannel(Player player, ServerTreasureState st, int serverId) {
         MyUser mUser = player.getMUser();
@@ -272,7 +272,7 @@ public final class TreasureEventService {
             return;
         }
 
-        // Phase 1: đứng cùng ô ≥ 1s rồi mới bắt đầu mở
+        // Phase 1: đứng cùng ô ≥ 0.5s rồi mới bắt đầu mở
         if (st.openStartAt <= 0 || st.openingUserId != mUser.getUserId()) {
             if (st.dwellStartAt <= 0 || st.dwellUserId != mUser.getUserId()) {
                 st.dwellUserId = mUser.getUserId();

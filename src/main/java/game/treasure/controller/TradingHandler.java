@@ -46,7 +46,7 @@ public class TradingHandler extends AHandler {
     public void initAction(Map<Integer, AHandler> mHandler) {
         List<Integer> actions = Arrays.asList(
                 TRADING_MARKET_LIST, TRADING_WALLET_ADD, TRADING_WALLET_REMOVE,
-                TRADING_UNLOCK_SLOT, TRADING_POST, TRADING_CANCEL, TRADING_BUY);
+                TRADING_UNLOCK_SLOT, TRADING_POST, TRADING_CANCEL, TRADING_BUY, TRADING_EDIT);
         actions.forEach(action -> mHandler.put(action, this));
     }
 
@@ -62,6 +62,7 @@ public class TradingHandler extends AHandler {
                 case TRADING_POST -> postListing();
                 case TRADING_CANCEL -> cancelListing();
                 case TRADING_BUY -> buyListing();
+                case TRADING_EDIT -> editListing();
             }
         } catch (Exception ex) {
             Logs.error(ex);
@@ -281,6 +282,42 @@ public class TradingHandler extends AHandler {
         TradingItemService.setTradingFlags(mUser, bonusType, rowId, 1, 0);
         pushTradingSync(bonusType, rowId, 1, 0);
         addResponseSuccess();
+    }
+
+    /** Đổi giá listing: trừ phí mới, không hoàn phí cũ, reset verifyUntil. */
+    void editListing() {
+        Pbmethod.CommonVector req = getInputCmv();
+        if (req.getALongCount() < 2) {
+            addErrParam();
+            return;
+        }
+        long tradingId = req.getALong(0);
+        int price = (int) req.getALong(1);
+        if (!CfgTrading.isValidPrice(price)) {
+            addErrResponse(getLang(Lang.err_params));
+            return;
+        }
+        UserTradingEntity row = TradingMarketCache.get(tradingId);
+        if (row == null || row.getUserId() != user.getId()) {
+            addErrResponse(getLang(Lang.err_params));
+            return;
+        }
+        int feeAmount = CfgTrading.calcListingFee(price);
+        List<Long> fee = Bonus.viewRuby(-feeAmount);
+        String err = Bonus.checkMoney(mUser, fee);
+        if (err != null) {
+            addErrResponse(getLang(err));
+            return;
+        }
+        Bonus.receiveListItem(mUser, DetailActionType.SELL_ITEM.getKey("trading_edit"), fee);
+        long verifyUntil = CfgTrading.randomVerifyUntil();
+        if (!row.update(List.of("price", price, "verify_until", verifyUntil))) {
+            addErrResponse();
+            return;
+        }
+        row.setPrice(price);
+        row.setVerifyUntil(verifyUntil);
+        addResponse(getCommonVector(row.getId(), (long) price, row.getVerifyUntil(), feeAmount));
     }
 
     void buyListing() {
