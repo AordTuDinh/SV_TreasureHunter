@@ -8,6 +8,8 @@ import game.battle.type.AnimationType;
 import game.battle.type.RoomState;
 import game.battle.type.UnitType;
 import game.config.CfgMob;
+import game.config.aEnum.DetailActionType;
+import game.object.MyUser;
 import game.treasure.BattleConfig;
 import game.treasure.mapping.main.ResMobEntity;
 import game.treasure.service.resource.ResMob;
@@ -20,6 +22,7 @@ import protocol.Pbmethod;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Data
@@ -108,9 +111,21 @@ public class Enemy extends Unit implements Serializable {
 
     @Override
     public synchronized void bonusKillMe(Unit killer) {
-        if (killer.isPlayer()) {
-            hasBonusKillMe = false;
-        }
+        if (!killer.isPlayer())
+            return;
+        hasBonusKillMe = false;
+        Player player = killer.getPlayer();
+        if (player == null || player.getMUser() == null)
+            return;
+        if (listBonus == null || listBonus.isEmpty())
+            return;
+        MyUser mUser = player.getMUser();
+        // [0]=rate drop item (phần nghìn), [1]=gold% — gold scale để receiveListItem xử lý, tránh nhân đôi
+        List<Long> perBuff = Arrays.asList((long) mUser.getRateDropItem(), 0L);
+        BonusKillEnemy rolled = getBonusWithPer(listBonus, perBuff);
+        if (rolled.getGold() <= 0 && (rolled.getBonus() == null || rolled.getBonus().isEmpty()))
+            return;
+        player.sendForceBonus(rolled, DetailActionType.BONUS_KILL_ENEMY.getKey(), player.getPos());
     }
 
     BonusKillEnemy getBonusWithPer(List<BonusConfig> aBonusConfig, List<Long> perBuff) {

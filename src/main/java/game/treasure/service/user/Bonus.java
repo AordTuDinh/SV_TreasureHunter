@@ -74,10 +74,8 @@ public class Bonus {
         return view(BONUS_GOLD, number);
     }
 
-    /** Preview/grant item by config key. Item point → viewItemPoint. Xóa row — handler gọi ResItem.removeUserItemRow. */
+    /** Preview/grant consumable {@code res_item} by itemKey. Item point dùng {@link #viewItemPoint}. */
     public static List<Long> viewItem(int itemKey, long number) {
-        if (ItemPointKey.isPointKey(itemKey))
-            return viewItemPoint(itemKey, number);
         if (number <= 0)
             return new ArrayList<>();
         return viewXNumber(view(BONUS_ITEM, itemKey), (int) number);

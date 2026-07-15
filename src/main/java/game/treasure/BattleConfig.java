@@ -9,8 +9,8 @@ public class BattleConfig {
     public static float P_timeStartAuto = 2f; // sau time này sẽ mới bắt đầu được auto
     public static float P_timeIdleToAuto = 0.2f; // sau time này sẽ chuyển sang chế độ auto mode
     public static final float P_delayReady = 2f; // join xong time này mới readly
-    /** statMoveSpeed / C_SCALE_SPEED = ô/giây (vd. 1000 → 20 ô/s). */
-    public static final float C_SCALE_SPEED = 50f;
+    /** statMoveSpeed / C_SCALE_SPEED = ô/giây (vd. 1000 → 25 ô/s). */
+    public static final float C_SCALE_SPEED = 40f;
     public static final float P_TimeDelayMoveDone = 0.35f; // Move xong r mới cho action khac
     public static final float m_LerpSpeedBar = 0.05f; // tốc độ giảm hp, càng tăng thì tốc độ giảm càng nhanh theo hàm lerp
     public static final int m_LimitUseItem = 100;

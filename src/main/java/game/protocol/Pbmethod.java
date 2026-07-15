@@ -219,6 +219,14 @@ public final class Pbmethod {
      * </pre>
      */
     IN_HEAL_ZONE(17, 18),
+    /**
+     * <code>BONUS_ADD_FORCE = 19;</code>
+     *
+     * <pre>
+     * [posX*1000, posY*1000, ...bonus wire] battle loot FX
+     * </pre>
+     */
+    BONUS_ADD_FORCE(18, 19),
     ;
 
     /**
@@ -345,6 +353,14 @@ public final class Pbmethod {
      * </pre>
      */
     public static final int IN_HEAL_ZONE_VALUE = 18;
+    /**
+     * <code>BONUS_ADD_FORCE = 19;</code>
+     *
+     * <pre>
+     * [posX*1000, posY*1000, ...bonus wire] battle loot FX
+     * </pre>
+     */
+    public static final int BONUS_ADD_FORCE_VALUE = 19;
 
 
     public final int getNumber() { return value; }
@@ -369,6 +385,7 @@ public final class Pbmethod {
         case 16: return REMOVE_EQUIPMENT;
         case 17: return REMOVE_MATERIAL;
         case 18: return IN_HEAL_ZONE;
+        case 19: return BONUS_ADD_FORCE;
         default: return null;
       }
     }

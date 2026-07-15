@@ -277,21 +277,29 @@ public class Player extends Unit implements Serializable {
         protoStatus(Pbmethod.SubStateType.ADD_BONUS, bm);
     }
 
+    /** Battle loot: cộng túi + FX bắn item tại {@code posInstance}. */
+    public void sendForceBonus(List<Long> bonus, String title, Pos posInstance) {
+        if (bonus == null || bonus.isEmpty() || posInstance == null)
+            return;
+        List<Long> bm = Bonus.receiveListItem(mUser, title, bonus);
+        if (bm == null || bm.isEmpty())
+            return;
+        List<Long> wire = new ArrayList<>(bm.size() + 2);
+        wire.add((long) (posInstance.x * 1000));
+        wire.add((long) (posInstance.y * 1000));
+        wire.addAll(bm);
+        protoStatus(Pbmethod.SubStateType.BONUS_ADD_FORCE, wire);
+    }
 
-    // bonus bắn ra từ điểm
     public void sendForceBonus(BonusKillEnemy bonus, String title, Pos posInstance) {
-        // tính vào exp party
-//        UserPartyEntity uParty = mUser.getUser().getParty();
-//        if (uParty != null) {
-//            uParty.shareBonusParty(mUser, bonus);
-//        }
-//        List<Long> bonusReal = bonus.getBonus();
-//        if (bonus.getGold() > 0) bonusReal.addAll(Bonus.viewGold(bonus.getGold()));
-//        List<Long> bm = Bonus.receiveListItem(mUser, title, bonusReal);
-//        bm.add(0, (long) (posInstance.x * 1000));
-//        bm.add(1, (long) (posInstance.y * 1000));
-      //  protoStatus(StateType.BONUS_ADD_FORCE, bm.size(), GsonUtil.toListInt(bm));
-
+        if (bonus == null || posInstance == null)
+            return;
+        List<Long> bonusReal = new ArrayList<>();
+        if (bonus.getBonus() != null)
+            bonusReal.addAll(bonus.getBonus());
+        if (bonus.getGold() > 0)
+            bonusReal.addAll(Bonus.viewGold(bonus.getGold()));
+        sendForceBonus(bonusReal, title, posInstance);
     }
 
 }

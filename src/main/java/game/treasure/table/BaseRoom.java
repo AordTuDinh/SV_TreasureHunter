@@ -510,7 +510,7 @@ public abstract class BaseRoom extends MonoRoom {
         }
         List<Long> resolved = resolveCellKillBonus(player.getMUser(), bonus);
         if (resolved.isEmpty()) return;
-        player.sendBonus(resolved, DetailActionType.KILL_CELL.getKey());
+        player.sendForceBonus(resolved, DetailActionType.KILL_CELL.getKey(), player.getPos());
     }
 
     /**
