@@ -232,6 +232,8 @@ public class Subscriber extends JedisPubSub {
             }
         }
         bonus.addAll(Bonus.viewVipExp(rPack.getVipExp()));
+        // vé x2 ruby nạp (item point 13)
+        bonus = Bonus.withRubyX2Voucher(mUser, bonus, true);
         if (DBJPA.update(uBuy)) {
             Util.sendProtoData(mUser.getChannel(), CommonProto.getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.BUY_IAP.getKey(rPack.getId()), bonus)), IAction.IAP_BUY_QR);
             // save vào log để thống kê

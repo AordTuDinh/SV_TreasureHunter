@@ -33,6 +33,9 @@ public class MainTask {
                 scheduler.scheduleJob(QuartzUtil.getJob(CCUProcess.class, "ccuProcess"), QuartzUtil.getTriggerMinute("ccuProcess", 1));
                 scheduler.scheduleJob(QuartzUtil.getJob(EndDayProcess.class, "endDayProcess"), QuartzUtil.getTriggerDaily("endDayProcess", 23, 58));
                 scheduler.scheduleJob(QuartzUtil.getJob(EndMonthProcess.class, "endMonthProcess"), QuartzUtil.getTriggerMonthly("endMonthProcess", 23, 58));
+                // Chủ nhật = 1 (Quartz), 23:55 GMT+7
+                scheduler.scheduleJob(QuartzUtil.getJob(ArenaWeekRewardProcess.class, "arenaWeekReward"),
+                        QuartzUtil.getTriggerWeekly("arenaWeekReward", 1, 23, 55));
             } catch (Exception se) {
                 se.printStackTrace();
             }

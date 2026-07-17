@@ -693,6 +693,14 @@ public abstract class BaseRoom extends MonoRoom {
         return chunkCharacter.containsKey(chunkId);
     }
 
+    /** Unit ids trong chunk (copy) — dùng broadcast arena spectator. */
+    public Set<Long> getChunkCharacterIds(int chunkId) {
+        Set<Long> set = chunkCharacter.get(chunkId);
+        if (set == null || set.isEmpty())
+            return Collections.emptySet();
+        return new HashSet<>(set);
+    }
+
 
     // add mới từ khi instance ra 1 unit thì chạy qua đây
     public void addUnit(Unit unit) {

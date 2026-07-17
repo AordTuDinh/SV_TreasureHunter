@@ -13,6 +13,8 @@ import game.treasure.mapping.UserItemEntity;
 import game.treasure.mapping.UserItemPointEntity;
 import game.treasure.mapping.UserMaterialEntity;
 import game.treasure.mapping.UserMobEntity;
+import game.treasure.mapping.UserMountEntity;
+import game.treasure.mapping.UserPetEntity;
 import game.treasure.mapping.main.ResItemEntity;
 import game.treasure.mapping.main.ResItemEquipmentEntity;
 import game.treasure.server.IAction;
@@ -358,6 +360,24 @@ public class ItemHandler extends AHandler {
             addResponse(getCommonVector(id, 1L));
             return;
         }
+        if (bonusType == Bonus.BONUS_PET) {
+            UserPetEntity pet = mUser.getResources().getPet(id);
+            if (pet == null) {
+                addErrResponse(getLang(Lang.item_not_own));
+                return;
+            }
+            sellPet(pet);
+            return;
+        }
+        if (bonusType == Bonus.BONUS_MOUNT) {
+            UserMountEntity mount = mUser.getResources().getMount(id);
+            if (mount == null) {
+                addErrResponse(getLang(Lang.item_not_own));
+                return;
+            }
+            sellMount(mount);
+            return;
+        }
         addErrParam();
     }
 
@@ -452,7 +472,105 @@ public class ItemHandler extends AHandler {
             result.priceBonus = CfgMob.getPriceSellMob(mob);
             return result;
         }
+        if (bonusType == Bonus.BONUS_PET) {
+            UserPetEntity pet = mUser.getResources().getPet(id);
+            if (pet == null)
+                return null;
+            return sellPetForBatch(pet);
+        }
+        if (bonusType == Bonus.BONUS_MOUNT) {
+            UserMountEntity mount = mUser.getResources().getMount(id);
+            if (mount == null)
+                return null;
+            return sellMountForBatch(mount);
+        }
         return null;
+    }
+
+    private void sellPet(UserPetEntity pet) {
+        long id = pet.getId();
+        boolean wasEquipped = UserPetEntity.isEquipped(mUser, id);
+        if (wasEquipped && !Bonus.clearPetEquipSlot(mUser)) {
+            addErrSystem();
+            return;
+        }
+        Bonus.clearItemFromSlot(mUser, Bonus.BONUS_PET, id);
+        if (!pet.deleteFromDb()) {
+            addErrSystem();
+            return;
+        }
+        mUser.getResources().removePet(id);
+        List<Long> bonus = CfgItem.getPriceSellPet(pet);
+        addBonusToast(Bonus.receiveListItem(mUser, DetailActionType.SELL_ITEM.getKey(pet.getPetId()), bonus));
+        if (wasEquipped) {
+            Pbmethod.ListCommonVector.Builder pb = Pbmethod.ListCommonVector.newBuilder();
+            pb.addAVector(getCommonVector(id, 1L));
+            pb.addAVector(user.reCalculatePoint(mUser).toCommonVector());
+            pb.addAVector(getCommonIntVector(mUser.getUser().normalizeItemEquipList()));
+            addResponse(pb.build());
+            mUser.reCalculatePoint();
+            UserHandler.buffInfo(mUser);
+        } else {
+            addResponse(getCommonVector(id, 1L));
+        }
+    }
+
+    private void sellMount(UserMountEntity mount) {
+        long id = mount.getId();
+        boolean wasEquipped = UserMountEntity.isEquipped(mUser, id);
+        if (wasEquipped && !Bonus.clearMountEquipSlot(mUser)) {
+            addErrSystem();
+            return;
+        }
+        Bonus.clearItemFromSlot(mUser, Bonus.BONUS_MOUNT, id);
+        if (!mount.deleteFromDb()) {
+            addErrSystem();
+            return;
+        }
+        mUser.getResources().removeMount(id);
+        List<Long> bonus = CfgItem.getPriceSellMount(mount);
+        addBonusToast(Bonus.receiveListItem(mUser, DetailActionType.SELL_ITEM.getKey(mount.getMountId()), bonus));
+        if (wasEquipped) {
+            Pbmethod.ListCommonVector.Builder pb = Pbmethod.ListCommonVector.newBuilder();
+            pb.addAVector(getCommonVector(id, 1L));
+            pb.addAVector(user.reCalculatePoint(mUser).toCommonVector());
+            pb.addAVector(getCommonIntVector(mUser.getUser().normalizeItemEquipList()));
+            addResponse(pb.build());
+            mUser.reCalculatePoint();
+            UserHandler.buffInfo(mUser);
+        } else {
+            addResponse(getCommonVector(id, 1L));
+        }
+    }
+
+    private SellBatchResult sellPetForBatch(UserPetEntity pet) {
+        long id = pet.getId();
+        boolean wasEquipped = UserPetEntity.isEquipped(mUser, id);
+        if (wasEquipped && !Bonus.clearPetEquipSlot(mUser))
+            return null;
+        Bonus.clearItemFromSlot(mUser, Bonus.BONUS_PET, id);
+        if (!pet.deleteFromDb())
+            return null;
+        mUser.getResources().removePet(id);
+        SellBatchResult result = new SellBatchResult();
+        result.priceBonus = CfgItem.getPriceSellPet(pet);
+        result.wasEquipped = wasEquipped;
+        return result;
+    }
+
+    private SellBatchResult sellMountForBatch(UserMountEntity mount) {
+        long id = mount.getId();
+        boolean wasEquipped = UserMountEntity.isEquipped(mUser, id);
+        if (wasEquipped && !Bonus.clearMountEquipSlot(mUser))
+            return null;
+        Bonus.clearItemFromSlot(mUser, Bonus.BONUS_MOUNT, id);
+        if (!mount.deleteFromDb())
+            return null;
+        mUser.getResources().removeMount(id);
+        SellBatchResult result = new SellBatchResult();
+        result.priceBonus = CfgItem.getPriceSellMount(mount);
+        result.wasEquipped = wasEquipped;
+        return result;
     }
 
     private SellBatchResult sellEquipmentForBatch(UserEquipmentEntity equip) {
@@ -619,6 +737,16 @@ public class ItemHandler extends AHandler {
             uplevelEquipment(equip);
             return;
         }
+        UserPetEntity pet = mUser.getResources().getPet(id);
+        if (pet != null) {
+            uplevelPet(pet);
+            return;
+        }
+        UserMountEntity mount = mUser.getResources().getMount(id);
+        if (mount != null) {
+            uplevelMount(mount);
+            return;
+        }
         UserItemEntity item = mUser.getResources().getItem(id);
         if (item == null) {
             addErrResponse(getLang(Lang.item_not_own));
@@ -731,6 +859,108 @@ public class ItemHandler extends AHandler {
         if (slotIndex < 0) return false;
         lst.set(slotIndex + 2, newLevel);
         return mUser.getUser().updateItemEquip(lst);
+    }
+
+    private void uplevelPet(UserPetEntity pet) {
+        long id = pet.getId();
+        if (!CfgItem.canUpLevel(pet)) {
+            addErrResponse(getLang(Lang.err_item_equip_max_level));
+            return;
+        }
+        List<Long> fee = CfgItem.getUpgradeFee(pet);
+        if (fee.isEmpty()) {
+            addErrResponse(getLang(Lang.err_params));
+            return;
+        }
+        String err = Bonus.checkMoney(mUser, fee);
+        if (err != null) {
+            addErrResponse(err);
+            return;
+        }
+        List<Long> paid = Bonus.receiveListItem(mUser, DetailActionType.NANG_CAP_VAT_PHAM.getKey(pet.getPetId()), fee);
+        if (paid.isEmpty()) {
+            addErrResponse();
+            return;
+        }
+        int newLevel = pet.getLevel() + 1;
+        if (!pet.update(List.of("level", newLevel))) {
+            Bonus.receiveListItem(mUser, DetailActionType.UPDATE_FAIL.getKey(), Bonus.reverseBonus(fee));
+            addErrResponse();
+            return;
+        }
+        boolean syncEquip = UserPetEntity.isEquipped(mUser, id);
+        pet.setLevel(newLevel);
+        if (syncEquip && !updateEquipSlotLevel((int) id, newLevel)) {
+            Bonus.receiveListItem(mUser, DetailActionType.UPDATE_FAIL.getKey(), Bonus.reverseBonus(fee));
+            pet.update(List.of("level", newLevel - 1));
+            pet.setLevel(newLevel - 1);
+            addErrResponse();
+            return;
+        }
+        addBonusToast(paid);
+        if (syncEquip) {
+            Pbmethod.ListCommonVector.Builder pb = Pbmethod.ListCommonVector.newBuilder();
+            pb.addAVector(getCommonVector(id, (long) newLevel));
+            pb.addAVector(user.reCalculatePoint(mUser).toCommonVector());
+            pb.addAVector(getCommonIntVector(mUser.getUser().normalizeItemEquipList()));
+            addResponse(pb.build());
+            mUser.reCalculatePoint();
+            UserHandler.buffInfo(mUser);
+        } else {
+            addResponse(getCommonVector(id, (long) newLevel));
+        }
+        addResponse(IAction.PET_INFO, Pbmethod.PbListPet.newBuilder().addPets(pet.toProto()).build());
+    }
+
+    private void uplevelMount(UserMountEntity mount) {
+        long id = mount.getId();
+        if (!CfgItem.canUpLevel(mount)) {
+            addErrResponse(getLang(Lang.err_item_equip_max_level));
+            return;
+        }
+        List<Long> fee = CfgItem.getUpgradeFee(mount);
+        if (fee.isEmpty()) {
+            addErrResponse(getLang(Lang.err_params));
+            return;
+        }
+        String err = Bonus.checkMoney(mUser, fee);
+        if (err != null) {
+            addErrResponse(err);
+            return;
+        }
+        List<Long> paid = Bonus.receiveListItem(mUser, DetailActionType.NANG_CAP_VAT_PHAM.getKey(mount.getMountId()), fee);
+        if (paid.isEmpty()) {
+            addErrResponse();
+            return;
+        }
+        int newLevel = mount.getLevel() + 1;
+        if (!mount.update(List.of("level", newLevel))) {
+            Bonus.receiveListItem(mUser, DetailActionType.UPDATE_FAIL.getKey(), Bonus.reverseBonus(fee));
+            addErrResponse();
+            return;
+        }
+        boolean syncEquip = UserMountEntity.isEquipped(mUser, id);
+        mount.setLevel(newLevel);
+        if (syncEquip && !updateEquipSlotLevel((int) id, newLevel)) {
+            Bonus.receiveListItem(mUser, DetailActionType.UPDATE_FAIL.getKey(), Bonus.reverseBonus(fee));
+            mount.update(List.of("level", newLevel - 1));
+            mount.setLevel(newLevel - 1);
+            addErrResponse();
+            return;
+        }
+        addBonusToast(paid);
+        if (syncEquip) {
+            Pbmethod.ListCommonVector.Builder pb = Pbmethod.ListCommonVector.newBuilder();
+            pb.addAVector(getCommonVector(id, (long) newLevel));
+            pb.addAVector(user.reCalculatePoint(mUser).toCommonVector());
+            pb.addAVector(getCommonIntVector(mUser.getUser().normalizeItemEquipList()));
+            addResponse(pb.build());
+            mUser.reCalculatePoint();
+            UserHandler.buffInfo(mUser);
+        } else {
+            addResponse(getCommonVector(id, (long) newLevel));
+        }
+        addResponse(IAction.MOUNT_INFO, Pbmethod.PbListMount.newBuilder().addMounts(mount.toProto()).build());
     }
 
     private void itemInfo() {

@@ -1,6 +1,7 @@
 package game.treasure.service.user;
 
 import game.config.CfgAchievement;
+import game.config.CfgArena;
 import game.config.CfgItem;
 import game.config.CfgLottery;
 import game.config.CfgMaterial;
@@ -160,6 +161,11 @@ public class Bonus {
 
     public static List<Long> viewCup(int number) {
         return view(BONUS_CUP, number);
+    }
+
+    /** Xu đấu trường = item point {@link ItemPointKey#ARENA_COIN}. */
+    public static List<Long> viewArenaCoin(int number) {
+        return viewItemPoint(CfgArena.arenaCoinPointId(), number);
     }
 
     public static List<Long> viewVipExp(long number) {
@@ -808,6 +814,51 @@ public class Bonus {
         return result;
     }
 
+    /** Chỉ nhân đôi (hoặc times) các chunk BONUS_RUBY trong bonus. */
+    public static List<Long> xRubyBonus(List<Long> bonus, int times) {
+        List<List<Long>> aBonus = parse(bonus);
+        List<Long> result = new ArrayList<>();
+        for (List<Long> bo : aBonus) {
+            result.addAll(bo);
+            if (bo.get(0).intValue() == BONUS_RUBY)
+                result.set(result.size() - 1, result.get(result.size() - 1) * times);
+        }
+        return result;
+    }
+
+    static boolean hasPositiveRuby(List<Long> bonus) {
+        for (List<Long> chunk : parse(bonus)) {
+            if (chunk.get(0).intValue() == BONUS_RUBY && chunk.size() > 1 && chunk.get(1) > 0)
+                return true;
+        }
+        return false;
+    }
+
+    /**
+     * Nếu túi có Vé x2 ruby nạp (point 13) và bonus có ruby: x2 ruby.
+     * {@code attachFee=true}: gắn trừ 1 vé vào bonus (cùng receiveListItem).
+     * {@code attachFee=false}: trừ vé ngay (dùng khi gửi bonus qua mail).
+     */
+    public static List<Long> withRubyX2Voucher(MyUser mUser, List<Long> bonus, boolean attachFee) {
+        int pointId = ItemPointKey.RUBY_X2_VOUCHER.id;
+        if (mUser.getResources().getItemPointNumber(pointId) < 1)
+            return bonus;
+        if (!hasPositiveRuby(bonus))
+            return bonus;
+        List<Long> fee = viewItemPoint(pointId, -1);
+        if (checkMoney(mUser, fee) != null)
+            return bonus;
+        List<Long> result = xRubyBonus(bonus, 2);
+        if (attachFee) {
+            List<Long> withFee = new ArrayList<>(fee);
+            withFee.addAll(result);
+            return withFee;
+        }
+        if (receiveListItem(mUser, DetailActionType.SU_DUNG_VE_X2_RUBY.getKey(), fee).isEmpty())
+            return bonus;
+        return result;
+    }
+
     public static List<Long> xPerBonus(List<Long> bonus, int per100) {
         List<List<Long>> aBonus = parse(bonus);
         List<Long> result = new ArrayList<>();
@@ -895,6 +946,102 @@ public class Bonus {
         lst.set(treasureIdx + 1, 0);
         lst.set(treasureIdx + 2, 0);
         return mUser.getUser().updateItemEquip(lst);
+    }
+
+    public static boolean movePetOutOfBag(MyUser mUser, UserPetEntity pet) {
+        if (pet == null)
+            return false;
+        clearItemFromSlot(mUser, BONUS_PET, pet.getId());
+        return true;
+    }
+
+    public static boolean movePetToBag(MyUser mUser, UserPetEntity pet) {
+        if (pet == null || !mUser.getResources().canAddBagItem(1))
+            return false;
+        List<Long> slots = mUser.getUData().getItemSlotList();
+        int bagCount = mUser.getUData().getSlotBagUI();
+        Integer slot = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
+        if (slot == null)
+            return false;
+        ItemSlotHelper.setPair(slots, slot, BONUS_PET, pet.getId());
+        return mUser.getResources().saveItemSlot(slots);
+    }
+
+    public static boolean movePetToBagSlot(MyUser mUser, UserPetEntity pet, int slotIndex) {
+        if (pet == null || slotIndex < 0)
+            return false;
+        List<Long> slots = mUser.getUData().getItemSlotList();
+        int bagCount = mUser.getUData().getSlotBagUI();
+        if (slotIndex >= bagCount)
+            return false;
+        ItemSlotHelper.setPair(slots, slotIndex, BONUS_PET, pet.getId());
+        return mUser.getResources().saveItemSlot(slots);
+    }
+
+    public static boolean moveMountOutOfBag(MyUser mUser, UserMountEntity mount) {
+        if (mount == null)
+            return false;
+        clearItemFromSlot(mUser, BONUS_MOUNT, mount.getId());
+        return true;
+    }
+
+    public static boolean moveMountToBag(MyUser mUser, UserMountEntity mount) {
+        if (mount == null || !mUser.getResources().canAddBagItem(1))
+            return false;
+        List<Long> slots = mUser.getUData().getItemSlotList();
+        int bagCount = mUser.getUData().getSlotBagUI();
+        Integer slot = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
+        if (slot == null)
+            return false;
+        ItemSlotHelper.setPair(slots, slot, BONUS_MOUNT, mount.getId());
+        return mUser.getResources().saveItemSlot(slots);
+    }
+
+    public static boolean moveMountToBagSlot(MyUser mUser, UserMountEntity mount, int slotIndex) {
+        if (mount == null || slotIndex < 0)
+            return false;
+        List<Long> slots = mUser.getUData().getItemSlotList();
+        int bagCount = mUser.getUData().getSlotBagUI();
+        if (slotIndex >= bagCount)
+            return false;
+        ItemSlotHelper.setPair(slots, slotIndex, BONUS_MOUNT, mount.getId());
+        return mUser.getResources().saveItemSlot(slots);
+    }
+
+    public static boolean clearPetEquipSlot(MyUser mUser) {
+        int idx = game.treasure.mapping.UserEntity.equipSlotIndex(
+                protocol.Pbmethod.EquipSlotType.PET.getNumber());
+        List<Integer> lst = mUser.getUser().normalizeItemEquipList();
+        if (idx < 0)
+            return false;
+        lst.set(idx, 0);
+        lst.set(idx + 1, 0);
+        lst.set(idx + 2, 0);
+        return mUser.getUser().updateItemEquip(lst);
+    }
+
+    public static boolean clearMountEquipSlot(MyUser mUser) {
+        int idx = game.treasure.mapping.UserEntity.equipSlotIndex(
+                protocol.Pbmethod.EquipSlotType.MOUNT.getNumber());
+        List<Integer> lst = mUser.getUser().normalizeItemEquipList();
+        if (idx < 0)
+            return false;
+        lst.set(idx, 0);
+        lst.set(idx + 1, 0);
+        lst.set(idx + 2, 0);
+        return mUser.getUser().updateItemEquip(lst);
+    }
+
+    public static Integer findPetBagSlot(MyUser mUser, long rowId) {
+        List<Long> slots = mUser.getUData().getItemSlotList();
+        int bagCount = mUser.getUData().getSlotBagUI();
+        return ItemSlotHelper.findSlotOf(slots, 0, bagCount, BONUS_PET, rowId);
+    }
+
+    public static Integer findMountBagSlot(MyUser mUser, long rowId) {
+        List<Long> slots = mUser.getUData().getItemSlotList();
+        int bagCount = mUser.getUData().getSlotBagUI();
+        return ItemSlotHelper.findSlotOf(slots, 0, bagCount, BONUS_MOUNT, rowId);
     }
 
     public static boolean moveEquipmentOutOfBag(MyUser mUser, UserEquipmentEntity equip) {

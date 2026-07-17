@@ -145,7 +145,8 @@ public class Online {
             MyUser mUser = ChUtil.getMUser(channel);
             BaseRoom room = ChUtil.getRoom(channel);
             if (mUser != null) {
-                if (room != null) {
+                game.treasure.service.arena.ArenaService.getInstance().onDisconnect(mUser.getUserId());
+                if (room != null && mUser.getPlayer() != null) {
                     room.removeUnit(mUser.getPlayer().getId());
                 }
                 mUser.userLogout();

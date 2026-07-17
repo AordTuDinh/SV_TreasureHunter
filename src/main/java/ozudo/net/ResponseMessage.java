@@ -58,6 +58,7 @@ public class ResponseMessage {
         TreasureHandler.getInstance().initAction(mHandler);
         MobHandler.getInstance().initAction(mHandler);
         TradingHandler.getInstance().initAction(mHandler);
+        ArenaHandler.getInstance().initAction(mHandler);
 //        FarmHandler.getInstance().initAction(mHandler);
     }
 

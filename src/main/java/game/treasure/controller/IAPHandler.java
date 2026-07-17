@@ -252,6 +252,8 @@ public class IAPHandler extends AHandler {
             }
             // add vip exp
             bonus.addAll(Bonus.viewVipExp(rPack.getVipExp()));
+            // vé x2 ruby nạp (item point 13)
+            bonus = Bonus.withRubyX2Voucher(mUser, bonus, true);
             addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.BUY_IAP.getKey(id), bonus)));
         } else {
             addErrResponse(getLang(Lang.err_buy_iap_fail));

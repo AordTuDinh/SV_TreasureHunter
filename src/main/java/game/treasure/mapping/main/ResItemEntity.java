@@ -20,7 +20,7 @@ public class ResItemEntity extends BaseEntity implements Serializable {
     @Getter
     String name,data;
     @Getter
-    int tier, sellPrice, icon;
+    int tier, icon;
     int type;
     @Getter
     @Transient

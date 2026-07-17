@@ -12,7 +12,11 @@ public enum ItemPointKey {
     CHIP(5),
     BONG_LINH_THU(6),
     BONG_SIEU_THU(7),
-    LOA_THE_GIOI(8);
+    LOA_THE_GIOI(8),
+    /** Vé x2 ruby khi nạp — res_item_point.point_id = 13 */
+    RUBY_X2_VOUCHER(13),
+    /** Xu đấu trường — res_item_point.point_id = 14 */
+    ARENA_COIN(14);
 
     public final int id;
 

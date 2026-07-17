@@ -11,8 +11,8 @@ import game.config.lang.Lang;
 
 import game.treasure.mapping.UserEquipmentEntity;
 import game.treasure.mapping.UserItemEntity;
-import game.treasure.mapping.main.ResItemEntity;
-import game.treasure.service.resource.ResItem;
+import game.treasure.mapping.UserMountEntity;
+import game.treasure.mapping.UserPetEntity;
 
 import game.object.MyUser;
 
@@ -97,6 +97,18 @@ public class CfgItem {
         return level >= 1 && level < MAX_UPGRADE_LEVEL;
     }
 
+    public static boolean canUpLevel(UserPetEntity item) {
+        if (item == null) return false;
+        int level = item.getLevel();
+        return level >= 1 && level < MAX_UPGRADE_LEVEL;
+    }
+
+    public static boolean canUpLevel(UserMountEntity item) {
+        if (item == null) return false;
+        int level = item.getLevel();
+        return level >= 1 && level < MAX_UPGRADE_LEVEL;
+    }
+
 
     public static int getTierMult(UserItemEntity item) {
         int tier = item.getTier();
@@ -104,6 +116,16 @@ public class CfgItem {
     }
 
     public static int getTierMult(UserEquipmentEntity item) {
+        int tier = item.getTier();
+        return tier > 0 ? tier : 1;
+    }
+
+    public static int getTierMult(UserPetEntity item) {
+        int tier = item.getTier();
+        return tier > 0 ? tier : 1;
+    }
+
+    public static int getTierMult(UserMountEntity item) {
         int tier = item.getTier();
         return tier > 0 ? tier : 1;
     }
@@ -149,11 +171,36 @@ public class CfgItem {
         return Bonus.viewGold(-fee);
     }
 
+    public static long getUpgradeFeeGold(UserPetEntity item) {
+        if (!canUpLevel(item)) return 0;
+        int level = item.getLevel();
+        int idx = level - 1;
+        if (idx < 0 || idx >= UPGRADE_FEE_BASE_T1.size()) return 0;
+        return (long) getTierMult(item) * UPGRADE_FEE_BASE_T1.get(idx);
+    }
+
+    public static long getUpgradeFeeGold(UserMountEntity item) {
+        if (!canUpLevel(item)) return 0;
+        int level = item.getLevel();
+        int idx = level - 1;
+        if (idx < 0 || idx >= UPGRADE_FEE_BASE_T1.size()) return 0;
+        return (long) getTierMult(item) * UPGRADE_FEE_BASE_T1.get(idx);
+    }
+
+    public static List<Long> getUpgradeFee(UserPetEntity item) {
+        long fee = getUpgradeFeeGold(item);
+        if (fee <= 0) return new ArrayList<>();
+        return Bonus.viewGem((int) -fee);
+    }
+
+    public static List<Long> getUpgradeFee(UserMountEntity item) {
+        long fee = getUpgradeFeeGold(item);
+        if (fee <= 0) return new ArrayList<>();
+        return Bonus.viewGem((int) -fee);
+    }
+
 
     public static int getSellPriceGold(UserItemEntity item) {
-        ResItemEntity res = ResItem.getItem(item.getItemId());
-        if (res != null && res.getSellPrice() > 0)
-            return res.getSellPrice();
         if (item.getType() != Pbmethod.ItemType.POSITION.getNumber())
             return 0;
         int level = item.getLevel();
@@ -169,12 +216,32 @@ public class CfgItem {
         return getTierMult(item) * SELL_PRICE_BASE_T1.get(idx);
     }
 
+    public static int getSellPriceGold(UserPetEntity item) {
+        int level = item.getLevel() > 0 ? item.getLevel() : 1;
+        int idx = Math.min(level, SELL_PRICE_BASE_T1.size()) - 1;
+        return getTierMult(item) * SELL_PRICE_BASE_T1.get(idx);
+    }
+
+    public static int getSellPriceGold(UserMountEntity item) {
+        int level = item.getLevel() > 0 ? item.getLevel() : 1;
+        int idx = Math.min(level, SELL_PRICE_BASE_T1.size()) - 1;
+        return getTierMult(item) * SELL_PRICE_BASE_T1.get(idx);
+    }
+
     public static List<Long> getPriceSellItem(UserItemEntity uItem) {
         return Bonus.viewGold(getSellPriceGold(uItem));
     }
 
     public static List<Long> getPriceSellItem(UserEquipmentEntity uItem) {
         return Bonus.viewGold(getSellPriceGold(uItem));
+    }
+
+    public static List<Long> getPriceSellPet(UserPetEntity pet) {
+        return Bonus.viewGem(getSellPriceGold(pet));
+    }
+
+    public static List<Long> getPriceSellMount(UserMountEntity mount) {
+        return Bonus.viewGem(getSellPriceGold(mount));
     }
 
 

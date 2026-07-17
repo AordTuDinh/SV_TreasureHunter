@@ -8,6 +8,7 @@ import game.config.aEnum.*;
 import game.treasure.BattleConfig;
 import game.treasure.service.resource.ResMap;
 import game.treasure.service.battle.DeathPenaltyService;
+import game.treasure.service.arena.ArenaService;
 import game.treasure.service.user.Bonus;
 import game.treasure.table.BaseRoom;
 import game.object.DataQuest;
@@ -193,6 +194,14 @@ public class Player extends Unit implements Serializable {
 
     @Override
     public synchronized void protoDie(Unit killer) {
+        if (ArenaService.getInstance().handleDeath(this, killer)) {
+            super.protoDie(killer);
+            if (sendDie) {
+                protoStatus(Pbmethod.SubStateType.DIE);
+                sendDie = false;
+            }
+            return;
+        }
         DeathPenaltyService.apply(this, killer);
         long protectedUntil = System.currentTimeMillis() + BattleConfig.P_timeProtectedMs;
         setTimeProtectedEnd(protectedUntil);

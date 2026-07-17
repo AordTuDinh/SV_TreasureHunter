@@ -86,6 +86,8 @@ public class UserEntity implements Serializable {
         while (items.size() < EQUIP_LIST_SIZE)
             items.add(0);
         int treasureIdx = equipSlotIndex(protocol.Pbmethod.EquipSlotType.TREASURE.getNumber());
+        int petIdx = equipSlotIndex(protocol.Pbmethod.EquipSlotType.PET.getNumber());
+        int mountIdx = equipSlotIndex(protocol.Pbmethod.EquipSlotType.MOUNT.getNumber());
         boolean update = false;
         for (int i = 0; i < items.size(); i += EQUIP_FIELDS_PER_SLOT) {
             int rowId = items.get(i);
@@ -93,6 +95,24 @@ public class UserEntity implements Serializable {
                 continue;
             if (i == treasureIdx) {
                 if (mUser.getResources().getArtifact(rowId) == null) {
+                    items.set(i, 0);
+                    items.set(i + 1, 0);
+                    items.set(i + 2, 0);
+                    update = true;
+                }
+                continue;
+            }
+            if (i == petIdx) {
+                if (mUser.getResources().getPet(rowId) == null) {
+                    items.set(i, 0);
+                    items.set(i + 1, 0);
+                    items.set(i + 2, 0);
+                    update = true;
+                }
+                continue;
+            }
+            if (i == mountIdx) {
+                if (mUser.getResources().getMount(rowId) == null) {
                     items.set(i, 0);
                     items.set(i + 1, 0);
                     items.set(i + 2, 0);

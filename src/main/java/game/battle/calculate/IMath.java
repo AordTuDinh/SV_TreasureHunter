@@ -248,6 +248,47 @@ public class IMath {
             for (int i = 0; i + 1 < itemPoints.size(); i += 2)
                 addPointData(pt, itemPoints.get(i).intValue(), itemPoints.get(i + 1).floatValue());
         }
+        addEquippedPetMountPoints(mUser, pt);
+    }
+
+    /** Cộng stat từ pet / mount đang trang bị (slot PET / MOUNT). */
+    static void addEquippedPetMountPoints(MyUser mUser, Point pt) {
+        List<Integer> lst = mUser.getUser().normalizeItemEquipList();
+        int petIdx = game.treasure.mapping.UserEntity.equipSlotIndex(
+                protocol.Pbmethod.EquipSlotType.PET.getNumber());
+        if (petIdx >= 0 && petIdx < lst.size()) {
+            int petRowId = lst.get(petIdx);
+            if (petRowId > 0) {
+                game.treasure.mapping.UserPetEntity pet = mUser.getResources().getPet(petRowId);
+                if (pet != null)
+                    addDataFloatPoints(pt, pet.getDataListFloat(), pet.getLevel());
+            }
+        }
+        int mountIdx = game.treasure.mapping.UserEntity.equipSlotIndex(
+                protocol.Pbmethod.EquipSlotType.MOUNT.getNumber());
+        if (mountIdx >= 0 && mountIdx < lst.size()) {
+            int mountRowId = lst.get(mountIdx);
+            if (mountRowId > 0) {
+                game.treasure.mapping.UserMountEntity mount = mUser.getResources().getMount(mountRowId);
+                if (mount != null)
+                    addDataFloatPoints(pt, mount.getDataListFloat(), mount.getLevel());
+            }
+        }
+    }
+
+    static void addDataFloatPoints(Point pt, List<Float> data, int level) {
+        if (data == null || data.size() < 2)
+            return;
+        int itemLevel = level > 0 ? level : 1;
+        for (int i = 0; i + 1 < data.size(); i += 2) {
+            int pointId = Math.round(data.get(i));
+            float base = data.get(i + 1);
+            if (pointId < 0 || base <= 0f)
+                continue;
+            float scaled = game.config.CfgItem.formatPointStat(pointId,
+                    game.config.CfgItem.getStatAtLevel(base, itemLevel));
+            addPointData(pt, pointId, scaled);
+        }
     }
 
     public static void addPointEffect(Point point, PointData[] aEffect) {

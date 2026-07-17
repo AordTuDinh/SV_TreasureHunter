@@ -106,6 +106,8 @@ public class UserService {
                 }
                 // add vip exp
                 bonus.addAll(Bonus.viewVipExp(rPack.getVipExp()));
+                // vé x2 ruby nạp (item point 13) — trừ vé ngay, bonus x2 gửi mail
+                bonus = Bonus.withRubyX2Voucher(mUser, bonus, false);
                 uBuy.setStatus(StatusType.DONE.value);
                 if (DBJPA.update(uBuy)) {
                     DBJPA.rawSQL(DBHelper.sqlMail(mUser.getUser().getId(), String.format(Lang.getTitle(mUser,Lang.mail_pack_bonus), rPack.getName()), StringHelper.toDBString(bonus)));

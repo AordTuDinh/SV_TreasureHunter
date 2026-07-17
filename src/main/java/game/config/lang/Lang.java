@@ -21,6 +21,12 @@ public abstract class Lang implements Serializable {
     public static String no_need_refresh = "no_need_refresh"; // Không cần làm mới
     public static String err_not_enough_ruby = "err_not_enough_ruby"; // Không đủ Ruby
     public static String err_not_enough_cup = "err_not_enough_cup"; // Không đủ Cup
+    public static String err_not_enough_arena_coin = "err_not_enough_arena_coin"; // Không đủ xu đấu trường
+    public static String err_arena_closed = "err_arena_closed"; // Đấu trường chưa mở
+    public static String err_arena_not_enough_cup = "err_arena_not_enough_cup"; // Cần đủ 50 cup để đăng ký
+    public static String err_arena_already_registered = "err_arena_already_registered"; // Đã đăng ký
+    public static String err_arena_not_registered = "err_arena_not_registered"; // Chưa đăng ký
+    public static String err_arena_in_match = "err_arena_in_match"; // Đang trong trận
 
     public static String err_trading_wallet_full = "err_trading_wallet_full"; // Túi giao dịch không còn ô trống
     public static String err_trading_waiting = "err_trading_waiting"; // Vật phẩm đang chờ xác minh, chưa thể mua

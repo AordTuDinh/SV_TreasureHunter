@@ -42,6 +42,7 @@ public enum DetailActionType {
     SU_DUNG_VE_SO_NHO("lottery_mini_use"),
     SU_DUNG_ITEM("used_item_"),
     SU_DUNG_LOA_THE_GIOI("speaker_use"),
+    SU_DUNG_VE_X2_RUBY("ruby_x2_voucher"),
     MUA_CHIP_VONG_QUAY("buy_chip"),
     BUY_SHOP("buy_shop_"),
     REFRESH_SHOP("refresh_shop_"),
@@ -127,6 +128,12 @@ public enum DetailActionType {
     FARM_QUEST_RECEIVE_QUEST("farm_quest_receive_quest_"), // Nhận phần thưởng đơn hàng
     START_FARM_QUEST("start_farm_quest_id_"),// Gửi đơn hàng theo id
     ATTACK_ARENA("attack_arena"), // đánh đấu trường
+    ARENA_REGISTER("arena_register"),
+    ARENA_CANCEL("arena_cancel"),
+    ARENA_WIN("arena_win"),
+    ARENA_LOSE("arena_lose"),
+    ARENA_DRAW("arena_draw"),
+    ARENA_DISCONNECT("arena_disconnect"),
     SMART_BOSS("smart_boss_num_"), // càn quét boss
     BONUS_COMMUNITY("bonus_community_"), // bonus cộng đồng
     BUY_EVENT_TIMER("buy_event_timer_"),// mua gói hạn giờ

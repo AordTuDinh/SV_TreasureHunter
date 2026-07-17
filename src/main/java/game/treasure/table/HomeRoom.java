@@ -64,6 +64,21 @@ public class HomeRoom extends BaseBattleRoom {
     public void Update1s() {
         super.Update1s();
         processHealZoneTick();
+        // Arena tick theo server của room
+        try {
+            if (mapInfo != null) {
+                // keyRoom / players share same server — lấy từ player đầu tiên nếu có
+                for (Long pid : aPlayerIds) {
+                    Unit u = getPlayerId(pid);
+                    if (u != null && u.isPlayer() && u.getPlayer().getMUser() != null) {
+                        int serverId = u.getPlayer().getMUser().getUser().getServer();
+                        game.treasure.service.arena.ArenaService.getInstance().tick(serverId);
+                        break;
+                    }
+                }
+            }
+        } catch (Exception ignored) {
+        }
     }
 
     void processHealZoneTick() {

@@ -22,6 +22,11 @@ public enum TopType {
             "SELECT u.*,c.contribute number FROM dson.user u INNER JOIN dson.user_clan c ON u.id = c.user_id WHERE u.SERVER=%s AND u.clan=%s order BY c.contribute desc limit 50",
             "SELECT count(*) number FROM dson.user_clan WHERE server=%s and contribute > (SELECT contribute FROM dson.user_clan WHERE user_id=%s)",
             "SELECT u.*,c.contribute number FROM dson.user u INNER JOIN dson.user_clan a ON u.id = c.user_id WHERE u.id=%s"),
+    /** Top thắng arena tuần — point = user_week.arena_win. get(): server, weekId */
+    USER_ARENA(5, 0, "ARENA",
+            "SELECT u.*, COALESCE(w.arena_win,0) number FROM dson.user u LEFT JOIN dson.user_week w ON u.id = w.user_id AND w.week_id=%2$s WHERE u.server=%1$s ORDER BY number DESC LIMIT 50",
+            "SELECT count(*) number FROM dson.user_week WHERE server=%1$s AND week_id=(SELECT week_id FROM dson.user_week WHERE user_id=%2$s LIMIT 1) AND arena_win > COALESCE((SELECT arena_win FROM dson.user_week WHERE user_id=%2$s LIMIT 1),-1)",
+            "SELECT u.*, COALESCE(w.arena_win,0) number FROM dson.user u LEFT JOIN dson.user_week w ON u.id = w.user_id AND w.week_id=(SELECT week_id FROM dson.user_week WHERE user_id=%1$s ORDER BY week_id DESC LIMIT 1) WHERE u.id=%1$s"),
 //    PURCHASE(8, 0, "PURCHASE",
 //            "SELECT u.*,c.total_purchases number FROM dson.user u INNER JOIN dson.user_top_purchase c ON u.id = c.user_id WHERE u.SERVER=%s  order BY c.total_purchases desc limit 50",
 //            "SELECT count(*) number FROM dson.user_top_purchase WHERE server_id=%s and total_purchases > (SELECT total_purchases FROM dson.user_top_purchase WHERE user_id=%s)",

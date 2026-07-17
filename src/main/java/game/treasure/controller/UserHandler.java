@@ -363,7 +363,11 @@ public class UserHandler extends AHandler {
             addResponse(pbClanList);
         } else {
             Pbmethod.PbListUser pbListUser = null;
-            if (topType.type == TopType.CLAN_MEMBER_TYPE) { // for clan  member
+            if (topType == TopType.USER_ARENA) {
+                pbListUser = (Pbmethod.PbListUser) TopMonitor.getInstance().get(topType,
+                        String.valueOf(user.getServer()),
+                        String.valueOf(ozudo.base.helper.DateTime.getNumberWeek()));
+            } else if (topType.type == TopType.CLAN_MEMBER_TYPE) {
                 pbListUser = (Pbmethod.PbListUser) TopMonitor.getInstance().get(topType, String.valueOf(user.getServer()), String.valueOf(user.getClan()));
             } else {
                 pbListUser = (Pbmethod.PbListUser) TopMonitor.getInstance().get(topType, String.valueOf(user.getServer()));

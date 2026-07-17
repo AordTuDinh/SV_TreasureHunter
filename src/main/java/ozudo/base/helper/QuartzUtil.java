@@ -55,4 +55,21 @@ public class QuartzUtil {
         }
         return null;
     }
+
+    /** Cron: giây phút giờ ? * DOW — dayOfWeek: 1=CN … 7=T7 (Quartz). */
+    public static Trigger getTriggerWeekly(String name, int dayOfWeek, int hour, int minute) {
+        DateBuilder.validateHour(hour);
+        DateBuilder.validateMinute(minute);
+        try {
+            CronScheduleBuilder cron = CronScheduleBuilder.cronSchedule(
+                    String.format("0 %d %d ? * %d", minute, hour, dayOfWeek));
+            return TriggerBuilder.newTrigger()
+                    .withIdentity(name, groupName)
+                    .startNow().withSchedule(cron)
+                    .build();
+        } catch (Exception e) {
+            Logs.error(e);
+        }
+        return null;
+    }
 }

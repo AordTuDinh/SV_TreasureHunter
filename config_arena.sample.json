@@ -1,0 +1,35 @@
+{
+  "minCup": 50,
+  "registerGem": 10,
+  "cupWin": 5,
+  "cupLose": -5,
+  "coinWin": 2,
+  "coinLose": 1,
+  "coinDraw": 1,
+  "matchDurationSec": 90,
+  "registerDelaySec": 300,
+  "cupMatchRange": 10,
+  "moveNormalSec": 10,
+  "moveSlowSec": 10,
+  "moveSlowPercentPerSec": 10,
+  "arenaCoinPointId": 14,
+  "posA": [6.6, -34],
+  "posB": [9.3, -34],
+  "dirA": [1, 0],
+  "dirB": [-1, 0],
+  "posEndA": [3.8, -34],
+  "posEndB": [12, -34],
+  "windows": [
+    [11, 30, 12, 30],
+    [20, 30, 21, 30]
+  ],
+  "weekRewards": [
+    {"from": 1, "to": 1, "bonus": [1, 10]},
+    {"from": 2, "to": 2, "bonus": [1, 10]},
+    {"from": 3, "to": 3, "bonus": [1, 10]},
+    {"from": 4, "to": 10, "bonus": [1, 10]},
+    {"from": 11, "to": 20, "bonus": [1, 10]},
+    {"from": 21, "to": 50, "bonus": [1, 10]},
+    {"from": 51, "to": 100, "bonus": [1, 10]}
+  ]
+}

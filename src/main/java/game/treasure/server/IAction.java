@@ -217,6 +217,18 @@ public class IAction {
     public static final int TRADING_SYNC = 480;
     public static final int TRADING_EDIT = 481;
 
+    public static final int PET_EQUIP = 482;
+    public static final int PET_UNEQUIP = 483;
+    public static final int MOUNT_EQUIP = 484;
+    public static final int MOUNT_UNEQUIP = 485;
+
+    // Arena (Đấu trường La Mã 1v1)
+    public static final int ARENA_STATUS = 490;
+    public static final int ARENA_REGISTER = 491;
+    public static final int ARENA_CANCEL = 492;
+    /** Server push kết quả trận / spectator icon */
+    public static final int ARENA_END = 493;
+
     // Event
     public static final int RPS_SEND_RQ = 600;
     public static final int RPS_RECEIVE_RQ = 601;
