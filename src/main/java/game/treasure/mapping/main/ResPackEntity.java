@@ -52,7 +52,7 @@ public class ResPackEntity {
         pb.setImage(image);
         pb.addAllBonus(GsonUtil.strToListInt(bonus));
         pb.setNameCell(name);
-        pb.setTextCell(Lang.getTitle(mUser,desc));
+        pb.setTextCell(desc);
         pb.setTextDesc(Lang.getTitle(mUser,desc2));
         pb.setNumBuy(numBuy);
         pb.setLimit(limit);
