@@ -300,20 +300,48 @@ public class CfgStats {
     }
 
     /**
-     * HP hồi mỗi tick (10s): floor(min(Hồi máu, healEffectiveCap) / healPointsPerHp).
-     * &lt; healPointsPerHp (mặc định 10) → 0; tại 600 → 60.
+     * % max HP hồi mỗi tick: (min(stat, healEffectiveCap) / healEffectiveCap) × healPercentAtCap.
+     * Tại 600 → 10%; scale tuyến tính phía dưới.
      */
-    public static int calcHealPerTick(long healingStat) {
-        long effective = Math.min(Math.max(healingStat, 0), cfg.healEffectiveCap);
-        if (effective < cfg.healPointsPerHp) {
+    public static float calcHealPercent(long healingStat) {
+        if (healingStat < cfg.healMinStat) {
+            return 0f;
+        }
+        long effective = Math.min(healingStat, cfg.healEffectiveCap);
+        if (effective <= 0 || cfg.healEffectiveCap <= 0 || cfg.healPercentAtCap <= 0) {
+            return 0f;
+        }
+        return (effective / (float) cfg.healEffectiveCap) * cfg.healPercentAtCap;
+    }
+
+    /**
+     * HP hồi mỗi tick (10s): floor(maxHp × calcHealPercent / 100).
+     * Tại 600 → 10% max HP; dưới {@link #getHealMinStat()} hoặc maxHp ≤ 0 → 0.
+     */
+    public static int calcHealPerTick(long healingStat, long maxHp) {
+        if (healingStat < cfg.healMinStat || maxHp <= 0) {
             return 0;
         }
-        return (int) (effective / cfg.healPointsPerHp);
+        long effective = Math.min(healingStat, cfg.healEffectiveCap);
+        if (cfg.healEffectiveCap <= 0 || cfg.healPercentAtCap <= 0) {
+            return 0;
+        }
+        return (int) (maxHp * effective * cfg.healPercentAtCap / (cfg.healEffectiveCap * 100L));
+    }
+
+    /** Điểm Hồi máu tối thiểu để chạy regen (dưới mức này bỏ qua mỗi tick/hit). */
+    public static int getHealMinStat() {
+        return cfg.healMinStat;
     }
 
     /** Khoảng cách giữa 2 lần hồi máu theo chỉ số Hồi máu (giây). */
     public static int calcHealIntervalSeconds() {
         return cfg.healIntervalSeconds;
+    }
+
+    /** Mỗi lần bị đánh rút ngắn bao nhiêu giây chu kỳ hồi máu. */
+    public static int calcHealAccelSecondsOnHit() {
+        return Math.max(0, cfg.healAccelSecondsOnHit);
     }
 
     /**
@@ -447,11 +475,17 @@ public class CfgStats {
         if (loaded.healEffectiveCap > 0) {
             cfg.healEffectiveCap = loaded.healEffectiveCap;
         }
-        if (loaded.healPointsPerHp > 0) {
-            cfg.healPointsPerHp = loaded.healPointsPerHp;
+        if (loaded.healPercentAtCap > 0) {
+            cfg.healPercentAtCap = loaded.healPercentAtCap;
+        }
+        if (loaded.healMinStat > 0) {
+            cfg.healMinStat = loaded.healMinStat;
         }
         if (loaded.healIntervalSeconds > 0) {
             cfg.healIntervalSeconds = loaded.healIntervalSeconds;
+        }
+        if (loaded.healAccelSecondsOnHit > 0) {
+            cfg.healAccelSecondsOnHit = loaded.healAccelSecondsOnHit;
         }
         if (loaded.dropReferenceEffective > 0) {
             cfg.dropReferenceEffective = loaded.dropReferenceEffective;
@@ -486,8 +520,10 @@ public class CfgStats {
         d.resistReduceAtReference = 0.50f;
         d.resistReduceMax = 0.75f;
         d.healEffectiveCap = 600;
-        d.healPointsPerHp = 10;
+        d.healPercentAtCap = 10;
+        d.healMinStat = 30;
         d.healIntervalSeconds = 10;
+        d.healAccelSecondsOnHit = 1;
         d.dropReferenceEffective = 600f;
         d.dropIncreaseAtReference = 100;
         d.dropIncreaseMax = 0;
@@ -534,12 +570,16 @@ public class CfgStats {
         public float resistReduceAtReference = 0.50f;
         /** Trần % giảm nguyên tố từ Kháng (0.75 = 75%). */
         public float resistReduceMax = 0.75f;
-        /** Cap hiệu dụng Hồi máu khi tính heal/tick (600 → tối đa 60 HP/10s). */
+        /** Cap hiệu dụng Hồi máu (600 → healPercentAtCap % max HP / tick). */
         public int healEffectiveCap = 600;
-        /** Số điểm Hồi máu = 1 HP mỗi tick (10 → 1 HP). */
-        public int healPointsPerHp = 10;
+        /** % max HP hồi mỗi tick tại healEffectiveCap (10 = 10%). */
+        public int healPercentAtCap = 10;
+        /** Điểm Hồi máu tối thiểu mới chạy regen (&lt; mức này bỏ qua mỗi tick/hit). */
+        public int healMinStat = 30;
         /** Khoảng cách tick hồi máu (giây). */
         public int healIntervalSeconds = 10;
+        /** Mỗi lần bị đánh rút ngắn chu kỳ hồi máu (giây). */
+        public int healAccelSecondsOnHit = 1;
         /** Mốc drop (600): tại đây → dropIncreaseAtReference phần nghìn. */
         public float dropReferenceEffective = 600f;
         /** Tại dropReferenceEffective → tăng bao nhiêu phần nghìn (100 = +10%). */

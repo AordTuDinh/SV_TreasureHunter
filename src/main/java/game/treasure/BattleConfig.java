@@ -15,7 +15,7 @@ public class BattleConfig {
     public static final float m_LerpSpeedBar = 0.05f; // tốc độ giảm hp, càng tăng thì tốc độ giảm càng nhanh theo hàm lerp
     public static final int m_LimitUseItem = 100;
     public static final float P_timeNoMove = 0.1f;
-    public static final float P_RangerAttack = 1.5f;
+    public static final float P_RangerAttack = 1f;
     public static final int P_reviveHpPercent = 50; // HP khi hồi sinh về làng (% max HP)
     public static final long P_timeProtectedMs = 3_600_000L; // 1 giờ bảo vệ sau khi chết
 

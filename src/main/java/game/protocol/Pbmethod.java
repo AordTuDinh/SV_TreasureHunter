@@ -1609,6 +1609,22 @@ public final class Pbmethod {
      * <code>AUTO_SELL_PET_4 = 15;</code>
      */
     AUTO_SELL_PET_4(15, 15),
+    /**
+     * <code>AUTO_SELL_ITEM_EVEN_1 = 16;</code>
+     */
+    AUTO_SELL_ITEM_EVEN_1(16, 16),
+    /**
+     * <code>AUTO_SELL_ITEM_EVEN_2 = 17;</code>
+     */
+    AUTO_SELL_ITEM_EVEN_2(17, 17),
+    /**
+     * <code>AUTO_SELL_ITEM_EVEN_3 = 18;</code>
+     */
+    AUTO_SELL_ITEM_EVEN_3(18, 18),
+    /**
+     * <code>AUTO_SELL_ITEM_EVEN_4 = 19;</code>
+     */
+    AUTO_SELL_ITEM_EVEN_4(19, 19),
     ;
 
     /**
@@ -1675,6 +1691,22 @@ public final class Pbmethod {
      * <code>AUTO_SELL_PET_4 = 15;</code>
      */
     public static final int AUTO_SELL_PET_4_VALUE = 15;
+    /**
+     * <code>AUTO_SELL_ITEM_EVEN_1 = 16;</code>
+     */
+    public static final int AUTO_SELL_ITEM_EVEN_1_VALUE = 16;
+    /**
+     * <code>AUTO_SELL_ITEM_EVEN_2 = 17;</code>
+     */
+    public static final int AUTO_SELL_ITEM_EVEN_2_VALUE = 17;
+    /**
+     * <code>AUTO_SELL_ITEM_EVEN_3 = 18;</code>
+     */
+    public static final int AUTO_SELL_ITEM_EVEN_3_VALUE = 18;
+    /**
+     * <code>AUTO_SELL_ITEM_EVEN_4 = 19;</code>
+     */
+    public static final int AUTO_SELL_ITEM_EVEN_4_VALUE = 19;
 
 
     public final int getNumber() { return value; }
@@ -1697,6 +1729,10 @@ public final class Pbmethod {
         case 13: return AUTO_SELL_PET_2;
         case 14: return AUTO_SELL_PET_3;
         case 15: return AUTO_SELL_PET_4;
+        case 16: return AUTO_SELL_ITEM_EVEN_1;
+        case 17: return AUTO_SELL_ITEM_EVEN_2;
+        case 18: return AUTO_SELL_ITEM_EVEN_3;
+        case 19: return AUTO_SELL_ITEM_EVEN_4;
         default: return null;
       }
     }
@@ -91051,7 +91087,7 @@ public final class Pbmethod {
       "\022\010\n\004HAIR\020\000\022\010\n\004FACE\020\001\022\007\n\003EYE\020\002\022\010\n\004BODY\020\003*" +
       "q\n\rEquipSlotType\022\010\n\004NULL\020\000\022\n\n\006WEAPON\020\001\022\007" +
       "\n\003HAT\020\002\022\t\n\005ARMOR\020\003\022\t\n\005CLOAK\020\004\022\t\n\005SHOES\020\005" +
-      "\022\014\n\010TREASURE\020\006\022\007\n\003PET\020\007\022\t\n\005MOUNT\020\010*\346\002\n\010A" +
+      "\022\014\n\010TREASURE\020\006\022\007\n\003PET\020\007\022\t\n\005MOUNT\020\010*\322\003\n\010A" +
       "utoSell\022\022\n\016AUTO_SELL_HP_1\020\000\022\022\n\016AUTO_SELL" +
       "_HP_2\020\001\022\022\n\016AUTO_SELL_HP_3\020\002\022\022\n\016AUTO_SELL" +
       "_HP_4\020\003\022\025\n\021AUTO_SELL_EQUIP_1\020\004\022\025\n\021AUTO_S",
@@ -91060,8 +91096,11 @@ public final class Pbmethod {
       "\020\010\022\025\n\021AUTO_SELL_MOUNT_2\020\t\022\025\n\021AUTO_SELL_M" +
       "OUNT_3\020\n\022\025\n\021AUTO_SELL_MOUNT_4\020\013\022\023\n\017AUTO_" +
       "SELL_PET_1\020\014\022\023\n\017AUTO_SELL_PET_2\020\r\022\023\n\017AUT" +
-      "O_SELL_PET_3\020\016\022\023\n\017AUTO_SELL_PET_4\020\017B\024\n\010p" +
-      "rotocolB\010Pbmethod"
+      "O_SELL_PET_3\020\016\022\023\n\017AUTO_SELL_PET_4\020\017\022\031\n\025A" +
+      "UTO_SELL_ITEM_EVEN_1\020\020\022\031\n\025AUTO_SELL_ITEM" +
+      "_EVEN_2\020\021\022\031\n\025AUTO_SELL_ITEM_EVEN_3\020\022\022\031\n\025" +
+      "AUTO_SELL_ITEM_EVEN_4\020\023B\024\n\010protocolB\010Pbm" +
+      "ethod"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

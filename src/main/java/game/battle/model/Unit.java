@@ -165,6 +165,7 @@ public abstract class Unit {
             if (checkHasBonusKill()) bonusKillMe(ownerDamage);
         } else {
             timeBeHit = System.currentTimeMillis();
+            accelerateHealRegenOnHit();
         }
     }
 
@@ -463,20 +464,48 @@ public abstract class Unit {
     }
 
     /**
-     * Hồi máu passive (point 15): mỗi 10s (Update1s) hồi floor(min(stat,600)/10) HP qua reHpFixed.
-     * Không hồi nếu chết, full máu, dưới 10 điểm, hoặc bị stun/đóng băng.
+     * Hồi máu passive (point 15): mỗi 10s hồi % max HP (600 → 10%, scale tuyến tính).
+     * Không hồi nếu chết, full máu, dưới healMinStat / HP hồi &lt; 1, hoặc bị stun/đóng băng.
      */
     private void processHealRegen() {
         if (!alive || point == null) {
             return;
         }
-        int healAmount = CfgStats.calcHealPerTick(point.getHealing());
-        if (healAmount <= 0) {
-            healSecondCounter = 0;
+        long healing = point.getHealing();
+        if (healing < CfgStats.getHealMinStat()) {
             return;
         }
-        int intervalSec = Math.max(1, CfgStats.calcHealIntervalSeconds());
+        int healAmount = CfgStats.calcHealPerTick(healing, point.getMaxHp());
+        if (healAmount < 1) {
+            return;
+        }
         healSecondCounter++;
+        tryHealRegenTick(healAmount);
+    }
+
+    /** Mỗi lần bị đánh: rút ngắn 1s chu kỳ hồi máu (có thể kích hoạt hồi ngay). */
+    private void accelerateHealRegenOnHit() {
+        if (!alive || point == null) {
+            return;
+        }
+        long healing = point.getHealing();
+        if (healing < CfgStats.getHealMinStat()) {
+            return;
+        }
+        int accel = CfgStats.calcHealAccelSecondsOnHit();
+        if (accel <= 0) {
+            return;
+        }
+        int healAmount = CfgStats.calcHealPerTick(healing, point.getMaxHp());
+        if (healAmount < 1) {
+            return;
+        }
+        healSecondCounter += accel;
+        tryHealRegenTick(healAmount);
+    }
+
+    private void tryHealRegenTick(int healAmount) {
+        int intervalSec = Math.max(1, CfgStats.calcHealIntervalSeconds());
         if (healSecondCounter < intervalSec) {
             return;
         }
