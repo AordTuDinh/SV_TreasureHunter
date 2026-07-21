@@ -51,7 +51,7 @@ public class ResPackEntity {
         pb.setId(id);
         pb.setImage(image);
         pb.addAllBonus(GsonUtil.strToListInt(bonus));
-        pb.setNameCell(Lang.getTitle(mUser, name));
+        pb.setNameCell(name);
         pb.setTextCell(Lang.getTitle(mUser,desc));
         pb.setTextDesc(Lang.getTitle(mUser,desc2));
         pb.setNumBuy(numBuy);

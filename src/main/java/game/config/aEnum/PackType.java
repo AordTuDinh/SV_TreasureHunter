@@ -38,8 +38,9 @@ public enum PackType {
     GOI_THANG_SO_3(31),
     GOI_THANG_SO_4(32),
     QUY_TRUONG_THANH(33),
-    GOI_KI_NANG_1(34),
-    GOI_KI_NANG_2(35),
+    GOI_THANG_SO_5(34),
+    GOI_THANG_SO_6(35),
+    GOI_THANG_SO_7(36),
     ;
 
     public final int value;

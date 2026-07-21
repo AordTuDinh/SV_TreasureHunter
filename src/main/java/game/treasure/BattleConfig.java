@@ -2,7 +2,7 @@ package game.treasure;
 
 public class BattleConfig {
     // new config
-    public static float attackSpeed = 0.5f;
+    public static float attackSpeed = 0.9f;
     public static float P_Height = 1.9f; //1 Chiều cao player
     public static float P_Width = 0.9f; //2 Chiều rộng player
     public static final float hSpeed = 0.3f; //3 - he so giam bot toc do move  - thong nhat giua client va server

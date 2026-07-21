@@ -337,8 +337,9 @@ public class WelfareHandler extends AHandler {
         tabThang.addCells(toProtoCell(PackType.GOI_THANG_SO_2));
         tabThang.addCells(toProtoCell(PackType.GOI_THANG_SO_3));
         tabThang.addCells(toProtoCell(PackType.GOI_THANG_SO_4));
-        tabThang.addCells(toProtoCell(PackType.GOI_KI_NANG_1));
-        tabThang.addCells(toProtoCell(PackType.GOI_KI_NANG_2));
+        tabThang.addCells(toProtoCell(PackType.GOI_THANG_SO_5));
+        tabThang.addCells(toProtoCell(PackType.GOI_THANG_SO_6));
+        tabThang.addCells(toProtoCell(PackType.GOI_THANG_SO_7));
         event.addTabEvent(tabThang);
         return event.build();
     }
