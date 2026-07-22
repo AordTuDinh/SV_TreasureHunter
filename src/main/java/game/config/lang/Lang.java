@@ -63,6 +63,7 @@ public abstract class Lang implements Serializable {
     public static String err_number_greater_than_equal = "err_number_greater_than_equal"; // Số phải lớn hơn hoặc bằng %s
     public static String need_join_clan_to_use = "need_join_clan_to_use"; //Cần gia nhập bang hội để sử dụng
     public static String clan_no_clan = "clan_no_clan";
+    public static String err_no_protect_shield = "err_no_protect_shield"; // Bạn đang không có khiên
     public static String err_no_bonus = "err_no_bonus"; // Không có gì để nhận
     public static String err_unauthorized = "err_unauthorized"; // Không được phép
     public static String err_in_room_already = "err_in_room_already"; // Bạn đang ở trong bản đồ này
@@ -376,6 +377,7 @@ public abstract class Lang implements Serializable {
     public static String mail_card_month_daily = "mail_card_month_daily"; // Quà thẻ Tháng mỗi ngày
     public static String mail_card_forever_daily = "mail_card_forever_daily"; // Quà thẻ Vĩnh Viễn mỗi ngày
     public static String mail_pack_land_daily = "mail_pack_land_daily"; // Quà gói Số lượt khai thác mỗi ngày
+    public static String mail_vip_daily = "mail_vip_daily"; // Phần thưởng vip %s
     public static String mail_refund_close_beta = "mail_refund_close_beta"; // Hoàn trả gói nạp Close Beta
     public static String mail_pack_bonus = "mail_pack_bonus"; // Phần quà gói: %s
     public static String mail_clan_boss_top = "mail_clan_boss_top"; // Chúc mừng bạn đạt top %s sát thương boss bang hội

@@ -475,9 +475,10 @@ public class Bonus {
     }
 
     static List<Long> addItemPoint(MyUser mUser, int pointId, long delta, String detailAction) {
-        if (ResItemPoint.get(pointId) == null)
+        if (ResItemPoint.get(pointId) == null && !ItemPointKey.isPointKey(pointId))
             return new ArrayList<>();
         int server = mUser.getUser().getServer();
+        boolean deferDb = pointId == ItemPointKey.PLOT.id;
         UserItemPointEntity row = mUser.getResources().getItemPoint(pointId);
         if (row == null) {
             if (delta < 0)
@@ -497,10 +498,15 @@ public class Bonus {
         long newNum = (long) row.getNumber() + delta;
         if (newNum < 0)
             return new ArrayList<>();
-        row.setNumber((int) newNum);
         row.setServer(server);
-        if (!row.updateNumber((int) newNum))
-            return new ArrayList<>();
+        if (deferDb) {
+            if (!row.setNumberDeferred((int) newNum))
+                return new ArrayList<>();
+        } else {
+            row.setNumber((int) newNum);
+            if (!row.updateNumber((int) newNum))
+                return new ArrayList<>();
+        }
         if (CfgServer.isRealServer())
             Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
                     "type", "item_point", "pointId", pointId, "add", delta, "cur", newNum);

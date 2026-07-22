@@ -16,6 +16,7 @@ import game.treasure.service.Services;
 import game.treasure.service.battle.PvpCupService;
 import game.treasure.service.resource.ResIAP;
 import game.treasure.service.user.Actions;
+import game.treasure.service.user.ProtectVipService;
 import game.treasure.table.BaseRoom;
 import game.treasure.task.dbcache.MailCreatorCache;
 import game.monitor.ClanManager;
@@ -379,8 +380,11 @@ public class LoginHandler extends AHandler {
         lstCmm.addAVector(getCommonIntVector(CfgArtifact.getGameConfigCoeffs()));
         // auto range: [tầm đánh, tầm buff HP, autoAttackMob, auto_buff]
         lstCmm.addAVector(getCommonIntVector(uSet.getAutoRangeList()));
-        // vip data: [26 int tích lũy theo VipType index]
+        // vip data: [12 int tích lũy theo VipType index]
         lstCmm.addAVector(getCommonIntVector(uSet.getVipDataList()));
+        // vip protect pool seconds còn lại hôm nay
+        ProtectVipService.settleIfExpired(mUser);
+        lstCmm.addAVector(getCommonIntVector(java.util.List.of(ProtectVipService.getPoolSeconds(mUser))));
         // ret
         addResponse(IAction.GAME_CONFIG, lstCmm.build());
     }

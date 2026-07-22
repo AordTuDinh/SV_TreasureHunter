@@ -1,5 +1,6 @@
 package game.treasure.service.user;
 
+import game.config.aEnum.VipType;
 import game.object.MyUser;
 import game.treasure.mapping.UserVip;
 import game.treasure.mapping.main.ResVipEntity;
@@ -16,13 +17,19 @@ public final class VipService {
         if (mUser == null || mUser.getUSetting() == null || fromLevel > toLevel) return;
         UserVip uVip = mUser.getUSetting().getUVip();
         boolean changed = false;
+        int shieldHoursAdded = 0;
         for (int level = fromLevel; level <= toLevel; level++) {
             ResVipEntity res = ResEvent.getResVip(level);
             if (res == null) continue;
             List<Integer> pairs = res.getAVipData();
             if (pairs == null || pairs.isEmpty()) continue;
             for (int i = 0; i + 1 < pairs.size(); i += 2) {
-                uVip.addValue(pairs.get(i), pairs.get(i + 1));
+                int type = pairs.get(i);
+                int value = pairs.get(i + 1);
+                uVip.addValue(type, value);
+                if (type == VipType.PROTECTION_SHIELD_HOUR && value > 0) {
+                    shieldHoursAdded += value;
+                }
                 changed = true;
             }
         }
@@ -30,6 +37,9 @@ public final class VipService {
             uVip.update();
             mUser.getUSetting().syncVipData(uVip.getList());
             mUser.queueVipDataSync();
+        }
+        if (shieldHoursAdded > 0) {
+            ProtectVipService.addHoursToDaily(mUser, shieldHoursAdded, uVip);
         }
     }
 }

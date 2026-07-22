@@ -10,6 +10,7 @@ import game.treasure.server.IAction;
 import game.treasure.service.resource.*;
 import game.treasure.service.user.Actions;
 import game.treasure.service.user.Bonus;
+import game.treasure.service.user.ProtectVipService;
 import game.treasure.mapping.UserSkinEntity;
 import game.treasure.task.dbcache.MailCreatorCache;
 import game.monitor.Online;
@@ -36,7 +37,7 @@ public class UserHandler extends AHandler {
         List<Integer> actions = Arrays.asList(CREATE_NAME, USER_INFO, DAME_SKIN_EQUIP, CHANGE_LANG,
                 CHAT_FRAME_EQUIP, USE_GIFT_CODE, TRIAL_EQUIP, BUFF_INFO, RANKING_STATUS, TUTORIAL_STATUS,
                 TUTORIAL_QUEST_RECEIVE, TUTORIAL_GO_TO, TUTORIAL_QUEST_STATUS, RANKING_INFO, SEND_MAIL,
-                HELP_VALUE, CHANGE_NAME, SKIN_EQUIP, USER_DATA_INFO, UPDATE_NEXT_DAY, SET_AUTO, SET_AUTO_RANGE, CANCEL_PROTECT);
+                HELP_VALUE, CHANGE_NAME, SKIN_EQUIP, USER_DATA_INFO, UPDATE_NEXT_DAY, SET_AUTO, SET_AUTO_RANGE, CANCEL_PROTECT, ACTIVATE_PROTECT);
         actions.forEach(action -> mHandler.put(action, this));
     }
 
@@ -82,6 +83,7 @@ public class UserHandler extends AHandler {
                 case SET_AUTO -> setAuto();
                 case SET_AUTO_RANGE -> setAutoRange();
                 case CANCEL_PROTECT -> cancelProtect();
+                case ACTIVATE_PROTECT -> activateProtect();
             }
         } catch (Exception ex) {
             Logs.error(ex);
@@ -89,20 +91,35 @@ public class UserHandler extends AHandler {
     }
 
     private void cancelProtect() {
-        long protectedEnd = mUser.getUData().getTimeProtected();
-        if (protectedEnd <= System.currentTimeMillis()) {
-            addResponse(getCommonVector(0L));
+        ProtectVipService.settleIfExpired(mUser);
+        long end = mUser.getUData().getTimeProtected();
+        if (end <= System.currentTimeMillis()) {
+            addResponse(getCommonVector(0L, (long) ProtectVipService.getPoolSeconds(mUser)));
             return;
         }
-        if (!mUser.getUData().update(List.of("time_protected", 0L))) {
-            addErrSystem();
+        ProtectVipService.settleActive(mUser);
+        addResponse(getCommonVector(0L, (long) ProtectVipService.getPoolSeconds(mUser)));
+    }
+
+    private void activateProtect() {
+        ProtectVipService.settleIfExpired(mUser);
+        if (mUser.getUData().getTimeProtected() > System.currentTimeMillis()) {
+            addErrParam();
             return;
         }
-        mUser.getUData().setTimeProtected(0);
-        if (mUser.getPlayer() != null) {
-            mUser.getPlayer().setTimeProtectedEnd(0);
+        if (ProtectVipService.getPoolSeconds(mUser) <= 0) {
+            String msg = Lang.getTitle(mUser, Lang.err_no_protect_shield);
+            if (StringHelper.isEmpty(msg) || msg.equals(Lang.err_no_protect_shield))
+                msg = "Bạn đang không có khiên";
+            addErrResponse(msg);
+            return;
         }
-        addResponse(getCommonVector(0L));
+        long wire = ProtectVipService.activate(mUser);
+        if (wire < 0) {
+            addErrParam();
+            return;
+        }
+        addResponse(getCommonVector(wire, (long) ProtectVipService.getPoolSeconds(mUser)));
     }
 
     private void setAuto() {

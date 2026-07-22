@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DataDaily {
-    public static final int NUMBER_VALUE = 20;
+    public static final int NUMBER_VALUE = 22;
     //endregion
     public static final int BUY_GOLD_0 = 0; // Mua vàng free
     public static final int BUY_GOLD_1 = 1; // Mua vàng 20
@@ -34,6 +34,10 @@ public class DataDaily {
     public static final int NUM_HONOR = 15; // Cống hiên bao nhiêu hôm nay rồi
     public static final int GET_CUP_FLOOR = 16; // Đã check tặng cup sàn (0→1) hôm nay chưa
     public static final int GET_PACK_LAND_DAILY = 17; // Đã nhận quà gói ô đất (pack 36) hôm nay chưa
+    public static final int GET_VIP_DAILY = 18; // Đã nhận quà VIP mỗi ngày chưa
+    public static final int PROTECTION_SHIELD_HOUR = 19; // Số giây khiên VIP còn lại trong pool hôm nay
+    public static final int GET_PROTECTION_SHIELD_DAILY = 20; // Đã cấp giây khiên VIP hôm nay chưa
+    public static final int PROTECTION_FROM_VIP = 21; // 1 = time_protected hiện tại lấy từ pool VIP
 
     public List<Integer> aInt;
     private int userId;

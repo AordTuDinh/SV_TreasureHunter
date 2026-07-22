@@ -507,4 +507,12 @@ public class UserResources implements Serializable {
             itemPoints.add(row);
         mItemPoint.put(row.getPointId(), row);
     }
+
+    /** Flush các item point dirty (PLOT defer) — gọi lúc logout. */
+    public void flushDirtyItemPoints() {
+        for (UserItemPointEntity row : mItemPoint.values()) {
+            if (row != null)
+                row.flushNumberIfDirty();
+        }
+    }
 }

@@ -7,8 +7,11 @@ import game.config.lang.Lang;
 import game.treasure.controller.UserEventTopEntity;
 import game.treasure.mapping.*;
 import game.treasure.mapping.main.ResIAPEntity;
+import game.treasure.mapping.main.ResVipEntity;
+import game.treasure.service.resource.ResEvent;
 import game.treasure.service.resource.ResIAP;
 import game.treasure.service.user.Bonus;
+import game.treasure.service.user.ProtectVipService;
 import game.object.DataDaily;
 import game.object.MyUser;
 import ozudo.base.database.DBJPA;
@@ -71,6 +74,24 @@ public class UserService {
         } else if (pLand != null && !pLand.hasHSD()) {
             mUser.getResources().removePack(pLand.getPackId());
         }
+        // quà VIP mỗi ngày (res_vip.bonus_day theo cấp VIP hiện tại)
+        int vipLevel = mUser.getUser().getVip();
+        if (vipLevel > 0 && data.getValue(DataDaily.GET_VIP_DAILY) == 0) {
+            ResVipEntity resVip = ResEvent.getResVip(vipLevel);
+            List<Long> vipBonusDay = resVip != null ? resVip.getABonusDay() : null;
+            if (vipBonusDay != null && !vipBonusDay.isEmpty()) {
+                String langTitle = Lang.getTitle(mUser, Lang.mail_vip_daily);
+                String title = StringHelper.isEmpty(langTitle) || langTitle.equals(Lang.mail_vip_daily)
+                        ? String.format("Phần thưởng vip %d", vipLevel)
+                        : String.format(langTitle, vipLevel);
+                if (DBResource.getInstance().rawSQL(DBHelper.sqlMail(mUser.getUser().getId(), title,
+                        StringHelper.toDBString(vipBonusDay)))) {
+                    data.setValueAndUpdate(DataDaily.GET_VIP_DAILY, 1);
+                }
+            }
+        }
+        // khiên bảo vệ VIP mỗi ngày (vip_data giờ → daily giây ×3600)
+        ProtectVipService.grantDailyFromVipData(mUser);
         // check buy qr error
         checkBuyQrError(mUser);
         // check event 7 day

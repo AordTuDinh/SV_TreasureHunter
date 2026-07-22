@@ -16,7 +16,9 @@ public enum ItemPointKey {
     /** Vé x2 ruby khi nạp — res_item_point.point_id = 13 */
     RUBY_X2_VOUCHER(13),
     /** Xu đấu trường — res_item_point.point_id = 14 */
-    ARENA_COIN(14);
+    ARENA_COIN(14),
+    /** Ô khai thác — trừ khi phá cell; res_item_point.point_id = 15 */
+    PLOT(15);
 
     public final int id;
 

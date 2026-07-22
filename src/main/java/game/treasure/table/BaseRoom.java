@@ -12,7 +12,7 @@ import game.config.CfgMaterial;
 import game.config.CfgServer;
 import game.config.aEnum.BlockType;
 import game.config.aEnum.DetailActionType;
-import protocol.Pbmethod;
+import game.config.aEnum.ItemPointKey;
 import game.config.aEnum.MapType;
 import game.treasure.BattleConfig;
 import game.treasure.mapping.UserEquipmentEntity;
@@ -28,6 +28,7 @@ import game.treasure.server.IAction;
 import game.treasure.service.battle.TreasureEventService;
 import game.treasure.service.user.Bonus;
 import game.object.MyUser;
+import game.protocol.CommonProto;
 import game.protocol.ProtoState;
 import io.netty.channel.Channel;
 import lombok.Getter;
@@ -452,6 +453,7 @@ public abstract class BaseRoom extends MonoRoom {
                     if (cellDie) {
                         addCellDie(cellObject);
                         MyUser mUser = player.getMUser();
+                        applyCellKillPlotCost(player);
                         ResObjectEntity.ObjectDropResult dropResult = cellObject.getBonusKillMe(
                                 mUser.getRateDropGold(), mUser.getRateDropGem(), mUser.getRateDropItem());
                         if (dropResult.fullMiss) {
@@ -497,6 +499,21 @@ public abstract class BaseRoom extends MonoRoom {
         if (mChunk.containsKey(chunkId) && mChunk.get(chunkId).getMCells().containsKey(globalCellId))
             return mChunk.get(chunkId).getMCells().get(globalCellId);
         return null;
+    }
+
+    /**
+     * Phá cell: trừ 1 PLOT (ô khai thác), sync số còn lại về client im lặng
+     * (UPDATE_BONUS_PRIVATE — không toast/FX); DB flush deferred (≤1 phút / logout).
+     */
+    void applyCellKillPlotCost(Player player) {
+        if (player == null || player.getMUser() == null) return;
+        MyUser mUser = player.getMUser();
+        if (mUser.getResources().getItemPointNumber(ItemPointKey.PLOT.id) <= 0)
+            return;
+        List<Long> wire = Bonus.receiveListItem(mUser, DetailActionType.KILL_CELL.getKey(),
+                Bonus.viewItemPoint(ItemPointKey.PLOT.id, -1));
+        if (wire != null && !wire.isEmpty())
+            Util.sendProtoData(mUser.getChannel(), CommonProto.getCommonVector(wire), IAction.UPDATE_BONUS_PRIVATE);
     }
 
     /** Phá cell: cộng bonus cho player; chỉ spawn quái khi chunk {@code [-1, mobId]}. */

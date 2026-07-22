@@ -203,6 +203,8 @@ public class Player extends Unit implements Serializable {
             return;
         }
         DeathPenaltyService.apply(this, killer);
+        // Hoàn giây VIP chưa dùng về pool trước khi gắn khiên chết
+        game.treasure.service.user.ProtectVipService.settleActive(mUser);
         long protectedUntil = System.currentTimeMillis() + BattleConfig.P_timeProtectedMs;
         setTimeProtectedEnd(protectedUntil);
         mUser.getUData().setTimeProtected(protectedUntil);

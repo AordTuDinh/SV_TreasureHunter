@@ -2,8 +2,10 @@ package game.treasure.mapping;
 
 import game.config.CfgEvent;
 import game.config.aEnum.StatusType;
+import game.config.aEnum.VipType;
 import game.object.DataDaily;
 import game.object.MyUser;
+import game.treasure.service.user.ProtectVipService;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -43,18 +45,21 @@ public class UserDailyEntity implements Serializable {
 
     public UserDailyEntity(int userId, int userLevel) {
         this.userId = userId;
-        genNewData(DateTime.getNumberDay(), false);
+        genNewData(DateTime.getNumberDay(), false, null);
     }
 
     public void checkData() {
+        checkData(null);
+    }
+
+    public void checkData(MyUser mUser) {
         int dayOfYear = DateTime.getNumberDay();
         if (dayOfYear != eventId) {
-            genNewData(dayOfYear, true);
+            genNewData(dayOfYear, true, mUser);
         }
     }
 
-
-    void genNewData(int dayOfYear, boolean update) {
+    void genNewData(int dayOfYear, boolean update, MyUser mUser) {
         eventId = dayOfYear;
         List<Integer> newDaily = NumberUtil.genListInt(DataDaily.NUMBER_VALUE, 0);
         dataInt = StringHelper.toDBString(newDaily);
@@ -64,7 +69,20 @@ public class UserDailyEntity implements Serializable {
         uuDaiHangNgay = NumberUtil.genListStringInt(CfgEvent.uuDaiHangNgay, StatusType.PROCESSING.value);
         event_1h = StringHelper.toDBString(NumberUtil.genListInt(CfgEvent.config.bonus1hour.size(), StatusType.PROCESSING.value));
         loginTime = 0;
+        applyVipProtectionShield(mUser);
+        dataInt = StringHelper.toDBString(dataDaily.aInt);
         if (update) DBJPA.update(this);
+    }
+
+    /** Mỗi ngày mới: ghi số giây khiên = tổng giờ vip_data × 3600. */
+    private void applyVipProtectionShield(MyUser mUser) {
+        if (mUser == null || mUser.getUSetting() == null) return;
+        int hours = mUser.getUSetting().getUVip().getValue(VipType.PROTECTION_SHIELD_HOUR);
+        int seconds = ProtectVipService.hoursToSeconds(hours);
+        if (seconds > 0) {
+            dataDaily.setValue(DataDaily.PROTECTION_SHIELD_HOUR, seconds);
+            dataDaily.setValue(DataDaily.GET_PROTECTION_SHIELD_DAILY, 1);
+        }
     }
 
     public List<Integer> getEvent1hStatus(MyUser mUser) {

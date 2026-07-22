@@ -17,6 +17,7 @@ import game.treasure.service.Services;
 import game.treasure.service.battle.TreasureEventService;
 import game.treasure.service.resource.ResItem;
 import game.treasure.service.user.Bonus;
+import game.treasure.service.user.ProtectVipService;
 import game.monitor.ClanManager;
 import game.protocol.CommonProto;
 import io.netty.channel.Channel;
@@ -247,7 +248,7 @@ public class MyUser implements Serializable {
     public UserDailyEntity getUserDaily() {
         if (uDaily == null) {
             uDaily = Services.userDAO.getUserDaily(this);
-        } else uDaily.checkData();
+        } else uDaily.checkData(this);
         return uDaily;
     }
 
@@ -434,10 +435,12 @@ public class MyUser implements Serializable {
 
     public void userLogout() {
         TreasureEventService.clearKeyOnLogout(this);
+        ProtectVipService.settleActive(this);
         long curTime = System.currentTimeMillis();
         saveLastHomePos();
         cachePointData(getPlayer().getPoint());
         uData.flushItemSlotIfDirty();
+        getResources().flushDirtyItemPoints();
         getUser().update(Arrays.asList("logout", Calendar.getInstance().getTime()));
         UserAchievementEntity uAchie = Services.userDAO.getUserAchievement(this);
         if (uAchie != null && uAchie.isCanUpdate()) uAchie.updateAll();

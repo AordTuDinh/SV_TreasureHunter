@@ -333,7 +333,7 @@ public class UserDAO {
             userDaily = getUserDaily(mUser.getUser().getId(), 1);
             if (userDaily != null) mUser.getCache().set("user_daily", userDaily);
         }
-        if(userDaily!=null) userDaily.checkData();
+        if(userDaily!=null) userDaily.checkData(mUser);
         return userDaily;
     }
 
