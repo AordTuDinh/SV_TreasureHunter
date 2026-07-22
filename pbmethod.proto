@@ -110,6 +110,7 @@ enum  ItemPointKey {
   LOA_THE_GIOI = 8;
   RUBY_X2_VOUCHER = 13; // vé x2 ruby khi nạp
   ARENA_COIN = 14; // xu đấu trường
+  PLOT = 15; // ô đất
 }
 
 // user_item.type / res_item.type — loại lưu trữ item (đồng bộ server + client)
