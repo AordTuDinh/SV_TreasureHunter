@@ -1,5 +1,6 @@
 package game.treasure.mapping.main;
 
+import game.config.CfgEvent;
 import game.config.aEnum.PackType;
 import game.config.lang.Lang;
 import game.object.MyUser;
@@ -37,10 +38,18 @@ public class ResPackEntity {
     public List<List<Long>> getData() {
         return GsonUtil.strTo2ListLong(data);
     }
+
     public List<Long> getDataList() {
         return GsonUtil.strToListLong(data);
     }
 
+    public int getDataInt() {
+        try {
+            return Integer.parseInt(data);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
 
     public String getStringData() {
         return data;
@@ -53,7 +62,7 @@ public class ResPackEntity {
         pb.addAllBonus(GsonUtil.strToListInt(bonus));
         pb.setNameCell(name);
         pb.setTextCell(desc);
-        pb.setTextDesc(Lang.getTitle(mUser,desc2));
+        pb.setTextDesc(Lang.getTitle(mUser, desc2));
         pb.setNumBuy(numBuy);
         pb.setLimit(limit);
         pb.addAllPrice(getPrice());
@@ -62,6 +71,10 @@ public class ResPackEntity {
         pb.setTimeRemain(timeRemain);
         pb.setTimeExpire(time * DateTime.HOUR_SECOND);
         return pb.build();
+    }
+
+    public boolean isPackMonth() {
+        return time == -3;
     }
 
     public long getTime() { // conver sang ms

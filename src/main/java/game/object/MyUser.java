@@ -67,6 +67,11 @@ public class MyUser implements Serializable {
     int rateDropGold;
     int rateDropGem;
     int rateDropItem;
+    /** Đủ ATK vũ khí (đã scale) để đánh vùng xám (≥300) / băng (≥400). Refresh khi login/mặc/gỡ/mất vũ khí. */
+    boolean canAttackGrey;
+    boolean canAttackIce;
+    /** Chống spam toast khi ATTACK bị chặn theo vùng. */
+    long lastZoneAttackToastMs;
 
     /**
      * Đồng bộ rate drop từ Point (point 17 vàng, 28 gem, 29 item).

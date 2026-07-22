@@ -505,7 +505,11 @@ public class EventHandler extends AHandler {
         if (curPack == null)
             curPack = UserPackEntity.builder().userId(user.getId()).packId(id).serverId(user.getServer()).number(0).build();
 
-        if (curPack.buyPack(mUser, curPack.getNumber() + 1)) {
+        // Hết hạn / chưa có HSD → mua lại bắt đầu từ 1, không cộng number cũ
+        boolean stillActive = curPack.hasHSD();
+        int nextNumber = stillActive ? curPack.getNumber() + 1 : 1;
+
+        if (curPack.buyPack(mUser, nextNumber)) {
             switch (PackType.get(id)) {
 //                case AFK_ADD_TIME, THE_THANG -> {
 //                    UserAfkEntity uAfk = Services.userDAO.getUserAfk(mUser);
@@ -558,12 +562,19 @@ public class EventHandler extends AHandler {
         List<Long> status = new ArrayList<>();
         for (int i = 0; i < packs.size(); i++) {
             UserPackEntity pack = packs.get(i);
+            if (!pack.hasHSD()) {
+                mUser.getResources().removePack(pack.getPackId());
+                continue;
+            }
             status.add((long) pack.getPackId());
             ResPackEntity resPack = pack.getRes();
             if (resPack.getTime() > 0) {
                 long timeRemain = (resPack.getTime() + pack.getTimeBuy()) - Calendar.getInstance().getTimeInMillis();
                 status.add(timeRemain > 0 ? timeRemain / 1000 : 0L);
-            } else status.add(0L);
+            } else {
+                // time <= 0 (-1/-2/-3/0): còn hạn theo hasHSD, gửi 1 để client giữ pack active
+                status.add(1L);
+            }
         }
         addResponse(getCommonVector(status));
     }

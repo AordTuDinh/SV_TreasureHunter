@@ -33,6 +33,7 @@ public class DataDaily {
     public static final int BONUS_TOP_HONOR = 14; // Đã nhận quà cống hiến mỗi ngày chưa
     public static final int NUM_HONOR = 15; // Cống hiên bao nhiêu hôm nay rồi
     public static final int GET_CUP_FLOOR = 16; // Đã check tặng cup sàn (0→1) hôm nay chưa
+    public static final int GET_PACK_LAND_DAILY = 17; // Đã nhận quà gói ô đất (pack 36) hôm nay chưa
 
     public List<Integer> aInt;
     private int userId;

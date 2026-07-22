@@ -33,6 +33,17 @@ public class CfgEvent {
     public static int maxQuyTruongThanh;
     public static final int uuDaiHangNgay = 3;
     static final List<Integer> slots1H = Arrays.asList(0, 1, 2, 3, 4, 5);
+    public static final List<Integer> packMonth = Arrays.asList(
+            PackType.GOI_THANG_SO_1.value, PackType.GOI_THANG_SO_2.value, PackType.GOI_THANG_SO_3.value,
+            PackType.GOI_THANG_SO_4.value, PackType.GOI_THANG_SO_5.value, PackType.GOI_THANG_SO_6.value,
+            PackType.GOI_THANG_SO_7.value);
+
+    /** Gói ô đất (36): quà ngày = bonus_day × number trong tháng. */
+    public static final List<PackType> packLandDaily = Arrays.asList(PackType.GOI_THANG_SO_7);
+
+    public static boolean isPackLandDaily(PackType packType) {
+        return packType != null && packLandDaily.contains(packType);
+    }
 
     public static Pbmethod.PbListTab.Builder getWelfare(MyUser mUser) {
         DataDaily uIntDaily = mUser.getUserDaily().getUDaily();

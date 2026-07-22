@@ -1,5 +1,6 @@
 package game.treasure.service;
 
+import game.config.CfgEvent;
 import game.config.CfgServer;
 import game.config.aEnum.*;
 import game.config.lang.Lang;
@@ -52,6 +53,24 @@ public class UserService {
             mUser.getPerReceiveBoss().set(0, mUser.getPerReceiveBoss().get(0)+ dataLst.get(1));
             mUser.getPerReceiveBoss().set(1, mUser.getPerReceiveBoss().get(1)+ dataLst.get(2));
         }
+        // quà gói ô đất (36): bonus_day × số lần mua trong tháng
+        UserPackEntity pLand = mUser.getResources().getPack(PackType.GOI_THANG_SO_7);
+        if (pLand != null && pLand.hasHSD() && pLand.getNumber() > 0
+                && data.getValue(DataDaily.GET_PACK_LAND_DAILY) == 0) {
+            List<Long> bonusDay = GsonUtil.strToListLong(pLand.getRes().getBonusDay());
+            if (bonusDay != null && !bonusDay.isEmpty()) {
+                bonusDay = Bonus.xBonus(bonusDay, pLand.getNumber());
+                String title = Lang.getTitle(mUser, Lang.mail_pack_land_daily);
+                if (StringHelper.isEmpty(title))
+                    title = "Quà gói Số lượt khai thác mỗi ngày";
+                if (DBResource.getInstance().rawSQL(DBHelper.sqlMail(mUser.getUser().getId(), title,
+                        StringHelper.toDBString(bonusDay)))) {
+                    data.setValueAndUpdate(DataDaily.GET_PACK_LAND_DAILY, 1);
+                }
+            }
+        } else if (pLand != null && !pLand.hasHSD()) {
+            mUser.getResources().removePack(pLand.getPackId());
+        }
         // check buy qr error
         checkBuyQrError(mUser);
         // check event 7 day
@@ -59,6 +78,9 @@ public class UserService {
         if (uEvent.hasEvent() && uEvent.hasActive(6)) {
 
         }
+
+        // check quà tháng
+
         // check den bu qua vip
 //        if (mUser.getUser().getLevel() > 5 && mUser.getUser().getServer()==1) {
 //            CacheUserBuyRubyEntity cUser = ResIAP.getCacheUserBuyRubyEntity(mUser.getUser().getMainId());

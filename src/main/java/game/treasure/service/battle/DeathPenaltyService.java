@@ -79,7 +79,7 @@ public final class DeathPenaltyService {
         notifyVictimItemRemoved(victim, drop);
     }
 
-    static int resolveTypeRoom(Player victim) {
+    public static int resolveTypeRoom(Player victim) {
         BaseRoom room = victim.getRoom();
         ResMapEntity map = room.getMapInfo();
         if (map == null)

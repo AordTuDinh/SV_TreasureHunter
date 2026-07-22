@@ -382,7 +382,8 @@ public class DateTime {
         cal1.setTime(fromDate);
         Calendar cal2 = Calendar.getInstance();
         cal2.setTime(toDate);
-        return cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH);
+        return cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR)
+                && cal1.get(Calendar.MONTH) == cal2.get(Calendar.MONTH);
     }
 
 

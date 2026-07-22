@@ -4,6 +4,7 @@ import game.config.CfgChat;
 import game.config.CfgItem;
 import game.config.CfgMaterial;
 import game.config.CfgMob;
+import game.config.CfgOpenBox;
 import game.config.CfgTreasure;
 import game.config.aEnum.*;
 import game.config.lang.Lang;
@@ -21,6 +22,7 @@ import game.treasure.server.IAction;
 import game.treasure.service.battle.TreasureEventService;
 import game.treasure.service.item.EquipmentExpireService;
 import game.treasure.service.resource.ResItem;
+import game.treasure.service.resource.ResItemPoint;
 import game.treasure.service.user.Bonus;
 import game.treasure.service.user.EquipSlotBonus;
 import game.monitor.Online;
@@ -44,7 +46,8 @@ public class ItemHandler extends AHandler {
     @Override
     public void initAction(Map<Integer, AHandler> mHandler) {
         List<Integer> actions = Arrays.asList(ITEM_EQUIPMENT_INFO, ITEM_EQUIPMENT_LOCK_DESTROY, ITEM_UP_LEVEL,
-                ITEM_EQUIPMENT_VIEW_INFO, ITEM_INFO, ITEM_SELL, ITEM_EQUIPMENT_UN_EQUIP, ITEM_USED, ITEM_EQUIPMENT_EQUIP, SPEAKER_SEND);
+                ITEM_EQUIPMENT_VIEW_INFO, ITEM_INFO, ITEM_SELL, ITEM_EQUIPMENT_UN_EQUIP, ITEM_USED, ITEM_POINT_USE,
+                ITEM_EQUIPMENT_EQUIP, SPEAKER_SEND);
         actions.forEach(action -> mHandler.put(action, this));
     }
 
@@ -72,6 +75,7 @@ public class ItemHandler extends AHandler {
                 case IAction.ITEM_EQUIPMENT_UN_EQUIP -> unEquipItem();
                 case IAction.ITEM_SELL -> sellItem();
                 case IAction.ITEM_USED -> usedItem();
+                case IAction.ITEM_POINT_USE -> itemPointUse();
                 case IAction.ITEM_INFO -> itemInfo();
                 case IAction.ITEM_EQUIPMENT_LOCK_DESTROY -> lockDestroy();
                 case IAction.ITEM_UP_LEVEL -> uplevel();
@@ -645,6 +649,73 @@ public class ItemHandler extends AHandler {
         lst.set(slotIndex + 1, 0);
         lst.set(slotIndex + 2, 0);
         return mUser.getUser().updateItemEquip(lst);
+    }
+
+    /**
+     * Mở rương item point type OPEN_BOX.
+     * Request: CommonVector [pointId, number] — number 1..100.
+     * Mỗi rương → 1 material: random materialId trong res.data, roll tier theo CfgOpenBox.
+     */
+    void itemPointUse() {
+        List<Long> aLong = CommonProto.parseCommonVector(requestData).getALongList();
+        if (aLong.size() < 2) {
+            addErrParam();
+            return;
+        }
+        int pointId = aLong.get(0).intValue();
+        int number = aLong.get(1).intValue();
+        if (number <= 0 || number > CfgOpenBox.MAX_OPEN_PER_TURN) {
+            addErrParam();
+            return;
+        }
+
+        game.treasure.mapping.main.ResItemPointEntity res = ResItemPoint.get(pointId);
+        if (res == null || res.getItemPointType() != Pbmethod.ItemPointType.OPEN_BOX) {
+            addErrParam();
+            return;
+        }
+        List<Integer> materialPool = res.getMaterialIds();
+        if (materialPool == null || materialPool.isEmpty()) {
+            addErrParam();
+            return;
+        }
+
+        if (mUser.getResources().getItemPointNumber(pointId) < number) {
+            addErrResponse(getLang(Lang.item_not_own));
+            return;
+        }
+
+        int freeSlots = mUser.getUData().getSlotMaterial() - mUser.getResources().getNumMaterial();
+        if (freeSlots < number) {
+            int need = number - Math.max(0, freeSlots);
+            String template = Lang.instance(mUser).get(Lang.err_need_material_slots);
+            if (template == null || "NA".equals(template)) {
+                template = "Cần thêm %d ô trống trong túi để nhận";
+            }
+            addErrResponse(String.format(template, need));
+            return;
+        }
+
+        List<Long> wire = new ArrayList<>(Bonus.viewItemPoint(pointId, -number));
+        for (int i = 0; i < number; i++) {
+            int materialId = materialPool.get(NumberUtil.getRandom(materialPool.size()));
+            int tier = CfgOpenBox.rollTier();
+            wire.addAll(Bonus.viewMaterial(materialId, tier));
+        }
+
+        String err = Bonus.checkMoney(mUser, wire);
+        if (err != null) {
+            addErrResponse(err);
+            return;
+        }
+
+        List<Long> receive = Bonus.receiveListItem(mUser,
+                DetailActionType.SU_DUNG_ITEM_POINT_BOX.getKey(pointId), wire);
+        if (receive == null || receive.isEmpty()) {
+            addErrResponse();
+            return;
+        }
+        addResponse(getCommonVector(receive));
     }
 
     void usedItem() {

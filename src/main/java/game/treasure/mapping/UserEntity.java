@@ -220,6 +220,7 @@ public class UserEntity implements Serializable {
         point.setCurHp(Math.min(cacheHp, point.getMaxHp()));
         mUser.getPlayer().setPoint(point);
         mUser.syncDropRates(point);
+        game.treasure.service.battle.ZoneAttackService.refresh(mUser);
         //todo tính thêm chỉ số của thẻ monster
         return point;
     }
@@ -235,6 +236,7 @@ public class UserEntity implements Serializable {
             point.setCurHp(cacheHp <= 0 ? point.getMaxHp() : Math.min(cacheHp, point.getMaxHp()));
         }
         mUser.syncDropRates(point);
+        game.treasure.service.battle.ZoneAttackService.refresh(mUser);
         return point;
     }
 

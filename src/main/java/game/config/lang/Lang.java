@@ -113,6 +113,8 @@ public abstract class Lang implements Serializable {
     public static String err_item_equip_cant_up = "err_item_equip_cant_up"; // Trang bị đang được sử dụng, cần tháo trang bị trước!
     public static String err_item_equip_slot = "err_item_equip_slot"; // Trang bị phải cùng loại!
     public static String err_max_slot = "err_max_slot"; // Túi không đủ chỗ chứa!
+    /** Cần thêm %d ô trống trong túi để nhận (mở rương material). */
+    public static String err_need_material_slots = "err_need_material_slots";
     public static String err_full_player = "err_full_player"; // Kênh đầy
     public static String err_item_equip_not_found = "err_item_equip_not_found"; // Trang bị không tồn tại
     public static String err_item_lock_in_bag = "err_item_lock_in_bag"; // Trang bị đang khóa, cần mở khóa trước!
@@ -217,6 +219,7 @@ public abstract class Lang implements Serializable {
     // campaign
     public static String err_lock_map_level = "err_lock_map_level"; //Bạn chưa đủ điều kiện để mở khóa bản đồ!
     public static String err_lock_map_power = "err_lock_map_power"; //Bạn chưa đủ lực chiến để mở khóa bản đồ!
+    public static String err_zone_weapon_atk = "err_zone_weapon_atk"; //Vũ khí cần %d tấn công để khai thác ở vùng này
     // quest
     public static String err_quest_done = "err_quest_done"; //Bạn chưa hoàn thành nhiệm vụ!
     public static String err_quest_not_found = "err_quest_not_found"; // Không tìm thấy nhiệm vụ!
@@ -372,6 +375,7 @@ public abstract class Lang implements Serializable {
     public static String mail_card_week_daily = "mail_card_week_daily"; // Quà thẻ Tuần mỗi ngày
     public static String mail_card_month_daily = "mail_card_month_daily"; // Quà thẻ Tháng mỗi ngày
     public static String mail_card_forever_daily = "mail_card_forever_daily"; // Quà thẻ Vĩnh Viễn mỗi ngày
+    public static String mail_pack_land_daily = "mail_pack_land_daily"; // Quà gói Số lượt khai thác mỗi ngày
     public static String mail_refund_close_beta = "mail_refund_close_beta"; // Hoàn trả gói nạp Close Beta
     public static String mail_pack_bonus = "mail_pack_bonus"; // Phần quà gói: %s
     public static String mail_clan_boss_top = "mail_clan_boss_top"; // Chúc mừng bạn đạt top %s sát thương boss bang hội

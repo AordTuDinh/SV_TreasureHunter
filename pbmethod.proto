@@ -123,6 +123,7 @@ enum ItemPointType {
   EVENT = 1;
   USE = 2;
   SPEAKER = 3;
+  OPEN_BOX = 4;
 }
 
 message PbUnit{

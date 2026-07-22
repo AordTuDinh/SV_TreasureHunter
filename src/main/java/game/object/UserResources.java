@@ -371,7 +371,11 @@ public class UserResources implements Serializable {
     }
 
     public void addPack(UserPackEntity pack) {
-        if (!mPacks.containsKey(pack.getPackId())) mPacks.put(pack.getPackId(), pack);
+        mPacks.put(pack.getPackId(), pack);
+    }
+
+    public void removePack(int packId) {
+        mPacks.remove(packId);
     }
 
     public UserMaterialEntity getMaterial(long id) {

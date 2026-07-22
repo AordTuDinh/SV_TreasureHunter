@@ -317,7 +317,7 @@ public class WelfareHandler extends AHandler {
         protocol.Pbmethod.PbTabWelfare.Builder tabTuan = protocol.Pbmethod.PbTabWelfare.newBuilder();
         tabTuan.setTabId(2);
         tabTuan.setNotify(false);
-        tabTuan.setTabName(getLang(Lang.week) );
+        tabTuan.setTabName(getLang(Lang.week));
         tabTuan.addCells(toProtoCell(PackType.CHIEU_MO_TUAN));
         tabTuan.addCells(toProtoCell(PackType.XU_GIA_TRI));
         tabTuan.addCells(toProtoCell(PackType.XU_MAY_MAN));
@@ -357,6 +357,12 @@ public class WelfareHandler extends AHandler {
             buttonStatus = uPack.getNumber() < rPack.getLimit() ? StatusType.PROCESSING.value : StatusType.DONE.value;
             if (rPack.getTime() > 0)
                 timeRemain = (rPack.getTime() + uPack.getTimeBuy() - Calendar.getInstance().getTimeInMillis()) / 1000;
+
+            // check gói tháng có 1 số gói trùng quà với vip thì cho nó done
+            if (rPack.isPackMonth()) { // gói tháng
+                int dataInt = rPack.getDataInt();
+                if (dataInt != 0 && user.getVip() >= dataInt) buttonStatus = StatusType.DONE.value;
+            }
         }
         return rPack.toPbCell(mUser, numBuy, buttonStatus, timeRemain);
     }
@@ -510,9 +516,9 @@ public class WelfareHandler extends AHandler {
         List<Integer> checkin = mUser.getUData().getNumCheckin();
         int numCheck = checkin.get(CfgCheckin.NUM_CHECKIN);
         List<Long> bonus = null;
-        if(numCheck>=CfgCheckin.config.bonusCheckin.size()){
+        if (numCheck >= CfgCheckin.config.bonusCheckin.size()) {
             bonus = Bonus.viewGem(100);
-        }else bonus = CfgCheckin.config.bonusCheckin.get(numCheck);
+        } else bonus = CfgCheckin.config.bonusCheckin.get(numCheck);
         checkin.set(CfgCheckin.NUM_CHECKIN, checkin.get(CfgCheckin.NUM_CHECKIN) + 1);
         checkin.set(CfgCheckin.STATUS, 1);
         if (mUser.getUData().updateCheckIn(StringHelper.toDBString(checkin))) {

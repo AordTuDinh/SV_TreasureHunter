@@ -437,6 +437,7 @@ public abstract class BaseRoom extends MonoRoom {
             game.treasure.service.resource.ResItem.useBuffItemInRoom(player, input.useItemId);
         } else if (input.typeId == NInput.ATTACK) {
             if (!player.canAttack()) return;
+            if (!game.treasure.service.battle.ZoneAttackService.tryAttackOrToast(player)) return;
             // Ưu tiên mở rương: đứng ô chest + chìa → không cho đánh
             if (TreasureEventService.blocksAttackForTreasureOpen(player)) return;
             if (input.targetAttack == Pbmethod.TargetAttack.OBJECT) {

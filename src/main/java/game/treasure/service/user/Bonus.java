@@ -1054,11 +1054,12 @@ public class Bonus {
         return ItemPointKey.isLotteryTicket(pointId);
     }
 
-    /** Tab túi event — res_item_point.type ∈ {EVENT, USE, SPEAKER}. */
+    /** Tab túi event — res_item_point.type ∈ {EVENT, USE, SPEAKER, OPEN_BOX}. */
     public static boolean usesEventBagStorage(Pbmethod.ItemPointType storageType) {
         return storageType == Pbmethod.ItemPointType.EVENT
                 || storageType == Pbmethod.ItemPointType.USE
-                || storageType == Pbmethod.ItemPointType.SPEAKER;
+                || storageType == Pbmethod.ItemPointType.SPEAKER
+                || storageType == Pbmethod.ItemPointType.OPEN_BOX;
     }
 
     public static boolean usesEventBagPoint(int pointId) {
