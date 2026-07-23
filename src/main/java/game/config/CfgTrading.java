@@ -1,5 +1,6 @@
 package game.config;
 
+import game.config.aEnum.VipType;
 import game.object.MyUser;
 import game.treasure.mapping.*;
 import game.treasure.service.user.Bonus;
@@ -17,8 +18,9 @@ public class CfgTrading {
     public static final int PAGE_SIZE = 20;
     public static final long WAIT_MIN_MS = 30_000L;
     public static final long WAIT_MAX_MS = 120_000L;
+    public static final int LISTING_FEE_MIN = 1;
 
-    /** Phí đăng tin — trả ngay khi xác nhận. Giá >= 400: chỉ 5%. */
+    /** Phí đăng tin gốc — trả ngay khi xác nhận. Giá >= 400: chỉ 5%. */
     public static int calcListingFee(int price) {
         if (price >= 400)
             return (int) Math.ceil(price * 0.05);
@@ -27,6 +29,26 @@ public class CfgTrading {
         if (price >= 100)
             return 2;
         return 1;
+    }
+
+    /**
+     * Phí đăng tin sau VIP:
+     * 1) giảm % {@link VipType#MARKET_TAX} (ceil),
+     * 2) trừ Ruby {@link VipType#MARKET_LISTING_RUBY},
+     * tối thiểu {@link #LISTING_FEE_MIN}.
+     */
+    public static int calcListingFee(int price, MyUser mUser) {
+        int fee = calcListingFee(price);
+        int taxPct = 0;
+        int rubyDiscount = 0;
+        if (mUser != null && mUser.getUSetting() != null) {
+            taxPct = Math.max(0, mUser.getUSetting().getUVip().getValue(VipType.MARKET_TAX));
+            rubyDiscount = Math.max(0, mUser.getUSetting().getUVip().getValue(VipType.MARKET_LISTING_RUBY));
+        }
+        if (taxPct > 0) {
+            fee = (int) Math.ceil(fee * (100 - Math.min(taxPct, 100)) / 100.0);
+        }
+        return Math.max(LISTING_FEE_MIN, fee - rubyDiscount);
     }
 
     public static int getUnlockCost(int tab, int unlockedCount) {

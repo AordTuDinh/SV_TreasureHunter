@@ -14,6 +14,7 @@ import game.treasure.mapping.UserItemEntity;
 import game.treasure.mapping.UserMountEntity;
 import game.treasure.mapping.UserPetEntity;
 
+import game.config.aEnum.VipType;
 import game.object.MyUser;
 
 import game.treasure.service.user.Bonus;
@@ -155,18 +156,40 @@ public class CfgItem {
         return (long) getTierMult(item) * UPGRADE_FEE_BASE_T1.get(idx);
     }
 
+    /**
+     * Giảm phí nâng theo VIP {@link VipType#UPGRADE_FEE} (%):
+     * {@code ceil(fee × (100 − pct) / 100)}, tối thiểu 1 nếu fee &gt; 0.
+     */
+    public static long applyUpgradeFeeVip(long fee, MyUser mUser) {
+        if (fee <= 0)
+            return 0;
+        int pct = 0;
+        if (mUser != null && mUser.getUSetting() != null)
+            pct = Math.max(0, mUser.getUSetting().getUVip().getValue(VipType.UPGRADE_FEE));
+        if (pct > 0)
+            fee = (long) Math.ceil(fee * (100 - Math.min(pct, 100)) / 100.0);
+        return Math.max(1, fee);
+    }
 
     public static List<Long> getUpgradeFee(UserItemEntity item) {
-        List<Long> poisonFee = CfgPoisonUpgrade.tryGetUpgradeFee(item);
+        return getUpgradeFee(item, null);
+    }
+
+    public static List<Long> getUpgradeFee(UserItemEntity item, MyUser mUser) {
+        List<Long> poisonFee = CfgPoisonUpgrade.tryGetUpgradeFee(item, mUser);
         if (poisonFee != null)
             return poisonFee;
-        long fee = getUpgradeFeeGold(item);
+        long fee = applyUpgradeFeeVip(getUpgradeFeeGold(item), mUser);
         if (fee <= 0) return new ArrayList<>();
         return Bonus.viewGold(-fee);
     }
 
     public static List<Long> getUpgradeFee(UserEquipmentEntity item) {
-        long fee = getUpgradeFeeGold(item);
+        return getUpgradeFee(item, null);
+    }
+
+    public static List<Long> getUpgradeFee(UserEquipmentEntity item, MyUser mUser) {
+        long fee = applyUpgradeFeeVip(getUpgradeFeeGold(item), mUser);
         if (fee <= 0) return new ArrayList<>();
         return Bonus.viewGold(-fee);
     }
@@ -188,13 +211,21 @@ public class CfgItem {
     }
 
     public static List<Long> getUpgradeFee(UserPetEntity item) {
-        long fee = getUpgradeFeeGold(item);
+        return getUpgradeFee(item, null);
+    }
+
+    public static List<Long> getUpgradeFee(UserPetEntity item, MyUser mUser) {
+        long fee = applyUpgradeFeeVip(getUpgradeFeeGold(item), mUser);
         if (fee <= 0) return new ArrayList<>();
         return Bonus.viewGem((int) -fee);
     }
 
     public static List<Long> getUpgradeFee(UserMountEntity item) {
-        long fee = getUpgradeFeeGold(item);
+        return getUpgradeFee(item, null);
+    }
+
+    public static List<Long> getUpgradeFee(UserMountEntity item, MyUser mUser) {
+        long fee = applyUpgradeFeeVip(getUpgradeFeeGold(item), mUser);
         if (fee <= 0) return new ArrayList<>();
         return Bonus.viewGem((int) -fee);
     }

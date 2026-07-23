@@ -103,13 +103,17 @@ public class CfgPoisonUpgrade {
      * Trả phí nâng poison đã HH; {@code null} nếu item không thuộc loại này.
      */
     public static List<Long> tryGetUpgradeFee(UserItemEntity item) {
+        return tryGetUpgradeFee(item, null);
+    }
+
+    public static List<Long> tryGetUpgradeFee(UserItemEntity item, game.object.MyUser mUser) {
         if (item == null || !isTransformedPoison(item))
             return null;
         if (!CfgItem.canUpLevel(item))
             return new ArrayList<>();
 
         int icon = item.getEffectiveIcon();
-        long cost = getUpgradeCost(icon, item.getTier(), item.getLevel());
+        long cost = CfgItem.applyUpgradeFeeVip(getUpgradeCost(icon, item.getTier(), item.getLevel()), mUser);
         if (cost <= 0)
             return new ArrayList<>();
         if (usesGemCurrency(icon))

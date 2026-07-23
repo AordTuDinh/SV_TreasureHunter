@@ -227,7 +227,7 @@ public class TradingHandler extends AHandler {
             addErrResponse(getLang(errKey));
             return;
         }
-        int feeAmount = CfgTrading.calcListingFee(price);
+        int feeAmount = CfgTrading.calcListingFee(price, mUser);
         List<Long> fee = Bonus.viewRuby(-feeAmount);
         String err = Bonus.checkMoney(mUser, fee);
         if (err != null) {
@@ -302,7 +302,7 @@ public class TradingHandler extends AHandler {
             addErrResponse(getLang(Lang.err_params));
             return;
         }
-        int feeAmount = CfgTrading.calcListingFee(price);
+        int feeAmount = CfgTrading.calcListingFee(price, mUser);
         List<Long> fee = Bonus.viewRuby(-feeAmount);
         String err = Bonus.checkMoney(mUser, fee);
         if (err != null) {

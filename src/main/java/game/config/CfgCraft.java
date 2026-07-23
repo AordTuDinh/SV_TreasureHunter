@@ -2,6 +2,8 @@ package game.config;
 
 import com.google.gson.Gson;
 import game.config.aEnum.CraftTargetType;
+import game.config.aEnum.VipType;
+import game.object.MyUser;
 import game.treasure.service.user.Bonus;
 import lombok.Data;
 import ozudo.base.helper.NumberUtil;
@@ -188,7 +190,11 @@ public class CfgCraft {
     }
 
     public static List<Long> getCraftFee(CraftTargetType type, int rank) {
-        long amount = getFeeAmount(type, rank);
+        return getCraftFee(type, rank, null);
+    }
+
+    public static List<Long> getCraftFee(CraftTargetType type, int rank, MyUser mUser) {
+        long amount = applyCraftFeeVip(getFeeAmount(type, rank), mUser);
         if (amount <= 0) {
             return new ArrayList<>();
         }
@@ -200,19 +206,45 @@ public class CfgCraft {
     }
 
     public static List<Long> sumCraftFees(CraftTargetType type, List<Integer> ranks) {
-        List<Long> total = new ArrayList<>();
+        return sumCraftFees(type, ranks, null);
+    }
+
+    public static List<Long> sumCraftFees(CraftTargetType type, List<Integer> ranks, MyUser mUser) {
+        if (ranks == null || ranks.isEmpty()) {
+            return new ArrayList<>();
+        }
+        long total = 0;
         for (int rank : ranks) {
-            List<Long> part = getCraftFee(type, rank);
-            if (part.isEmpty()) {
+            long amount = getFeeAmount(type, rank);
+            if (amount <= 0) {
                 return new ArrayList<>();
             }
-            if (total.isEmpty()) {
-                total.addAll(part);
-            } else {
-                total.set(1, total.get(1) + part.get(1));
-            }
+            total += amount;
         }
-        return total;
+        total = applyCraftFeeVip(total, mUser);
+        if (total <= 0) {
+            return new ArrayList<>();
+        }
+        TargetConfig t = targetByType.get(type.id);
+        if (t != null && "gold".equalsIgnoreCase(t.feeCurrency)) {
+            return Bonus.viewGold(-total);
+        }
+        return Bonus.viewGem((int) -total);
+    }
+
+    /**
+     * Giảm phí craft theo VIP {@link VipType#CRAFT_FEE} (%):
+     * {@code ceil(fee × (100 − pct) / 100)}, tối thiểu 1 nếu fee &gt; 0.
+     */
+    public static long applyCraftFeeVip(long fee, MyUser mUser) {
+        if (fee <= 0)
+            return 0;
+        int pct = 0;
+        if (mUser != null && mUser.getUSetting() != null)
+            pct = Math.max(0, mUser.getUSetting().getUVip().getValue(VipType.CRAFT_FEE));
+        if (pct > 0)
+            fee = (long) Math.ceil(fee * (100 - Math.min(pct, 100)) / 100.0);
+        return Math.max(1, fee);
     }
 
     /**
@@ -239,7 +271,16 @@ public class CfgCraft {
 
     /** @return 0 = no transform, 1..3 = hh tier */
     public static int rollTransformTier() {
-        if (cfg.transformRate <= 0 || NumberUtil.getRandom(100) >= cfg.transformRate)
+        return rollTransformTier(0);
+    }
+
+    /**
+     * Gate hóa hình: {@code transformRate + rateBonus}/100 (cap 100).
+     * {@code rateBonus} = VIP {@link game.config.aEnum.VipType#TRANSMUTE_RATE} (% điểm).
+     */
+    public static int rollTransformTier(int rateBonus) {
+        int effectiveRate = Math.min(100, Math.max(0, cfg.transformRate) + Math.max(0, rateBonus));
+        if (effectiveRate <= 0 || NumberUtil.getRandom(100) >= effectiveRate)
             return 0;
         if (cfg.transformTiers == null || cfg.transformTiers.isEmpty())
             return 0;

@@ -827,7 +827,7 @@ public class ItemHandler extends AHandler {
             addErrResponse(getLang(Lang.err_item_equip_max_level));
             return;
         }
-        List<Long> fee = CfgItem.getUpgradeFee(item);
+        List<Long> fee = CfgItem.getUpgradeFee(item, mUser);
         if (fee.isEmpty()) {
             addErrResponse(getLang(Lang.err_params));
             return;
@@ -868,7 +868,7 @@ public class ItemHandler extends AHandler {
             addErrResponse(getLang(Lang.err_item_lock_in_bag));
             return;
         }
-        List<Long> fee = CfgItem.getUpgradeFee(equip);
+        List<Long> fee = CfgItem.getUpgradeFee(equip, mUser);
         if (fee.isEmpty()) {
             addErrResponse(getLang(Lang.err_params));
             return;
@@ -938,7 +938,7 @@ public class ItemHandler extends AHandler {
             addErrResponse(getLang(Lang.err_item_equip_max_level));
             return;
         }
-        List<Long> fee = CfgItem.getUpgradeFee(pet);
+        List<Long> fee = CfgItem.getUpgradeFee(pet, mUser);
         if (fee.isEmpty()) {
             addErrResponse(getLang(Lang.err_params));
             return;
@@ -989,7 +989,7 @@ public class ItemHandler extends AHandler {
             addErrResponse(getLang(Lang.err_item_equip_max_level));
             return;
         }
-        List<Long> fee = CfgItem.getUpgradeFee(mount);
+        List<Long> fee = CfgItem.getUpgradeFee(mount, mUser);
         if (fee.isEmpty()) {
             addErrResponse(getLang(Lang.err_params));
             return;

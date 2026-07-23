@@ -81,7 +81,7 @@ public class MaterialHandler extends AHandler {
         }
         int gemTypeTier = res.getTier();
         int rank = gem.getTier();
-        List<Long> fee = CfgMaterial.getUpgradeFee(gemTypeTier, rank, gem.getLevel());
+        List<Long> fee = CfgMaterial.getUpgradeFee(gemTypeTier, rank, gem.getLevel(), mUser);
         if (fee.isEmpty()) {
             addErrParam();
             return;

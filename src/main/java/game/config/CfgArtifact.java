@@ -28,10 +28,14 @@ public class CfgArtifact {
     }
 
     public static List<Long> getUpgradeFee(UserArtifactEntity artifact, int currentLevel) {
+        return getUpgradeFee(artifact, currentLevel, null);
+    }
+
+    public static List<Long> getUpgradeFee(UserArtifactEntity artifact, int currentLevel, MyUser mUser) {
         if (artifact == null)
             return List.of();
         int tier = artifact.getTier() > 0 ? artifact.getTier() : 1;
-        long cost = getUpgradeCost(tier, currentLevel);
+        long cost = CfgItem.applyUpgradeFeeVip(getUpgradeCost(tier, currentLevel), mUser);
         if (cost <= 0)
             return List.of();
         return Bonus.viewItemPoint(ARTIFACT_POINT_ID, -cost);
@@ -62,7 +66,11 @@ public class CfgArtifact {
     }
 
     public static List<Long> getCraftFee(int tier) {
-        long cost = getCraftCost(tier);
+        return getCraftFee(tier, null);
+    }
+
+    public static List<Long> getCraftFee(int tier, MyUser mUser) {
+        long cost = CfgCraft.applyCraftFeeVip(getCraftCost(tier), mUser);
         if (cost <= 0)
             return List.of();
         return Bonus.viewItemPoint(ARTIFACT_POINT_ID, -cost);

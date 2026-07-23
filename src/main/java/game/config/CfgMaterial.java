@@ -150,7 +150,11 @@ public class CfgMaterial {
     }
 
     public static List<Long> getUpgradeFee(int tier, int rank, int currentLevel) {
-        long cost = getUpgradeCost(tier, rank, currentLevel);
+        return getUpgradeFee(tier, rank, currentLevel, null);
+    }
+
+    public static List<Long> getUpgradeFee(int tier, int rank, int currentLevel, game.object.MyUser mUser) {
+        long cost = CfgItem.applyUpgradeFeeVip(getUpgradeCost(tier, rank, currentLevel), mUser);
         if (cost <= 0) {
             return new ArrayList<>();
         }

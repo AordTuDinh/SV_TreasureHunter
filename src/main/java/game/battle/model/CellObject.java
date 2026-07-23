@@ -60,11 +60,12 @@ public class CellObject {
     }
 
 
-    public ResObjectEntity.ObjectDropResult getBonusKillMe(int rateDropGold, int rateDropGem, int rateDropItem) {
+    public ResObjectEntity.ObjectDropResult getBonusKillMe(int rateDropGold, int rateDropGem, int rateDropItem,
+                                                          int rateDropBonus) {
         ResObjectEntity resObject = ResMap.getResObject(resObjectType);
         if (resObject == null) return ResObjectEntity.ObjectDropResult.of(new ArrayList<>());
         ResObjectEntity.ObjectDropResult result =
-                resObject.randomBonus(materialId, itemEventId, rateDropGold, rateDropGem, rateDropItem);
+                resObject.randomBonus(materialId, itemEventId, rateDropGold, rateDropGem, rateDropItem, rateDropBonus);
         List<Long> bonus = result.bonus;
         if (isCampFire && bonus.size() >= 2 && bonus.get(0) == -1L) {
             int mobId = ResObjectEntity.pickIdByRatePairs(CAMPFIRE_MOB_RATE_PAIRS);

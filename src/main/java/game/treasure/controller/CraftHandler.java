@@ -337,6 +337,8 @@ public class CraftHandler extends AHandler {
             applyPetTransform(targetId);
         } else if (targetType == CraftTargetType.MOUNT) {
             applyMountTransform(targetId);
+        } else if (targetType == CraftTargetType.ARTIFACT) {
+            applyArtifactTransform(targetId);
         }
 
         boolean craftLeveled = false;
@@ -393,9 +395,9 @@ public class CraftHandler extends AHandler {
             if (artifact == null)
                 return List.of();
             int tier = artifact.getTier() > 0 ? artifact.getTier() : 1;
-            return CfgArtifact.getCraftFee(tier);
+            return CfgArtifact.getCraftFee(tier, mUser);
         }
-        return CfgCraft.sumCraftFees(targetType, gemRanks);
+        return CfgCraft.sumCraftFees(targetType, gemRanks, mUser);
     }
 
     private int resolveRequiredMaterialPointId(CraftTargetType targetType, long targetId,
@@ -756,7 +758,7 @@ public class CraftHandler extends AHandler {
     }
 
     private void applyEquipmentTransform(long targetId) {
-        applyTransform(targetId, CfgCraft.rollTransformTier(),
+        applyTransform(targetId, CfgCraft.rollTransformTier(mUser.getTransmuteRateBonus()),
                 mUser.getResources().getItemEquipment(targetId),
                 equip -> equip == null ? null : equip.getResEquipment(),
                 ResItemEquipmentEntity::getTransformIcon,
@@ -773,7 +775,7 @@ public class CraftHandler extends AHandler {
     }
 
     private void applyPetTransform(long targetId) {
-        applyTransform(targetId, CfgCraft.rollTransformTier(),
+        applyTransform(targetId, CfgCraft.rollTransformTier(mUser.getTransmuteRateBonus()),
                 mUser.getResources().getPet(targetId),
                 pet -> pet == null ? null : pet.getResPet(),
                 ResPetEntity::getTransformIcon,
@@ -790,7 +792,7 @@ public class CraftHandler extends AHandler {
     }
 
     private void applyMountTransform(long targetId) {
-        applyTransform(targetId, CfgCraft.rollTransformTier(),
+        applyTransform(targetId, CfgCraft.rollTransformTier(mUser.getTransmuteRateBonus()),
                 mUser.getResources().getMount(targetId),
                 mount -> mount == null ? null : mount.getRes(),
                 ResMountEntity::getTransformIcon,
@@ -804,6 +806,20 @@ public class CraftHandler extends AHandler {
                     return false;
                 },
                 UserMountEntity::getData);
+    }
+
+    /** Artifact: chỉ cập nhật hh (không icon/stat), rate hóa hình giống equip. */
+    private void applyArtifactTransform(long targetId) {
+        int tier = CfgCraft.rollTransformTier(mUser.getTransmuteRateBonus());
+        if (tier <= 0)
+            return;
+        UserArtifactEntity artifact = mUser.getResources().getArtifact(targetId);
+        if (artifact == null)
+            return;
+        int hh = CfgCraft.hhFromTransformTier(tier);
+        if (artifact.update(List.of("hh", hh))) {
+            artifact.setHh(hh);
+        }
     }
 
     @FunctionalInterface

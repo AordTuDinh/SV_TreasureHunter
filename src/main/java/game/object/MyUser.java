@@ -90,6 +90,45 @@ public class MyUser implements Serializable {
         rateDropItem = CfgStats.calcDropIncreaseRate(point.get(Point.P_MATERIAL_INCREASE));
     }
 
+    /** Rate vàng miss cell: material + VIP {@link VipType#GOLD_MINING} (% → phần nghìn ×10). */
+    public int getRateDropGold() {
+        int vipBonus = 0;
+        if (uSetting != null) {
+            vipBonus = Math.max(0, uSetting.getUVip().getValue(VipType.GOLD_MINING)) * 10;
+        }
+        return rateDropGold + vipBonus;
+    }
+
+    /** Rate kim cương miss cell: material + VIP {@link VipType#DIAMOND_MINING_RATE} (% → phần nghìn ×10). Trúng → 1 gem. */
+    public int getRateDropGem() {
+        int vipBonus = 0;
+        if (uSetting != null) {
+            vipBonus = Math.max(0, uSetting.getUVip().getValue(VipType.DIAMOND_MINING_RATE)) * 10;
+        }
+        return rateDropGem + vipBonus;
+    }
+
+    /** Rate material miss cell: material + VIP {@link VipType#STONE_MINING_RATE} (% → phần nghìn ×10). */
+    public int getRateDropItem() {
+        int vipBonus = 0;
+        if (uSetting != null) {
+            vipBonus = Math.max(0, uSetting.getUVip().getValue(VipType.STONE_MINING_RATE)) * 10;
+        }
+        return rateDropItem + vipBonus;
+    }
+
+    /** Tăng rate drop trúng cell: VIP {@link VipType#GENERAL_MINING_RATE} (% → phần nghìn ×10). */
+    public int getRateDropBonus() {
+        if (uSetting == null) return 0;
+        return Math.max(0, uSetting.getUVip().getValue(VipType.GENERAL_MINING_RATE)) * 10;
+    }
+
+    /** Tăng tỉ lệ hóa hình craft: VIP {@link VipType#TRANSMUTE_RATE} (% điểm, cộng vào transformRate/100). */
+    public int getTransmuteRateBonus() {
+        if (uSetting == null) return 0;
+        return Math.max(0, uSetting.getUVip().getValue(VipType.TRANSMUTE_RATE));
+    }
+
     public void queueUpdateBag() {
         updateBagPending = true;
     }

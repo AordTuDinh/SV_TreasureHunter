@@ -380,7 +380,7 @@ public class LoginHandler extends AHandler {
         lstCmm.addAVector(getCommonIntVector(CfgArtifact.getGameConfigCoeffs()));
         // auto range: [tầm đánh, tầm buff HP, autoAttackMob, auto_buff]
         lstCmm.addAVector(getCommonIntVector(uSet.getAutoRangeList()));
-        // vip data: [12 int tích lũy theo VipType index]
+        // vip data: [11 int tích lũy theo VipType index]
         lstCmm.addAVector(getCommonIntVector(uSet.getVipDataList()));
         // vip protect pool seconds còn lại hôm nay
         ProtectVipService.settleIfExpired(mUser);

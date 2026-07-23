@@ -184,7 +184,7 @@ public class ArtifactHandler extends AHandler {
 
         }
 
-        List<Long> fee = CfgArtifact.getUpgradeFee(artifact, artifact.getLevel());
+        List<Long> fee = CfgArtifact.getUpgradeFee(artifact, artifact.getLevel(), mUser);
 
         if (fee.isEmpty()) {
 

@@ -73,12 +73,18 @@ public class ResObjectEntity extends BaseEntity implements Serializable {
     }
 
     /**
-     * Gate {@code rateDrop}/1000 trước; pass mới roll category theo {@code rate_option}/1000.
+     * Gate {@code rateDrop}/1000 trước (+ {@code rateDropBonus} VIP); pass mới roll category theo {@code rate_option}/1000.
      * Hụt gate → roll miss bonus; vẫn trống → {@code fullMiss=true} (caller roll treasure).
      */
     public ObjectDropResult randomBonus(int materialId, int itemEventId,
                                         int rateDropGold, int rateDropGem, int rateDropItem) {
-        if (rateDrop <= 0 || NumberUtil.getRandom(RATE_DROP_TOTAL) >= rateDrop) {
+        return randomBonus(materialId, itemEventId, rateDropGold, rateDropGem, rateDropItem, 0);
+    }
+
+    public ObjectDropResult randomBonus(int materialId, int itemEventId,
+                                        int rateDropGold, int rateDropGem, int rateDropItem, int rateDropBonus) {
+        int effectiveRate = Math.min(RATE_DROP_TOTAL, Math.max(0, rateDrop) + Math.max(0, rateDropBonus));
+        if (effectiveRate <= 0 || NumberUtil.getRandom(RATE_DROP_TOTAL) >= effectiveRate) {
             if (rateDropGold <= 0 && rateDropGem <= 0 && rateDropItem <= 0) {
                 return ObjectDropResult.fullMiss();
             }

@@ -14,6 +14,7 @@ import game.config.aEnum.BlockType;
 import game.config.aEnum.DetailActionType;
 import game.config.aEnum.ItemPointKey;
 import game.config.aEnum.MapType;
+import game.config.aEnum.VipType;
 import game.treasure.BattleConfig;
 import game.treasure.mapping.UserEquipmentEntity;
 import game.treasure.mapping.UserItemEntity;
@@ -455,7 +456,8 @@ public abstract class BaseRoom extends MonoRoom {
                         MyUser mUser = player.getMUser();
                         applyCellKillPlotCost(player);
                         ResObjectEntity.ObjectDropResult dropResult = cellObject.getBonusKillMe(
-                                mUser.getRateDropGold(), mUser.getRateDropGem(), mUser.getRateDropItem());
+                                mUser.getRateDropGold(), mUser.getRateDropGem(), mUser.getRateDropItem(),
+                                mUser.getRateDropBonus());
                         if (dropResult.fullMiss) {
                             TreasureEventService.tryDropOnFullMiss(player, cellObject);
                         } else {
@@ -557,7 +559,27 @@ public abstract class BaseRoom extends MonoRoom {
             pendingMaterial += need[2];
             result.addAll(chunk);
         }
-        return Bonus.merge(result);
+        return applyVipGoldReceived(mUser, Bonus.merge(result));
+    }
+
+    /** Type 5 GOLD_RECEIVED: tăng % vàng nhận khi phá cell. */
+    static List<Long> applyVipGoldReceived(MyUser mUser, List<Long> bonus) {
+        if (bonus == null || bonus.isEmpty() || mUser == null || mUser.getUSetting() == null) {
+            return bonus;
+        }
+        int pct = Math.max(0, mUser.getUSetting().getUVip().getValue(VipType.GOLD_RECEIVED));
+        if (pct <= 0) return bonus;
+        List<Long> out = new ArrayList<>();
+        for (List<Long> chunk : Bonus.parse(bonus)) {
+            if (!chunk.isEmpty() && chunk.get(0) == Bonus.BONUS_GOLD && chunk.size() >= 2) {
+                long gold = Math.max(0, chunk.get(1));
+                long boosted = gold + gold * pct / 100L;
+                if (boosted > 0) out.addAll(Bonus.viewGold(boosted));
+            } else {
+                out.addAll(chunk);
+            }
+        }
+        return Bonus.merge(out);
     }
 
     /** @return [bagSlots, eventSlots, materialSlots] */
