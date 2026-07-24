@@ -199,6 +199,9 @@ public abstract class Lang implements Serializable {
     public static String clan_kick_too_many = "clan_kick_too_many";
     public static String clan_leader_leave_error = "clan_leader_leave_error"; //Bang chủ không được thoát
     public static String clan_wait_leave = "clan_wait_leave"; //Hãy chờ %s trước khi thoát khỏi bang
+    public static String clan_max_pending_req = "clan_max_pending_req"; // Đã đạt tối đa %s đơn xin đang chờ
+    public static String clan_max_coleader = "clan_max_coleader"; // Đã đạt số phó bang tối đa
+    public static String clan_coleader_level_required = "clan_coleader_level_required"; // Bang chưa đủ cấp để bổ nhiệm phó
     // Auth
     public static String err_user_not_exist = "err_user_not_exist"; // Người chơi không tồn tại.
     public static String err_user_not_online = "err_user_not_online"; // Người chơi không online!

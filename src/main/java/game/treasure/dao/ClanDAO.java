@@ -109,6 +109,26 @@ public class ClanDAO extends AbstractDAO {
                 .setParameter("userId", userId).getResultList());
     }
 
+    public int countUserReq(int userId) {
+        List<ClanReqEntity> list = getListUserReq(userId);
+        return list == null ? 0 : list.size();
+    }
+
+    /** Xóa toàn bộ đơn xin của user (sau khi vào bang). */
+    public boolean deleteAllUserReq(int userId) {
+        return doUpdate(em -> {
+            em.createNativeQuery("delete from clan_req where user_id=" + userId).executeUpdate();
+            return true;
+        });
+    }
+
+    public boolean deleteUserReq(int clanId, int userId) {
+        return doUpdate(em -> {
+            em.createNativeQuery("delete from clan_req where clan_id=" + clanId + " and user_id=" + userId).executeUpdate();
+            return true;
+        });
+    }
+
     public boolean addNewMember(ClanEntity clan, int userId, List<Integer> memberIds) {
         EntityManager session = null;
         try {
@@ -170,7 +190,7 @@ public class ClanDAO extends AbstractDAO {
         EntityManager session = null;
         try {
             session = DBJPA.getEntityManager();
-            Query query = session.createNativeQuery(String.format("select * from clan where server=%s AND member>0  ORDER BY RAND() limit 5", server, CfgClan.config.maxMember), ClanEntity.class);
+            Query query = session.createNativeQuery(String.format("select * from clan where server=%s AND member>0  ORDER BY RAND() limit 10", server), ClanEntity.class);
             return query.getResultList();
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -209,9 +229,9 @@ public class ClanDAO extends AbstractDAO {
             user.setClanName("");
             user.setClanPosition(0);
             user.setClanAvatar(0);
-            // doi lai tat ca nguoi choi phai cho 2 ngay moi duoc join clan moi
+            // Khóa 6h sau khi rời bang thường (chặn join + create)
             String key = ClanHandler.KEY_CLAN_LEAVE + user.getId();
-            JCache.getInstance().setValue(key, System.currentTimeMillis() + "", JCache.EXPIRE_1H * 12);
+            JCache.getInstance().setValue(key, System.currentTimeMillis() + "", JCache.EXPIRE_1H * 6);
 
             return 0;
         } catch (Exception ex) {
@@ -319,8 +339,7 @@ public class ClanDAO extends AbstractDAO {
             user.setClanPosition(0);
             user.setClanAvatar(0);
             user.setClanRank(0);
-            String key = ClanHandler.KEY_CLAN_LEAVE + user.getId();
-            JCache.getInstance().setValue(key, System.currentTimeMillis() + "", JCache.EXPIRE_1H * 8);
+            // Rời bang hệ thống: không khóa cooldown
             return true;
         } catch (Exception ex) {
             ex.printStackTrace();

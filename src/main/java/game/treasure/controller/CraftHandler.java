@@ -356,6 +356,27 @@ public class CraftHandler extends AHandler {
         }
 
         sendTargetProto(targetType, targetId);
+        broadcastEquipViewIfTargetEquipped(targetType, targetId);
+    }
+
+    private void broadcastEquipViewIfTargetEquipped(CraftTargetType targetType, long targetId) {
+        if (mUser.getPlayer() == null)
+            return;
+        List<Integer> ids = mUser.getUser().getListIdEquipmentEquip();
+        boolean equipped = false;
+        if (targetType == CraftTargetType.EQUIPMENT
+                || targetType == CraftTargetType.PET
+                || targetType == CraftTargetType.MOUNT
+                || targetType == CraftTargetType.ARTIFACT) {
+            for (int id : ids) {
+                if (id == (int) targetId) {
+                    equipped = true;
+                    break;
+                }
+            }
+        }
+        if (equipped)
+            mUser.getPlayer().broadcastEquipViewEffect();
     }
 
     private void sendTargetProto(CraftTargetType targetType, long targetId) {

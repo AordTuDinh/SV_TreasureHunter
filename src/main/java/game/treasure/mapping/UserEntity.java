@@ -9,6 +9,7 @@ import game.treasure.service.resource.ResEvent;
 import game.monitor.ClanManager;
 import game.monitor.Online;
 import game.object.MyUser;
+import game.object.UserResources;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ozudo.base.database.DBJPA;
@@ -201,6 +202,72 @@ public class UserEntity implements Serializable {
         List<Integer> keys = getListItemKeyEquip();
         List<Long> ret = new ArrayList<>(keys.size());
         for (int key : keys) ret.add((long) key);
+        return ret;
+    }
+
+    /**
+     * Wire effect trang bị cho player khác trên map:
+     * 8 slot × (itemKey, level, hh) theo EquipSlotType WEAPON..MOUNT.
+     * hh lấy từ entity đang trang bị (equipment / artifact / pet / mount).
+     */
+    public List<Integer> getListItemEquipView(MyUser mUser) {
+        List<Integer> lst = normalizeItemEquipList();
+        List<Integer> ret = new ArrayList<>(EQUIP_SLOT_COUNT * EQUIP_FIELDS_PER_SLOT);
+        UserResources res = mUser != null ? mUser.getResources() : null;
+        for (int i = 0; i < EQUIP_SLOT_COUNT; i++) {
+            int base = i * EQUIP_FIELDS_PER_SLOT;
+            int rowId = lst.get(base);
+            int key = lst.get(base + 1);
+            int level = lst.get(base + 2);
+            int hh = 0;
+            int slotType = i + 1;
+            if (rowId > 0 && res != null) {
+                if (slotType == protocol.Pbmethod.EquipSlotType.TREASURE.getNumber()) {
+                    UserArtifactEntity art = res.getArtifact(rowId);
+                    if (art != null) {
+                        key = art.getArtifactId();
+                        level = art.getLevel();
+                        hh = art.getHh();
+                    }
+                } else if (slotType == protocol.Pbmethod.EquipSlotType.PET.getNumber()) {
+                    UserPetEntity pet = res.getPet(rowId);
+                    if (pet != null) {
+                        key = pet.getPetId();
+                        level = pet.getLevel();
+                        hh = pet.getHh();
+                    }
+                } else if (slotType == protocol.Pbmethod.EquipSlotType.MOUNT.getNumber()) {
+                    UserMountEntity mount = res.getMount(rowId);
+                    if (mount != null) {
+                        key = mount.getMountId();
+                        level = mount.getLevel();
+                        hh = mount.getHh();
+                    }
+                } else {
+                    UserEquipmentEntity equip = res.getEquipment(rowId);
+                    if (equip != null) {
+                        key = equip.getItemId();
+                        level = equip.getLevel();
+                        hh = equip.getHh();
+                    }
+                }
+            }
+            if (rowId <= 0) {
+                key = 0;
+                level = 0;
+                hh = 0;
+            }
+            ret.add(key);
+            ret.add(level);
+            ret.add(hh);
+        }
+        return ret;
+    }
+
+    public List<Long> getListItemEquipViewLong(MyUser mUser) {
+        List<Integer> view = getListItemEquipView(mUser);
+        List<Long> ret = new ArrayList<>(view.size());
+        for (int v : view) ret.add((long) v);
         return ret;
     }
 

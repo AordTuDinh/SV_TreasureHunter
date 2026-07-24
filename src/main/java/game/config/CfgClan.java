@@ -19,8 +19,14 @@ public class CfgClan {
     public static final int assassinMoveSpeedBonus = 10;
     public static final int warriorHpBonus = 10;
     public static DataConfig config;
-    public static long timeWaitLeave = 12 * DateTime.HOUR_MILLI_SECOND;
-    public static long timeWaitLeaveSystemClan = 8 * DateTime.HOUR_MILLI_SECOND;
+    /** Cooldown sau khi rời bang thường: chặn gia nhập + tạo bang. */
+    public static long timeWaitLeave = 6 * DateTime.HOUR_MILLI_SECOND;
+    /** Rời bang hệ thống không khóa; giữ field để tương thích cũ. */
+    public static long timeWaitLeaveSystemClan = 0;
+    public static final int MAX_PENDING_REQ = 10;
+    public static final int MAX_CLAN_LEVEL = 10;
+    public static final int MAX_MEMBER_CAP = 13;
+    public static final int MAX_PERSONAL_CONTRIBUTE = 2000;
 
     public static boolean isSystemClan(int clanId) {
         return clanId == ASSASSIN_CLAN_ID || clanId == WARRIOR_CLAN_ID;
@@ -95,8 +101,18 @@ public class CfgClan {
         return Bonus.viewGem(-config.feeChangeName);
     }
 
+    /** Level 1 = maxMember (3), mỗi level +1, tối đa 13. */
     public static int getMaxMember(int level) {
-        return config.maxMember + level - 1;
+        int lv = Math.max(1, Math.min(level, MAX_CLAN_LEVEL));
+        return Math.min(MAX_MEMBER_CAP, config.maxMember + lv - 1);
+    }
+
+    /** Phó bang: mở thêm 1 slot ở cấp 3, 6, 9 (tối đa 3). */
+    public static int getMaxCoLeader(int level) {
+        if (level >= 9) return 3;
+        if (level >= 6) return 2;
+        if (level >= 3) return 1;
+        return 0;
     }
 
 

@@ -174,7 +174,7 @@ public abstract class Unit {
     }
 
     public Pet getPetUse() {
-        return (Pet) this;
+        return null;
     }
 
     public Enemy getEnemy() {

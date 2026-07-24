@@ -146,6 +146,8 @@ public class IAction {
     public static final int CLAN_HONOR = 354;
     public static final int CLAN_SYSTEM_JOIN = 355;
     public static final int CLAN_SYSTEM_LEAVE = 356;
+    public static final int CLAN_MY_REQ_LIST = 357; // danh sách đơn xin của bản thân
+    public static final int CLAN_CANCEL_REQ = 358; // hủy đơn xin đang chờ
 
     // Friend
     public static final int FRIEND_STATUS = 330;

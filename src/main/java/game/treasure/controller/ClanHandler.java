@@ -32,7 +32,7 @@ public class ClanHandler extends AHandler {
                 CLAN_DYNAMIC_REWARD_BOX, CLAN_FINDING, CLAN_SET_JOIN_RULE, CLAN_SET_POSITION, CLAN_USER_UPDATE_STATE, CLAN_MAIL_TO_MEMBER,
                 CLAN_CHANGE_NAME, CLAN_CHAT, CLAN_CHANGE_AVATAR_INTRO, CLAN_CHAT_LIST, CLAN_START_QUEST, CLAN_LIST_QUEST, CLAN_UPGRADE_QUEST,
                 CLAN_RECEIVE_QUEST, CLAN_CONTRIBUTE_INFO, CLAN_CONTRIBUTE, CLAN_CONTRIBUTE_TOP, CLAN_UP_LEVEL, CLAN_HONOR_STATUS, CLAN_HONOR,
-                CLAN_HONOR_GET_BONUS, CLAN_SYSTEM_JOIN, CLAN_SYSTEM_LEAVE);
+                CLAN_HONOR_GET_BONUS, CLAN_SYSTEM_JOIN, CLAN_SYSTEM_LEAVE, CLAN_MY_REQ_LIST, CLAN_CANCEL_REQ);
         actions.forEach(action -> mHandler.put(action, this));
     }
 
@@ -72,6 +72,8 @@ public class ClanHandler extends AHandler {
                 case IAction.CLAN_MEMBER_LIST -> memberList();
                 case IAction.CLAN_REQ -> sendClanReq();
                 case IAction.CLAN_FINDING -> findClan();
+                case IAction.CLAN_MY_REQ_LIST -> myReqList();
+                case IAction.CLAN_CANCEL_REQ -> cancelReq();
                 case IAction.CLAN_SYSTEM_JOIN -> joinSystemClan();
                 case IAction.CLAN_SYSTEM_LEAVE -> leaveSystemClan();
                 default -> {
@@ -223,7 +225,6 @@ public class ClanHandler extends AHandler {
             return;
         }
         int avatar = (int) cmm.getALong(0);
-        // type =0 : kim cuong -- type =1 ruby
         int type = cmm.getALongCount() > 2 ? (int) cmm.getALong(2) : 0;
         if (avatar < 1001 || avatar >= 10000) {
             addErrResponse(getLang(Lang.err_params));
@@ -237,7 +238,7 @@ public class ClanHandler extends AHandler {
             addErrResponse(getLang(Lang.err_intro_max_length));
             return;
         }
-        if (1 < CfgClan.config.levelCreateClan) {
+        if (user.getLevel() < CfgClan.config.levelCreateClan) {
             addErrResponse(String.format(getLang(Lang.user_function_level_required), CfgClan.config.levelCreateClan));
             return;
         }
@@ -253,6 +254,8 @@ public class ClanHandler extends AHandler {
             }
             return;
         }
+        if (hasClanLeaveCooldown(CfgClan.timeWaitLeave)) return;
+
         ClanEntity findClan = Services.clanDAO.getClan(name);
         if (findClan != null) {
             addErrResponse(getLang(Lang.clan_name_exist));
@@ -265,14 +268,23 @@ public class ClanHandler extends AHandler {
             addErrResponse(err);
             return;
         }
-        int ret = Services.clanDAO.createClan(user, name, CfgClan.config.feeCreate, intro, avatar, (int) cmm.getALong(1), type == 0 ? 1 : 3);
+        // joinRule: 0 = chiêu mộ tắt (duyệt tay), 1 = bật (auto vào)
+        int joinRule = (int) cmm.getALong(1);
+        if (joinRule != 0 && joinRule != 1) joinRule = 0;
+        int gemFee = type == 0 ? CfgClan.config.feeCreate : 0;
+        int ret = Services.clanDAO.createClan(user, name, gemFee, intro, avatar, joinRule, 1);
         if (ret > 0) {
-            user.addGem(-CfgClan.config.feeCreate);
+            if (type == 0) user.addGem(-CfgClan.config.feeCreate);
+            else user.addRuby(-CfgClan.config.feeCreateRuby);
             user.setClan(ret);
             user.setClanName(name);
             user.setClanPosition(ClanPosition.LEADER.value);
             user.setClanAvatar(avatar);
-            addResponse(getCommonVector((long) ret, (long) Bonus.BONUS_GEM, user.getGem(), (long) -CfgClan.config.feeCreate));
+            clearAllPendingReq(user.getId());
+            long moneyType = type == 0 ? Bonus.BONUS_GEM : Bonus.BONUS_RUBY;
+            long moneyLeft = type == 0 ? user.getGem() : user.getRuby();
+            long moneyCost = type == 0 ? -CfgClan.config.feeCreate : -CfgClan.config.feeCreateRuby;
+            addResponse(getCommonVector((long) ret, moneyType, moneyLeft, moneyCost));
             if (CfgServer.isRealServer()) Actions.save(user, Actions.GCLAN, Actions.DCREATE, "id", ret);
             mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.JOIN_CLAN, 1);
         } else {
@@ -308,15 +320,8 @@ public class ClanHandler extends AHandler {
             }
             return;
         }
-        String key = ClanHandler.KEY_CLAN_LEAVE + user.getId();
-        Long timeLeave = JCache.getInstance().getLongValue(key);
-        if (timeLeave != null) {
-            long timeRemain = CfgClan.timeWaitLeave + timeLeave - System.currentTimeMillis();
-            if (timeRemain > 0) {
-                addErrResponse(String.format(getLang(Lang.clan_wait_leave1), DateTime.formatTime(timeRemain / 1000)));
-                return;
-            }
-        }
+        if (hasClanLeaveCooldown(CfgClan.timeWaitLeave)) return;
+
         ClanEntity clan = ClanManager.getInstance(clanId).getClan();
         if (clan == null) {
             addErrResponse(getLang(Lang.clan_not_found));
@@ -328,11 +333,12 @@ public class ClanHandler extends AHandler {
         }
 
         if (clan.getJoinRule() == 1) {
-            // duyet tu dong
+            // Chiêu mộ ON — vào thẳng bang
             List<Integer> memberIds = clan.getMemberId();
             if (!memberIds.contains(user.getId())) memberIds.add(user.getId());
             if (dao.addNewMember(clan, user.getId(), memberIds)) {
                 clan.joinUser(user);
+                clearAllPendingReq(user.getId());
                 if (CfgServer.isRealServer())
                     Actions.save(user, "clan", "answer_req1", "answer", 1, "userId", user.getId(), "clanId", clanId);
                 Pbmethod.CommonVector.Builder cmm = Pbmethod.CommonVector.newBuilder();
@@ -345,6 +351,11 @@ public class ClanHandler extends AHandler {
                 addResponse(IAction.CLAN_ACCEPT_MEMBER, cmm.build());
             } else addErrResponse();
         } else {
+            // Chiêu mộ OFF — gửi đơn chờ duyệt
+            if (dao.countUserReq(user.getId()) >= CfgClan.MAX_PENDING_REQ) {
+                addErrResponse(String.format(getLang(Lang.clan_max_pending_req), CfgClan.MAX_PENDING_REQ));
+                return;
+            }
             List<ClanReqEntity> aReq = clan.getAReq();
             String newKey = "clanReq_" + clanId + "_" + user.getId();
             if (JCache.getInstance().getValue(newKey) != null) {
@@ -420,6 +431,7 @@ public class ClanHandler extends AHandler {
             if (!memberIds.contains(memberUser.getId())) memberIds.add(memberUser.getId());
             if (dao.addNewMember(clan, userId, memberIds)) {
                 clan.joinUser(memberUser);
+                clearAllPendingReq(userId);
                 addResponse(getCommonVector(1));
                 addErrResponse(getLang(Lang.success));
                 if (CfgServer.isRealServer())
@@ -507,19 +519,70 @@ public class ClanHandler extends AHandler {
 
     void leaveClan() {
         ClanEntity clan = clanManager.getClan();
-        if (user.getClanPosition() == ClanPosition.LEADER.value && clan.getMember() > 1) {
+        // Chủ bang bắt buộc chuyển chức trước khi rời — không giải tán bang
+        if (user.getClanPosition() == ClanPosition.LEADER.value) {
             addErrResponse(getLang(Lang.clan_leader_leave_error));
             return;
         }
         if (user.getClanJoin() != null) {
             Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.HOUR, -12);
+            calendar.add(Calendar.HOUR, -6);
             if (calendar.getTime().before(user.getClanJoin())) {
                 addErrResponse(String.format(getLang(Lang.clan_wait_leave), DateTime.formatTime((user.getClanJoin().getTime() - calendar.getTimeInMillis()) / 1000)));
                 return;
             }
         }
         clan.leaveClan(this, user);
+    }
+
+    void myReqList() {
+        if (user.getClan() != 0) {
+            addErrResponse(getLang(Lang.user_in_clan));
+            return;
+        }
+        List<ClanReqEntity> reqs = dao.getListUserReq(user.getId());
+        protocol.Pbmethod.PbListClan.Builder builder = protocol.Pbmethod.PbListClan.newBuilder();
+        if (reqs != null) {
+            for (ClanReqEntity req : reqs) {
+                ClanManager cm = ClanManager.getInstance(req.getClanId());
+                if (cm == null || cm.getClan() == null) continue;
+                protocol.Pbmethod.PbClan.Builder clanBuilder = cm.getClan().protoClan(Lang.instance(mUser));
+                clanBuilder.setJoinTrophy(1); // đánh dấu đang xin
+                builder.addClan(clanBuilder);
+            }
+        }
+        addResponse(builder.build());
+    }
+
+    void cancelReq() {
+        if (user.getClan() != 0) {
+            addErrResponse(getLang(Lang.user_in_clan));
+            return;
+        }
+        int clanId = CommonProto.parseCommonVector(requestData).getALongList().get(0).intValue();
+        ClanManager cm = ClanManager.getInstance(clanId);
+        if (cm != null && cm.getClan() != null) {
+            cm.getClan().deleteRequest(user.getId());
+        } else {
+            dao.deleteUserReq(clanId, user.getId());
+        }
+        JCache.getInstance().removeValue("clanReq_" + clanId + "_" + user.getId());
+        addResponse(getCommonVector((long) clanId));
+    }
+
+    /** Xóa mọi đơn chờ của user + gỡ khỏi cache aReq của từng bang. */
+    void clearAllPendingReq(int userId) {
+        List<ClanReqEntity> reqs = dao.getListUserReq(userId);
+        if (reqs != null) {
+            for (ClanReqEntity req : reqs) {
+                ClanManager cm = ClanManager.getInstance(req.getClanId());
+                if (cm != null && cm.getClan() != null) {
+                    cm.getClan().removeRequest(userId);
+                }
+                JCache.getInstance().removeValue("clanReq_" + req.getClanId() + "_" + userId);
+            }
+        }
+        dao.deleteAllUserReq(userId);
     }
 
     void findClan() {
@@ -660,7 +723,7 @@ public class ClanHandler extends AHandler {
             List<Long> aBonus = Bonus.receiveListItem(mUser, DetailActionType.DIEM_DANH_BANG_HOI.getKey(),
                     Bonus.viewItemPoint(ItemPointKey.CO_VAT.id, guildCoin));
             addResponse(protocol.Pbmethod.CommonVector.newBuilder().addALong(clan.getLevel()).
-                    addALong(clan.getExp()).addALong(clanHonor).addALong(DateTime.secondsUntilEndDay()).addALong(clan.getHonor()).addAllALong(aBonus).build());
+                    addALong(clan.getExp()).addALong(clanHonor).addALong(DateTime.secondsUntilEndDay()).addALong(clan.getContribute()).addAllALong(aBonus).build());
             CfgQuest.addNumQuest(mUser, DataQuest.CHECK_IN_CLAN, 1);
         } else addErrSystem();
     }
@@ -962,7 +1025,7 @@ public class ClanHandler extends AHandler {
             addErrResponse(getLang(Lang.user_in_clan));
             return;
         }
-        if (hasClanLeaveCooldown(CfgClan.timeWaitLeaveSystemClan)) return;
+        if (hasClanLeaveCooldown(CfgClan.timeWaitLeave)) return;
         String clanName = CfgClan.getSystemClanName(clanId);
         if (!dao.joinSystemClan(user, clanId, clanName)) {
             addErrResponse(getLang(Lang.err_system_down));

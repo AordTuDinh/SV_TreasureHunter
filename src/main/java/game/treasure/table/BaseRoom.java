@@ -757,7 +757,11 @@ public abstract class BaseRoom extends MonoRoom {
         if (unit.isPlayer()) {
             aPlayerIds.add(idInMap);
             Pet pet = unit.getPlayer().getPetUse();
-            if (pet != null) addUnit(pet);
+            if (pet != null) {
+                if (unit.getPos() != null)
+                    pet.setPos(Pos.randomPos(unit.getPos(), 1f, 1f));
+                addUnit(pet);
+            }
         }
     }
 

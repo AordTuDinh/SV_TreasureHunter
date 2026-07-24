@@ -19,11 +19,16 @@ public class Pet extends Unit implements Serializable {
         this.model = uPet.getPetId();
         this.direction = Pos.RandomDirection();
         this.clanId = 0;
-        this.pos = owner.getPos().clone();
+        this.owner = owner;
+        this.alive = true;
+        this.pos = owner.getPos() != null ? owner.getPos().clone() : Pos.zero();
         this.point = new Point();
         this.point.setMoveSpeed(100);
-        this.owner = owner;
         ResPetEntity res = uPet.getResPet();
+    }
+
+    public Player getOwner() {
+        return owner;
     }
 
     @Override
@@ -44,6 +49,8 @@ public class Pet extends Unit implements Serializable {
         pb.setAvatar(model);
         pb.setOwnerId(owner.id);
         pb.setSpeed((int) point.getMoveSpeed());
+        pb.setAlive(true);
+        pb.addAllPoint(point.toProto());
         return pb.build();
     }
 

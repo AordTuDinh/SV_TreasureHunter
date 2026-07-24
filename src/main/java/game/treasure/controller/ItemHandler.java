@@ -269,7 +269,7 @@ public class ItemHandler extends AHandler {
 
     private void broadcastItemEquipUpdate() {
         if (mUser.getPlayer() == null) return;
-        mUser.getPlayer().protoStatus(Pbmethod.SubStateType.UPDATE_ITEM_EQUIP, mUser.getUser().getListItemKeyEquipLong());
+        mUser.getPlayer().broadcastEquipViewEffect();
     }
 
 
@@ -977,6 +977,7 @@ public class ItemHandler extends AHandler {
             addResponse(pb.build());
             mUser.reCalculatePoint();
             UserHandler.buffInfo(mUser);
+            broadcastItemEquipUpdate();
         } else {
             addResponse(getCommonVector(id, (long) newLevel));
         }
@@ -1028,6 +1029,7 @@ public class ItemHandler extends AHandler {
             addResponse(pb.build());
             mUser.reCalculatePoint();
             UserHandler.buffInfo(mUser);
+            broadcastItemEquipUpdate();
         } else {
             addResponse(getCommonVector(id, (long) newLevel));
         }

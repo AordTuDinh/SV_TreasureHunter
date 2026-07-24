@@ -97,6 +97,17 @@ public class UserClanEntity {
     public void addContribute(int numBuff) {
         contribute += numBuff;
         update(List.of("contribute", contribute));
+        try {
+            game.treasure.mapping.UserEntity u = game.monitor.Online.getDbUser(userId);
+            int cid = u != null && u.getClan() > 0 ? u.getClan() : clanId;
+            if (cid > 0) {
+                game.monitor.ClanManager cm = game.monitor.ClanManager.getInstance(cid);
+                if (cm != null && cm.getClan() != null) {
+                    cm.getClan().addContribute(numBuff);
+                }
+            }
+        } catch (Exception ignored) {
+        }
     }
 
     public boolean addHonor(int numHonor) {

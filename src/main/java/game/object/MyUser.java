@@ -384,14 +384,25 @@ public class MyUser implements Serializable {
     }
 
     public Pet getPet(Player player) {
-        List<Integer> pets = user.getPet(this);
-        if (pets.get(0) != 0 && pet == null) {
-            long petKey = pets.get(0);
-            UserPetEntity uPet = resources.getPet(petKey);
-            if (uPet == null) uPet = resources.getPetByConfigId((int) petKey);
-            if (uPet != null) pet = new Pet(uPet, player);
+        List<Integer> equip = user.normalizeItemEquipList();
+        int petIdx = UserEntity.equipSlotIndex(Pbmethod.EquipSlotType.PET.getNumber());
+        long rowId = (petIdx >= 0 && petIdx < equip.size()) ? equip.get(petIdx) : 0;
+        if (rowId <= 0) {
+            pet = null;
+            return null;
         }
+        UserPetEntity uPet = resources.getPet(rowId);
+        if (uPet == null) {
+            pet = null;
+            return null;
+        }
+        if (pet == null)
+            pet = new Pet(uPet, player);
         return pet;
+    }
+
+    public void clearCachedPet() {
+        pet = null;
     }
 
     public void reCalculatePoint() {

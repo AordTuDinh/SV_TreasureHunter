@@ -170,6 +170,7 @@ public class PetHandler extends AHandler {
         }
         syncAllPetMountEquipFlags();
         finishPetMountEquipChange(buildPetSlotPayload(pet, newBagSlot));
+        syncEquippedPetInRoom();
     }
 
     private void unequipPet() {
@@ -203,6 +204,7 @@ public class PetHandler extends AHandler {
         syncAllPetMountEquipFlags();
         Integer bagSlot = Bonus.findPetBagSlot(mUser, pet.getId());
         finishPetMountEquipChange(buildPetSlotPayload(pet, bagSlot));
+        syncEquippedPetInRoom();
     }
 
     private void equipMount() {
@@ -340,5 +342,27 @@ public class PetHandler extends AHandler {
         mUser.reCalculatePoint();
         addResponse(IAction.UPDATE_BAG, mUser.getResources().buildUpdateBagPayload());
         UserHandler.buffInfo(mUser);
+        if (mUser.getPlayer() != null)
+            mUser.getPlayer().broadcastEquipViewEffect();
+    }
+
+    /** Equip/unequip pet khi đang ở map: remove pet cũ / add pet mới vào room. */
+    private void syncEquippedPetInRoom() {
+        game.battle.model.Player player = mUser.getPlayer();
+        if (player == null) return;
+        game.treasure.table.BaseRoom room = player.getRoom();
+
+        game.battle.model.Pet oldPet = player.getPetUse();
+        if (oldPet != null && oldPet.getId() > 0 && room != null)
+            room.removeUnit(oldPet.getId());
+        player.setPetUse(null);
+        mUser.clearCachedPet();
+
+        game.battle.model.Pet newPet = mUser.getPet(player);
+        player.setPetUse(newPet);
+        if (newPet != null && room != null) {
+            newPet.setPos(game.battle.object.Pos.randomPos(player.getPos(), 1f, 1f));
+            room.addUnit(newPet);
+        }
     }
 }

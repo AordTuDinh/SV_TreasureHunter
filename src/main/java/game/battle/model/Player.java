@@ -249,8 +249,16 @@ public class Player extends Unit implements Serializable {
     @Override
     public List<Integer> getListInfo(int effInit) {
         List<Integer> lst = new ArrayList<>(super.getListInfo(effInit));
-        lst.addAll(mUser.getUser().getListItemKeyEquip());
+        // 8 slot × (key, level, hh) — client PlayerEffectB
+        lst.addAll(mUser.getUser().getListItemEquipView(mUser));
         return lst;
+    }
+
+    /** Broadcast effect trang bị (key/level/hh) tới player khác trong view. */
+    public void broadcastEquipViewEffect() {
+        if (mUser == null || mUser.getUser() == null)
+            return;
+        protoStatus(Pbmethod.SubStateType.UPDATE_ITEM_EQUIP, mUser.getUser().getListItemEquipViewLong(mUser));
     }
 
     @Override

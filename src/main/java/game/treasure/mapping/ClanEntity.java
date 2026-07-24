@@ -198,6 +198,23 @@ public class ClanEntity {
 //        update(List.of("level_quest", levelQuest, "contribute", contribute));
 //    }
 
+    /** Cộng cống hiến bang (đồng bộ khi thành viên tăng cống hiến cá nhân). */
+    public synchronized void addContribute(long addContribute) {
+        if (addContribute <= 0) return;
+        contribute += addContribute;
+        update(List.of("contribute", contribute));
+    }
+
+    public int countCoLeader() {
+        List<UserEntity> aUser = Services.clanDAO.getListMember(id);
+        if (aUser == null) return 0;
+        int count = 0;
+        for (UserEntity u : aUser) {
+            if (u.getClanPosition() == ClanPosition.CO_LEADER.value) count++;
+        }
+        return count;
+    }
+
     public Pbmethod.PbClan toProto(int... rank) {
         Pbmethod.PbClan.Builder pbClan = Pbmethod.PbClan.newBuilder();
         pbClan.setId(id);
@@ -305,7 +322,8 @@ public class ClanEntity {
         builder.setLevel(level).setExp(level == CfgClan.config.exp.size() + 1 ? 0 : exp).setMaxExp(CfgClan.getMaxExp(level));
         builder.setAvatar(avatar);
         builder.setIntro(intro);
-        builder.setStar((int) honor);
+        builder.setStar((int) Math.min(Integer.MAX_VALUE, contribute));
+        builder.setPointRank(star); // cup bang (chiếm làng) — field star trên DB
         return builder;
     }
 
@@ -354,12 +372,32 @@ public class ClanEntity {
         if (newPosition == ClanPosition.LEADER.value && System.currentTimeMillis() - promoteUser.getLastAction() >= DateTime.DAY_MILLI_SECOND * 5) {
             return Lang.instance(mUser).get(Lang.clan_message_8);
         }
-        int myPosition = newPosition == ClanPosition.LEADER.value ? ClanPosition.CO_LEADER.value : mUser.getUser().getClanPosition();
-        if (Services.clanDAO.promote(mUser.getUser().getId(), myPosition, promoteUser, newPosition)) {
+        if (newPosition == ClanPosition.CO_LEADER.value) {
+            int maxCo = CfgClan.getMaxCoLeader(level);
+            if (maxCo <= 0) {
+                return Lang.instance(mUser).get(Lang.clan_coleader_level_required);
+            }
+            int curCo = countCoLeader();
+            if (promoteUser.getClanPosition() != ClanPosition.CO_LEADER.value && curCo >= maxCo) {
+                return Lang.instance(mUser).get(Lang.clan_max_coleader);
+            }
+        }
+        // Chuyển chủ: bang chủ cũ thành phó (nếu còn slot), không thì về member — không giải tán bang
+        int myPosition = mUser.getUser().getClanPosition();
+        if (newPosition == ClanPosition.LEADER.value) {
+            int maxCo = CfgClan.getMaxCoLeader(level);
+            int curCo = countCoLeader();
+            // promoteUser nếu đang là phó thì slot phó được giải phóng trước khi chủ cũ nhận phó
+            if (promoteUser.getClanPosition() == ClanPosition.CO_LEADER.value) curCo--;
+            myPosition = curCo < maxCo ? ClanPosition.CO_LEADER.value : ClanPosition.MEMBER.value;
+        }
+        if (Services.clanDAO.promote(mUser.getUser().getId(),
+                newPosition == ClanPosition.LEADER.value ? myPosition : -1,
+                promoteUser, newPosition)) {
             int oldPosition = promoteUser.getClanPosition();
             promoteUser.setClanPosition(newPosition);
             addPositionMsg(mUser.getUser().getName(), promoteUser, newPosition > oldPosition);
-            if (myPosition > -1) {
+            if (newPosition == ClanPosition.LEADER.value) {
                 mUser.getUser().setClanPosition(myPosition);
                 addPositionMsg(mUser.getUser().getName(), mUser.getUser(), false);
             }
@@ -460,13 +498,8 @@ public class ClanEntity {
         }
         addMember(-1, user.getId());
         handler.addResponse(null);
-        // addChat(user, ChatObject.MSG_RED, CfgMsgTemplate.tplClanLeave(user.getName()));
         addClanLog(Lang.clan_message_4, user.getName());
         Actions.save(user, Actions.GCLAN, Actions.DLEAVE, "id", id, "member", member);
-        if (member == 0) {
-            DBJPA.rawSQL("delete from clan where id=" + id, "update user set clan=0, clan_name='', clan_position='' where clan=" + id);
-            Actions.save(user, Actions.GCLAN, Actions.DDESTROY, "id", id, "member", "0");
-            ClanManager.getInstance(user.getClan()).destroyClan(user);
-        }
+        // Không giải tán bang — bắt buộc chuyển chức trước khi chủ bang rời
     }
 }

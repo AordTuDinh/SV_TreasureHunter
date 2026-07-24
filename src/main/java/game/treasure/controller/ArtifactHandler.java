@@ -671,6 +671,9 @@ public class ArtifactHandler extends AHandler {
 
         addResponse(IAction.UPDATE_BAG, mUser.getResources().buildUpdateBagPayload());
 
+        if (mUser.getPlayer() != null)
+            mUser.getPlayer().broadcastEquipViewEffect();
+
     }
 
 }
