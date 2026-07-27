@@ -62,9 +62,6 @@ public class ResTutorialQuestEntity extends BaseEntity {
                     }
                 }
             }
-            case HAS_PET -> {
-                return String.format(title, Lang.getTitle(mUser,ResPet.getPet(quest.get(1)).getName()));
-            }
             case HAS_ITEM_EQUIP_ID, HAS_ITEM_EQUIP_LEVEL -> {
                 return String.format(title, Lang.getTitle(mUser, ResItem.getItemEquipment(quest.get(1)).getName()), num);
             }

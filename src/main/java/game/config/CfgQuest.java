@@ -21,12 +21,11 @@ public class CfgQuest {
     public static int numberQuestD = 8;
     public static int numberQuestC = 8;
     public static int numberQuestB = 5;
-    public static List<Integer> indexs = Arrays.asList(0, 1, 2, 3, 4);
+    public static List<Integer> indexs = Arrays.asList(0, 1, 2, 4);
     public static int packX2 = 2;
     public static final int INDEX_SUMMON_STONE = 0;
     public static final int INDEX_SUMMON_PIECE = 1;
     public static final int INDEX_SPINE = 2;
-    public static final int INDEX_SUMMON_PET = 3;
     public static final int INDEX_SHIP = 4;
 
 
@@ -183,13 +182,6 @@ public class CfgQuest {
             }
             case HAS_WEAPON_BY_RANK -> {
                 mUser.getUData().setQuestTutorialNumber(mUser.getResources().getNumWeaponByRank(res.getIdInfo()));
-            }
-            case HAS_PET -> {
-                UserPetEntity userPet = mUser.getResources().getPetByConfigId(res.getIdInfo());
-                if (userPet != null) {
-                    mUser.getUData().setQuestTutorialNumber(1);
-                    return StatusType.RECEIVE.value;
-                }
             }
 
         }

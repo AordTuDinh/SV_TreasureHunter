@@ -19,7 +19,6 @@ public class ResPetEntity implements Serializable {
     @Id
     int id;
     String name;
-    int showSummon; // showSummon: có thể summon ra
     float rare, epic, legends;
     String data;
     int hh1, hh2, hh3;

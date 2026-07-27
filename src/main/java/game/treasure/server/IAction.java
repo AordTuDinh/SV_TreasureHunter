@@ -100,8 +100,6 @@ public class IAction {
 
     public static final int PET_INFO = 137;
     public static final int MOUNT_INFO = 138;
-    // collection pet
-    public static final int PET_SUMMON = 142;
     // quest hàng ngày
     public static final int QUEST_STATUS = 200;
     public static final int QUEST_RECEIVE = 201;
@@ -249,7 +247,6 @@ public class IAction {
     public static final int LOTTERY_RECEIVE = 612;
     // LUCKY SPINE NORMAL
     public static final int LUCKY_SPINE_STATUS = 616;
-    public static final int LUCKY_SPINE_REFRESH = 617;
     public static final int LUCKY_SPINE_ROTATE = 618;
     public static final int LUCKY_SPINE_BUY_CHIP = 619;
 

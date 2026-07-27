@@ -26,9 +26,7 @@ public enum QuestTutType {
     BUY_GOLD(27,"TUT_BUY_GOLD"),
     GET_SUPPORT(28,"TUT_GET_SUPPORT"),
     JOIN_CLAN(29,"TUT_JOIN_CLAN"),
-    HAS_PET(34,"TUT_HAS_PET"),
     CARE_PET_MONSTER(35,"TUT_CARE_PET_MONSTER"),
-    SUMMON_PET(36,"TUT_SUMMON_PET"),
     HAS_POINT_D(37,"TUT_HAS_POINT_D"), // has handle
     HAS_ITEM_EQUIP_LEVEL(38,"TUT_HAS_ITEM_EQUIP_LEVEL"), // Cường hóa item name lên cấp %s
     HAS_ITEM_EQUIP_ID(39,"TUT_HAS_ITEM_EQUIP_ID"), // Sở hữu trang bị %s

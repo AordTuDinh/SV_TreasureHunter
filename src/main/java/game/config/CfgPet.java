@@ -1,11 +1,6 @@
 package game.config;
 
 import com.google.gson.Gson;
-import game.treasure.mapping.main.ResPetEntity;
-import game.treasure.service.resource.ResPet;
-import game.treasure.service.user.Bonus;
-import game.object.MyUser;
-import ozudo.base.helper.NumberUtil;
 
 import java.util.*;
 
@@ -20,39 +15,7 @@ public class CfgPet {
     static final Map<Integer, List<FeeUpStar>> feeStarPet = new HashMap<>();
     static final List<Long> BONUS_MONSTER_POINT = List.of(6L, 87L, 10L);
     static final List<Long> BONUS_PET_POINT = List.of(6L, 87L, 10L);
-    static List<Integer> rateStonePet = new ArrayList<>();
     static final List<Integer> MAX_HP_BY_STAR = List.of(100, 120, 150, 200);
-
-    public static List<Long> summonPet(MyUser mUser, int number, boolean isVip, int petId) {
-        List<Long> bonus = new ArrayList<>();
-        ResPetEntity rPet = ResPet.getPet(petId);
-        boolean hasPet = false;
-        if (petId == 0 || rPet == null || rPet.getShowSummon() == 0) {  // bắt hụt
-            bonus.addAll(getBonusStone(number));
-        } else {
-            for (int i = 0; i < number; i++) {
-                if (hasPet || rPet.getShowSummon() == 0) {
-                    bonus.addAll(getBonusStone(1));
-                } else {
-                    int rand = NumberUtil.getRandom(1000);
-                    int rateIndex = 0;
-                    int rate = isVip ? config.ratePetVip.get(rateIndex) : config.ratePet.get(rateIndex);
-                    if (rand <= rate) {
-                        bonus.addAll(Bonus.viewPet( petId));
-                        hasPet = true;
-                    } else {
-                        bonus.addAll(getBonusStone(1));
-                    }
-                }
-            }
-        }
-        return bonus;
-    }
-
-    public static List<Long> getBonusStone(int number) {
-        List<Long> bonus = new ArrayList<>();
-        return bonus;
-    }
 
     public static void loadConfig(String value) {
         config = new Gson().fromJson(value, DataConfig.class);
@@ -61,10 +24,6 @@ public class CfgPet {
         }
         for (int i = 0; i < config.feeUpStarsPet.size(); i++) {
             feeStarPet.put(config.feeUpStarsPet.get(i).rank, config.feeUpStarsPet.get(i).fee);
-        }
-        rateStonePet.add(config.rateStone.get(0));
-        for (int i = 1; i < config.rateStone.size(); i++) {
-            rateStonePet.add(i, rateStonePet.get(i - 1) + config.rateStone.get(i));
         }
     }
 
@@ -79,9 +38,6 @@ public class CfgPet {
     public static class DataConfig {
         public List<FeeStarByRank> feeUpStarsMonster;
         public List<FeeStarByRank> feeUpStarsPet;
-        List<Integer> ratePet;
-        List<Integer> ratePetVip;
-        List<Integer> rateStone;
         public List<Integer> bonusStar;
     }
 

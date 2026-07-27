@@ -491,13 +491,14 @@ public class MyUser implements Serializable {
         cachePointData(getPlayer().getPoint());
         uData.flushItemSlotIfDirty();
         getResources().flushDirtyItemPoints();
+        getUser().flushMobKill();
         getUser().update(Arrays.asList("logout", Calendar.getInstance().getTime()));
         UserAchievementEntity uAchie = Services.userDAO.getUserAchievement(this);
         if (uAchie != null && uAchie.isCanUpdate()) uAchie.updateAll();
         EntityManager session = DBJPA.getEntityManager();
         try {
             session.getTransaction().begin();
-            session.createNativeQuery("update user set logout = now(), point_data='" + StringHelper.toDBString(getPlayer().getPoint().getValues()) + "' where id = " + user.getId()).executeUpdate();
+            session.createNativeQuery("update user set logout = now(), point_data='" + StringHelper.toDBString(getPlayer().getPoint().getValues()) + "', mob_kill=" + user.getMobKill() + " where id = " + user.getId()).executeUpdate();
             int timeAdd = (int) ((Calendar.getInstance().getTime().getTime() - getUser().getLastLogin().getTime()) / 1000);
             session.createNativeQuery("update user_daily set login_time =" + timeAdd + "+login_time, data_int= '" + StringHelper.toDBString(getUserDaily().getUDaily().aInt) + "' where user_id = " + user.getId()).executeUpdate();
             session.getTransaction().commit();

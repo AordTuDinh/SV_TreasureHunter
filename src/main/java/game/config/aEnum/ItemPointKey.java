@@ -10,8 +10,6 @@ public enum ItemPointKey {
     TICKER_NORMAL(3),
     TICKER_SPECIAL(4),
     CHIP(5),
-    BONG_LINH_THU(6),
-    BONG_SIEU_THU(7),
     LOA_THE_GIOI(8),
     /** Vé x2 ruby khi nạp — res_item_point.point_id = 13 */
     RUBY_X2_VOUCHER(13),

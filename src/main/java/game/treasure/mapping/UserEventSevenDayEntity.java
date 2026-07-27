@@ -40,7 +40,6 @@ public class UserEventSevenDayEntity implements Serializable {
     int attackArena;
     int summonPiece;
     int buyShop;
-    int summonPet;
     int buyLand;
     int ship;
     int upWeapon;
@@ -62,7 +61,6 @@ public class UserEventSevenDayEntity implements Serializable {
         this.attackArena = 0;
         this.summonPiece = 0;
         this.buyShop = 0;
-        this.summonPet = 0;
         this.buyLand = 0;
         this.ship = 0;
         this.upWeapon = 0;
@@ -183,8 +181,6 @@ public class UserEventSevenDayEntity implements Serializable {
             case 4 -> {
                 if (panel == 1) { // level
                     return 1;
-                } else if (panel == 2) { // pet
-                    return summonPet;
                 }
             }
             case 5 -> {

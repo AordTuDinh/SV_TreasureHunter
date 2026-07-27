@@ -120,7 +120,6 @@ public enum DetailActionType {
     PET_CARE_ID("pet_care_id_"),// Chăm sóc thú id
     UP_STAR_MONSTER("up_star_monster"),  // nâng sao quái thú
     UP_STAR_PET("up_star_pet"),  // nâng sao thú cưng
-    SUMMON_PET("summon_pet_x"), // summon pet x lần
     BUY_DECO_FARM("buy_deco_farm_id_"),// mua deco farm
     BONUS_ATTACK_ARENA("bonus_attack_arena_vs_id_"),// bonus khi danh vs user id
     USE_SCROLL_FARM_QUEST("scroll_farm_quest_"),// dùng cuộn nhiệm vụ farm

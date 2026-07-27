@@ -105,8 +105,6 @@ enum  ItemPointKey {
   TICKER_NORMAL = 3;
   TICKER_SPECIAL = 4;
   CHIP = 5;
-  BONG_LINH_THU = 6;
-  BONG_SIEU_THU = 7;
   LOA_THE_GIOI = 8;
   RUBY_X2_VOUCHER = 13; // vé x2 ruby khi nạp
   ARENA_COIN = 14; // xu đấu trường

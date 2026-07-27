@@ -857,17 +857,9 @@ public final class Pbmethod {
      */
     CHIP(4, 5),
     /**
-     * <code>BONG_LINH_THU = 6;</code>
-     */
-    BONG_LINH_THU(5, 6),
-    /**
-     * <code>BONG_SIEU_THU = 7;</code>
-     */
-    BONG_SIEU_THU(6, 7),
-    /**
      * <code>LOA_THE_GIOI = 8;</code>
      */
-    LOA_THE_GIOI(7, 8),
+    LOA_THE_GIOI(5, 8),
     /**
      * <code>RUBY_X2_VOUCHER = 13;</code>
      *
@@ -875,7 +867,7 @@ public final class Pbmethod {
      * vé x2 ruby khi nạp
      * </pre>
      */
-    RUBY_X2_VOUCHER(8, 13),
+    RUBY_X2_VOUCHER(6, 13),
     /**
      * <code>ARENA_COIN = 14;</code>
      *
@@ -883,7 +875,7 @@ public final class Pbmethod {
      * xu đấu trường
      * </pre>
      */
-    ARENA_COIN(9, 14),
+    ARENA_COIN(7, 14),
     /**
      * <code>PLOT = 15;</code>
      *
@@ -891,7 +883,7 @@ public final class Pbmethod {
      * ô đất
      * </pre>
      */
-    PLOT(10, 15),
+    PLOT(8, 15),
     ;
 
     /**
@@ -914,14 +906,6 @@ public final class Pbmethod {
      * <code>CHIP = 5;</code>
      */
     public static final int CHIP_VALUE = 5;
-    /**
-     * <code>BONG_LINH_THU = 6;</code>
-     */
-    public static final int BONG_LINH_THU_VALUE = 6;
-    /**
-     * <code>BONG_SIEU_THU = 7;</code>
-     */
-    public static final int BONG_SIEU_THU_VALUE = 7;
     /**
      * <code>LOA_THE_GIOI = 8;</code>
      */
@@ -961,8 +945,6 @@ public final class Pbmethod {
         case 3: return TICKER_NORMAL;
         case 4: return TICKER_SPECIAL;
         case 5: return CHIP;
-        case 6: return BONG_LINH_THU;
-        case 7: return BONG_SIEU_THU;
         case 8: return LOA_THE_GIOI;
         case 13: return RUBY_X2_VOUCHER;
         case 14: return ARENA_COIN;
@@ -91101,32 +91083,31 @@ public final class Pbmethod {
       "\022\016\n\nBINH_MAU_1\020\001\022\016\n\nBINH_MAU_2\020\002\022\016\n\nBINH" +
       "_MAU_3\020\003\022\016\n\nBINH_MAU_4\020\004\022\010\n\004GOLD\020\005\022\007\n\003GE" +
       "M\020\006\022\010\n\004RUBY\020\007\022\007\n\003CUP\020\010\022\020\n\014TREASURE_KEY\020\t" +
-      "*\303\001\n\014ItemPointKey\022\n\n\006CO_VAT\020\001\022\017\n\013TICKER_" +
+      "*\235\001\n\014ItemPointKey\022\n\n\006CO_VAT\020\001\022\017\n\013TICKER_" +
       "MINI\020\002\022\021\n\rTICKER_NORMAL\020\003\022\022\n\016TICKER_SPEC" +
-      "IAL\020\004\022\010\n\004CHIP\020\005\022\021\n\rBONG_LINH_THU\020\006\022\021\n\rBO" +
-      "NG_SIEU_THU\020\007\022\020\n\014LOA_THE_GIOI\020\010\022\023\n\017RUBY_" +
-      "X2_VOUCHER\020\r\022\016\n\nARENA_COIN\020\016\022\010\n\004PLOT\020\017*/" +
-      "\n\010ItemType\022\014\n\010POSITION\020\001\022\014\n\010CURRENCY\020\002\022\007",
-      "\n\003KEY\020\003*>\n\rItemPointType\022\t\n\005EVENT\020\001\022\007\n\003U" +
-      "SE\020\002\022\013\n\007SPEAKER\020\003\022\014\n\010OPEN_BOX\020\004*;\n\014Targe" +
-      "tAttack\022\n\n\006OBJECT\020\000\022\t\n\005ENEMY\020\001\022\010\n\004BOSS\020\002" +
-      "\022\n\n\006PLAYER\020\003*1\n\010SkinType\022\010\n\004HAIR\020\000\022\010\n\004FA" +
-      "CE\020\001\022\007\n\003EYE\020\002\022\010\n\004BODY\020\003*q\n\rEquipSlotType" +
-      "\022\010\n\004NULL\020\000\022\n\n\006WEAPON\020\001\022\007\n\003HAT\020\002\022\t\n\005ARMOR" +
-      "\020\003\022\t\n\005CLOAK\020\004\022\t\n\005SHOES\020\005\022\014\n\010TREASURE\020\006\022\007" +
-      "\n\003PET\020\007\022\t\n\005MOUNT\020\010*\322\003\n\010AutoSell\022\022\n\016AUTO_" +
-      "SELL_HP_1\020\000\022\022\n\016AUTO_SELL_HP_2\020\001\022\022\n\016AUTO_" +
-      "SELL_HP_3\020\002\022\022\n\016AUTO_SELL_HP_4\020\003\022\025\n\021AUTO_",
-      "SELL_EQUIP_1\020\004\022\025\n\021AUTO_SELL_EQUIP_2\020\005\022\025\n" +
-      "\021AUTO_SELL_EQUIP_3\020\006\022\025\n\021AUTO_SELL_EQUIP_" +
-      "4\020\007\022\025\n\021AUTO_SELL_MOUNT_1\020\010\022\025\n\021AUTO_SELL_" +
-      "MOUNT_2\020\t\022\025\n\021AUTO_SELL_MOUNT_3\020\n\022\025\n\021AUTO" +
-      "_SELL_MOUNT_4\020\013\022\023\n\017AUTO_SELL_PET_1\020\014\022\023\n\017" +
-      "AUTO_SELL_PET_2\020\r\022\023\n\017AUTO_SELL_PET_3\020\016\022\023" +
-      "\n\017AUTO_SELL_PET_4\020\017\022\031\n\025AUTO_SELL_ITEM_EV" +
-      "EN_1\020\020\022\031\n\025AUTO_SELL_ITEM_EVEN_2\020\021\022\031\n\025AUT" +
-      "O_SELL_ITEM_EVEN_3\020\022\022\031\n\025AUTO_SELL_ITEM_E" +
-      "VEN_4\020\023B\024\n\010protocolB\010Pbmethod"
+      "IAL\020\004\022\010\n\004CHIP\020\005\022\020\n\014LOA_THE_GIOI\020\010\022\023\n\017RUB" +
+      "Y_X2_VOUCHER\020\r\022\016\n\nARENA_COIN\020\016\022\010\n\004PLOT\020\017" +
+      "*/\n\010ItemType\022\014\n\010POSITION\020\001\022\014\n\010CURRENCY\020\002" +
+      "\022\007\n\003KEY\020\003*>\n\rItemPointType\022\t\n\005EVENT\020\001\022\007\n",
+      "\003USE\020\002\022\013\n\007SPEAKER\020\003\022\014\n\010OPEN_BOX\020\004*;\n\014Tar" +
+      "getAttack\022\n\n\006OBJECT\020\000\022\t\n\005ENEMY\020\001\022\010\n\004BOSS" +
+      "\020\002\022\n\n\006PLAYER\020\003*1\n\010SkinType\022\010\n\004HAIR\020\000\022\010\n\004" +
+      "FACE\020\001\022\007\n\003EYE\020\002\022\010\n\004BODY\020\003*q\n\rEquipSlotTy" +
+      "pe\022\010\n\004NULL\020\000\022\n\n\006WEAPON\020\001\022\007\n\003HAT\020\002\022\t\n\005ARM" +
+      "OR\020\003\022\t\n\005CLOAK\020\004\022\t\n\005SHOES\020\005\022\014\n\010TREASURE\020\006" +
+      "\022\007\n\003PET\020\007\022\t\n\005MOUNT\020\010*\322\003\n\010AutoSell\022\022\n\016AUT" +
+      "O_SELL_HP_1\020\000\022\022\n\016AUTO_SELL_HP_2\020\001\022\022\n\016AUT" +
+      "O_SELL_HP_3\020\002\022\022\n\016AUTO_SELL_HP_4\020\003\022\025\n\021AUT" +
+      "O_SELL_EQUIP_1\020\004\022\025\n\021AUTO_SELL_EQUIP_2\020\005\022",
+      "\025\n\021AUTO_SELL_EQUIP_3\020\006\022\025\n\021AUTO_SELL_EQUI" +
+      "P_4\020\007\022\025\n\021AUTO_SELL_MOUNT_1\020\010\022\025\n\021AUTO_SEL" +
+      "L_MOUNT_2\020\t\022\025\n\021AUTO_SELL_MOUNT_3\020\n\022\025\n\021AU" +
+      "TO_SELL_MOUNT_4\020\013\022\023\n\017AUTO_SELL_PET_1\020\014\022\023" +
+      "\n\017AUTO_SELL_PET_2\020\r\022\023\n\017AUTO_SELL_PET_3\020\016" +
+      "\022\023\n\017AUTO_SELL_PET_4\020\017\022\031\n\025AUTO_SELL_ITEM_" +
+      "EVEN_1\020\020\022\031\n\025AUTO_SELL_ITEM_EVEN_2\020\021\022\031\n\025A" +
+      "UTO_SELL_ITEM_EVEN_3\020\022\022\031\n\025AUTO_SELL_ITEM" +
+      "_EVEN_4\020\023B\024\n\010protocolB\010Pbmethod"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

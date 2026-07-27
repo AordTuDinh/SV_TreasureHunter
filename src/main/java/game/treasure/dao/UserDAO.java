@@ -293,40 +293,6 @@ public class UserDAO {
         return null;
     }
 
-
-    public UserLuckySpineEntity getUserSpine(MyUser mUser) {
-        UserLuckySpineEntity userSpine = (UserLuckySpineEntity) mUser.getCache().get("user_spine");
-        if (userSpine == null) {
-            userSpine = getUserSpine(mUser.getUser().getId());
-            if (userSpine != null) mUser.getCache().set("user_spine", userSpine);
-        }
-
-        return userSpine;
-    }
-
-    private UserLuckySpineEntity getUserSpine(int userId) {
-        EntityManager session = null;
-        try {
-            session = DBJPA.getEntityManager();
-            Query query = session.createNativeQuery("select * from user_lucky_spine where user_id =:user_id", UserLuckySpineEntity.class);
-            query.setParameter("user_id", userId);
-            List<UserLuckySpineEntity> aUser = query.getResultList();
-            if (aUser.isEmpty()) {
-                UserLuckySpineEntity userS = new UserLuckySpineEntity(userId);
-                session.getTransaction().begin();
-                session.persist(userS);
-                session.getTransaction().commit();
-                return userS;
-            }
-            return aUser.get(0);
-        } catch (Exception ex) {
-            Logs.error(GUtil.exToString(ex));
-        } finally {
-            closeSession(session);
-        }
-        return null;
-    }
-
     public UserDailyEntity getUserDaily(MyUser mUser) {
         UserDailyEntity userDaily = (UserDailyEntity) mUser.getCache().get("user_daily");
         if (userDaily == null) {

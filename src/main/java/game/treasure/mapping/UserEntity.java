@@ -35,7 +35,10 @@ public class UserEntity implements Serializable {
     int server, vip, vipExp, userRank;
     long gold, gem, ruby, power;
     int numberFriend, rr, cup;
+    int mobKill;
     int blockType;
+    @Transient
+    boolean mobKillDirty;
     int numDayLogin;
     long lastAction;
     Date lastLogin, dateCreated, lockChat;
@@ -466,6 +469,12 @@ public class UserEntity implements Serializable {
         gold += value;
     }
 
+    public synchronized void addMobKill(int delta) {
+        if (delta <= 0) return;
+        mobKill += delta;
+        mobKillDirty = true;
+    }
+
     public synchronized void addVipExp(long value) {
         if (vip >= ResEvent.lengthVip - 1) return;
         vipExp += value;
@@ -538,8 +547,20 @@ public class UserEntity implements Serializable {
         obj.add(gem);
         obj.add("gold");
         obj.add(gold);
+        if (mobKillDirty) {
+            obj.add("mob_kill");
+            obj.add(mobKill);
+            mobKillDirty = false;
+        }
         this.setLastAction(time);
         return DBJPA.update("user", obj, Arrays.asList("id", id));
+    }
+
+    /** Ghi mob_kill khi logout — luôn flush dù chưa có update user khác trong session. */
+    public boolean flushMobKill() {
+        if (!mobKillDirty) return true;
+        mobKillDirty = false;
+        return update(Arrays.asList("mob_kill", mobKill));
     }
 
 

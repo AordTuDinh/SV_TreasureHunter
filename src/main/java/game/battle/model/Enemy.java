@@ -94,6 +94,12 @@ public class Enemy extends Unit implements Serializable {
 
     @Override
     public void protoDie(Unit killer) {
+        if (killer != null && killer.isPlayer()) {
+            Player player = killer.getPlayer();
+            if (player != null) {
+                player.addNumKillMonster(this);
+            }
+        }
         super.protoDie(killer);
         protoStatus(Pbmethod.SubStateType.DIE, 1L);
     }
