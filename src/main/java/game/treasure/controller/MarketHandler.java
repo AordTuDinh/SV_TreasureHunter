@@ -7,6 +7,7 @@ import game.config.CfgLottery;
 import game.config.CfgQuest;
 import game.config.aEnum.*;
 import game.config.lang.Lang;
+import game.treasure.mapping.UserDataEntity;
 import game.treasure.mapping.UserEventSevenDayEntity;
 import game.treasure.mapping.UserItemEntity;
 import game.treasure.mapping.UserMarketEntity;
@@ -182,6 +183,7 @@ public class MarketHandler extends AHandler {
             return;
         }
         addBonusToastPlus(aBonus);
+        pushCraftUpdateIfCustomImage(item);
         mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.BUY_SHOP, number);
         checkQuest(Bonus.getIdItem(item), number);
         // event 7 day attack boss day 2
@@ -190,6 +192,17 @@ public class MarketHandler extends AHandler {
             uEvent.setBuyShop(uEvent.getBuyShop() + number);
         }
         Actions.save(user, Actions.GRECEIVE, DetailActionType.BUY_SHOP.getKey(market.id), "bonus", price);
+    }
+
+    private void pushCraftUpdateIfCustomImage(List<Long> itemWire) {
+        if (!Bonus.isCustomImageBonus(itemWire))
+            return;
+        UserDataEntity uData = mUser.getUData();
+        if (uData == null)
+            return;
+        addResponse(CRAFT_UPDATE, getCommonVector(
+                (long) uData.getCraftLevel(),
+                (long) uData.getCraftExp()));
     }
 
     private void checkQuest(int itemId, int number) {
@@ -235,6 +248,7 @@ public class MarketHandler extends AHandler {
                             addErrResponse();
                         } else {
                             addBonusToastPlus(aBonus);
+                            pushCraftUpdateIfCustomImage(resItem.getItems());
 //                            addResponse(getCommonVector(aBonus));
                             mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.BUY_SHOP, 1);
                             status(market.getId());
@@ -362,6 +376,7 @@ public class MarketHandler extends AHandler {
                     return;
                 } else {
                     addBonusToastPlus(aBonus);
+                    pushCraftUpdateIfCustomImage(item.getItems());
                     status(market.getId());
                     checkQuest(Bonus.getIdItem(item.getItems()), number);
                     mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.BUY_SHOP, 1);

@@ -40,7 +40,7 @@ public class UserSkinEntity implements Serializable {
         this.userId = user.getId();
         this.skinId = skinId;
         this.type = type;
-        this.tier = 0;
+        this.tier = 1;
         this.data = "[]";
         this.dateCreated = new Date();
     }
