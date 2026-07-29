@@ -152,7 +152,7 @@ public class WelfareHandler extends AHandler {
             protocol.Pbmethod.PbCellEvent.Builder pb = protocol.Pbmethod.PbCellEvent.newBuilder();
             pb.setId(i);
             int requireLevel = CfgEvent.config.numQuyTruongThanh.get(i);
-            pb.setNameCell(getLang(Lang.has_level) + " " + requireLevel);
+            pb.setNameCell(getLang(Lang.has_power) + " " + requireLevel);
             pb.addAllBonus(CfgEvent.config.bonusQuyTruongThanh.get(i));
             int cacheStatus = quyTruongThanh.get(i);
             if (cacheStatus == StatusType.PROCESSING.value && requireLevel <= 1) {

@@ -11,11 +11,14 @@ import game.treasure.mapping.UserDataEntity;
 import game.treasure.mapping.UserEventSevenDayEntity;
 import game.treasure.mapping.UserItemEntity;
 import game.treasure.mapping.UserMarketEntity;
+import game.treasure.mapping.main.ResBonusImageEntity;
 import game.treasure.mapping.main.ResMarketDetailEntity;
 import game.treasure.mapping.main.ResMarketEntity;
+import game.treasure.mapping.main.ResBonusImageType;
 import game.treasure.service.Services;
 import game.treasure.service.resource.ResMarket;
 import game.treasure.service.resource.ResItem;
+import game.treasure.service.resource.ResImage;
 import game.treasure.service.user.Actions;
 import game.treasure.service.user.Bonus;
 import game.object.DataQuest;
@@ -196,6 +199,15 @@ public class MarketHandler extends AHandler {
 
     private void pushCraftUpdateIfCustomImage(List<Long> itemWire) {
         if (!Bonus.isCustomImageBonus(itemWire))
+            return;
+        if (itemWire.size() < 3)
+            return;
+        int bonusImageId = itemWire.get(1).intValue();
+        ResBonusImageEntity cfg = ResImage.get(bonusImageId);
+        if (cfg == null)
+            return;
+        ResBonusImageType type = ResBonusImageType.fromInt(cfg.getType());
+        if (type != ResBonusImageType.CRAFT_EXP)
             return;
         UserDataEntity uData = mUser.getUData();
         if (uData == null)

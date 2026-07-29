@@ -296,7 +296,7 @@ public abstract class Lang implements Serializable {
     public static String err_has_level_for_buy = "err_has_level_for_buy"; // Cần đạt cấp %s để mua
     public static String eat_lunch = "eat_lunch"; //Bữa trưa
     public static String eat_dinner = "eat_dinner"; //Bữa tối
-    public static String has_level = "has_level"; //Đạt cấp độ
+    public static String has_power = "has_power"; //Đạt lực chiến
     public static String quy_truong_thanh = "quy_truong_thanh"; //Quỹ trưởng thành
     public static String quy_truong_thanh2 = "quy_truong_thanh2"; //Đạt cấp độ để nhận quà
     public static String moi_ngay = "moi_ngay"; //"Mỗi ngày:"

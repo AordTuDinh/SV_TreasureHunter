@@ -13,10 +13,13 @@ import protocol.Pbmethod;
 import game.treasure.mapping.*;
 import game.treasure.mapping.main.ResItemEntity;
 import game.treasure.mapping.main.ResItemPointEntity;
+import game.treasure.mapping.main.ResBonusImageEntity;
+import game.treasure.mapping.main.ResBonusImageType;
 import game.treasure.service.resource.ResAvatar;
 import game.treasure.service.item.EquipmentStatRollService;
 import game.treasure.service.resource.ResItem;
 import game.treasure.service.resource.ResItemPoint;
+import game.treasure.service.resource.ResImage;
 import game.treasure.service.resource.ResMount;
 import game.treasure.service.resource.ResMob;
 import game.object.MyUser;
@@ -28,8 +31,8 @@ import ozudo.base.helper.StringHelper;
 import java.util.*;
 
 public class Bonus {
-    /** Shop display-only: [-1, imageId, craftExp] — cộng craft exp, không tạo vật phẩm. */
-    public static final int BONUS_CUSTOM_IMAGE = -1;
+    /** Shop display-only: [17, bonusImageId, craftExpTotal] — cộng craft exp, không tạo vật phẩm. */
+    public static final int BONUS_CUSTOM_IMAGE = 17;
     public static final int BONUS_GOLD = 1;
     public static final int BONUS_GEM = 2;
     public static final int BONUS_RUBY = 3;
@@ -180,7 +183,7 @@ public class Bonus {
         return view(BONUS_ITEM_POINT, pointId, number);
     }
 
-    /** Preview/grant craft exp shop: [-1, imageId, exp]. */
+    /** Preview/grant craft exp shop: [17, imageId, exp]. */
     public static List<Long> viewCustomImageCraftExp(int imageId, long exp) {
         return view(BONUS_CUSTOM_IMAGE, imageId, exp);
     }
@@ -310,33 +313,95 @@ public class Bonus {
             case BONUS_MATERIAL -> addMaterial(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
             case BONUS_ITEM_POINT -> addItemPoint(mUser, chunk.get(1).intValue(), chunk.get(2), detailAction);
             case BONUS_CHANGE_OWNER -> applyChangeOwnerChunk(mUser, chunk, detailAction);
-            case BONUS_CUSTOM_IMAGE -> addCustomImageCraftExp(mUser, chunk, detailAction);
+            case BONUS_CUSTOM_IMAGE -> addBonusImageReward(mUser, chunk, detailAction);
             default -> new ArrayList<>();
         };
     }
 
     /**
-     * Shop bonus [-1, imageId, exp] — cộng craft exp (imageId chỉ để client hiển thị).
-     * Trả [-1, imageId, exp] để toast client hiện icon ItemImage + số EXP.
+     * Bonus image (nội bộ):
+     * - Receive config: [-1, bonusImageId, times]
+     * - CRAFT_EXP:    cộng craft exp, trả [-1, icon, craftExpTotal]
+     * - MATERIAL:     roll materialIds từ res_bonus_image.data, tier lấy từ res_bonus_image.tier
      */
-    static List<Long> addCustomImageCraftExp(MyUser mUser, List<Long> chunk, String detailAction) {
+    static List<Long> addBonusImageReward(MyUser mUser, List<Long> chunk, String detailAction) {
         if (chunk == null || chunk.size() < 3)
             return new ArrayList<>();
-        int imageId = chunk.get(1).intValue();
-        int expGain = chunk.get(2).intValue();
-        if (expGain <= 0)
+        int bonusImageId = chunk.get(1).intValue();
+        int times = chunk.get(2).intValue();
+        if (times <= 0)
             return new ArrayList<>();
-        UserDataEntity uData = mUser.getUData();
-        if (uData == null)
+
+        ResBonusImageEntity cfg = ResImage.get(bonusImageId);
+        if (cfg == null)
             return new ArrayList<>();
-        CfgCraft.addCraftExp(uData, expGain);
-        uData.update(Arrays.asList("craft_level", uData.getCraftLevel(), "craft_exp", uData.getCraftExp()));
-        if (CfgServer.isRealServer()) {
-            Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
-                    "type", "craft_exp", "imageId", imageId, "exp", expGain,
-                    "craftLevel", uData.getCraftLevel(), "craftExp", uData.getCraftExp());
+
+        ResBonusImageType cfgType = ResBonusImageType.fromInt(cfg.getType());
+        if (cfgType == null)
+            return new ArrayList<>();
+
+        switch (cfgType) {
+            case CRAFT_EXP -> {
+                int expPerRoll = cfg.getCraftExpPerRoll();
+                if (expPerRoll <= 0) return new ArrayList<>();
+                int expGain = expPerRoll * times;
+                UserDataEntity uData = mUser.getUData();
+                if (uData == null)
+                    return new ArrayList<>();
+                CfgCraft.addCraftExp(uData, expGain);
+                uData.update(Arrays.asList("craft_level", uData.getCraftLevel(), "craft_exp", uData.getCraftExp()));
+                if (CfgServer.isRealServer()) {
+                    // imageId trong wire chỉ để client hiển thị (lấy theo cột icon).
+                    Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
+                            "type", "craft_exp",
+                            "imageId", cfg.getIcon(),
+                            "exp", expGain,
+                            "craftLevel", uData.getCraftLevel(),
+                            "craftExp", uData.getCraftExp());
+                }
+                return Arrays.asList(
+                        (long) BONUS_CUSTOM_IMAGE,
+                        (long) bonusImageId,
+                        (long) expGain
+                );
+            }
+            case MATERIAL -> {
+                int tier = cfg.getTier() > 0 ? Math.min(cfg.getTier(), 4) : 1;
+                List<Integer> materialIds = cfg.getMaterialIds();
+                if (materialIds == null || materialIds.isEmpty())
+                    return new ArrayList<>();
+
+                List<Long> ret = new ArrayList<>();
+                for (int i = 0; i < times; i++) {
+                    int idx = NumberUtil.getRandom(0, materialIds.size() - 1);
+                    int materialId = materialIds.get(idx);
+                    List<Long> added = addMaterial(mUser, materialId, tier, detailAction);
+                    if (added == null || added.isEmpty())
+                        break; // hết slot vật phẩm, không roll tiếp.
+                    ret.addAll(added);
+                }
+                return ret;
+            }
+            case SKIN -> {
+                int tier = cfg.getTier() > 0 ? Math.min(cfg.getTier(), 4) : 1;
+                List<Integer> skinIds = cfg.getSkinIds();
+                if (skinIds == null || skinIds.isEmpty())
+                    return new ArrayList<>();
+
+                List<Long> ret = new ArrayList<>();
+                for (int i = 0; i < times; i++) {
+                    int idx = NumberUtil.getRandom(0, skinIds.size() - 1);
+                    int skinId = skinIds.get(idx);
+                    List<Long> added = addCharacterSkin(mUser, skinId, detailAction);
+                    if (added == null || added.isEmpty())
+                        break;
+                    ret.addAll(added);
+                }
+                return ret;
+            }
         }
-        return Arrays.asList((long) BONUS_CUSTOM_IMAGE, (long) imageId, (long) expGain);
+
+        return new ArrayList<>();
     }
 
     /** Apply [15, typeBonus, rowId, itemKey] — đổi chủ row escrow → receive [12|11, rowId, itemKey, tier]. */
