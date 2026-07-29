@@ -65,9 +65,6 @@ public abstract class Unit {
     long poisonNextTickMs;
     int poisonDamagePerTick;
     int poisonMoveSlowApplied;
-    long freezeStatBackup;
-    long freezeEndMs;
-    int freezeAttackSlowApplied;
     long windDodgeBackup;
     long windAccuracyBackup;
     float windReduceRate;
@@ -139,7 +136,6 @@ public abstract class Unit {
             target.beAttackDamage(this, totalDame);
             IMath.applyLifeSteal(this, totalDame);
             IMath.tryApplyPoison(this, target);
-            IMath.tryApplyFreeze(this, target);
             IMath.tryApplyWind(this, target);
             IMath.tryApplyFire(this, target);
         }
@@ -214,7 +210,6 @@ public abstract class Unit {
     public void Update() {
         processPoison();
         processFire();
-        processFreeze();
         processWind();
     }
 
@@ -262,35 +257,6 @@ public abstract class Unit {
         fireEndMs = newEnd;
         long remainingMs = fireEndMs - now;
         protoStatus(Pbmethod.SubStateType.EFFECT_BODY, (long) EffectBodyType.DOT_FIRE.value, remainingMs);
-    }
-
-    /** Đóng băng: đứng im (beBlock), giảm tốc đánh, thời gian theo Băng − Giáp. */
-    public void applyFreeze(Unit owner, long freezeStat) {
-        if (!alive || freezeStat <= 0) {
-            return;
-        }
-        int durationSec = CfgStats.calcFreezeDurationSeconds(freezeStat, point.getDefense());
-        if (durationSec <= 0) {
-            return;
-        }
-        long durationMs = durationSec * 1000L;
-        long now = System.currentTimeMillis();
-        long newEnd = now + durationMs;
-        if (freezeEndMs > now) {
-            newEnd = Math.max(newEnd, freezeEndMs);
-        } else {
-            freezeStatBackup = point.getFreezeStat();
-        }
-        if (newEnd <= freezeEndMs && freezeEndMs > now) {
-            return;
-        }
-        freezeEndMs = newEnd;
-        point.setFreezeEnd(freezeEndMs);
-        clearFreezeAttackSlow();
-        applyFreezeAttackSlow(CfgStats.calcFreezeAttackSlowPercent(freezeStat));
-        setMove(false);
-        protoStatus(Pbmethod.SubStateType.EFFECT_BODY, (long) EffectBodyType.SLOW.value, durationMs);
-        protoUpdatePoint((long) Point.FREEZE, point.get(Point.FREEZE));
     }
 
     /** Gió: giảm Né / Chính Xác theo successRate(Gió), mặc định 10s. */
@@ -348,52 +314,6 @@ public abstract class Unit {
         windEndMs = 0;
         protoUpdatePoint((long) Point.DOGE, point.get(Point.DOGE));
         protoUpdatePoint((long) Point.ACCURACY, point.get(Point.ACCURACY));
-    }
-
-    private void processFreeze() {
-        if (freezeEndMs <= 0) {
-            return;
-        }
-        if (!alive || System.currentTimeMillis() >= freezeEndMs) {
-            clearFreeze();
-        }
-    }
-
-    private void applyFreezeAttackSlow(int slowPercent) {
-        if (slowPercent <= 0) {
-            freezeAttackSlowApplied = 0;
-            return;
-        }
-        long currentChange = point.get(Point.CHANGE_ATTACK_SPEED);
-        if (currentChange <= 0) {
-            currentChange = 100;
-        }
-        long minChange = Math.max(0, 100 - Math.round(CfgStats.getFreezeSlowMax() * 100f));
-        int actualSlow = (int) Math.min(slowPercent, Math.max(0, currentChange - minChange));
-        if (actualSlow <= 0) {
-            freezeAttackSlowApplied = 0;
-            return;
-        }
-        freezeAttackSlowApplied = actualSlow;
-        point.add(Point.CHANGE_ATTACK_SPEED, -actualSlow);
-        protoUpdatePoint((long) Point.CHANGE_ATTACK_SPEED, point.get(Point.CHANGE_ATTACK_SPEED));
-    }
-
-    private void clearFreeze() {
-        clearFreezeAttackSlow();
-        freezeEndMs = 0;
-        point.getValues()[Point.FREEZE] = freezeStatBackup;
-        freezeStatBackup = 0;
-        protoUpdatePoint((long) Point.FREEZE, point.get(Point.FREEZE));
-    }
-
-    private void clearFreezeAttackSlow() {
-        if (freezeAttackSlowApplied <= 0) {
-            return;
-        }
-        point.add(Point.CHANGE_ATTACK_SPEED, freezeAttackSlowApplied);
-        freezeAttackSlowApplied = 0;
-        protoUpdatePoint((long) Point.CHANGE_ATTACK_SPEED, point.get(Point.CHANGE_ATTACK_SPEED));
     }
 
     private void processPoison() {
@@ -547,7 +467,6 @@ public abstract class Unit {
     private void clearCombatEffects() {
         clearPoison();
         clearFire();
-        clearFreeze();
         clearWind();
     }
 

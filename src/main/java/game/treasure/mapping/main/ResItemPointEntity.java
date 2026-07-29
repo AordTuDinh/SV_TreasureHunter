@@ -26,7 +26,7 @@ public class ResItemPointEntity implements Serializable {
     String name;
     @Getter
     String desc;
-    /** JSON list materialId — dùng khi type = OPEN_BOX. */
+    /** JSON list materialId — dùng khi type = OPEN_BOX / OPEN_BOX_TIER. */
     @Getter
     String data;
     @Getter

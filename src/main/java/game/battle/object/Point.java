@@ -169,21 +169,9 @@ public class Point {
         }
     }
 
-    public void addFreezeEnd(long durationMs) {
-        long newFreeze = System.currentTimeMillis() + durationMs;
-        setFreezeEnd(newFreeze);
-    }
-
-    public void setFreezeEnd(long endMs) {
-        if (values[FREEZE] < endMs) {
-            values[FREEZE] = endMs;
-        }
-    }
-
+    /** Chỉ số Băng (raw). Effect đóng băng làm sau — không ghi timestamp vào slot này. */
     public long getFreezeStat() {
-        long v = values[FREEZE];
-        long now = System.currentTimeMillis();
-        return v > now ? 0 : v;
+        return values[FREEZE];
     }
 
     public void setBaseDef(int value) {
@@ -399,35 +387,34 @@ public class Point {
         return values[POWER];
     }
 
-    public void calculatorPower(int level, float perItemWeaponEquip) { // perItemWeaponEquip : hệ số atk
-        int power = 0;
-        power += getAttackDamage() * 0.5f;
-        power += getAttackDamage() * perItemWeaponEquip;
-        power += getMaxHp() * 0.5f;
-        power += values[ATTACK_SPEED] * 0.005f;
-        power += getMoveSpeed() * 2f;
-        power += getDefense() * 2f;
-        power += getCrit() * level * 0.02f;
-        power += getCritDamage() * 0.02f;
+
+    /** Lực chiến = tổng raw point; HP × 0.1, MOVE_SPEED × 2.5 để cân scale. */
+    public void calculatorPower() {
+        long power = 0;
+        power += values[ATTACK];
+        power += (long) (values[HP] * 0.1f);
+        power += values[DEFENSE];
+        power += values[CRIT];
+        power += values[CRIT_DAMAGE];
+        power += values[COUNTER_ATTACK];
+        power += values[LIFE_STEAL];
+        power += values[ACCURACY];
+        power += values[HEALING];
+        power += values[DOGE];
+        power += values[DOT];
+        power += values[FREEZE];
+        power += values[POISON];
+        power += values[MULTI_ATTACK];
+        power += values[ATTACK_SPEED];
+        power += values[WIND];
+        power += values[SUMMON];
+        power += (long) (values[MOVE_SPEED] * 2.5f);
         values[POWER] = power;
-
-    }
-
-    public void calculatorPower() { // perItemWeaponEquip : hệ số atk
-        int power = 0;
-        power += getAttackDamage() * 0.5f;
-        power += getMaxHp() * 0.5f;
-        power += values[ATTACK_SPEED] * 0.005f;
-        power += getMoveSpeed() * 2f;
-        power += getDefense() * 2f;
-        power += getCritDamage() * 0.02f;
-        values[POWER] = power;
-
     }
 
     public boolean beBlock() {
         long now = System.currentTimeMillis();
-        return values[STUN] > now || values[FREEZE] > now || values[Point.BLOCK_PARALYZE] > now;
+        return values[STUN] > now || values[Point.BLOCK_PARALYZE] > now;
     }
 
 

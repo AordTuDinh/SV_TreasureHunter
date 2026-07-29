@@ -9,6 +9,7 @@ import java.util.List;
 
 /**
  * Rate roll tier khi mở rương item point (OPEN_BOX).
+ * OPEN_BOX_TIER không dùng rate này — lấy tier từ res_item_point.
  * DB key: {@code config_openBox} → {@link #loadConfig(String)}.
  * Default: 45 / 35 / 15 / 5 cho tier 1..4.
  */

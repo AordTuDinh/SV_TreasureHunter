@@ -123,6 +123,8 @@ enum ItemPointType {
   USE = 2;
   SPEAKER = 3;
   OPEN_BOX = 4;
+  /** Random materialId trong data; tier cố định = tier của item point. */
+  OPEN_BOX_TIER = 5;
 }
 
 message PbUnit{

@@ -35,7 +35,7 @@ public class CfgDaily {
     }
 
     public class DataConfig {
-        public List<Integer> gemFee;
+        public List<Integer> rubyFee;
         public List<Integer> goldBuy;
     }
 }

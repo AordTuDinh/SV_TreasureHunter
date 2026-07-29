@@ -1124,6 +1124,14 @@ public final class Pbmethod {
      * <code>OPEN_BOX = 4;</code>
      */
     OPEN_BOX(3, 4),
+    /**
+     * <code>OPEN_BOX_TIER = 5;</code>
+     *
+     * <pre>
+     * Random materialId trong data; tier cố định = tier của item point.
+     * </pre>
+     */
+    OPEN_BOX_TIER(4, 5),
     ;
 
     /**
@@ -1142,6 +1150,10 @@ public final class Pbmethod {
      * <code>OPEN_BOX = 4;</code>
      */
     public static final int OPEN_BOX_VALUE = 4;
+    /**
+     * <code>OPEN_BOX_TIER = 5;</code>
+     */
+    public static final int OPEN_BOX_TIER_VALUE = 5;
 
 
     public final int getNumber() { return value; }
@@ -1152,6 +1164,7 @@ public final class Pbmethod {
         case 2: return USE;
         case 3: return SPEAKER;
         case 4: return OPEN_BOX;
+        case 5: return OPEN_BOX_TIER;
         default: return null;
       }
     }
@@ -91088,8 +91101,8 @@ public final class Pbmethod {
       "IAL\020\004\022\010\n\004CHIP\020\005\022\020\n\014LOA_THE_GIOI\020\010\022\023\n\017RUB" +
       "Y_X2_VOUCHER\020\r\022\016\n\nARENA_COIN\020\016\022\010\n\004PLOT\020\017" +
       "*/\n\010ItemType\022\014\n\010POSITION\020\001\022\014\n\010CURRENCY\020\002" +
-      "\022\007\n\003KEY\020\003*>\n\rItemPointType\022\t\n\005EVENT\020\001\022\007\n",
-      "\003USE\020\002\022\013\n\007SPEAKER\020\003\022\014\n\010OPEN_BOX\020\004*;\n\014Tar" +
+      "\022\007\n\003KEY\020\003*Q\n\rItemPointType\022\t\n\005EVENT\020\001\022\007\n",
+      "\003USE\020\002\022\013\n\007SPEAKER\020\003\022\014\n\010OPEN_BOX\020\004\022\021\n\rOPEN_BOX_TIER\020\005*;\n\014Tar" +
       "getAttack\022\n\n\006OBJECT\020\000\022\t\n\005ENEMY\020\001\022\010\n\004BOSS" +
       "\020\002\022\n\n\006PLAYER\020\003*1\n\010SkinType\022\010\n\004HAIR\020\000\022\010\n\004" +
       "FACE\020\001\022\007\n\003EYE\020\002\022\010\n\004BODY\020\003*q\n\rEquipSlotTy" +

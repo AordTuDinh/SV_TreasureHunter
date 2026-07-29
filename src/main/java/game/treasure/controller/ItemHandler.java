@@ -652,9 +652,11 @@ public class ItemHandler extends AHandler {
     }
 
     /**
-     * Mở rương item point type OPEN_BOX.
+     * Mở rương item point type OPEN_BOX / OPEN_BOX_TIER.
      * Request: CommonVector [pointId, number] — number 1..100.
-     * Mỗi rương → 1 material: random materialId trong res.data, roll tier theo CfgOpenBox.
+     * Mỗi rương → 1 material: random materialId trong res.data.
+     * OPEN_BOX: roll tier theo CfgOpenBox.
+     * OPEN_BOX_TIER: tier = res.tier.
      */
     void itemPointUse() {
         List<Long> aLong = CommonProto.parseCommonVector(requestData).getALongList();
@@ -670,7 +672,17 @@ public class ItemHandler extends AHandler {
         }
 
         game.treasure.mapping.main.ResItemPointEntity res = ResItemPoint.get(pointId);
-        if (res == null || res.getItemPointType() != Pbmethod.ItemPointType.OPEN_BOX) {
+        if (res == null) {
+            addErrParam();
+            return;
+        }
+        Pbmethod.ItemPointType pointType = res.getItemPointType();
+        boolean fixedTier = pointType == Pbmethod.ItemPointType.OPEN_BOX_TIER;
+        if (pointType != Pbmethod.ItemPointType.OPEN_BOX && !fixedTier) {
+            addErrParam();
+            return;
+        }
+        if (fixedTier && (res.getTier() < 1 || res.getTier() > 4)) {
             addErrParam();
             return;
         }
@@ -699,7 +711,7 @@ public class ItemHandler extends AHandler {
         List<Long> wire = new ArrayList<>(Bonus.viewItemPoint(pointId, -number));
         for (int i = 0; i < number; i++) {
             int materialId = materialPool.get(NumberUtil.getRandom(materialPool.size()));
-            int tier = CfgOpenBox.rollTier();
+            int tier = fixedTier ? res.getTier() : CfgOpenBox.rollTier();
             wire.addAll(Bonus.viewMaterial(materialId, tier));
         }
 

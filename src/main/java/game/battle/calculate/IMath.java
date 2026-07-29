@@ -177,19 +177,6 @@ public class IMath {
         target.applyFire(attacker, fire);
     }
 
-    /** Băng: chỉ số bị Kháng trừ %, roll success khi đòn trúng (không miss). */
-    public static void tryApplyFreeze(Unit attacker, Unit target) {
-        if (attacker == null || target == null || !attacker.isAlive() || !target.isAlive()) {
-            return;
-        }
-        long freezeStat = CfgStats.getEffectiveElementAfterResist(
-                attacker.getPoint().getFreezeStat(), target.getPoint().getResistance());
-        if (freezeStat <= 0 || !CfgStats.rollFreezeProc(freezeStat)) {
-            return;
-        }
-        target.applyFreeze(attacker, freezeStat);
-    }
-
     // Hàm gốc - tất cả đều tính qua hàm này
     public static int calculateDamageBase(long atkDame, Unit beAttacker, PointBuff buff, Unit attacker) {
         long def = beAttacker.getPoint().getDefense();
@@ -226,11 +213,9 @@ public class IMath {
         }
         if (hasItemEquip)
             addEquippedItemPoints(mUser, pt);
-        // cal power from shuriken equipment
-        float perPowerWeaponEquip = 1;
 
         // power tinh cuoi cung
-        pt.calculatorPower(1, perPowerWeaponEquip);
+        pt.calculatorPower();
         return pt;
     }
 

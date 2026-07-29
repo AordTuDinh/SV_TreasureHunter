@@ -247,7 +247,7 @@ public class QuestHandler extends AHandler {
             addErrResponse(getLang(Lang.err_sold_out));
             return;
         }
-        List<Long> bonus = Bonus.viewGem(-CfgDaily.config.gemFee.get(slot));
+        List<Long> bonus = Bonus.viewRuby(-CfgDaily.config.rubyFee.get(slot));
         String err = Bonus.checkMoney(mUser, bonus);
         if (err != null) {
             addErrResponse(err);

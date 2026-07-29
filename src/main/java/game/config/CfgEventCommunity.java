@@ -9,7 +9,7 @@ public class CfgEventCommunity {
     public static int SIZE_DAME_SKIN_FREE;
     public static int SIZE_100_SCROLL;
     public static DataConfig config;
-    public static final int TYPE_LEVEL = 1;
+    public static final int TYPE_POWER = 1; // đạt lực chiến
     public static final int TYPE_DAY = 2;
 
 

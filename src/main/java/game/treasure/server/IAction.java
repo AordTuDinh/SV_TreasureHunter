@@ -189,7 +189,7 @@ public class IAction {
     public static final int ITEM_USED = 452;
     public static final int ITEM_INFO = 453;
     public static final int SPEAKER_SEND = 454;
-    /** Mở rương item point type OPEN_BOX — [pointId, number]. */
+    /** Mở rương item point type OPEN_BOX / OPEN_BOX_TIER — [pointId, number]. */
     public static final int ITEM_POINT_USE = 455;
     public static final int MATERIAL_UPGRADE = 458;
     public static final int CRAFT_EXECUTE = 459;
