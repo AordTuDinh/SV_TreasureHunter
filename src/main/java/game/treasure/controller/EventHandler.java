@@ -12,6 +12,7 @@ import game.treasure.service.resource.ResEventPanel;
 import game.treasure.service.resource.ResIAP;
 import game.treasure.service.resource.ResQuest;
 import game.treasure.service.user.Bonus;
+import game.treasure.service.user.VipRuntimeService;
 import game.object.DataQuest;
 import io.netty.channel.Channel;
 import ozudo.base.helper.DateTime;
@@ -55,7 +56,7 @@ public class EventHandler extends AHandler {
         }
         try {
             switch (actionId) {
-               // case IAction.EVENT_ACTIVE -> active();
+                case IAction.EVENT_ACTIVE -> active();
                 case IAction.EVENT_14D_STATUS -> e14DayStatus();
                 case IAction.EVENT_14D_REWARD -> e14DayReward();
                 case IAction.EVENT_14D_RE_TICK -> e14DayReTick();
@@ -370,13 +371,12 @@ public class EventHandler extends AHandler {
         if (CfgEvent.hasEventE14(uEvent)) {
             builder.addALong(EventType.LOGIN_14.value);
         }
-        EventInt eInt = uEvent.getEventInt();
-        // tat tam event fipu
-        if (eInt.getValue(EventInt.TIME_BUY_FIRST_PURCHASE) == 0 || DateTime.getDayToNumberDay(eInt.getValue(EventInt.TIME_BUY_FIRST_PURCHASE)) < 3)
+        if (isFirstPurchaseEventActive())
             builder.addALong(EventType.FIRST_PURCHASE.value);
         // event 7 day
         builder.addALong(EventType.OPEN_SV_7_DAY.value);
         // event cong dong
+        EventInt eInt = uEvent.getEventInt();
         boolean inEventCommunity = eInt.getValue(EventInt.EVENT_COMMUNITY_1) == 0 || eInt.getValue(EventInt.EVENT_COMMUNITY_2) == 0;
         if (inEventCommunity) builder.addALong(EventType.COMMUNITY.value);
 
@@ -541,6 +541,9 @@ public class EventHandler extends AHandler {
             bonus.addAll(checkBonusOld(curPack));
             aBonus.addAll(bonus);
             addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.BUY_PACK.getKey(id), aBonus)));
+            if (VipRuntimeService.isPrivilegePack(id)) {
+                VipRuntimeService.rebuildEffectiveVip(mUser);
+            }
             // save vào log để thống kê
             LogBuyPackEntity pack = LogBuyPackEntity.builder().userId(user.getId()).packId(id).serverId(user.getServer()).price(rPack.getPriceString()).build();
             pack.saveLog();
@@ -579,17 +582,30 @@ public class EventHandler extends AHandler {
         addResponse(getCommonVector(status));
     }
 
+    private boolean isFirstPurchaseEventActive() {
+        EventInt eInt = uEvent.getEventInt();
+        int timeBuy = eInt.getValue(EventInt.TIME_BUY_FIRST_PURCHASE);
+        return timeBuy == 0 || DateTime.getDayToNumberDay(timeBuy) < 3;
+    }
+
     private void fipuStatus() {
+        if (!isFirstPurchaseEventActive()) {
+            addErrResponse(getLang(Lang.err_event_end));
+            return;
+        }
+        ResIAPEntity iap = ResIAP.getIAP(ResIAP.IAP_ID_FIRST_PURCHASE);
+        if (iap == null) {
+            addErrSystem();
+            return;
+        }
         Pbmethod.ListCommonVector.Builder cmm = Pbmethod.ListCommonVector.newBuilder();
         List<List<Long>> bonusNextDay = ResIAP.bonusDayFirstPurchase;
-        ResIAPEntity iap = ResIAP.getIAP(ResIAP.IAP_ID_FIRST_PURCHASE);
         cmm.addAVector(getCommonVector(iap.getABonus()));
         cmm.addAVector(getCommonVector(bonusNextDay.get(0)));
         cmm.addAVector(getCommonVector(bonusNextDay.get(1)));
         int timeBuy = mUser.getUEvent().getEventInt().getValue(EventInt.TIME_BUY_FIRST_PURCHASE);
         long dayGet = timeBuy == 0 ? 0 : DateTime.getDayToNumberDay(timeBuy) + 1;
         Pbmethod.CommonVector.Builder ret = Pbmethod.CommonVector.newBuilder();
-        if (dayGet > 3) return;
         ret.addALong(dayGet).addALong(iap.getId()).addALong(iap.getPrice()).addALong(iap.getPriceQr()).addAString(iap.getProductIdAndroid()).addAString(iap.getProductIdIos());
         cmm.addAVector(ret);
         addResponse(cmm.build());

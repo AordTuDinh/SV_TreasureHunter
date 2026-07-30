@@ -305,11 +305,8 @@ public class WelfareHandler extends AHandler {
         tabNgay.setTabId(1);
         tabNgay.setNotify(false);
         tabNgay.setTabName(getLang(Lang.day));
-        tabNgay.addCells(toProtoCell(PackType.UU_DAI_CHIEU_MO));
         tabNgay.addCells(toProtoCell(PackType.UU_DAI_MOI_NGAY));
         tabNgay.addCells(toProtoCell(PackType.GOI_TAI_NGUYEN_TAN_THU));
-        tabNgay.addCells(toProtoCell(PackType.GOI_TAI_NGUYEN_BANG_HOI));
-        tabNgay.addCells(toProtoCell(PackType.GOI_TAI_NGUYEN_NONG_TRAI));
         tabNgay.addCells(toProtoCell(PackType.GOI_MAY_MAN));
         event.addTabEvent(tabNgay);
         // Tab 2
@@ -319,14 +316,6 @@ public class WelfareHandler extends AHandler {
         tabTuan.setNotify(false);
         tabTuan.setTabName(getLang(Lang.week));
         tabTuan.addCells(toProtoCell(PackType.CHIEU_MO_TUAN));
-        tabTuan.addCells(toProtoCell(PackType.XU_GIA_TRI));
-        tabTuan.addCells(toProtoCell(PackType.XU_MAY_MAN));
-        tabTuan.addCells(toProtoCell(PackType.LIEN_MINH_GIA_TRI));
-        tabTuan.addCells(toProtoCell(PackType.CUONG_HOA_CAP_1));
-        tabTuan.addCells(toProtoCell(PackType.CUONG_HOA_CAP_2));
-        tabTuan.addCells(toProtoCell(PackType.CUONG_HOA_CAP_3));
-        tabTuan.addCells(toProtoCell(PackType.CUONG_HOA_CAP_4));
-        tabTuan.addCells(toProtoCell(PackType.CUONG_HOA_CAP_5));
         event.addTabEvent(tabTuan);
         // Tab 3
         protocol.Pbmethod.PbTabWelfare.Builder tabThang = protocol.Pbmethod.PbTabWelfare.newBuilder();
@@ -491,8 +480,22 @@ public class WelfareHandler extends AHandler {
 
     private void welfareGetCell() {
         List<Long> inputs = getInputALong();
-        EventType eventType = EventType.get(inputs.get(0).intValue());
+        if (inputs == null || inputs.size() < 2) {
+            Logs.warn("[Welfare644] input thiếu: " + inputs);
+            addDebugLogError("WELFARE_GET_CELL input thiếu: " + inputs);
+            addErrParam();
+            return;
+        }
+        int eventId = inputs.get(0).intValue();
         int cellId = inputs.get(1).intValue();
+        EventType eventType = EventType.get(eventId);
+        Logs.info("[Welfare644] eventId=" + eventId + " cellId=" + cellId + " eventType=" + eventType);
+        if (eventType == null) {
+            Logs.warn("[Welfare644] eventId không hợp lệ: " + eventId);
+            addDebugLogError("WELFARE_GET_CELL eventId không hợp lệ: " + eventId);
+            addErrParam();
+            return;
+        }
         switch (eventType) {
             case QUA_NAP_TIEN -> getQuaNapTien(cellId);
             case DIEM_DANH -> checkIn();
@@ -501,6 +504,11 @@ public class WelfareHandler extends AHandler {
             case GET_SUPPORT -> getSupportBonus(cellId);
             case ONLINE_1H -> getOnline1H(cellId);
             case QUY_TRUONG_THANH -> getQuyTruongThanh(cellId);
+            default -> {
+                Logs.warn("[Welfare644] event chưa hỗ trợ get cell: " + eventType);
+                addDebugLogError("WELFARE_GET_CELL event chưa hỗ trợ: " + eventType);
+                addErrParam();
+            }
         }
     }
 
@@ -519,14 +527,22 @@ public class WelfareHandler extends AHandler {
         if (numCheck >= CfgCheckin.config.bonusCheckin.size()) {
             bonus = Bonus.viewGem(100);
         } else bonus = CfgCheckin.config.bonusCheckin.get(numCheck);
+        if (!mUser.checkSlotAddBonus(bonus)) {
+            addErrResponse(getLang(Lang.err_max_slot));
+            return;
+        }
+        List<Long> retBonus = Bonus.receiveListItem(mUser, DetailActionType.DIEM_DANH_HANG_NGAY.getKey(numCheck + 1), bonus);
+        if (retBonus.isEmpty()) {
+            Logs.warn("[Welfare644][CheckIn] receiveListItem rỗng — bonus=" + bonus
+                    + " numCheck=" + numCheck + " userId=" + user.getId()
+                    + " (xem log [BonusImage] nếu type=17)");
+            addDebugLogError("CheckIn receive rỗng, bonus=" + bonus + ", numCheck=" + numCheck);
+            addErrResponse(getLang(Lang.err_max_slot));
+            return;
+        }
         checkin.set(CfgCheckin.NUM_CHECKIN, checkin.get(CfgCheckin.NUM_CHECKIN) + 1);
         checkin.set(CfgCheckin.STATUS, 1);
         if (mUser.getUData().updateCheckIn(StringHelper.toDBString(checkin))) {
-            List<Long> retBonus = Bonus.receiveListItem(mUser, DetailActionType.DIEM_DANH_HANG_NGAY.getKey(numCheck + 1), bonus);
-            if (retBonus.isEmpty()) {
-                addErrResponse();
-                return;
-            }
             addBonusToast(retBonus);
             addResponse(null);
             CfgAchievement.addListAchievement(mUser, 3, CfgAchievement.checkinAchi, 1);

@@ -15,7 +15,7 @@ public class ResIAP {
     static Map<String, ResIAPEntity> mIAPProductAndroid = new HashMap<>();
     static Map<String, ResIAPEntity> mIAPProductIos = new HashMap<>();
     public static final int IAP_ID_FIRST_PURCHASE = 1;
-    public static final List<List<Long>> bonusDayFirstPurchase = List.of(List.of(6L, 70L, 1000l, 6L, 26L, 10L), List.of(6L, 70L, 1000l, 6L, 35L, 10L));
+    public static final List<List<Long>> bonusDayFirstPurchase = List.of(List.of(13L,5L,5L,1L,500L,2L,50L), List.of(13L,5L,5L,1L,500L,2L,50L));
 
     public static ResIAPEntity getIAP(int iapId) {
         return mIAP.get(iapId);
@@ -25,7 +25,6 @@ public class ResIAP {
         if (os == 0) return mIAPProductAndroid.get(productId);
         return mIAPProductIos.get(productId);
     }
-
 
     public static void init() {
         // purchase list

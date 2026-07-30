@@ -164,8 +164,8 @@ public class CfgItem {
         if (fee <= 0)
             return 0;
         int pct = 0;
-        if (mUser != null && mUser.getUSetting() != null)
-            pct = Math.max(0, mUser.getUSetting().getUVip().getValue(VipType.UPGRADE_FEE));
+        if (mUser != null)
+            pct = Math.max(0, mUser.getEffectiveVipValue(VipType.UPGRADE_FEE));
         if (pct > 0)
             fee = (long) Math.ceil(fee * (100 - Math.min(pct, 100)) / 100.0);
         return Math.max(1, fee);

@@ -36,7 +36,7 @@ public final class VipService {
         if (changed) {
             uVip.update();
             mUser.getUSetting().syncVipData(uVip.getList());
-            mUser.queueVipDataSync();
+            VipRuntimeService.rebuildEffectiveVip(mUser);
         }
         if (shieldHoursAdded > 0) {
             ProtectVipService.addHoursToDaily(mUser, shieldHoursAdded, uVip);

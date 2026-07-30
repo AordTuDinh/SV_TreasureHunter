@@ -9,6 +9,7 @@ import game.treasure.mapping.UserEntity;
 import game.treasure.mapping.UserItemEntity;
 import game.treasure.server.IAction;
 import game.treasure.service.resource.ResItem;
+import game.treasure.service.day.ServerDayService;
 import game.monitor.Online;
 import game.object.MyUser;
 import game.protocol.CommonProto;
@@ -57,6 +58,7 @@ public abstract class AHandler extends IAction {
                 if (oldChannel == null) Online.addChannel(mUser.getUser(), channel);
                 user = mUser.getUser();
                 if (mUser.getChannel() == null) mUser.setChannel(channel);
+                ServerDayService.ensureCurrentDay(mUser);
             }
         }
         debug("-----------> Time: " + DateTime.getFullDate() + " -- Receive Service: " + actionId + " -- Length: " + requestData.length);
@@ -139,7 +141,7 @@ public abstract class AHandler extends IAction {
         if (mUser == null || mUser.getUSetting() == null)
             return;
         if (mUser.drainVipDataPending())
-            addResponse(UPDATE_VIP_DATA, getCommonIntVector(mUser.getUSetting().getVipDataList()));
+            addResponse(UPDATE_VIP_DATA, getCommonIntVector(mUser.getEffectiveVipDataList()));
     }
 
     public void addErrResponse() {

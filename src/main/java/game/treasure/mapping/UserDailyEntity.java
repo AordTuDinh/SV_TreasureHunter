@@ -42,6 +42,9 @@ public class UserDailyEntity implements Serializable {
     String friendSend, giftReceive; // danh sách những thằng mình đã gửi quà của hôm đó - danh sách các quà đã nhận
     @Transient
     DataDaily dataDaily;
+    /** true ngay sau genNewData(update=true) — {@link game.treasure.service.day.ServerDayService} consume một lần. */
+    @Transient
+    boolean justRolledOver;
 
     public UserDailyEntity(int userId, int userLevel) {
         this.userId = userId;
@@ -59,7 +62,15 @@ public class UserDailyEntity implements Serializable {
         }
     }
 
+    public boolean consumeRolledOver() {
+        if (!justRolledOver)
+            return false;
+        justRolledOver = false;
+        return true;
+    }
+
     void genNewData(int dayOfYear, boolean update, MyUser mUser) {
+        justRolledOver = update;
         eventId = dayOfYear;
         List<Integer> newDaily = NumberUtil.genListInt(DataDaily.NUMBER_VALUE, 0);
         dataInt = StringHelper.toDBString(newDaily);
@@ -77,7 +88,7 @@ public class UserDailyEntity implements Serializable {
     /** Mỗi ngày mới: ghi số giây khiên = tổng giờ vip_data × 3600. */
     private void applyVipProtectionShield(MyUser mUser) {
         if (mUser == null || mUser.getUSetting() == null) return;
-        int hours = mUser.getUSetting().getUVip().getValue(VipType.PROTECTION_SHIELD_HOUR);
+        int hours = mUser.getEffectiveVipValue(VipType.PROTECTION_SHIELD_HOUR);
         int seconds = ProtectVipService.hoursToSeconds(hours);
         if (seconds > 0) {
             dataDaily.setValue(DataDaily.PROTECTION_SHIELD_HOUR, seconds);

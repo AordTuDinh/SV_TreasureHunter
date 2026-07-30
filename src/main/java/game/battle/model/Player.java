@@ -33,6 +33,8 @@ public class Player extends Unit implements Serializable {
     Pos targetDirectionAttackRun2;
     boolean isAttackRun2;
     Pos directionHitRun = Pos.zero();
+    /** Runtime in-room: đang bật tự động khai thác (PLOT chỉ trừ khi true). */
+    boolean autoGather;
     //ping logic
     long curTick = 0;
     int poolSizeTick = 5;
@@ -67,6 +69,7 @@ public class Player extends Unit implements Serializable {
         this.direction = Pos.right();
         this.isMove = false;
         this.skillSlotNext = 0;
+        this.autoGather = false;
     }
 
     public Player( int teamId, Point point, UnitType type) {
@@ -90,6 +93,7 @@ public class Player extends Unit implements Serializable {
         timeBeHit = 0;
         beDameInfo = new HashMap<>();
         targetMove = Pos.zero();
+        autoGather = false;
         if (petUse != null) {
             petUse.setPos(Pos.randomPos(this.pos, 1f, 1f));
         }
@@ -195,6 +199,7 @@ public class Player extends Unit implements Serializable {
 
     @Override
     public synchronized void protoDie(Unit killer) {
+        autoGather = false;
         if (ArenaService.getInstance().handleDeath(this, killer)) {
             super.protoDie(killer);
             if (sendDie) {

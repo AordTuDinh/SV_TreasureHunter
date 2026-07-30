@@ -27,7 +27,7 @@ public final class ProtectVipService {
     /** Cấp giây khiên vào daily từ tổng giờ vip_data (đã ×3600). */
     public static void grantDailyFromVipData(MyUser mUser) {
         if (mUser == null || mUser.getUSetting() == null) return;
-        int hours = mUser.getUSetting().getUVip().getValue(VipType.PROTECTION_SHIELD_HOUR);
+        int hours = mUser.getEffectiveVipValue(VipType.PROTECTION_SHIELD_HOUR);
         int seconds = hoursToSeconds(hours);
         if (seconds <= 0) return;
         DataDaily daily = mUser.getUserDaily().getUDaily();

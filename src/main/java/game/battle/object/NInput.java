@@ -14,6 +14,7 @@ public class NInput {
     public static final int USE_ITEM = 4;
     public static final int ADD_ZONE_HEATH = 5;
     public static final int REMOVE_ZONE_HEATH = 6;
+    public static final int SET_AUTO_GATHER = 7;
     //endregion
     //
 
@@ -26,6 +27,8 @@ public class NInput {
     public long idAttack;
     /** CLIENT_INPUT USE_ITEM — user_item.id */
     public long useItemId;
+    /** CLIENT_INPUT SET_AUTO_GATHER — bật/tắt auto khai thác (runtime in-room). */
+    public boolean autoGatherEnabled;
 
     public static NInput parse(byte[] data) {
         NInput obj = new NInput();
@@ -44,6 +47,8 @@ public class NInput {
             obj.idAttack = buffer.readLong();
         } else if (obj.typeId == USE_ITEM) {
             obj.useItemId = buffer.readLong();
+        } else if (obj.typeId == SET_AUTO_GATHER) {
+            obj.autoGatherEnabled = buffer.isReadable() && buffer.readByte() != 0;
         }
         return obj;
     }

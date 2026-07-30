@@ -41,9 +41,9 @@ public class CfgTrading {
         int fee = calcListingFee(price);
         int taxPct = 0;
         int rubyDiscount = 0;
-        if (mUser != null && mUser.getUSetting() != null) {
-            taxPct = Math.max(0, mUser.getUSetting().getUVip().getValue(VipType.MARKET_TAX));
-            rubyDiscount = Math.max(0, mUser.getUSetting().getUVip().getValue(VipType.MARKET_LISTING_RUBY));
+        if (mUser != null) {
+            taxPct = Math.max(0, mUser.getEffectiveVipValue(VipType.MARKET_TAX));
+            rubyDiscount = Math.max(0, mUser.getEffectiveVipValue(VipType.MARKET_LISTING_RUBY));
         }
         if (taxPct > 0) {
             fee = (int) Math.ceil(fee * (100 - Math.min(taxPct, 100)) / 100.0);

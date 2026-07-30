@@ -11,6 +11,7 @@ import game.treasure.mapping.main.ResVipEntity;
 import game.treasure.service.resource.ResEvent;
 import game.treasure.service.resource.ResIAP;
 import game.treasure.service.user.Bonus;
+import game.treasure.service.day.ServerDayService;
 import game.treasure.service.user.ProtectVipService;
 import game.object.DataDaily;
 import game.object.MyUser;
@@ -28,70 +29,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class UserService {
     public void afterLogin(MyUser mUser) {
         CfgServer.checkSystemMail(mUser.getUser());
-        // send bonus card month,week,day
-        DataDaily data = mUser.getUserDaily().getUDaily();
-        // quà thẻ tuần
-        UserPackEntity pWeek = mUser.getResources().getPack(PackType.THE_TUAN);
-        if (pWeek != null && pWeek.hasHSD() && data.getValue(DataDaily.GET_CARD_WEEK) == 0) {
-            if (DBResource.getInstance().rawSQL(DBHelper.sqlMail(mUser.getUser().getId(), Lang.getTitle(mUser,Lang.mail_card_week_daily), pWeek.getRes().getBonusDay()))) {
-                data.setValueAndUpdate(DataDaily.GET_CARD_WEEK, 1);
-            }
-            mUser.getPerReceiveBoss().set(0, (int) (mUser.getPerReceiveBoss().get(0)+ pWeek.getRes().getDataList().get(1)));
-        }
-        // quà thẻ tháng
-        UserPackEntity pMonth = mUser.getResources().getPack(PackType.THE_THANG);
-        if (pMonth != null && pMonth.hasHSD() && data.getValue(DataDaily.GET_CARD_MONTH) == 0) {
-            if (DBResource.getInstance().rawSQL(DBHelper.sqlMail(mUser.getUser().getId(), Lang.getTitle(mUser,Lang.mail_card_month_daily), pMonth.getRes().getBonusDay()))) {
-                data.setValueAndUpdate(DataDaily.GET_CARD_MONTH, 1);
-            }
-            mUser.getPerReceiveBoss().set(1, (int) (mUser.getPerReceiveBoss().get(1)+ pMonth.getRes().getDataList().get(1)));
-        }
-        // quà thẻ vĩnh viễn
-        UserPackEntity pCard = mUser.getResources().getPack(PackType.THE_VINH_VIEN);
-        if (pCard != null && pCard.hasHSD() && data.getValue(DataDaily.GET_CARD_VINH_VIEN) == 0) {
-            if (DBResource.getInstance().rawSQL(DBHelper.sqlMail(mUser.getUser().getId(), Lang.getTitle(mUser,Lang.mail_card_forever_daily), pCard.getRes().getBonusDay()))) {
-                data.setValueAndUpdate(DataDaily.GET_CARD_VINH_VIEN, 1);
-            }
-            List<Integer> dataLst= GsonUtil.strToListInt(pCard.getRes().getStringData());
-            mUser.getPerReceiveBoss().set(0, mUser.getPerReceiveBoss().get(0)+ dataLst.get(1));
-            mUser.getPerReceiveBoss().set(1, mUser.getPerReceiveBoss().get(1)+ dataLst.get(2));
-        }
-        // quà gói ô đất (36): bonus_day × số lần mua trong tháng
-        UserPackEntity pLand = mUser.getResources().getPack(PackType.GOI_THANG_SO_7);
-        if (pLand != null && pLand.hasHSD() && pLand.getNumber() > 0
-                && data.getValue(DataDaily.GET_PACK_LAND_DAILY) == 0) {
-            List<Long> bonusDay = GsonUtil.strToListLong(pLand.getRes().getBonusDay());
-            if (bonusDay != null && !bonusDay.isEmpty()) {
-                bonusDay = Bonus.xBonus(bonusDay, pLand.getNumber());
-                String title = Lang.getTitle(mUser, Lang.mail_pack_land_daily);
-                if (StringHelper.isEmpty(title))
-                    title = "Quà gói Số lượt khai thác mỗi ngày";
-                if (DBResource.getInstance().rawSQL(DBHelper.sqlMail(mUser.getUser().getId(), title,
-                        StringHelper.toDBString(bonusDay)))) {
-                    data.setValueAndUpdate(DataDaily.GET_PACK_LAND_DAILY, 1);
-                }
-            }
-        } else if (pLand != null && !pLand.hasHSD()) {
-            mUser.getResources().removePack(pLand.getPackId());
-        }
-        // quà VIP mỗi ngày (res_vip.bonus_day theo cấp VIP hiện tại)
-        int vipLevel = mUser.getUser().getVip();
-        if (vipLevel > 0 && data.getValue(DataDaily.GET_VIP_DAILY) == 0) {
-            ResVipEntity resVip = ResEvent.getResVip(vipLevel);
-            List<Long> vipBonusDay = resVip != null ? resVip.getABonusDay() : null;
-            if (vipBonusDay != null && !vipBonusDay.isEmpty()) {
-                String langTitle = Lang.getTitle(mUser, Lang.mail_vip_daily);
-                String title = StringHelper.isEmpty(langTitle) || langTitle.equals(Lang.mail_vip_daily)
-                        ? String.format("Phần thưởng vip %d", vipLevel)
-                        : String.format(langTitle, vipLevel);
-                if (DBResource.getInstance().rawSQL(DBHelper.sqlMail(mUser.getUser().getId(), title,
-                        StringHelper.toDBString(vipBonusDay)))) {
-                    data.setValueAndUpdate(DataDaily.GET_VIP_DAILY, 1);
-                }
-            }
-        }
-        // khiên bảo vệ VIP mỗi ngày (vip_data giờ → daily giây ×3600)
-        ProtectVipService.grantDailyFromVipData(mUser);
+        ServerDayService.ensureCurrentDay(mUser);
+        grantDailyMailRewards(mUser);
         // check buy qr error
         checkBuyQrError(mUser);
         // check event 7 day
@@ -117,6 +56,64 @@ public class UserService {
 //        }
         // check top pet
 
+    }
+
+    /** Quà ngày qua mail — idempotent nhờ cờ GET_* trong DataDaily. */
+    public void grantDailyMailRewards(MyUser mUser) {
+        if (mUser == null)
+            return;
+        DataDaily data = mUser.getUserDaily().getUDaily();
+        UserPackEntity pWeek = mUser.getResources().getPack(PackType.THE_TUAN);
+        if (pWeek != null && pWeek.hasHSD() && data.getValue(DataDaily.GET_CARD_WEEK) == 0) {
+            if (DBResource.getInstance().rawSQL(DBHelper.sqlMail(mUser.getUser().getId(), Lang.getTitle(mUser, Lang.mail_card_week_daily), pWeek.getRes().getBonusDay()))) {
+                data.setValueAndUpdate(DataDaily.GET_CARD_WEEK, 1);
+            }
+        }
+        UserPackEntity pMonth = mUser.getResources().getPack(PackType.THE_THANG);
+        if (pMonth != null && pMonth.hasHSD() && data.getValue(DataDaily.GET_CARD_MONTH) == 0) {
+            if (DBResource.getInstance().rawSQL(DBHelper.sqlMail(mUser.getUser().getId(), Lang.getTitle(mUser, Lang.mail_card_month_daily), pMonth.getRes().getBonusDay()))) {
+                data.setValueAndUpdate(DataDaily.GET_CARD_MONTH, 1);
+            }
+        }
+        UserPackEntity pCard = mUser.getResources().getPack(PackType.THE_VINH_VIEN);
+        if (pCard != null && pCard.hasHSD() && data.getValue(DataDaily.GET_CARD_VINH_VIEN) == 0) {
+            if (DBResource.getInstance().rawSQL(DBHelper.sqlMail(mUser.getUser().getId(), Lang.getTitle(mUser, Lang.mail_card_forever_daily), pCard.getRes().getBonusDay()))) {
+                data.setValueAndUpdate(DataDaily.GET_CARD_VINH_VIEN, 1);
+            }
+        }
+        UserPackEntity pLand = mUser.getResources().getPack(PackType.GOI_THANG_SO_7);
+        if (pLand != null && pLand.hasHSD() && pLand.getNumber() > 0
+                && data.getValue(DataDaily.GET_PACK_LAND_DAILY) == 0) {
+            List<Long> bonusDay = GsonUtil.strToListLong(pLand.getRes().getBonusDay());
+            if (bonusDay != null && !bonusDay.isEmpty()) {
+                bonusDay = Bonus.xBonus(bonusDay, pLand.getNumber());
+                String title = Lang.getTitle(mUser, Lang.mail_pack_land_daily);
+                if (StringHelper.isEmpty(title))
+                    title = "Quà gói Số lượt khai thác mỗi ngày";
+                if (DBResource.getInstance().rawSQL(DBHelper.sqlMail(mUser.getUser().getId(), title,
+                        StringHelper.toDBString(bonusDay)))) {
+                    data.setValueAndUpdate(DataDaily.GET_PACK_LAND_DAILY, 1);
+                }
+            }
+        } else if (pLand != null && !pLand.hasHSD()) {
+            mUser.getResources().removePack(pLand.getPackId());
+        }
+        int vipLevel = mUser.getUser().getVip();
+        if (vipLevel > 0 && data.getValue(DataDaily.GET_VIP_DAILY) == 0) {
+            ResVipEntity resVip = ResEvent.getResVip(vipLevel);
+            List<Long> vipBonusDay = resVip != null ? resVip.getABonusDay() : null;
+            if (vipBonusDay != null && !vipBonusDay.isEmpty()) {
+                String langTitle = Lang.getTitle(mUser, Lang.mail_vip_daily);
+                String title = StringHelper.isEmpty(langTitle) || langTitle.equals(Lang.mail_vip_daily)
+                        ? String.format("Phần thưởng vip %d", vipLevel)
+                        : String.format(langTitle, vipLevel);
+                if (DBResource.getInstance().rawSQL(DBHelper.sqlMail(mUser.getUser().getId(), title,
+                        StringHelper.toDBString(vipBonusDay)))) {
+                    data.setValueAndUpdate(DataDaily.GET_VIP_DAILY, 1);
+                }
+            }
+        }
+        ProtectVipService.grantDailyFromVipData(mUser);
     }
 
     void checkBuyQrError(MyUser mUser) {

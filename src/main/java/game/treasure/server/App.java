@@ -4,6 +4,7 @@ import game.cache.JCache;
 import game.cache.JCachePubSub;
 import game.config.CfgServer;
 import game.treasure.mapping.main.ConfigEntity;
+import game.treasure.task.ServerDayRolloverJob;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -16,6 +17,7 @@ import org.quartz.SimpleTrigger;
 import org.quartz.impl.StdSchedulerFactory;
 import ozudo.base.database.DBJPA;
 import ozudo.base.helper.Filer;
+import ozudo.base.helper.QuartzUtil;
 import ozudo.base.log.Config;
 import ozudo.base.log.Logs;
 import ozudo.net.tcp.RequestDecoder;
@@ -34,6 +36,7 @@ public class App {
         TimeZone.setDefault(TimeZone.getTimeZone("GMT+07:00"));
         init();
        // createMainJob();
+        scheduleServerDayRollover();
         startNetwork();
     }
 //
@@ -96,6 +99,20 @@ public class App {
                 }
             }
         }).start();
+    }
+
+    static void scheduleServerDayRollover() {
+        try {
+            Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
+            scheduler.start();
+            String jobName = "serverDayRollover_" + CfgServer.serverId;
+            scheduler.scheduleJob(
+                    QuartzUtil.getJob(ServerDayRolloverJob.class, jobName),
+                    QuartzUtil.getTriggerDaily(jobName, 0, 0));
+            Logs.info("Scheduled ServerDayRolloverJob at 00:00 (server TZ)");
+        } catch (Exception ex) {
+            Logs.error(ex);
+        }
     }
 
     static void init() throws Exception {

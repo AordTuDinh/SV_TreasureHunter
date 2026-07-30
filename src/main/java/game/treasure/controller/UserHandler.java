@@ -10,6 +10,7 @@ import game.treasure.server.IAction;
 import game.treasure.service.resource.*;
 import game.treasure.service.user.Actions;
 import game.treasure.service.user.Bonus;
+import game.treasure.service.day.ServerDayService;
 import game.treasure.service.user.ProtectVipService;
 import game.treasure.mapping.UserSkinEntity;
 import game.treasure.task.dbcache.MailCreatorCache;
@@ -456,15 +457,9 @@ public class UserHandler extends AHandler {
     }
 
     void updateNextDay() {
-//        Pbmethod.ListCommonVector.Builder pb = Pbmethod.ListCommonVector.newBuilder();
-//        pb.addAVector(getCommonVector(1));
-//        List<UserItemEntity> uItem = mUser.getResources().getMItem().values().stream().toList();
-//        List<Long> bonusExpire = new ArrayList<>();
-//        for (int i = 0; i < uItem.size(); i++) {
-//            bonusExpire.addAll(Bonus.viewItem(uItem.get(i).getItemId(), -uItem.get(i).getQuantity()));
-//        }
-//        pb.addAVector(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.UPDATE_BONUS_NEXT_DAY.getKey(), bonusExpire)));
-//        addResponse(pb.build());
+        // Client có thể gọi — server tự check ngày, không tin giờ máy client.
+        ServerDayService.ensureCurrentDay(mUser);
+        addResponseSuccess();
     }
 
     private void tutorial() {

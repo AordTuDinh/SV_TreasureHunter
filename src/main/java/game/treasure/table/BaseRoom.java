@@ -407,6 +407,10 @@ public abstract class BaseRoom extends MonoRoom {
             }
             return;
         }
+        if (input.typeId == NInput.SET_AUTO_GATHER) {
+            handleAutoGatherInput(player, input);
+            return;
+        }
         if (!player.isAlive() || !player.isReady() || player.getRoom() == null || player.getRoom().getRoomState() != RoomState.ACTIVE)
             return;
         // check Idle
@@ -443,6 +447,10 @@ public abstract class BaseRoom extends MonoRoom {
             // Ưu tiên mở rương: đứng ô chest + chìa → không cho đánh
             if (TreasureEventService.blocksAttackForTreasureOpen(player)) return;
             if (input.targetAttack == Pbmethod.TargetAttack.OBJECT) {
+                if (player.isAutoGather() && !hasPlotForAutoGather(player)) {
+                    player.setAutoGather(false);
+                    return;
+                }
                 int globalCellId = (int) input.idAttack;
                 int chunkId = MapService.globalCellIdToChunkId(mapInfo, globalCellId);
                 CellObject cellObject = getCellObject(globalCellId, chunkId);
@@ -454,7 +462,9 @@ public abstract class BaseRoom extends MonoRoom {
                     if (cellDie) {
                         addCellDie(cellObject);
                         MyUser mUser = player.getMUser();
-                        applyCellKillPlotCost(player);
+                        if (player.isAutoGather()) {
+                            applyCellKillPlotCost(player);
+                        }
                         ResObjectEntity.ObjectDropResult dropResult = cellObject.getBonusKillMe(
                                 mUser.getRateDropGold(), mUser.getRateDropGem(), mUser.getRateDropItem(),
                                 mUser.getRateDropBonus());
@@ -503,19 +513,45 @@ public abstract class BaseRoom extends MonoRoom {
         return null;
     }
 
+    void handleAutoGatherInput(Player player, NInput input) {
+        if (player == null || !player.isAlive() || player.getRoom() == null
+                || player.getRoom().getRoomState() != RoomState.ACTIVE)
+            return;
+        if (input.autoGatherEnabled) {
+            if (!player.canAttack())
+                return;
+            if (!hasPlotForAutoGather(player))
+                return;
+            player.setAutoGather(true);
+        } else {
+            player.setAutoGather(false);
+        }
+    }
+
+    static boolean hasPlotForAutoGather(Player player) {
+        if (player == null || player.getMUser() == null)
+            return false;
+        return player.getMUser().getResources().getItemPointNumber(ItemPointKey.PLOT.id) > 0;
+    }
+
     /**
-     * Phá cell: trừ 1 PLOT (ô khai thác), sync số còn lại về client im lặng
-     * (UPDATE_BONUS_PRIVATE — không toast/FX); DB flush deferred (≤1 phút / logout).
+     * Phá cell khi đang auto khai thác: trừ 1 PLOT, sync im lặng (UPDATE_BONUS_PRIVATE).
+     * Đào tay (autoGather=false) không gọi hàm này.
      */
     void applyCellKillPlotCost(Player player) {
-        if (player == null || player.getMUser() == null) return;
-        MyUser mUser = player.getMUser();
-        if (mUser.getResources().getItemPointNumber(ItemPointKey.PLOT.id) <= 0)
+        if (player == null || !player.isAutoGather() || player.getMUser() == null)
             return;
+        MyUser mUser = player.getMUser();
+        if (mUser.getResources().getItemPointNumber(ItemPointKey.PLOT.id) <= 0) {
+            player.setAutoGather(false);
+            return;
+        }
         List<Long> wire = Bonus.receiveListItem(mUser, DetailActionType.KILL_CELL.getKey(),
                 Bonus.viewItemPoint(ItemPointKey.PLOT.id, -1));
         if (wire != null && !wire.isEmpty())
             Util.sendProtoData(mUser.getChannel(), CommonProto.getCommonVector(wire), IAction.UPDATE_BONUS_PRIVATE);
+        if (mUser.getResources().getItemPointNumber(ItemPointKey.PLOT.id) <= 0)
+            player.setAutoGather(false);
     }
 
     /** Phá cell: cộng bonus cho player; chỉ spawn quái khi chunk {@code [-1, mobId]}. */
@@ -567,7 +603,7 @@ public abstract class BaseRoom extends MonoRoom {
         if (bonus == null || bonus.isEmpty() || mUser == null || mUser.getUSetting() == null) {
             return bonus;
         }
-        int pct = Math.max(0, mUser.getUSetting().getUVip().getValue(VipType.GOLD_RECEIVED));
+        int pct = Math.max(0, mUser.getEffectiveVipValue(VipType.GOLD_RECEIVED));
         if (pct <= 0) return bonus;
         List<Long> out = new ArrayList<>();
         for (List<Long> chunk : Bonus.parse(bonus)) {

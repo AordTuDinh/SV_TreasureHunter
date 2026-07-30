@@ -3,6 +3,7 @@ package game.treasure.service.resource;
 import game.config.CfgServer;
 import game.treasure.mapping.main.ResBonusImageEntity;
 import ozudo.base.database.DBResource;
+import ozudo.base.log.Logs;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,13 +22,17 @@ public class ResImage {
     }
 
     public static void init() {
-        List<ResBonusImageEntity> rows = DBResource.getInstance()
-                .getList(CfgServer.DB_MAIN + "res_bonus_image", ResBonusImageEntity.class);
         mImage.clear();
-        rows.forEach(row -> {
-            row.init();
-            mImage.put(row.getId(), row);
-        });
+        try {
+            List<ResBonusImageEntity> rows = DBResource.getInstance()
+                    .getList(CfgServer.DB_MAIN + "res_bonus_image", ResBonusImageEntity.class);
+                        rows.forEach(row -> {
+                row.init();
+                mImage.put(row.getId(), row);
+            });
+        } catch (Exception ex) {
+            Logs.error("[ResImage] init failed — kiểm tra bảng res_bonus_image đã tạo chưa", ex);
+        }
     }
 }
 

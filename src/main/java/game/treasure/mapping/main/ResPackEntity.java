@@ -2,7 +2,6 @@ package game.treasure.mapping.main;
 
 import game.config.CfgEvent;
 import game.config.aEnum.PackType;
-import game.config.lang.Lang;
 import game.object.MyUser;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -62,7 +61,7 @@ public class ResPackEntity {
         pb.addAllBonus(GsonUtil.strToListInt(bonus));
         pb.setNameCell(name);
         pb.setTextCell(desc);
-        pb.setTextDesc(Lang.getTitle(mUser, desc2));
+        pb.setTextDesc(desc2 != null ? desc2 : "");
         pb.setNumBuy(numBuy);
         pb.setLimit(limit);
         pb.addAllPrice(getPrice());

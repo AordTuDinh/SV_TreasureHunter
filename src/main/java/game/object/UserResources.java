@@ -7,6 +7,7 @@ import game.protocol.CommonProto;
 import game.treasure.service.item.EquipmentExpireService;
 import game.treasure.service.user.Bonus;
 import game.treasure.service.user.ItemSlotHelper;
+import game.treasure.service.user.VipRuntimeService;
 import protocol.Pbmethod;
 import lombok.Getter;
 import lombok.Setter;
@@ -376,6 +377,9 @@ public class UserResources implements Serializable {
 
     public void removePack(int packId) {
         mPacks.remove(packId);
+        if (VipRuntimeService.isPrivilegePack(packId)) {
+            VipRuntimeService.rebuildEffectiveVip(mUser);
+        }
     }
 
     public UserMaterialEntity getMaterial(long id) {

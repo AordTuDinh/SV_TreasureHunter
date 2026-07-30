@@ -27,6 +27,7 @@ import ozudo.base.database.DBJPA;
 import ozudo.base.helper.GsonUtil;
 import ozudo.base.helper.NumberUtil;
 import ozudo.base.helper.StringHelper;
+import ozudo.base.log.Logs;
 
 import java.util.*;
 
@@ -296,6 +297,8 @@ public class Bonus {
         if (chunk == null || chunk.isEmpty())
             return new ArrayList<>();
         int type = chunk.get(0).intValue();
+        if (type == -1)
+            type = BONUS_CUSTOM_IMAGE;
         return switch (type) {
             case BONUS_GOLD -> addGold(mUser, chunk.get(1), detailAction);
             case BONUS_GEM -> addGem(mUser, chunk.get(1), detailAction);
@@ -320,34 +323,47 @@ public class Bonus {
 
     /**
      * Bonus image (nội bộ):
-     * - Receive config: [-1, bonusImageId, times]
-     * - CRAFT_EXP:    cộng craft exp, trả [-1, icon, craftExpTotal]
+     * - Receive config: [17, bonusImageId, times] (wire cũ -1 vẫn được parse chuyển sang 17)
+     * - CRAFT_EXP:    cộng craft exp, trả [17, bonusImageId, craftExpTotal]
      * - MATERIAL:     roll materialIds từ res_bonus_image.data, tier lấy từ res_bonus_image.tier
      */
     static List<Long> addBonusImageReward(MyUser mUser, List<Long> chunk, String detailAction) {
-        if (chunk == null || chunk.size() < 3)
+        if (chunk == null || chunk.size() < 3) {
+            logBonusImageFail("chunk thiếu phần tử", chunk, null);
             return new ArrayList<>();
+        }
         int bonusImageId = chunk.get(1).intValue();
         int times = chunk.get(2).intValue();
-        if (times <= 0)
+        if (times <= 0) {
+            logBonusImageFail("times <= 0", chunk, null);
             return new ArrayList<>();
+        }
 
         ResBonusImageEntity cfg = ResImage.get(bonusImageId);
-        if (cfg == null)
+        if (cfg == null) {
+            logBonusImageFail("ResImage.get(" + bonusImageId + ") = null — bảng res_bonus_image chưa load/seed", chunk, null);
             return new ArrayList<>();
+        }
 
         ResBonusImageType cfgType = ResBonusImageType.fromInt(cfg.getType());
-        if (cfgType == null)
+        if (cfgType == null) {
+            logBonusImageFail("type không hợp lệ", chunk, "cfg.type=" + cfg.getType());
             return new ArrayList<>();
+        }
 
         switch (cfgType) {
             case CRAFT_EXP -> {
                 int expPerRoll = cfg.getCraftExpPerRoll();
-                if (expPerRoll <= 0) return new ArrayList<>();
+                if (expPerRoll <= 0) {
+                    logBonusImageFail("craftExpPerRoll <= 0", chunk, "data=" + cfg.getData());
+                    return new ArrayList<>();
+                }
                 int expGain = expPerRoll * times;
                 UserDataEntity uData = mUser.getUData();
-                if (uData == null)
+                if (uData == null) {
+                    logBonusImageFail("uData null", chunk, null);
                     return new ArrayList<>();
+                }
                 CfgCraft.addCraftExp(uData, expGain);
                 uData.update(Arrays.asList("craft_level", uData.getCraftLevel(), "craft_exp", uData.getCraftExp()));
                 if (CfgServer.isRealServer()) {
@@ -368,16 +384,20 @@ public class Bonus {
             case MATERIAL -> {
                 int tier = cfg.getTier() > 0 ? Math.min(cfg.getTier(), 4) : 1;
                 List<Integer> materialIds = cfg.getMaterialIds();
-                if (materialIds == null || materialIds.isEmpty())
+                if (materialIds == null || materialIds.isEmpty()) {
+                    logBonusImageFail("materialIds rỗng", chunk, "data=" + cfg.getData());
                     return new ArrayList<>();
+                }
 
                 List<Long> ret = new ArrayList<>();
                 for (int i = 0; i < times; i++) {
                     int idx = NumberUtil.getRandom(0, materialIds.size() - 1);
                     int materialId = materialIds.get(idx);
                     List<Long> added = addMaterial(mUser, materialId, tier, detailAction);
-                    if (added == null || added.isEmpty())
+                    if (added == null || added.isEmpty()) {
+                        logBonusImageFail("addMaterial fail/stop", chunk, "materialId=" + materialId + " tier=" + tier + " roll=" + i);
                         break; // hết slot vật phẩm, không roll tiếp.
+                    }
                     ret.addAll(added);
                 }
                 return ret;
@@ -385,23 +405,33 @@ public class Bonus {
             case SKIN -> {
                 int tier = cfg.getTier() > 0 ? Math.min(cfg.getTier(), 4) : 1;
                 List<Integer> skinIds = cfg.getSkinIds();
-                if (skinIds == null || skinIds.isEmpty())
+                if (skinIds == null || skinIds.isEmpty()) {
+                    logBonusImageFail("skinIds rỗng", chunk, "data=" + cfg.getData());
                     return new ArrayList<>();
+                }
 
                 List<Long> ret = new ArrayList<>();
                 for (int i = 0; i < times; i++) {
                     int idx = NumberUtil.getRandom(0, skinIds.size() - 1);
                     int skinId = skinIds.get(idx);
                     List<Long> added = addCharacterSkin(mUser, skinId, detailAction);
-                    if (added == null || added.isEmpty())
+                    if (added == null || added.isEmpty()) {
+                        logBonusImageFail("addCharacterSkin fail/stop", chunk, "skinId=" + skinId + " roll=" + i);
                         break;
+                    }
                     ret.addAll(added);
                 }
                 return ret;
             }
         }
 
+        logBonusImageFail("switch fallthrough", chunk, "cfgType=" + cfgType);
         return new ArrayList<>();
+    }
+
+    static void logBonusImageFail(String reason, List<Long> chunk, String extra) {
+        Logs.warn("[BonusImage] " + reason + " chunk=" + chunk
+                + (extra != null ? " | " + extra : ""));
     }
 
     /** Apply [15, typeBonus, rowId, itemKey] — đổi chủ row escrow → receive [12|11, rowId, itemKey, tier]. */
@@ -879,6 +909,9 @@ public class Bonus {
             while (index < bonus.size()) {
                 List<Long> tmp = new ArrayList<>();
                 int type = bonus.get(index++).intValue();
+                // Wire cũ dùng -1 cho bonus image — chuẩn hóa sang 17.
+                if (type == -1)
+                    type = BONUS_CUSTOM_IMAGE;
                 int length = mTypeLength.getOrDefault(type, 0);
                 tmp.add((long) type);
                 for (int i = index; i < index + length; i++)

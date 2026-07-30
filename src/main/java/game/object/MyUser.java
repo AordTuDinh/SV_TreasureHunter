@@ -15,6 +15,9 @@ import game.treasure.mapping.*;
 import game.treasure.server.IAction;
 import game.treasure.service.Services;
 import game.treasure.service.battle.TreasureEventService;
+import game.treasure.mapping.main.ResBonusImageEntity;
+import game.treasure.mapping.main.ResBonusImageType;
+import game.treasure.service.resource.ResImage;
 import game.treasure.service.resource.ResItem;
 import game.treasure.service.user.Bonus;
 import game.treasure.service.user.ProtectVipService;
@@ -59,7 +62,8 @@ public class MyUser implements Serializable {
     Map<Integer, List<FriendChatObject>> aChatFriends = new HashMap<>();
     List<Integer> comboWeapon = NumberUtil.genListInt(6, 0);
     List<Integer> cacheSendParty = new ArrayList<>(); // [userId,timeSend, number]
-    List<Integer> perReceiveBoss = List.of(0, 0);  // per tăng đá - per tăng drop
+    /** VIP hiệu lực runtime = vip_data DB + buff thẻ 12/13/14; không persist. */
+    List<Integer> effectiveVipData;
     List<Pbmethod.PbPointItemUpdate> itemPointUpdates = new ArrayList<>();
     boolean updateBagPending;
     boolean userDataInfoPending;
@@ -90,43 +94,45 @@ public class MyUser implements Serializable {
         rateDropItem = CfgStats.calcDropIncreaseRate(point.get(Point.P_MATERIAL_INCREASE));
     }
 
+    public int getEffectiveVipValue(int type) {
+        if (effectiveVipData != null && type >= 0 && type < effectiveVipData.size())
+            return effectiveVipData.get(type);
+        if (uSetting != null)
+            return uSetting.getUVip().getValue(type);
+        return 0;
+    }
+
+    public List<Integer> getEffectiveVipDataList() {
+        if (effectiveVipData != null)
+            return effectiveVipData;
+        if (uSetting != null)
+            return uSetting.getVipDataList();
+        return NumberUtil.genListInt(VipType.COUNT, 0);
+    }
+
     /** Rate vàng miss cell: material + VIP {@link VipType#GOLD_MINING} (% → phần nghìn ×10). */
     public int getRateDropGold() {
-        int vipBonus = 0;
-        if (uSetting != null) {
-            vipBonus = Math.max(0, uSetting.getUVip().getValue(VipType.GOLD_MINING)) * 10;
-        }
-        return rateDropGold + vipBonus;
+        return rateDropGold + Math.max(0, getEffectiveVipValue(VipType.GOLD_MINING)) * 10;
     }
 
     /** Rate kim cương miss cell: material + VIP {@link VipType#DIAMOND_MINING_RATE} (% → phần nghìn ×10). Trúng → 1 gem. */
     public int getRateDropGem() {
-        int vipBonus = 0;
-        if (uSetting != null) {
-            vipBonus = Math.max(0, uSetting.getUVip().getValue(VipType.DIAMOND_MINING_RATE)) * 10;
-        }
-        return rateDropGem + vipBonus;
+        return rateDropGem + Math.max(0, getEffectiveVipValue(VipType.DIAMOND_MINING_RATE)) * 10;
     }
 
     /** Rate material miss cell: material + VIP {@link VipType#STONE_MINING_RATE} (% → phần nghìn ×10). */
     public int getRateDropItem() {
-        int vipBonus = 0;
-        if (uSetting != null) {
-            vipBonus = Math.max(0, uSetting.getUVip().getValue(VipType.STONE_MINING_RATE)) * 10;
-        }
-        return rateDropItem + vipBonus;
+        return rateDropItem + Math.max(0, getEffectiveVipValue(VipType.STONE_MINING_RATE)) * 10;
     }
 
     /** Tăng rate drop trúng cell: VIP {@link VipType#GENERAL_MINING_RATE} (% → phần nghìn ×10). */
     public int getRateDropBonus() {
-        if (uSetting == null) return 0;
-        return Math.max(0, uSetting.getUVip().getValue(VipType.GENERAL_MINING_RATE)) * 10;
+        return Math.max(0, getEffectiveVipValue(VipType.GENERAL_MINING_RATE)) * 10;
     }
 
     /** Tăng tỉ lệ hóa hình craft: VIP {@link VipType#TRANSMUTE_RATE} (% điểm, cộng vào transformRate/100). */
     public int getTransmuteRateBonus() {
-        if (uSetting == null) return 0;
-        return Math.max(0, uSetting.getUVip().getValue(VipType.TRANSMUTE_RATE));
+        return Math.max(0, getEffectiveVipValue(VipType.TRANSMUTE_RATE));
     }
 
     public void queueUpdateBag() {
@@ -458,6 +464,16 @@ public class MyUser implements Serializable {
                 numBag++;
             } else if (bonusType == Bonus.BONUS_MATERIAL) {
                 numMaterial++;
+            } else if (bonusType == Bonus.BONUS_CUSTOM_IMAGE) {
+                if (chunk.size() >= 3) {
+                    int bonusImageId = chunk.get(1).intValue();
+                    int times = chunk.get(2).intValue();
+                    if (times > 0) {
+                        ResBonusImageEntity cfg = ResImage.get(bonusImageId);
+                        if (cfg != null && ResBonusImageType.fromInt(cfg.getType()) == ResBonusImageType.MATERIAL)
+                            numMaterial += times;
+                    }
+                }
             } else if (bonusType == Bonus.BONUS_CHANGE_OWNER) {
                 int innerType = chunk.get(1).intValue();
                 if (innerType == Bonus.BONUS_EQUIPMENT

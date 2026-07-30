@@ -17,6 +17,7 @@ import game.treasure.service.battle.PvpCupService;
 import game.treasure.service.resource.ResIAP;
 import game.treasure.service.user.Actions;
 import game.treasure.service.user.ProtectVipService;
+import game.treasure.service.user.VipRuntimeService;
 import game.treasure.table.BaseRoom;
 import game.treasure.task.dbcache.MailCreatorCache;
 import game.monitor.ClanManager;
@@ -381,7 +382,7 @@ public class LoginHandler extends AHandler {
         // auto range: [tầm đánh, tầm buff HP, autoAttackMob, auto_buff]
         lstCmm.addAVector(getCommonIntVector(uSet.getAutoRangeList()));
         // vip data: [11 int tích lũy theo VipType index]
-        lstCmm.addAVector(getCommonIntVector(uSet.getVipDataList()));
+        lstCmm.addAVector(getCommonIntVector(mUser.getEffectiveVipDataList()));
         // vip protect pool seconds còn lại hôm nay
         ProtectVipService.settleIfExpired(mUser);
         lstCmm.addAVector(getCommonIntVector(java.util.List.of(ProtectVipService.getPoolSeconds(mUser))));
@@ -449,6 +450,7 @@ public class LoginHandler extends AHandler {
         } finally {
             closeSession(session);
         }
+        VipRuntimeService.rebuildEffectiveVip(mUser);
         return mUser;
     }
 

@@ -1,6 +1,7 @@
 package game.config;
 
 import com.google.gson.Gson;
+import game.config.aEnum.EventType;
 import game.config.aEnum.PackType;
 import game.config.aEnum.StatusType;
 import game.config.aEnum.TriggerEventTimer;
@@ -48,37 +49,39 @@ public class CfgEvent {
     public static Pbmethod.PbListTab.Builder getWelfare(MyUser mUser) {
         DataDaily uIntDaily = mUser.getUserDaily().getUDaily();
         Pbmethod.PbListTab.Builder welfare = Pbmethod.PbListTab.newBuilder();
-        // Điểm danh
-        welfare.addTabs(toProtoWelfare(mUser, 0, CfgEvent.isNotifyCheckin(mUser.getUData())));
-        //Nhận hỗ trợ
-        welfare.addTabs(toProtoWelfare(mUser,1, CfgEvent.isNotifySupport(uIntDaily)));
-        // Online 1h
-        welfare.addTabs(toProtoWelfare(mUser,2, CfgEvent.isNotify1H(mUser)));
-        // quỹ trưởng thành
-        boolean hasPack = mUser.getResources().getPack(PackType.QUY_TRUONG_THANH) != null;
-        if (!hasPack || mUser.getUEvent().hasQuyTruongThanh())
-            welfare.addTabs(toProtoWelfare(mUser,3, CfgEvent.isNotifyQuyTruongThanh(mUser)));
-        // Ưu đãi ngày
-        welfare.addTabs(toProtoWelfare(mUser,4, CfgEvent.isNotifyUuDaiNgay(uIntDaily)));
-        // Đặc quyền
-        welfare.addTabs(toProtoWelfare(mUser,5, CfgEvent.isNotifyDacQuyen(uIntDaily)));
-        // Quà nạp tiền
-        welfare.addTabs(toProtoWelfare(mUser,6, CfgEvent.isNotifyQuyNapTien(mUser.getUEvent())));
-        // Quà giới hạn
-        welfare.addTabs(toProtoWelfare(mUser,7, CfgEvent.isNotifyGioiHan(uIntDaily)));
-        // VIP
-        welfare.addTabs(toProtoWelfare(mUser,8, CfgEvent.isNotifyBonusVip(mUser.getUEvent(), mUser.getUser())));
-        // Gói nông trại
-        welfare.addTabs(toProtoWelfare(mUser,9, false));
-        // Gift code
-        welfare.addTabs(toProtoWelfare(mUser,10, false));
+        if (config == null || config.welfare == null)
+            return welfare;
+        for (Welfare wel : config.welfare) {
+            if (wel.eventId == EventType.QUY_TRUONG_THANH.value) {
+                boolean hasPack = mUser.getResources().getPack(PackType.QUY_TRUONG_THANH) != null;
+                if (hasPack && !mUser.getUEvent().hasQuyTruongThanh())
+                    continue;
+            }
+            welfare.addTabs(toProtoWelfare(mUser, wel, isWelfareNotify(mUser, uIntDaily, wel.eventId)));
+        }
         return welfare;
     }
 
+    private static boolean isWelfareNotify(MyUser mUser, DataDaily uIntDaily, int eventId) {
+        EventType type = EventType.get(eventId);
+        if (type == null)
+            return false;
+        return switch (type) {
+            case DIEM_DANH -> isNotifyCheckin(mUser.getUData());
+            case GET_SUPPORT -> isNotifySupport(uIntDaily);
+            case ONLINE_1H -> isNotify1H(mUser);
+            case QUY_TRUONG_THANH -> isNotifyQuyTruongThanh(mUser);
+            case UU_DAI_NGAY -> isNotifyUuDaiNgay(uIntDaily);
+            case DAC_QUYEN -> isNotifyDacQuyen(uIntDaily);
+            case QUA_NAP_TIEN -> isNotifyQuyNapTien(mUser.getUEvent());
+            case QUA_GIOI_HAN -> isNotifyGioiHan(uIntDaily);
+            case VIP -> isNotifyBonusVip(mUser.getUEvent(), mUser.getUser());
+            default -> false;
+        };
+    }
 
-    private static Pbmethod.PbTab.Builder toProtoWelfare(MyUser mUser, int index, boolean isNotify) {
+    private static Pbmethod.PbTab.Builder toProtoWelfare(MyUser mUser, Welfare wel, boolean isNotify) {
         Pbmethod.PbTab.Builder pb = Pbmethod.PbTab.newBuilder();
-        Welfare wel = config.welfare.get(index);
         pb.setTabId(wel.eventId);
         pb.setName(Lang.instance(mUser).get(wel.name));
         pb.setImage(wel.image);
