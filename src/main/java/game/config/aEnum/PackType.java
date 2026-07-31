@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum PackType {
+    CHECKIN_VIP(1),
     CARD_MONTH(2),
     WPASS(3),
     FARM_MONTH(4),

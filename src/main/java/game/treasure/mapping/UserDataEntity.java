@@ -343,10 +343,21 @@ public class UserDataEntity implements Serializable {
         return uInt;
     }
 
+    /**
+     * checkIn: month - day - num - status
+     */
     public List<Integer> getNumCheckin() {
-        List<Integer> lstCheckin = GsonUtil.strToListInt(checkIn); //checkIn : month - day - num - status
+        return getNumCheckin(null);
+    }
+
+    public List<Integer> getNumCheckin(MyUser mUser) {
+        List<Integer> lstCheckin = GsonUtil.strToListInt(checkIn);
         while (lstCheckin.size() < 4) {
             lstCheckin.add(0);
+        }
+        // Bỏ field vip cũ nếu còn trong DB
+        if (lstCheckin.size() > 4) {
+            lstCheckin = new ArrayList<>(lstCheckin.subList(0, 4));
         }
         Calendar ca = Calendar.getInstance();
         int month = ca.get(Calendar.MONTH);
@@ -357,6 +368,7 @@ public class UserDataEntity implements Serializable {
             lstCheckin.set(CfgCheckin.NUM_CHECKIN, 0);
             lstCheckin.set(CfgCheckin.STATUS, 0);
             update(Arrays.asList("check_in", lstCheckin.toString()));
+            clearCheckinVipPack(mUser);
         } else if (lstCheckin.get(CfgCheckin.DAY_CHECKIN) != day) {
             lstCheckin.set(CfgCheckin.DAY_CHECKIN, day);
             lstCheckin.set(CfgCheckin.STATUS, 0);
@@ -365,8 +377,31 @@ public class UserDataEntity implements Serializable {
         return lstCheckin;
     }
 
+    private void clearCheckinVipPack(MyUser mUser) {
+        if (mUser == null || mUser.getResources() == null)
+            return;
+        UserPackEntity pack = mUser.getResources().getPack(CfgCheckin.PACK_CHECKIN_VIP);
+        if (pack == null)
+            return;
+        DBJPA.delete("user_pack", "user_id", userId, "pack_id", CfgCheckin.PACK_CHECKIN_VIP);
+        mUser.getResources().removePack(CfgCheckin.PACK_CHECKIN_VIP);
+    }
+
     public int getStatusCheckIn() { // 1 : da check in, 0 chua checkin
         return getNumCheckin().get(CfgCheckin.STATUS);
+    }
+
+    public boolean hasCheckinVipPack(MyUser mUser) {
+        if (mUser == null || mUser.getResources() == null)
+            return false;
+        UserPackEntity pack = mUser.getResources().getPack(CfgCheckin.PACK_CHECKIN_VIP);
+        if (pack == null)
+            return false;
+        if (!pack.hasHSD()) {
+            mUser.getResources().removePack(CfgCheckin.PACK_CHECKIN_VIP);
+            return false;
+        }
+        return true;
     }
 
     public Pbmethod.PbUserData toProto(MyUser mUser) {

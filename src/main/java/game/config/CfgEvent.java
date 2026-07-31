@@ -67,7 +67,7 @@ public class CfgEvent {
         if (type == null)
             return false;
         return switch (type) {
-            case DIEM_DANH -> isNotifyCheckin(mUser.getUData());
+            case DIEM_DANH -> isNotifyCheckin(mUser);
             case GET_SUPPORT -> isNotifySupport(uIntDaily);
             case ONLINE_1H -> isNotify1H(mUser);
             case QUY_TRUONG_THANH -> isNotifyQuyTruongThanh(mUser);
@@ -218,8 +218,8 @@ public static boolean isNotifyQuyNapTien(UserEventEntity uEvent) {
     return false;
 }
 
-public static boolean isNotifyCheckin(UserDataEntity uData) {
-    return uData.getStatusCheckIn() == 0;
+public static boolean isNotifyCheckin(MyUser mUser) {
+    return mUser.getUData().getNumCheckin(mUser).get(CfgCheckin.STATUS) == 0;
 }
 
 public static boolean isNotifyGioiHan(DataDaily uIntDaily) {

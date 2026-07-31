@@ -121,28 +121,35 @@ public class LotteryHandler extends AHandler {
     }
 
     void history(int inputType) {
-        Pbmethod.ItemPointType type = Pbmethod.ItemPointType.valueOf(inputType);
-        if (type == null) {
+        // type = ItemPointKey pointId: TICKER_NORMAL(3) / TICKER_SPECIAL(4)
+        if (!ItemPointKey.isLotteryTicket(inputType)) {
             addErrParam();
             return;
         }
-        List<UserLotteryHistoryEntity> history = DBJPA.getList("user_lottery_history", Arrays.asList("type", type.getNumber(), "user_id", user.getId()), "", UserLotteryHistoryEntity.class);
+        List<UserLotteryHistoryEntity> history = DBJPA.getList("user_lottery_history",
+                Arrays.asList("type", inputType, "user_id", user.getId()), "", UserLotteryHistoryEntity.class);
         Pbmethod.PbListLotteryHistory.Builder pb = Pbmethod.PbListLotteryHistory.newBuilder();
         for (UserLotteryHistoryEntity u : history) {
             pb.addALottery(u.toProto());
         }
-        addResponse(IAction.LOTTERY_HISTORY,pb.build());
+        addResponse(IAction.LOTTERY_HISTORY, pb.build());
     }
 
     void receive() {
         List<Long> input = getInputALong();
-        Pbmethod.ItemPointType type = Pbmethod.ItemPointType.valueOf(Math.toIntExact(input.get(0)));
-        if (type == null) {
+        if (input == null || input.size() < 2) {
+            addErrParam();
+            return;
+        }
+        int pointId = Math.toIntExact(input.get(0));
+        if (!ItemPointKey.isLotteryTicket(pointId)) {
             addErrParam();
             return;
         }
         int eventId = Math.toIntExact(input.get(1));
-        List<UserLotteryHistoryEntity> history = DBJPA.getList("user_lottery_history", Arrays.asList("type", type.getNumber(), "event_id", eventId, "user_id", user.getId()), "", UserLotteryHistoryEntity.class);
+        List<UserLotteryHistoryEntity> history = DBJPA.getList("user_lottery_history",
+                Arrays.asList("type", pointId, "event_id", eventId, "user_id", user.getId()), "",
+                UserLotteryHistoryEntity.class);
         if (history == null || history.isEmpty()) {
             addErrParam();
             return;
@@ -157,8 +164,11 @@ public class LotteryHandler extends AHandler {
         }
         if (curItem.update(Arrays.asList("status", StatusType.DONE.value))) {
             curItem.setStatus(StatusType.DONE.value);
-            addBonusToast(Bonus.receiveListItem(mUser, DetailActionType.RECEIVE_LOTTERY.getKey(eventId), Bonus.merge(curItem.getBonus())));
-          //  history(type.value);
+            List<Long> result = Bonus.receiveListItem(mUser, DetailActionType.RECEIVE_LOTTERY.getKey(eventId),
+                    Bonus.merge(curItem.getBonus()));
+            addBonusToast(result);
+            addResponse(IAction.LOTTERY_RECEIVE, getCommonVector(result));
+            flushItemPointUpdates();
         } else addErrSystem();
     }
 }

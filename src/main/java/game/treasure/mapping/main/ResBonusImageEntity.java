@@ -40,6 +40,9 @@ public class ResBonusImageEntity implements Serializable {
     /**
      * - CRAFT_EXP: số exp per roll (vd "1" hoặc "[1]").
      * - MATERIAL: JSON list materialId (vd "[6,7,9]").
+     * - SKIN: JSON list skinId.
+     * - PET: JSON list petId; tier nhận = {@link #tier}.
+     * - MOUNT: JSON list mountId; tier nhận = {@link #tier}.
      */
     @Getter
     String data;
@@ -56,6 +59,14 @@ public class ResBonusImageEntity implements Serializable {
     @Transient
     List<Integer> skinIds = new ArrayList<>();
 
+    @Getter
+    @Transient
+    List<Integer> petIds = new ArrayList<>();
+
+    @Getter
+    @Transient
+    List<Integer> mountIds = new ArrayList<>();
+
     public void init() {
         ResBonusImageType t = ResBonusImageType.fromInt(type);
         if (t == null) return;
@@ -63,6 +74,8 @@ public class ResBonusImageEntity implements Serializable {
             case CRAFT_EXP -> craftExpPerRoll = parseCraftExpPerRoll(data);
             case MATERIAL -> materialIds = GsonUtil.strToListInt(data);
             case SKIN -> skinIds = GsonUtil.strToListInt(data);
+            case PET -> petIds = GsonUtil.strToListInt(data);
+            case MOUNT -> mountIds = GsonUtil.strToListInt(data);
         }
     }
 

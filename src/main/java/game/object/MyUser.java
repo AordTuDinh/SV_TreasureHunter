@@ -196,7 +196,7 @@ public class MyUser implements Serializable {
         if (uDaily == null) return ret;
         DataDaily uIntDaily = getUserDaily().getUDaily();
         // điểm danh
-        if (uData.getStatusCheckIn() == 0) {
+        if (uData.getNumCheckin(this).get(CfgCheckin.STATUS) == 0) {
             ret.add((long) NotifyType.CHECK_IN.value);
         }
         // điểm danh bang
@@ -278,7 +278,7 @@ public class MyUser implements Serializable {
         // Quà nạp tiền
         if (CfgEvent.isNotifyQuyNapTien(uEvent)) return true;
         // Điểm danh
-        if (CfgEvent.isNotifyCheckin(uData)) return true;
+        if (CfgEvent.isNotifyCheckin(this)) return true;
         // Quà giới hạn
         if (CfgEvent.isNotifyGioiHan(uIntDaily)) return true;
         // Vip
@@ -470,8 +470,13 @@ public class MyUser implements Serializable {
                     int times = chunk.get(2).intValue();
                     if (times > 0) {
                         ResBonusImageEntity cfg = ResImage.get(bonusImageId);
-                        if (cfg != null && ResBonusImageType.fromInt(cfg.getType()) == ResBonusImageType.MATERIAL)
-                            numMaterial += times;
+                        if (cfg != null) {
+                            ResBonusImageType imgType = ResBonusImageType.fromInt(cfg.getType());
+                            if (imgType == ResBonusImageType.MATERIAL)
+                                numMaterial += times;
+                            else if (imgType == ResBonusImageType.PET || imgType == ResBonusImageType.MOUNT)
+                                numBag += times;
+                        }
                     }
                 }
             } else if (bonusType == Bonus.BONUS_CHANGE_OWNER) {

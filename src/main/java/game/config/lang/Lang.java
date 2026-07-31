@@ -383,6 +383,7 @@ public abstract class Lang implements Serializable {
     public static String mail_vip_daily = "mail_vip_daily"; // Phần thưởng vip %s
     public static String mail_refund_close_beta = "mail_refund_close_beta"; // Hoàn trả gói nạp Close Beta
     public static String mail_pack_bonus = "mail_pack_bonus"; // Phần quà gói: %s
+    public static String mail_checkin_bonus = "mail_checkin_bonus"; // Quà điểm danh
     public static String mail_clan_boss_top = "mail_clan_boss_top"; // Chúc mừng bạn đạt top %s sát thương boss bang hội
     public static String mail_event_top_level = "mail_event_top_level"; // Chúc mừng bạn đạt top %s trong sự kiện đua top Cấp độ
     public static String mail_reset_hero_bonus = "mail_reset_hero_bonus"; // Bù quà reset nhân vật

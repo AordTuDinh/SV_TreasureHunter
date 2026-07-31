@@ -8,7 +8,13 @@ public enum ResBonusImageType {
     MATERIAL(2),
 
     /** data = JSON array skinId (vd: "[101,102]") */
-    SKIN(3);
+    SKIN(3),
+
+    /** data = JSON array petId (vd: "[1,2,3]"); tier = res_bonus_image.tier */
+    PET(4),
+
+    /** data = JSON array mountId (vd: "[1,2,3]"); tier = res_bonus_image.tier */
+    MOUNT(5);
 
     public final int value;
 

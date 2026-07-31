@@ -12,7 +12,6 @@ import ozudo.base.database.DBJPA2;
 import ozudo.base.database.DBResource;
 import ozudo.base.helper.*;
 import ozudo.base.log.Logs;
-import protocol.Pbmethod;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
@@ -49,7 +48,7 @@ public class LuckyNormalJob {
         if (uLot == null || uLot.size() <= 0) return;
         List<Integer> luckyId = new ArrayList<>();
         String sql = "";
-        int eventType = Pbmethod.ItemPointType.EVENT.getNumber();
+        int eventType = ItemPointKey.TICKER_NORMAL.id;
         for (int i = 0; i < uLot.size(); i++) {
             List<Integer> ticker = GsonUtil.strToListInt(uLot.get(i).getData());
             if (ticker == null || ticker.isEmpty()) continue;

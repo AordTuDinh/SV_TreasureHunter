@@ -536,15 +536,36 @@ public class ClanHandler extends AHandler {
             addErrResponse(getLang(Lang.user_in_clan));
             return;
         }
+        // Trả PbListClan — mỗi phần tử = 1 bang đang xin (tối đa 10).
+        // joinTrophy luôn = 1 (đánh dấu pending). Không gửi activityLog / member list.
         List<ClanReqEntity> reqs = dao.getListUserReq(user.getId());
         protocol.Pbmethod.PbListClan.Builder builder = protocol.Pbmethod.PbListClan.newBuilder();
         if (reqs != null) {
+            int count = 0;
             for (ClanReqEntity req : reqs) {
+                if (count >= CfgClan.MAX_PENDING_REQ) break;
                 ClanManager cm = ClanManager.getInstance(req.getClanId());
                 if (cm == null || cm.getClan() == null) continue;
-                protocol.Pbmethod.PbClan.Builder clanBuilder = cm.getClan().protoClan(Lang.instance(mUser));
-                clanBuilder.setJoinTrophy(1); // đánh dấu đang xin
+                ClanEntity clan = cm.getClan();
+                protocol.Pbmethod.PbClan.Builder clanBuilder = protocol.Pbmethod.PbClan.newBuilder();
+                clanBuilder.setId(clan.getId());
+                clanBuilder.setName(clan.getName());
+                clanBuilder.setAvatar(clan.getAvatar());
+                clanBuilder.setLevel(clan.getLevel());
+                clanBuilder.setNumberMember(clan.getMember());
+                clanBuilder.setMaxMember(CfgClan.getMaxMember(clan.getLevel()));
+                clanBuilder.setJoinRule(clan.getJoinRule());
+                clanBuilder.setMasterName(clan.getMaster() != null ? clan.getMaster() : "");
+                clanBuilder.setIntro(clan.getIntro() != null ? clan.getIntro() : "");
+                clanBuilder.setJoinTrophy(1); // pending request flag
+                clanBuilder.setStar((int) Math.min(Integer.MAX_VALUE, clan.getContribute()));
+                clanBuilder.setPointRank(clan.getStar()); // cup bang
+                // epoch ms lúc gửi đơn — client hiển thị thời gian nếu cần
+                if (req.getDateCreated() != null) {
+                    clanBuilder.setExp(req.getDateCreated().getTime());
+                }
                 builder.addClan(clanBuilder);
+                count++;
             }
         }
         addResponse(builder.build());

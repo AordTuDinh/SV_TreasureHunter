@@ -16,9 +16,11 @@ import game.treasure.service.user.VipRuntimeService;
 import game.object.DataQuest;
 import io.netty.channel.Channel;
 import ozudo.base.helper.DateTime;
+import ozudo.base.helper.DBHelper;
 import ozudo.base.helper.GsonUtil;
 import ozudo.base.helper.StringHelper;
 import ozudo.base.log.Logs;
+import ozudo.base.database.DBJPA;
 import protocol.Pbmethod;
 
 import java.util.*;
@@ -537,10 +539,19 @@ public class EventHandler extends AHandler {
                     mUser.getUserDaily().updateUuDai(uuDai);
                 }
             }
-            List<Long> bonus = rPack.getBonus();
-            bonus.addAll(checkBonusOld(curPack));
-            aBonus.addAll(bonus);
-            addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.BUY_PACK.getKey(id), aBonus)));
+            List<Long> rewards = new ArrayList<>(rPack.getBonus());
+            rewards.addAll(checkBonusOld(curPack));
+            List<Long> priceWire = new ArrayList<>(aBonus);
+            if (!mUser.checkSlotAddBonus(rewards)) {
+                // Túi đầy: trừ tiền + gửi quà vào thư
+                Bonus.receiveListItem(mUser, DetailActionType.BUY_PACK.getKey(id), priceWire);
+                String title = String.format(Lang.getTitle(mUser, Lang.mail_pack_bonus), rPack.getName());
+                DBJPA.rawSQL(DBHelper.sqlMail(user.getId(), title, StringHelper.toDBString(rewards)));
+                addResponse(getCommonVector(rewards));
+            } else {
+                aBonus.addAll(rewards);
+                addResponse(getCommonVector(Bonus.receiveListItem(mUser, DetailActionType.BUY_PACK.getKey(id), aBonus)));
+            }
             if (VipRuntimeService.isPrivilegePack(id)) {
                 VipRuntimeService.rebuildEffectiveVip(mUser);
             }
@@ -555,8 +566,28 @@ public class EventHandler extends AHandler {
 
     private List<Long> checkBonusOld(UserPackEntity pack) {
         List<Long> bonus = new ArrayList<>();
-        // check nhận thêm bonus ví dụ quest b đc nhận x2 bonus thì phải bù bonus đã nhận cho nó
-        if (!pack.hasHSD()) return bonus;
+        if (pack == null || !pack.hasHSD())
+            return bonus;
+        if (pack.getPackId() == CfgCheckin.PACK_CHECKIN_VIP)
+            bonus.addAll(claimCheckinVipCatchUp());
+        return bonus;
+    }
+
+    /**
+     * Mua pack điểm danh VIP: trả quà VIP cho các ngày đã điểm danh thường (0 .. num-1).
+     */
+    private List<Long> claimCheckinVipCatchUp() {
+        List<Long> bonus = new ArrayList<>();
+        List<Integer> checkin = mUser.getUData().getNumCheckin(mUser);
+        int num = checkin.get(CfgCheckin.NUM_CHECKIN);
+        List<List<Long>> bonusVip = CfgCheckin.config.bonusCheckinVip;
+        if (bonusVip == null || bonusVip.isEmpty() || num <= 0)
+            return bonus;
+
+        int end = Math.min(num, bonusVip.size());
+        for (int i = 0; i < end; i++) {
+            bonus.addAll(new ArrayList<>(bonusVip.get(i)));
+        }
         return bonus;
     }
 

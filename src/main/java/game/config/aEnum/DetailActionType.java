@@ -69,6 +69,7 @@ public enum DetailActionType {
     BUY_SLOT_BAG("buy_slot_bag_"),
     BUY_SLOT_BAG_FAIL("buy_slot_bag_fail"),
     DIEM_DANH_HANG_NGAY("daily_check_in_"),
+    DIEM_DANH_VIP("daily_check_in_vip_"),
     PHAN_THUONG_BOSS_GOD("bonus_boss_god_"),
     PHAN_THUONG_LEO_THAP("bonus_tower_"),
     CREATE_WEAPON("create_weapon_"),  // Tạo mới vũ khí id

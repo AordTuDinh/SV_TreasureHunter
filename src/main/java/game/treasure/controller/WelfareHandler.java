@@ -17,9 +17,12 @@ import game.object.DataDaily;
 import io.netty.channel.Channel;
 import ozudo.base.helper.GsonUtil;
 import ozudo.base.helper.StringHelper;
+import ozudo.base.helper.DBHelper;
 import ozudo.base.log.Logs;
+import ozudo.base.database.DBJPA;
 import protocol.Pbmethod;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
@@ -212,11 +215,12 @@ public class WelfareHandler extends AHandler {
 
     private protocol.Pbmethod.CommonVector checkin() {
         protocol.Pbmethod.CommonVector.Builder pb = protocol.Pbmethod.CommonVector.newBuilder();
-        int numCheckin = mUser.getUData().getNumCheckin().get(CfgCheckin.NUM_CHECKIN);
-        pb.addALong(numCheckin);
-        pb.addALong(mUser.getUData().getStatusCheckIn());
+        List<Integer> checkinData = mUser.getUData().getNumCheckin(mUser);
+        pb.addALong(checkinData.get(CfgCheckin.NUM_CHECKIN));
+        pb.addALong(checkinData.get(CfgCheckin.STATUS));
         pb.addALong(CfgCheckin.config.bonusCheckin.size());
         pb.addAString(CfgCheckin.getBonusCheckin());
+        pb.addAString(CfgCheckin.getBonusCheckinVip());
         return pb.build();
     }
 
@@ -498,7 +502,7 @@ public class WelfareHandler extends AHandler {
         }
         switch (eventType) {
             case QUA_NAP_TIEN -> getQuaNapTien(cellId);
-            case DIEM_DANH -> checkIn();
+            case DIEM_DANH -> checkIn(cellId);
             case UU_DAI_NGAY -> getUuDaiNgay(cellId);
             case VIP -> getVipBonus(cellId);
             case GET_SUPPORT -> getSupportBonus(cellId);
@@ -513,22 +517,51 @@ public class WelfareHandler extends AHandler {
     }
 
 
-    void checkIn() {
+    void checkIn(int type) {
         if (!CfgFeature.isOpenFeature(FeatureType.CHECK_IN, mUser, this)) {
             return;
         }
-        if (mUser.getUData().getStatusCheckIn() == 1) {
+        // type VIP cũng đi cùng flow thường (num chung); client VIP chưa mua thì mở buy pack
+        if (type != CfgCheckin.TYPE_NORMAL && type != CfgCheckin.TYPE_VIP) {
+            addErrParam();
+            return;
+        }
+        List<Integer> checkin = mUser.getUData().getNumCheckin(mUser);
+        if (checkin.get(CfgCheckin.STATUS) == 1) {
             addErrResponse(Lang.getTitle(mUser.getUser().getLang(), Lang.err_has_checkin));
             return;
         }
-        List<Integer> checkin = mUser.getUData().getNumCheckin();
         int numCheck = checkin.get(CfgCheckin.NUM_CHECKIN);
-        List<Long> bonus = null;
+        List<Long> bonus = new ArrayList<>();
         if (numCheck >= CfgCheckin.config.bonusCheckin.size()) {
-            bonus = Bonus.viewGem(100);
-        } else bonus = CfgCheckin.config.bonusCheckin.get(numCheck);
+            bonus.addAll(Bonus.viewGem(100));
+        } else bonus.addAll(CfgCheckin.config.bonusCheckin.get(numCheck));
+
+        // Có pack VIP → nhận thêm quà VIP cùng ngày
+        if (mUser.getUData().hasCheckinVipPack(mUser)) {
+            List<List<Long>> bonusVip = CfgCheckin.config.bonusCheckinVip;
+            if (bonusVip != null && !bonusVip.isEmpty()) {
+                if (numCheck >= bonusVip.size())
+                    bonus.addAll(Bonus.viewGem(100));
+                else
+                    bonus.addAll(bonusVip.get(numCheck));
+            }
+        }
+
         if (!mUser.checkSlotAddBonus(bonus)) {
-            addErrResponse(getLang(Lang.err_max_slot));
+            // Túi đầy: gửi vào thư, vẫn tính đã điểm danh
+            String title = Lang.getTitle(mUser, Lang.mail_checkin_bonus);
+            if (!DBJPA.rawSQL(DBHelper.sqlMail(user.getId(), title, StringHelper.toDBString(bonus)))) {
+                addErrResponse(getLang(Lang.err_max_slot));
+                return;
+            }
+            checkin.set(CfgCheckin.NUM_CHECKIN, checkin.get(CfgCheckin.NUM_CHECKIN) + 1);
+            checkin.set(CfgCheckin.STATUS, 1);
+            if (mUser.getUData().updateCheckIn(StringHelper.toDBString(checkin))) {
+                addBonusToast(bonus);
+                addResponse(null);
+                CfgAchievement.addListAchievement(mUser, 3, CfgAchievement.checkinAchi, 1);
+            } else addErrResponse();
             return;
         }
         List<Long> retBonus = Bonus.receiveListItem(mUser, DetailActionType.DIEM_DANH_HANG_NGAY.getKey(numCheck + 1), bonus);

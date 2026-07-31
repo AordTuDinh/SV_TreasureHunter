@@ -190,7 +190,12 @@ public class ClanDAO extends AbstractDAO {
         EntityManager session = null;
         try {
             session = DBJPA.getEntityManager();
-            Query query = session.createNativeQuery(String.format("select * from clan where server=%s AND member>0  ORDER BY RAND() limit 10", server), ClanEntity.class);
+            // 10 bang ngẫu nhiên cùng server, còn slot (chưa max theo level)
+            int baseMax = CfgClan.config != null ? CfgClan.config.maxMember : 3;
+            String sql = String.format(
+                    "select * from clan where server=%d AND member>0 AND member < LEAST(%d, %d + level - 1) ORDER BY RAND() limit 10",
+                    server, CfgClan.MAX_MEMBER_CAP, baseMax);
+            Query query = session.createNativeQuery(sql, ClanEntity.class);
             return query.getResultList();
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -228,6 +228,10 @@ public class Bonus {
                         ? Math.toIntExact(bonus.get(2))
                         : Math.toIntExact(bonus.get(1));
             }
+            case BONUS_ITEM_POINT -> {
+                // preview [13, pointId, number]
+                return Math.toIntExact(bonus.get(1));
+            }
             case BONUS_SKIN -> Math.toIntExact(bonus.get(1));
             case BONUS_EFFECT_SKIN -> Math.toIntExact(bonus.get(2));
         }
@@ -326,6 +330,9 @@ public class Bonus {
      * - Receive config: [17, bonusImageId, times] (wire cũ -1 vẫn được parse chuyển sang 17)
      * - CRAFT_EXP:    cộng craft exp, trả [17, bonusImageId, craftExpTotal]
      * - MATERIAL:     roll materialIds từ res_bonus_image.data, tier lấy từ res_bonus_image.tier
+     * - SKIN:         roll skinIds từ data
+     * - PET:          roll petIds từ data, tier lấy từ res_bonus_image.tier
+     * - MOUNT:        roll mountIds từ data, tier lấy từ res_bonus_image.tier
      */
     static List<Long> addBonusImageReward(MyUser mUser, List<Long> chunk, String detailAction) {
         if (chunk == null || chunk.size() < 3) {
@@ -403,7 +410,6 @@ public class Bonus {
                 return ret;
             }
             case SKIN -> {
-                int tier = cfg.getTier() > 0 ? Math.min(cfg.getTier(), 4) : 1;
                 List<Integer> skinIds = cfg.getSkinIds();
                 if (skinIds == null || skinIds.isEmpty()) {
                     logBonusImageFail("skinIds rỗng", chunk, "data=" + cfg.getData());
@@ -417,6 +423,48 @@ public class Bonus {
                     List<Long> added = addCharacterSkin(mUser, skinId, detailAction);
                     if (added == null || added.isEmpty()) {
                         logBonusImageFail("addCharacterSkin fail/stop", chunk, "skinId=" + skinId + " roll=" + i);
+                        break;
+                    }
+                    ret.addAll(added);
+                }
+                return ret;
+            }
+            case PET -> {
+                int tier = cfg.getTier() > 0 ? Math.min(cfg.getTier(), 4) : 1;
+                List<Integer> petIds = cfg.getPetIds();
+                if (petIds == null || petIds.isEmpty()) {
+                    logBonusImageFail("petIds rỗng", chunk, "data=" + cfg.getData());
+                    return new ArrayList<>();
+                }
+
+                List<Long> ret = new ArrayList<>();
+                for (int i = 0; i < times; i++) {
+                    int idx = NumberUtil.getRandom(0, petIds.size() - 1);
+                    int petId = petIds.get(idx);
+                    List<Long> added = addPet(mUser, petId, tier, detailAction);
+                    if (added == null || added.isEmpty()) {
+                        logBonusImageFail("addPet fail/stop", chunk, "petId=" + petId + " tier=" + tier + " roll=" + i);
+                        break;
+                    }
+                    ret.addAll(added);
+                }
+                return ret;
+            }
+            case MOUNT -> {
+                int tier = cfg.getTier() > 0 ? Math.min(cfg.getTier(), 4) : 1;
+                List<Integer> mountIds = cfg.getMountIds();
+                if (mountIds == null || mountIds.isEmpty()) {
+                    logBonusImageFail("mountIds rỗng", chunk, "data=" + cfg.getData());
+                    return new ArrayList<>();
+                }
+
+                List<Long> ret = new ArrayList<>();
+                for (int i = 0; i < times; i++) {
+                    int idx = NumberUtil.getRandom(0, mountIds.size() - 1);
+                    int mountId = mountIds.get(idx);
+                    List<Long> added = addMount(mUser, mountId, tier, detailAction);
+                    if (added == null || added.isEmpty()) {
+                        logBonusImageFail("addMount fail/stop", chunk, "mountId=" + mountId + " tier=" + tier + " roll=" + i);
                         break;
                     }
                     ret.addAll(added);

@@ -47,6 +47,11 @@ public class UserLotteryHistoryEntity implements Serializable {
         return Pbmethod.ItemType.valueOf(type);
     }
 
+    /** user_lottery_history.type = ItemPointKey pointId (TICKER_NORMAL=3 / TICKER_SPECIAL=4). */
+    public int getType() {
+        return type;
+    }
+
     public Pbmethod.PbLotteryHistory toProto() {
         Pbmethod.PbLotteryHistory.Builder pb = Pbmethod.PbLotteryHistory.newBuilder();
         pb.setEventId(eventId);

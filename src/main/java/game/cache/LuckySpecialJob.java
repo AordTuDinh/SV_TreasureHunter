@@ -15,7 +15,6 @@ import ozudo.base.helper.GUtil;
 import ozudo.base.helper.GsonUtil;
 import ozudo.base.helper.StringHelper;
 import ozudo.base.log.Logs;
-import protocol.Pbmethod;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
@@ -87,7 +86,7 @@ public class LuckySpecialJob {
         } else {
             DBResource.getInstance().rawSQL("update " + CfgServer.DB_MAIN + "lottery_special set gem= " + gem);
         }
-        int eventType = Pbmethod.ItemPointType.EVENT.getNumber();
+        int eventType = ItemPointKey.TICKER_SPECIAL.id;
         for (int i = 0; i < uLot.size(); i++) {
             long curGemWin = (long) countWinByRow[i] * gemInTickerWin;
             List<Long> bonus = new ArrayList<>();

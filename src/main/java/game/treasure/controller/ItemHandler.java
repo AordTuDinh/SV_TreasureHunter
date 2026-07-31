@@ -18,6 +18,7 @@ import game.treasure.mapping.UserMountEntity;
 import game.treasure.mapping.UserPetEntity;
 import game.treasure.mapping.main.ResItemEntity;
 import game.treasure.mapping.main.ResItemEquipmentEntity;
+import game.treasure.mapping.main.ResItemPointEntity;
 import game.treasure.server.IAction;
 import game.treasure.service.battle.TreasureEventService;
 import game.treasure.service.item.EquipmentExpireService;
@@ -382,7 +383,43 @@ public class ItemHandler extends AHandler {
             sellMount(mount);
             return;
         }
+        if (bonusType == Bonus.BONUS_ITEM_POINT) {
+            sellItemPoint((int) id);
+            return;
+        }
         addErrParam();
+    }
+
+    /** Bán user_item_point theo res_item_point.sell_price (vàng / đơn vị × số lượng). */
+    private void sellItemPoint(int pointId) {
+        UserItemPointEntity row = mUser.getResources().getItemPoint(pointId);
+        if (row == null || row.getNumber() <= 0) {
+            addErrResponse(getLang(Lang.item_not_own));
+            return;
+        }
+        ResItemPointEntity res = ResItemPoint.get(pointId);
+        if (res == null || res.getSellPrice() <= 0) {
+            addErrResponse(getLang(Lang.err_params));
+            return;
+        }
+        int qty = row.getNumber();
+        List<Long> wire = new ArrayList<>();
+        wire.addAll(Bonus.viewItemPoint(pointId, -qty));
+        wire.addAll(Bonus.viewGold((long) res.getSellPrice() * qty));
+        List<Long> result = Bonus.receiveListItem(mUser, DetailActionType.SELL_ITEM.getKey(pointId), wire);
+        if (result == null || result.isEmpty()) {
+            addErrResponse();
+            return;
+        }
+        // Xóa data vé số / metadata còn sót sau khi trừ hết.
+        UserItemPointEntity after = mUser.getResources().getItemPoint(pointId);
+        if (after != null && after.getNumber() <= 0) {
+            after.setDataLongList(new ArrayList<>());
+            after.persist();
+        }
+        addBonusToast(result);
+        flushItemPointUpdates();
+        addResponse(getCommonVector((long) pointId, 1L));
     }
 
     /** Auto-sell batch: prefix 1 + pairs (bonusType, id). Vàng cộng im lặng, không BONUS_TOAST. */
