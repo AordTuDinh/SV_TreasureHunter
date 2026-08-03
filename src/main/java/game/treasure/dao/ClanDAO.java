@@ -55,9 +55,11 @@ public class ClanDAO extends AbstractDAO {
             query.executeUpdate();
 
             session.getTransaction().commit();
+            System.out.println("[CLAN_CREATE][DAO] OK clanId=" + clan.getId() + " userId=" + user.getId());
             return clan.getId();
         } catch (Exception ex) {
             ex.printStackTrace();
+            System.out.println("[CLAN_CREATE][DAO] FAIL userId=" + user.getId() + " name=" + clanName + " ex=" + ex.getMessage());
             getLogger().error(GUtil.exToString(ex));
         } finally {
             closeSession(session);

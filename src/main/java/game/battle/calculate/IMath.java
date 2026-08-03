@@ -197,16 +197,7 @@ public class IMath {
         Point pt = PlayerBasePoint.getBase();
 //        System.out.println("point 8 = " + pt.toMiniString());
         // phúc lợi bang hội
-        if (mUser.getUser().getClan() > 0) {
-            ClanEntity clan = Services.clanDAO.getClan(mUser.getUser().getClan());
-            if (clan != null) {
-                int level = clan.getLevel();
-                for (int i = 0; i < level; i++) {
-                    CfgClan.ClanWelfare welfare = CfgClan.getClanWelfare(i);
-                    if (welfare.point > 0) addPointData(pt, welfare.point, welfare.num / 100f);
-                }
-            }
-        } else if (mUser.getUser().getClan() == CfgClan.ASSASSIN_CLAN_ID) {
+       if (mUser.getUser().getClan() == CfgClan.ASSASSIN_CLAN_ID) {
             addPointData(pt, Point.P_MOVE_SPEED, CfgClan.assassinMoveSpeedBonus);
         } else if (mUser.getUser().getClan() == CfgClan.WARRIOR_CLAN_ID) {
             addPointData(pt, Point.P_HP, CfgClan.warriorHpBonus);

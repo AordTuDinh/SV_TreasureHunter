@@ -44,10 +44,6 @@ public class CfgClan {
         config = new Gson().fromJson(strJson, DataConfig.class);
     }
 
-    public static ClanWelfare getClanWelfare(int indexLevel) {
-        return config.clanWelfare.get(indexLevel);
-    }
-
     public static int getMaxExp(int level) {
         return config.exp.get(level - 1);
     }
@@ -138,13 +134,6 @@ public class CfgClan {
         public List<Integer> upgradeQuest;
         public List<Long> bonusDynamic;
         public List<BonusConfig> bonusBoxDynamic;
-        public List<ClanWelfare> clanWelfare;
-    }
-
-    public class ClanWelfare {
-        public int level;
-        public int num;
-        public int point;
     }
 
     public class DataHonor {
