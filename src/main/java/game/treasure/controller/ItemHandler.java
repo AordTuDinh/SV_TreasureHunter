@@ -971,6 +971,8 @@ public class ItemHandler extends AHandler {
         } else {
             addResponse(getCommonVector(id, (long) newLevel));
         }
+        tryBroadcastUpgradeLv10(Bonus.BONUS_EQUIPMENT, id, newLevel, equip.getHh(),
+                equip.getResEquipment() != null ? equip.getResEquipment().getName() : "");
     }
 
     private boolean updateEquipSlotLevel(int itemId, int newLevel) {
@@ -1031,6 +1033,8 @@ public class ItemHandler extends AHandler {
             addResponse(getCommonVector(id, (long) newLevel));
         }
         addResponse(IAction.PET_INFO, Pbmethod.PbListPet.newBuilder().addPets(pet.toProto()).build());
+        tryBroadcastUpgradeLv10(Bonus.BONUS_PET, id, newLevel, pet.getHh(),
+                pet.getResPet() != null ? pet.getResPet().getName() : "");
     }
 
     private void uplevelMount(UserMountEntity mount) {
@@ -1083,6 +1087,15 @@ public class ItemHandler extends AHandler {
             addResponse(getCommonVector(id, (long) newLevel));
         }
         addResponse(IAction.MOUNT_INFO, Pbmethod.PbListMount.newBuilder().addMounts(mount.toProto()).build());
+        tryBroadcastUpgradeLv10(Bonus.BONUS_MOUNT, id, newLevel, mount.getHh(),
+                mount.getRes() != null ? mount.getRes().getName() : "");
+    }
+
+    /** Hóa hình (hh &gt; 0) lên đúng cấp 10 → announce chat thế giới. */
+    private void tryBroadcastUpgradeLv10(int wireType, long rowId, int newLevel, int hh, String itemName) {
+        if (newLevel != 10 || hh <= 0)
+            return;
+        ChatHandler.broadcastUpgradeLv10(mUser, wireType, rowId, itemName);
     }
 
     private void itemInfo() {

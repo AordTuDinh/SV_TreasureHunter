@@ -271,16 +271,7 @@ public class ChatHandler extends AHandler {
             return;
         }
 
-        Pbmethod.CommonVector info;
-        switch (wireType) {
-            case Bonus.BONUS_PET -> info = buildPetShareInfo(rowId);
-            case Bonus.BONUS_MOUNT -> info = buildMountShareInfo(rowId);
-            case Bonus.BONUS_EQUIPMENT -> info = buildEquipShareInfo(rowId);
-            default -> {
-                addErrParam();
-                return;
-            }
-        }
+        Pbmethod.CommonVector info = buildShareInfo(mUser, wireType, rowId);
         if (info == null) {
             addErrResponse(getLang(Lang.item_not_own));
             return;
@@ -289,12 +280,52 @@ public class ChatHandler extends AHandler {
         user.setLastChatServer(System.currentTimeMillis());
         user.setLastMsgChatServer("__SHARE_ITEM__");
         String msg = user.getName() + " đã chia sẻ thông tin vật phẩm";
-        Util.sendProtoDataToListChanel(Online.getUserInServer(user.getServer()),
-                chatShare(msg, info), IAction.CHAT_SERVER);
+        broadcastShare(mUser, msg, info);
         addToast(ToastType.NORMAL, "Chia sẻ thành công");
     }
 
-    Pbmethod.CommonVector buildPetShareInfo(long rowId) {
+    /**
+     * Auto announce khi hóa hình (hh &gt; 0) nâng lên cấp 10. Không dính spam chat.
+     */
+    public static void broadcastUpgradeLv10(MyUser mUser, int wireType, long rowId, String itemName) {
+        if (mUser == null || mUser.getUser() == null || rowId <= 0)
+            return;
+        Pbmethod.CommonVector info = buildShareInfo(mUser, wireType, rowId);
+        if (info == null)
+            return;
+        String name = mUser.getUser().getName() != null ? mUser.getUser().getName() : "";
+        String item = itemName != null ? itemName : "";
+        String msg = "Chúc mừng " + name + " đã nâng cấp thành công lên cấp 10 " + item;
+        broadcastShare(mUser, msg, info);
+    }
+
+    public static void broadcastShare(MyUser mUser, String msg, Pbmethod.CommonVector info) {
+        if (mUser == null || mUser.getUser() == null)
+            return;
+        Pbmethod.PbChat.Builder chat = Pbmethod.PbChat.newBuilder();
+        chat.setReqTime(System.currentTimeMillis() / 1000);
+        chat.setMessage(msg != null ? msg : "");
+        chat.setType(ChatType.SHARE_ITEM.value);
+        chat.setUser(mUser.getUser().toProto());
+        if (info != null)
+            chat.setInfo(info);
+        chat.addAllPoint(mUser.getUser().getCachePoint().toProto());
+        Util.sendProtoDataToListChanel(Online.getUserInServer(mUser.getUser().getServer()),
+                chat.build(), IAction.CHAT_SERVER);
+    }
+
+    public static Pbmethod.CommonVector buildShareInfo(MyUser mUser, int wireType, long rowId) {
+        if (mUser == null)
+            return null;
+        return switch (wireType) {
+            case Bonus.BONUS_PET -> buildPetShareInfo(mUser, rowId);
+            case Bonus.BONUS_MOUNT -> buildMountShareInfo(mUser, rowId);
+            case Bonus.BONUS_EQUIPMENT -> buildEquipShareInfo(mUser, rowId);
+            default -> null;
+        };
+    }
+
+    public static Pbmethod.CommonVector buildPetShareInfo(MyUser mUser, long rowId) {
         UserPetEntity pet = mUser.getResources().getPet(rowId);
         if (pet == null)
             return null;
@@ -321,7 +352,7 @@ public class ChatHandler extends AHandler {
         return CommonProto.getCommonVectorProto(aLong, aString);
     }
 
-    Pbmethod.CommonVector buildMountShareInfo(long rowId) {
+    public static Pbmethod.CommonVector buildMountShareInfo(MyUser mUser, long rowId) {
         UserMountEntity mount = mUser.getResources().getMount(rowId);
         if (mount == null)
             return null;
@@ -348,7 +379,7 @@ public class ChatHandler extends AHandler {
         return CommonProto.getCommonVectorProto(aLong, aString);
     }
 
-    Pbmethod.CommonVector buildEquipShareInfo(long rowId) {
+    public static Pbmethod.CommonVector buildEquipShareInfo(MyUser mUser, long rowId) {
         UserEquipmentEntity equip = mUser.getResources().getEquipment(rowId);
         if (equip == null)
             return null;
@@ -381,18 +412,6 @@ public class ChatHandler extends AHandler {
         chat.setMessage(msg);
         chat.setType(ChatType.MSG.value);
         chat.setUser(user.toProto());
-        chat.addAllPoint(user.getCachePoint().toProto());
-        return chat.build();
-    }
-
-    Pbmethod.PbChat chatShare(String msg, Pbmethod.CommonVector info) {
-        Pbmethod.PbChat.Builder chat = Pbmethod.PbChat.newBuilder();
-        chat.setReqTime(System.currentTimeMillis() / 1000);
-        chat.setMessage(msg);
-        chat.setType(ChatType.SHARE_ITEM.value);
-        chat.setUser(user.toProto());
-        if (info != null)
-            chat.setInfo(info);
         chat.addAllPoint(user.getCachePoint().toProto());
         return chat.build();
     }
