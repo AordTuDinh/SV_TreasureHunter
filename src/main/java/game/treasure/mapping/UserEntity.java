@@ -396,7 +396,7 @@ public class UserEntity implements Serializable {
         if (clan > 0) {
             ClanManager clanManager = ClanManager.getInstance(clan);
             if (clanManager != null) {
-                int rankClan = ClanManager.getInstance(clan).getClan().getRank();
+                int rankClan = ClanManager.getInstance(clan).getClan().getClanRank();
                 if (rankClan != clanRank && update(Arrays.asList("clan_rank", rankClan))) {
                     clanRank = rankClan;
                 }

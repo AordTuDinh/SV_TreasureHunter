@@ -218,52 +218,37 @@ public class ClanHandler extends AHandler {
         int avatar = cmm.getALongCount() > 0 ? (int) cmm.getALong(0) : 0;
         int joinRule = cmm.getALongCount() > 1 ? (int) cmm.getALong(1) : 0;
         int type = cmm.getALongCount() > 2 ? (int) cmm.getALong(2) : 0;
-        System.out.println("[CLAN_CREATE] userId=" + (user != null ? user.getId() : -1)
-                + " name=" + name + " intro=" + intro
-                + " avatar=" + avatar + " joinRule=" + joinRule + " type=" + type
-                + " userClan=" + (user != null ? user.getClan() : -1)
-                + " gem=" + (user != null ? user.getGem() : -1)
-                + " level=" + (user != null ? user.getLevel() : -1)
-                + " feeCreate=" + (CfgClan.config != null ? CfgClan.config.feeCreate : -1));
 
         if (name.contains("<") || name.contains(">") || name.contains("[") || name.contains("]")) {
-            System.out.println("[CLAN_CREATE] FAIL name_err_1 invalid chars");
             addErrResponse(getLang(Lang.name_err_1));
             return;
         }
 
         if (CfgChat.validText(name) || CfgChat.validText(intro)) {
-            System.out.println("[CLAN_CREATE] FAIL name_not_found invalidText name=" + CfgChat.validText(name) + " intro=" + CfgChat.validText(intro));
             addErrResponse(getLang(Lang.name_not_found));
             return;
         }
         if (avatar < 1001 || avatar >= 10000) {
-            System.out.println("[CLAN_CREATE] FAIL err_params avatar=" + avatar);
             addErrResponse(getLang(Lang.err_params));
             return;
         }
         if (CfgClan.config == null) {
-            System.out.println("[CLAN_CREATE] FAIL CfgClan.config is null");
             addErrResponse(getLang(Lang.err_system_down));
             return;
         }
         if (name.length() > CfgClan.config.clanNameLength) {
-            System.out.println("[CLAN_CREATE] FAIL name_err_length len=" + name.length() + " max=" + CfgClan.config.clanNameLength);
             addErrResponse(getLang(Lang.name_err_length));
             return;
         }
         if (intro.length() > CfgClan.config.introLength) {
-            System.out.println("[CLAN_CREATE] FAIL err_intro_max_length len=" + intro.length() + " max=" + CfgClan.config.introLength);
             addErrResponse(getLang(Lang.err_intro_max_length));
             return;
         }
         if (name.length() < 4) {
-            System.out.println("[CLAN_CREATE] FAIL clan_name_min_length len=" + name.length());
             addErrResponse(getLang(Lang.clan_name_min_length));
             return;
         }
         if (user.getClan() != 0) {
-            System.out.println("[CLAN_CREATE] FAIL already in clan id=" + user.getClan());
             if (CfgClan.isSystemClan(user.getClan())) {
                 addErrResponse(String.format(getLang(Lang.clan_leave_first), CfgClan.getSystemClanName(user.getClan())));
             } else {
@@ -272,13 +257,11 @@ public class ClanHandler extends AHandler {
             return;
         }
         if (hasClanLeaveCooldown(CfgClan.timeWaitLeave)) {
-            System.out.println("[CLAN_CREATE] FAIL leave cooldown");
             return;
         }
 
         ClanEntity findClan = Services.clanDAO.getClan(name);
         if (findClan != null) {
-            System.out.println("[CLAN_CREATE] FAIL name_exist id=" + findClan.getId());
             addErrResponse(getLang(Lang.clan_name_exist));
             return;
         }
@@ -286,14 +269,12 @@ public class ClanHandler extends AHandler {
         List<Long> fee = CfgClan.getFeeCreate(type);
         String err = Bonus.checkMoney(mUser, fee);
         if (err != null) {
-            System.out.println("[CLAN_CREATE] FAIL checkMoney err=" + err + " fee=" + fee + " gem=" + user.getGem() + " ruby=" + user.getRuby());
             addErrResponse(err);
             return;
         }
         // joinRule: 0 = chiêu mộ tắt (duyệt tay), 1 = bật (auto vào)
         if (joinRule != 0 && joinRule != 1) joinRule = 0;
         int gemFee = type == 0 ? CfgClan.config.feeCreate : 0;
-        System.out.println("[CLAN_CREATE] creating gemFee=" + gemFee + " joinRule=" + joinRule);
         int ret = Services.clanDAO.createClan(user, name, gemFee, intro, avatar, joinRule, 1);
         if (ret > 0) {
             if (type == 0) user.addGem(-CfgClan.config.feeCreate);
@@ -306,12 +287,10 @@ public class ClanHandler extends AHandler {
             long moneyType = type == 0 ? Bonus.BONUS_GEM : Bonus.BONUS_RUBY;
             long moneyLeft = type == 0 ? user.getGem() : user.getRuby();
             long moneyCost = type == 0 ? -CfgClan.config.feeCreate : -CfgClan.config.feeCreateRuby;
-            System.out.println("[CLAN_CREATE] OK clanId=" + ret + " moneyLeft=" + moneyLeft);
             addResponse(getCommonVector((long) ret, moneyType, moneyLeft, moneyCost));
             if (CfgServer.isRealServer()) Actions.save(user, Actions.GCLAN, Actions.DCREATE, "id", ret);
             mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.JOIN_CLAN, 1);
         } else {
-            System.out.println("[CLAN_CREATE] FAIL dao.createClan ret=" + ret);
             addErrResponse(getLang(Lang.err_system_down));
         }
     }
@@ -339,16 +318,22 @@ public class ClanHandler extends AHandler {
             if (CfgClan.isSystemClan(user.getClan())) {
                 addErrResponse(String.format(getLang(Lang.clan_leave_first), CfgClan.getSystemClanName(user.getClan())));
             } else {
-                ClanEntity clan = ClanManager.getInstance(user.getClan()).getClan();
-                addErrResponse(String.format(getLang(Lang.clan_leave_first), clan.getName()));
+                ClanManager own = ClanManager.getInstance(user.getClan());
+                String clanName = own != null && own.getClan() != null ? own.getClan().getName() : "";
+                addErrResponse(String.format(getLang(Lang.clan_leave_first), clanName));
             }
             return;
         }
         if (hasClanLeaveCooldown(CfgClan.timeWaitLeave)) return;
 
-        ClanEntity clan = ClanManager.getInstance(clanId).getClan();
-        if (clan == null) {
+        ClanManager targetCm = ClanManager.getInstance(clanId);
+        if (targetCm == null || targetCm.getClan() == null) {
             addErrResponse(getLang(Lang.clan_not_found));
+            return;
+        }
+        ClanEntity clan = targetCm.getClan();
+        if (CfgClan.config == null) {
+            addErrResponse(getLang(Lang.err_system_down));
             return;
         }
         if (clan.getMember() >= CfgClan.getMaxMember(clan.getLevel())) {
@@ -366,11 +351,12 @@ public class ClanHandler extends AHandler {
                 if (CfgServer.isRealServer())
                     Actions.save(user, "clan", "answer_req1", "answer", 1, "userId", user.getId(), "clanId", clanId);
                 Pbmethod.CommonVector.Builder cmm = Pbmethod.CommonVector.newBuilder();
-                cmm.addALong(0);
+                cmm.addALong(ClanPosition.MEMBER.value);
                 cmm.addALong(clan.getId());
                 cmm.addALong(clan.getAvatar());
-                cmm.addAString(String.format(getLang(Lang.clan_message_12), clan.getName()));
-                cmm.addAString(clan.getName());
+                String cName = clan.getName() != null ? clan.getName() : "";
+                cmm.addAString(String.format(getLang(Lang.clan_message_12), cName));
+                cmm.addAString(cName);
                 mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.JOIN_CLAN, 1);
                 addResponse(IAction.CLAN_ACCEPT_MEMBER, cmm.build());
             } else addErrResponse();
@@ -381,6 +367,7 @@ public class ClanHandler extends AHandler {
                 return;
             }
             List<ClanReqEntity> aReq = clan.getAReq();
+            if (aReq == null) aReq = new ArrayList<>();
             String newKey = "clanReq_" + clanId + "_" + user.getId();
             if (JCache.getInstance().getValue(newKey) != null) {
                 for (int i = 0; i < aReq.size(); i++) {
@@ -577,11 +564,11 @@ public class ClanHandler extends AHandler {
                 ClanEntity clan = cm.getClan();
                 protocol.Pbmethod.PbClan.Builder clanBuilder = protocol.Pbmethod.PbClan.newBuilder();
                 clanBuilder.setId(clan.getId());
-                clanBuilder.setName(clan.getName());
+                clanBuilder.setName(clan.getName() != null ? clan.getName() : "");
                 clanBuilder.setAvatar(clan.getAvatar());
                 clanBuilder.setLevel(clan.getLevel());
                 clanBuilder.setNumberMember(clan.getMember());
-                clanBuilder.setMaxMember(CfgClan.getMaxMember(clan.getLevel()));
+                clanBuilder.setMaxMember(CfgClan.config != null ? CfgClan.getMaxMember(clan.getLevel()) : Math.max(3, clan.getMember()));
                 clanBuilder.setJoinRule(clan.getJoinRule());
                 clanBuilder.setMasterName(clan.getMaster() != null ? clan.getMaster() : "");
                 clanBuilder.setIntro(clan.getIntro() != null ? clan.getIntro() : "");

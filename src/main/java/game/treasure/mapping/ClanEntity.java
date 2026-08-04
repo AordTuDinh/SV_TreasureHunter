@@ -37,7 +37,10 @@ public class ClanEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-    int server, avatar, masterId, level, member, joinRule, bossLevel, rank, star, levelQuest, pointDynamic;
+    int server, avatar, masterId, level, member, joinRule, bossLevel, star, levelQuest, pointDynamic;
+    /** DB column: clan_rank (tránh reserved keyword rank). */
+    @Column(name = "clan_rank")
+    int clanRank;
     String name, master, intro, activityLog, memberId, dynamic, dynamicId; //dynamicId : week - id
     String infoAttackBoss;// day-cur attack
     long exp, power, contribute, honor, timeOpenBoss;
@@ -59,7 +62,7 @@ public class ClanEntity {
         this.joinRule = joinRule;
         this.levelQuest = 1;
         this.bossLevel = 1;
-        this.rank = 0;
+        this.clanRank = 0;
         this.contribute = 0;
         this.honor = 0;
         this.name = name;
@@ -71,7 +74,7 @@ public class ClanEntity {
         this.memberId = "[]";
         this.dynamicId = "[]";
         this.infoAttackBoss = "[0,0]";
-        addClanLog(Lang.clan_message_1, master.getName(), name);
+        // Không ghi log trước khi có id — tránh insert activity_log phức tạp + lỗi SQL
     }
 
     public void initChat() {
@@ -223,9 +226,9 @@ public class ClanEntity {
         pbClan.setName(name);
         pbClan.setMasterId(masterId);
         pbClan.setMasterName(master);
-        pbClan.setRank(this.rank);
+        pbClan.setRank(this.clanRank);
         ClanManager clanManager = ClanManager.getInstance(id);
-        if (clanManager != null && clanManager.getClan() != null) clanManager.getClan().setRank(this.rank);
+        if (clanManager != null && clanManager.getClan() != null) clanManager.getClan().setClanRank(this.clanRank);
         pbClan.setPower(power);
         pbClan.setJoinRule(joinRule);
         pbClan.setIntro(intro);
@@ -237,12 +240,12 @@ public class ClanEntity {
         pbClan.setJoinTrophy(CfgClan.NUM_ATTACK_BOSS - info.get(1));
         // rank
         if (rank != null && rank.length > 0) {
-            this.rank = rank[0];
+            this.clanRank = rank[0];
             int typeRank = rank.length > 1 ? rank[1] : 0;
             TopType topType = TopType.get(typeRank);
             if (topType == TopType.CLAN_POWER) pbClan.setPointRank(power);
             if (topType == TopType.CLAN_STAR) pbClan.setPointRank(star);
-            pbClan.setRank(this.rank);
+            pbClan.setRank(this.clanRank);
         }
         return pbClan.build();
     }
@@ -481,8 +484,8 @@ public class ClanEntity {
 
     boolean update(List<Object> data) {
         List<Object> ret = new ArrayList<>(data);
-        ret.add("rank");
-        ret.add(rank);
+        ret.add("clan_rank");
+        ret.add(clanRank);
         return DBJPA.update("clan", ret, Arrays.asList("id", String.valueOf(id)));
     }
 

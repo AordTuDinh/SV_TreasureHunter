@@ -3,6 +3,7 @@ package game.treasure.dao;
 import game.cache.JCache;
 import game.config.CfgClan;
 import game.config.aEnum.ClanPosition;
+import game.config.lang.Lang;
 import game.treasure.controller.ClanHandler;
 import game.treasure.mapping.ClanEntity;
 import game.treasure.mapping.ClanReqEntity;
@@ -41,30 +42,41 @@ public class ClanDAO extends AbstractDAO {
         return (ClanEntity) DBJPA.getUnique("clan", ClanEntity.class, "id", clanId);
     }
 
-    public int createClan(UserEntity user, String clanName, int gem, String status, int avatar,int joinRule,int level) {
-        EntityManager session = DBJPA.getEntityManager();
+    public int createClan(UserEntity user, String clanName, int gem, String status, int avatar, int joinRule, int level) {
         try {
-            session.getTransaction().begin();
-            ClanEntity clan = new ClanEntity(user, status, avatar, clanName,joinRule,level);
+            ClanEntity clan = new ClanEntity(user, status, avatar, clanName, joinRule, level);
             clan.setServer(user.getServer());
-            session.persist(clan);
-            Query query = session.createNativeQuery("update user set gem=gem-" + gem + ", clan=" + clan.getId() + ",clan_avatar=:clanAvatar, clan_position=:clanPosition, clan_name=:clanName where id=" + user.getId());
-            query.setParameter("clanName", clanName);
-            query.setParameter("clanAvatar", avatar);
-            query.setParameter("clanPosition", ClanPosition.LEADER.value);
-            query.executeUpdate();
+            if (!DBJPA.save(clan) || clan.getId() <= 0) {
+                return -1;
+            }
 
-            session.getTransaction().commit();
-            System.out.println("[CLAN_CREATE][DAO] OK clanId=" + clan.getId() + " userId=" + user.getId());
+            EntityManager session = DBJPA.getEntityManager();
+            try {
+                session.getTransaction().begin();
+                Query query = session.createNativeQuery(
+                        "UPDATE user SET gem=gem-" + gem + ", clan=" + clan.getId()
+                                + ", clan_avatar=:clanAvatar, clan_position=:clanPosition, clan_name=:clanName WHERE id=" + user.getId());
+                query.setParameter("clanName", clanName);
+                query.setParameter("clanAvatar", avatar);
+                query.setParameter("clanPosition", ClanPosition.LEADER.value);
+                query.executeUpdate();
+                session.getTransaction().commit();
+            } catch (Exception ex) {
+                try {
+                    if (session.getTransaction().isActive()) session.getTransaction().rollback();
+                } catch (Exception ignored) {
+                }
+                throw ex;
+            } finally {
+                closeSession(session);
+            }
+
+            clan.addClanLog(Lang.clan_message_1, user.getName(), clanName);
             return clan.getId();
         } catch (Exception ex) {
-            ex.printStackTrace();
-            System.out.println("[CLAN_CREATE][DAO] FAIL userId=" + user.getId() + " name=" + clanName + " ex=" + ex.getMessage());
             getLogger().error(GUtil.exToString(ex));
-        } finally {
-            closeSession(session);
+            return -1;
         }
-        return -1;
     }
 
     private boolean dbUpdateName(int clanId, String name) {
@@ -102,7 +114,7 @@ public class ClanDAO extends AbstractDAO {
     }
 
     public List<UserEntity> getListMember(int clanId) {
-        return DBJPA.getEntityManager().createNativeQuery("select * from user where clan=:clanId order by level desc", UserEntity.class)
+        return DBJPA.getEntityManager().createNativeQuery("select * from user where clan=:clanId order by vip_exp desc", UserEntity.class)
                 .setParameter("clanId", clanId).getResultList();
     }
 

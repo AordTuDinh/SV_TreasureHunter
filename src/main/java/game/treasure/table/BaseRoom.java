@@ -411,6 +411,13 @@ public abstract class BaseRoom extends MonoRoom {
             handleAutoGatherInput(player, input);
             return;
         }
+        if (input.typeId == NInput.USE_ITEM) {
+            if (player != null && player.isAlive() && player.getRoom() != null
+                    && player.getRoom().getRoomState() == RoomState.ACTIVE) {
+                game.treasure.service.resource.ResItem.useBuffItemInRoom(player, input.useItemId);
+            }
+            return;
+        }
         if (!player.isAlive() || !player.isReady() || player.getRoom() == null || player.getRoom().getRoomState() != RoomState.ACTIVE)
             return;
         // check Idle
@@ -439,8 +446,6 @@ public abstract class BaseRoom extends MonoRoom {
             }
         } else if (input.typeId == NInput.PING_GAME) {
             Util.sendProtoData(player.getMUser().getChannel(), null, IAction.PING_GAME);
-        } else if (input.typeId == NInput.USE_ITEM) {
-            game.treasure.service.resource.ResItem.useBuffItemInRoom(player, input.useItemId);
         } else if (input.typeId == NInput.ATTACK) {
             if (!player.canAttack()) return;
             if (!game.treasure.service.battle.ZoneAttackService.tryAttackOrToast(player)) return;
