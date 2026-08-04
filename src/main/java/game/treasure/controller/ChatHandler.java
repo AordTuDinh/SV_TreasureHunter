@@ -6,10 +6,18 @@ import game.config.CfgServer;
 import game.config.aEnum.NotifyType;
 import game.config.aEnum.ChatType;
 import game.config.aEnum.FeatureType;
+import game.config.aEnum.ToastType;
 import game.config.lang.Lang;
 import game.treasure.mapping.UserChatEntity;
+import game.treasure.mapping.UserEquipmentEntity;
+import game.treasure.mapping.UserMountEntity;
+import game.treasure.mapping.UserPetEntity;
+import game.treasure.mapping.main.ResItemEquipmentEntity;
+import game.treasure.mapping.main.ResMountEntity;
+import game.treasure.mapping.main.ResPetEntity;
 import game.treasure.server.IAction;
 import game.treasure.service.Services;
+import game.treasure.service.user.Bonus;
 import game.treasure.table.BaseRoom;
 import game.monitor.Online;
 import game.object.FriendChatObject;
@@ -49,7 +57,7 @@ public class ChatHandler extends AHandler {
     @Override
     public void initAction(Map<Integer, AHandler> mHandler) {
         List<Integer> actions = Arrays.asList(CHAT_SERVER, CHAT_MAP, CHAT_BLOCK, CHAT_UN_BLOCK, CHAT_FRIEND_LIST, CHAT_FRIEND,
-                CHAT_SETTING, CHAT_FRIEND_NOTIFY);
+                CHAT_SETTING, CHAT_FRIEND_NOTIFY, CHAT_SHARE_ITEM);
         actions.forEach(action -> mHandler.put(action, this));
     }
 
@@ -69,6 +77,7 @@ public class ChatHandler extends AHandler {
                 case IAction.CHAT_BLOCK -> chatBlock();
                 case IAction.CHAT_UN_BLOCK -> chatUnBlock();
                 case IAction.CHAT_SETTING -> chatSetting();
+                case IAction.CHAT_SHARE_ITEM -> shareItem();
                // case IAction.CHAT_FRIEND_NOTIFY -> chatNotifyList();
             }
         } catch (Exception ex) {
@@ -240,12 +249,150 @@ public class ChatHandler extends AHandler {
         addResponse(getCommonVector(data));
     }
 
+    /** Chia sẻ pet / mount / equip vào chat thế giới. Input: [wireBonusType, rowId]. */
+    void shareItem() {
+        if (user.isLockChat() != null) {
+            addErrResponse(getLang(Lang.err_chat_block));
+            return;
+        }
+        List<Long> inputs = getInputALong();
+        if (inputs == null || inputs.size() < 2) {
+            addErrParam();
+            return;
+        }
+        int wireType = inputs.get(0).intValue();
+        long rowId = inputs.get(1);
+        if (rowId <= 0) {
+            addErrParam();
+            return;
+        }
+        if (System.currentTimeMillis() - user.getLastChatServer() <= CfgChat.chatSpam * 1000L) {
+            addErrResponse(getLang(Lang.chat_too_quick));
+            return;
+        }
+
+        Pbmethod.CommonVector info;
+        switch (wireType) {
+            case Bonus.BONUS_PET -> info = buildPetShareInfo(rowId);
+            case Bonus.BONUS_MOUNT -> info = buildMountShareInfo(rowId);
+            case Bonus.BONUS_EQUIPMENT -> info = buildEquipShareInfo(rowId);
+            default -> {
+                addErrParam();
+                return;
+            }
+        }
+        if (info == null) {
+            addErrResponse(getLang(Lang.item_not_own));
+            return;
+        }
+
+        user.setLastChatServer(System.currentTimeMillis());
+        user.setLastMsgChatServer("__SHARE_ITEM__");
+        String msg = user.getName() + " đã chia sẻ thông tin vật phẩm";
+        Util.sendProtoDataToListChanel(Online.getUserInServer(user.getServer()),
+                chatShare(msg, info), IAction.CHAT_SERVER);
+        addToast(ToastType.NORMAL, "Chia sẻ thành công");
+    }
+
+    Pbmethod.CommonVector buildPetShareInfo(long rowId) {
+        UserPetEntity pet = mUser.getResources().getPet(rowId);
+        if (pet == null)
+            return null;
+        ResPetEntity res = pet.getResPet();
+        String name = res != null && res.getName() != null ? res.getName() : "";
+        List<Long> aLong = Arrays.asList(
+                (long) Bonus.BONUS_PET,
+                pet.getId(),
+                (long) pet.getPetId(),
+                (long) pet.getLevel(),
+                (long) (pet.getTier() > 0 ? pet.getTier() : 1),
+                (long) pet.getIcon(),
+                (long) pet.getHh(),
+                (long) pet.getIsCraft(),
+                (long) pet.getPriceTreasure(),
+                pet.isEquip() ? 1L : 0L,
+                0L
+        );
+        List<String> aString = Arrays.asList(
+                pet.getData() != null ? pet.getData() : "[]",
+                name,
+                pet.getCraftBy() != null ? pet.getCraftBy() : ""
+        );
+        return CommonProto.getCommonVectorProto(aLong, aString);
+    }
+
+    Pbmethod.CommonVector buildMountShareInfo(long rowId) {
+        UserMountEntity mount = mUser.getResources().getMount(rowId);
+        if (mount == null)
+            return null;
+        ResMountEntity res = mount.getRes();
+        String name = res != null && res.getName() != null ? res.getName() : "";
+        List<Long> aLong = Arrays.asList(
+                (long) Bonus.BONUS_MOUNT,
+                mount.getId(),
+                (long) mount.getMountId(),
+                (long) mount.getLevel(),
+                (long) (mount.getTier() > 0 ? mount.getTier() : 1),
+                (long) mount.getIcon(),
+                (long) mount.getHh(),
+                (long) mount.getIsCraft(),
+                (long) mount.getPriceTreasure(),
+                mount.isEquip() ? 1L : 0L,
+                0L
+        );
+        List<String> aString = Arrays.asList(
+                mount.getData() != null ? mount.getData() : "[]",
+                name,
+                mount.getCraftBy() != null ? mount.getCraftBy() : ""
+        );
+        return CommonProto.getCommonVectorProto(aLong, aString);
+    }
+
+    Pbmethod.CommonVector buildEquipShareInfo(long rowId) {
+        UserEquipmentEntity equip = mUser.getResources().getEquipment(rowId);
+        if (equip == null)
+            return null;
+        ResItemEquipmentEntity res = equip.getResEquipment();
+        String name = res != null && res.getName() != null ? res.getName() : "";
+        List<Long> aLong = Arrays.asList(
+                (long) Bonus.BONUS_EQUIPMENT,
+                equip.getId(),
+                (long) equip.getItemId(),
+                (long) equip.getLevel(),
+                (long) (equip.getTier() > 0 ? equip.getTier() : 1),
+                (long) equip.getIcon(),
+                (long) equip.getHh(),
+                (long) equip.getIsCraft(),
+                (long) equip.getPriceTreasure(),
+                (long) equip.getLockDestroy(),
+                equip.getTimeExpire()
+        );
+        List<String> aString = Arrays.asList(
+                equip.getData() != null ? equip.getData() : "[]",
+                name,
+                ""
+        );
+        return CommonProto.getCommonVectorProto(aLong, aString);
+    }
+
     Pbmethod.PbChat chat(String msg) {
         Pbmethod.PbChat.Builder chat = Pbmethod.PbChat.newBuilder();
         chat.setReqTime(System.currentTimeMillis() / 1000);
         chat.setMessage(msg);
         chat.setType(ChatType.MSG.value);
         chat.setUser(user.toProto());
+        chat.addAllPoint(user.getCachePoint().toProto());
+        return chat.build();
+    }
+
+    Pbmethod.PbChat chatShare(String msg, Pbmethod.CommonVector info) {
+        Pbmethod.PbChat.Builder chat = Pbmethod.PbChat.newBuilder();
+        chat.setReqTime(System.currentTimeMillis() / 1000);
+        chat.setMessage(msg);
+        chat.setType(ChatType.SHARE_ITEM.value);
+        chat.setUser(user.toProto());
+        if (info != null)
+            chat.setInfo(info);
         chat.addAllPoint(user.getCachePoint().toProto());
         return chat.build();
     }

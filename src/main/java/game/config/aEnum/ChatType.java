@@ -5,6 +5,7 @@ import java.util.Map;
 
 public enum ChatType {
     MSG(0),
+    SHARE_ITEM(1),
     ;
 
     public final int value;
