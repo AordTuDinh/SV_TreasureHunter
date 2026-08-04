@@ -308,6 +308,6 @@ public class IAction {
     public static final int PING_IDLE = 10003;
     //endregion
     public static List<Integer> loginServices = Arrays.asList(LOGIN_GAME, LOGOUT);
-    public static List<Integer> notDebug = Arrays.asList(PING_GAME, TUTORIAL_QUEST_UPDATE, TREASURE_OPENING,UPDATE_BONUS_PRIVATE);
+    public static List<Integer> notDebug = Arrays.asList(PING_GAME, TUTORIAL_QUEST_UPDATE, TREASURE_OPENING,UPDATE_BONUS_PRIVATE,BUFF_INFO);
 }
 

@@ -731,6 +731,15 @@ public abstract class BaseRoom extends MonoRoom {
                 pbInit.addUnits(unit.toProtoAdd(unit.getChunkId()));
             }
         }
+
+        Logs.info(String.format(
+                "[JoinRoom] playerId=%d userId=%d chunk=%d addChunks=%d chunkIds=%s",
+                player.getId(),
+                player.getMUser().getUserId(),
+                curChunk,
+                chunkVisible.size(),
+                chunkVisible));
+
         handler.addResponse(IAction.JOIN_MAP, pbInit.build());
         TreasureEventService.syncOnJoin(player);
     }
@@ -865,6 +874,19 @@ public abstract class BaseRoom extends MonoRoom {
         // exited = oldVisible - newVisible
         Set<Integer> exited = new HashSet<>(oldVisible);
         newVisible.forEach(exited::remove);
+
+        if (!entered.isEmpty() || !exited.isEmpty()) {
+            Logs.info(String.format(
+                    "[ViewDelta] playerId=%d userId=%d oldChunk=%d newChunk=%d addChunks=%d removeChunks=%d addIds=%s removeIds=%s",
+                    player.getId(),
+                    player.getMUser().getUserId(),
+                    oldChunk,
+                    newChunk,
+                    entered.size(),
+                    exited.size(),
+                    entered,
+                    exited));
+        }
 
         protocol.Pbmethod.PbState.Builder builder = protocol.Pbmethod.PbState.newBuilder();
         builder.setServerTime(serverTime);
