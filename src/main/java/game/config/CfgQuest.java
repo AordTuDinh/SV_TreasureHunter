@@ -10,24 +10,14 @@ import game.treasure.service.resource.ResQuest;
 import game.object.DataDaily;
 import game.object.DataQuest;
 import game.object.MyUser;
-import ozudo.base.helper.StringHelper;
 
 import java.util.*;
 
 public class CfgQuest {
     public static DataConfig config;
     public static int numberBonusDay = 5;
-    public static int numberBonusWeek = 5;
     public static int numberQuestD = 7;
-    public static int numberQuestC = 8;
-    public static int numberQuestB = 5;
     public static List<Integer> indexs = Arrays.asList(0, 1, 2, 4);
-    public static int packX2 = 2;
-    public static final int INDEX_SUMMON_STONE = 0;
-    public static final int INDEX_SUMMON_PIECE = 1;
-    public static final int INDEX_SPINE = 2;
-    public static final int INDEX_SHIP = 4;
-
 
     public static void loadConfig(String strJson) {
         config = new Gson().fromJson(strJson, DataConfig.class);
@@ -37,19 +27,15 @@ public class CfgQuest {
         return config.aBonusQuest.get(index);
     }
 
-    public static List<Long> getQuestCBonus(int index) {
-        return config.aBonusQuestC.get(index);
-    }
-
     public static boolean isNotifyQuest(MyUser mUser) {
         UserQuestEntity uQuest = mUser.getUQuest();
-        DataQuest quest = uQuest.getDataQuestD();
+        DataQuest quest = uQuest.getDataQuest();
         if (quest == null) return false;
         List<Integer> quests = uQuest.getQuest();
         for (int i = 0; i < quests.size(); i += 2) {
             ResQuestEntity qe = ResQuest.mQuest.get(quests.get(i));
             if (quests.get(i + 1) != StatusType.DONE.value) {
-                StatusType status = CfgQuest.getStatus(quest.getValue(qe.getId()),  qe.getNumber());
+                StatusType status = CfgQuest.getStatus(quest.getValue(qe.getId()), qe.getNumber());
                 if (status == StatusType.RECEIVE) {
                     return true;
                 }
@@ -60,9 +46,13 @@ public class CfgQuest {
 
     public static void addNumQuest(MyUser mUser, int type, int number) { // add value + check notify
         UserQuestEntity uQuest = mUser.getUQuest();
+        if (uQuest.isDone()) return;
+        if (uQuest.isDoneGold() && type == DataQuest.HAVE_GOLD) return;
+        if (uQuest.isDoneGem() && type == DataQuest.HAVE_GEM) return;
+
         ResQuestEntity quest = ResQuest.mQuest.get(type);
-        if (uQuest.getDataQuestD() != null) {
-            DataQuest dataQuestD = uQuest.getDataQuestD();
+        if (uQuest.getDataQuest() != null) {
+            DataQuest dataQuestD = uQuest.getDataQuest();
             dataQuestD.addValue(type, number);
             if (dataQuestD.aNotify.get(type) == 0 && dataQuestD.getValue(type) >= quest.getNumber()) {
                 List<Integer> statusQuest = uQuest.getQuest();
@@ -81,6 +71,7 @@ public class CfgQuest {
             CacheStoreBeans.cache1Min.add(mUser.getUser().getId() + "_update_user_quest", 1);
             uQuest.update(new ArrayList<>());
         }
+        uQuest.checkDoneAllQuest();
         // check notify
 
     }
@@ -141,7 +132,7 @@ public class CfgQuest {
                 mUser.getUData().setQuestTutorialNumber(max);
             }
             case HAS_POINT_D -> {
-                DataQuest dataQuest = mUser.getUQuest().getDataQuestD();
+                DataQuest dataQuest = mUser.getUQuest().getDataQuest();
                 mUser.getUData().setQuestTutorialNumber(dataQuest.getValue(DataQuest.CUR_POINT_D));
             }
             case HAS_ITEM_EQUIP_ID -> {
@@ -168,7 +159,5 @@ public class CfgQuest {
     public class DataConfig {
         public List<List<Long>> aBonusQuest;
         public List<Integer> pointState;
-        public List<List<Long>> aBonusQuestC;
-        public List<Integer> pointStateC;
     }
 }

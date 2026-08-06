@@ -2,8 +2,10 @@ package game.treasure.mapping;
 
 import game.battle.calculate.IMath;
 import game.battle.object.Point;
+import game.config.CfgQuest;
 import game.config.aEnum.*;
 import game.config.lang.Lang;
+import game.object.DataQuest;
 import game.treasure.mapping.main.ResVipEntity;
 import game.treasure.service.resource.ResEvent;
 import game.monitor.ClanManager;

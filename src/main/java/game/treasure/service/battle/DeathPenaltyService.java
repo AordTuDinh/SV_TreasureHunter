@@ -2,9 +2,11 @@ package game.treasure.service.battle;
 
 import game.battle.model.Player;
 import game.battle.model.Unit;
+import game.config.CfgQuest;
 import game.config.CfgServer;
 import game.config.aEnum.DetailActionType;
 import game.config.lang.Lang;
+import game.object.DataQuest;
 import game.object.MyUser;
 import game.treasure.BattleConfig;
 import game.treasure.mapping.UserEquipmentEntity;
@@ -17,6 +19,7 @@ import game.treasure.service.user.Bonus;
 import game.treasure.service.user.EquipSlotBonus;
 import game.treasure.table.BaseRoom;
 import game.treasure.task.dbcache.MailCreatorCache;
+import lombok.Data;
 import ozudo.base.helper.NumberUtil;
 import ozudo.base.helper.StringHelper;
 import protocol.Pbmethod;
@@ -55,6 +58,8 @@ public final class DeathPenaltyService {
 
         if (killer != null && killer.isPlayer() && !isNoCupLossZone(victim))
             PvpCupService.apply(victim, killer.getPlayer());
+
+        CfgQuest.addNumQuest(killer.getPlayer().getMUser(), DataQuest.KILL_PLAYER, 1);
 
         DropSelection drop = rollItemDrop(victimUser, typeRoom);
         if (drop == null) {

@@ -166,11 +166,6 @@ public class Player extends Unit implements Serializable {
     }
 
 
-
-    public synchronized void addGold(long gold) {
-        mUser.getUser().addGold(gold);
-    }
-
     public boolean hasAttack() {  // delay giữa 2 lần đánh
         return DateTime.isAfterTime(timeActionAttack, point.getAttackSpeed());
     }

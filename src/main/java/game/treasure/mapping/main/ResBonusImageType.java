@@ -14,7 +14,10 @@ public enum ResBonusImageType {
     PET(4),
 
     /** data = JSON array mountId (vd: "[1,2,3]"); tier = res_bonus_image.tier */
-    MOUNT(5);
+    MOUNT(5),
+
+    /** data = flat bonus wire (vd: "[2,200,13,15,500]"); tier không dùng; không chứa type 17 */
+    BONUS_DATA(6);
 
     public final int value;
 

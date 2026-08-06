@@ -24,7 +24,7 @@ public class DataQuest {
     public static final int KILL_3 = 7;
     public static final int KILL_4 = 8;
     public static final int CHANGE_GOLD = 9;
-    public static final int HAVE_DIAMOND = 10;
+    public static final int HAVE_GEM = 10;
     public static final int HAVE_GOLD = 11;
     public static final int GATHER = 12;
     public static final int KILL_PLAYER = 13;

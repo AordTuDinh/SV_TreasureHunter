@@ -1,14 +1,9 @@
 package game.treasure.service.user;
 
-import game.config.CfgAchievement;
-import game.config.CfgArena;
-import game.config.CfgCraft;
-import game.config.CfgItem;
-import game.config.CfgLottery;
-import game.config.CfgMaterial;
-import game.config.CfgServer;
+import game.config.*;
 import game.config.aEnum.*;
 import game.config.lang.Lang;
+import game.object.DataQuest;
 import protocol.Pbmethod;
 import game.treasure.mapping.*;
 import game.treasure.mapping.main.ResItemEntity;
@@ -32,7 +27,9 @@ import ozudo.base.log.Logs;
 import java.util.*;
 
 public class Bonus {
-    /** Shop display-only: [17, bonusImageId, craftExpTotal] — cộng craft exp, không tạo vật phẩm. */
+    /**
+     * Shop display-only: [17, bonusImageId, craftExpTotal] — cộng craft exp, không tạo vật phẩm.
+     */
     public static final int BONUS_CUSTOM_IMAGE = 17;
     public static final int BONUS_GOLD = 1;
     public static final int BONUS_GEM = 2;
@@ -83,7 +80,9 @@ public class Bonus {
         return view(BONUS_GOLD, number);
     }
 
-    /** Preview/grant consumable {@code res_item} by itemKey. Item point dùng {@link #viewItemPoint}. */
+    /**
+     * Preview/grant consumable {@code res_item} by itemKey. Item point dùng {@link #viewItemPoint}.
+     */
     public static List<Long> viewItem(int itemKey, long number) {
         if (number <= 0)
             return new ArrayList<>();
@@ -171,7 +170,9 @@ public class Bonus {
         return view(BONUS_CUP, number);
     }
 
-    /** Xu đấu trường = item point {@link ItemPointKey#ARENA_COIN}. */
+    /**
+     * Xu đấu trường = item point {@link ItemPointKey#ARENA_COIN}.
+     */
     public static List<Long> viewArenaCoin(int number) {
         return viewItemPoint(CfgArena.arenaCoinPointId(), number);
     }
@@ -184,7 +185,9 @@ public class Bonus {
         return view(BONUS_ITEM_POINT, pointId, number);
     }
 
-    /** Preview/grant craft exp shop: [17, imageId, exp]. */
+    /**
+     * Preview/grant craft exp shop: [17, imageId, exp].
+     */
     public static List<Long> viewCustomImageCraftExp(int imageId, long exp) {
         return view(BONUS_CUSTOM_IMAGE, imageId, exp);
     }
@@ -266,7 +269,9 @@ public class Bonus {
         return flattenReceiveItemPoint(applied);
     }
 
-    /** Gộp receive wire cùng pointId — preview vẫn tách từng chunk. */
+    /**
+     * Gộp receive wire cùng pointId — preview vẫn tách từng chunk.
+     */
     static List<Long> flattenReceiveItemPoint(List<List<Long>> applied) {
         List<Long> ret = new ArrayList<>();
         Map<Integer, Integer> indexByPoint = new HashMap<>();
@@ -292,7 +297,9 @@ public class Bonus {
         return ret;
     }
 
-    /** Tách flat wire apply — cố định mTypeLength (giống parse preview). */
+    /**
+     * Tách flat wire apply — cố định mTypeLength (giống parse preview).
+     */
     static List<List<Long>> parseForApply(List<Long> bonus) {
         return parse(bonus);
     }
@@ -309,11 +316,14 @@ public class Bonus {
             case BONUS_RUBY -> addRuby(mUser, chunk.get(1), detailAction);
             case BONUS_CUP -> addCup(mUser, chunk.get(1), detailAction);
             case BONUS_ITEM -> grantUserItem(mUser, chunk.get(1).intValue(), detailAction);
-            case BONUS_EQUIPMENT -> grantUserEquipment(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
-            case BONUS_ARTIFACT -> addItemArtifact(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
+            case BONUS_EQUIPMENT ->
+                    grantUserEquipment(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
+            case BONUS_ARTIFACT ->
+                    addItemArtifact(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
             case BONUS_VIP_EXP -> addVipExp(mUser, chunk.get(1).intValue(), detailAction);
             case BONUS_SKIN -> addCharacterSkin(mUser, chunk.get(1).intValue(), detailAction);
-            case BONUS_EFFECT_SKIN -> addEffectSkin(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
+            case BONUS_EFFECT_SKIN ->
+                    addEffectSkin(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
             case BONUS_PET -> addPet(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
             case BONUS_MOUNT -> addMount(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
             case BONUS_MOB -> addMob(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
@@ -333,6 +343,7 @@ public class Bonus {
      * - SKIN:         roll skinIds từ data
      * - PET:          roll petIds từ data, tier lấy từ res_bonus_image.tier
      * - MOUNT:        roll mountIds từ data, tier lấy từ res_bonus_image.tier
+     * - BONUS_DATA:   nhận toàn bộ flat bonus wire trong data (không chứa type 17)
      */
     static List<Long> addBonusImageReward(MyUser mUser, List<Long> chunk, String detailAction) {
         if (chunk == null || chunk.size() < 3) {
@@ -471,10 +482,38 @@ public class Bonus {
                 }
                 return ret;
             }
+            case BONUS_DATA -> {
+                List<Long> bonusData = cfg.getBonusData();
+                if (bonusData == null || bonusData.isEmpty()) {
+                    logBonusImageFail("bonusData rỗng", chunk, "data=" + cfg.getData());
+                    return new ArrayList<>();
+                }
+                if (containsCustomImageBonus(bonusData)) {
+                    logBonusImageFail("data chứa BONUS_CUSTOM_IMAGE (17)", chunk, "data=" + cfg.getData());
+                    return new ArrayList<>();
+                }
+                List<Long> toGrant = resolveBonusImageDataGrant(bonusData, times);
+                return receiveListItem(mUser, detailAction, toGrant);
+            }
         }
 
         logBonusImageFail("switch fallthrough", chunk, "cfgType=" + cfgType);
         return new ArrayList<>();
+    }
+
+    static boolean containsCustomImageBonus(List<Long> bonus) {
+        for (List<Long> c : parse(bonus)) {
+            if (!c.isEmpty() && c.get(0).intValue() == BONUS_CUSTOM_IMAGE)
+                return true;
+        }
+        return false;
+    }
+
+    /** Expand res_bonus_image BONUS_DATA × times (dùng cho grant + check slot). */
+    public static List<Long> resolveBonusImageDataGrant(List<Long> bonusData, int times) {
+        if (bonusData == null || bonusData.isEmpty() || times <= 0)
+            return new ArrayList<>();
+        return times > 1 ? xBonus(bonusData, times) : new ArrayList<>(bonusData);
     }
 
     static void logBonusImageFail(String reason, List<Long> chunk, String extra) {
@@ -482,7 +521,9 @@ public class Bonus {
                 + (extra != null ? " | " + extra : ""));
     }
 
-    /** Apply [15, typeBonus, rowId, itemKey] — đổi chủ row escrow → receive [12|11, rowId, itemKey, tier]. */
+    /**
+     * Apply [15, typeBonus, rowId, itemKey] — đổi chủ row escrow → receive [12|11, rowId, itemKey, tier].
+     */
     static List<Long> applyChangeOwnerChunk(MyUser mUser, List<Long> chunk, String detailAction) {
         int typeBonus = chunk.get(1).intValue();
         long rowId = chunk.get(2);
@@ -720,7 +761,7 @@ public class Bonus {
             tier = 1;
         if (!mUser.getResources().prepareNewItemSlot(BONUS_PET, 0))
             return new ArrayList<>();
-        UserPetEntity uPet = new UserPetEntity(mUser.getUser(), petId,tier);
+        UserPetEntity uPet = new UserPetEntity(mUser.getUser(), petId, tier);
         if (DBJPA.save(uPet)) {
             if (!mUser.getResources().prepareNewItemSlot(BONUS_PET, uPet.getId())) {
                 DBJPA.delete("user_pet", "id", uPet.getId(), "user_id", uPet.getUserId());
@@ -742,7 +783,7 @@ public class Bonus {
         if (ResMount.get(mountId) == null) return new ArrayList<>();
         if (!mUser.getResources().prepareNewItemSlot(BONUS_MOUNT, 0))
             return new ArrayList<>();
-        UserMountEntity uMount = new UserMountEntity(mUser.getUser(), mountId,tier);
+        UserMountEntity uMount = new UserMountEntity(mUser.getUser(), mountId, tier);
         if (DBJPA.save(uMount)) {
             if (!mUser.getResources().prepareNewItemSlot(BONUS_MOUNT, uMount.getId())) {
                 DBJPA.delete("user_mount", "id", uMount.getId(), "user_id", uMount.getUserId());
@@ -805,22 +846,20 @@ public class Bonus {
     static List<Long> addGold(MyUser mUser, long value, String detailAction) {
         if (value > 0)
             value = scaleGoldByIncrease(mUser, value);
-        if (detailAction.equals(DetailActionType.BONUS_KILL_ENEMY)) {
+        if (dbAddGold(mUser.getUser(), value)) {
             mUser.getUser().addGold(value);
             CfgAchievement.addListAchievement(mUser, 5, CfgAchievement.addGold, (int) value);
+            CfgQuest.addNumQuest(mUser, DataQuest.HAVE_GOLD, (int) value);
+            if (CfgServer.isRealServer()) Actions.logGold(mUser.getUser(), detailAction, value);
             return Arrays.asList((long) BONUS_GOLD, mUser.getUser().getGold(), value);
-        } else {
-            if (dbAddGold(mUser.getUser(), value)) {
-                mUser.getUser().addGold(value);
-                CfgAchievement.addListAchievement(mUser, 5, CfgAchievement.addGold, (int) value);
-                if (CfgServer.isRealServer()) Actions.logGold(mUser.getUser(), detailAction, value);
-                return Arrays.asList((long) BONUS_GOLD, mUser.getUser().getGold(), value);
-            }
-            return new ArrayList<>();
         }
+        return new ArrayList<>();
+
     }
 
-    /** Point 17 — tăng vàng nhận thêm theo % (chỉ khi value > 0). */
+    /**
+     * Point 17 — tăng vàng nhận thêm theo % (chỉ khi value > 0).
+     */
     static long scaleGoldByIncrease(MyUser mUser, long baseGold) {
         if (baseGold <= 0 || mUser == null)
             return baseGold;
@@ -840,6 +879,7 @@ public class Bonus {
         if (dbAddGem(mUser.getUser(), value)) {
             mUser.getUser().addGem(value);
             CfgAchievement.addListAchievement(mUser, 5, CfgAchievement.addGem, (int) value);
+            CfgQuest.addNumQuest(mUser, DataQuest.HAVE_GEM, (int) value);
             if (CfgServer.isRealServer())
                 Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction, "type", "gem", "value", mUser.getUser().getGem(), "addValue", value);
             return Arrays.asList((long) BONUS_GEM, mUser.getUser().getGem(), value);
@@ -949,7 +989,9 @@ public class Bonus {
         return results;
     }
 
-    /** Parse preview/reward config — ITEM [4,itemKey], ARTIFACT [5,itemKey,tier], EQUIP [12,itemKey,tier], PET/MOUNT [9|10,configId,tier]. */
+    /**
+     * Parse preview/reward config — ITEM [4,itemKey], ARTIFACT [5,itemKey,tier], EQUIP [12,itemKey,tier], PET/MOUNT [9|10,configId,tier].
+     */
     public static List<List<Long>> parse(List<Long> bonus) {
         List<List<Long>> result = new ArrayList<>();
         if (bonus != null && !bonus.isEmpty()) {
@@ -971,7 +1013,9 @@ public class Bonus {
         return result;
     }
 
-    /** Parse apply wire — cố định mTypeLength (alias parse). */
+    /**
+     * Parse apply wire — cố định mTypeLength (alias parse).
+     */
     public static List<List<Long>> parseCost(List<Long> bonus) {
         return parse(bonus);
     }
@@ -1010,7 +1054,9 @@ public class Bonus {
         return result;
     }
 
-    /** Chỉ nhân đôi (hoặc times) các chunk BONUS_RUBY trong bonus. */
+    /**
+     * Chỉ nhân đôi (hoặc times) các chunk BONUS_RUBY trong bonus.
+     */
     public static List<Long> xRubyBonus(List<Long> bonus, int times) {
         List<List<Long>> aBonus = parse(bonus);
         List<Long> result = new ArrayList<>();
@@ -1250,7 +1296,9 @@ public class Bonus {
         return ItemPointKey.isLotteryTicket(pointId);
     }
 
-    /** Tab túi event — res_item_point.type ∈ {EVENT, USE, SPEAKER, OPEN_BOX, OPEN_BOX_TIER}. */
+    /**
+     * Tab túi event — res_item_point.type ∈ {EVENT, USE, SPEAKER, OPEN_BOX, OPEN_BOX_TIER}.
+     */
     public static boolean usesEventBagStorage(Pbmethod.ItemPointType storageType) {
         return storageType == Pbmethod.ItemPointType.EVENT
                 || storageType == Pbmethod.ItemPointType.USE
@@ -1264,7 +1312,9 @@ public class Bonus {
         return res != null && res.getItemPointType() != null && usesEventBagStorage(res.getItemPointType());
     }
 
-    /** Mua vé số — lưu user_item_point.data [eventDay, các số vé]. */
+    /**
+     * Mua vé số — lưu user_item_point.data [eventDay, các số vé].
+     */
     public static List<Long> grantLotteryTickets(MyUser mUser, int pointId, long eventDay, List<Long> nums, String detailAction) {
         if (!ItemPointKey.isLotteryTicket(pointId) || nums == null || nums.isEmpty())
             return new ArrayList<>();
@@ -1290,7 +1340,9 @@ public class Bonus {
         return Arrays.asList((long) BONUS_ITEM_POINT, (long) pointId, (long) nums.size(), (long) row.getNumber());
     }
 
-    /** item_slot: consum (BONUS_ITEM), equip, pet, mount, artifact — không gồm event/currency. */
+    /**
+     * item_slot: consum (BONUS_ITEM), equip, pet, mount, artifact — không gồm event/currency.
+     */
     public static boolean usesItemSlotBonusType(int bonusType) {
         return bonusType == BONUS_ITEM || bonusType == BONUS_EQUIPMENT
                 || bonusType == BONUS_PET || bonusType == BONUS_MOUNT || bonusType == BONUS_MOB
@@ -1313,7 +1365,9 @@ public class Bonus {
         return ItemSlotHelper.findSlotOf(slots, 0, bagCount, bonusType, rowId) != null;
     }
 
-    /** Ô item_slot còn trỏ tới row hợp lệ cho túi UI (tồn tại, chưa mặc, chưa kẹt ví/chợ). */
+    /**
+     * Ô item_slot còn trỏ tới row hợp lệ cho túi UI (tồn tại, chưa mặc, chưa kẹt ví/chợ).
+     */
     static boolean slotRowValid(MyUser mUser, int bonusType, long rowId) {
         if (rowId <= 0 || !usesItemSlotBonusType(bonusType))
             return false;
@@ -1356,7 +1410,9 @@ public class Bonus {
         return slotRowValid(mUser, bonusType, rowId);
     }
 
-    /** Xóa ô invalid/trùng; tùy chọn gán item hợp lệ chưa có ô vào chỗ trống. */
+    /**
+     * Xóa ô invalid/trùng; tùy chọn gán item hợp lệ chưa có ô vào chỗ trống.
+     */
     public static void verifyItemSlots(MyUser mUser, boolean backfillOrphans) {
         List<Long> slots = mUser.getUData().getItemSlotList();
         int bagCount = mUser.getUData().getSlotBagUI();
@@ -1460,12 +1516,16 @@ public class Bonus {
         return changed;
     }
 
-    /** Xóa ô item_slot trỏ tới row không còn tồn tại hoặc không thuộc túi UI. */
+    /**
+     * Xóa ô item_slot trỏ tới row không còn tồn tại hoặc không thuộc túi UI.
+     */
     public static void reconcileItemSlots(MyUser mUser) {
         verifyItemSlots(mUser, false);
     }
 
-    /** Gán ô túi UI — bonusType ∈ {4 consum, 12 equip, 9 pet, 10 mount, 14 mob, 5 artifact}. rowId=0 chỉ check còn chỗ. */
+    /**
+     * Gán ô túi UI — bonusType ∈ {4 consum, 12 equip, 9 pet, 10 mount, 14 mob, 5 artifact}. rowId=0 chỉ check còn chỗ.
+     */
     public static boolean prepareNewItemSlot(MyUser mUser, int bonusType, long rowId) {
         if (!usesItemSlotBonusType(bonusType))
             return true;

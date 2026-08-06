@@ -471,7 +471,11 @@ public class MyUser implements Serializable {
                         ResBonusImageEntity cfg = ResImage.get(bonusImageId);
                         if (cfg != null) {
                             ResBonusImageType imgType = ResBonusImageType.fromInt(cfg.getType());
-                            if (imgType == ResBonusImageType.MATERIAL)
+                            if (imgType == ResBonusImageType.BONUS_DATA) {
+                                List<Long> expanded = Bonus.resolveBonusImageDataGrant(cfg.getBonusData(), times);
+                                if (!expanded.isEmpty() && !checkSlotAddBonus(expanded))
+                                    return false;
+                            } else if (imgType == ResBonusImageType.MATERIAL)
                                 numMaterial += times;
                             else if (imgType == ResBonusImageType.PET || imgType == ResBonusImageType.MOUNT)
                                 numBag += times;

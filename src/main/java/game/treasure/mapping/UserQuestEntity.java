@@ -37,29 +37,52 @@ public class UserQuestEntity implements Serializable {
     int point;
     @Transient
     @Getter
-    DataQuest dataQuestD;
+    DataQuest dataQuest;
+    @Transient
+    @Getter
+    boolean isDone, doneGold, doneGem, doneGather; // cache trạng thái đỡ phải check nhiều vì xử lí rất nhiều.
 
 
     public UserQuestEntity(int userId, int userLevel) {
         this.userId = userId;
-        genNewDataQuestD(userLevel, Calendar.getInstance().get(Calendar.DAY_OF_YEAR));
+        genNewDataQuest(userLevel, Calendar.getInstance().get(Calendar.DAY_OF_YEAR));
+        checkDoneAllQuest();
     }
 
     public void checkData(int userLevel) {
         int day = Calendar.getInstance().get(Calendar.DAY_OF_YEAR);
-        if (dataQuestD == null) dataQuestD = new DataQuest( dayInt, userId);
-        if (day != dataQuestD.getTime()) {
-            genNewDataQuestD(userLevel, day);
+        if (dataQuest == null) dataQuest = new DataQuest(dayInt, userId);
+        if (day != dataQuest.getTime()) {
+            genNewDataQuest(userLevel, day);
             update(List.of("day_status", dayStatus, "day_quest", dayQuest));
         }
+        checkDoneAllQuest();
     }
 
+    public void checkDoneAllQuest() {
+        isDone = true;
+        doneGold = true;
+        doneGem = true;
+        doneGather = true;
+        List<Integer> data = getQuest();
+        for (int i = 0; i < data.size(); i += 2) {
+            if (data.get(i + 1) == StatusType.PROCESSING.value) {
+                isDone = false;
+            }
+            if (data.get(i) == DataQuest.HAVE_GOLD && data.get(i + 1) == StatusType.PROCESSING.value)
+                doneGold = false;
+            if (data.get(i) == DataQuest.HAVE_GEM && data.get(i + 1) == StatusType.PROCESSING.value)
+                doneGem = false;
+            if (data.get(i) == DataQuest.GATHER && data.get(i + 1) == StatusType.PROCESSING.value)
+                doneGather = false;
+        }
+    }
 
     public void addPoint(int number) {
         point += number;
     }
 
-    void genNewDataQuestD(int userLevel, int curDay) {
+    void genNewDataQuest(int userLevel, int curDay) {
         List<Integer> data = new ArrayList<>();
         List<ResQuestEntity> questToDay = ResQuest.genQuest(userLevel);
         for (int i = 0; i < questToDay.size(); i++) {
@@ -72,7 +95,7 @@ public class UserQuestEntity implements Serializable {
         newDay.set(0, curDay);
         this.dayInt = StringHelper.toDBString(newDay);
         this.dayStatus = StringHelper.toDBString(NumberUtil.genListInt(CfgQuest.numberBonusDay, StatusType.PROCESSING.value));
-        this.dataQuestD = new DataQuest( dayInt, userId);
+        this.dataQuest = new DataQuest(dayInt, userId);
     }
 
 
@@ -81,11 +104,11 @@ public class UserQuestEntity implements Serializable {
     }
 
     public List<Integer> getStatus() {
-      return   GsonUtil.strToListInt((dayStatus));
+        return GsonUtil.strToListInt((dayStatus));
     }
 
 
-    public boolean receiveQuestBonus( String dataQuest) {
+    public boolean receiveQuestBonus(String dataQuest) {
         if (update(Arrays.asList("day_quest", dataQuest))) {
             this.dayQuest = dataQuest;
             return true;
@@ -93,7 +116,7 @@ public class UserQuestEntity implements Serializable {
         return false;
     }
 
-    public boolean updateStatus( String barStatus) {
+    public boolean updateStatus(String barStatus) {
         if (update(Arrays.asList("day_status", barStatus))) {
             this.dayStatus = barStatus;
             return true;
@@ -103,9 +126,9 @@ public class UserQuestEntity implements Serializable {
 
     public boolean update(List<Object> updateData) {
         List<Object> obj = new ArrayList<>(updateData);
-        if (dataQuestD != null) {
+        if (dataQuest != null) {
             obj.add("day_int");
-            obj.add(StringHelper.toDBString(dataQuestD.aInt));
+            obj.add(StringHelper.toDBString(dataQuest.aInt));
         }
         obj.add("point");
         obj.add(point);

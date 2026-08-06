@@ -43,6 +43,7 @@ public class ResBonusImageEntity implements Serializable {
      * - SKIN: JSON list skinId.
      * - PET: JSON list petId; tier nhận = {@link #tier}.
      * - MOUNT: JSON list mountId; tier nhận = {@link #tier}.
+     * - BONUS_DATA: flat bonus wire (vd "[2,200,13,15,500]"); tier không dùng.
      */
     @Getter
     String data;
@@ -67,6 +68,11 @@ public class ResBonusImageEntity implements Serializable {
     @Transient
     List<Integer> mountIds = new ArrayList<>();
 
+    /** Parsed từ data khi type = BONUS_DATA. */
+    @Getter
+    @Transient
+    List<Long> bonusData = new ArrayList<>();
+
     public void init() {
         ResBonusImageType t = ResBonusImageType.fromInt(type);
         if (t == null) return;
@@ -76,7 +82,15 @@ public class ResBonusImageEntity implements Serializable {
             case SKIN -> skinIds = GsonUtil.strToListInt(data);
             case PET -> petIds = GsonUtil.strToListInt(data);
             case MOUNT -> mountIds = GsonUtil.strToListInt(data);
+            case BONUS_DATA -> bonusData = parseBonusData(data);
         }
+    }
+
+    private List<Long> parseBonusData(String raw) {
+        if (raw == null || raw.trim().isEmpty())
+            return new ArrayList<>();
+        List<Long> parsed = GsonUtil.strToListLong(raw);
+        return parsed != null ? parsed : new ArrayList<>();
     }
 
     private int parseCraftExpPerRoll(String raw) {

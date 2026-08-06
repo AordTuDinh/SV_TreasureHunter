@@ -6,7 +6,6 @@ import game.config.aEnum.*;
 import game.config.lang.Lang;
 import game.treasure.mapping.*;
 import game.treasure.mapping.main.ResTutorialQuestEntity;
-import game.treasure.service.Services;
 import game.object.DataDaily;
 import game.object.DataQuest;
 import game.treasure.mapping.main.ResQuestEntity;
@@ -66,7 +65,7 @@ public class QuestHandler extends AHandler {
     }
 
     void questStatus() {
-        DataQuest dataQuest = uQuest.getDataQuestD();
+        DataQuest dataQuest = uQuest.getDataQuest();
         List<Integer> aLong2 = new ArrayList<>();
         List<Integer> quests = uQuest.getQuest();
         int numDone = 0;
@@ -114,7 +113,7 @@ public class QuestHandler extends AHandler {
 
     void receiveQuest() {
         int id = getInputInt();
-        DataQuest dataQuest = mUser.getUQuest().getDataQuestD();
+        DataQuest dataQuest = mUser.getUQuest().getDataQuest();
         List<Integer> quests = mUser.getUQuest().getQuest();
         for (int i = 0; i < quests.size(); i += 2) {
             if (quests.get(i) == id) {
@@ -136,10 +135,18 @@ public class QuestHandler extends AHandler {
                         return;
                     }
                 }
-                dataQuest.addValue(DataQuest.CUR_POINT_D, curQ.getBonus());
+                dataQuest.addValue(DataQuest.CUR_POINT_D, curQ.getPoint());
                 quests.set(i + 1, StatusType.DONE.value);
                 uQuest.update(new ArrayList<>());
                 if (mUser.getUQuest().receiveQuestBonus(StringHelper.toDBString(quests))) {
+                    List<Long> itemBonus = new ArrayList<>();
+                    List<Long> questBonus = curQ.getBonusList();
+                    if (!questBonus.isEmpty()) {
+                        itemBonus = Bonus.receiveListItem(mUser, DetailActionType.NHIEM_VU_HANG_NGAY.getKey(id), questBonus);
+                    }
+                    Pbmethod.ListCommonVector.Builder lst = Pbmethod.ListCommonVector.newBuilder();
+                    lst.addAVector(getCommonVector(itemBonus));
+                    addResponse(IAction.QUEST_RECEIVE, lst.build());
                     questStatus();
                     ResTutorialQuestEntity res = ResQuest.mTutQuest.get(mUser.getUData().getQuestTutorial());
                     if (res != null && res.getType() == QuestTutType.HAS_POINT_D) {

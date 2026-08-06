@@ -9,12 +9,14 @@ import game.battle.type.AnimationType;
 import game.battle.type.RoomState;
 import game.config.CfgItem;
 import game.config.CfgMaterial;
+import game.config.CfgQuest;
 import game.config.CfgServer;
 import game.config.aEnum.BlockType;
 import game.config.aEnum.DetailActionType;
 import game.config.aEnum.ItemPointKey;
 import game.config.aEnum.MapType;
 import game.config.aEnum.VipType;
+import game.object.DataQuest;
 import game.treasure.BattleConfig;
 import game.treasure.mapping.UserEquipmentEntity;
 import game.treasure.mapping.UserItemEntity;
@@ -287,7 +289,9 @@ public abstract class BaseRoom extends MonoRoom {
         return mUnit.getOrDefault(id, null);
     }
 
-    /** Kiểm tra attacker có được đánh target trong phạm vi và luật PvP. */
+    /**
+     * Kiểm tra attacker có được đánh target trong phạm vi và luật PvP.
+     */
     public boolean canAttackTarget(Unit attacker, Unit target) {
         if (attacker == null || target == null || !target.isAlive()) {
             return false;
@@ -465,7 +469,7 @@ public abstract class BaseRoom extends MonoRoom {
                     player.setTimeAttack();
                     player.protoStatus(Pbmethod.SubStateType.PLAY_ANIM, (long) AnimationType.ATTACK.value);
                     if (cellDie) {
-                        addCellDie(cellObject);
+                        addCellDie(player, cellObject);
                         MyUser mUser = player.getMUser();
                         if (player.isAutoGather()) {
                             applyCellKillPlotCost(player);
@@ -508,8 +512,9 @@ public abstract class BaseRoom extends MonoRoom {
         cellObjectProcess.get(cellObject.getChunkId()).add(cellObject.getId());
     }
 
-    public void addCellDie(CellObject cellObject) {
+    public void addCellDie(Player atk, CellObject cellObject) {
         cellObjectDie.add(cellObject);
+        CfgQuest.addNumQuest(atk.getMUser(), DataQuest.GATHER, 1);
     }
 
     public CellObject getCellObject(int globalCellId, int chunkId) {
@@ -559,7 +564,9 @@ public abstract class BaseRoom extends MonoRoom {
             player.setAutoGather(false);
     }
 
-    /** Phá cell: cộng bonus cho player; chỉ spawn quái khi chunk {@code [-1, mobId]}. */
+    /**
+     * Phá cell: cộng bonus cho player; chỉ spawn quái khi chunk {@code [-1, mobId]}.
+     */
     void applyCellKillBonus(Player player, List<Long> bonus) {
         if (bonus == null || bonus.isEmpty()) return;
         if (bonus.get(0) == -1L) {
@@ -603,7 +610,9 @@ public abstract class BaseRoom extends MonoRoom {
         return applyVipGoldReceived(mUser, Bonus.merge(result));
     }
 
-    /** Type 5 GOLD_RECEIVED: tăng % vàng nhận khi phá cell. */
+    /**
+     * Type 5 GOLD_RECEIVED: tăng % vàng nhận khi phá cell.
+     */
     static List<Long> applyVipGoldReceived(MyUser mUser, List<Long> bonus) {
         if (bonus == null || bonus.isEmpty() || mUser == null || mUser.getUSetting() == null) {
             return bonus;
@@ -623,7 +632,9 @@ public abstract class BaseRoom extends MonoRoom {
         return Bonus.merge(out);
     }
 
-    /** @return [bagSlots, eventSlots, materialSlots] */
+    /**
+     * @return [bagSlots, eventSlots, materialSlots]
+     */
     static int[] countCellKillSlotNeed(MyUser mUser, List<Long> chunk) {
         int[] need = new int[3];
         if (chunk.isEmpty()) return need;
@@ -656,7 +667,7 @@ public abstract class BaseRoom extends MonoRoom {
             UserItemEntity preview = new UserItemEntity(mUser.getUser().getId(), itemKey, type);
             return CfgItem.getSellPriceGold(preview);
         }
-        if (bonusType == Bonus.BONUS_EQUIPMENT ) {
+        if (bonusType == Bonus.BONUS_EQUIPMENT) {
             int itemKey = chunk.get(1).intValue();
             int tier = chunk.get(2).intValue();
             UserEquipmentEntity preview = new UserEquipmentEntity(mUser.getUser().getId(), itemKey);
@@ -761,7 +772,9 @@ public abstract class BaseRoom extends MonoRoom {
         return mUnit.containsKey(userId);
     }
 
-    /** Player đang online trong room (dùng cho buff cổ vật area). */
+    /**
+     * Player đang online trong room (dùng cho buff cổ vật area).
+     */
     public List<Player> listPlayers() {
         List<Player> list = new ArrayList<>();
         for (int i = 0; i < aPlayerIds.size(); i++) {
@@ -783,7 +796,9 @@ public abstract class BaseRoom extends MonoRoom {
         return chunkCharacter.containsKey(chunkId);
     }
 
-    /** Unit ids trong chunk (copy) — dùng broadcast arena spectator. */
+    /**
+     * Unit ids trong chunk (copy) — dùng broadcast arena spectator.
+     */
     public Set<Long> getChunkCharacterIds(int chunkId) {
         Set<Long> set = chunkCharacter.get(chunkId);
         if (set == null || set.isEmpty())

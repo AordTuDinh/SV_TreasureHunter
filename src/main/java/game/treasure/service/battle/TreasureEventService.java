@@ -3,9 +3,11 @@ package game.treasure.service.battle;
 import game.battle.model.CellObject;
 import game.battle.model.Player;
 import game.battle.object.Pos;
+import game.config.CfgQuest;
 import game.config.CfgTreasure;
 import game.config.aEnum.DetailActionType;
 import game.monitor.Online;
+import game.object.DataQuest;
 import game.object.MyUser;
 import game.protocol.CommonProto;
 import game.treasure.server.IAction;
@@ -23,7 +25,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * Key/chest state broadcast toàn server (IAction 59/60).
  */
 public final class TreasureEventService {
-    /** rowId giả khi sell/bag sync runtime key. */
+    /**
+     * rowId giả khi sell/bag sync runtime key.
+     */
     public static final long KEY_RUNTIME_ROW_ID = -9L;
 
     private static final ConcurrentHashMap<Integer, ServerTreasureState> BY_SERVER = new ConcurrentHashMap<>();
@@ -75,16 +79,6 @@ public final class TreasureEventService {
         }
     }
 
-    /** Đang channel mở rương (đã qua idle 0.5s, đang đếm openChannel). */
-    public static boolean isOpening(Player player) {
-        if (player == null || player.getMUser() == null || player.getMUser().getUser() == null)
-            return false;
-        ServerTreasureState st = BY_SERVER.get(player.getMUser().getUser().getServer());
-        if (st == null) return false;
-        synchronized (st) {
-            return st.openingUserId == player.getMUser().getUserId() && st.openStartAt > 0;
-        }
-    }
 
     /**
      * Ưu tiên mở rương: holder đứng cùng ô chest + có chìa → chặn attack.
@@ -122,7 +116,9 @@ public final class TreasureEventService {
         }
     }
 
-    /** @deprecated giữ tên cũ. */
+    /**
+     * @deprecated giữ tên cũ.
+     */
     public static void onPlayerAttackOrMoveCancel(Player player) {
         onPlayerMoved(player);
     }
@@ -176,7 +172,9 @@ public final class TreasureEventService {
         return clearKeyForSell(mUser);
     }
 
-    /** Sync state khi join map — gửi đủ key+chest cho player vừa vào. */
+    /**
+     * Sync state khi join map — gửi đủ key+chest cho player vừa vào.
+     */
     public static void syncOnJoin(Player player) {
         if (player == null || player.getMUser() == null) return;
         MyUser mUser = player.getMUser();
@@ -204,7 +202,9 @@ public final class TreasureEventService {
         }
     }
 
-    /** Spawn rương đúng ô cell vừa phá (góc lưới + globalCellId). */
+    /**
+     * Spawn rương đúng ô cell vừa phá (góc lưới + globalCellId).
+     */
     private static void spawnChest(Player player, ServerTreasureState st, CellObject cell, int serverId) {
         int x = cellOf(cell.getPos().getX());
         int y = cellOf(cell.getPos().getY());
@@ -240,7 +240,9 @@ public final class TreasureEventService {
         Util.sendSliderChat(Online.getUserInServer(serverId), msg);
     }
 
-    /** Holder đổi ô floor → broadcast pos chìa. */
+    /**
+     * Holder đổi ô floor → broadcast pos chìa.
+     */
     private static void tickKeyHolderPos(Player player, ServerTreasureState st, int serverId) {
         if (player.getPos() == null || !hasKey(st) || st.holderUserId != player.getMUser().getUserId())
             return;
@@ -301,7 +303,9 @@ public final class TreasureEventService {
         }
     }
 
-    /** Cùng ô floor với rương (khớp MapService). */
+    /**
+     * Cùng ô floor với rương (khớp MapService).
+     */
     private static boolean sameChestCell(Player player, ServerTreasureState st) {
         if (player == null || player.getPos() == null || !hasChest(st))
             return false;
@@ -309,7 +313,9 @@ public final class TreasureEventService {
                 && cellOf(player.getPos().getY()) == cellOf(st.chestPosY);
     }
 
-    /** Hủy dwell + opening (rời ô / mất key). */
+    /**
+     * Hủy dwell + opening (rời ô / mất key).
+     */
     private static void resetOpenProgress(Player player, ServerTreasureState st) {
         boolean wasOpening = st.openStartAt > 0 && st.openingUserId > 0;
         st.dwellUserId = 0;
@@ -344,48 +350,30 @@ public final class TreasureEventService {
         Util.sendSliderChat(Online.getUserInServer(serverId),
                 "Chúc mừng " + name + " đã mở rương thành công");
 
-        debugTreasure(mUser, "[TreasureOpen] completeOpen user=" + mUser.getUserId()
-                + " rewardRaw=" + reward);
-
         List<Long> toGrant = resolveOpenReward(mUser, reward);
-        debugTreasure(mUser, "[TreasureOpen] toGrant=" + toGrant);
 
         List<Long> applied = new ArrayList<>();
         if (toGrant != null && !toGrant.isEmpty()) {
             applied = Bonus.receiveListItem(mUser,
                     DetailActionType.TREASURE_CHEST_OPEN.getKey(), toGrant);
-            debugTreasure(mUser, "[TreasureOpen] applied size=" + applied.size() + " data=" + applied);
         }
         // Id material lạ / apply fail khác → vẫn quy đổi gem 20–80
         if (applied.isEmpty()) {
             List<Long> gem = rollGemReward();
             applied = Bonus.receiveListItem(mUser,
                     DetailActionType.TREASURE_CHEST_OPEN.getKey(), gem);
-            debugTreasure(mUser, "[TreasureOpen] applyFail→gem size=" + applied.size() + " data=" + applied);
         }
 
         if (applied.isEmpty()) {
-            debugTreasure(mUser, "[TreasureOpen] FAIL applied empty — không gửi BONUS_TOAST");
             return;
         }
         if (mUser.getChannel() == null) {
-            debugTreasure(mUser, "[TreasureOpen] FAIL channel null");
             return;
         }
         Util.sendProtoData(mUser.getChannel(),
                 CommonProto.getCommonVector(applied),
                 IAction.BONUS_TOAST);
-        debugTreasure(mUser, "[TreasureOpen] sent BONUS_TOAST=" + IAction.BONUS_TOAST
-                + " payload=" + applied);
-    }
-
-    private static void debugTreasure(MyUser mUser, String msg) {
-        System.out.println(msg);
-        if (mUser != null && mUser.getChannel() != null) {
-            Util.sendProtoData(mUser.getChannel(),
-                    CommonProto.getCommonVector(msg),
-                    IAction.DEBUG_LOG);
-        }
+        CfgQuest.addNumQuest(mUser, DataQuest.OPEN_BOX, 1);
     }
 
     /**
@@ -397,7 +385,6 @@ public final class TreasureEventService {
         if (reward.get(0).intValue() == Bonus.BONUS_MATERIAL) {
             if (mUser == null || mUser.getResources() == null || !mUser.getResources().canAddMaterial(1)) {
                 List<Long> gem = rollGemReward();
-                debugTreasure(mUser, "[TreasureOpen] túi nguyên liệu đầy → quy đổi gem=" + gem);
                 return gem;
             }
         }
@@ -518,7 +505,7 @@ public final class TreasureEventService {
     }
 
     private static void sendKeyStateToUser(MyUser mUser, boolean hasKey, long remainMs,
-                                          int posX, int posY, int holderUserId) {
+                                           int posX, int posY, int holderUserId) {
         if (mUser == null || mUser.getChannel() == null) return;
         Util.sendProtoData(mUser.getChannel(),
                 CommonProto.getCommonVector(
@@ -532,7 +519,9 @@ public final class TreasureEventService {
                 IAction.TREASURE_KEY_STATE);
     }
 
-    /** [hasChest, posX, posY, remainMs, globalCellId] */
+    /**
+     * [hasChest, posX, posY, remainMs, globalCellId]
+     */
     private static void broadcastChest(int serverId, boolean has, int x, int y, long remainMs, int globalCellId) {
         Util.sendProtoDataToListChanel(Online.getUserInServer(serverId),
                 CommonProto.getCommonVector(has ? 1L : 0L, (long) x, (long) y, remainMs, (long) globalCellId),
@@ -568,12 +557,16 @@ public final class TreasureEventService {
         long keyExpireAt;
         float chestPosX;
         float chestPosY;
-        /** globalCellId ô rương — client snap đúng CellObject. */
+        /**
+         * globalCellId ô rương — client snap đúng CellObject.
+         */
         int chestGlobalCellId;
         long chestExpireAt;
         int openingUserId;
         long openStartAt;
-        /** Đứng cùng ô trước khi bắt đầu channel. */
+        /**
+         * Đứng cùng ô trước khi bắt đầu channel.
+         */
         int dwellUserId;
         long dwellStartAt;
         int lastSentRemainSec = -1;
