@@ -18,7 +18,7 @@ public class CfgQuest {
     public static DataConfig config;
     public static int numberBonusDay = 5;
     public static int numberBonusWeek = 5;
-    public static int numberQuestD = 8;
+    public static int numberQuestD = 7;
     public static int numberQuestC = 8;
     public static int numberQuestB = 5;
     public static List<Integer> indexs = Arrays.asList(0, 1, 2, 4);
@@ -41,15 +41,15 @@ public class CfgQuest {
         return config.aBonusQuestC.get(index);
     }
 
-    public static boolean isNotifyQuest(MyUser mUser, QuestType type) {
+    public static boolean isNotifyQuest(MyUser mUser) {
         UserQuestEntity uQuest = mUser.getUQuest();
-        DataQuest quest = uQuest.getDataQuest(type);
+        DataQuest quest = uQuest.getDataQuestD();
         if (quest == null) return false;
-        List<Integer> quests = uQuest.getQuest(type);
+        List<Integer> quests = uQuest.getQuest();
         for (int i = 0; i < quests.size(); i += 2) {
             ResQuestEntity qe = ResQuest.mQuest.get(quests.get(i));
             if (quests.get(i + 1) != StatusType.DONE.value) {
-                StatusType status = CfgQuest.getStatus(quest.getValue(qe.getId()), type == QuestType.QUEST_D ? qe.getNumber() : qe.getNumberC());
+                StatusType status = CfgQuest.getStatus(quest.getValue(qe.getId()),  qe.getNumber());
                 if (status == StatusType.RECEIVE) {
                     return true;
                 }
@@ -61,11 +61,11 @@ public class CfgQuest {
     public static void addNumQuest(MyUser mUser, int type, int number) { // add value + check notify
         UserQuestEntity uQuest = mUser.getUQuest();
         ResQuestEntity quest = ResQuest.mQuest.get(type);
-        if (uQuest.getDataQuest(QuestType.QUEST_D) != null) {
-            DataQuest dataQuestD = uQuest.getDataQuest(QuestType.QUEST_D);
+        if (uQuest.getDataQuestD() != null) {
+            DataQuest dataQuestD = uQuest.getDataQuestD();
             dataQuestD.addValue(type, number);
             if (dataQuestD.aNotify.get(type) == 0 && dataQuestD.getValue(type) >= quest.getNumber()) {
-                List<Integer> statusQuest = uQuest.getQuest(QuestType.QUEST_D);
+                List<Integer> statusQuest = uQuest.getQuest();
                 for (int i = 0; i < statusQuest.size(); i += 2) {
                     if (statusQuest.get(i) == type && statusQuest.get(i + 1) != StatusType.DONE.value) {
                         mUser.addNotify(NotifyType.QUEST_D);
@@ -74,23 +74,6 @@ public class CfgQuest {
                 }
             }
         }
-
-        if (uQuest.getDataQuest(QuestType.QUEST_C) != null) {
-            DataQuest dataQuestC = uQuest.getDataQuest(QuestType.QUEST_C);
-            dataQuestC.addValue(type, number);
-            if (dataQuestC.aNotify.get(type) == 0 && dataQuestC.getValue(type) >= quest.getNumberC()) {
-                List<Integer> statusQuestC = uQuest.getQuest(QuestType.QUEST_C);
-                for (int i = 0; i < statusQuestC.size(); i += 2) {
-                    if (statusQuestC.get(i) == type && statusQuestC.get(i + 1) != StatusType.DONE.value) {
-                        mUser.addNotify(NotifyType.QUEST_C);
-                        dataQuestC.aNotify.set(type, 1);
-                    }
-                }
-            }
-        }
-
-        if (uQuest.getDataQuest(QuestType.QUEST_MONTH) != null)
-            uQuest.getDataQuest(QuestType.QUEST_MONTH).addValue(type, number);
         //save db theo cache
         Integer cache = CacheStoreBeans.cache1Min.get(mUser.getUser().getId() + "_update_user_quest");
         uQuest.addPoint(number);
@@ -102,17 +85,6 @@ public class CfgQuest {
 
     }
 
-    public static void addNumQuestB(MyUser mUser, int index, int number) {
-//        UserItemEntity uItem = mUser.getResources().getItem(ItemKey.QUEST_B);
-//        if (uItem == null || uItem.getNumber() == 0 || uItem.expired()) return;
-//        List<Integer> data = uItem.getDataListInt();
-//        int indexState = index * 2 + 1;// 0: day, [state - number] nên phải +2
-//        if (data.get(indexState) == StatusType.PROCESSING.value) {
-//            data.set(indexState + 1, data.get(indexState + 1) + number);
-//            uItem.setData(data.toString());
-//            uItem.update(List.of("data", StringHelper.toDBString(data)));
-//        }
-    }
 
     public static StatusType getStatus(int cur, int max) {
         return cur >= max ? StatusType.RECEIVE : StatusType.PROCESSING;
@@ -169,7 +141,7 @@ public class CfgQuest {
                 mUser.getUData().setQuestTutorialNumber(max);
             }
             case HAS_POINT_D -> {
-                DataQuest dataQuest = mUser.getUQuest().getDataQuest(QuestType.QUEST_D);
+                DataQuest dataQuest = mUser.getUQuest().getDataQuestD();
                 mUser.getUData().setQuestTutorialNumber(dataQuest.getValue(DataQuest.CUR_POINT_D));
             }
             case HAS_ITEM_EQUIP_ID -> {

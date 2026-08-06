@@ -132,7 +132,11 @@ public class Player extends Unit implements Serializable {
         mUser.getUser().addMobKill(1);
         CfgQuest.addNumQuest(mUser, DataQuest.KILL_MONSTER, 1);
 
-//        if (beKill.type ==UnitType.BOSS) CfgQuest.addNumQuest(mUser, DataQuest.KILL_BOSS_MAP, 1);
+        if (beKill.model ==1) CfgQuest.addNumQuest(mUser, DataQuest.KILL_1, 1);
+        if (beKill.model ==2) CfgQuest.addNumQuest(mUser, DataQuest.KILL_2, 1);
+        if (beKill.model ==3) CfgQuest.addNumQuest(mUser, DataQuest.KILL_3, 1);
+        if (beKill.model ==4) CfgQuest.addNumQuest(mUser, DataQuest.KILL_4, 1);
+
         CfgAchievement.addAchievement(mUser, 1, beKill.getEnemy().getModel(), 1);
         mUser.getUData().checkQuestTutorial(mUser, QuestTutType.KILL_ENEMY, beKill.getEnemy().getModel(), 1);
         if (countUpdate > 100) {

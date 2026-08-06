@@ -549,7 +549,7 @@ public class WelfareHandler extends AHandler {
         }
 
         if (!mUser.checkSlotAddBonus(bonus)) {
-            // Túi đầy: gửi vào thư, vẫn tính đã điểm danh
+            // Túi đầy: gửi vào thư, response null + toast báo
             String title = Lang.getTitle(mUser, Lang.mail_checkin_bonus);
             if (!DBJPA.rawSQL(DBHelper.sqlMail(user.getId(), title, StringHelper.toDBString(bonus)))) {
                 addErrResponse(getLang(Lang.err_max_slot));
@@ -558,7 +558,7 @@ public class WelfareHandler extends AHandler {
             checkin.set(CfgCheckin.NUM_CHECKIN, checkin.get(CfgCheckin.NUM_CHECKIN) + 1);
             checkin.set(CfgCheckin.STATUS, 1);
             if (mUser.getUData().updateCheckIn(StringHelper.toDBString(checkin))) {
-                addBonusToast(bonus);
+                addToast(ToastType.NORMAL, getLang(Lang.msg_bonus_to_mail));
                 addResponse(null);
                 CfgAchievement.addListAchievement(mUser, 3, CfgAchievement.checkinAchi, 1);
             } else addErrResponse();

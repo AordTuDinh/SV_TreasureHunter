@@ -46,7 +46,7 @@ public class ResQuest {
             ret.add(questType.get(NumberUtil.getRandom(questType.size())));
         }
 //        Collections.shuffle(ret);
-        // Đảm bảo luôn chỉ có 8 quest
+        // Đảm bảo luôn chỉ có 7 quest
         return ret.subList(0, CfgQuest.numberQuestD);
     }
 }

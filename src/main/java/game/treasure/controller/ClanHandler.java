@@ -492,9 +492,6 @@ public class ClanHandler extends AHandler {
         }
 
         UserClanEntity userClan = Services.userDAO.getUserClan(mUser);
-        if (userClan != null && !userClan.canCheckin()) {
-            CfgQuest.addNumQuest(mUser, DataQuest.CHECK_IN_CLAN, 1);
-        }
         addResponse(clan.protoClan(Lang.instance(mUser), 1).build());
     }
 
@@ -756,7 +753,6 @@ public class ClanHandler extends AHandler {
                     Bonus.viewItemPoint(ItemPointKey.CO_VAT.id, guildCoin));
             addResponse(protocol.Pbmethod.CommonVector.newBuilder().addALong(clan.getLevel()).
                     addALong(clan.getExp()).addALong(clanHonor).addALong(DateTime.secondsUntilEndDay()).addALong(clan.getContribute()).addAllALong(aBonus).build());
-            CfgQuest.addNumQuest(mUser, DataQuest.CHECK_IN_CLAN, 1);
         } else addErrSystem();
     }
 

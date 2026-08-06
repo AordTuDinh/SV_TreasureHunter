@@ -110,7 +110,6 @@ public class LuckySpineHandler extends AHandler {
 
         mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.USE_SPINE_ROTATE, numberRotate);
         CfgQuest.addNumQuest(mUser, DataQuest.SPINE, numberRotate);
-        CfgQuest.addNumQuestB(mUser, CfgQuest.INDEX_SPINE, numberRotate);
     }
 
     void nBuyChip() {

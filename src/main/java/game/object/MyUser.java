@@ -251,8 +251,7 @@ public class MyUser implements Serializable {
         UserAchievementEntity uAchie = Services.userDAO.getUserAchievement(this);
         if (uAchie != null) ret.addAll(uAchie.listNotify());
         // nhiệm vụ
-        if (CfgQuest.isNotifyQuest(this, QuestType.QUEST_D)) ret.add((long) NotifyType.QUEST_D.value);
-        if (CfgQuest.isNotifyQuest(this, QuestType.QUEST_C)) ret.add((long) NotifyType.QUEST_C.value);
+        if (CfgQuest.isNotifyQuest(this)) ret.add((long) NotifyType.QUEST_D.value);
         return ret;
     }
 

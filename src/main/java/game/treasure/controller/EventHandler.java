@@ -686,29 +686,29 @@ public class EventHandler extends AHandler {
         UserQuestEntity uQuest = mUser.getUQuest();
         protocol.Pbmethod.PbPanelEventTabCell.Builder event = protocol.Pbmethod.PbPanelEventTabCell.newBuilder();
         // Cell
-        if (eventId == EventType.EVENT_MONTH.value) {
-            // banner
-            event.setEventName(getLang(Lang.event_monthly_goal_name));
-            event.setImageBanner("Link");
-            event.setTimeCD(DateTime.getSecondsToNextMonth());
-            QuestType questType = QuestType.QUEST_MONTH;
-            List<Integer> quests = uQuest.getQuest(questType);
-            DataQuest dataQuest = mUser.getUQuest().getDataQuest(questType);
-            for (int i = 0; i < quests.size(); i += 2) {
-                protocol.Pbmethod.PbCellPanelEventTabCell.Builder cell = protocol.Pbmethod.PbCellPanelEventTabCell.newBuilder();
-                cell.setId(i / 2);
-                ResQuestEntity rQuest = ResQuest.mQuest.get(quests.get(i));
-                cell.setCellName(rQuest.getDesc());
-                cell.addAllBonus(rQuest.getBonusMonth());
-                cell.setPer(dataQuest.getValue(questType.value) + "/" + rQuest.getNumberMonth());
-                if (quests.get(i + 1) != StatusType.DONE.value) {
-                    cell.setButtonStatus(CfgQuest.getStatus(dataQuest.getValue(rQuest.getId()), rQuest.getNumberMonth()).value);
-                } else {
-                    cell.setButtonStatus(StatusType.DONE.value);
-                }
-                event.addCells(cell);
-            }
-        }
+//        if (eventId == EventType.EVENT_MONTH.value) {
+//            // banner
+//            event.setEventName(getLang(Lang.event_monthly_goal_name));
+//            event.setImageBanner("Link");
+//            event.setTimeCD(DateTime.getSecondsToNextMonth());
+//            QuestType questType = QuestType.QUEST_MONTH;
+//            List<Integer> quests = uQuest.getQuest(questType);
+//            DataQuest dataQuest = mUser.getUQuest().getDataQuest(questType);
+//            for (int i = 0; i < quests.size(); i += 2) {
+//                protocol.Pbmethod.PbCellPanelEventTabCell.Builder cell = protocol.Pbmethod.PbCellPanelEventTabCell.newBuilder();
+//                cell.setId(i / 2);
+//                ResQuestEntity rQuest = ResQuest.mQuest.get(quests.get(i));
+//                cell.setCellName(rQuest.getDesc());
+//                cell.addAllBonus(rQuest.getBonusMonth());
+//                cell.setPer(dataQuest.getValue(questType.value) + "/" + rQuest.getNumberMonth());
+//                if (quests.get(i + 1) != StatusType.DONE.value) {
+//                    cell.setButtonStatus(CfgQuest.getStatus(dataQuest.getValue(rQuest.getId()), rQuest.getNumberMonth()).value);
+//                } else {
+//                    cell.setButtonStatus(StatusType.DONE.value);
+//                }
+//                event.addCells(cell);
+//            }
+//        }
         addResponse(event.build());
     }
 }

@@ -17,15 +17,6 @@ public class ResQuestEntity implements Serializable {
     @Id
     int id;
     String desc;
-    int number, numberMonth, level, bonus, type;
-    @Column(name = "number_c")
-    int numberC;
-    @Column(name = "bonus_c")
-    int bonusC;
-    String bonusMonth;
-
-
-    public List<Long> getBonusMonth() {
-        return GsonUtil.strToListLong(bonusMonth);
-    }
+    int  level, bonus, type;
+    int number;
 }

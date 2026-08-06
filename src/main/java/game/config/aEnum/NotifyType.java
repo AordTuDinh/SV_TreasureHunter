@@ -22,7 +22,6 @@ public enum NotifyType {
     AFK_BONUS(14),
     FRIEND_SEND_GIFT(15),
     PHUC_LOI(16),
-    QUEST_C(17),
     QUEST_7_DAY(18),
     FREE_100_SCROLL(19),
     FREE_DAME_SKIN(20),

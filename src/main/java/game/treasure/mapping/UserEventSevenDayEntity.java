@@ -1,7 +1,6 @@
 package game.treasure.mapping;
 
 import game.config.CfgEventSevenDay;
-import game.config.aEnum.QuestType;
 import game.config.aEnum.StatusType;
 import game.treasure.controller.FriendHandler;
 import game.object.DataQuest;
@@ -152,8 +151,6 @@ public class UserEventSevenDayEntity implements Serializable {
                 if (panel == 1) { // bạn bè
                     List<UserFriendRelationshipEntity> aFriends = FriendHandler.dbGetListFriends(mUser);
                     return aFriends.size();
-                } else if (panel == 2) { // Đánh ải
-                    return mUser.getUQuest().getDataQuest(QuestType.QUEST_MONTH).getValue(DataQuest.KILL_MONSTER);
                 }
             }
 //            case 1 -> {

@@ -188,7 +188,6 @@ public class MarketHandler extends AHandler {
         addBonusToastPlus(aBonus);
         pushCraftUpdateIfCustomImage(item);
         mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.BUY_SHOP, number);
-        checkQuest(Bonus.getIdItem(item), number);
         // event 7 day attack boss day 2
         UserEventSevenDayEntity uEvent = Services.userDAO.getUserSevenDay(mUser);
         if (uEvent.hasEvent() && uEvent.hasActive(3) && uEvent.update(List.of("buy_shop", uEvent.getBuyShop() + number))) {
@@ -215,12 +214,6 @@ public class MarketHandler extends AHandler {
         addResponse(CRAFT_UPDATE, getCommonVector(
                 (long) uData.getCraftLevel(),
                 (long) uData.getCraftExp()));
-    }
-
-    private void checkQuest(int itemId, int number) {
-        if (CfgItem.isItemMedicine(itemId)) CfgQuest.addNumQuest(mUser, DataQuest.BUY_MEDICINE, number);
-        CfgQuest.addNumQuest(mUser, DataQuest.BUY_ITEM_SHOP, number);
-        mUser.getDataDaily().update();
     }
 
 
@@ -261,10 +254,8 @@ public class MarketHandler extends AHandler {
                         } else {
                             addBonusToastPlus(aBonus);
                             pushCraftUpdateIfCustomImage(resItem.getItems());
-//                            addResponse(getCommonVector(aBonus));
                             mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.BUY_SHOP, 1);
                             status(market.getId());
-                            checkQuest(idItem, 1);
                         }
                         // event 7 day attack boss day 2
                         UserEventSevenDayEntity uEvent = Services.userDAO.getUserSevenDay(mUser);
@@ -390,7 +381,6 @@ public class MarketHandler extends AHandler {
                     addBonusToastPlus(aBonus);
                     pushCraftUpdateIfCustomImage(item.getItems());
                     status(market.getId());
-                    checkQuest(Bonus.getIdItem(item.getItems()), number);
                     mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.BUY_SHOP, 1);
                 }
                 // event 7 day attack boss day 2
