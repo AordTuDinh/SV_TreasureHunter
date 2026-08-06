@@ -9,8 +9,11 @@ import game.treasure.mapping.main.ResTutorialQuestEntity;
 import game.object.DataDaily;
 import game.object.DataQuest;
 import game.treasure.mapping.main.ResQuestEntity;
+import game.treasure.mapping.main.ResBonusImageEntity;
+import game.treasure.mapping.main.ResBonusImageType;
 import game.treasure.server.IAction;
 import game.treasure.service.resource.ResQuest;
+import game.treasure.service.resource.ResImage;
 import game.treasure.service.user.Bonus;
 import io.netty.channel.Channel;
 import ozudo.base.helper.DateTime;
@@ -127,39 +130,78 @@ public class QuestHandler extends AHandler {
                     addErrResponse(getLang(Lang.err_received_bonus));
                     return;
                 }
-                // check data
                 StatusType readStatus = CfgQuest.getStatus(dataQuest.getValue(quests.get(i)), curQ.getNumber());
                 if (readStatus != StatusType.RECEIVE) {
-                    if (readStatus != StatusType.RECEIVE) {
-                        addErrResponse(getLang(Lang.err_quest_done));
+                    addErrResponse(getLang(Lang.err_quest_done));
+                    return;
+                }
+
+                List<Long> questBonus = curQ.getBonusList();
+                if (!questBonus.isEmpty() && !mUser.checkSlotAddBonus(questBonus)) {
+                    addErrResponse(getQuestSlotError(questBonus));
+                    return;
+                }
+
+                List<Long> itemBonus = new ArrayList<>();
+                if (!questBonus.isEmpty()) {
+                    itemBonus = Bonus.receiveListItem(mUser, DetailActionType.NHIEM_VU_HANG_NGAY.getKey(id), questBonus);
+                    if (itemBonus.isEmpty()) {
+                        addErrResponse(getQuestSlotError(questBonus));
                         return;
                     }
                 }
+
                 dataQuest.addValue(DataQuest.CUR_POINT_D, curQ.getPoint());
                 quests.set(i + 1, StatusType.DONE.value);
-                uQuest.update(new ArrayList<>());
-                if (mUser.getUQuest().receiveQuestBonus(StringHelper.toDBString(quests))) {
-                    List<Long> itemBonus = new ArrayList<>();
-                    List<Long> questBonus = curQ.getBonusList();
-                    if (!questBonus.isEmpty()) {
-                        itemBonus = Bonus.receiveListItem(mUser, DetailActionType.NHIEM_VU_HANG_NGAY.getKey(id), questBonus);
-                    }
-                    Pbmethod.ListCommonVector.Builder lst = Pbmethod.ListCommonVector.newBuilder();
-                    lst.addAVector(getCommonVector(itemBonus));
-                    addResponse(IAction.QUEST_RECEIVE, lst.build());
-                    questStatus();
-                    ResTutorialQuestEntity res = ResQuest.mTutQuest.get(mUser.getUData().getQuestTutorial());
-                    if (res != null && res.getType() == QuestTutType.HAS_POINT_D) {
-                        UserHandler.tutorialQuestStatus(mUser, this);
-                    }
-                    return;
-                } else {
+                if (!mUser.getUQuest().receiveQuestBonus(StringHelper.toDBString(quests))) {
                     addErrResponse();
                     return;
                 }
+                mUser.getUQuest().update(new ArrayList<>());
+
+                Pbmethod.ListCommonVector.Builder lst = Pbmethod.ListCommonVector.newBuilder();
+                lst.addAVector(getCommonVector(itemBonus));
+                addResponse(IAction.QUEST_RECEIVE, lst.build());
+                questStatus();
+                ResTutorialQuestEntity res = ResQuest.mTutQuest.get(mUser.getUData().getQuestTutorial());
+                if (res != null && res.getType() == QuestTutType.HAS_POINT_D) {
+                    UserHandler.tutorialQuestStatus(mUser, this);
+                }
+                return;
             }
         }
         addErrResponse();
+    }
+
+    private int countMaterialSlotsNeeded(List<Long> bonus) {
+        int need = 0;
+        for (List<Long> chunk : Bonus.parse(bonus)) {
+            if (chunk.isEmpty()) continue;
+            int type = chunk.get(0).intValue();
+            if (type == Bonus.BONUS_MATERIAL) {
+                need++;
+            } else if (type == Bonus.BONUS_CUSTOM_IMAGE && chunk.size() >= 3) {
+                ResBonusImageEntity cfg = ResImage.get(chunk.get(1).intValue());
+                if (cfg != null && ResBonusImageType.fromInt(cfg.getType()) == ResBonusImageType.MATERIAL)
+                    need += Math.max(0, chunk.get(2).intValue());
+            }
+        }
+        return need;
+    }
+
+    private String getQuestSlotError(List<Long> bonus) {
+        int needMat = countMaterialSlotsNeeded(bonus);
+        if (needMat > 0) {
+            int free = mUser.getUData().getSlotMaterial() - mUser.getResources().getNumMaterial();
+            if (free < needMat) {
+                int lack = needMat - Math.max(0, free);
+                String template = Lang.instance(mUser).get(Lang.err_need_material_slots);
+                if (template == null || template.isEmpty() || "NA".equals(template))
+                    template = "Cần thêm %d ô trống trong túi nguyên liệu để nhận";
+                return String.format(template, lack);
+            }
+        }
+        return getLang(Lang.err_max_slot);
     }
 
     void receiveBarQuestD() {
