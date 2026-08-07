@@ -60,22 +60,89 @@ public class AchievementHandler extends AHandler {
     }
 
     void status() {
-        addResponse(getCommonIntVector(uAchi.getPoint()));
+        List<Integer> points = uAchi.getPoint();
+        uAchi.syncMilestoneStatus(points);
+        uAchi.flushMilestoneSync();
+        Pbmethod.ListCommonVector.Builder pb = Pbmethod.ListCommonVector.newBuilder();
+        pb.addAVector(getCommonIntVector(points));
+        pb.addAVector(getCommonIntVector(uAchi.getMilestoneStatus()));
+        addResponse(pb.build());
     }
 
     void reward() {
-        int type = (int) CommonProto.parseCommonVector(requestData).getALong(0);
+        List<Long> cmm = CommonProto.parseCommonVector(requestData).getALongList();
+        int type = Math.toIntExact(cmm.get(0));
+        if (type == 0) {
+            rewardMainMilestone(cmm);
+            return;
+        }
+        rewardTabSlider(type);
+    }
+
+    /** Nhận quà mốc thanh tổng (20/40/60/80/100); request [0, milestoneIndex]. */
+    void rewardMainMilestone(List<Long> cmm) {
+        if (cmm.size() < 2) {
+            addErrResponse(getLang(Lang.err_params));
+            return;
+        }
+        int index = Math.toIntExact(cmm.get(1));
+        if (!CfgAchievement.checkMilestoneIndex(index)) {
+            addErrResponse(getLang(Lang.err_params));
+            return;
+        }
         List<Integer> points = uAchi.getPoint();
-        int maxPoint = type == 0 ? CfgAchievement.config.maxAllPoint : CfgAchievement.config.maxPoint;
+        uAchi.syncMilestoneStatus(points);
+        List<Integer> status = uAchi.getMilestoneStatus();
+        if (status.get(index) == StatusType.DONE.value) {
+            addErrResponse(getLang(Lang.err_received_bonus));
+            return;
+        }
+        if (status.get(index) != StatusType.RECEIVE.value) {
+            addErrResponse(getLang(Lang.err_not_enough_point));
+            return;
+        }
+        List<Long> bonusWire = CfgAchievement.getMilestoneBonus(index);
+        if (!bonusWire.isEmpty() && !mUser.checkSlotAddBonus(bonusWire)) {
+            addErrResponse(getLang(Lang.err_max_slot));
+            return;
+        }
+        List<Long> ret = Bonus.receiveListItem(mUser,
+                DetailActionType.POINT_ACHIEVEMENT.getKey(index), bonusWire);
+        if (ret.isEmpty()) {
+            addErrSystem();
+            return;
+        }
+        status.set(index, StatusType.DONE.value);
+        if (!uAchi.updateMilestoneStatus(status)) {
+            addErrSystem();
+            return;
+        }
+        Pbmethod.ListCommonVector.Builder pb = Pbmethod.ListCommonVector.newBuilder();
+        pb.addAVector(getCommonVector(ret));
+        pb.addAVector(getCommonIntVector(points));
+        pb.addAVector(getCommonIntVector(status));
+        addResponse(pb.build());
+    }
+
+    /** Rương slider từng tab (type 1–5): giữ logic cũ, trừ điểm tab và +1 điểm tổng. */
+    void rewardTabSlider(int type) {
+        List<Integer> points = uAchi.getPoint();
+        int maxPoint = CfgAchievement.config.maxPoint;
         if (points.get(type) < maxPoint) {
             addErrResponse(getLang(Lang.err_not_enough_point));
             return;
         }
         int num = points.get(type) / maxPoint;
         points.set(type, points.get(type) - maxPoint * num);
-        // add point all
-        if (type != 0) points.set(0, points.get(0) + 1);
-        if (uAchi.update(List.of("point", StringHelper.toDBString(points)))) {
+        points.set(0, points.get(0) + num);
+        uAchi.syncMilestoneStatus(points);
+        List<Object> updateFields = new java.util.ArrayList<>(List.of("point", StringHelper.toDBString(points)));
+        if (uAchi.isCanUpdate()) {
+            updateFields.add("milestone_status");
+            updateFields.add(StringHelper.toDBString(uAchi.getMilestoneStatus()));
+            uAchi.setCanUpdate(false);
+        }
+        if (uAchi.update(updateFields)) {
             uAchi.setPoint(points.toString());
             List<Long> bonus = CfgAchievement.getBonusByType(type, num);
             Pbmethod.ListCommonVector.Builder pb = Pbmethod.ListCommonVector.newBuilder();
@@ -122,6 +189,7 @@ public class AchievementHandler extends AHandler {
             Pbmethod.ListCommonVector.Builder lsc = Pbmethod.ListCommonVector.newBuilder();
             lsc.addAVector(getCommonIntVector(points));
             lsc.addAVector(getCommonVector(type, id, ret.get(index * 2 + 1)));
+            lsc.addAVector(getCommonIntVector(uAchi.getMilestoneStatus()));
             addResponse(lsc.build());
         }
     }

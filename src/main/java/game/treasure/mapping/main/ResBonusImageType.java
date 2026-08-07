@@ -17,7 +17,10 @@ public enum ResBonusImageType {
     MOUNT(5),
 
     /** data = flat bonus wire (vd: "[2,200,13,15,500]"); tier không dùng; không chứa type 17 */
-    BONUS_DATA(6);
+    BONUS_DATA(6),
+
+    /** data = JSON array skinId; roll 1 skin/lần × times; tier = res_bonus_image.tier; cho phép trùng skinId */
+    SKIN_LIST(7);
 
     public final int value;
 

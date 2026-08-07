@@ -56,7 +56,7 @@ public class Bonus {
         put(BONUS_CUP, 1);
         put(BONUS_ITEM, 1);
         put(BONUS_ARTIFACT, 2);
-        put(BONUS_SKIN, 1);
+        put(BONUS_SKIN, 2);
         put(BONUS_EFFECT_SKIN, 2);
         put(BONUS_VIP_EXP, 1);
         put(BONUS_PET, 2);
@@ -129,7 +129,12 @@ public class Bonus {
     }
 
     public static List<Long> viewSkin(int skinId) {
-        return view(BONUS_SKIN, skinId);
+        return viewSkin(skinId, 1);
+    }
+
+    public static List<Long> viewSkin(int skinId, int tier) {
+        int t = tier > 0 ? Math.min(tier, 4) : 1;
+        return view(BONUS_SKIN, skinId, t);
     }
 
     public static List<Long> viewItem(int itemType, Pbmethod.ItemKey itemKey, long number) {
@@ -235,7 +240,12 @@ public class Bonus {
                 // preview [13, pointId, number]
                 return Math.toIntExact(bonus.get(1));
             }
-            case BONUS_SKIN -> Math.toIntExact(bonus.get(1));
+            case BONUS_SKIN -> {
+                // preview [6, skinId, tier] | receive [6, rowId, skinId, tier]
+                return bonus.size() >= 4
+                        ? Math.toIntExact(bonus.get(2))
+                        : Math.toIntExact(bonus.get(1));
+            }
             case BONUS_EFFECT_SKIN -> Math.toIntExact(bonus.get(2));
         }
         return 0;
@@ -321,7 +331,11 @@ public class Bonus {
             case BONUS_ARTIFACT ->
                     addItemArtifact(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
             case BONUS_VIP_EXP -> addVipExp(mUser, chunk.get(1).intValue(), detailAction);
-            case BONUS_SKIN -> addCharacterSkin(mUser, chunk.get(1).intValue(), detailAction);
+            case BONUS_SKIN -> {
+                int skinId = chunk.get(1).intValue();
+                int tier = chunk.size() >= 3 ? chunk.get(2).intValue() : 1;
+                yield addCharacterSkin(mUser, skinId, tier, false, detailAction);
+            }
             case BONUS_EFFECT_SKIN ->
                     addEffectSkin(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
             case BONUS_PET -> addPet(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
@@ -344,6 +358,7 @@ public class Bonus {
      * - PET:          roll petIds từ data, tier lấy từ res_bonus_image.tier
      * - MOUNT:        roll mountIds từ data, tier lấy từ res_bonus_image.tier
      * - BONUS_DATA:   nhận toàn bộ flat bonus wire trong data (không chứa type 17)
+     * - SKIN_LIST:    roll skinId từ data × times; tier = res_bonus_image.tier; cho phép trùng skinId
      */
     static List<Long> addBonusImageReward(MyUser mUser, List<Long> chunk, String detailAction) {
         if (chunk == null || chunk.size() < 3) {
@@ -495,6 +510,27 @@ public class Bonus {
                 List<Long> toGrant = resolveBonusImageDataGrant(bonusData, times);
                 return receiveListItem(mUser, detailAction, toGrant);
             }
+            case SKIN_LIST -> {
+                int tier = cfg.getTier() > 0 ? Math.min(cfg.getTier(), 4) : 1;
+                List<Integer> skinIds = cfg.getSkinIds();
+                if (skinIds == null || skinIds.isEmpty()) {
+                    logBonusImageFail("skinIds rỗng", chunk, "data=" + cfg.getData());
+                    return new ArrayList<>();
+                }
+
+                List<Long> ret = new ArrayList<>();
+                for (int i = 0; i < times; i++) {
+                    int idx = NumberUtil.getRandom(0, skinIds.size() - 1);
+                    int skinId = skinIds.get(idx);
+                    List<Long> added = addCharacterSkin(mUser, skinId, tier, true, detailAction);
+                    if (added == null || added.isEmpty()) {
+                        logBonusImageFail("addCharacterSkin fail/stop", chunk, "skinId=" + skinId + " tier=" + tier + " roll=" + i);
+                        break;
+                    }
+                    ret.addAll(added);
+                }
+                return ret;
+            }
         }
 
         logBonusImageFail("switch fallthrough", chunk, "cfgType=" + cfgType);
@@ -536,19 +572,38 @@ public class Bonus {
     }
 
     static List<Long> addCharacterSkin(MyUser mUser, int skinId, String detailAction) {
+        return addCharacterSkin(mUser, skinId, 1, false, detailAction);
+    }
+
+    /**
+     * Grant character skin — wire receive: [6, userRowId, skinId, tier].
+     * {@code allowDuplicate=true}: luôn tạo row mới (SKIN_LIST type 7).
+     */
+    static List<Long> addCharacterSkin(MyUser mUser, int skinId, int tier, boolean allowDuplicate, String detailAction) {
         if (ResAvatar.getSkin(skinId) == null) return new ArrayList<>();
-        UserSkinEntity existing = mUser.getResources().getSkinByConfigId(skinId);
-        if (existing != null) {
-            return Arrays.asList((long) BONUS_SKIN, existing.getId(), (long) skinId);
+        int configTier = tier > 0 ? Math.min(tier, 4) : 1;
+        if (!allowDuplicate) {
+            UserSkinEntity existing = mUser.getResources().getSkinByConfigId(skinId);
+            if (existing != null) {
+                return Arrays.asList(
+                        (long) BONUS_SKIN,
+                        existing.getId(),
+                        (long) skinId,
+                        (long) (existing.getTier() > 0 ? existing.getTier() : 1));
+            }
         }
         UserSkinEntity uSkin = new UserSkinEntity(mUser.getUser(), skinId, ResAvatar.getSkin(skinId).getType());
+        uSkin.setTier(configTier);
         if (DBJPA.save(uSkin)) {
             mUser.getResources().addSkin(uSkin);
             if (CfgServer.isRealServer()) {
                 Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
-                        "type", "character_skin", "id", uSkin.getId(), "skinId", skinId);
+                        "type", "character_skin",
+                        "id", uSkin.getId(),
+                        "skinId", skinId,
+                        "tier", configTier);
             }
-            return Arrays.asList((long) BONUS_SKIN, uSkin.getId(), (long) skinId);
+            return Arrays.asList((long) BONUS_SKIN, uSkin.getId(), (long) skinId, (long) configTier);
         }
         return new ArrayList<>();
     }

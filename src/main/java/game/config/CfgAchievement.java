@@ -39,16 +39,35 @@ public class CfgAchievement {
         }
     }
 
-
+    /** Tab slider treasure (type 1–5): random bonus theo config.bonus. */
     public static List<Long> getBonusByType(int type, int num) {
         List<Long> bonus = new ArrayList<>();
-        List<BonusConfig> bms = type == 0 ? CfgAchievement.config.bonusAll : CfgAchievement.config.bonus;
+        List<BonusConfig> bms = CfgAchievement.config.bonus;
         for (int i = 0; i < num; i++) {
             bonus.addAll(BonusConfig.getRandomOneBonus(bms));
         }
         return bonus;
     }
 
+    public static boolean checkMilestoneIndex(int index) {
+        return config != null
+                && config.bonusMilestone != null
+                && index >= 0
+                && index < config.bonusMilestone.size();
+    }
+
+    public static int getMilestonePoint(int index) {
+        return config.pointMilestone.get(index);
+    }
+
+    public static List<Long> getMilestoneBonus(int index) {
+        return config.bonusMilestone.get(index);
+    }
+
+    public static int getMilestoneCount() {
+        if (config == null || config.bonusMilestone == null) return 0;
+        return config.bonusMilestone.size();
+    }
 
     public static boolean checkType(int type) {
         return types.contains(type);
@@ -66,10 +85,13 @@ public class CfgAchievement {
         uAchi.addListAchievement(type, ids, num);
     }
 
-    public class DataConfig {
+    public static class DataConfig {
         public int maxPoint;
         public int maxAllPoint;
         public List<BonusConfig> bonus;
+        /** @deprecated Thanh tổng dùng bonusMilestone cố định; giữ field để tương thích JSON cũ. */
         public List<BonusConfig> bonusAll;
+        public List<Integer> pointMilestone;
+        public List<List<Long>> bonusMilestone;
     }
 }

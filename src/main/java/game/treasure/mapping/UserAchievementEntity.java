@@ -34,9 +34,12 @@ public class UserAchievementEntity {
     String tab1, tab2, tab3, tab4, tab5; // [curNum,status]
     @Setter
     String point;
+    /** Trạng thái nhận quà mốc thanh tổng (20/40/60/80/100): PROCESSING/RECEIVE/DONE. */
+    String milestoneStatus;
     @Transient
     long timeUpdate;
     @Getter
+    @Setter
     @Transient
     boolean canUpdate = false;
 
@@ -55,6 +58,54 @@ public class UserAchievementEntity {
         this.tab4 = NumberUtil.genListStringInt(ResAchievement.maxItemTab.get(3) * 2, 0);
         this.tab5 = NumberUtil.genListStringInt(ResAchievement.maxItemTab.get(4) * 2, 0);
         this.point = NumberUtil.genListStringInt(6, 0);
+        int milestoneCount = CfgAchievement.getMilestoneCount();
+        if (milestoneCount <= 0) milestoneCount = 5;
+        this.milestoneStatus = NumberUtil.genListStringInt(milestoneCount, StatusType.PROCESSING.value);
+    }
+
+    public List<Integer> getMilestoneStatus() {
+        int count = CfgAchievement.getMilestoneCount();
+        if (count <= 0) return new ArrayList<>();
+        if (milestoneStatus == null || milestoneStatus.isEmpty()) {
+            return NumberUtil.genListInt(count, StatusType.PROCESSING.value);
+        }
+        List<Integer> ret = GsonUtil.strToListInt(milestoneStatus);
+        while (ret.size() < count) ret.add(StatusType.PROCESSING.value);
+        return ret;
+    }
+
+    /** Cập nhật PROCESSING → RECEIVE khi đủ điểm mốc; không trừ điểm. */
+    public void syncMilestoneStatus(List<Integer> points) {
+        if (CfgAchievement.getMilestoneCount() <= 0) return;
+        int curPoint = points.get(0);
+        List<Integer> status = getMilestoneStatus();
+        boolean changed = false;
+        for (int i = 0; i < status.size(); i++) {
+            if (status.get(i) == StatusType.PROCESSING.value
+                    && curPoint >= CfgAchievement.getMilestonePoint(i)) {
+                status.set(i, StatusType.RECEIVE.value);
+                changed = true;
+            }
+        }
+        if (changed) {
+            milestoneStatus = StringHelper.toDBString(status);
+            canUpdate = true;
+        }
+    }
+
+    public boolean updateMilestoneStatus(List<Integer> status) {
+        if (update(Arrays.asList("milestone_status", StringHelper.toDBString(status)))) {
+            milestoneStatus = StringHelper.toDBString(status);
+            canUpdate = false;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean flushMilestoneSync() {
+        if (!canUpdate) return true;
+        canUpdate = false;
+        return update(Arrays.asList("milestone_status", milestoneStatus));
     }
 
     public List<Integer> getAItem(int type) {
@@ -113,7 +164,16 @@ public class UserAchievementEntity {
                     noti.add((long) NotifyType.ACHIEVEMENT_TAB_5.value);
             }
         }
-        if (noti.size() > 0) noti.add((long) NotifyType.ACHIEVEMENT.value);
+        syncMilestoneStatus(points);
+        boolean hasMilestoneReward = false;
+        for (int ms : getMilestoneStatus()) {
+            if (ms == StatusType.RECEIVE.value) {
+                hasMilestoneReward = true;
+                break;
+            }
+        }
+        if (noti.size() > 0 || hasMilestoneReward)
+            noti.add((long) NotifyType.ACHIEVEMENT.value);
         return noti;
     }
 
@@ -223,7 +283,14 @@ public class UserAchievementEntity {
             case 4 -> column = "tab4";
             case 5 -> column = "tab5";
         }
-        if (DBJPA.update("user_achievement", Arrays.asList(column, StringHelper.toDBString(data), "point", StringHelper.toDBString(points)), Arrays.asList("user_id", userId))) {
+        syncMilestoneStatus(points);
+        List<Object> updateData = new ArrayList<>(Arrays.asList(column, StringHelper.toDBString(data), "point", StringHelper.toDBString(points)));
+        if (canUpdate) {
+            updateData.add("milestone_status");
+            updateData.add(milestoneStatus);
+            canUpdate = false;
+        }
+        if (DBJPA.update("user_achievement", updateData, Arrays.asList("user_id", userId))) {
             setDataTab(type, data.toString());
             this.point = points.toString();
             return true;
