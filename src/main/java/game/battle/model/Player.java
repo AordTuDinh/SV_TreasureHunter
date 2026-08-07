@@ -110,6 +110,7 @@ public class Player extends Unit implements Serializable {
         timeBeHit = 0;
         beDameInfo = new HashMap<>();
         targetMove = Pos.zero();
+        autoGather = false;
         if (wasDead) {
             this.alive = false;
             point.setCurHp(0);
@@ -228,6 +229,7 @@ public class Player extends Unit implements Serializable {
 
     @Override
     public void revive() {
+        autoGather = false;
         timeRevive = System.currentTimeMillis();
         this.sendDie = false;
         pos = Pos.zero();

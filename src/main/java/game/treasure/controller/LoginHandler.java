@@ -251,6 +251,7 @@ public class LoginHandler extends AHandler {
             addErrResponse();
             return;
         }
+        mUser.getPlayer().setAutoGather(false);
         mUser.setVersion(version);
         mUser.setSession(session);
         Online.addChannel(mUser.getUser(), channel);
