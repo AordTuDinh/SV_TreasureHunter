@@ -149,7 +149,7 @@ public class UserAchievementEntity {
         }
         List<Integer> points = getPoint();
         //slider 5 tab con
-        int maxPoint = CfgAchievement.config.maxPoint;
+        int maxPoint = CfgAchievement.getMaxPoint();
         for (int i = 1; i < points.size(); i++) {
             if (points.get(i).intValue() >= maxPoint) {
                 if (!noti.contains(NotifyType.ACHIEVEMENT_TAB_1.value) && i == 1)

@@ -59,7 +59,8 @@ public final class DeathPenaltyService {
         if (killer != null && killer.isPlayer() && !isNoCupLossZone(victim))
             PvpCupService.apply(victim, killer.getPlayer());
 
-        CfgQuest.addNumQuest(killer.getPlayer().getMUser(), DataQuest.KILL_PLAYER, 1);
+        if (killer != null && killer.isPlayer())
+            CfgQuest.addNumQuest(killer.getPlayer().getMUser(), DataQuest.KILL_PLAYER, 1);
 
         DropSelection drop = rollItemDrop(victimUser, typeRoom);
         if (drop == null) {

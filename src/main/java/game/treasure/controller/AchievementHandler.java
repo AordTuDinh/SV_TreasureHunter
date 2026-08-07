@@ -93,6 +93,10 @@ public class AchievementHandler extends AHandler {
         List<Integer> points = uAchi.getPoint();
         uAchi.syncMilestoneStatus(points);
         List<Integer> status = uAchi.getMilestoneStatus();
+        if (index >= status.size()) {
+            addErrResponse(getLang(Lang.err_not_enough_point));
+            return;
+        }
         if (status.get(index) == StatusType.DONE.value) {
             addErrResponse(getLang(Lang.err_received_bonus));
             return;
@@ -127,7 +131,7 @@ public class AchievementHandler extends AHandler {
     /** Rương slider từng tab (type 1–5): giữ logic cũ, trừ điểm tab và +1 điểm tổng. */
     void rewardTabSlider(int type) {
         List<Integer> points = uAchi.getPoint();
-        int maxPoint = CfgAchievement.config.maxPoint;
+        int maxPoint = CfgAchievement.getMaxPoint();
         if (points.get(type) < maxPoint) {
             addErrResponse(getLang(Lang.err_not_enough_point));
             return;
