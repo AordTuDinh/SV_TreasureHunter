@@ -63,7 +63,7 @@ public class UserEntity implements Serializable {
         this.clan = 0;
         this.clanName = "";
         this.power = 0;
-        this.gem = 100;
+        this.gem = 0;
         this.vip = 0;
         this.userRank = 0;
         this.lastLogin = Calendar.getInstance().getTime();

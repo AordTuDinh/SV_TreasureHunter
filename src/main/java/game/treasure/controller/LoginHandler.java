@@ -266,10 +266,12 @@ public class LoginHandler extends AHandler {
         loadGameConfig(mUser);
         // battleConfig
         loadBattleConfig();
-        // qua ngày + 0 cup → tặng 1 cup (trước user proto để client nhận cup đúng)
-        List<Long> dailyCup = PvpCupService.grantDailyFloorIfNeeded(mUser);
-        if (!dailyCup.isEmpty())
-            addBonusToastPlus(dailyCup);
+        // qua ngày + 0 cup → tặng 1 cup (chỉ khi đã tạo nhân vật; sync im lặng)
+        if (!StringHelper.isEmpty(user.getName())) {
+            List<Long> dailyCup = PvpCupService.grantDailyFloorIfNeeded(mUser);
+            if (!dailyCup.isEmpty())
+                addBonusPrivate(dailyCup);
+        }
         // user info
         builder.setUser(user.toProto(mUser));
         this.user = user;
