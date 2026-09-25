@@ -12,7 +12,6 @@ public enum PopupType {
     NULL(0, ""),
     FORCE_LOGOUT(1, Lang.err_login_orther),
     POPUP_DEAD(2, Lang.err_login_orther),
-    POPUP_END_GAME(3, Lang.err_login_orther),
     POPUP_END_TOWER(4, Lang.err_login_orther),
     POPUP_END_ARENA(5, Lang.err_login_orther),
     POPUP_WORLD_ARENA(6, ""),
