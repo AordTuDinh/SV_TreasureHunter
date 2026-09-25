@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public enum ItemEquipmentType {
-    AXE(1, "rìu"),
+    WEAPON(1, "vũ khí"),
     HAT(2, "mũ"),
     ARMOR(3, "áo"),
-    CAPE(4, "áo choàng"),
-    BOOTS(5, "giày"),
+    PANTS(4, "quần"),
+    SHOES(5, "giày"),
+    CLOAK(6, "áo choàng"),
+    GLOVES(7, "bao tay"),
     ;
 
     public final int value;

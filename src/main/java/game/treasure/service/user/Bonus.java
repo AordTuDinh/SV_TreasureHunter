@@ -1318,15 +1318,9 @@ public class Bonus {
     }
 
     public static boolean clearMountEquipSlot(MyUser mUser) {
-        int idx = game.treasure.mapping.UserEntity.equipSlotIndex(
-                protocol.Pbmethod.EquipSlotType.MOUNT.getNumber());
-        List<Integer> lst = mUser.getUser().normalizeItemEquipList();
-        if (idx < 0)
-            return false;
-        lst.set(idx, 0);
-        lst.set(idx + 1, 0);
-        lst.set(idx + 2, 0);
-        return mUser.getUser().updateItemEquip(lst);
+        if (mUser == null || mUser.getResources().getMMount() == null) return true;
+        mUser.getResources().getMMount().values().forEach(mount -> mount.setEquip(false));
+        return true;
     }
 
     public static Integer findPetBagSlot(MyUser mUser, long rowId) {

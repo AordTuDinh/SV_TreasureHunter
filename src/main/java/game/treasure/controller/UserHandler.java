@@ -566,7 +566,7 @@ public class UserHandler extends AHandler {
         }
         int part = (int) cv.getALong(0);
         long userSkinId = cv.getALong(1);
-        if (part < 0 || part >= UserSkinEntity.PART_COUNT) {
+        if (UserSkinEntity.skinSlotIndex(part) < 0) {
             addErrParam();
             return;
         }

@@ -24,7 +24,7 @@ public class FriendChatObject implements Serializable {
         pb.setMessage(msg);
         pb.setTime(time);
         pb.setName(info.name);
-        pb.addAllSkins(info.skins);
+        pb.addAllItemEquip(info.itemEquips);
         pb.setLevel(info.level);
         return pb.build();
     }

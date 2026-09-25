@@ -25,10 +25,9 @@ public class ResAvatar {
     public static Map<Integer, ResSkinEntity> mSkin = new HashMap<>();
 
     private static final Pbmethod.SkinType[] DEFAULT_SKIN_TYPES = {
+            Pbmethod.SkinType.BODY,
             Pbmethod.SkinType.HAIR,
-            Pbmethod.SkinType.FACE,
-            Pbmethod.SkinType.EYE,
-            Pbmethod.SkinType.BODY
+            Pbmethod.SkinType.FACE
     };
 
     public static void init() {
@@ -70,8 +69,6 @@ public class ResAvatar {
             return;
         }
         UserEntity user = mUser.getUser();
-        List<Integer> equipped = UserSkinEntity.normalize(user.getSkins());
-        boolean hasEquipped = equipped.stream().anyMatch(v -> v > 0);
         boolean created = false;
 
         session.getTransaction().begin();
@@ -86,19 +83,12 @@ public class ResAvatar {
                 session.flush();
                 mUser.getResources().addSkin(uSkin);
                 created = true;
-
-                if (UserSkinEntity.getResSkinId(equipped, type) <= 0) {
-                    UserSkinEntity.setEquipped(equipped, type, uSkin.getId(), resId);
-                }
+                user.updateSkin(type, uSkin.getId(), resId);
             }
             session.getTransaction().commit();
         } catch (Exception ex) {
             session.getTransaction().rollback();
             throw ex;
-        }
-
-        if (created || !hasEquipped) {
-            user.updateSkins(equipped);
         }
     }
 

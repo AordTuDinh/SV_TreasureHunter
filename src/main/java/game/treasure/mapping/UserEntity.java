@@ -45,7 +45,7 @@ public class UserEntity implements Serializable {
     long lastAction;
     Date lastLogin, dateCreated, lockChat;
     Date clanJoin;
-    String skins, pet; // HAIR, FACE, EYE, BODY by SkinType index
+    String pet;
     @Transient
     long lastChatMap, lastChatServer, lastUpdateDefTeam;
     @Transient
@@ -59,7 +59,6 @@ public class UserEntity implements Serializable {
         this.gameChannel = gameChannel;
         this.version = version;
         this.gold = 0;
-        this.skins = "[0,0,0,0,0,0,0,0]";
         this.clan = 0;
         this.clanName = "";
         this.power = 0;
@@ -67,7 +66,7 @@ public class UserEntity implements Serializable {
         this.vip = 0;
         this.userRank = 0;
         this.lastLogin = Calendar.getInstance().getTime();
-        this.itemEquipment = NumberUtil.genListInt(24, 0).toString();
+        this.itemEquipment = NumberUtil.genListInt(EQUIP_LIST_SIZE, 0).toString();
         this.dateCreated = Calendar.getInstance().getTime();
         this.pet = "[0,0]";
         this.packBuy = "[]";
@@ -84,7 +83,6 @@ public class UserEntity implements Serializable {
         builder.setGem(gem);
         builder.setCup(cup);
         builder.setBlockType(blockType);
-        builder.addAllSkins(getSkins());
         builder.addAllVip(getVipInfo());
         builder.setRank(userRank);
         builder.addAllChannel(Online.getUserChannelInfo(id));
@@ -93,7 +91,6 @@ public class UserEntity implements Serializable {
             items.add(0);
         int treasureIdx = equipSlotIndex(protocol.Pbmethod.EquipSlotType.TREASURE.getNumber());
         int petIdx = equipSlotIndex(protocol.Pbmethod.EquipSlotType.PET.getNumber());
-        int mountIdx = equipSlotIndex(protocol.Pbmethod.EquipSlotType.MOUNT.getNumber());
         boolean update = false;
         for (int i = 0; i < items.size(); i += EQUIP_FIELDS_PER_SLOT) {
             int rowId = items.get(i);
@@ -110,15 +107,6 @@ public class UserEntity implements Serializable {
             }
             if (i == petIdx) {
                 if (mUser.getResources().getPet(rowId) == null) {
-                    items.set(i, 0);
-                    items.set(i + 1, 0);
-                    items.set(i + 2, 0);
-                    update = true;
-                }
-                continue;
-            }
-            if (i == mountIdx) {
-                if (mUser.getResources().getMount(rowId) == null) {
                     items.set(i, 0);
                     items.set(i + 1, 0);
                     items.set(i + 2, 0);
@@ -167,16 +155,67 @@ public class UserEntity implements Serializable {
     }
 
     public List<Integer> getAllInfoItemEquip() {
-        return GsonUtil.strToListInt(itemEquipment);
+        List<Integer> lst = GsonUtil.strToListInt(itemEquipment);
+        if (lst.size() == OLD_EQUIP_LIST_SIZE) return migrateOldEquip(lst);
+        while (lst.size() < EQUIP_LIST_SIZE) lst.add(0);
+        if (lst.size() > EQUIP_LIST_SIZE) return new ArrayList<>(lst.subList(0, EQUIP_LIST_SIZE));
+        return lst;
     }
 
-    public static final int EQUIP_SLOT_COUNT = 8;
     public static final int EQUIP_FIELDS_PER_SLOT = 3;
+    /** 16 slot theo EquipSlotType: vũ khí → vòng tay. Mount không nằm trong list. */
+    public static final int[] EQUIP_SLOT_ORDER = {
+            protocol.Pbmethod.EquipSlotType.WEAPON.getNumber(),
+            protocol.Pbmethod.EquipSlotType.HAT.getNumber(),
+            protocol.Pbmethod.EquipSlotType.ARMOR.getNumber(),
+            protocol.Pbmethod.EquipSlotType.PANTS.getNumber(),
+            protocol.Pbmethod.EquipSlotType.SHOES.getNumber(),
+            protocol.Pbmethod.EquipSlotType.CLOAK.getNumber(),
+            protocol.Pbmethod.EquipSlotType.GLOVES.getNumber(),
+            protocol.Pbmethod.EquipSlotType.PET.getNumber(),
+            protocol.Pbmethod.EquipSlotType.TREASURE.getNumber(),
+            protocol.Pbmethod.EquipSlotType.BODY.getNumber(),
+            protocol.Pbmethod.EquipSlotType.HEAD.getNumber(),
+            protocol.Pbmethod.EquipSlotType.HAIR.getNumber(),
+            protocol.Pbmethod.EquipSlotType.FACE.getNumber(),
+            protocol.Pbmethod.EquipSlotType.ACCESSORY.getNumber(),
+            protocol.Pbmethod.EquipSlotType.GLASSES.getNumber(),
+            protocol.Pbmethod.EquipSlotType.BRACELET.getNumber()
+    };
+    public static final int EQUIP_SLOT_COUNT = EQUIP_SLOT_ORDER.length;
     public static final int EQUIP_LIST_SIZE = EQUIP_SLOT_COUNT * EQUIP_FIELDS_PER_SLOT;
+    /** Format cũ 8 slot: weapon, hat, armor, cloak, shoes, treasure, pet, mount. */
+    private static final int OLD_EQUIP_LIST_SIZE = 24;
 
     public static int equipSlotIndex(int equipSlotType) {
-        if (equipSlotType < 1 || equipSlotType > EQUIP_SLOT_COUNT) return -1;
-        return (equipSlotType - 1) * EQUIP_FIELDS_PER_SLOT;
+        for (int i = 0; i < EQUIP_SLOT_ORDER.length; i++) {
+            if (EQUIP_SLOT_ORDER[i] == equipSlotType) return i * EQUIP_FIELDS_PER_SLOT;
+        }
+        return -1;
+    }
+
+    /** Cũ: weapon, hat, armor, cloak, shoes, treasure, pet, mount. */
+    private static List<Integer> migrateOldEquip(List<Integer> old) {
+        List<Integer> neu = new ArrayList<>();
+        for (int i = 0; i < EQUIP_LIST_SIZE; i++) neu.add(0);
+        copyEquipSlot(old, neu, 0, 0);
+        copyEquipSlot(old, neu, 1, 1);
+        copyEquipSlot(old, neu, 2, 2);
+        copyEquipSlot(old, neu, 4, 4);
+        copyEquipSlot(old, neu, 3, 5);
+        copyEquipSlot(old, neu, 5, 7);
+        copyEquipSlot(old, neu, 6, 8);
+        copyEquipSlot(old, neu, 7, 9);
+        return neu;
+    }
+
+    private static void copyEquipSlot(List<Integer> oldList, List<Integer> newList, int oldSlot, int newSlot) {
+        int from = oldSlot * EQUIP_FIELDS_PER_SLOT;
+        int to = newSlot * EQUIP_FIELDS_PER_SLOT;
+        if (from + 2 >= oldList.size()) return;
+        newList.set(to, oldList.get(from));
+        newList.set(to + 1, oldList.get(from + 1));
+        newList.set(to + 2, oldList.get(from + 2));
     }
 
     public static int findEquipSlotByItemId(List<Integer> lst, int itemId) {
@@ -225,7 +264,7 @@ public class UserEntity implements Serializable {
             int key = lst.get(base + 1);
             int level = lst.get(base + 2);
             int hh = 0;
-            int slotType = i + 1;
+            int slotType = EQUIP_SLOT_ORDER[i];
             if (rowId > 0 && res != null) {
                 if (slotType == protocol.Pbmethod.EquipSlotType.TREASURE.getNumber()) {
                     UserArtifactEntity art = res.getArtifact(rowId);
@@ -241,12 +280,12 @@ public class UserEntity implements Serializable {
                         level = pet.getLevel();
                         hh = pet.getHh();
                     }
-                } else if (slotType == protocol.Pbmethod.EquipSlotType.MOUNT.getNumber()) {
-                    UserMountEntity mount = res.getMount(rowId);
-                    if (mount != null) {
-                        key = mount.getMountId();
-                        level = mount.getLevel();
-                        hh = mount.getHh();
+                } else if (slotType >= protocol.Pbmethod.EquipSlotType.BODY.getNumber()
+                        && slotType <= protocol.Pbmethod.EquipSlotType.BRACELET.getNumber()) {
+                    UserSkinEntity skin = res.getSkin(rowId);
+                    if (skin != null) {
+                        key = skin.getSkinId();
+                        level = skin.getTier();
                     }
                 } else {
                     UserEquipmentEntity equip = res.getEquipment(rowId);
@@ -349,7 +388,6 @@ public class UserEntity implements Serializable {
         pb.setGem(gem);
         pb.setCup(cup);
         pb.setBlockType(blockType);
-        pb.addAllSkins(getSkins());
         pb.addAllVip(getVipInfo());
         pb.setRank(userRank);
         pb.setPower(getPower());
@@ -370,7 +408,6 @@ public class UserEntity implements Serializable {
         builder.setName(getName());
         builder.setPower(getPower());
         builder.setRank(rank.length > 0 ? rank[0] : 0);
-        builder.addAllSkins(getSkins());
         builder.addAllItemEquip(getAllInfoItemEquip());
         builder.addAllPet(GsonUtil.strToListInt(pet));
         checkRank();
@@ -383,7 +420,7 @@ public class UserEntity implements Serializable {
         protocol.Pbmethod.ClanMember.Builder member = protocol.Pbmethod.ClanMember.newBuilder();
         member.setPosition(clanPosition);
         member.setId(id).setName(getName());
-        member.addAllSkins(getSkins());
+        member.addAllItemEquip(getAllInfoItemEquip());
         member.setLevel(1);
         member.setClanDonated(0);
         member.setOnline(Online.isOnline(id));
@@ -420,28 +457,21 @@ public class UserEntity implements Serializable {
         return lastAction / 1000;
     }
 
-    public List<Integer> getSkins() {
-        return UserSkinEntity.normalize(GsonUtil.strToListInt(this.skins));
-    }
-
     public int getBodySkinId() {
-        return UserSkinEntity.getBodyId(getSkins());
-    }
-
-    public boolean updateSkins(List<Integer> skinList) {
-        List<Integer> normalized = UserSkinEntity.normalize(skinList);
-        String dbValue = StringHelper.toDBString(normalized.subList(0, UserSkinEntity.EQUIPPED_SIZE));
-        if (update(Arrays.asList("skins", dbValue))) {
-            this.skins = dbValue;
-            return true;
-        }
-        return false;
+        int idx = equipSlotIndex(protocol.Pbmethod.EquipSlotType.BODY.getNumber());
+        List<Integer> lst = getAllInfoItemEquip();
+        if (idx < 0 || idx + 1 >= lst.size()) return 0;
+        return lst.get(idx + 1);
     }
 
     public boolean updateSkin(protocol.Pbmethod.SkinType part, long userSkinId, int resSkinId) {
-        List<Integer> list = getSkins();
-        UserSkinEntity.setEquipped(list, part, userSkinId, resSkinId);
-        return updateSkins(list);
+        int idx = equipSlotIndex(part.getNumber());
+        if (idx < 0) return false;
+        List<Integer> lst = normalizeItemEquipList();
+        lst.set(idx, (int) userSkinId);
+        lst.set(idx + 1, resSkinId);
+        lst.set(idx + 2, 0);
+        return updateItemEquip(lst);
     }
 
 

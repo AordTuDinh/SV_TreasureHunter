@@ -52,12 +52,9 @@ public class UserMountEntity implements Serializable {
     }
 
     public static boolean isEquipped(MyUser mUser, long mountRowId) {
-        if (mUser == null || mountRowId <= 0) {
-            return false;
-        }
-        List<Integer> equip = mUser.getUser().normalizeItemEquipList();
-        int idx = UserEntity.equipSlotIndex(protocol.Pbmethod.EquipSlotType.MOUNT.getNumber());
-        return idx >= 0 && idx < equip.size() && equip.get(idx) == (int) mountRowId;
+        if (mUser == null || mountRowId <= 0) return false;
+        UserMountEntity mount = mUser.getResources().getMount(mountRowId);
+        return mount != null && mount.isEquip;
     }
 
     public void syncEquipFlag(MyUser mUser) {

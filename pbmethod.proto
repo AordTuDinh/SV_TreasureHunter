@@ -60,7 +60,7 @@ enum SubStateType {
   UPDATE_MULTI_POINT = 12; // [point id - cur] chỉ dùng số ít point, không phải toàn bộ point
   USE_ITEM_SLOT = 13;     // slot
   UPDATE_DIRECTION = 14; // update direction for unit
-  UPDATE_ITEM_EQUIP = 15; // 8 itemKey dang mac (theo EquipSlotType)
+  UPDATE_ITEM_EQUIP = 15; // itemKey dang mac, thu tu UserEntity.EQUIP_SLOT_ORDER
   REMOVE_EQUIPMENT = 16;  // rowId user_equipment
   REMOVE_MATERIAL = 17;   // rowId user_material
   IN_HEAL_ZONE = 18;      // 0 = ngoài zone hồi máu, 1 = trong zone
@@ -248,7 +248,7 @@ message ClanMember {
   optional int64 lastAction = 25;
   optional int32 vip = 10;
   optional int32 rankTrophy = 11;
-  repeated int32 skins = 12;
+  repeated int32 itemEquip = 12;
   optional int32 curDonated = 13;
   optional  bool  online = 14;
 }
@@ -265,7 +265,6 @@ message PbUser {
   optional string name = 3;
   optional int64 gold = 4;
   optional int64 gem = 5;
-  repeated int32 skins = 8;
   repeated int32 vip = 9;
   optional CommonVector clanInfo = 10;
   optional CommonVector info = 11;
@@ -416,7 +415,7 @@ message  PbListChatFriend{
 message PbChatFriend {
   optional  int32 userId = 1;
   optional string message = 2;
-  repeated int32 skins = 3;
+  repeated int32 itemEquip = 3;
   optional string name = 4;
   optional int64 time = 5;
   optional int32 level = 6;
@@ -535,7 +534,7 @@ message  PbCharacterInfo{
   optional  int32 id = 1;
   optional string name = 2;
   optional int32 team = 3;
-  repeated int32 skins = 4;
+  repeated int32 itemEquip = 4;
   repeated int32 aItem = 5;
   repeated int64 point = 6;
 }
@@ -615,10 +614,13 @@ enum TargetAttack {
 }
 
 enum SkinType{
-  HAIR = 0;
-  FACE = 1;
-  EYE = 2;
-  BODY = 3;
+  BODY = 10;
+  HEAD = 11;
+  HAIR = 12;
+  FACE = 13;
+  ACCESSORY = 14;
+  GLASSES = 15;
+  BRACELET = 16;
 }
 
 enum EquipSlotType {
@@ -626,11 +628,19 @@ enum EquipSlotType {
   WEAPON = 1;
   HAT = 2;
   ARMOR = 3;
-  CLOAK = 4;
+  PANTS = 4;
   SHOES = 5;
-  TREASURE = 6;
-  PET = 7;
-  MOUNT = 8;
+  CLOAK = 6;
+  GLOVES = 7;
+  PET = 8;
+  TREASURE = 9;
+  BODY = 10;
+  HEAD = 11;
+  HAIR = 12;
+  FACE = 13;
+  ACCESSORY = 14;
+  GLASSES = 15;
+  BRACELET = 16;
 }
 
 enum AutoSell {

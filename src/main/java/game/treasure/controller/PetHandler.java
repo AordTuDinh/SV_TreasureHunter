@@ -184,38 +184,21 @@ public class PetHandler extends AHandler {
             return;
         }
 
-        int slotIdx = UserEntity.equipSlotIndex(Pbmethod.EquipSlotType.MOUNT.getNumber());
-        List<Integer> lst = mUser.getUser().normalizeItemEquipList();
-        int oldRowId = lst.get(slotIdx);
         Integer newBagSlot = Bonus.findMountBagSlot(mUser, rowId);
 
         Bonus.moveMountOutOfBag(mUser, mount);
 
-        if (oldRowId > 0 && oldRowId != (int) rowId) {
-            UserMountEntity oldMount = mUser.getResources().getMount(oldRowId);
-            if (oldMount != null) {
-                if (newBagSlot != null) {
-                    if (!Bonus.moveMountToBagSlot(mUser, oldMount, newBagSlot)) {
-                        Bonus.moveMountToBag(mUser, mount);
-                        addErrResponse(getLang(Lang.err_max_slot));
-                        return;
-                    }
-                } else if (!Bonus.moveMountToBag(mUser, oldMount)) {
-                    Bonus.moveMountToBag(mUser, mount);
-                    addErrResponse(getLang(Lang.err_max_slot));
-                    return;
-                }
-                oldMount.syncEquipFlag(mUser);
+        for (UserMountEntity other : mUser.getResources().getMMount().values()) {
+            if (other.getId() == mount.getId() || !other.isEquip())
+                continue;
+            other.setEquip(false);
+            if (!Bonus.moveMountToBag(mUser, other)) {
+                Bonus.moveMountToBag(mUser, mount);
+                addErrResponse(getLang(Lang.err_max_slot));
+                return;
             }
         }
-
-        lst.set(slotIdx, (int) mount.getId());
-        lst.set(slotIdx + 1, mount.getMountId());
-        lst.set(slotIdx + 2, mount.getLevel());
-        if (!mUser.getUser().updateItemEquip(lst)) {
-            addErrSystem();
-            return;
-        }
+        mount.setEquip(true);
         syncAllPetMountEquipFlags();
         finishPetMountEquipChange(buildMountSlotPayload(mount, newBagSlot));
     }

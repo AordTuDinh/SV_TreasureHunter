@@ -19,8 +19,11 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "user_skin")
 public class UserSkinEntity implements Serializable {
-    public static final int PART_COUNT = 4;
+    public static final int SKIN_MIN = 8;
+    public static final int PART_COUNT = 7;
     public static final int EQUIPPED_SIZE = PART_COUNT * 2;
+    /** Format cũ: HAIR, FACE, EYE, BODY. */
+    private static final int OLD_PART_COUNT = 4;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -78,15 +81,16 @@ public class UserSkinEntity implements Serializable {
         return DBJPA.update("user_skin", lst, List.of("id", id));
     }
 
+    public static int skinSlotIndex(int type) {
+        int i = type - SKIN_MIN;
+        if (i < 0 || i >= PART_COUNT) return -1;
+        return i * 2;
+    }
+
     public static List<Integer> normalize(List<Integer> skins) {
         List<Integer> result = skins != null ? new ArrayList<>(skins) : new ArrayList<>();
-        if (result.size() == PART_COUNT) {
-            List<Integer> migrated = new ArrayList<>(EQUIPPED_SIZE);
-            for (int i = 0; i < PART_COUNT; i++) {
-                migrated.add(0);
-                migrated.add(result.get(i));
-            }
-            result = migrated;
+        if (result.size() == OLD_PART_COUNT || result.size() == OLD_PART_COUNT * 2) {
+            result = migrateOldSkins(result);
         }
         while (result.size() < EQUIPPED_SIZE) result.add(0);
         if (result.size() > EQUIPPED_SIZE) {
@@ -95,12 +99,37 @@ public class UserSkinEntity implements Serializable {
         return result;
     }
 
+    /** Cũ: HAIR, FACE, EYE, BODY. Mới: BODY, HEAD, HAIR, FACE, ACCESSORY, GLASSES, BRACELET. */
+    private static List<Integer> migrateOldSkins(List<Integer> old) {
+        int[] user = new int[OLD_PART_COUNT];
+        int[] res = new int[OLD_PART_COUNT];
+        if (old.size() == OLD_PART_COUNT) {
+            for (int i = 0; i < OLD_PART_COUNT; i++) res[i] = old.get(i);
+        } else {
+            for (int i = 0; i < OLD_PART_COUNT; i++) {
+                user[i] = old.get(i * 2);
+                res[i] = old.get(i * 2 + 1);
+            }
+        }
+        List<Integer> neu = new ArrayList<>();
+        for (int i = 0; i < EQUIPPED_SIZE; i++) neu.add(0);
+        place(neu, 0, user[3], res[3]); // BODY
+        place(neu, 2, user[0], res[0]); // HAIR
+        place(neu, 3, user[1], res[1]); // FACE
+        return neu;
+    }
+
+    private static void place(List<Integer> list, int partIndex, int userSkinId, int resSkinId) {
+        int index = partIndex * 2;
+        list.set(index, userSkinId);
+        list.set(index + 1, resSkinId);
+    }
 
     public static int getResSkinId(List<Integer> skins, Pbmethod.SkinType part) {
         List<Integer> normalized = normalize(skins);
-        int index = part.getNumber() * 2 + 1;
-        if (index < 0 || index >= normalized.size()) return 0;
-        return normalized.get(index);
+        int index = skinSlotIndex(part.getNumber());
+        if (index < 0) return 0;
+        return normalized.get(index + 1);
     }
 
     public static int getPart(List<Integer> skins, Pbmethod.SkinType part) {
@@ -113,7 +142,8 @@ public class UserSkinEntity implements Serializable {
 
     public static void setEquipped(List<Integer> skins, Pbmethod.SkinType part, long userSkinId, int resSkinId) {
         List<Integer> normalized = normalize(skins);
-        int index = part.getNumber() * 2;
+        int index = skinSlotIndex(part.getNumber());
+        if (index < 0) return;
         normalized.set(index, (int) userSkinId);
         normalized.set(index + 1, resSkinId);
         skins.clear();

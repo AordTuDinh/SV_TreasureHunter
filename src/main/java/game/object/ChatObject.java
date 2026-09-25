@@ -41,11 +41,10 @@ public class ChatObject implements Serializable {
         pbUser.setId(id);
         if (username != null) pbUser.setUsername(username);
         pbUser.setName(getName());
-        pbUser.addAllSkins(getSkins());
+        pbUser.addAllItemEquip(itemEquips);
         pbUser.setRank(rank);
         pbUser.setPower(getPower());
         pbUser.addAllPet(pets);
-        pbUser.addAllItemEquip(itemEquips);
         pbUser.addAllChannel(Online.getUserChannelInfo(id));
         return pbUser.build();
     }
@@ -60,14 +59,13 @@ public class ChatObject implements Serializable {
         this.exp = 0;
         this.timeSeconds = System.currentTimeMillis() / 1000;
         this.clanId = user.getClan();
-        this.skins = user.getSkins();
+        this.itemEquips = user.getAllInfoItemEquip();
         this.pets = GsonUtil.strToListInt(user.getPet());
         this.chatType = ChatType.MSG;
         this.rank = user.getUserRank();
         this.power = user.getPower();
         this.name = user.getName();
         this.username = user.getUsername();
-        this.itemEquips = GsonUtil.strToListInt(user.getItemEquipment());
     }
 
     private String formatChat(String msg) {

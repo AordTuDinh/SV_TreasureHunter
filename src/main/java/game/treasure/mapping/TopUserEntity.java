@@ -24,11 +24,7 @@ public class TopUserEntity implements Serializable {
     int  vip;
     int clan, clanRank, clanPosition, clanAvatar;
     long gold, gem, number, power;
-    String skins, clanName, itemEquipment;
-
-    public List<Integer> getSkinsList() {
-        return UserSkinEntity.normalize(GsonUtil.strToListInt(skins));
-    }
+    String clanName, itemEquipment;
 
     public protocol.Pbmethod.PbUser toProto(int rank, TopType topType) {
         protocol.Pbmethod.PbUser.Builder pb = protocol.Pbmethod.PbUser.newBuilder();
@@ -37,7 +33,6 @@ public class TopUserEntity implements Serializable {
         pb.setName(getName());
         pb.setGold(gold);
         pb.setGem(gem);
-        pb.addAllSkins(getSkinsList());
         pb.addVip(vip);
         pb.setRank(rank);
         pb.addAllItemEquip(GsonUtil.strToListInt(itemEquipment));

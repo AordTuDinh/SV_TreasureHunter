@@ -240,13 +240,9 @@ public class IMath {
                     addDataFloatPoints(pt, pet.getDataListFloat(), pet.getLevel());
             }
         }
-        int mountIdx = game.treasure.mapping.UserEntity.equipSlotIndex(
-                protocol.Pbmethod.EquipSlotType.MOUNT.getNumber());
-        if (mountIdx >= 0 && mountIdx < lst.size()) {
-            int mountRowId = lst.get(mountIdx);
-            if (mountRowId > 0) {
-                game.treasure.mapping.UserMountEntity mount = mUser.getResources().getMount(mountRowId);
-                if (mount != null)
+        if (mUser.getResources().getMMount() != null) {
+            for (game.treasure.mapping.UserMountEntity mount : mUser.getResources().getMMount().values()) {
+                if (mount != null && mount.isEquip())
                     addDataFloatPoints(pt, mount.getDataListFloat(), mount.getLevel());
             }
         }
