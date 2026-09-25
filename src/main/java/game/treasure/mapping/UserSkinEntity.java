@@ -125,22 +125,22 @@ public class UserSkinEntity implements Serializable {
         list.set(index + 1, resSkinId);
     }
 
-    public static int getResSkinId(List<Integer> skins, Pbmethod.SkinType part) {
+    public static int getResSkinId(List<Integer> skins, Pbmethod.EquipSlotType part) {
         List<Integer> normalized = normalize(skins);
         int index = skinSlotIndex(part.getNumber());
         if (index < 0) return 0;
         return normalized.get(index + 1);
     }
 
-    public static int getPart(List<Integer> skins, Pbmethod.SkinType part) {
+    public static int getPart(List<Integer> skins, Pbmethod.EquipSlotType part) {
         return getResSkinId(skins, part);
     }
 
     public static int getBodyId(List<Integer> skins) {
-        return getResSkinId(skins, Pbmethod.SkinType.BODY);
+        return getResSkinId(skins, Pbmethod.EquipSlotType.BODY);
     }
 
-    public static void setEquipped(List<Integer> skins, Pbmethod.SkinType part, long userSkinId, int resSkinId) {
+    public static void setEquipped(List<Integer> skins, Pbmethod.EquipSlotType part, long userSkinId, int resSkinId) {
         List<Integer> normalized = normalize(skins);
         int index = skinSlotIndex(part.getNumber());
         if (index < 0) return;

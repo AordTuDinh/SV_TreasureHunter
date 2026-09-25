@@ -246,13 +246,30 @@ public class UserHandler extends AHandler {
             addErrResponse(Lang.getTitle(mUser, Lang.user_name_exist));
             return;
         }
+        if (cmm.getALongCount() < 4) {
+            addErrParam();
+            return;
+        }
+        int hair = Math.toIntExact(cmm.getALong(0));
+        int face =Math.toIntExact( cmm.getALong(1));
+        int armor = Math.toIntExact(cmm.getALong(2));
+        int pants = Math.toIntExact(cmm.getALong(3));
+        if (!isCreateLookId(hair, 30000, 30030, 30110, 31570, 31610, 31770)
+                || !isCreateLookId(face, 20000, 20001, 20003, 20008)
+                || !isCreateLookId(armor, 1040002, 1040006, 1041006)
+                || !isCreateLookId(pants, 1060002, 1060006, 1061001)) {
+            addErrParam();
+            return;
+        }
+
         if (userName.contains("<") || userName.contains(">") || userName.contains("[") || userName.contains("]")) {
             addErrResponse(getLang(Lang.err_string_prefix));
             return;
         }
 
 
-        if (mUser.getUser().updateCreateUser(userName)) {
+        List<Integer> equip = user.buildCreateLook(hair, face, armor, pants);
+        if (mUser.getUser().updateCreateUser(userName, equip)) {
             Pbmethod.PbLoginGame.Builder builder = Pbmethod.PbLoginGame.newBuilder();
             builder.setUser(user.toProto(mUser));
             //  user point
@@ -260,6 +277,12 @@ public class UserHandler extends AHandler {
         } else addErrResponse();
     }
 
+    private static boolean isCreateLookId(int id, int... allowed) {
+        for (int value : allowed) {
+            if (value == id) return true;
+        }
+        return false;
+    }
 
     void userDataInfo() {
         addResponse(IAction.USER_DATA_INFO, mUser.getUData().toProto(mUser));
@@ -570,7 +593,7 @@ public class UserHandler extends AHandler {
             addErrParam();
             return;
         }
-        Pbmethod.SkinType skinType = Pbmethod.SkinType.valueOf(part);
+        Pbmethod.EquipSlotType skinType = Pbmethod.EquipSlotType.valueOf(part);
         if (skinType == null) {
             addErrParam();
             return;

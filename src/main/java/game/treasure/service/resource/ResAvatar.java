@@ -24,10 +24,10 @@ public class ResAvatar {
     public static Map<Integer, ResEffectTrialEntity> mTrial = new HashMap<>();
     public static Map<Integer, ResSkinEntity> mSkin = new HashMap<>();
 
-    private static final Pbmethod.SkinType[] DEFAULT_SKIN_TYPES = {
-            Pbmethod.SkinType.BODY,
-            Pbmethod.SkinType.HAIR,
-            Pbmethod.SkinType.FACE
+    private static final Pbmethod.EquipSlotType[] DEFAULT_SKIN_TYPES = {
+            Pbmethod.EquipSlotType.BODY,
+            Pbmethod.EquipSlotType.HAIR,
+            Pbmethod.EquipSlotType.FACE
     };
 
     public static void init() {
@@ -52,13 +52,13 @@ public class ResAvatar {
         return mSkin.get(skinId);
     }
 
-    public static List<ResSkinEntity> getSkinsByType(Pbmethod.SkinType type) {
+    public static List<ResSkinEntity> getSkinsByType(Pbmethod.EquipSlotType type) {
         return mSkin.values().stream()
                 .filter(s -> s.getType() == type.getNumber())
                 .collect(Collectors.toList());
     }
 
-    public static int getDefaultSkinId(Pbmethod.SkinType type) {
+    public static int getDefaultSkinId(Pbmethod.EquipSlotType type) {
         List<ResSkinEntity> list = getSkinsByType(type);
         if (list.isEmpty()) return 0;
         return list.get(0).getId();
@@ -73,7 +73,7 @@ public class ResAvatar {
 
         session.getTransaction().begin();
         try {
-            for (Pbmethod.SkinType type : DEFAULT_SKIN_TYPES) {
+            for (Pbmethod.EquipSlotType type : DEFAULT_SKIN_TYPES) {
                 int resId = getDefaultSkinId(type);
                 if (resId <= 0) continue;
                 if (mUser.getResources().getSkinByConfigId(resId) != null) continue;

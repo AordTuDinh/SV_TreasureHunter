@@ -613,16 +613,6 @@ enum TargetAttack {
   PLAYER = 3;
 }
 
-enum SkinType{
-  BODY = 10;
-  HEAD = 11;
-  HAIR = 12;
-  FACE = 13;
-  ACCESSORY = 14;
-  GLASSES = 15;
-  BRACELET = 16;
-}
-
 enum EquipSlotType {
   NULL = 0;
   WEAPON = 1;

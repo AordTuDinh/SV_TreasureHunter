@@ -297,7 +297,6 @@ public class UserEntity implements Serializable {
                 }
             }
             if (rowId <= 0) {
-                key = 0;
                 level = 0;
                 hh = 0;
             }
@@ -464,7 +463,7 @@ public class UserEntity implements Serializable {
         return lst.get(idx + 1);
     }
 
-    public boolean updateSkin(protocol.Pbmethod.SkinType part, long userSkinId, int resSkinId) {
+    public boolean updateSkin(protocol.Pbmethod.EquipSlotType part, long userSkinId, int resSkinId) {
         int idx = equipSlotIndex(part.getNumber());
         if (idx < 0) return false;
         List<Integer> lst = normalizeItemEquipList();
@@ -530,6 +529,35 @@ public class UserEntity implements Serializable {
     }
 
     // region db
+    public boolean updateCreateUser(String name, List<Integer> equip) {
+        String dbValue = StringHelper.toDBString(equip);
+        if (update(Arrays.asList("name", name, "item_equipment", dbValue))) {
+            this.name = name;
+            this.itemEquipment = dbValue;
+            return true;
+        }
+        return false;
+    }
+
+    /** Tạo nhân vật: 4 lựa chọn + body 2000 + head 12000. Ô khác = 0. */
+    public List<Integer> buildCreateLook(int hair, int face, int armor, int pants) {
+        List<Integer> equip = new ArrayList<>();
+        for (int i = 0; i < EQUIP_LIST_SIZE; i++) equip.add(0);
+        putLookKey(equip, protocol.Pbmethod.EquipSlotType.BODY.getNumber(), 2000);
+        putLookKey(equip, protocol.Pbmethod.EquipSlotType.HEAD.getNumber(), 12000);
+        putLookKey(equip, protocol.Pbmethod.EquipSlotType.HAIR.getNumber(), hair);
+        putLookKey(equip, protocol.Pbmethod.EquipSlotType.FACE.getNumber(), face);
+        putLookKey(equip, protocol.Pbmethod.EquipSlotType.ARMOR.getNumber(), armor);
+        putLookKey(equip, protocol.Pbmethod.EquipSlotType.PANTS.getNumber(), pants);
+        return equip;
+    }
+
+    private static void putLookKey(List<Integer> equip, int slotType, int itemKey) {
+        int idx = equipSlotIndex(slotType);
+        if (idx < 0) return;
+        equip.set(idx + 1, itemKey);
+    }
+
     public boolean updateCreateUser(String name) {
         if (update(Arrays.asList("name", name))) {
             this.name = name;
