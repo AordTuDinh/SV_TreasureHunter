@@ -12,6 +12,7 @@ import game.config.CfgMaterial;
 import game.config.CfgQuest;
 import game.config.CfgServer;
 import game.config.aEnum.BlockType;
+import game.config.aEnum.QuestTutType;
 import game.config.aEnum.DetailActionType;
 import game.config.aEnum.ItemPointKey;
 import game.config.aEnum.MapType;
@@ -305,7 +306,10 @@ public abstract class BaseRoom extends MonoRoom {
         if (!attacker.targetInSizeAttack(target)) {
             return false;
         }
-        if (target.isPlayer()) {
+        if (attacker.isPlayer() && target.isPlayer()) {
+            if (attacker.isInNoPvpChunk() || target.isInNoPvpChunk()) {
+                return false;
+            }
             if (mapInfo.isInCampFireSafeZone(attacker.getPos())
                     || mapInfo.isInCampFireSafeZone(target.getPos())) {
                 return false;
@@ -451,7 +455,6 @@ public abstract class BaseRoom extends MonoRoom {
         } else if (input.typeId == NInput.PING_GAME) {
             Util.sendProtoData(player.getMUser().getChannel(), null, IAction.PING_GAME);
         } else if (input.typeId == NInput.ATTACK) {
-            if (!player.canAttack()) return;
             if (!game.treasure.service.battle.ZoneAttackService.tryAttackOrToast(player)) return;
             // Ưu tiên mở rương: đứng ô chest + chìa → không cho đánh
             if (TreasureEventService.blocksAttackForTreasureOpen(player)) return;
@@ -490,6 +493,7 @@ public abstract class BaseRoom extends MonoRoom {
                 if (!unit.isAlive()) return;
                 if (player.getClanId() != 0 && player.getClanId() == unit.getClanId()) return;
                 if (unit.isPlayer()) {
+                    if (player.isInNoPvpChunk() || unit.isInNoPvpChunk()) return;
                     if (mapInfo.isInCampFireSafeZone(player.getPos())
                             || mapInfo.isInCampFireSafeZone(unit.getPos())) return;
                     if (mapInfo.isInBlockedPvpZone(player.getPos())
@@ -515,6 +519,8 @@ public abstract class BaseRoom extends MonoRoom {
     public void addCellDie(Player atk, CellObject cellObject) {
         cellObjectDie.add(cellObject);
         CfgQuest.addNumQuest(atk.getMUser(), DataQuest.GATHER, 1);
+        atk.getMUser().getUData().checkQuestTutDefault(atk.getMUser(), QuestTutType.HARVEST_BOX, 1);
+        atk.getMUser().getUData().checkQuestTutDefault(atk.getMUser(), QuestTutType.DIG_SOIL, 1);
     }
 
     public CellObject getCellObject(int globalCellId, int chunkId) {
@@ -528,8 +534,6 @@ public abstract class BaseRoom extends MonoRoom {
                 || player.getRoom().getRoomState() != RoomState.ACTIVE)
             return;
         if (input.autoGatherEnabled) {
-            if (!player.canAttack())
-                return;
             if (!hasPlotForAutoGather(player))
                 return;
             player.setAutoGather(true);
@@ -578,6 +582,21 @@ public abstract class BaseRoom extends MonoRoom {
         }
         List<Long> resolved = resolveCellKillBonus(player.getMUser(), bonus);
         if (resolved.isEmpty()) return;
+        int bloodStone = 0;
+        int defenseStone = 0;
+        for (List<Long> chunk : Bonus.parse(resolved)) {
+            if (chunk.size() < 2 || chunk.get(0).intValue() != Bonus.BONUS_MATERIAL)
+                continue;
+            int materialId = chunk.get(1).intValue();
+            if (materialId == 1)
+                bloodStone++;
+            else if (materialId == 5)
+                defenseStone++;
+        }
+        if (bloodStone > 0)
+            player.getMUser().getUData().checkQuestTutorial(player.getMUser(), QuestTutType.DIG_STONE, 1, bloodStone);
+        if (defenseStone > 0)
+            player.getMUser().getUData().checkQuestTutorial(player.getMUser(), QuestTutType.DIG_STONE, 2, defenseStone);
         player.sendForceBonus(resolved, DetailActionType.KILL_CELL.getKey(), player.getPos());
     }
 
@@ -889,19 +908,6 @@ public abstract class BaseRoom extends MonoRoom {
         // exited = oldVisible - newVisible
         Set<Integer> exited = new HashSet<>(oldVisible);
         newVisible.forEach(exited::remove);
-
-        if (!entered.isEmpty() || !exited.isEmpty()) {
-            Logs.info(String.format(
-                    "[ViewDelta] playerId=%d userId=%d oldChunk=%d newChunk=%d addChunks=%d removeChunks=%d addIds=%s removeIds=%s",
-                    player.getId(),
-                    player.getMUser().getUserId(),
-                    oldChunk,
-                    newChunk,
-                    entered.size(),
-                    exited.size(),
-                    entered,
-                    exited));
-        }
 
         protocol.Pbmethod.PbState.Builder builder = protocol.Pbmethod.PbState.newBuilder();
         builder.setServerTime(serverTime);

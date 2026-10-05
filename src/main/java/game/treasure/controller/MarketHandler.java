@@ -187,7 +187,6 @@ public class MarketHandler extends AHandler {
         }
         addBonusToastPlus(aBonus);
         pushCraftUpdateIfCustomImage(item);
-        mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.BUY_SHOP, number);
         // event 7 day attack boss day 2
         UserEventSevenDayEntity uEvent = Services.userDAO.getUserSevenDay(mUser);
         if (uEvent.hasEvent() && uEvent.hasActive(3) && uEvent.update(List.of("buy_shop", uEvent.getBuyShop() + number))) {
@@ -254,7 +253,6 @@ public class MarketHandler extends AHandler {
                         } else {
                             addBonusToastPlus(aBonus);
                             pushCraftUpdateIfCustomImage(resItem.getItems());
-                            mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.BUY_SHOP, 1);
                             status(market.getId());
                         }
                         // event 7 day attack boss day 2
@@ -302,7 +300,6 @@ public class MarketHandler extends AHandler {
         if (userMarket.updateShop(market, new Gson().toJson(aItem))) {
             addBonusToastPlus(aBonus);
             status(market.getId());
-            mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.BUY_SHOP, nums.size());
             UserEventSevenDayEntity uEvent = Services.userDAO.getUserSevenDay(mUser);
             if (uEvent.hasEvent() && uEvent.hasActive(3) && uEvent.update(List.of("buy_shop", uEvent.getBuyShop() + nums.size()))) {
                 uEvent.setBuyShop(uEvent.getBuyShop() + nums.size());
@@ -342,7 +339,6 @@ public class MarketHandler extends AHandler {
         aBonus.addAll(ticketBonus);
         if (userMarket.updateShop(market, new Gson().toJson(aItem))) {
             addBonusToastPlus(aBonus);
-            mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.BUY_SHOP, nums.size());
             status(market.getId());
             // event 7 day attack boss day 2
             UserEventSevenDayEntity uEvent = Services.userDAO.getUserSevenDay(mUser);
@@ -381,7 +377,6 @@ public class MarketHandler extends AHandler {
                     addBonusToastPlus(aBonus);
                     pushCraftUpdateIfCustomImage(item.getItems());
                     status(market.getId());
-                    mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.BUY_SHOP, 1);
                 }
                 // event 7 day attack boss day 2
                 UserEventSevenDayEntity uEvent = Services.userDAO.getUserSevenDay(mUser);

@@ -139,7 +139,16 @@ public class Player extends Unit implements Serializable {
         if (beKill.model ==4) CfgQuest.addNumQuest(mUser, DataQuest.KILL_4, 1);
 
         CfgAchievement.addAchievement(mUser, 1, beKill.getEnemy().getModel(), 1);
-        mUser.getUData().checkQuestTutorial(mUser, QuestTutType.KILL_ENEMY, beKill.getEnemy().getModel(), 1);
+        if (beKill.model == 1)
+            mUser.getUData().checkQuestTutorial(mUser, QuestTutType.KILL_ENEMY, 1, 1);
+        if (beKill.model == 2)
+            mUser.getUData().checkQuestTutorial(mUser, QuestTutType.KILL_ENEMY, 2, 1);
+        if (beKill.model == 3)
+            mUser.getUData().checkQuestTutorial(mUser, QuestTutType.KILL_ENEMY, 3, 1);
+        if (beKill.model == 4)
+            mUser.getUData().checkQuestTutorial(mUser, QuestTutType.KILL_ENEMY, 4, 1);
+        if (beKill.model == 16)
+            mUser.getUData().checkQuestTutorial(mUser, QuestTutType.KILL_ENEMY, 16, 1);
         if (countUpdate > 100) {
             countUpdate -= 100;
             mUser.getUQuest().update(new ArrayList<>());
@@ -200,6 +209,7 @@ public class Player extends Unit implements Serializable {
     @Override
     public synchronized void protoDie(Unit killer) {
         autoGather = false;
+        addKillPlayerQuest(killer);
         if (ArenaService.getInstance().handleDeath(this, killer)) {
             super.protoDie(killer);
             if (sendDie) {
@@ -220,6 +230,14 @@ public class Player extends Unit implements Serializable {
             protoStatus(Pbmethod.SubStateType.DIE);
             sendDie = false;
         }
+    }
+
+    void addKillPlayerQuest(Unit killer) {
+        if (killer == null || killer == this || !killer.isPlayer() || !(killer instanceof Player killerPlayer))
+            return;
+        if (killerPlayer.getMUser() == null || killerPlayer.getMUser().getUData() == null)
+            return;
+        killerPlayer.getMUser().getUData().checkQuestTutDefault(killerPlayer.getMUser(), QuestTutType.KILL_PLAYER, 1);
     }
 
     @Override

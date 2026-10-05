@@ -160,7 +160,6 @@ public class ItemHandler extends AHandler {
             return;
         }
 
-        mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.USE_ITEM_EQUIP, 1);
         int oldBonusBag = EquipSlotBonus.bagBonus(mUser);
         int oldBonusMat = EquipSlotBonus.materialBonus(mUser);
         List<UserEquipmentEntity> slotUpdates = new ArrayList<>();
@@ -266,6 +265,7 @@ public class ItemHandler extends AHandler {
         mUser.reCalculatePoint();
         broadcastItemEquipUpdate();
         UserHandler.buffInfo(mUser);
+        mUser.getUData().syncEquipTutorialQuest(mUser);
     }
 
     private void broadcastItemEquipUpdate() {
@@ -463,6 +463,7 @@ public class ItemHandler extends AHandler {
             mUser.reCalculatePoint();
             broadcastItemEquipUpdate();
             UserHandler.buffInfo(mUser);
+            mUser.getUData().syncEquipTutorialQuest(mUser);
         } else {
             addResponse(getCommonVector(soldResponse));
         }
@@ -665,6 +666,7 @@ public class ItemHandler extends AHandler {
                 mUser.reCalculatePoint();
                 broadcastItemEquipUpdate();
                 UserHandler.buffInfo(mUser);
+                mUser.getUData().syncEquipTutorialQuest(mUser);
             } else {
                 addResponse(getCommonVector(id, 1L));
             }
@@ -971,6 +973,7 @@ public class ItemHandler extends AHandler {
         } else {
             addResponse(getCommonVector(id, (long) newLevel));
         }
+        mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.UPGRADE_EQUIP, 1);
         tryBroadcastUpgradeLv10(Bonus.BONUS_EQUIPMENT, id, newLevel, equip.getHh(),
                 equip.getResEquipment() != null ? equip.getResEquipment().getName() : "");
     }

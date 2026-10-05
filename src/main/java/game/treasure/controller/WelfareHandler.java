@@ -640,7 +640,6 @@ public class WelfareHandler extends AHandler {
             if (uDaily.update()) {
                 addResponse(null);
                 addBonusToastPlus(Bonus.receiveListItem(mUser, DetailActionType.EAT_LUNCH.getKey(), CfgEvent.config.bonusEatLunch));
-                mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.GET_SUPPORT, 1);
             }
         } else {
             if (dinner == StatusType.DONE.value || !CfgEvent.haveDinner()) {
@@ -651,7 +650,6 @@ public class WelfareHandler extends AHandler {
             if (uDaily.update()) {
                 addResponse(null);
                 addBonusToastPlus(Bonus.receiveListItem(mUser, DetailActionType.EAT_DINNER.getKey(), CfgEvent.config.bonusEatDinner));
-                mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.GET_SUPPORT, 1);
             }
         }
 
@@ -678,7 +676,6 @@ public class WelfareHandler extends AHandler {
             mUser.getUserDaily().setEvent_1h(data.toString());
             addBonusToastPlus(Bonus.receiveListItem(mUser, DetailActionType.EVENT_1_HOUR.getKey(slot), CfgEvent.config.bonus1hour.get(slot)));
             addResponse(null);
-            mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.GET_BONUS_ONLINE, 1);
         } else addErrResponse();
     }
 

@@ -96,6 +96,13 @@ public class UserEntity implements Serializable {
             int rowId = items.get(i);
             if (rowId <= 0)
                 continue;
+            int slotOrd = i / EQUIP_FIELDS_PER_SLOT;
+            if (slotOrd >= 0 && slotOrd < EQUIP_SLOT_ORDER.length) {
+                int slotType = EQUIP_SLOT_ORDER[slotOrd];
+                if (slotType >= protocol.Pbmethod.EquipSlotType.BODY.getNumber()
+                        && slotType <= protocol.Pbmethod.EquipSlotType.BRACELET.getNumber())
+                    continue;
+            }
             if (i == treasureIdx) {
                 if (mUser.getResources().getArtifact(rowId) == null) {
                     items.set(i, 0);
@@ -152,6 +159,16 @@ public class UserEntity implements Serializable {
             ret.add(lst.get(i));
         }
         return ret;
+    }
+
+    /** Số ô trang bị đang có đồ. Mặc đè vào ô đã có đồ không đổi số này. */
+    public int countWornEquipment() {
+        List<Integer> lst = normalizeItemEquipList();
+        int count = 0;
+        for (int i = 0; i < lst.size(); i += EQUIP_FIELDS_PER_SLOT) {
+            if (lst.get(i) > 0) count++;
+        }
+        return count;
     }
 
     public List<Integer> getAllInfoItemEquip() {
@@ -282,10 +299,12 @@ public class UserEntity implements Serializable {
                     }
                 } else if (slotType >= protocol.Pbmethod.EquipSlotType.BODY.getNumber()
                         && slotType <= protocol.Pbmethod.EquipSlotType.BRACELET.getNumber()) {
-                    UserSkinEntity skin = res.getSkin(rowId);
-                    if (skin != null) {
-                        key = skin.getSkinId();
-                        level = skin.getTier();
+                    if (key <= 0) {
+                        UserSkinEntity skin = res.getSkin(rowId);
+                        if (skin != null) {
+                            key = skin.getSkinId();
+                            level = skin.getTier();
+                        }
                     }
                 } else {
                     UserEquipmentEntity equip = res.getEquipment(rowId);
@@ -331,6 +350,8 @@ public class UserEntity implements Serializable {
         mUser.getPlayer().setPoint(point);
         mUser.syncDropRates(point);
         game.treasure.service.battle.ZoneAttackService.refresh(mUser);
+        if (mUser.getUData() != null)
+            mUser.getUData().syncPowerTutorialQuest(mUser, point.getPower());
         //todo tính thêm chỉ số của thẻ monster
         return point;
     }
@@ -347,6 +368,8 @@ public class UserEntity implements Serializable {
         }
         mUser.syncDropRates(point);
         game.treasure.service.battle.ZoneAttackService.refresh(mUser);
+        if (mUser.getUData() != null)
+            mUser.getUData().syncPowerTutorialQuest(mUser, point.getPower());
         return point;
     }
 

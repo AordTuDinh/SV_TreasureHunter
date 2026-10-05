@@ -59,7 +59,7 @@ public class UserEquipmentEntity implements Serializable {
         hh = 0;
         icon = itemId;
         data = "[]";
-        timeExpire = EquipmentExpireService.defaultExpireAt();
+        timeExpire = EquipmentExpireService.PERMANENT;
     }
 
     public boolean isPermanent() {

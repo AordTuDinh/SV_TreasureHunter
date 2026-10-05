@@ -193,8 +193,9 @@ public abstract class Unit {
         return isAlive() && isReady() && isReviveReady() && !sameTeam(teamId);
     }
 
-    public boolean canAttack() {
-        return !room.chunkNoAttack.contains(chunkId);
+    /** Chunk làng: chỉ cấm PvP. PvE (quái, cell) vẫn đánh được. */
+    public boolean isInNoPvpChunk() {
+        return room != null && room.chunkNoAttack.contains(chunkId);
     }
 
 
@@ -716,6 +717,19 @@ public abstract class Unit {
 
     public void protoStatus(Pbmethod.SubStateType status, List<Long> info) {
         if (room != null) room.addProtoUnitState(protoState(status, info));
+    }
+
+    /** SubStateType.ARTIFACT_EFFECT = 20 — [artifactId, variant]. variant 0 play prefab id, 1 play id_1. */
+    public void protoArtifactEffect(int artifactId, boolean impact) {
+        if (room == null || artifactId <= 0)
+            return;
+        Pbmethod.PbUnitState.Builder builder = Pbmethod.PbUnitState.newBuilder();
+        builder.setId(id);
+        builder.addStatus(20);
+        builder.addStatus(2);
+        builder.addPoint(artifactId);
+        builder.addPoint(impact ? 1L : 0L);
+        room.addProtoUnitState(builder.build());
     }
 
     Pbmethod.PbUnitState protoState(Pbmethod.SubStateType stateType, List<Long> aInfo) {

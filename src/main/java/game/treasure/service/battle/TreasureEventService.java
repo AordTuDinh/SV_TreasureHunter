@@ -6,6 +6,7 @@ import game.battle.object.Pos;
 import game.config.CfgQuest;
 import game.config.CfgTreasure;
 import game.config.aEnum.DetailActionType;
+import game.config.aEnum.QuestTutType;
 import game.monitor.Online;
 import game.object.DataQuest;
 import game.object.MyUser;
@@ -374,6 +375,8 @@ public final class TreasureEventService {
                 CommonProto.getCommonVector(applied),
                 IAction.BONUS_TOAST);
         CfgQuest.addNumQuest(mUser, DataQuest.OPEN_BOX, 1);
+        if (mUser.getUData() != null)
+            mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.OPEN_CHEST, 1);
     }
 
     /**

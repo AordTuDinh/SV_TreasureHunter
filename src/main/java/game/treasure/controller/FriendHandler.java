@@ -255,7 +255,6 @@ public class FriendHandler extends AHandler {
             builder.addALong(friendId);
             addResponse(builder.build());
             addErrResponse(getLang(Lang.request_add_friend_success));
-            mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.SEND_REQUEST_FRIEND, 1);
         } else addErrResponse();
     }
 
@@ -384,7 +383,6 @@ public class FriendHandler extends AHandler {
             addBonusToastPlus(Bonus.receiveListItem(mUser, DetailActionType.BONUS_FRIEND_SEND.getKey(friendId), Bonus.viewGem(1)));
             status();
             CfgQuest.addNumQuest(mUser, DataQuest.SEND_FRIEND_GIFT, 1);
-            mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.SEND_FRIEND_GIFT, 1);
         } else addErrResponse();
     }
 
@@ -483,7 +481,6 @@ public class FriendHandler extends AHandler {
             mUser.getCache().del("user_send_gift");
             status();
             // quest tutorial
-            mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.SEND_FRIEND_GIFT, lstSend.size());
             // quest
             CfgQuest.addNumQuest(mUser, DataQuest.SEND_FRIEND_GIFT, lstSend.size());
             CfgQuest.addNumQuest(mUser, DataQuest.GET_FRIEND_GIFT, idReceive.size());

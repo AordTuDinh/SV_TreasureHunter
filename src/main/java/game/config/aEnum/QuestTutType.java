@@ -3,44 +3,41 @@ package game.config.aEnum;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Loại quest tuần tự. {@code quest_type} trong DB là {@code [type, idInfo]}.
+ * Tiến độ do chỗ chơi gọi {@code checkQuestTutorial} / {@code checkQuestTutDefault}; luồng nhận thưởng chỉ so số đã lưu với {@code num}.
+ */
 public enum QuestTutType {
-    NULL(0,""),
-    KILL_ENEMY(1,"TUT_KILL_ENEMY"),
-    SUMMON_STONE(5,"TUT_SUMMON_STONE"),
-    UPGRADE_WEAPON(6,"TUT_UPGRADE_WEAPON"),
-    CREATE_WEAPON(7,"TUT_CREATE_WEAPON"),
-    USE_WEAPON(8,"TUT_USE_WEAPON"),
-    ATTACK_BOSS_GOD(9,"TUT_ATTACK_BOSS_GOD"),
-    UPGRADE_ITEM_EQUIP(10,"TUT_UPGRADE_ITEM_EQUIP"),
-    USE_ITEM_EQUIP(11,"TUT_USE_ITEM_EQUIP"),
-    USE_FERTILIZER(14,"TUT_USE_FERTILIZER"),
-    SHIP(16,"TUT_SHIP"),
-    USE_SPINE_ROTATE(18,"TUT_USE_SPINE_ROTATE"),
-    ATTACK_ARENA(19,"TUT_ATTACK_ARENA"),
-    SEND_REQUEST_FRIEND(20,"TUT_SEND_REQUEST_FRIEND"),
-    SEND_FRIEND_GIFT(21,"TUT_SEND_FRIEND_GIFT"),
-    SUMMON_PIECE(22,"TUT_SUMMON_PIECE"),
-    HAS_LEVEL(23,"TUT_HAS_LEVEL"),
-    BUY_SHOP(24,"TUT_BUY_SHOP"),
-    GET_BONUS_ONLINE(26,"TUT_GET_BONUS_ONLINE"),
-    BUY_GOLD(27,"TUT_BUY_GOLD"),
-    GET_SUPPORT(28,"TUT_GET_SUPPORT"),
-    JOIN_CLAN(29,"TUT_JOIN_CLAN"),
-    CARE_PET_MONSTER(35,"TUT_CARE_PET_MONSTER"),
-    HAS_POINT_D(37,"TUT_HAS_POINT_D"), // has handle
-    HAS_ITEM_EQUIP_LEVEL(38,"TUT_HAS_ITEM_EQUIP_LEVEL"), // Cường hóa item name lên cấp %s
-    HAS_ITEM_EQUIP_ID(39,"TUT_HAS_ITEM_EQUIP_ID"), // Sở hữu trang bị %s
-    HAS_WEAPON_BY_RANK(40,"TUT_HAS_WEAPON_BY_RANK"), // Sở hữu 2 phi tiêu rank hiếm
-    SMART_TOWER(41,"TUT_SMART_TOWER"), // Càn quét tháp
-    USE_ITEM(42,"TUT_USE_ITEM"), // Sử dụng item id - num
-    USE_ITEM_CAMPAIGN_SMART(43,"TUT_USE_ITEM_CAMPAIGN_SMART") // Sử dụng thẻ càn quét ải
-    ;
-    public final int value;
-    public final String     keyLang;
+    NULL(0, ""),
+    HARVEST_BOX(1, "Khai thác hộp"),
+    DIG_SOIL(2, "Đào đất"),
+    KILL_ENEMY(3, "Đánh bại quái"),
+    EQUIP(4, "Mặc trang bị"),
+    UPGRADE_EQUIP(5, "Nâng cấp trang bị"),
+    DIG_STONE(6, "Đào đá"),
+    UPGRADE_STONE(7, "Nâng đá"),
+    MEET_NPC(8, "Gặp NPC"),
+    MERGE_STONE(9, "Hợp nhất đá"),
+    CRAFT_EQUIP(10, "Chế tạo trang bị"),
+    CRAFT_POTION(11, "Chế tạo thuốc"),
+    EQUIP_LEGENDARY(12, "Mặc đồ huyền thoại"),
+    COMBINE_STONE(13, "Ghép đá"),
+    AWAKEN_PET(14, "Thức tỉnh thú cưng"),
+    CRAFT_WING(15, "Chế tạo cánh"),
+    KILL_PLAYER(16, "Đánh bại người chơi"),
+    FORGE_LEVEL(17, "Đạt cấp lò rèn"),
+    HAS_MATERIAL_RANK(18, "Sở hữu nguyên liệu"),
+    HAS_POWER(19, "Đạt lực chiến"),
+    ARENA(20, "Tham gia đấu trường"),
+    JOIN_CLAN(21, "Tham gia bang hội"),
+    OPEN_CHEST(22, "Mở rương");
 
-    QuestTutType(int value,String keyLang) {
+    public final int value;
+    public final String label;
+
+    QuestTutType(int value, String label) {
         this.value = value;
-        this.keyLang = keyLang;
+        this.label = label;
     }
 
     static Map<Integer, QuestTutType> lookup = new HashMap<>();

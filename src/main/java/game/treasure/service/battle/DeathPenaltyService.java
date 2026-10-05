@@ -251,8 +251,10 @@ public final class DeathPenaltyService {
         MyUser mUser = victim.getMUser();
         if (mUser == null)
             return;
-        if (mUser.getUData() != null)
+        if (mUser.getUData() != null) {
             mUser.getUData().syncSlotsAfterEquipmentChange(mUser, oldBonusBag, oldBonusMat);
+            mUser.getUData().syncEquipTutorialQuest(mUser);
+        }
         mUser.reCalculatePoint();
         List<Long> wire = mUser.getUser().getListItemEquipViewLong(mUser);
         victim.protoStatus(Pbmethod.SubStateType.UPDATE_ITEM_EQUIP, wire);

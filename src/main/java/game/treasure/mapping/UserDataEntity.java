@@ -161,6 +161,60 @@ public class UserDataEntity implements Serializable {
         checkQuestTutorial(mUser, type, 0, number);
     }
 
+    /**
+     * Ghi đè tiến độ quest hiện tại (lực chiến, cấp lò rèn, số món đang mặc).
+     * Chỉ áp dụng khi type và idInfo khớp quest đang làm.
+     */
+    public void setQuestTutorialProgress(MyUser mUser, QuestTutType type, int idInfo, int value) {
+        ResTutorialQuestEntity res = ResQuest.mTutQuest.get(questTutorial);
+        if (res == null || res.getType() != type || res.getIdInfo() != idInfo) return;
+        if (value < 0) value = 0;
+        if (value == questTutorialNumber) return;
+        if (updateTutQuestNumber(value))
+            Util.sendProtoData(mUser.getChannel(), CommonProto.getCommonVector(questTutorial, questTutorialNumber), IAction.TUTORIAL_QUEST_UPDATE);
+    }
+
+    /** Quest mặc trang bị và đồ huyền thoại. Gọi sau khi mặc, gỡ, hoặc khi hỏi trạng thái. */
+    public void syncEquipTutorialQuest(MyUser mUser) {
+        if (mUser == null || mUser.getUser() == null) return;
+        setQuestTutorialProgress(mUser, QuestTutType.EQUIP, 0, mUser.getUser().countWornEquipment());
+        setQuestTutorialProgress(mUser, QuestTutType.EQUIP_LEGENDARY, 4, countWornLegendary(mUser));
+    }
+
+    /** Quest lò rèn: điểm = cấp hiện tại. Cấp 5 thì đủ. */
+    public void syncForgeTutorialQuest(MyUser mUser) {
+        if (mUser == null) return;
+        setQuestTutorialProgress(mUser, QuestTutType.FORGE_LEVEL, 5, Math.max(0, craftLevel));
+    }
+
+    /** Quest bang hội: đã có bang thì đủ 1 điểm. Rời bang không trừ. */
+    public void syncJoinClanTutorialQuest(MyUser mUser) {
+        if (mUser == null || mUser.getUser() == null || mUser.getUser().getClan() == 0) return;
+        setQuestTutorialProgress(mUser, QuestTutType.JOIN_CLAN, 0, 1);
+    }
+
+    /** Quest lực chiến: điểm = lực chiến hiện tại. */
+    public void syncPowerTutorialQuest(MyUser mUser, long power) {
+        if (mUser == null) return;
+        int value = power <= 0 ? 0 : (power > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) power);
+        setQuestTutorialProgress(mUser, QuestTutType.HAS_POWER, 0, value);
+    }
+
+    /** Số item equip đang mặc có tier >= 4. Pet, ngựa và ô không phải trang bị không tính. */
+    int countWornLegendary(MyUser mUser) {
+        if (mUser.getResources() == null) return 0;
+        List<Integer> lst = mUser.getUser().normalizeItemEquipList();
+        int count = 0;
+        for (int i = 0; i < lst.size(); i += UserEntity.EQUIP_FIELDS_PER_SLOT) {
+            int id = lst.get(i);
+            if (id <= 0) continue;
+            UserEquipmentEntity equip = mUser.getResources().getEquipment(id);
+            if (equip != null && equip.getTier() >= 4)
+                count++;
+        }
+        return count;
+    }
+
 
     public List<Long> getBuffTriplets() {
         return game.treasure.service.user.UserBuff.parseTriplets(buff);

@@ -93,6 +93,8 @@ public class IAction {
     public static final int TUTORIAL_QUEST_RECEIVE = 124;
     public static final int TUTORIAL_QUEST_UPDATE = 125;
     public static final int TUTORIAL_GO_TO = 126;
+    /** Client báo đã mở đúng màn (smithy, NPC). Server cộng điểm nếu khớp quest đang làm. */
+    public static final int TUTORIAL_QUEST_PROGRESS = 127;
     // market
     public static final int MARKET_STATUS = 128;
     public static final int MARKET_BUY = 129;

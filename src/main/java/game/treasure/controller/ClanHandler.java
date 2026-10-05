@@ -282,6 +282,7 @@ public class ClanHandler extends AHandler {
             user.setClan(ret);
             user.setClanName(name);
             user.setClanPosition(ClanPosition.LEADER.value);
+            mUser.getUData().syncJoinClanTutorialQuest(mUser);
             user.setClanAvatar(avatar);
             clearAllPendingReq(user.getId());
             long moneyType = type == 0 ? Bonus.BONUS_GEM : Bonus.BONUS_RUBY;
@@ -289,7 +290,6 @@ public class ClanHandler extends AHandler {
             long moneyCost = type == 0 ? -CfgClan.config.feeCreate : -CfgClan.config.feeCreateRuby;
             addResponse(getCommonVector((long) ret, moneyType, moneyLeft, moneyCost));
             if (CfgServer.isRealServer()) Actions.save(user, Actions.GCLAN, Actions.DCREATE, "id", ret);
-            mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.JOIN_CLAN, 1);
         } else {
             addErrResponse(getLang(Lang.err_system_down));
         }
@@ -357,7 +357,6 @@ public class ClanHandler extends AHandler {
                 String cName = clan.getName() != null ? clan.getName() : "";
                 cmm.addAString(String.format(getLang(Lang.clan_message_12), cName));
                 cmm.addAString(cName);
-                mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.JOIN_CLAN, 1);
                 addResponse(IAction.CLAN_ACCEPT_MEMBER, cmm.build());
             } else addErrResponse();
         } else {
@@ -457,7 +456,6 @@ public class ClanHandler extends AHandler {
                     cmm.addAString(clan.getName());
                     MyUser userMember = Online.getMUser(memberUser.getId());
                     if (userMember != null)
-                        userMember.getUData().checkQuestTutDefault(mUser, QuestTutType.JOIN_CLAN, 1);
                     Util.sendProtoData(channel, cmm.build(), IAction.CLAN_ACCEPT_MEMBER);
                 }
             } else addErrResponse();
@@ -1060,6 +1058,7 @@ public class ClanHandler extends AHandler {
             return;
         }
         mUser.reCalculatePoint();
+        mUser.getUData().syncJoinClanTutorialQuest(mUser);
         Pbmethod.CommonVector.Builder cmm = Pbmethod.CommonVector.newBuilder();
         cmm.addALong(clanId);
         cmm.addAString(clanName);

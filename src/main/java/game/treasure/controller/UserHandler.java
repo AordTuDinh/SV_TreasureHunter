@@ -37,7 +37,7 @@ public class UserHandler extends AHandler {
     public void initAction(Map<Integer, AHandler> mHandler) {
         List<Integer> actions = Arrays.asList(CREATE_NAME, USER_INFO, DAME_SKIN_EQUIP, CHANGE_LANG,
                 CHAT_FRAME_EQUIP, USE_GIFT_CODE, TRIAL_EQUIP, BUFF_INFO, RANKING_STATUS, TUTORIAL_STATUS,
-                TUTORIAL_QUEST_RECEIVE, TUTORIAL_GO_TO, TUTORIAL_QUEST_STATUS, RANKING_INFO, SEND_MAIL,
+                TUTORIAL_QUEST_RECEIVE, TUTORIAL_GO_TO, TUTORIAL_QUEST_PROGRESS, TUTORIAL_QUEST_STATUS, RANKING_INFO, SEND_MAIL,
                 HELP_VALUE, CHANGE_NAME, SKIN_EQUIP, USER_DATA_INFO, UPDATE_NEXT_DAY, SET_AUTO, SET_AUTO_RANGE, CANCEL_PROTECT, ACTIVATE_PROTECT);
         actions.forEach(action -> mHandler.put(action, this));
     }
@@ -75,6 +75,7 @@ public class UserHandler extends AHandler {
                 case TUTORIAL_STATUS -> tutorial();
                 case TUTORIAL_QUEST_STATUS -> tutorialQuestStatus(mUser, this);
                 case TUTORIAL_QUEST_RECEIVE -> tutorialQuestReceive();
+                case TUTORIAL_QUEST_PROGRESS -> tutorialQuestProgress();
                 case DAME_SKIN_EQUIP -> dameSkinEquip();
                 case CHAT_FRAME_EQUIP -> chatFrameEquip();
                 case TRIAL_EQUIP -> trialEquip();
@@ -492,35 +493,72 @@ public class UserHandler extends AHandler {
     public static void tutorialQuestStatus(MyUser mUser, AHandler handler) {
         ResTutorialQuestEntity resQuest = ResQuest.mTutQuest.get(mUser.getUData().getQuestTutorial());
         if (resQuest == null) {
-            handler.addErrResponse(handler.getLang(err_null_quest));
+            handler.addResponse(TUTORIAL_QUEST_STATUS, emptyTutorialQuest());
             return;
         }
+        mUser.getUData().syncEquipTutorialQuest(mUser);
+        mUser.getUData().syncForgeTutorialQuest(mUser);
+        mUser.getUData().syncPowerTutorialQuest(mUser, mUser.getUser().getPower());
+        mUser.getUData().syncJoinClanTutorialQuest(mUser);
         int status = CfgQuest.getQuestTutStatus(mUser, resQuest);
         Pbmethod.CommonVector.Builder builder = Pbmethod.CommonVector.newBuilder();
-        builder.addALong(status).addALong(mUser.getUData().getQuestTutorial()).addALong(mUser.getUData().getQuestTutorialNumber()).addALong(resQuest.getNum()).addALong(resQuest.getGotoId()).addALong(resQuest.getType().value);
+        builder.addALong(status)
+                .addALong(mUser.getUData().getQuestTutorial())
+                .addALong(mUser.getUData().getQuestTutorialNumber())
+                .addALong(resQuest.getNum())
+                .addALong(resQuest.getGotoId())
+                .addALong(resQuest.getType().value);
         builder.addAString(resQuest.getTitle(mUser));
-        builder.addAString(resQuest.getBonus());
+        builder.addAString(resQuest.getBonus() == null ? "[]" : resQuest.getBonus());
         handler.addResponse(TUTORIAL_QUEST_STATUS, builder.build());
+    }
+
+    private static Pbmethod.CommonVector emptyTutorialQuest() {
+        Pbmethod.CommonVector.Builder builder = Pbmethod.CommonVector.newBuilder();
+        builder.addALong(0).addALong(0).addALong(0).addALong(0).addALong(0).addALong(0);
+        builder.addAString("").addAString("[]");
+        return builder.build();
+    }
+
+    /** Client gửi [type, idInfo] khi mở đúng màn hình. Chỉ nhận loại gặp NPC. */
+    private void tutorialQuestProgress() {
+        List<Long> inputs = getInputALong();
+        if (inputs.size() < 2) {
+            addErrParam();
+            return;
+        }
+        QuestTutType type = QuestTutType.get(inputs.get(0).intValue());
+        int idInfo = inputs.get(1).intValue();
+        if (type != QuestTutType.MEET_NPC) {
+            addErrParam();
+            return;
+        }
+        mUser.getUData().checkQuestTutorial(mUser, type, idInfo, 1);
+        addResponseSuccess();
     }
 
     private void tutorialQuestReceive() {
         ResTutorialQuestEntity resQuest = ResQuest.mTutQuest.get(mUser.getUData().getQuestTutorial());
         if (resQuest == null) {
-            addErrResponse(getLang(err_null_quest));
+            addResponse(TUTORIAL_QUEST_STATUS, emptyTutorialQuest());
             return;
         }
         int status = CfgQuest.getQuestTutStatus(mUser, resQuest);
-        if (status == StatusType.RECEIVE.value) {
-            if (mUser.getUData().updateTutorialQuest()) {
-                addResponse(CommonProto.getCommonVectorProto(Bonus.receiveListItem(mUser, DetailActionType.RECEIVE_TUTORIAL_QUEST.getKey(mUser.getUData().getQuestTutorial() - 1), resQuest.getABonus())));
-                CfgEvent.processTriggerEventTimer(mUser, mUser.getUData().getQuestTutorial(), TriggerEventTimer.QUEST_TUTORIAL_LEVEL);
-            } else {
-                addErrResponse();
-            }
-        } else {
+        if (status != StatusType.RECEIVE.value) {
             tutorialQuestStatus(mUser, this);
+            return;
         }
-
+        if (!mUser.getUData().updateTutorialQuest()) {
+            addErrResponse();
+            return;
+        }
+        int doneQuestId = mUser.getUData().getQuestTutorial() - 1;
+        List<Long> bonus = resQuest.getABonus();
+        List<Long> received = bonus.isEmpty()
+                ? new ArrayList<>()
+                : Bonus.receiveListItem(mUser, DetailActionType.RECEIVE_TUTORIAL_QUEST.getKey(doneQuestId), bonus);
+        addResponse(CommonProto.getCommonVectorProto(received));
+        CfgEvent.processTriggerEventTimer(mUser, mUser.getUData().getQuestTutorial(), TriggerEventTimer.QUEST_TUTORIAL_LEVEL);
     }
 
 //    private void tutorialGoTo() {

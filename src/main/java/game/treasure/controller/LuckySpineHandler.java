@@ -108,7 +108,6 @@ public class LuckySpineHandler extends AHandler {
         retBonus.add(0, (long) max);
         addResponse(getCommonVector(retBonus));
 
-        mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.USE_SPINE_ROTATE, numberRotate);
         CfgQuest.addNumQuest(mUser, DataQuest.SPINE, numberRotate);
     }
 

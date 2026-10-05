@@ -330,7 +330,6 @@ public class UserResources implements Serializable {
         equipments.add(uEquip);
         mEquipment.put(uEquip.getId(), uEquip);
         CfgAchievement.addAchievement(mUser, 2, uEquip.getItemId() + 30, 1);
-        mUser.getUData().checkQuestTutorial(mUser, QuestTutType.HAS_ITEM_EQUIP_ID, uEquip.getItemId(), 1);
         applyItemSlotsFromUserData();
     }
 

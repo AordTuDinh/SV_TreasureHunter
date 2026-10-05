@@ -65,6 +65,7 @@ enum SubStateType {
   REMOVE_MATERIAL = 17;   // rowId user_material
   IN_HEAL_ZONE = 18;      // 0 = ngoài zone hồi máu, 1 = trong zone
   BONUS_ADD_FORCE = 19;   // [posX*1000, posY*1000, ...bonus wire] battle loot FX
+  ARTIFACT_EFFECT = 20;   // [artifactId, variant] variant 0 = prefab id, 1 = prefab id_1
 }
 
 enum StateType {

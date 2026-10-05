@@ -13,7 +13,8 @@ import java.util.List;
  * Item vẫn giữ trong inventory (client hiện overlay expired).
  */
 public final class EquipmentExpireService {
-    public static final long DEFAULT_DURATION_SECONDS = 30L * 24 * 60 * 60;
+    /** -1 = vĩnh viễn. Trang bị nhận về không còn hạn 30 ngày. */
+    public static final long PERMANENT = -1L;
 
     private EquipmentExpireService() {
     }
@@ -23,7 +24,7 @@ public final class EquipmentExpireService {
     }
 
     public static long defaultExpireAt() {
-        return nowSeconds() + DEFAULT_DURATION_SECONDS;
+        return PERMANENT;
     }
 
     /** Sync khi login / load resources. */
@@ -56,6 +57,8 @@ public final class EquipmentExpireService {
                         Logs.warn("EquipmentExpire unequip failed id=" + equip.getId());
                 }
                 equip.unEquip();
+                if (mUser.getUData() != null)
+                    mUser.getUData().syncEquipTutorialQuest(mUser);
             }
             Bonus.clearItemFromSlot(mUser, Bonus.BONUS_EQUIPMENT, equip.getId());
             equip.setBagSlot(-1);

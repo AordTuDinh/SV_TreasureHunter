@@ -2,6 +2,7 @@ package game.treasure.controller;
 
 import game.config.CfgMaterial;
 import game.config.aEnum.DetailActionType;
+import game.config.aEnum.QuestTutType;
 import game.config.lang.Lang;
 import game.treasure.mapping.UserMaterialEntity;
 import game.treasure.mapping.main.ResMaterialEntity;
@@ -105,6 +106,7 @@ public class MaterialHandler extends AHandler {
             gem.setSocketRate(newSocketRate);
             addBonusToast(aBonus);
             addResponse(gem.toProto().build());
+            mUser.getUData().checkQuestTutorial(mUser, QuestTutType.UPGRADE_STONE, 2, 1);
             System.out.println("aBonus = " + aBonus);
         } else {
             Bonus.receiveListItem(mUser, DetailActionType.UPDATE_FAIL.getKey(), Bonus.reverseBonus(fee));
@@ -203,5 +205,9 @@ public class MaterialHandler extends AHandler {
 
         mUser.getResources().addMaterial(output);
         addResponse(output.toProto().build());
+        mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.MERGE_STONE, 1);
+        mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.COMBINE_STONE, 1);
+        if (resultRank == 4)
+            mUser.getUData().checkQuestTutorial(mUser, QuestTutType.HAS_MATERIAL_RANK, 4, 1);
     }
 }

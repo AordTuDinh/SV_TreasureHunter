@@ -399,6 +399,7 @@ public class Bonus {
                 }
                 CfgCraft.addCraftExp(uData, expGain);
                 uData.update(Arrays.asList("craft_level", uData.getCraftLevel(), "craft_exp", uData.getCraftExp()));
+                uData.syncForgeTutorialQuest(mUser);
                 if (CfgServer.isRealServer()) {
                     // imageId trong wire chỉ để client hiển thị (lấy theo cột icon).
                     Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
@@ -884,6 +885,8 @@ public class Bonus {
         UserMaterialEntity uMaterial = new UserMaterialEntity(mUser.getUser().getId(), materialId, rank);
         if (DBJPA.save(uMaterial)) {
             mUser.getResources().addMaterial(uMaterial);
+            if (rank == 4 && mUser.getUData() != null)
+                mUser.getUData().checkQuestTutorial(mUser, QuestTutType.HAS_MATERIAL_RANK, 4, 1);
             if (CfgServer.isRealServer()) {
                 Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
                         "type", "material",

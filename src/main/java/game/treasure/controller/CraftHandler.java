@@ -4,8 +4,10 @@ import game.battle.calculate.IMath;
 import game.battle.object.Point;
 import game.config.CfgArtifact;
 import game.config.CfgCraft;
+import game.config.CfgItem;
 import game.config.aEnum.CraftTargetType;
 import game.config.aEnum.DetailActionType;
+import game.config.aEnum.QuestTutType;
 import game.config.aEnum.ToastType;
 import game.config.lang.Lang;
 import game.treasure.mapping.UserArtifactEntity;
@@ -345,11 +347,13 @@ public class CraftHandler extends AHandler {
         if (totalExpGain > 0) {
             craftLeveled = CfgCraft.addCraftExp(uData, totalExpGain);
             uData.update(Arrays.asList("craft_level", uData.getCraftLevel(), "craft_exp", uData.getCraftExp()));
+            uData.syncForgeTutorialQuest(mUser);
         }
 
         appendCraftStatus(resp, targetType, uData);
         addResponse(getCommonVector(resp));
         addToast(ToastType.SUCCESS, getLang(Lang.craft_success));
+        addCraftTutorialQuest(targetType, targetId);
 
         if (craftLeveled) {
             pushCraftUpdate(uData);
@@ -357,6 +361,27 @@ public class CraftHandler extends AHandler {
 
         sendTargetProto(targetType, targetId);
         broadcastEquipViewIfTargetEquipped(targetType, targetId);
+    }
+
+    /** Quest 14: chế trang bị. Quest 15: chế bình máu. */
+    private void addCraftTutorialQuest(CraftTargetType targetType, long targetId) {
+        if (targetType == CraftTargetType.EQUIPMENT) {
+            mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.CRAFT_EQUIP, 1);
+            return;
+        }
+        if (targetType == CraftTargetType.PET) {
+            mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.AWAKEN_PET, 1);
+            return;
+        }
+        if (targetType == CraftTargetType.MOUNT) {
+            mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.CRAFT_WING, 1);
+            return;
+        }
+        if (targetType != CraftTargetType.CONSUMABLE)
+            return;
+        UserItemEntity item = mUser.getResources().getItem(targetId);
+        if (item != null && CfgItem.isItemMedicine(item.getItemId()))
+            mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.CRAFT_POTION, 1);
     }
 
     private void broadcastEquipViewIfTargetEquipped(CraftTargetType targetType, long targetId) {

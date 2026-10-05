@@ -21,6 +21,7 @@ import game.treasure.mapping.main.ResArtifactEntity;
 import game.treasure.server.IAction;
 
 import game.treasure.controller.UserHandler;
+import game.battle.model.Player;
 import game.treasure.service.user.Bonus;
 import game.treasure.service.user.ArtifactBuffTargets;
 import game.treasure.service.user.UserBuff;
@@ -594,20 +595,41 @@ public class ArtifactHandler extends AHandler {
             int pointId = res.getPointMain();
             float effValue = artifact.getEffectiveSlot(ArtifactDataSlot.IDX_VALUE);
             long durationSec = Math.round(artifact.getEffectiveSlot(ArtifactDataSlot.IDX_TIME));
+            List<MyUser> targets = ArtifactBuffTargets.resolve(mUser, res.getArtifactType(), artifact);
             if (pointId != 0 && effValue != 0 && durationSec > 0) {
                 long valueScaled = Math.round(effValue * 1000);
-                List<MyUser> targets = ArtifactBuffTargets.resolve(mUser, res.getArtifactType(), artifact);
                 for (MyUser target : targets) {
                     if (target != null)
                         UserBuff.grantBuff(target, pointId, valueScaled, durationSec);
                 }
             }
+            broadcastArtifactFx(targets, artifact.getArtifactId());
         }
         UserHandler.buffInfo(mUser);
         addResponse(getCommonVector(now, cdSec));
     }
 
 
+
+    /** Người dùng play prefab id. Người server chọn (không phải người dùng) play id_1. */
+    void broadcastArtifactFx(List<MyUser> targets, int artifactId) {
+        Player caster = mUser.getPlayer();
+        if (caster == null || artifactId <= 0)
+            return;
+        caster.protoArtifactEffect(artifactId, false);
+        long casterUnitId = caster.getId();
+        if (targets == null)
+            return;
+        for (int i = 0; i < targets.size(); i++) {
+            MyUser target = targets.get(i);
+            if (target == null)
+                continue;
+            Player player = target.getPlayer();
+            if (player == null || player.getId() == casterUnitId)
+                continue;
+            player.protoArtifactEffect(artifactId, true);
+        }
+    }
 
     void syncTreasureEquipFields(UserArtifactEntity artifact) {
 

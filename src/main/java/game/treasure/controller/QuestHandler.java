@@ -163,10 +163,6 @@ public class QuestHandler extends AHandler {
                 lst.addAVector(getCommonVector(itemBonus));
                 addResponse(IAction.QUEST_RECEIVE, lst.build());
                 questStatus();
-                ResTutorialQuestEntity res = ResQuest.mTutQuest.get(mUser.getUData().getQuestTutorial());
-                if (res != null && res.getType() == QuestTutType.HAS_POINT_D) {
-                    UserHandler.tutorialQuestStatus(mUser, this);
-                }
                 return;
             }
         }
@@ -274,7 +270,6 @@ public class QuestHandler extends AHandler {
             uDaily.update();
             addBonusToastPlus(bonus);
             buyGoldStatus();
-            mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.BUY_GOLD, 1);
         } else addErrResponse();
     }
 

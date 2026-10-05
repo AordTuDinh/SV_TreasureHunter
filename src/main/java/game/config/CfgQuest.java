@@ -7,7 +7,6 @@ import game.treasure.mapping.*;
 import game.treasure.mapping.main.ResQuestEntity;
 import game.treasure.mapping.main.ResTutorialQuestEntity;
 import game.treasure.service.resource.ResQuest;
-import game.object.DataDaily;
 import game.object.DataQuest;
 import game.object.MyUser;
 
@@ -81,74 +80,11 @@ public class CfgQuest {
         return cur >= max ? StatusType.RECEIVE : StatusType.PROCESSING;
     }
 
+    /** 0 = hết chuỗi. 1 = đang làm. 2 = đủ số, được nhận. Không tự đếm hành động. */
     public static int getQuestTutStatus(MyUser mUser, ResTutorialQuestEntity resQuest) {
-        if (resQuest == null) return 0;
-        UserDataEntity uData = mUser.getUData();
-        ResTutorialQuestEntity res = ResQuest.mTutQuest.get(uData.getQuestTutorial());
-        if (res == null) return StatusType.PROCESSING.value;
-        switch (res.getType()) {
-            case HAS_LEVEL -> {
-                mUser.getUData().setQuestTutorialNumber(1);
-                if (1 >= res.getNum()) {
-                    return StatusType.RECEIVE.value;
-                }
-            }
-            case GET_BONUS_ONLINE -> {
-                List<Integer> data = mUser.getUserDaily().getEvent1hStatus(mUser);
-                int num = (int) data.stream().filter(i -> i.intValue() == StatusType.DONE.value).count();
-                mUser.getUData().setQuestTutorialNumber(num);
-            }
-            case BUY_GOLD -> {
-                int numBuy = 0;
-                DataDaily uDaily = mUser.getUserDaily().getUDaily();
-                if (uDaily.getValue(DataDaily.BUY_GOLD_0) != 0) numBuy++;
-                if (uDaily.getValue(DataDaily.BUY_GOLD_1) != 0) numBuy++;
-                if (uDaily.getValue(DataDaily.BUY_GOLD_2) != 0) numBuy++;
-                mUser.getUData().setQuestTutorialNumber(numBuy);
-            }
-            case GET_SUPPORT -> {
-                int num = 0;
-                boolean lunch = mUser.getUserDaily().getUDaily().getValue(DataDaily.EAT_LUNCH) == StatusType.DONE.value;
-                if (lunch) num++;
-                boolean dinner = mUser.getUserDaily().getUDaily().getValue(DataDaily.EAT_DINNER) == StatusType.DONE.value;
-                //System.out.println("mUser.getUserDaily().getUDaily().getValue(DataDaily.EAT_DINNER) = " + mUser.getUserDaily().getUDaily().getValue(DataDaily.EAT_DINNER));
-                if (dinner) num++;
-                mUser.getUData().setQuestTutorialNumber(num);
-                //System.out.println("num = " + num);
-            }
-            case JOIN_CLAN -> {
-                if (mUser.getUser().getClan() > 0) {
-                    mUser.getUData().setQuestTutorialNumber(1);
-                    return StatusType.RECEIVE.value;
-                }
-            }
-            case HAS_ITEM_EQUIP_LEVEL -> {
-                int max = 0;
-                for (UserEquipmentEntity itemEq : mUser.getResources().listEquipment()) {
-                    if (itemEq.getItemId() == res.getIdInfo() && itemEq.getLevel() > max) {
-                        max = itemEq.getLevel();
-                    }
-                }
-                mUser.getUData().setQuestTutorialNumber(max);
-            }
-            case HAS_POINT_D -> {
-                DataQuest dataQuest = mUser.getUQuest().getDataQuest();
-                mUser.getUData().setQuestTutorialNumber(dataQuest.getValue(DataQuest.CUR_POINT_D));
-            }
-            case HAS_ITEM_EQUIP_ID -> {
-                for (UserEquipmentEntity itemEq : mUser.getResources().listEquipment()) {
-                    if (itemEq.getItemId() == res.getIdInfo()) {
-                        mUser.getUData().setQuestTutorialNumber(1);
-                        break;
-                    }
-                }
-            }
-            case HAS_WEAPON_BY_RANK -> {
-                mUser.getUData().setQuestTutorialNumber(mUser.getResources().getNumWeaponByRank(res.getIdInfo()));
-            }
-
-        }
-        return mUser.getUData().getQuestTutorialNumber() >= resQuest.getNum() ? StatusType.RECEIVE.value : StatusType.PROCESSING.value;
+        if (resQuest == null) return StatusType.LOCK.value;
+        int cur = mUser.getUData().getQuestTutorialNumber();
+        return cur >= resQuest.getNum() ? StatusType.RECEIVE.value : StatusType.PROCESSING.value;
     }
 
     // dùng cho nhiều chỗ, cẩn thận khi thay đổi

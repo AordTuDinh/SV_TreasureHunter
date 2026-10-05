@@ -459,6 +459,8 @@ public class ClanEntity {
                 _u.setClan(id);
                 _u.setClanName(name);
                 _u.setClanAvatar(avatar);
+                if (_tmp.getUData() != null)
+                    _tmp.getUData().syncJoinClanTutorialQuest(_tmp);
             }
         }
         Actions.save(user, Actions.GCLAN, Actions.DAREQ, "id", id, "userId", user.getId(), "member", member);

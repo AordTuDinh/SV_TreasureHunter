@@ -2,9 +2,6 @@ package game.treasure.mapping.main;
 
 
 import game.config.aEnum.QuestTutType;
-import game.config.aEnum.RankType;
-import game.config.lang.Lang;
-import game.treasure.service.resource.*;
 import game.object.MyUser;
 import lombok.Getter;
 import ozudo.base.helper.GsonUtil;
@@ -21,6 +18,8 @@ public class ResTutorialQuestEntity extends BaseEntity {
     @Id
     private int id;
     @Getter
+    private String name;
+    @Getter
     private int num, gotoId;
     @Getter
     private String bonus;
@@ -32,59 +31,30 @@ public class ResTutorialQuestEntity extends BaseEntity {
     List<Integer> quest;
 
     public void init() {
-        aBonus = GsonUtil.strToListLong(bonus);
-        quest = GsonUtil.strToListInt(questType);
-        checkJson(id, bonus);
-        checkJson(id, questType);
+        aBonus = bonus == null || bonus.isEmpty() ? new ArrayList<>() : GsonUtil.strToListLong(bonus);
+        quest = questType == null || questType.isEmpty() ? new ArrayList<>() : GsonUtil.strToListInt(questType);
+        if (bonus != null && !bonus.isEmpty()) checkJson(id, bonus);
+        if (questType != null && !questType.isEmpty()) checkJson(id, questType);
     }
 
     public String getTitle(MyUser mUser) {
-        QuestTutType questTut = QuestTutType.get(quest.get(0));
-        String title = Lang.getTitle(mUser, questTut.keyLang);
-        switch (questTut) {
-            case KILL_ENEMY -> {
-                //return String.format(title, ResEnemy.getEnemy(quest.get(1)).getName());
-            }
-            case ATTACK_BOSS_GOD -> {
-                int type = quest.get(1);
-                switch (type) {
-                    case 1 -> {
-                        return String.format(title, Lang.getTitle(mUser.getUser().getLang(), Lang.god_fire));
-                    }
-                    case 2 -> {
-                        return String.format(title, Lang.getTitle(mUser.getUser().getLang(), Lang.god_water));
-                    }
-                    case 3 -> {
-                        return String.format(title, Lang.getTitle(mUser.getUser().getLang(), Lang.god_flame));
-                    }
-                    case 4 -> {
-                        return String.format(title, Lang.getTitle(mUser.getUser().getLang(), Lang.god_earth));
-                    }
-                }
-            }
-            case HAS_ITEM_EQUIP_ID, HAS_ITEM_EQUIP_LEVEL -> {
-                return String.format(title, Lang.getTitle(mUser, ResItem.getItemEquipment(quest.get(1)).getName()), num);
-            }
-            case USE_ITEM -> {
-                return String.format(title,Lang.getTitle(mUser, ResItem.getItem(quest.get(1)).getName()));
-            }
-            case HAS_WEAPON_BY_RANK -> {
-                return String.format(title, num,Lang.getTitle(mUser, RankType.get(quest.get(1)).name));
-            }
-        }
-        return String.format(title, num);
+        if (name != null && !name.isEmpty()) return name;
+        QuestTutType questTut = getType();
+        return questTut == null ? "" : questTut.label;
     }
 
     public QuestTutType getType() {
-        return QuestTutType.get(quest.get(0));
+        if (quest == null || quest.isEmpty()) return QuestTutType.NULL;
+        QuestTutType type = QuestTutType.get(quest.get(0));
+        return type == null ? QuestTutType.NULL : type;
     }
 
     public int getIdInfo() {
-        return quest.get(1);
+        return quest != null && quest.size() > 1 ? quest.get(1) : 0;
     }
 
     public List<Long> getABonus() {
-        return new ArrayList<>(aBonus);
+        return aBonus == null ? new ArrayList<>() : new ArrayList<>(aBonus);
     }
 
 
