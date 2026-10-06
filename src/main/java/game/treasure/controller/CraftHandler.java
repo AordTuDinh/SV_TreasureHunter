@@ -15,13 +15,13 @@ import game.treasure.mapping.UserDataEntity;
 import game.treasure.mapping.UserEquipmentEntity;
 import game.treasure.mapping.UserItemEntity;
 import game.treasure.mapping.UserMaterialEntity;
-import game.treasure.mapping.UserMountEntity;
+import game.treasure.mapping.UserWingsEntity;
 import game.treasure.mapping.UserPetEntity;
 import game.treasure.mapping.UserSkinEntity;
 import game.treasure.mapping.main.ResArtifactEntity;
 import game.treasure.mapping.main.ResItemEquipmentEntity;
 import game.treasure.mapping.main.ResMaterialEntity;
-import game.treasure.mapping.main.ResMountEntity;
+import game.treasure.mapping.main.ResWingsEntity;
 import game.treasure.mapping.main.ResPetEntity;
 import game.treasure.server.IAction;
 import game.treasure.service.item.CraftPointDataUtil;
@@ -142,13 +142,13 @@ public class CraftHandler extends AHandler {
                 return;
             }
         }
-        if (targetType == CraftTargetType.MOUNT) {
-            UserMountEntity mount = mUser.getResources().getMount(targetId);
-            if (mount == null) {
+        if (targetType == CraftTargetType.WINGS) {
+            UserWingsEntity wings = mUser.getResources().getWings(targetId);
+            if (wings == null) {
                 addErrResponse(getLang(Lang.err_item_equip_not_found));
                 return;
             }
-            if (mount.getIsCraft() == 1) {
+            if (wings.getIsCraft() == 1) {
                 addErrResponse(getLang(Lang.err_params));
                 return;
             }
@@ -337,8 +337,8 @@ public class CraftHandler extends AHandler {
             applyConsumableTransform(targetId, consumableHpOriginal);
         } else if (targetType == CraftTargetType.PET) {
             applyPetTransform(targetId);
-        } else if (targetType == CraftTargetType.MOUNT) {
-            applyMountTransform(targetId);
+        } else if (targetType == CraftTargetType.WINGS) {
+            applyWingsTransform(targetId);
         } else if (targetType == CraftTargetType.ARTIFACT) {
             applyArtifactTransform(targetId);
         }
@@ -373,7 +373,7 @@ public class CraftHandler extends AHandler {
             mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.AWAKEN_PET, 1);
             return;
         }
-        if (targetType == CraftTargetType.MOUNT) {
+        if (targetType == CraftTargetType.WINGS) {
             mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.CRAFT_WING, 1);
             return;
         }
@@ -391,7 +391,7 @@ public class CraftHandler extends AHandler {
         boolean equipped = false;
         if (targetType == CraftTargetType.EQUIPMENT
                 || targetType == CraftTargetType.PET
-                || targetType == CraftTargetType.MOUNT
+                || targetType == CraftTargetType.WINGS
                 || targetType == CraftTargetType.ARTIFACT) {
             for (int id : ids) {
                 if (id == (int) targetId) {
@@ -416,11 +416,11 @@ public class CraftHandler extends AHandler {
                 addResponse(IAction.PET_INFO, Pbmethod.PbListPet.newBuilder()
                         .addPets(pet.toProto()).build());
             }
-        } else if (targetType == CraftTargetType.MOUNT) {
-            UserMountEntity mount = mUser.getResources().getMount(targetId);
-            if (mount != null) {
-                addResponse(IAction.MOUNT_INFO, Pbmethod.PbListMount.newBuilder()
-                        .addMounts(mount.toProto()).build());
+        } else if (targetType == CraftTargetType.WINGS) {
+            UserWingsEntity wings = mUser.getResources().getWings(targetId);
+            if (wings != null) {
+                addResponse(IAction.WINGS_INFO, Pbmethod.PbListWings.newBuilder()
+                        .addWings(wings.toProto()).build());
             }
         } else if (targetType == CraftTargetType.ARTIFACT) {
             UserArtifactEntity artifact = mUser.getResources().getArtifact(targetId);
@@ -483,8 +483,8 @@ public class CraftHandler extends AHandler {
             return mUser.getResources().getItem(targetId);
         if (type == CraftTargetType.PET)
             return mUser.getResources().getPet(targetId);
-        if (type == CraftTargetType.MOUNT)
-            return mUser.getResources().getMount(targetId);
+        if (type == CraftTargetType.WINGS)
+            return mUser.getResources().getWings(targetId);
         if (type == CraftTargetType.ARTIFACT)
             return craftArtifact != null ? craftArtifact : mUser.getResources().getArtifact(targetId);
         return null;
@@ -507,11 +507,11 @@ public class CraftHandler extends AHandler {
                 return -1;
             return pet.getTier() > 0 ? pet.getTier() : 1;
         }
-        if (type == CraftTargetType.MOUNT) {
-            UserMountEntity mount = mUser.getResources().getMount(targetId);
-            if (mount == null)
+        if (type == CraftTargetType.WINGS) {
+            UserWingsEntity wings = mUser.getResources().getWings(targetId);
+            if (wings == null)
                 return -1;
-            return mount.getTier() > 0 ? mount.getTier() : 1;
+            return wings.getTier() > 0 ? wings.getTier() : 1;
         }
         if (type == CraftTargetType.CONSUMABLE) {
             UserItemEntity item = mUser.getResources().getItem(targetId);
@@ -573,16 +573,16 @@ public class CraftHandler extends AHandler {
             }
             return false;
         }
-        if (type == CraftTargetType.MOUNT) {
-            UserMountEntity mount = mUser.getResources().getMount(targetId);
-            if (mount == null)
+        if (type == CraftTargetType.WINGS) {
+            UserWingsEntity wings = mUser.getResources().getWings(targetId);
+            if (wings == null)
                 return false;
-            if (mount.getIsCraft() == 1)
+            if (wings.getIsCraft() == 1)
                 return true;
-            if (mount.update(List.of("is_craft", 1, "craft_by", crafter, "hh", 1))) {
-                mount.setIsCraft(1);
-                mount.setCraftBy(crafter);
-                mount.setHh(1);
+            if (wings.update(List.of("is_craft", 1, "craft_by", crafter, "hh", 1))) {
+                wings.setIsCraft(1);
+                wings.setCraftBy(crafter);
+                wings.setHh(1);
                 return true;
             }
             return false;
@@ -625,8 +625,8 @@ public class CraftHandler extends AHandler {
             destroyConsumable(targetId);
         } else if (type == CraftTargetType.PET) {
             destroyPet(targetId);
-        } else if (type == CraftTargetType.MOUNT) {
-            destroyMount(targetId);
+        } else if (type == CraftTargetType.WINGS) {
+            destroyWings(targetId);
         } else if (type == CraftTargetType.ARTIFACT) {
             destroyArtifact(targetId);
         } else if (type == CraftTargetType.SKIN) {
@@ -673,18 +673,18 @@ public class CraftHandler extends AHandler {
         }
     }
 
-    private void destroyMount(long mountId) {
-        UserMountEntity mount = mUser.getResources().getMount(mountId);
-        if (mount == null) {
+    private void destroyWings(long wingsId) {
+        UserWingsEntity wings = mUser.getResources().getWings(wingsId);
+        if (wings == null) {
             return;
         }
-        mount.syncEquipFlag(mUser);
-        if (mount.isEquip()) {
+        wings.syncEquipFlag(mUser);
+        if (wings.isEquip()) {
             return;
         }
-        Bonus.clearItemFromSlot(mUser, Bonus.BONUS_MOUNT, mountId);
-        if (mount.deleteFromDb()) {
-            mUser.getResources().removeMount(mountId);
+        Bonus.clearItemFromSlot(mUser, Bonus.BONUS_WINGS, wingsId);
+        if (wings.deleteFromDb()) {
+            mUser.getResources().removeWings(wingsId);
         }
     }
 
@@ -750,15 +750,15 @@ public class CraftHandler extends AHandler {
             }
             return false;
         }
-        if (type == CraftTargetType.MOUNT) {
-            UserMountEntity mount = mUser.getResources().getMount(targetId);
-            if (mount == null)
+        if (type == CraftTargetType.WINGS) {
+            UserWingsEntity wings = mUser.getResources().getWings(targetId);
+            if (wings == null)
                 return false;
             List<Float> merged = CraftPointDataUtil.mergePointPair(
-                    CraftPointDataUtil.parseDataFloats(mount.getData()), pointId, addValue);
+                    CraftPointDataUtil.parseDataFloats(wings.getData()), pointId, addValue);
             String dataJson = StringHelper.toDBString(merged);
-            if (mount.update(List.of("data", dataJson))) {
-                mount.setData(dataJson);
+            if (wings.update(List.of("data", dataJson))) {
+                wings.setData(dataJson);
                 return true;
             }
             return false;
@@ -837,21 +837,21 @@ public class CraftHandler extends AHandler {
                 UserPetEntity::getData);
     }
 
-    private void applyMountTransform(long targetId) {
+    private void applyWingsTransform(long targetId) {
         applyTransform(targetId, CfgCraft.rollTransformTier(mUser.getTransmuteRateBonus()),
-                mUser.getResources().getMount(targetId),
-                mount -> mount == null ? null : mount.getRes(),
-                ResMountEntity::getTransformIcon,
-                (mount, dataJson, iconId, hh) -> {
-                    if (mount.update(Arrays.asList("data", dataJson, "icon", iconId, "hh", hh))) {
-                        mount.setData(dataJson);
-                        mount.setIcon(iconId);
-                        mount.setHh(hh);
+                mUser.getResources().getWings(targetId),
+                wings -> wings == null ? null : wings.getRes(),
+                ResWingsEntity::getTransformIcon,
+                (wings, dataJson, iconId, hh) -> {
+                    if (wings.update(Arrays.asList("data", dataJson, "icon", iconId, "hh", hh))) {
+                        wings.setData(dataJson);
+                        wings.setIcon(iconId);
+                        wings.setHh(hh);
                         return true;
                     }
                     return false;
                 },
-                UserMountEntity::getData);
+                UserWingsEntity::getData);
     }
 
     /** Artifact: chỉ cập nhật hh (không icon/stat), rate hóa hình giống equip. */
@@ -934,14 +934,14 @@ public class CraftHandler extends AHandler {
             if (pet.update(List.of("price_treasure", newValue))) {
                 pet.setPriceTreasure(newValue);
             }
-        } else if (type == CraftTargetType.MOUNT) {
-            UserMountEntity mount = mUser.getResources().getMount(targetId);
-            if (mount == null) {
+        } else if (type == CraftTargetType.WINGS) {
+            UserWingsEntity wings = mUser.getResources().getWings(targetId);
+            if (wings == null) {
                 return;
             }
-            int newValue = mount.getPriceTreasure() + gain;
-            if (mount.update(List.of("price_treasure", newValue))) {
-                mount.setPriceTreasure(newValue);
+            int newValue = wings.getPriceTreasure() + gain;
+            if (wings.update(List.of("price_treasure", newValue))) {
+                wings.setPriceTreasure(newValue);
             }
         }
     }

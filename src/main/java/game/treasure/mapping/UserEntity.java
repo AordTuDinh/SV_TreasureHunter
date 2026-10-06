@@ -180,7 +180,7 @@ public class UserEntity implements Serializable {
     }
 
     public static final int EQUIP_FIELDS_PER_SLOT = 3;
-    /** 16 slot theo EquipSlotType: vũ khí → vòng tay. Mount không nằm trong list. */
+    /** 16 slot theo EquipSlotType: vũ khí → vòng tay. Wings không nằm trong list. */
     public static final int[] EQUIP_SLOT_ORDER = {
             protocol.Pbmethod.EquipSlotType.WEAPON.getNumber(),
             protocol.Pbmethod.EquipSlotType.HAT.getNumber(),
@@ -201,7 +201,7 @@ public class UserEntity implements Serializable {
     };
     public static final int EQUIP_SLOT_COUNT = EQUIP_SLOT_ORDER.length;
     public static final int EQUIP_LIST_SIZE = EQUIP_SLOT_COUNT * EQUIP_FIELDS_PER_SLOT;
-    /** Format cũ 8 slot: weapon, hat, armor, cloak, shoes, treasure, pet, mount. */
+    /** Format cũ 8 slot: weapon, hat, armor, cloak, shoes, treasure, pet, wings. */
     private static final int OLD_EQUIP_LIST_SIZE = 24;
 
     public static int equipSlotIndex(int equipSlotType) {
@@ -211,7 +211,7 @@ public class UserEntity implements Serializable {
         return -1;
     }
 
-    /** Cũ: weapon, hat, armor, cloak, shoes, treasure, pet, mount. */
+    /** Cũ: weapon, hat, armor, cloak, shoes, treasure, pet, wings. */
     private static List<Integer> migrateOldEquip(List<Integer> old) {
         List<Integer> neu = new ArrayList<>();
         for (int i = 0; i < EQUIP_LIST_SIZE; i++) neu.add(0);
@@ -249,7 +249,7 @@ public class UserEntity implements Serializable {
         return lst;
     }
 
-    /** 8 itemKey theo thứ tự EquipSlotType (WEAPON..MOUNT). */
+    /** 8 itemKey theo thứ tự EquipSlotType (WEAPON..WINGS). */
     public List<Integer> getListItemKeyEquip() {
         List<Integer> lst = normalizeItemEquipList();
         List<Integer> ret = new ArrayList<>(EQUIP_SLOT_COUNT);
@@ -268,8 +268,8 @@ public class UserEntity implements Serializable {
 
     /**
      * Wire effect trang bị cho player khác trên map:
-     * 8 slot × (itemKey, level, hh) theo EquipSlotType WEAPON..MOUNT.
-     * hh lấy từ entity đang trang bị (equipment / artifact / pet / mount).
+     * 8 slot × (itemKey, level, hh) theo EquipSlotType WEAPON..WINGS.
+     * hh lấy từ entity đang trang bị (equipment / artifact / pet / wings).
      */
     public List<Integer> getListItemEquipView(MyUser mUser) {
         List<Integer> lst = normalizeItemEquipList();

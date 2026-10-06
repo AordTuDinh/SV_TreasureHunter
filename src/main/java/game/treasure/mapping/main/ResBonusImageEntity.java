@@ -42,7 +42,7 @@ public class ResBonusImageEntity implements Serializable {
      * - MATERIAL: JSON list materialId (vd "[6,7,9]").
      * - SKIN: JSON list skinId.
      * - PET: JSON list petId; tier nhận = {@link #tier}.
-     * - MOUNT: JSON list mountId; tier nhận = {@link #tier}.
+     * - WINGS: JSON list wingsId; tier nhận = {@link #tier}.
      * - BONUS_DATA: flat bonus wire (vd "[2,200,13,15,500]"); tier không dùng.
      * - SKIN_LIST: JSON list skinId; roll ngẫu nhiên × times; tier nhận = {@link #tier}.
      */
@@ -67,7 +67,7 @@ public class ResBonusImageEntity implements Serializable {
 
     @Getter
     @Transient
-    List<Integer> mountIds = new ArrayList<>();
+    List<Integer> wingsIds = new ArrayList<>();
 
     /** Parsed từ data khi type = BONUS_DATA. */
     @Getter
@@ -82,7 +82,7 @@ public class ResBonusImageEntity implements Serializable {
             case MATERIAL -> materialIds = GsonUtil.strToListInt(data);
             case SKIN -> skinIds = GsonUtil.strToListInt(data);
             case PET -> petIds = GsonUtil.strToListInt(data);
-            case MOUNT -> mountIds = GsonUtil.strToListInt(data);
+            case WINGS -> wingsIds = GsonUtil.strToListInt(data);
             case BONUS_DATA -> bonusData = parseBonusData(data);
             case SKIN_LIST -> skinIds = GsonUtil.strToListInt(data);
         }

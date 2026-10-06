@@ -11,7 +11,7 @@ import game.config.lang.Lang;
 
 import game.treasure.mapping.UserEquipmentEntity;
 import game.treasure.mapping.UserItemEntity;
-import game.treasure.mapping.UserMountEntity;
+import game.treasure.mapping.UserWingsEntity;
 import game.treasure.mapping.UserPetEntity;
 
 import game.config.aEnum.VipType;
@@ -104,7 +104,7 @@ public class CfgItem {
         return level >= 1 && level < MAX_UPGRADE_LEVEL;
     }
 
-    public static boolean canUpLevel(UserMountEntity item) {
+    public static boolean canUpLevel(UserWingsEntity item) {
         if (item == null) return false;
         int level = item.getLevel();
         return level >= 1 && level < MAX_UPGRADE_LEVEL;
@@ -126,7 +126,7 @@ public class CfgItem {
         return tier > 0 ? tier : 1;
     }
 
-    public static int getTierMult(UserMountEntity item) {
+    public static int getTierMult(UserWingsEntity item) {
         int tier = item.getTier();
         return tier > 0 ? tier : 1;
     }
@@ -202,7 +202,7 @@ public class CfgItem {
         return (long) getTierMult(item) * UPGRADE_FEE_BASE_T1.get(idx);
     }
 
-    public static long getUpgradeFeeGold(UserMountEntity item) {
+    public static long getUpgradeFeeGold(UserWingsEntity item) {
         if (!canUpLevel(item)) return 0;
         int level = item.getLevel();
         int idx = level - 1;
@@ -220,11 +220,11 @@ public class CfgItem {
         return Bonus.viewGem((int) -fee);
     }
 
-    public static List<Long> getUpgradeFee(UserMountEntity item) {
+    public static List<Long> getUpgradeFee(UserWingsEntity item) {
         return getUpgradeFee(item, null);
     }
 
-    public static List<Long> getUpgradeFee(UserMountEntity item, MyUser mUser) {
+    public static List<Long> getUpgradeFee(UserWingsEntity item, MyUser mUser) {
         long fee = applyUpgradeFeeVip(getUpgradeFeeGold(item), mUser);
         if (fee <= 0) return new ArrayList<>();
         return Bonus.viewGem((int) -fee);
@@ -253,7 +253,7 @@ public class CfgItem {
         return getTierMult(item) * SELL_PRICE_BASE_T1.get(idx);
     }
 
-    public static int getSellPriceGold(UserMountEntity item) {
+    public static int getSellPriceGold(UserWingsEntity item) {
         int level = item.getLevel() > 0 ? item.getLevel() : 1;
         int idx = Math.min(level, SELL_PRICE_BASE_T1.size()) - 1;
         return getTierMult(item) * SELL_PRICE_BASE_T1.get(idx);
@@ -271,8 +271,8 @@ public class CfgItem {
         return Bonus.viewGem(getSellPriceGold(pet));
     }
 
-    public static List<Long> getPriceSellMount(UserMountEntity mount) {
-        return Bonus.viewGem(getSellPriceGold(mount));
+    public static List<Long> getPriceSellWings(UserWingsEntity wings) {
+        return Bonus.viewGem(getSellPriceGold(wings));
     }
 
 

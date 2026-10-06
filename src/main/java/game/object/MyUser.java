@@ -457,7 +457,7 @@ public class MyUser implements Serializable {
                     numEvent++;
             } else if (bonusType == Bonus.BONUS_EQUIPMENT
                     || bonusType == Bonus.BONUS_PET
-                    || bonusType == Bonus.BONUS_MOUNT
+                    || bonusType == Bonus.BONUS_WINGS
                     || bonusType == Bonus.BONUS_MOB
                     || bonusType == Bonus.BONUS_ARTIFACT) {
                 numBag++;
@@ -477,7 +477,7 @@ public class MyUser implements Serializable {
                                     return false;
                             } else if (imgType == ResBonusImageType.MATERIAL)
                                 numMaterial += times;
-                            else if (imgType == ResBonusImageType.PET || imgType == ResBonusImageType.MOUNT)
+                            else if (imgType == ResBonusImageType.PET || imgType == ResBonusImageType.WINGS)
                                 numBag += times;
                         }
                     }
@@ -486,7 +486,7 @@ public class MyUser implements Serializable {
                 int innerType = chunk.get(1).intValue();
                 if (innerType == Bonus.BONUS_EQUIPMENT
                         || innerType == Bonus.BONUS_PET
-                        || innerType == Bonus.BONUS_MOUNT
+                        || innerType == Bonus.BONUS_WINGS
                         || innerType == Bonus.BONUS_MOB
                         || innerType == Bonus.BONUS_ARTIFACT)
                     numBag++;

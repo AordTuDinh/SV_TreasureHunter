@@ -1,6 +1,7 @@
 package game.config;
 
 import com.google.gson.Gson;
+import com.google.gson.annotations.SerializedName;
 import game.treasure.service.user.Bonus;
 import ozudo.base.helper.NumberUtil;
 
@@ -12,7 +13,7 @@ public class CfgLuckySpine {
     public static final int SLOT_ITEM = 1;
     public static final int SLOT_ITEM_EQUIP = 2;
     public static final int SLOT_PET = 3;
-    public static final int SLOT_MOUNT = 4;
+    public static final int SLOT_WINGS = 4;
     public static final int SLOT_MATERIAL = 5;
     public static final int SLOT_ITEM_POINT = 6;
     public static final int SLOT_MATERIAL_SPD = 7;
@@ -65,7 +66,7 @@ public class CfgLuckySpine {
             case SLOT_ITEM -> Bonus.viewItem(pickRandomId(bonusNormal.item), 1);
             case SLOT_ITEM_EQUIP -> Bonus.viewItemEquipment(pickRandomId(bonusNormal.itemEquip), EQUIP_TIER);
             case SLOT_PET -> Bonus.viewPet(pickRandomId(bonusNormal.pet), rollTier());
-            case SLOT_MOUNT -> Bonus.viewMount(pickRandomId(bonusNormal.mount), rollTier());
+            case SLOT_WINGS -> Bonus.viewWings(pickRandomId(bonusNormal.wings), rollTier());
             case SLOT_MATERIAL -> Bonus.viewMaterial(pickRandomId(bonusNormal.material), rollTier());
             case SLOT_ITEM_POINT -> Bonus.viewItemPoint(pickRandomId(bonusNormal.itemPoint), 1);
             case SLOT_MATERIAL_SPD -> Bonus.viewMaterial(pickRandomId(bonusNormal.materialSpd), rollTier());
@@ -104,7 +105,9 @@ public class CfgLuckySpine {
         public List<Integer> item;
         public List<Integer> itemEquip;
         public List<Integer> pet;
-        public List<Integer> mount;
+        /** Config cũ trong DB vẫn dùng key "mount". */
+        @SerializedName(value = "wings", alternate = {"mount"})
+        public List<Integer> wings;
         public List<Integer> material;
         public List<Integer> itemPoint;
         public List<Integer> materialSpd;

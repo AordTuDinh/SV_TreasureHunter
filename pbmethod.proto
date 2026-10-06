@@ -297,7 +297,7 @@ message  PbUserData{
   repeated PbSkin aSkin = 11;
   optional PbListMaterial aMaterial = 12;
   repeated PbPet aPet = 15;
-  repeated PbMount aMount = 16;
+  repeated PbWings aWings = 16;
   optional  int32 tutorial = 17;
   repeated  int32 dameSkins = 18;
   optional  int32 dameSkinEquip = 19;
@@ -329,8 +329,8 @@ message PbListMaterial{
   repeated  PbMaterial materials = 1;
 }
 
-message PbListMount{
-  repeated PbMount mounts = 1;
+message PbListWings{
+  repeated PbWings wings = 1;
 }
 
 message PbSkin{
@@ -344,10 +344,10 @@ message PbSkin{
   optional int32 inMarket = 8;
 }
 
-message PbMount{
+message PbWings{
   optional int64 id = 1;
   repeated int64 point = 2;
-  optional int32 mountId = 3;
+  optional int32 wingsId = 3;
   optional int32 level = 4;
   optional int32 tier = 5;
   optional int32 isCraft = 6;
@@ -643,10 +643,10 @@ enum AutoSell {
   AUTO_SELL_EQUIP_2 = 5;
   AUTO_SELL_EQUIP_3 = 6;
   AUTO_SELL_EQUIP_4 = 7;
-  AUTO_SELL_MOUNT_1 = 8;
-  AUTO_SELL_MOUNT_2 = 9;
-  AUTO_SELL_MOUNT_3 = 10;
-  AUTO_SELL_MOUNT_4 = 11;
+  AUTO_SELL_WINGS_1 = 8;
+  AUTO_SELL_WINGS_2 = 9;
+  AUTO_SELL_WINGS_3 = 10;
+  AUTO_SELL_WINGS_4 = 11;
   AUTO_SELL_PET_1 = 12;
   AUTO_SELL_PET_2 = 13;
   AUTO_SELL_PET_3 = 14;

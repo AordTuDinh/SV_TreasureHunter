@@ -13,8 +13,8 @@ public enum ResBonusImageType {
     /** data = JSON array petId (vd: "[1,2,3]"); tier = res_bonus_image.tier */
     PET(4),
 
-    /** data = JSON array mountId (vd: "[1,2,3]"); tier = res_bonus_image.tier */
-    MOUNT(5),
+    /** data = JSON array wingsId (vd: "[1,2,3]"); tier = res_bonus_image.tier */
+    WINGS(5),
 
     /** data = flat bonus wire (vd: "[2,200,13,15,500]"); tier không dùng; không chứa type 17 */
     BONUS_DATA(6),

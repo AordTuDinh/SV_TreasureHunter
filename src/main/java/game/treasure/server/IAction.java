@@ -101,7 +101,7 @@ public class IAction {
     public static final int MARKET_REFRESH = 130;
 
     public static final int PET_INFO = 137;
-    public static final int MOUNT_INFO = 138;
+    public static final int WINGS_INFO = 138;
     // quest hàng ngày
     public static final int QUEST_STATUS = 200;
     public static final int QUEST_RECEIVE = 201;
@@ -207,7 +207,7 @@ public class IAction {
     public static final int ADD_BUFF = 468;
     public static final int CANCEL_PROTECT = 469;
     public static final int ACTIVATE_PROTECT = 486;
-    /** Chia sẻ pet/mount/equip vào chat thế giới — CommonVector [wireBonusType, rowId]. */
+    /** Chia sẻ pet/wings/equip vào chat thế giới — CommonVector [wireBonusType, rowId]. */
     public static final int CHAT_SHARE_ITEM = 487;
     public static final int TREASURE_TRANS = 470;
     public static final int TREASURE_BUY = 471;
@@ -226,8 +226,8 @@ public class IAction {
 
     public static final int PET_EQUIP = 482;
     public static final int PET_UNEQUIP = 483;
-    public static final int MOUNT_EQUIP = 484;
-    public static final int MOUNT_UNEQUIP = 485;
+    public static final int WINGS_EQUIP = 484;
+    public static final int WINGS_UNEQUIP = 485;
 
     // Arena (Đấu trường La Mã 1v1)
     public static final int ARENA_STATUS = 490;

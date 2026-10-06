@@ -6,9 +6,9 @@ import com.google.protobuf.CodedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
-/** Gắn field proto 9 (data) và 10 (isEquip) khi PbPet/PbMount chưa regenerate từ .proto. */
-public final class ProtoPetMountWire {
-    private ProtoPetMountWire() {
+/** Gắn field proto 9 (data) và 10 (isEquip) khi PbPet/PbWings chưa regenerate từ .proto. */
+public final class ProtoPetWingsWire {
+    private ProtoPetWingsWire() {
     }
 
     public static byte[] appendDataAndIsEquip(byte[] baseMessage, String data, boolean isEquip) {

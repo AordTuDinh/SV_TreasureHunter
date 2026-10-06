@@ -14,7 +14,7 @@ import game.treasure.mapping.UserItemEntity;
 import game.treasure.mapping.UserItemPointEntity;
 import game.treasure.mapping.UserMaterialEntity;
 import game.treasure.mapping.UserMobEntity;
-import game.treasure.mapping.UserMountEntity;
+import game.treasure.mapping.UserWingsEntity;
 import game.treasure.mapping.UserPetEntity;
 import game.treasure.mapping.main.ResItemEntity;
 import game.treasure.mapping.main.ResItemEquipmentEntity;
@@ -374,13 +374,13 @@ public class ItemHandler extends AHandler {
             sellPet(pet);
             return;
         }
-        if (bonusType == Bonus.BONUS_MOUNT) {
-            UserMountEntity mount = mUser.getResources().getMount(id);
-            if (mount == null) {
+        if (bonusType == Bonus.BONUS_WINGS) {
+            UserWingsEntity wings = mUser.getResources().getWings(id);
+            if (wings == null) {
                 addErrResponse(getLang(Lang.item_not_own));
                 return;
             }
-            sellMount(mount);
+            sellWings(wings);
             return;
         }
         if (bonusType == Bonus.BONUS_ITEM_POINT) {
@@ -520,11 +520,11 @@ public class ItemHandler extends AHandler {
                 return null;
             return sellPetForBatch(pet);
         }
-        if (bonusType == Bonus.BONUS_MOUNT) {
-            UserMountEntity mount = mUser.getResources().getMount(id);
-            if (mount == null)
+        if (bonusType == Bonus.BONUS_WINGS) {
+            UserWingsEntity wings = mUser.getResources().getWings(id);
+            if (wings == null)
                 return null;
-            return sellMountForBatch(mount);
+            return sellWingsForBatch(wings);
         }
         return null;
     }
@@ -557,21 +557,21 @@ public class ItemHandler extends AHandler {
         }
     }
 
-    private void sellMount(UserMountEntity mount) {
-        long id = mount.getId();
-        boolean wasEquipped = UserMountEntity.isEquipped(mUser, id);
-        if (wasEquipped && !Bonus.clearMountEquipSlot(mUser)) {
+    private void sellWings(UserWingsEntity wings) {
+        long id = wings.getId();
+        boolean wasEquipped = UserWingsEntity.isEquipped(mUser, id);
+        if (wasEquipped && !Bonus.clearWingsEquipSlot(mUser)) {
             addErrSystem();
             return;
         }
-        Bonus.clearItemFromSlot(mUser, Bonus.BONUS_MOUNT, id);
-        if (!mount.deleteFromDb()) {
+        Bonus.clearItemFromSlot(mUser, Bonus.BONUS_WINGS, id);
+        if (!wings.deleteFromDb()) {
             addErrSystem();
             return;
         }
-        mUser.getResources().removeMount(id);
-        List<Long> bonus = CfgItem.getPriceSellMount(mount);
-        addBonusToast(Bonus.receiveListItem(mUser, DetailActionType.SELL_ITEM.getKey(mount.getMountId()), bonus));
+        mUser.getResources().removeWings(id);
+        List<Long> bonus = CfgItem.getPriceSellWings(wings);
+        addBonusToast(Bonus.receiveListItem(mUser, DetailActionType.SELL_ITEM.getKey(wings.getWingsId()), bonus));
         if (wasEquipped) {
             Pbmethod.ListCommonVector.Builder pb = Pbmethod.ListCommonVector.newBuilder();
             pb.addAVector(getCommonVector(id, 1L));
@@ -600,17 +600,17 @@ public class ItemHandler extends AHandler {
         return result;
     }
 
-    private SellBatchResult sellMountForBatch(UserMountEntity mount) {
-        long id = mount.getId();
-        boolean wasEquipped = UserMountEntity.isEquipped(mUser, id);
-        if (wasEquipped && !Bonus.clearMountEquipSlot(mUser))
+    private SellBatchResult sellWingsForBatch(UserWingsEntity wings) {
+        long id = wings.getId();
+        boolean wasEquipped = UserWingsEntity.isEquipped(mUser, id);
+        if (wasEquipped && !Bonus.clearWingsEquipSlot(mUser))
             return null;
-        Bonus.clearItemFromSlot(mUser, Bonus.BONUS_MOUNT, id);
-        if (!mount.deleteFromDb())
+        Bonus.clearItemFromSlot(mUser, Bonus.BONUS_WINGS, id);
+        if (!wings.deleteFromDb())
             return null;
-        mUser.getResources().removeMount(id);
+        mUser.getResources().removeWings(id);
         SellBatchResult result = new SellBatchResult();
-        result.priceBonus = CfgItem.getPriceSellMount(mount);
+        result.priceBonus = CfgItem.getPriceSellWings(wings);
         result.wasEquipped = wasEquipped;
         return result;
     }
@@ -864,9 +864,9 @@ public class ItemHandler extends AHandler {
             uplevelPet(pet);
             return;
         }
-        UserMountEntity mount = mUser.getResources().getMount(id);
-        if (mount != null) {
-            uplevelMount(mount);
+        UserWingsEntity wings = mUser.getResources().getWings(id);
+        if (wings != null) {
+            uplevelWings(wings);
             return;
         }
         UserItemEntity item = mUser.getResources().getItem(id);
@@ -1040,13 +1040,13 @@ public class ItemHandler extends AHandler {
                 pet.getResPet() != null ? pet.getResPet().getName() : "");
     }
 
-    private void uplevelMount(UserMountEntity mount) {
-        long id = mount.getId();
-        if (!CfgItem.canUpLevel(mount)) {
+    private void uplevelWings(UserWingsEntity wings) {
+        long id = wings.getId();
+        if (!CfgItem.canUpLevel(wings)) {
             addErrResponse(getLang(Lang.err_item_equip_max_level));
             return;
         }
-        List<Long> fee = CfgItem.getUpgradeFee(mount, mUser);
+        List<Long> fee = CfgItem.getUpgradeFee(wings, mUser);
         if (fee.isEmpty()) {
             addErrResponse(getLang(Lang.err_params));
             return;
@@ -1056,23 +1056,23 @@ public class ItemHandler extends AHandler {
             addErrResponse(err);
             return;
         }
-        List<Long> paid = Bonus.receiveListItem(mUser, DetailActionType.NANG_CAP_VAT_PHAM.getKey(mount.getMountId()), fee);
+        List<Long> paid = Bonus.receiveListItem(mUser, DetailActionType.NANG_CAP_VAT_PHAM.getKey(wings.getWingsId()), fee);
         if (paid.isEmpty()) {
             addErrResponse();
             return;
         }
-        int newLevel = mount.getLevel() + 1;
-        if (!mount.update(List.of("level", newLevel))) {
+        int newLevel = wings.getLevel() + 1;
+        if (!wings.update(List.of("level", newLevel))) {
             Bonus.receiveListItem(mUser, DetailActionType.UPDATE_FAIL.getKey(), Bonus.reverseBonus(fee));
             addErrResponse();
             return;
         }
-        boolean syncEquip = UserMountEntity.isEquipped(mUser, id);
-        mount.setLevel(newLevel);
+        boolean syncEquip = UserWingsEntity.isEquipped(mUser, id);
+        wings.setLevel(newLevel);
         if (syncEquip && !updateEquipSlotLevel((int) id, newLevel)) {
             Bonus.receiveListItem(mUser, DetailActionType.UPDATE_FAIL.getKey(), Bonus.reverseBonus(fee));
-            mount.update(List.of("level", newLevel - 1));
-            mount.setLevel(newLevel - 1);
+            wings.update(List.of("level", newLevel - 1));
+            wings.setLevel(newLevel - 1);
             addErrResponse();
             return;
         }
@@ -1089,9 +1089,9 @@ public class ItemHandler extends AHandler {
         } else {
             addResponse(getCommonVector(id, (long) newLevel));
         }
-        addResponse(IAction.MOUNT_INFO, Pbmethod.PbListMount.newBuilder().addMounts(mount.toProto()).build());
-        tryBroadcastUpgradeLv10(Bonus.BONUS_MOUNT, id, newLevel, mount.getHh(),
-                mount.getRes() != null ? mount.getRes().getName() : "");
+        addResponse(IAction.WINGS_INFO, Pbmethod.PbListWings.newBuilder().addWings(wings.toProto()).build());
+        tryBroadcastUpgradeLv10(Bonus.BONUS_WINGS, id, newLevel, wings.getHh(),
+                wings.getRes() != null ? wings.getRes().getName() : "");
     }
 
     /** Hóa hình (hh &gt; 0) lên đúng cấp 10 → announce chat thế giới. */

@@ -94,7 +94,7 @@ public class CfgArtifact {
         return mUser.getResources().getArtifact(rowId);
     }
 
-    /** CD artifact đang mặc (giây) — từ user_artifact.data[idx_cd]. */
+    /** CD artifact đang mặc (giây), lấy từ data[idx_cd]. */
     public static long getEquippedArtifactCooldownSec(MyUser mUser) {
         UserArtifactEntity artifact = getEquippedArtifact(mUser);
         if (artifact == null)

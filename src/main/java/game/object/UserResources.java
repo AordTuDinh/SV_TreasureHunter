@@ -33,7 +33,7 @@ public class UserResources implements Serializable {
     @Setter
     List<UserArtifactEntity> artifacts;
     @Setter
-    List<UserMountEntity> mounts;
+    List<UserWingsEntity> wings;
     @Setter
     List<UserMobEntity> mobs;
     @Setter
@@ -54,7 +54,7 @@ public class UserResources implements Serializable {
     @Getter
     Map<Long, UserArtifactEntity> mArtifact = new HashMap<>();
     @Getter
-    Map<Long, UserMountEntity> mMount = new HashMap<>();
+    Map<Long, UserWingsEntity> mWings = new HashMap<>();
     @Getter
     Map<Long, UserMobEntity> mMob = new HashMap<>();
     @Getter
@@ -83,8 +83,8 @@ public class UserResources implements Serializable {
         for (UserPetEntity pet : mPet.values()) {
             pet.syncEquipFlag(mUser);
         }
-        for (UserMountEntity mount : mMount.values()) {
-            mount.syncEquipFlag(mUser);
+        for (UserWingsEntity wings : mWings.values()) {
+            wings.syncEquipFlag(mUser);
         }
     }
 
@@ -136,8 +136,8 @@ public class UserResources implements Serializable {
             if (artifacts != null) {
                 artifacts.forEach(item -> mArtifact.put(item.getId(), item));
             }
-            if (mounts != null) {
-                mounts.forEach(item -> mMount.put(item.getId(), item));
+            if (wings != null) {
+                wings.forEach(item -> mWings.put(item.getId(), item));
             }
             if (mobs != null) {
                 mobs.forEach(mob -> mMob.put(mob.getId(), mob));
@@ -308,8 +308,8 @@ public class UserResources implements Serializable {
             artifacts.remove(rm);
     }
 
-    public UserMountEntity getMount(long id) {
-        return mMount.get(id);
+    public UserWingsEntity getWings(long id) {
+        return mWings.get(id);
     }
 
     public boolean hasItem(int itemId) {
@@ -402,10 +402,10 @@ public class UserResources implements Serializable {
         mPet.put(uPet.getId(), uPet);
     }
 
-    public void addMount(UserMountEntity uMount) {
-        if (mounts == null) mounts = new ArrayList<>();
-        mounts.add(uMount);
-        mMount.put(uMount.getId(), uMount);
+    public void addWings(UserWingsEntity uWings) {
+        if (wings == null) wings = new ArrayList<>();
+        wings.add(uWings);
+        mWings.put(uWings.getId(), uWings);
     }
 
     public void removePet(long id) {
@@ -415,10 +415,10 @@ public class UserResources implements Serializable {
         }
     }
 
-    public void removeMount(long id) {
-        UserMountEntity rm = mMount.remove(id);
-        if (rm != null && mounts != null) {
-            mounts.remove(rm);
+    public void removeWings(long id) {
+        UserWingsEntity rm = mWings.remove(id);
+        if (rm != null && wings != null) {
+            wings.remove(rm);
         }
     }
 
@@ -479,7 +479,7 @@ public class UserResources implements Serializable {
         return CommonProto.getCommonVectorProto(payload);
     }
 
-    /** Gán ô túi UI khi nhận consum / equip / pet / mount. */
+    /** Gán ô túi UI khi nhận consum / equip / pet / wings. */
     public boolean prepareNewItemSlot(int bonusType, long rowId) {
         return Bonus.prepareNewItemSlot(mUser, bonusType, rowId);
     }

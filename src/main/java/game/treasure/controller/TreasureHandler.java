@@ -5,7 +5,7 @@ import game.config.CfgArtifact;
 import game.config.CfgCraft;
 import game.config.lang.Lang;
 import game.treasure.mapping.UserEquipmentEntity;
-import game.treasure.mapping.UserMountEntity;
+import game.treasure.mapping.UserWingsEntity;
 import game.treasure.mapping.UserPetEntity;
 import game.treasure.mapping.main.ResArtifactEntity;
 import game.treasure.server.IAction;
@@ -104,22 +104,22 @@ public class TreasureHandler extends AHandler {
                 addErrSystem();
                 return;
             }
-        } else if (bonusType == Bonus.BONUS_MOUNT) {
-            UserMountEntity mount = mUser.getResources().getMount(rowId);
-            if (mount == null) {
+        } else if (bonusType == Bonus.BONUS_WINGS) {
+            UserWingsEntity wings = mUser.getResources().getWings(rowId);
+            if (wings == null) {
                 addErrResponse(getLang(Lang.err_item_equip_not_found));
                 return;
             }
-            if (mount.getIsCraft() != 1) {
+            if (wings.getIsCraft() != 1) {
                 addErrResponse(getLang(Lang.err_params));
                 return;
             }
-            if (UserMountEntity.isEquipped(mUser, rowId)) {
+            if (UserWingsEntity.isEquipped(mUser, rowId)) {
                 addErrResponse(getLang(Lang.err_params));
                 return;
             }
-            priceTreasure = mount.getPriceTreasure();
-            if (!deleteMountForTreasure(mount)) {
+            priceTreasure = wings.getPriceTreasure();
+            if (!deleteWingsForTreasure(wings)) {
                 addErrSystem();
                 return;
             }
@@ -219,13 +219,13 @@ public class TreasureHandler extends AHandler {
         return true;
     }
 
-    private boolean deleteMountForTreasure(UserMountEntity mount) {
-        long id = mount.getId();
-        Bonus.clearItemFromSlot(mUser, Bonus.BONUS_MOUNT, id);
-        if (!DBJPA.delete("user_mount", "id", id, "user_id", mount.getUserId())) {
+    private boolean deleteWingsForTreasure(UserWingsEntity wings) {
+        long id = wings.getId();
+        Bonus.clearItemFromSlot(mUser, Bonus.BONUS_WINGS, id);
+        if (!DBJPA.delete("user_wings", "id", id, "user_id", wings.getUserId())) {
             return false;
         }
-        mUser.getResources().removeMount(id);
+        mUser.getResources().removeWings(id);
         return true;
     }
 }

@@ -15,7 +15,7 @@ import game.treasure.service.item.EquipmentStatRollService;
 import game.treasure.service.resource.ResItem;
 import game.treasure.service.resource.ResItemPoint;
 import game.treasure.service.resource.ResImage;
-import game.treasure.service.resource.ResMount;
+import game.treasure.service.resource.ResWings;
 import game.treasure.service.resource.ResMob;
 import game.object.MyUser;
 import ozudo.base.database.DBJPA;
@@ -40,7 +40,7 @@ public class Bonus {
     public static final int BONUS_EFFECT_SKIN = 7;
     public static final int BONUS_VIP_EXP = 8;
     public static final int BONUS_PET = 9;
-    public static final int BONUS_MOUNT = 10;
+    public static final int BONUS_WINGS = 10;
     public static final int BONUS_MATERIAL = 11;
     public static final int BONUS_EQUIPMENT = 12;
     public static final int BONUS_ITEM_POINT = 13;
@@ -60,7 +60,7 @@ public class Bonus {
         put(BONUS_EFFECT_SKIN, 2);
         put(BONUS_VIP_EXP, 1);
         put(BONUS_PET, 2);
-        put(BONUS_MOUNT, 2);
+        put(BONUS_WINGS, 2);
         put(BONUS_MATERIAL, 2);
         put(BONUS_EQUIPMENT, 2);
         put(BONUS_ITEM_POINT, 2);
@@ -69,7 +69,7 @@ public class Bonus {
     }};
 
     public static List<Integer> bonusSinger = Arrays.asList(
-            BONUS_ITEM, BONUS_EQUIPMENT, BONUS_ARTIFACT, BONUS_PET, BONUS_MOUNT, BONUS_MOB,
+            BONUS_ITEM, BONUS_EQUIPMENT, BONUS_ARTIFACT, BONUS_PET, BONUS_WINGS, BONUS_MOB,
             BONUS_SKIN, BONUS_EFFECT_SKIN, BONUS_MATERIAL, BONUS_ITEM_POINT, BONUS_CHANGE_OWNER);
 
     public static boolean isBonusSinger(int type) {
@@ -102,13 +102,13 @@ public class Bonus {
         return viewPet(petId, 1);
     }
 
-    public static List<Long> viewMount(int mountId, int tier) {
+    public static List<Long> viewWings(int wingsId, int tier) {
         int t = tier > 0 ? Math.min(tier, 4) : 1;
-        return view(BONUS_MOUNT, mountId, t);
+        return view(BONUS_WINGS, wingsId, t);
     }
 
-    public static List<Long> viewMount(int mountId) {
-        return viewMount(mountId, 1);
+    public static List<Long> viewWings(int wingsId) {
+        return viewWings(wingsId, 1);
     }
 
     public static List<Long> viewMob(int mobId, int tier) {
@@ -339,7 +339,7 @@ public class Bonus {
             case BONUS_EFFECT_SKIN ->
                     addEffectSkin(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
             case BONUS_PET -> addPet(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
-            case BONUS_MOUNT -> addMount(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
+            case BONUS_WINGS -> addWings(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
             case BONUS_MOB -> addMob(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
             case BONUS_MATERIAL -> addMaterial(mUser, chunk.get(1).intValue(), chunk.get(2).intValue(), detailAction);
             case BONUS_ITEM_POINT -> addItemPoint(mUser, chunk.get(1).intValue(), chunk.get(2), detailAction);
@@ -356,7 +356,7 @@ public class Bonus {
      * - MATERIAL:     roll materialIds từ res_bonus_image.data, tier lấy từ res_bonus_image.tier
      * - SKIN:         roll skinIds từ data
      * - PET:          roll petIds từ data, tier lấy từ res_bonus_image.tier
-     * - MOUNT:        roll mountIds từ data, tier lấy từ res_bonus_image.tier
+     * - WINGS:        roll wingsIds từ data, tier lấy từ res_bonus_image.tier
      * - BONUS_DATA:   nhận toàn bộ flat bonus wire trong data (không chứa type 17)
      * - SKIN_LIST:    roll skinId từ data × times; tier = res_bonus_image.tier; cho phép trùng skinId
      */
@@ -477,21 +477,21 @@ public class Bonus {
                 }
                 return ret;
             }
-            case MOUNT -> {
+            case WINGS -> {
                 int tier = cfg.getTier() > 0 ? Math.min(cfg.getTier(), 4) : 1;
-                List<Integer> mountIds = cfg.getMountIds();
-                if (mountIds == null || mountIds.isEmpty()) {
-                    logBonusImageFail("mountIds rỗng", chunk, "data=" + cfg.getData());
+                List<Integer> wingsIds = cfg.getWingsIds();
+                if (wingsIds == null || wingsIds.isEmpty()) {
+                    logBonusImageFail("wingsIds rỗng", chunk, "data=" + cfg.getData());
                     return new ArrayList<>();
                 }
 
                 List<Long> ret = new ArrayList<>();
                 for (int i = 0; i < times; i++) {
-                    int idx = NumberUtil.getRandom(0, mountIds.size() - 1);
-                    int mountId = mountIds.get(idx);
-                    List<Long> added = addMount(mUser, mountId, tier, detailAction);
+                    int idx = NumberUtil.getRandom(0, wingsIds.size() - 1);
+                    int wingsId = wingsIds.get(idx);
+                    List<Long> added = addWings(mUser, wingsId, tier, detailAction);
                     if (added == null || added.isEmpty()) {
-                        logBonusImageFail("addMount fail/stop", chunk, "mountId=" + mountId + " tier=" + tier + " roll=" + i);
+                        logBonusImageFail("addWings fail/stop", chunk, "wingsId=" + wingsId + " tier=" + tier + " roll=" + i);
                         break;
                     }
                     ret.addAll(added);
@@ -833,24 +833,24 @@ public class Bonus {
         return new ArrayList<>();
     }
 
-    static List<Long> addMount(MyUser mUser, int mountId, int tier, String detailAction) {
+    static List<Long> addWings(MyUser mUser, int wingsId, int tier, String detailAction) {
         if (tier <= 0)
             tier = 1;
-        if (ResMount.get(mountId) == null) return new ArrayList<>();
-        if (!mUser.getResources().prepareNewItemSlot(BONUS_MOUNT, 0))
+        if (ResWings.get(wingsId) == null) return new ArrayList<>();
+        if (!mUser.getResources().prepareNewItemSlot(BONUS_WINGS, 0))
             return new ArrayList<>();
-        UserMountEntity uMount = new UserMountEntity(mUser.getUser(), mountId, tier);
-        if (DBJPA.save(uMount)) {
-            if (!mUser.getResources().prepareNewItemSlot(BONUS_MOUNT, uMount.getId())) {
-                DBJPA.delete("user_mount", "id", uMount.getId(), "user_id", uMount.getUserId());
+        UserWingsEntity uWings = new UserWingsEntity(mUser.getUser(), wingsId, tier);
+        if (DBJPA.save(uWings)) {
+            if (!mUser.getResources().prepareNewItemSlot(BONUS_WINGS, uWings.getId())) {
+                DBJPA.delete("user_wings", "id", uWings.getId(), "user_id", uWings.getUserId());
                 return new ArrayList<>();
             }
-            mUser.getResources().addMount(uMount);
+            mUser.getResources().addWings(uWings);
             if (CfgServer.isRealServer()) {
                 Actions.save(mUser.getUser(), Actions.GRECEIVE, detailAction,
-                        "type", "mount", "id", uMount.getId(), "mountId", mountId, "tier", tier);
+                        "type", "wings", "id", uWings.getId(), "wingsId", wingsId, "tier", tier);
             }
-            return Arrays.asList((long) BONUS_MOUNT, uMount.getId(), (long) mountId, (long) tier);
+            return Arrays.asList((long) BONUS_WINGS, uWings.getId(), (long) wingsId, (long) tier);
         }
         return new ArrayList<>();
     }
@@ -1048,7 +1048,7 @@ public class Bonus {
     }
 
     /**
-     * Parse preview/reward config — ITEM [4,itemKey], ARTIFACT [5,itemKey,tier], EQUIP [12,itemKey,tier], PET/MOUNT [9|10,configId,tier].
+     * Parse preview/reward config — ITEM [4,itemKey], ARTIFACT [5,itemKey,tier], EQUIP [12,itemKey,tier], PET/WINGS [9|10,configId,tier].
      */
     public static List<List<Long>> parse(List<Long> bonus) {
         List<List<Long>> result = new ArrayList<>();
@@ -1278,33 +1278,33 @@ public class Bonus {
         return mUser.getResources().saveItemSlot(slots);
     }
 
-    public static boolean moveMountOutOfBag(MyUser mUser, UserMountEntity mount) {
-        if (mount == null)
+    public static boolean moveWingsOutOfBag(MyUser mUser, UserWingsEntity wings) {
+        if (wings == null)
             return false;
-        clearItemFromSlot(mUser, BONUS_MOUNT, mount.getId());
+        clearItemFromSlot(mUser, BONUS_WINGS, wings.getId());
         return true;
     }
 
-    public static boolean moveMountToBag(MyUser mUser, UserMountEntity mount) {
-        if (mount == null || !mUser.getResources().canAddBagItem(1))
+    public static boolean moveWingsToBag(MyUser mUser, UserWingsEntity wings) {
+        if (wings == null || !mUser.getResources().canAddBagItem(1))
             return false;
         List<Long> slots = mUser.getUData().getItemSlotList();
         int bagCount = mUser.getUData().getSlotBagUI();
         Integer slot = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
         if (slot == null)
             return false;
-        ItemSlotHelper.setPair(slots, slot, BONUS_MOUNT, mount.getId());
+        ItemSlotHelper.setPair(slots, slot, BONUS_WINGS, wings.getId());
         return mUser.getResources().saveItemSlot(slots);
     }
 
-    public static boolean moveMountToBagSlot(MyUser mUser, UserMountEntity mount, int slotIndex) {
-        if (mount == null || slotIndex < 0)
+    public static boolean moveWingsToBagSlot(MyUser mUser, UserWingsEntity wings, int slotIndex) {
+        if (wings == null || slotIndex < 0)
             return false;
         List<Long> slots = mUser.getUData().getItemSlotList();
         int bagCount = mUser.getUData().getSlotBagUI();
         if (slotIndex >= bagCount)
             return false;
-        ItemSlotHelper.setPair(slots, slotIndex, BONUS_MOUNT, mount.getId());
+        ItemSlotHelper.setPair(slots, slotIndex, BONUS_WINGS, wings.getId());
         return mUser.getResources().saveItemSlot(slots);
     }
 
@@ -1320,9 +1320,9 @@ public class Bonus {
         return mUser.getUser().updateItemEquip(lst);
     }
 
-    public static boolean clearMountEquipSlot(MyUser mUser) {
-        if (mUser == null || mUser.getResources().getMMount() == null) return true;
-        mUser.getResources().getMMount().values().forEach(mount -> mount.setEquip(false));
+    public static boolean clearWingsEquipSlot(MyUser mUser) {
+        if (mUser == null || mUser.getResources().getMWings() == null) return true;
+        mUser.getResources().getMWings().values().forEach(wings -> wings.setEquip(false));
         return true;
     }
 
@@ -1332,10 +1332,10 @@ public class Bonus {
         return ItemSlotHelper.findSlotOf(slots, 0, bagCount, BONUS_PET, rowId);
     }
 
-    public static Integer findMountBagSlot(MyUser mUser, long rowId) {
+    public static Integer findWingsBagSlot(MyUser mUser, long rowId) {
         List<Long> slots = mUser.getUData().getItemSlotList();
         int bagCount = mUser.getUData().getSlotBagUI();
-        return ItemSlotHelper.findSlotOf(slots, 0, bagCount, BONUS_MOUNT, rowId);
+        return ItemSlotHelper.findSlotOf(slots, 0, bagCount, BONUS_WINGS, rowId);
     }
 
     public static boolean moveEquipmentOutOfBag(MyUser mUser, UserEquipmentEntity equip) {
@@ -1393,11 +1393,11 @@ public class Bonus {
     }
 
     /**
-     * item_slot: consum (BONUS_ITEM), equip, pet, mount, artifact — không gồm event/currency.
+     * item_slot: consum (BONUS_ITEM), equip, pet, wings, artifact — không gồm event/currency.
      */
     public static boolean usesItemSlotBonusType(int bonusType) {
         return bonusType == BONUS_ITEM || bonusType == BONUS_EQUIPMENT
-                || bonusType == BONUS_PET || bonusType == BONUS_MOUNT || bonusType == BONUS_MOB
+                || bonusType == BONUS_PET || bonusType == BONUS_WINGS || bonusType == BONUS_MOB
                 || bonusType == BONUS_ARTIFACT;
     }
 
@@ -1439,10 +1439,10 @@ public class Bonus {
                 return pet != null && !pet.isEquip()
                         && !isBlockedFromBagSlot(pet.getIsTrading(), pet.getInMarket());
             }
-            case BONUS_MOUNT: {
-                UserMountEntity mount = mUser.getResources().getMount(rowId);
-                return mount != null && !mount.isEquip()
-                        && !isBlockedFromBagSlot(mount.getIsTrading(), mount.getInMarket());
+            case BONUS_WINGS: {
+                UserWingsEntity wings = mUser.getResources().getWings(rowId);
+                return wings != null && !wings.isEquip()
+                        && !isBlockedFromBagSlot(wings.getIsTrading(), wings.getInMarket());
             }
             case BONUS_MOB: {
                 UserMobEntity mob = mUser.getResources().getMob(rowId);
@@ -1531,15 +1531,15 @@ public class Bonus {
             ItemSlotHelper.setPair(slots, s, BONUS_PET, pet.getId());
             changed = true;
         }
-        for (UserMountEntity mount : mUser.getResources().getMMount().values()) {
-            if (mount.isEquip() || isBlockedFromBagSlot(mount.getIsTrading(), mount.getInMarket()))
+        for (UserWingsEntity wings : mUser.getResources().getMWings().values()) {
+            if (wings.isEquip() || isBlockedFromBagSlot(wings.getIsTrading(), wings.getInMarket()))
                 continue;
-            if (isAlreadySlotted(slots, bagCount, BONUS_MOUNT, mount.getId()))
+            if (isAlreadySlotted(slots, bagCount, BONUS_WINGS, wings.getId()))
                 continue;
             Integer s = ItemSlotHelper.findFirstEmpty(slots, 0, bagCount);
             if (s == null)
                 return changed;
-            ItemSlotHelper.setPair(slots, s, BONUS_MOUNT, mount.getId());
+            ItemSlotHelper.setPair(slots, s, BONUS_WINGS, wings.getId());
             changed = true;
         }
         for (UserMobEntity mob : mUser.getResources().getMMob().values()) {
@@ -1576,7 +1576,7 @@ public class Bonus {
     }
 
     /**
-     * Gán ô túi UI — bonusType ∈ {4 consum, 12 equip, 9 pet, 10 mount, 14 mob, 5 artifact}. rowId=0 chỉ check còn chỗ.
+     * Gán ô túi UI — bonusType ∈ {4 consum, 12 equip, 9 pet, 10 wings, 14 mob, 5 artifact}. rowId=0 chỉ check còn chỗ.
      */
     public static boolean prepareNewItemSlot(MyUser mUser, int bonusType, long rowId) {
         if (!usesItemSlotBonusType(bonusType))

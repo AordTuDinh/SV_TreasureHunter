@@ -4,7 +4,7 @@ import game.config.CfgCraft;
 
 public enum CraftTargetType {
     EQUIPMENT(1),
-    MOUNT(2),
+    WINGS(2),
     PET(3),
     SKIN(4),
     ARTIFACT(5),

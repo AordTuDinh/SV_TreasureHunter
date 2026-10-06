@@ -10,10 +10,10 @@ import game.config.aEnum.ToastType;
 import game.config.lang.Lang;
 import game.treasure.mapping.UserChatEntity;
 import game.treasure.mapping.UserEquipmentEntity;
-import game.treasure.mapping.UserMountEntity;
+import game.treasure.mapping.UserWingsEntity;
 import game.treasure.mapping.UserPetEntity;
 import game.treasure.mapping.main.ResItemEquipmentEntity;
-import game.treasure.mapping.main.ResMountEntity;
+import game.treasure.mapping.main.ResWingsEntity;
 import game.treasure.mapping.main.ResPetEntity;
 import game.treasure.server.IAction;
 import game.treasure.service.Services;
@@ -249,7 +249,7 @@ public class ChatHandler extends AHandler {
         addResponse(getCommonVector(data));
     }
 
-    /** Chia sẻ pet / mount / equip vào chat thế giới. Input: [wireBonusType, rowId]. */
+    /** Chia sẻ pet / wings / equip vào chat thế giới. Input: [wireBonusType, rowId]. */
     void shareItem() {
         if (user.isLockChat() != null) {
             addErrResponse(getLang(Lang.err_chat_block));
@@ -319,7 +319,7 @@ public class ChatHandler extends AHandler {
             return null;
         return switch (wireType) {
             case Bonus.BONUS_PET -> buildPetShareInfo(mUser, rowId);
-            case Bonus.BONUS_MOUNT -> buildMountShareInfo(mUser, rowId);
+            case Bonus.BONUS_WINGS -> buildWingsShareInfo(mUser, rowId);
             case Bonus.BONUS_EQUIPMENT -> buildEquipShareInfo(mUser, rowId);
             default -> null;
         };
@@ -352,29 +352,29 @@ public class ChatHandler extends AHandler {
         return CommonProto.getCommonVectorProto(aLong, aString);
     }
 
-    public static Pbmethod.CommonVector buildMountShareInfo(MyUser mUser, long rowId) {
-        UserMountEntity mount = mUser.getResources().getMount(rowId);
-        if (mount == null)
+    public static Pbmethod.CommonVector buildWingsShareInfo(MyUser mUser, long rowId) {
+        UserWingsEntity wings = mUser.getResources().getWings(rowId);
+        if (wings == null)
             return null;
-        ResMountEntity res = mount.getRes();
+        ResWingsEntity res = wings.getRes();
         String name = res != null && res.getName() != null ? res.getName() : "";
         List<Long> aLong = Arrays.asList(
-                (long) Bonus.BONUS_MOUNT,
-                mount.getId(),
-                (long) mount.getMountId(),
-                (long) mount.getLevel(),
-                (long) (mount.getTier() > 0 ? mount.getTier() : 1),
-                (long) mount.getIcon(),
-                (long) mount.getHh(),
-                (long) mount.getIsCraft(),
-                (long) mount.getPriceTreasure(),
-                mount.isEquip() ? 1L : 0L,
+                (long) Bonus.BONUS_WINGS,
+                wings.getId(),
+                (long) wings.getWingsId(),
+                (long) wings.getLevel(),
+                (long) (wings.getTier() > 0 ? wings.getTier() : 1),
+                (long) wings.getIcon(),
+                (long) wings.getHh(),
+                (long) wings.getIsCraft(),
+                (long) wings.getPriceTreasure(),
+                wings.isEquip() ? 1L : 0L,
                 0L
         );
         List<String> aString = Arrays.asList(
-                mount.getData() != null ? mount.getData() : "[]",
+                wings.getData() != null ? wings.getData() : "[]",
                 name,
-                mount.getCraftBy() != null ? mount.getCraftBy() : ""
+                wings.getCraftBy() != null ? wings.getCraftBy() : ""
         );
         return CommonProto.getCommonVectorProto(aLong, aString);
     }

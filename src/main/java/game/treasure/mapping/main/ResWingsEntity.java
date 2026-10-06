@@ -1,8 +1,6 @@
 package game.treasure.mapping.main;
 
 import game.object.PointRandomConfig;
-import game.treasure.service.resource.ResMount;
-import game.treasure.service.resource.ResPet;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ozudo.base.helper.StringHelper;
@@ -16,7 +14,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @Entity
-public class ResMountEntity implements Serializable {
+public class ResWingsEntity implements Serializable {
     @Id
     int id;
     String name;

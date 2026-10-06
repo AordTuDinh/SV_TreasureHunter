@@ -519,9 +519,9 @@ public class UserDataEntity implements Serializable {
             pb.addASkin(skin.getValue().toProto());
         }
 
-        // mount
-        for (Map.Entry<Long, UserMountEntity> mounts : mUser.getResources().getMMount().entrySet()) {
-            pb.addAMount(mounts.getValue().toProto());
+        // wings
+        for (Map.Entry<Long, UserWingsEntity> wings : mUser.getResources().getMWings().entrySet()) {
+            pb.addAWings(wings.getValue().toProto());
         }
 
         // mob

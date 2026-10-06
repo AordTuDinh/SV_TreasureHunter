@@ -1,7 +1,7 @@
 package game.treasure.controller;
 
 import game.treasure.mapping.UserEntity;
-import game.treasure.mapping.UserMountEntity;
+import game.treasure.mapping.UserWingsEntity;
 import game.treasure.mapping.UserPetEntity;
 import game.treasure.server.IAction;
 import game.config.lang.Lang;
@@ -18,7 +18,7 @@ public class PetHandler extends AHandler {
         List<Integer> actions = Arrays.asList(
                 PET_INFO,
                 PET_EQUIP, PET_UNEQUIP,
-                MOUNT_EQUIP, MOUNT_UNEQUIP);
+                WINGS_EQUIP, WINGS_UNEQUIP);
         actions.forEach(action -> mHandler.put(action, this));
     }
 
@@ -44,8 +44,8 @@ public class PetHandler extends AHandler {
                 case PET_INFO -> petInfo();
                 case PET_EQUIP -> equipPet();
                 case PET_UNEQUIP -> unequipPet();
-                case MOUNT_EQUIP -> equipMount();
-                case MOUNT_UNEQUIP -> unequipMount();
+                case WINGS_EQUIP -> equipWings();
+                case WINGS_UNEQUIP -> unequipWings();
             }
         } catch (Exception ex) {
             Logs.error(ex);
@@ -124,8 +124,8 @@ public class PetHandler extends AHandler {
             addErrSystem();
             return;
         }
-        syncAllPetMountEquipFlags();
-        finishPetMountEquipChange(buildPetSlotPayload(pet, newBagSlot));
+        syncAllPetWingsEquipFlags();
+        finishPetWingsEquipChange(buildPetSlotPayload(pet, newBagSlot));
         syncEquippedPetInRoom();
     }
 
@@ -157,65 +157,65 @@ public class PetHandler extends AHandler {
             addErrResponse(getLang(Lang.err_max_slot));
             return;
         }
-        syncAllPetMountEquipFlags();
+        syncAllPetWingsEquipFlags();
         Integer bagSlot = Bonus.findPetBagSlot(mUser, pet.getId());
-        finishPetMountEquipChange(buildPetSlotPayload(pet, bagSlot));
+        finishPetWingsEquipChange(buildPetSlotPayload(pet, bagSlot));
         syncEquippedPetInRoom();
     }
 
-    private void equipMount() {
+    private void equipWings() {
         List<Long> inputs = getInputALong();
         if (inputs.isEmpty()) {
             addErrParam();
             return;
         }
         long rowId = inputs.get(0);
-        UserMountEntity mount = mUser.getResources().getMount(rowId);
-        if (mount == null) {
+        UserWingsEntity wings = mUser.getResources().getWings(rowId);
+        if (wings == null) {
             addErrResponse(getLang(Lang.err_item_equip_not_found));
             return;
         }
-        if (Bonus.isBlockedFromBagSlot(mount.getIsTrading(), mount.getInMarket())) {
+        if (Bonus.isBlockedFromBagSlot(wings.getIsTrading(), wings.getInMarket())) {
             addErrResponse(getLang(Lang.err_params));
             return;
         }
-        if (UserMountEntity.isEquipped(mUser, rowId)) {
+        if (UserWingsEntity.isEquipped(mUser, rowId)) {
             addErrResponse(getLang(Lang.err_params));
             return;
         }
 
-        Integer newBagSlot = Bonus.findMountBagSlot(mUser, rowId);
+        Integer newBagSlot = Bonus.findWingsBagSlot(mUser, rowId);
 
-        Bonus.moveMountOutOfBag(mUser, mount);
+        Bonus.moveWingsOutOfBag(mUser, wings);
 
-        for (UserMountEntity other : mUser.getResources().getMMount().values()) {
-            if (other.getId() == mount.getId() || !other.isEquip())
+        for (UserWingsEntity other : mUser.getResources().getMWings().values()) {
+            if (other.getId() == wings.getId() || !other.isEquip())
                 continue;
             other.setEquip(false);
-            if (!Bonus.moveMountToBag(mUser, other)) {
-                Bonus.moveMountToBag(mUser, mount);
+            if (!Bonus.moveWingsToBag(mUser, other)) {
+                Bonus.moveWingsToBag(mUser, wings);
                 addErrResponse(getLang(Lang.err_max_slot));
                 return;
             }
         }
-        mount.setEquip(true);
-        syncAllPetMountEquipFlags();
-        finishPetMountEquipChange(buildMountSlotPayload(mount, newBagSlot));
+        wings.setEquip(true);
+        syncAllPetWingsEquipFlags();
+        finishPetWingsEquipChange(buildWingsSlotPayload(wings, newBagSlot));
     }
 
-    private void unequipMount() {
+    private void unequipWings() {
         List<Long> inputs = getInputALong();
         if (inputs.isEmpty()) {
             addErrParam();
             return;
         }
         long rowId = inputs.get(0);
-        if (!UserMountEntity.isEquipped(mUser, rowId)) {
+        if (!UserWingsEntity.isEquipped(mUser, rowId)) {
             addErrResponse(getLang(Lang.err_params));
             return;
         }
-        UserMountEntity mount = mUser.getResources().getMount(rowId);
-        if (mount == null) {
+        UserWingsEntity wings = mUser.getResources().getWings(rowId);
+        if (wings == null) {
             addErrResponse(getLang(Lang.err_item_equip_not_found));
             return;
         }
@@ -223,23 +223,23 @@ public class PetHandler extends AHandler {
             addErrResponse(getLang(Lang.err_max_slot));
             return;
         }
-        if (!Bonus.clearMountEquipSlot(mUser)) {
+        if (!Bonus.clearWingsEquipSlot(mUser)) {
             addErrSystem();
             return;
         }
-        if (!Bonus.moveMountToBag(mUser, mount)) {
+        if (!Bonus.moveWingsToBag(mUser, wings)) {
             addErrResponse(getLang(Lang.err_max_slot));
             return;
         }
-        syncAllPetMountEquipFlags();
-        Integer bagSlot = Bonus.findMountBagSlot(mUser, mount.getId());
-        finishPetMountEquipChange(buildMountSlotPayload(mount, bagSlot));
+        syncAllPetWingsEquipFlags();
+        Integer bagSlot = Bonus.findWingsBagSlot(mUser, wings.getId());
+        finishPetWingsEquipChange(buildWingsSlotPayload(wings, bagSlot));
     }
 
-    void syncAllPetMountEquipFlags() {
+    void syncAllPetWingsEquipFlags() {
         for (UserPetEntity p : mUser.getResources().getMPet().values())
             p.syncEquipFlag(mUser);
-        for (UserMountEntity m : mUser.getResources().getMMount().values())
+        for (UserWingsEntity m : mUser.getResources().getMWings().values())
             m.syncEquipFlag(mUser);
     }
 
@@ -257,21 +257,21 @@ public class PetHandler extends AHandler {
         return data;
     }
 
-    List<Long> buildMountSlotPayload(UserMountEntity mount, Integer freedOrNewSlot) {
+    List<Long> buildWingsSlotPayload(UserWingsEntity wings, Integer freedOrNewSlot) {
         List<Long> data = new ArrayList<>();
         if (freedOrNewSlot != null && freedOrNewSlot >= 0) {
-            if (mount != null && UserMountEntity.isEquipped(mUser, mount.getId())) {
+            if (wings != null && UserWingsEntity.isEquipped(mUser, wings.getId())) {
                 data.add(0L);
                 data.add((long) freedOrNewSlot);
-            } else if (mount != null) {
-                data.add(mount.getId());
+            } else if (wings != null) {
+                data.add(wings.getId());
                 data.add((long) freedOrNewSlot);
             }
         }
         return data;
     }
 
-    private void finishPetMountEquipChange(List<Long> slotPairUpdates) {
+    private void finishPetWingsEquipChange(List<Long> slotPairUpdates) {
         Pbmethod.ListCommonVector.Builder pb = Pbmethod.ListCommonVector.newBuilder();
         pb.addAVector(user.reCalculatePoint(mUser).toCommonVector());
         pb.addAVector(getCommonIntVector(mUser.getUser().normalizeItemEquipList()));

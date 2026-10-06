@@ -22,7 +22,7 @@ public final class TradingItemService {
             case Bonus.BONUS_EQUIPMENT -> res.getEquipment(rowId);
             case Bonus.BONUS_MATERIAL -> res.getMaterial(rowId);
             case Bonus.BONUS_PET -> res.getPet(rowId);
-            case Bonus.BONUS_MOUNT -> res.getMount(rowId);
+            case Bonus.BONUS_WINGS -> res.getWings(rowId);
             case Bonus.BONUS_MOB -> res.getMob(rowId);
             case Bonus.BONUS_ARTIFACT -> res.getArtifact(rowId);
             case Bonus.BONUS_SKIN -> res.getSkin(rowId);
@@ -32,7 +32,7 @@ public final class TradingItemService {
 
     public static int getIsTrading(Object entity) {
         if (entity instanceof UserPetEntity e) return e.getIsTrading();
-        if (entity instanceof UserMountEntity e) return e.getIsTrading();
+        if (entity instanceof UserWingsEntity e) return e.getIsTrading();
         if (entity instanceof UserItemEntity e) return e.getIsTrading();
         if (entity instanceof UserMaterialEntity e) return e.getIsTrading();
         if (entity instanceof UserMobEntity e) return e.getIsTrading();
@@ -43,7 +43,7 @@ public final class TradingItemService {
 
     public static int getInMarket(Object entity) {
         if (entity instanceof UserPetEntity e) return e.getInMarket();
-        if (entity instanceof UserMountEntity e) return e.getInMarket();
+        if (entity instanceof UserWingsEntity e) return e.getInMarket();
         if (entity instanceof UserItemEntity e) return e.getInMarket();
         if (entity instanceof UserMaterialEntity e) return e.getInMarket();
         if (entity instanceof UserMobEntity e) return e.getInMarket();
@@ -91,7 +91,7 @@ public final class TradingItemService {
         if (entity instanceof UserPetEntity e) {
             e.setIsTrading(isTrading);
             e.setInMarket(inMarket);
-        } else if (entity instanceof UserMountEntity e) {
+        } else if (entity instanceof UserWingsEntity e) {
             e.setIsTrading(isTrading);
             e.setInMarket(inMarket);
         } else if (entity instanceof UserItemEntity e) {
@@ -118,7 +118,7 @@ public final class TradingItemService {
             case Bonus.BONUS_EQUIPMENT -> "user_equipment";
             case Bonus.BONUS_MATERIAL -> "user_material";
             case Bonus.BONUS_PET -> "user_pet";
-            case Bonus.BONUS_MOUNT -> "user_mount";
+            case Bonus.BONUS_WINGS -> "user_wings";
             case Bonus.BONUS_MOB -> "user_mob";
             case Bonus.BONUS_ARTIFACT -> "user_artifact";
             case Bonus.BONUS_SKIN -> "user_skin";
@@ -130,7 +130,7 @@ public final class TradingItemService {
         UserResources res = mUser.getResources();
         int count = 0;
         count += countTab(res.getMPet().values(), tab, Bonus.BONUS_PET);
-        count += countTab(res.getMMount().values(), tab, Bonus.BONUS_MOUNT);
+        count += countTab(res.getMWings().values(), tab, Bonus.BONUS_WINGS);
         count += countTab(res.getMItem().values(), tab, Bonus.BONUS_ITEM);
         count += countTab(res.getMMaterial().values(), tab, Bonus.BONUS_MATERIAL);
         count += countTab(res.getMMob().values(), tab, Bonus.BONUS_MOB);
@@ -176,7 +176,7 @@ public final class TradingItemService {
             case Bonus.BONUS_EQUIPMENT -> UserEquipmentEntity.class;
             case Bonus.BONUS_MATERIAL -> UserMaterialEntity.class;
             case Bonus.BONUS_PET -> UserPetEntity.class;
-            case Bonus.BONUS_MOUNT -> UserMountEntity.class;
+            case Bonus.BONUS_WINGS -> UserWingsEntity.class;
             case Bonus.BONUS_MOB -> UserMobEntity.class;
             case Bonus.BONUS_ARTIFACT -> UserArtifactEntity.class;
             case Bonus.BONUS_SKIN -> UserSkinEntity.class;
@@ -192,7 +192,7 @@ public final class TradingItemService {
             applyFlags(row, 1, 0);
         UserResources res = buyer.getResources();
         if (row instanceof UserPetEntity e) res.addPet(e);
-        else if (row instanceof UserMountEntity e) res.addMount(e);
+        else if (row instanceof UserWingsEntity e) res.addWings(e);
         else if (row instanceof UserItemEntity e) res.addItem(e);
         else if (row instanceof UserEquipmentEntity e) res.addEquipment(e);
         else if (row instanceof UserMaterialEntity e) res.addMaterial(e);
@@ -208,7 +208,7 @@ public final class TradingItemService {
             case Bonus.BONUS_EQUIPMENT -> res.removeEquipment(rowId);
             case Bonus.BONUS_MATERIAL -> res.removeMaterial(rowId);
             case Bonus.BONUS_PET -> res.removePet(rowId);
-            case Bonus.BONUS_MOUNT -> res.removeMount(rowId);
+            case Bonus.BONUS_WINGS -> res.removeWings(rowId);
             case Bonus.BONUS_MOB -> res.removeMob(rowId);
             case Bonus.BONUS_ARTIFACT -> res.removeArtifact(rowId);
             case Bonus.BONUS_SKIN -> res.removeSkin(rowId);

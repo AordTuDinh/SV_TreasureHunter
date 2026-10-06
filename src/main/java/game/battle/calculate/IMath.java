@@ -224,11 +224,11 @@ public class IMath {
             for (int i = 0; i + 1 < itemPoints.size(); i += 2)
                 addPointData(pt, itemPoints.get(i).intValue(), itemPoints.get(i + 1).floatValue());
         }
-        addEquippedPetMountPoints(mUser, pt);
+        addEquippedPetWingsPoints(mUser, pt);
     }
 
-    /** Cộng stat từ pet / mount đang trang bị (slot PET / MOUNT). */
-    static void addEquippedPetMountPoints(MyUser mUser, Point pt) {
+    /** Cộng stat từ pet / wings đang trang bị (slot PET / WINGS). */
+    static void addEquippedPetWingsPoints(MyUser mUser, Point pt) {
         List<Integer> lst = mUser.getUser().normalizeItemEquipList();
         int petIdx = game.treasure.mapping.UserEntity.equipSlotIndex(
                 protocol.Pbmethod.EquipSlotType.PET.getNumber());
@@ -240,10 +240,10 @@ public class IMath {
                     addDataFloatPoints(pt, pet.getDataListFloat(), pet.getLevel());
             }
         }
-        if (mUser.getResources().getMMount() != null) {
-            for (game.treasure.mapping.UserMountEntity mount : mUser.getResources().getMMount().values()) {
-                if (mount != null && mount.isEquip())
-                    addDataFloatPoints(pt, mount.getDataListFloat(), mount.getLevel());
+        if (mUser.getResources().getMWings() != null) {
+            for (game.treasure.mapping.UserWingsEntity wings : mUser.getResources().getMWings().values()) {
+                if (wings != null && wings.isEquip())
+                    addDataFloatPoints(pt, wings.getDataListFloat(), wings.getLevel());
             }
         }
     }

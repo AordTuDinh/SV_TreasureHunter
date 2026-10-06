@@ -2,7 +2,7 @@ package game.treasure.mapping;
 
 import game.object.MyUser;
 import game.treasure.mapping.main.ResPetEntity;
-import game.treasure.service.item.ProtoPetMountWire;
+import game.treasure.service.item.ProtoPetWingsWire;
 import game.treasure.service.resource.ResPet;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -96,9 +96,9 @@ public class UserPetEntity implements Serializable {
 
     public protocol.Pbmethod.PbPet toProto() {
         try {
-            byte[] bytes = ProtoPetMountWire.appendDataAndIsEquip(
+            byte[] bytes = ProtoPetWingsWire.appendDataAndIsEquip(
                     toProtoBuilder().build().toByteArray(), data, isEquip);
-            bytes = game.treasure.service.item.ProtoTradingWire.appendPetMountTrading(bytes, isTrading, inMarket);
+            bytes = game.treasure.service.item.ProtoTradingWire.appendPetWingsTrading(bytes, isTrading, inMarket);
             return protocol.Pbmethod.PbPet.parseFrom(bytes);
         } catch (Exception ex) {
             return toProtoBuilder().build();

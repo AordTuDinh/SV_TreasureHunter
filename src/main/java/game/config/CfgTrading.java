@@ -79,9 +79,9 @@ public class CfgTrading {
                 return "err_item_equip";
             return null;
         }
-        if (bonusType == Bonus.BONUS_MOUNT) {
-            UserMountEntity mount = (UserMountEntity) entity;
-            if (UserMountEntity.isEquipped(mUser, mount.getId()))
+        if (bonusType == Bonus.BONUS_WINGS) {
+            UserWingsEntity wings = (UserWingsEntity) entity;
+            if (UserWingsEntity.isEquipped(mUser, wings.getId()))
                 return "err_item_equip";
             return null;
         }
@@ -116,8 +116,8 @@ public class CfgTrading {
                 return "err_trading_need_craft";
             return null;
         }
-        if (bonusType == Bonus.BONUS_MOUNT) {
-            if (((UserMountEntity) entity).getIsCraft() != 1)
+        if (bonusType == Bonus.BONUS_WINGS) {
+            if (((UserWingsEntity) entity).getIsCraft() != 1)
                 return "err_trading_need_craft";
             return null;
         }

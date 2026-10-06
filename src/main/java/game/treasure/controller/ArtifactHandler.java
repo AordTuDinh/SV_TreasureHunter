@@ -578,7 +578,7 @@ public class ArtifactHandler extends AHandler {
             addErrResponse(getLang(Lang.err_artifact_cooldown));
             return;
         }
-        long cdSec = Math.round(artifact.getEffectiveSlot(game.config.ArtifactDataSlot.IDX_CD));
+        long cdSec = CfgArtifact.getEquippedArtifactCooldownSec(mUser);
         if (cdSec <= 0) {
             addErrParam();
             return;

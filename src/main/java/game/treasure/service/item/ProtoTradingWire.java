@@ -10,7 +10,7 @@ public final class ProtoTradingWire {
     private ProtoTradingWire() {
     }
 
-    public static byte[] appendPetMountTrading(byte[] base, int isTrading, int inMarket) {
+    public static byte[] appendPetWingsTrading(byte[] base, int isTrading, int inMarket) {
         return appendInt32Pair(base, 12, isTrading, 13, inMarket);
     }
 

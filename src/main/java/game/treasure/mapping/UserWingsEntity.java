@@ -1,9 +1,9 @@
 package game.treasure.mapping;
 
 import game.object.MyUser;
-import game.treasure.mapping.main.ResMountEntity;
-import game.treasure.service.item.ProtoPetMountWire;
-import game.treasure.service.resource.ResMount;
+import game.treasure.mapping.main.ResWingsEntity;
+import game.treasure.service.item.ProtoPetWingsWire;
+import game.treasure.service.resource.ResWings;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import ozudo.base.database.DBJPA;
@@ -16,13 +16,13 @@ import java.util.List;
 @Data
 @Entity
 @NoArgsConstructor
-@Table(name = "user_mount")
-public class UserMountEntity implements Serializable {
+@Table(name = "user_wings")
+public class UserWingsEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
     int userId;
-    int mountId;
+    int wingsId;
     int level;
     int tier = 1;
     int priceTreasure;
@@ -38,23 +38,23 @@ public class UserMountEntity implements Serializable {
     @Transient
     boolean isEquip;
 
-    public UserMountEntity(UserEntity user, int mountId,int tier) {
+    public UserWingsEntity(UserEntity user, int wingsId,int tier) {
         this.userId = user.getId();
-        this.mountId = mountId;
+        this.wingsId = wingsId;
         this.server = user.getServer();
         this.level = 1;
         this.tier = tier;
         this.isCraft = 0;
         this.hh = 0;
         this.priceTreasure = 0;
-        this.icon = mountId;
+        this.icon = wingsId;
         this.data = getRes().getPointData(tier);
     }
 
-    public static boolean isEquipped(MyUser mUser, long mountRowId) {
-        if (mUser == null || mountRowId <= 0) return false;
-        UserMountEntity mount = mUser.getResources().getMount(mountRowId);
-        return mount != null && mount.isEquip;
+    public static boolean isEquipped(MyUser mUser, long wingsRowId) {
+        if (mUser == null || wingsRowId <= 0) return false;
+        UserWingsEntity wings = mUser.getResources().getWings(wingsRowId);
+        return wings != null && wings.isEquip;
     }
 
     public void syncEquipFlag(MyUser mUser) {
@@ -71,14 +71,14 @@ public class UserMountEntity implements Serializable {
         this.data = data;
     }
 
-    public ResMountEntity getRes() {
-        return ResMount.get(mountId);
+    public ResWingsEntity getRes() {
+        return ResWings.get(wingsId);
     }
 
-    public protocol.Pbmethod.PbMount.Builder toProtoBuilder() {
-        protocol.Pbmethod.PbMount.Builder pb = protocol.Pbmethod.PbMount.newBuilder();
+    public protocol.Pbmethod.PbWings.Builder toProtoBuilder() {
+        protocol.Pbmethod.PbWings.Builder pb = protocol.Pbmethod.PbWings.newBuilder();
         pb.setId(id);
-        pb.setMountId(mountId);
+        pb.setWingsId(wingsId);
         pb.setLevel(level);
         pb.setTier(tier > 0 ? tier : 1);
         pb.setIsCraft(isCraft);
@@ -91,22 +91,22 @@ public class UserMountEntity implements Serializable {
         return pb;
     }
 
-    public protocol.Pbmethod.PbMount toProto() {
+    public protocol.Pbmethod.PbWings toProto() {
         try {
-            byte[] bytes = ProtoPetMountWire.appendDataAndIsEquip(
+            byte[] bytes = ProtoPetWingsWire.appendDataAndIsEquip(
                     toProtoBuilder().build().toByteArray(), data, isEquip);
-            bytes = game.treasure.service.item.ProtoTradingWire.appendPetMountTrading(bytes, isTrading, inMarket);
-            return protocol.Pbmethod.PbMount.parseFrom(bytes);
+            bytes = game.treasure.service.item.ProtoTradingWire.appendPetWingsTrading(bytes, isTrading, inMarket);
+            return protocol.Pbmethod.PbWings.parseFrom(bytes);
         } catch (Exception ex) {
             return toProtoBuilder().build();
         }
     }
 
     public boolean update(List<Object> lst) {
-        return DBJPA.update("user_mount", lst, List.of("id", id));
+        return DBJPA.update("user_wings", lst, List.of("id", id));
     }
 
     public boolean deleteFromDb() {
-        return DBJPA.delete("user_mount", "id", id, "user_id", userId);
+        return DBJPA.delete("user_wings", "id", id, "user_id", userId);
     }
 }
