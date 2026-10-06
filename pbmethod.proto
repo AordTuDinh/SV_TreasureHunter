@@ -622,7 +622,7 @@ enum EquipSlotType {
   PANTS = 4;
   SHOES = 5;
   CLOAK = 6;
-  GLOVES = 7;
+  WINGS = 7;
   PET = 8;
   TREASURE = 9;
   BODY = 10;

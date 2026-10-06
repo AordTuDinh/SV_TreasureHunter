@@ -1371,9 +1371,9 @@ public final class Pbmethod {
      */
     CLOAK(6, 6),
     /**
-     * <code>GLOVES = 7;</code>
+     * <code>WINGS = 7;</code>
      */
-    GLOVES(7, 7),
+    WINGS(7, 7),
     /**
      * <code>PET = 8;</code>
      */
@@ -1441,9 +1441,9 @@ public final class Pbmethod {
      */
     public static final int CLOAK_VALUE = 6;
     /**
-     * <code>GLOVES = 7;</code>
+     * <code>WINGS = 7;</code>
      */
-    public static final int GLOVES_VALUE = 7;
+    public static final int WINGS_VALUE = 7;
     /**
      * <code>PET = 8;</code>
      */
@@ -1493,7 +1493,7 @@ public final class Pbmethod {
         case 4: return PANTS;
         case 5: return SHOES;
         case 6: return CLOAK;
-        case 7: return GLOVES;
+        case 7: return WINGS;
         case 8: return PET;
         case 9: return TREASURE;
         case 10: return BODY;
@@ -90941,24 +90941,24 @@ public final class Pbmethod {
       "ype\022\t\n\005EVENT\020\001\022\007\n\003USE\020\002\022\013\n\007SPEAKER\020\003\022\014\n\010" +
       "OPEN_BOX\020\004\022\021\n\rOPEN_BOX_TIER\020\005*;\n\014TargetA" +
       "ttack\022\n\n\006OBJECT\020\000\022\t\n\005ENEMY\020\001\022\010\n\004BOSS\020\002\022\n" +
-      "\n\006PLAYER\020\003*\317\001\n\rEquipSlotType\022\010\n\004NULL\020\000\022\n" +
+      "\n\006PLAYER\020\003*\316\001\n\rEquipSlotType\022\010\n\004NULL\020\000\022\n" +
       "\n\006WEAPON\020\001\022\007\n\003HAT\020\002\022\t\n\005ARMOR\020\003\022\t\n\005PANTS\020" +
-      "\004\022\t\n\005SHOES\020\005\022\t\n\005CLOAK\020\006\022\n\n\006GLOVES\020\007\022\007\n\003P" +
-      "ET\020\010\022\014\n\010TREASURE\020\t\022\010\n\004BODY\020\n\022\010\n\004HEAD\020\013\022\010" +
-      "\n\004HAIR\020\014\022\010\n\004FACE\020\r\022\r\n\tACCESSORY\020\016\022\013\n\007GLA" +
-      "SSES\020\017\022\014\n\010BRACELET\020\020*\322\003\n\010AutoSell\022\022\n\016AUT" +
-      "O_SELL_HP_1\020\000\022\022\n\016AUTO_SELL_HP_2\020\001\022\022\n\016AUT",
-      "O_SELL_HP_3\020\002\022\022\n\016AUTO_SELL_HP_4\020\003\022\025\n\021AUT" +
-      "O_SELL_EQUIP_1\020\004\022\025\n\021AUTO_SELL_EQUIP_2\020\005\022" +
-      "\025\n\021AUTO_SELL_EQUIP_3\020\006\022\025\n\021AUTO_SELL_EQUI" +
-      "P_4\020\007\022\025\n\021AUTO_SELL_WINGS_1\020\010\022\025\n\021AUTO_SEL" +
-      "L_WINGS_2\020\t\022\025\n\021AUTO_SELL_WINGS_3\020\n\022\025\n\021AU" +
-      "TO_SELL_WINGS_4\020\013\022\023\n\017AUTO_SELL_PET_1\020\014\022\023" +
-      "\n\017AUTO_SELL_PET_2\020\r\022\023\n\017AUTO_SELL_PET_3\020\016" +
-      "\022\023\n\017AUTO_SELL_PET_4\020\017\022\031\n\025AUTO_SELL_ITEM_" +
-      "EVEN_1\020\020\022\031\n\025AUTO_SELL_ITEM_EVEN_2\020\021\022\031\n\025A" +
-      "UTO_SELL_ITEM_EVEN_3\020\022\022\031\n\025AUTO_SELL_ITEM",
-      "_EVEN_4\020\023B\024\n\010protocolB\010Pbmethod"
+      "\004\022\t\n\005SHOES\020\005\022\t\n\005CLOAK\020\006\022\t\n\005WINGS\020\007\022\007\n\003PE" +
+      "T\020\010\022\014\n\010TREASURE\020\t\022\010\n\004BODY\020\n\022\010\n\004HEAD\020\013\022\010\n" +
+      "\004HAIR\020\014\022\010\n\004FACE\020\r\022\r\n\tACCESSORY\020\016\022\013\n\007GLAS" +
+      "SES\020\017\022\014\n\010BRACELET\020\020*\322\003\n\010AutoSell\022\022\n\016AUTO" +
+      "_SELL_HP_1\020\000\022\022\n\016AUTO_SELL_HP_2\020\001\022\022\n\016AUTO",
+      "_SELL_HP_3\020\002\022\022\n\016AUTO_SELL_HP_4\020\003\022\025\n\021AUTO" +
+      "_SELL_EQUIP_1\020\004\022\025\n\021AUTO_SELL_EQUIP_2\020\005\022\025" +
+      "\n\021AUTO_SELL_EQUIP_3\020\006\022\025\n\021AUTO_SELL_EQUIP" +
+      "_4\020\007\022\025\n\021AUTO_SELL_WINGS_1\020\010\022\025\n\021AUTO_SELL" +
+      "_WINGS_2\020\t\022\025\n\021AUTO_SELL_WINGS_3\020\n\022\025\n\021AUT" +
+      "O_SELL_WINGS_4\020\013\022\023\n\017AUTO_SELL_PET_1\020\014\022\023\n" +
+      "\017AUTO_SELL_PET_2\020\r\022\023\n\017AUTO_SELL_PET_3\020\016\022" +
+      "\023\n\017AUTO_SELL_PET_4\020\017\022\031\n\025AUTO_SELL_ITEM_E" +
+      "VEN_1\020\020\022\031\n\025AUTO_SELL_ITEM_EVEN_2\020\021\022\031\n\025AU" +
+      "TO_SELL_ITEM_EVEN_3\020\022\022\031\n\025AUTO_SELL_ITEM_",
+      "EVEN_4\020\023B\024\n\010protocolB\010Pbmethod"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

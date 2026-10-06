@@ -180,7 +180,7 @@ public class UserEntity implements Serializable {
     }
 
     public static final int EQUIP_FIELDS_PER_SLOT = 3;
-    /** 16 slot theo EquipSlotType: vũ khí → vòng tay. Wings không nằm trong list. */
+    /** 16 slot theo EquipSlotType: vũ khí → vòng tay. Ô 7 là WINGS. */
     public static final int[] EQUIP_SLOT_ORDER = {
             protocol.Pbmethod.EquipSlotType.WEAPON.getNumber(),
             protocol.Pbmethod.EquipSlotType.HAT.getNumber(),
@@ -188,7 +188,7 @@ public class UserEntity implements Serializable {
             protocol.Pbmethod.EquipSlotType.PANTS.getNumber(),
             protocol.Pbmethod.EquipSlotType.SHOES.getNumber(),
             protocol.Pbmethod.EquipSlotType.CLOAK.getNumber(),
-            protocol.Pbmethod.EquipSlotType.GLOVES.getNumber(),
+            protocol.Pbmethod.EquipSlotType.WINGS.getNumber(),
             protocol.Pbmethod.EquipSlotType.PET.getNumber(),
             protocol.Pbmethod.EquipSlotType.TREASURE.getNumber(),
             protocol.Pbmethod.EquipSlotType.BODY.getNumber(),

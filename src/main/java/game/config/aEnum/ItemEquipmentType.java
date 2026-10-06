@@ -10,7 +10,7 @@ public enum ItemEquipmentType {
     PANTS(4, "quần"),
     SHOES(5, "giày"),
     CLOAK(6, "áo choàng"),
-    GLOVES(7, "bao tay"),
+    WINGS(7, "wings"),
     ;
 
     public final int value;
