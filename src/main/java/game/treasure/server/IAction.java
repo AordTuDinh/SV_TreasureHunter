@@ -99,6 +99,10 @@ public class IAction {
     public static final int MARKET_STATUS = 128;
     public static final int MARKET_BUY = 129;
     public static final int MARKET_REFRESH = 130;
+    /** Rời làng tân thủ (map 0) sang map chính (map 1). */
+    public static final int CHANGE_MAP = 131;
+    /** [mapId] map đang chơi. 0 = làng tân thủ, 1 = map chính. */
+    public static final int MAP_INFO = 132;
 
     public static final int PET_INFO = 137;
     public static final int WINGS_INFO = 138;

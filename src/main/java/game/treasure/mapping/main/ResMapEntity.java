@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import game.battle.model.CellObject;
 import game.battle.model.ChunkObject;
 import game.battle.model.MapService;
+import game.treasure.service.resource.ResMap;
 import game.battle.object.Pos;
 import game.object.MapData;
 import lombok.Getter;
@@ -17,8 +18,10 @@ import javax.persistence.Transient;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @Entity
 public class ResMapEntity extends BaseEntity implements Serializable {
@@ -111,8 +114,16 @@ public class ResMapEntity extends BaseEntity implements Serializable {
         buildZoneCache();
 
         // parse map object
+        if (mapData.cells == null) return;
+        Set<Integer> skippedTypes = new HashSet<>();
         for (MapData.CellDto c : mapData.cells) {
-            MapService.validateType(c.type);
+            if (!MapService.isKnownCellType(c.type) || ResMap.getResObject(c.type) == null) {
+                if (skippedTypes.add(c.type)) {
+                    System.out.println("[MapLoad] skip cell type=" + c.type + " mapId=" + id
+                            + " (chưa có trong CellObjectType hoặc res_object)");
+                }
+                continue;
+            }
             // c.x, c.y là tọa độ world trực tiếp (không còn x100)
             int worldX = c.x;
             int worldY = c.y;

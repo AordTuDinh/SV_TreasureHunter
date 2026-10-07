@@ -5,7 +5,8 @@ import java.util.Map;
 
 public enum MapType {
     LOGIN(-1, false, 0),
-    HOME(0, true, 100),
+    NEWBIE(0, false, 200),
+    HOME(1, true, 200),
     ;
 
     public final int value;
@@ -16,6 +17,11 @@ public enum MapType {
         this.value = value;
         this.allowChangeChanel = allowChangeChanel;
         this.maxPlayer = maxPlayer;
+    }
+
+    /** Map thế giới có lưu vị trí: làng tân thủ và map chính. */
+    public boolean isOpenWorld() {
+        return this == NEWBIE || this == HOME;
     }
 
     // lookup

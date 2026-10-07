@@ -5,6 +5,7 @@ import game.battle.model.Unit;
 import game.battle.object.Pos;
 import game.config.CfgArena;
 import game.config.aEnum.DetailActionType;
+import game.config.aEnum.QuestTutType;
 import game.config.lang.Lang;
 import game.monitor.Online;
 import game.object.MyUser;
@@ -164,6 +165,8 @@ public final class ArenaService {
                 .add(new QueueEntry(mUser.getUserId(), mUser.getUser().getCup(), now));
         if (outBonus != null)
             outBonus.addAll(wire);
+        // Quest 30: đăng ký đấu trường thì cộng 1 điểm.
+        mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.ARENA, 1);
         return null;
     }
 

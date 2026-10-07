@@ -240,9 +240,13 @@ public class IMath {
                     addDataFloatPoints(pt, pet.getDataListFloat(), pet.getLevel());
             }
         }
-        if (mUser.getResources().getMWings() != null) {
-            for (game.treasure.mapping.UserWingsEntity wings : mUser.getResources().getMWings().values()) {
-                if (wings != null && wings.isEquip())
+        int wingsIdx = game.treasure.mapping.UserEntity.equipSlotIndex(
+                protocol.Pbmethod.EquipSlotType.WINGS.getNumber());
+        if (wingsIdx >= 0 && wingsIdx < lst.size()) {
+            int wingsRowId = lst.get(wingsIdx);
+            if (wingsRowId > 0) {
+                game.treasure.mapping.UserWingsEntity wings = mUser.getResources().getWings(wingsRowId);
+                if (wings != null)
                     addDataFloatPoints(pt, wings.getDataListFloat(), wings.getLevel());
             }
         }

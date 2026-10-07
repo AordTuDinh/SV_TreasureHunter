@@ -85,6 +85,9 @@ enum CellObjectType{
   BONES = 7;
   GRAVESTONE = 8;
   HELMET = 9;
+  NEWBIE1 = 10;
+  NEWBIE2 = 11;
+  NEWBIE3 = 12;
 }
 
 // item id trong DB / bonus consumable (đồng bộ server + client)

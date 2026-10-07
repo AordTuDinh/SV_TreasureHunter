@@ -20,13 +20,16 @@ public class MapService {
         return map.getMinChunkY() + ny;
     }
 
-    public static void validateType(int type) {
+    public static boolean isKnownCellType(int type) {
         for (Pbmethod.CellObjectType e : Pbmethod.CellObjectType.values()) {
-            if (e.getNumber() == type) {
-                return;
-            }
+            if (e.getNumber() == type) return true;
         }
-        throw new IllegalArgumentException("Invalid type ---- : " + type);
+        return false;
+    }
+
+    public static void validateType(int type) {
+        if (!isKnownCellType(type))
+            throw new IllegalArgumentException("Invalid type ---- : " + type);
     }
 
 

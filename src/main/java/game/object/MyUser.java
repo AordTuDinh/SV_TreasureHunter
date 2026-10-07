@@ -337,7 +337,7 @@ public class MyUser implements Serializable {
         if (room == null && channel != null) {
             room = ChUtil.getRoom(channel);
         }
-        if (room == null || room.getRoomType() != MapType.HOME) return;
+        if (room == null || !room.getRoomType().isOpenWorld()) return;
 
         ResMapEntity map = room.getMapInfo();
         Pos pos = Pos.capPos(

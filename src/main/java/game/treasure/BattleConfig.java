@@ -18,6 +18,8 @@ public class BattleConfig {
     public static final float P_RangerAttack = 1f;
     public static final int P_reviveHpPercent = 50; // HP khi hồi sinh về làng (% max HP)
     public static final long P_timeProtectedMs = 3_600_000L; // 1 giờ bảo vệ sau khi chết
+    /** 2 giờ bảo vệ, chỉ một lần khi rời map 0 sang map 1. */
+    public static final long P_timeFirstMapProtectedMs = 7_200_000L;
 
     /** Chuyển thời điểm hết bảo vệ (ms tuyệt đối) → ms còn lại gửi client. */
     public static long toWireProtectedMs(long absoluteEndMs) {

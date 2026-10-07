@@ -108,6 +108,13 @@ public final class ProtectVipService {
         return 0;
     }
 
+    /** Trả giây VIP còn lại về pool trước khi gắn khiên một lần (rời làng tân thủ). */
+    public static void releaseVipShieldIfActive(MyUser mUser) {
+        if (mUser == null || mUser.getUserDaily() == null) return;
+        if (mUser.getUserDaily().getUDaily().getValue(DataDaily.PROTECTION_FROM_VIP) != 1) return;
+        settleActive(mUser);
+    }
+
     /** Hết hạn tự nhiên: xóa flag, không hoàn (đã trừ hết). */
     public static void settleIfExpired(MyUser mUser) {
         if (mUser == null || mUser.getUData() == null) return;

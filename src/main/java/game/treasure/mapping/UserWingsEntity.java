@@ -53,8 +53,9 @@ public class UserWingsEntity implements Serializable {
 
     public static boolean isEquipped(MyUser mUser, long wingsRowId) {
         if (mUser == null || wingsRowId <= 0) return false;
-        UserWingsEntity wings = mUser.getResources().getWings(wingsRowId);
-        return wings != null && wings.isEquip;
+        java.util.List<Integer> equip = mUser.getUser().normalizeItemEquipList();
+        int idx = UserEntity.equipSlotIndex(protocol.Pbmethod.EquipSlotType.WINGS.getNumber());
+        return idx >= 0 && idx < equip.size() && equip.get(idx) == (int) wingsRowId;
     }
 
     public void syncEquipFlag(MyUser mUser) {

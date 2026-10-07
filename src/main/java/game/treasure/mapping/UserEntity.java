@@ -297,6 +297,13 @@ public class UserEntity implements Serializable {
                         level = pet.getLevel();
                         hh = pet.getHh();
                     }
+                } else if (slotType == protocol.Pbmethod.EquipSlotType.WINGS.getNumber()) {
+                    UserWingsEntity wings = res.getWings(rowId);
+                    if (wings != null) {
+                        key = wings.getIcon() > 0 ? wings.getIcon() : wings.getWingsId();
+                        level = wings.getLevel();
+                        hh = wings.getHh();
+                    }
                 } else if (slotType >= protocol.Pbmethod.EquipSlotType.BODY.getNumber()
                         && slotType <= protocol.Pbmethod.EquipSlotType.BRACELET.getNumber()) {
                     if (key <= 0) {

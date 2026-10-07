@@ -184,21 +184,38 @@ public class PetHandler extends AHandler {
             return;
         }
 
+        int slotIdx = UserEntity.equipSlotIndex(Pbmethod.EquipSlotType.WINGS.getNumber());
+        List<Integer> lst = mUser.getUser().normalizeItemEquipList();
+        int oldRowId = lst.get(slotIdx);
         Integer newBagSlot = Bonus.findWingsBagSlot(mUser, rowId);
 
         Bonus.moveWingsOutOfBag(mUser, wings);
 
-        for (UserWingsEntity other : mUser.getResources().getMWings().values()) {
-            if (other.getId() == wings.getId() || !other.isEquip())
-                continue;
-            other.setEquip(false);
-            if (!Bonus.moveWingsToBag(mUser, other)) {
-                Bonus.moveWingsToBag(mUser, wings);
-                addErrResponse(getLang(Lang.err_max_slot));
-                return;
+        if (oldRowId > 0 && oldRowId != (int) rowId) {
+            UserWingsEntity oldWings = mUser.getResources().getWings(oldRowId);
+            if (oldWings != null) {
+                if (newBagSlot != null) {
+                    if (!Bonus.moveWingsToBagSlot(mUser, oldWings, newBagSlot)) {
+                        Bonus.moveWingsToBag(mUser, wings);
+                        addErrResponse(getLang(Lang.err_max_slot));
+                        return;
+                    }
+                } else if (!Bonus.moveWingsToBag(mUser, oldWings)) {
+                    Bonus.moveWingsToBag(mUser, wings);
+                    addErrResponse(getLang(Lang.err_max_slot));
+                    return;
+                }
+                oldWings.syncEquipFlag(mUser);
             }
         }
-        wings.setEquip(true);
+
+        lst.set(slotIdx, (int) wings.getId());
+        lst.set(slotIdx + 1, wings.getWingsId());
+        lst.set(slotIdx + 2, wings.getLevel());
+        if (!mUser.getUser().updateItemEquip(lst)) {
+            addErrSystem();
+            return;
+        }
         syncAllPetWingsEquipFlags();
         finishPetWingsEquipChange(buildWingsSlotPayload(wings, newBagSlot));
     }

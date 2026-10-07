@@ -38,8 +38,12 @@ public class ResMap {
         mMap.clear();
 
         aMap.forEach(item -> {
-            item.init();
-            mMap.put(item.getId(), item);
+            try {
+                item.init();
+                mMap.put(item.getId(), item);
+            } catch (Exception ex) {
+                System.out.println("[MapLoad] failed mapId=" + item.getId() + " " + ex);
+            }
         });
 
     }

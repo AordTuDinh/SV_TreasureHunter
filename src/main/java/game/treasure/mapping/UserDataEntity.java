@@ -47,7 +47,11 @@ public class UserDataEntity implements Serializable {
     long timeProtected;
     long timeActiveArtifact;
     /**
-     * Vị trí HOME lần logout gần nhất — JSON [x, y].
+     * Map đang chơi. {@link MapType#NEWBIE} khi tạo tài khoản, {@link MapType#HOME} sau khi rời làng tân thủ.
+     */
+    int mapId;
+    /**
+     * Vị trí map lần logout gần nhất — JSON [x, y].
      */
     String lastPos;
     /**
@@ -85,6 +89,7 @@ public class UserDataEntity implements Serializable {
         this.craftExp = 0;
         this.buff = "[]";
         this.itemSlot = buildEmptyItemSlot(CfgUser.getSlotBagInit());
+        this.mapId = MapType.NEWBIE.value;
         this.lastPos = "[0,0]";
         this.lastDead = 0;
     }
@@ -580,6 +585,25 @@ public class UserDataEntity implements Serializable {
         if (piggybackSlot || explicitItemSlot)
             itemSlotDirty = false;
         return true;
+    }
+
+    public MapType getPlayMap() {
+        MapType type = MapType.get(mapId);
+        if (type == null || !type.isOpenWorld()) return MapType.NEWBIE;
+        return type;
+    }
+
+    /** Ghi map mới, xóa vị trí map cũ, và gắn mốc hết bảo vệ (không rút ngắn nếu đang dài hơn). */
+    public boolean updateMap(int nextMap, long protectedUntil) {
+        long until = Math.max(timeProtected, protectedUntil);
+        if (update(List.of("map_id", nextMap, "last_pos", "[0,0]", "last_dead", 0, "time_protected", until))) {
+            this.mapId = nextMap;
+            this.lastPos = "[0,0]";
+            this.lastDead = 0;
+            this.timeProtected = until;
+            return true;
+        }
+        return false;
     }
 
     public boolean updateTutorialQuest() {

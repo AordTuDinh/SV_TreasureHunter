@@ -1321,8 +1321,19 @@ public class Bonus {
     }
 
     public static boolean clearWingsEquipSlot(MyUser mUser) {
-        if (mUser == null || mUser.getResources().getMWings() == null) return true;
-        mUser.getResources().getMWings().values().forEach(wings -> wings.setEquip(false));
+        if (mUser == null) return false;
+        int idx = game.treasure.mapping.UserEntity.equipSlotIndex(
+                protocol.Pbmethod.EquipSlotType.WINGS.getNumber());
+        List<Integer> lst = mUser.getUser().normalizeItemEquipList();
+        if (idx < 0)
+            return false;
+        lst.set(idx, 0);
+        lst.set(idx + 1, 0);
+        lst.set(idx + 2, 0);
+        if (!mUser.getUser().updateItemEquip(lst))
+            return false;
+        if (mUser.getResources().getMWings() != null)
+            mUser.getResources().getMWings().values().forEach(wings -> wings.syncEquipFlag(mUser));
         return true;
     }
 

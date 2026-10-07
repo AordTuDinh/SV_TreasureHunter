@@ -277,6 +277,7 @@ public class LoginHandler extends AHandler {
         this.user = user;
         //  user point
         addResponse(builder.build());
+        addResponse(MAP_INFO, CommonProto.getCommonVector(mUser.getUData().getPlayMap().value));
         // tra user data luon
         ChUtil.setMUser(channel, mUser);
         game.treasure.service.user.UserBuff.onLogin(mUser);

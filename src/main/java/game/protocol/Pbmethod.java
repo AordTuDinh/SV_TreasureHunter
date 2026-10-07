@@ -595,6 +595,18 @@ public final class Pbmethod {
      * <code>HELMET = 9;</code>
      */
     HELMET(8, 9),
+    /**
+     * <code>NEWBIE1 = 10;</code>
+     */
+    NEWBIE1(9, 10),
+    /**
+     * <code>NEWBIE2 = 11;</code>
+     */
+    NEWBIE2(10, 11),
+    /**
+     * <code>NEWBIE3 = 12;</code>
+     */
+    NEWBIE3(11, 12),
     ;
 
     /**
@@ -633,6 +645,18 @@ public final class Pbmethod {
      * <code>HELMET = 9;</code>
      */
     public static final int HELMET_VALUE = 9;
+    /**
+     * <code>NEWBIE1 = 10;</code>
+     */
+    public static final int NEWBIE1_VALUE = 10;
+    /**
+     * <code>NEWBIE2 = 11;</code>
+     */
+    public static final int NEWBIE2_VALUE = 11;
+    /**
+     * <code>NEWBIE3 = 12;</code>
+     */
+    public static final int NEWBIE3_VALUE = 12;
 
 
     public final int getNumber() { return value; }
@@ -648,6 +672,9 @@ public final class Pbmethod {
         case 7: return BONES;
         case 8: return GRAVESTONE;
         case 9: return HELMET;
+        case 10: return NEWBIE1;
+        case 11: return NEWBIE2;
+        case 12: return NEWBIE3;
         default: return null;
       }
     }
@@ -90926,18 +90953,19 @@ public final class Pbmethod {
       "DD_FORCE\020\023\022\023\n\017ARTIFACT_EFFECT\020\024*Y\n\tState" +
       "Type\022\023\n\017TYPE_ADD_REMOVE\020\001\022\014\n\010TYPE_POS\020\002\022" +
       "\023\n\017TYPE_UNIT_STATE\020\003\022\024\n\020TYPE_CHUNK_STATE" +
-      "\020\004*y\n\016CellObjectType\022\010\n\004ROCK\020\001\022\010\n\004SIGN\020\002" +
-      "\022\n\n\006CACTUS\020\003\022\n\n\006FLOWER\020\004\022\t\n\005SKULL\020\005\022\t\n\005C",
-      "HEST\020\006\022\t\n\005BONES\020\007\022\016\n\nGRAVESTONE\020\010\022\n\n\006HEL" +
-      "MET\020\t*\201\001\n\007ItemKey\022\016\n\nBINH_MAU_1\020\001\022\016\n\nBIN" +
+      "\020\004*\240\001\n\016CellObjectType\022\010\n\004ROCK\020\001\022\010\n\004SIGN\020" +
+      "\002\022\n\n\006CACTUS\020\003\022\n\n\006FLOWER\020\004\022\t\n\005SKULL\020\005\022\t\n\005",
+      "CHEST\020\006\022\t\n\005BONES\020\007\022\016\n\nGRAVESTONE\020\010\022\n\n\006HE" +
+      "LMET\020\t\022\013\n\007NEWBIE1\020\n\022\013\n\007NEWBIE2\020\013\022\013\n\007NEWB" +
+      "IE3\020\014*\201\001\n\007ItemKey\022\016\n\nBINH_MAU_1\020\001\022\016\n\nBIN" +
       "H_MAU_2\020\002\022\016\n\nBINH_MAU_3\020\003\022\016\n\nBINH_MAU_4\020" +
       "\004\022\010\n\004GOLD\020\005\022\007\n\003GEM\020\006\022\010\n\004RUBY\020\007\022\007\n\003CUP\020\010\022" +
       "\020\n\014TREASURE_KEY\020\t*\235\001\n\014ItemPointKey\022\n\n\006CO" +
       "_VAT\020\001\022\017\n\013TICKER_MINI\020\002\022\021\n\rTICKER_NORMAL" +
       "\020\003\022\022\n\016TICKER_SPECIAL\020\004\022\010\n\004CHIP\020\005\022\020\n\014LOA_" +
       "THE_GIOI\020\010\022\023\n\017RUBY_X2_VOUCHER\020\r\022\016\n\nARENA" +
-      "_COIN\020\016\022\010\n\004PLOT\020\017*/\n\010ItemType\022\014\n\010POSITIO" +
-      "N\020\001\022\014\n\010CURRENCY\020\002\022\007\n\003KEY\020\003*Q\n\rItemPointT",
+      "_COIN\020\016\022\010\n\004PLOT\020\017*/\n\010ItemType\022\014\n\010POSITIO",
+      "N\020\001\022\014\n\010CURRENCY\020\002\022\007\n\003KEY\020\003*Q\n\rItemPointT" +
       "ype\022\t\n\005EVENT\020\001\022\007\n\003USE\020\002\022\013\n\007SPEAKER\020\003\022\014\n\010" +
       "OPEN_BOX\020\004\022\021\n\rOPEN_BOX_TIER\020\005*;\n\014TargetA" +
       "ttack\022\n\n\006OBJECT\020\000\022\t\n\005ENEMY\020\001\022\010\n\004BOSS\020\002\022\n" +
@@ -90946,8 +90974,8 @@ public final class Pbmethod {
       "\004\022\t\n\005SHOES\020\005\022\t\n\005CLOAK\020\006\022\t\n\005WINGS\020\007\022\007\n\003PE" +
       "T\020\010\022\014\n\010TREASURE\020\t\022\010\n\004BODY\020\n\022\010\n\004HEAD\020\013\022\010\n" +
       "\004HAIR\020\014\022\010\n\004FACE\020\r\022\r\n\tACCESSORY\020\016\022\013\n\007GLAS" +
-      "SES\020\017\022\014\n\010BRACELET\020\020*\322\003\n\010AutoSell\022\022\n\016AUTO" +
-      "_SELL_HP_1\020\000\022\022\n\016AUTO_SELL_HP_2\020\001\022\022\n\016AUTO",
+      "SES\020\017\022\014\n\010BRACELET\020\020*\322\003\n\010AutoSell\022\022\n\016AUTO",
+      "_SELL_HP_1\020\000\022\022\n\016AUTO_SELL_HP_2\020\001\022\022\n\016AUTO" +
       "_SELL_HP_3\020\002\022\022\n\016AUTO_SELL_HP_4\020\003\022\025\n\021AUTO" +
       "_SELL_EQUIP_1\020\004\022\025\n\021AUTO_SELL_EQUIP_2\020\005\022\025" +
       "\n\021AUTO_SELL_EQUIP_3\020\006\022\025\n\021AUTO_SELL_EQUIP" +
@@ -90956,8 +90984,8 @@ public final class Pbmethod {
       "O_SELL_WINGS_4\020\013\022\023\n\017AUTO_SELL_PET_1\020\014\022\023\n" +
       "\017AUTO_SELL_PET_2\020\r\022\023\n\017AUTO_SELL_PET_3\020\016\022" +
       "\023\n\017AUTO_SELL_PET_4\020\017\022\031\n\025AUTO_SELL_ITEM_E" +
-      "VEN_1\020\020\022\031\n\025AUTO_SELL_ITEM_EVEN_2\020\021\022\031\n\025AU" +
-      "TO_SELL_ITEM_EVEN_3\020\022\022\031\n\025AUTO_SELL_ITEM_",
+      "VEN_1\020\020\022\031\n\025AUTO_SELL_ITEM_EVEN_2\020\021\022\031\n\025AU",
+      "TO_SELL_ITEM_EVEN_3\020\022\022\031\n\025AUTO_SELL_ITEM_" +
       "EVEN_4\020\023B\024\n\010protocolB\010Pbmethod"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
