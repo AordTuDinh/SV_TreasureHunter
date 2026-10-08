@@ -9,6 +9,7 @@ import game.config.*;
 import game.config.aEnum.*;
 import game.treasure.BattleConfig;
 import game.treasure.mapping.main.ResMapEntity;
+import game.treasure.service.resource.ResMap;
 import game.treasure.table.BaseRoom;
 import game.treasure.controller.UserHandler;
 import game.treasure.mapping.*;
@@ -375,10 +376,24 @@ public class MyUser implements Serializable {
         return uData.getLastDead() == 1;
     }
 
+    /** Hồi sinh đứng ở tâm vùng hồi máu của map đang chơi. */
+    public Pos getReviveSpawnPos() {
+        if (uData != null) {
+            ResMapEntity map = ResMap.getMap(uData.getPlayMap());
+            if (map != null) {
+                Pos heath = map.getHeathCenter();
+                if (heath != null) return heath;
+            }
+        }
+        return new Pos(BattleConfig.P_reviveSpawnX, BattleConfig.P_reviveSpawnY);
+    }
+
     public void clearLastHomeState() {
-        uData.setLastPos("[0,0]");
+        Pos spawn = getReviveSpawnPos();
+        String posStr = StringHelper.toDBString(List.of(spawn.getX(), spawn.getY()));
+        uData.setLastPos(posStr);
         uData.setLastDead(0);
-        uData.update(List.of("last_pos", "[0,0]", "last_dead", 0));
+        uData.update(List.of("last_pos", posStr, "last_dead", 0));
     }
 
     public Player getPlayer() {

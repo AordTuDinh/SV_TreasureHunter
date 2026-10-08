@@ -14,6 +14,7 @@ import game.treasure.mapping.main.ResBonusImageType;
 import game.treasure.server.IAction;
 import game.treasure.service.resource.ResQuest;
 import game.treasure.service.resource.ResImage;
+import game.treasure.service.battle.PvpCupService;
 import game.treasure.service.user.Bonus;
 import io.netty.channel.Channel;
 import ozudo.base.helper.DateTime;
@@ -109,6 +110,7 @@ public class QuestHandler extends AHandler {
             }
         }
         if (update) mUser.getUQuest().updateStatus(StringHelper.toDBString(topStatus));
+        PvpCupService.tryGrantDailyQuestCup(mUser);
         lstCm.addAVector(getCommonIntVector(topStatus));
         lstCm.addAVector(getCommonIntVector(aLong2));
         addResponse(IAction.QUEST_STATUS, lstCm.build());

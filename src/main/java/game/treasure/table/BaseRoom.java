@@ -307,6 +307,9 @@ public abstract class BaseRoom extends MonoRoom {
             return false;
         }
         if (attacker.isPlayer() && target.isPlayer()) {
+            if (getRoomType() == MapType.NEWBIE) {
+                return false;
+            }
             if (attacker.isInNoPvpChunk() || target.isInNoPvpChunk()) {
                 return false;
             }
@@ -493,6 +496,7 @@ public abstract class BaseRoom extends MonoRoom {
                 if (!unit.isAlive()) return;
                 if (player.getClanId() != 0 && player.getClanId() == unit.getClanId()) return;
                 if (unit.isPlayer()) {
+                    if (getRoomType() == MapType.NEWBIE) return;
                     if (player.isInNoPvpChunk() || unit.isInNoPvpChunk()) return;
                     if (mapInfo.isInCampFireSafeZone(player.getPos())
                             || mapInfo.isInCampFireSafeZone(unit.getPos())) return;

@@ -14,37 +14,58 @@ import ozudo.base.database.DBJPA;
 import protocol.Pbmethod;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
  * Chuyển cup khi player hạ player khác.
  * Online: ADD_BONUS (BONUS_CUP) → BattleUI textBonus.
  * Offline: chỉ cập nhật cột cup bảng user.
- * Login qua ngày: nếu đang 0 cup thì tặng 1 cup (một lần/ngày).
+ * Xong hết nhiệm vụ ngày: +1 cup, một lần mỗi ngày.
  */
 public final class PvpCupService {
+    /** Nạn nhân thấp hơn người giết từ mức này thì không cướp, không trừ. */
+    public static final int CUP_GAP_BLOCK = 50;
+    static final int PVP_CUP_DELTA = 1;
+
     private PvpCupService() {
     }
 
     /**
-     * Login qua ngày: nếu cup == 0 thì tặng 1 cup (đánh dấu daily để không lặp trong ngày).
-     * @return wire bonus đã nhận, hoặc empty nếu không tặng
+     * Khi mọi nhiệm vụ ngày đã đủ chỉ tiêu: +1 cup, một lần trong ngày.
      */
-    public static List<Long> grantDailyFloorIfNeeded(MyUser mUser) {
+    public static void tryGrantDailyQuestCup(MyUser mUser) {
         if (mUser == null || mUser.getUser() == null || mUser.getUserDaily() == null)
-            return Collections.emptyList();
+            return;
         DataDaily data = mUser.getUserDaily().getUDaily();
-        if (data.getValue(DataDaily.GET_CUP_FLOOR) != 0)
-            return Collections.emptyList();
-        if (mUser.getUser().getCup() > 0) {
-            data.setValueAndUpdate(DataDaily.GET_CUP_FLOOR, 1);
-            return Collections.emptyList();
+        if (data == null || data.getValue(DataDaily.GET_CUP_FLOOR) != 0)
+            return;
+        if (!allDailyQuestsCompleted(mUser.getUQuest()))
+            return;
+
+        List<Long> wire = Bonus.receiveListItem(mUser, DetailActionType.DAILY_QUEST_CUP.getKey(), Bonus.viewCup(1));
+        if (wire.isEmpty())
+            return;
+        data.setValueAndUpdate(DataDaily.GET_CUP_FLOOR, 1);
+        Player player = mUser.getPlayer();
+        if (player != null)
+            player.protoStatus(Pbmethod.SubStateType.ADD_BONUS, wire);
+    }
+
+    static boolean allDailyQuestsCompleted(game.treasure.mapping.UserQuestEntity uQuest) {
+        if (uQuest == null || uQuest.getDataQuest() == null)
+            return false;
+        List<Integer> quests = uQuest.getQuest();
+        if (quests == null || quests.size() < 2)
+            return false;
+        game.object.DataQuest data = uQuest.getDataQuest();
+        for (int i = 0; i < quests.size(); i += 2) {
+            if (quests.get(i + 1) == game.config.aEnum.StatusType.DONE.value)
+                continue;
+            game.treasure.mapping.main.ResQuestEntity quest = game.treasure.service.resource.ResQuest.mQuest.get(quests.get(i));
+            if (quest == null || data.getValue(quest.getId()) < quest.getNumber())
+                return false;
         }
-        List<Long> wire = Bonus.receiveListItem(mUser, DetailActionType.DAILY_CUP_FLOOR.getKey(), Bonus.viewCup(1));
-        if (!wire.isEmpty())
-            data.setValueAndUpdate(DataDaily.GET_CUP_FLOOR, 1);
-        return wire;
+        return true;
     }
 
     public static void apply(Player victim, Player killer) {
@@ -60,12 +81,13 @@ public final class PvpCupService {
 
         int victimCup = victimUser.getUser().getCup();
         int killerCup = killerUser.getUser().getCup();
-        int amount = CfgUser.calcPvpCupAmount(victimCup, killerCup);
-        if (amount <= 0)
+        if (victimCup <= 0)
+            return;
+        if (killerCup - victimCup >= CUP_GAP_BLOCK)
             return;
 
         int maxLoss = Math.max(0, victimCup - CfgUser.getCupFloor());
-        int transfer = Math.min(amount, maxLoss);
+        int transfer = Math.min(PVP_CUP_DELTA, maxLoss);
         if (transfer <= 0)
             return;
 

@@ -252,6 +252,12 @@ public class ResMapEntity extends BaseEntity implements Serializable {
         }
     }
 
+    /** Tâm vùng hồi máu. Null nếu map không có heath. */
+    public Pos getHeathCenter() {
+        if (heathZoneCache == null || heathZoneCache.radius <= 0) return null;
+        return new Pos(heathZoneCache.x, heathZoneCache.y);
+    }
+
     public boolean isInHeathZone(Pos pos) {
         if (pos == null || heathZoneCache == null) return false;
         float dx = pos.getX() - heathZoneCache.x;

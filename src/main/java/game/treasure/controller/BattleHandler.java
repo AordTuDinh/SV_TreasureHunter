@@ -105,7 +105,7 @@ public class BattleHandler extends AHandler implements Serializable {
         }
         Player player = mUser.getPlayer();
         player.setTimeProtectedEnd(mUser.getUData().getTimeProtected());
-        if (!player.isAlive()) player.revive();
+        if (!player.isAlive()) player.reviveAt(Pos.zero());
         com.google.protobuf.AbstractMessage initMap = prepareInitMap(channel, mUser, MapType.HOME, Pos.zero(), PopupType.NULL);
         if (initMap == null) {
             addErrResponse(getLang(Lang.err_room_not_found));
@@ -204,10 +204,12 @@ public class BattleHandler extends AHandler implements Serializable {
     }
 
     private static void reviveToHome(Channel channel, MyUser mUser, boolean pushToClient, BattleHandler responseHandler) {
+        Pos spawn = mUser.getReviveSpawnPos();
         mUser.clearLastHomeState();
         Player player = mUser.getPlayer();
-        player.revive();
-        com.google.protobuf.AbstractMessage initMap = prepareInitMap(channel, mUser, mUser.getUData().getPlayMap(), Pos.zero(), PopupType.NULL);
+        player.reviveAt(spawn);
+        // Không truyền (0,0): prepareInitMap coi (0,0) là khôi phục last_pos (chỗ vừa chết).
+        com.google.protobuf.AbstractMessage initMap = prepareInitMap(channel, mUser, mUser.getUData().getPlayMap(), spawn, PopupType.NULL);
         player.getPoint().resetHpPercent(BattleConfig.P_reviveHpPercent);
         if (initMap == null) {
             return;

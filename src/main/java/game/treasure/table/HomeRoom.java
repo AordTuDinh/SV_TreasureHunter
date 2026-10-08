@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class HomeRoom extends BaseBattleRoom {
-    private static final int HEAL_PER_SECOND = 50;
+    private static final int HEAL_PER_SECOND = 20;
     private static final int VERIFY_INTERVAL_SECONDS = 30;
 
     private final Set<Long> healZonePlayers = new HashSet<>();

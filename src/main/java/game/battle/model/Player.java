@@ -219,17 +219,28 @@ public class Player extends Unit implements Serializable {
             return;
         }
         DeathPenaltyService.apply(this, killer);
-        // Hoàn giây VIP chưa dùng về pool trước khi gắn khiên chết
-        game.treasure.service.user.ProtectVipService.settleActive(mUser);
-        long protectedUntil = System.currentTimeMillis() + BattleConfig.P_timeProtectedMs;
-        setTimeProtectedEnd(protectedUntil);
-        mUser.getUData().setTimeProtected(protectedUntil);
-        mUser.getUData().update(Arrays.asList("time_protected", protectedUntil));
+        if (isPvpKiller(killer)) {
+            // Hoàn giây VIP chưa dùng về pool trước khi gắn khiên chết PvP
+            game.treasure.service.user.ProtectVipService.settleActive(mUser);
+            long protectedUntil = System.currentTimeMillis() + BattleConfig.P_timeProtectedMs;
+            setTimeProtectedEnd(protectedUntil);
+            mUser.getUData().setTimeProtected(protectedUntil);
+            mUser.getUData().update(Arrays.asList("time_protected", protectedUntil));
+        }
         super.protoDie(killer);
         if (sendDie) {
             protoStatus(Pbmethod.SubStateType.DIE);
             sendDie = false;
         }
+    }
+
+    /** Người chơi, hoặc pet của người chơi. Quái và sát thương môi trường không tính. */
+    boolean isPvpKiller(Unit killer) {
+        if (killer == null || killer == this)
+            return false;
+        if (killer.isPlayer())
+            return true;
+        return killer instanceof Pet pet && pet.getOwner() != null && pet.getOwner() != this;
     }
 
     void addKillPlayerQuest(Unit killer) {
@@ -247,13 +258,21 @@ public class Player extends Unit implements Serializable {
 
     @Override
     public void revive() {
+        Pos spawn = mUser != null ? mUser.getReviveSpawnPos() : new Pos(BattleConfig.P_reviveSpawnX, BattleConfig.P_reviveSpawnY);
+        reviveAt(spawn);
+    }
+
+    /** Hồi sinh tại một điểm cụ thể. Điểm (0, 0) dùng khi rời map, không phải chết rồi hồi sinh. */
+    public void reviveAt(Pos spawnPos) {
         autoGather = false;
         timeRevive = System.currentTimeMillis();
         this.sendDie = false;
-        pos = Pos.zero();
+        pos = spawnPos != null ? spawnPos.clone() : Pos.zero();
         long protectedEnd = mUser.getUData().getTimeProtected();
         setTimeProtectedEnd(protectedEnd);
-        protoStatus(Pbmethod.SubStateType.REVIVE, 0L, 0L, BattleConfig.toWireProtectedMs(protectedEnd));
+        protoStatus(Pbmethod.SubStateType.REVIVE,
+                (long) (pos.x * 1000), (long) (pos.y * 1000),
+                BattleConfig.toWireProtectedMs(protectedEnd));
         this.alive = true;
         point.initDefault();
         point.resetHpPercent(BattleConfig.P_reviveHpPercent);

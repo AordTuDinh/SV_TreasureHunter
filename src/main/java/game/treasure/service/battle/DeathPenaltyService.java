@@ -56,7 +56,7 @@ public final class DeathPenaltyService {
                 victim.protoStatus(Pbmethod.SubStateType.ADD_BONUS, goldWire);
         }
 
-        if (killer != null && killer.isPlayer() && !isNoCupLossZone(victim))
+        if (killer != null && killer.isPlayer() && canStealCup(victim))
             PvpCupService.apply(victim, killer.getPlayer());
 
         if (killer != null && killer.isPlayer())
@@ -99,6 +99,14 @@ public final class DeathPenaltyService {
         BaseRoom room = victim.getRoom();
         ResMapEntity map = room.getMapInfo();
         return map != null && map.isInNoCupLossZone(victim.getPos());
+    }
+
+    /** Cướp cup chỉ ở vùng xám (2) và vùng băng (3). Vùng xanh và zone không trừ cup thì không. */
+    static boolean canStealCup(Player victim) {
+        if (isNoCupLossZone(victim))
+            return false;
+        int typeRoom = resolveTypeRoom(victim);
+        return typeRoom == 2 || typeRoom == 3;
     }
 
     static long calcGoldPenalty(long currentGold, int typeRoom) {

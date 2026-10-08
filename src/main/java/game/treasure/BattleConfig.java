@@ -17,7 +17,10 @@ public class BattleConfig {
     public static final float P_timeNoMove = 0.1f;
     public static final float P_RangerAttack = 1f;
     public static final int P_reviveHpPercent = 50; // HP khi hồi sinh về làng (% max HP)
-    public static final long P_timeProtectedMs = 3_600_000L; // 1 giờ bảo vệ sau khi chết
+    /** Fallback khi map không có heath. Tâm hồi máu mặc định (MapCampFireLayout). */
+    public static final float P_reviveSpawnX = 11f;
+    public static final float P_reviveSpawnY = -14f;
+    public static final long P_timeProtectedMs = 3_600_000L; // 1 giờ bảo vệ sau khi chết vì PvP
     /** 2 giờ bảo vệ, chỉ một lần khi rời map 0 sang map 1. */
     public static final long P_timeFirstMapProtectedMs = 7_200_000L;
 

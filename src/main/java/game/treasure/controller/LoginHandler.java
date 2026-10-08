@@ -13,7 +13,6 @@ import game.treasure.mapping.main.MainUserEntity;
 import game.treasure.server.Constans;
 import game.treasure.server.IAction;
 import game.treasure.service.Services;
-import game.treasure.service.battle.PvpCupService;
 import game.treasure.service.resource.ResIAP;
 import game.treasure.service.user.Actions;
 import game.treasure.service.user.ProtectVipService;
@@ -266,12 +265,6 @@ public class LoginHandler extends AHandler {
         loadGameConfig(mUser);
         // battleConfig
         loadBattleConfig();
-        // qua ngày + 0 cup → tặng 1 cup (chỉ khi đã tạo nhân vật; sync im lặng)
-        if (!StringHelper.isEmpty(user.getName())) {
-            List<Long> dailyCup = PvpCupService.grantDailyFloorIfNeeded(mUser);
-            if (!dailyCup.isEmpty())
-                addBonusPrivate(dailyCup);
-        }
         // user info
         builder.setUser(user.toProto(mUser));
         this.user = user;

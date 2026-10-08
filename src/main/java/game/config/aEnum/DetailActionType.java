@@ -22,7 +22,8 @@ public enum DetailActionType {
     REVIVE_PLAYER("revive_player"),// Hồi sinh
     DEATH_PENALTY("death_penalty"),
     PVP_KILL_LOOT("pvp_kill_loot_"),
-    DAILY_CUP_FLOOR("daily_cup_floor"), // Login qua ngày khi 0 cup → tặng 1 cup
+    DAILY_CUP_FLOOR("daily_cup_floor"), // Cũ: login 0 cup → tặng 1. Không còn gọi.
+    DAILY_QUEST_CUP("daily_quest_cup"), // Xong hết nhiệm vụ ngày → +1 cup
     CAMPAIGN_CONQUER("campaign_conquer_"),// Nhận bonus campaign conquer map id
     CAMPAIGN_SMART("campaign_smart_"),// Càn quét map id , number
     BUY_LOTTERY_MINI("buy_lottery_mini"),// Mua vé số nhỏ

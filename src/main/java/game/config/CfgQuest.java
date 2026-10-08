@@ -9,6 +9,7 @@ import game.treasure.mapping.main.ResTutorialQuestEntity;
 import game.treasure.service.resource.ResQuest;
 import game.object.DataQuest;
 import game.object.MyUser;
+import game.treasure.service.battle.PvpCupService;
 
 import java.util.*;
 
@@ -45,7 +46,10 @@ public class CfgQuest {
 
     public static void addNumQuest(MyUser mUser, int type, int number) { // add value + check notify
         UserQuestEntity uQuest = mUser.getUQuest();
-        if (uQuest.isDone()) return;
+        if (uQuest.isDone()) {
+            PvpCupService.tryGrantDailyQuestCup(mUser);
+            return;
+        }
         if (uQuest.isDoneGold() && type == DataQuest.HAVE_GOLD) return;
         if (uQuest.isDoneGem() && type == DataQuest.HAVE_GEM) return;
 
@@ -71,6 +75,7 @@ public class CfgQuest {
             uQuest.update(new ArrayList<>());
         }
         uQuest.checkDoneAllQuest();
+        PvpCupService.tryGrantDailyQuestCup(mUser);
         // check notify
 
     }

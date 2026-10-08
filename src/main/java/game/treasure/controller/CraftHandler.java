@@ -256,6 +256,7 @@ public class CraftHandler extends AHandler {
         resp.add(targetId);
 
         if (!craftOk) {
+            addCraftTutorialQuest(targetType, targetId);
             if (targetType.losesTargetOnCraftFail()) {
                 destroyCraftTarget(targetType, targetId);
             }
@@ -363,7 +364,7 @@ public class CraftHandler extends AHandler {
         broadcastEquipViewIfTargetEquipped(targetType, targetId);
     }
 
-    /** Quest 14: chế trang bị. Quest 15: chế bình máu. */
+    /** Cộng điểm quest chế tạo cả khi thành công lẫn thất bại. Quest 14: trang bị. Quest 15: bình máu. */
     private void addCraftTutorialQuest(CraftTargetType targetType, long targetId) {
         if (targetType == CraftTargetType.EQUIPMENT) {
             mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.CRAFT_EQUIP, 1);
