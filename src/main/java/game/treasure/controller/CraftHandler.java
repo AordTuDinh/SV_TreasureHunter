@@ -256,7 +256,8 @@ public class CraftHandler extends AHandler {
         resp.add(targetId);
 
         if (!craftOk) {
-            addCraftTutorialQuest(targetType, targetId);
+            if (mUser.getUData().getQuestTutorial() != 22)
+                addCraftTutorialQuest(targetType, targetId);
             if (targetType.losesTargetOnCraftFail()) {
                 destroyCraftTarget(targetType, targetId);
             }
@@ -364,12 +365,13 @@ public class CraftHandler extends AHandler {
         broadcastEquipViewIfTargetEquipped(targetType, targetId);
     }
 
-    /** Cộng điểm quest chế tạo cả khi thành công lẫn thất bại. Quest 14: trang bị. Quest 15: bình máu. */
+    /** Cộng điểm quest chế tạo cả khi thành công lẫn thất bại, trừ quest 22 chỉ tính lúc thành công. Quest 22: pet và cánh cũng tính là trang bị. */
     private void addCraftTutorialQuest(CraftTargetType targetType, long targetId) {
-        if (targetType == CraftTargetType.EQUIPMENT) {
+        if (targetType == CraftTargetType.EQUIPMENT || countsAsEquipCraft(targetType)) {
             mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.CRAFT_EQUIP, 1);
-            return;
         }
+        if (targetType == CraftTargetType.EQUIPMENT)
+            return;
         if (targetType == CraftTargetType.PET) {
             mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.AWAKEN_PET, 1);
             return;
@@ -383,6 +385,13 @@ public class CraftHandler extends AHandler {
         UserItemEntity item = mUser.getResources().getItem(targetId);
         if (item != null && CfgItem.isItemMedicine(item.getItemId()))
             mUser.getUData().checkQuestTutDefault(mUser, QuestTutType.CRAFT_POTION, 1);
+    }
+
+    /** Quest 22 đếm pet và cánh như trang bị. Quest thức tỉnh thú và chế cánh phía sau vẫn giữ loại riêng. */
+    private boolean countsAsEquipCraft(CraftTargetType targetType) {
+        if (mUser.getUData().getQuestTutorial() != 22)
+            return false;
+        return targetType == CraftTargetType.PET || targetType == CraftTargetType.WINGS;
     }
 
     private void broadcastEquipViewIfTargetEquipped(CraftTargetType targetType, long targetId) {

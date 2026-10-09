@@ -47,10 +47,13 @@ public abstract class MonoRoom extends Mono {
         this.timeCreateRoom = System.currentTimeMillis();
         this.coroutines = new ArrayList<>();
         this.battleId = TaskMonitor.getCounterId();
+        this.keyRoom = keyRoom;
+        // Phải ghi key trước khi đọc. battleId vừa tạo chưa có trong map,
+        // getKeyRoomById trả "0_0" → mapType luôn thành NEWBIE (0).
+        TaskMonitor.addBattleKey(battleId, keyRoom);
         this.mapType = MapType.get(Integer.parseInt(TaskMonitor.getKeyRoomById(this.battleId)[1]));
         this.aProtoChange = new ArrayList<>();
         this.aProtoUnitState = new ArrayList<>();
-        TaskMonitor.addBattleKey(battleId, keyRoom);
     }
 
 

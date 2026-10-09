@@ -129,6 +129,7 @@ public class Player extends Unit implements Serializable {
 
 
     public void addNumKillMonster(Unit beKill) {
+        if (mUser == null || beKill == null) return;
         this.countUpdate++;
         mUser.getUser().addMobKill(1);
         CfgQuest.addNumQuest(mUser, DataQuest.KILL_MONSTER, 1);

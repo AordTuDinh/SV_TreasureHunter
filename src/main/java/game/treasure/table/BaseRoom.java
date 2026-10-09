@@ -100,7 +100,8 @@ public abstract class BaseRoom extends MonoRoom {
         if (data == null) return;
         for (int i = 0; i < aPlayerIds.size(); i++) {
             Unit player = mUnit.get(aPlayerIds.get(i));
-            if (player != null && player.isPlayer() && player.getPlayer().getMUser().getChannel() != null) {
+            if (player != null && player.isPlayer() && player.getPlayer().getMUser() != null
+                    && player.getPlayer().getMUser().getChannel() != null) {
                 Util.sendGameData(player.getPlayer().getMUser().getChannel(), data.get(player.getChunkId()), Constans.MAGIC_IN_PUT);
             }
         }
@@ -117,7 +118,7 @@ public abstract class BaseRoom extends MonoRoom {
         List<Channel> lst = new ArrayList<>();
         for (int i = 0; i < aPlayerIds.size(); i++) {
             Player p = mUnit.get(aPlayerIds.get(i)).getPlayer();
-            if (p != null && p.getMUser().getChannel() != null && p.getMUser().getChannel().isActive()) {
+            if (p != null && p.getMUser() != null && p.getMUser().getChannel() != null && p.getMUser().getChannel().isActive()) {
                 lst.add(p.getMUser().getChannel());
             }
         }
@@ -516,12 +517,65 @@ public abstract class BaseRoom extends MonoRoom {
     }
 
 
+    /**
+     * Đánh ô như người chơi: trừ máu ô, vỡ thì rơi quái. Người giả không có túi nên không nhận đồ.
+     */
+    public boolean hitCell(Player player, CellObject cellObject) {
+        if (player == null || !player.isAlive() || !player.hasAttack()) return false;
+        if (cellObject == null || !cellObject.canAttack() || player.getPos() == null || cellObject.getPos() == null)
+            return false;
+        if (player.getPos().distance(cellObject.getPos()) > player.getRangeAttack() + 0.25f) return false;
+        addCellProcess(cellObject);
+        boolean cellDie = cellObject.attack();
+        player.setTimeAttack();
+        Pos face = player.getPos().getDirectionTo(cellObject.getPos());
+        if (face != null && (face.x != 0f || face.y != 0f)) player.setDirection(face);
+        player.protoStatus(Pbmethod.SubStateType.PLAY_ANIM, (long) AnimationType.ATTACK.value);
+        if (!cellDie) return true;
+        addCellDie(player, cellObject);
+        MyUser mUser = player.getMUser();
+        int rateGold = 0;
+        int rateGem = 0;
+        int rateItem = 0;
+        int rateBonus = 0;
+        if (mUser != null) {
+            if (player.isAutoGather()) applyCellKillPlotCost(player);
+            rateGold = mUser.getRateDropGold();
+            rateGem = mUser.getRateDropGem();
+            rateItem = mUser.getRateDropItem();
+            rateBonus = mUser.getRateDropBonus();
+        }
+        ResObjectEntity.ObjectDropResult dropResult = cellObject.getBonusKillMe(rateGold, rateGem, rateItem, rateBonus);
+        if (mUser == null) {
+            applyCellKillBonus(player, dropResult.bonus);
+            return true;
+        }
+        if (dropResult.fullMiss) {
+            TreasureEventService.tryDropOnFullMiss(player, cellObject);
+        } else {
+            applyCellKillBonus(player, dropResult.bonus);
+        }
+        return true;
+    }
+
+    /** Đánh quái trong tầm, cùng nhịp attackSpeed với người chơi. */
+    public boolean hitUnit(Player player, Unit target) {
+        if (player == null || target == null || !player.isAlive() || !target.isAlive()) return false;
+        if (target.isPlayer() || !player.hasAttack() || !player.targetInSizeAttack(target)) return false;
+        player.faceToward(target);
+        player.setTimeAttack();
+        player.protoStatus(Pbmethod.SubStateType.PLAY_ANIM, (long) AnimationType.ATTACK.value);
+        player.attackUnit(target);
+        return true;
+    }
+
     public void addCellProcess(CellObject cellObject) {
         cellObjectProcess.get(cellObject.getChunkId()).add(cellObject.getId());
     }
 
     public void addCellDie(Player atk, CellObject cellObject) {
         cellObjectDie.add(cellObject);
+        if (atk == null || atk.getMUser() == null) return;
         CfgQuest.addNumQuest(atk.getMUser(), DataQuest.GATHER, 1);
         atk.getMUser().getUData().checkQuestTutDefault(atk.getMUser(), QuestTutType.HARVEST_BOX, 1);
         atk.getMUser().getUData().checkQuestTutDefault(atk.getMUser(), QuestTutType.DIG_SOIL, 1);
@@ -584,6 +638,7 @@ public abstract class BaseRoom extends MonoRoom {
             addUnit(enemy);
             return;
         }
+        if (player.getMUser() == null) return;
         List<Long> resolved = resolveCellKillBonus(player.getMUser(), bonus);
         if (resolved.isEmpty()) return;
         int bloodStone = 0;
@@ -741,9 +796,14 @@ public abstract class BaseRoom extends MonoRoom {
         return true;
     }
 
+    /** Người thật vừa được add vào phòng, trước khi đóng gói map cho client. */
+    protected void onRealPlayerEntered(Player player) {
+    }
+
     public void joinRoom(AHandler handler, Player player) {
         if (roomState != RoomState.ACTIVE) return;
         addUnit(player);
+        onRealPlayerEntered(player);
 
         // trả về 9 chunk xung quanh player
         int curChunk = player.getChunkId();
@@ -755,9 +815,15 @@ public abstract class BaseRoom extends MonoRoom {
             pbInit.setTimeProtected(BattleConfig.toWireProtectedMs(protectedEnd));
         }
 
+        int cellSum = 0;
+        StringBuilder cellByChunk = new StringBuilder();
         for (int i = 0; i < chunkVisible.size(); i++) {
             // add data chunks
             ChunkObject chunkData = mChunk.get(chunkVisible.get(i));
+            int nCell = chunkData.getMCells() == null ? 0 : chunkData.getMCells().size();
+            cellSum += nCell;
+            if (cellByChunk.length() > 0) cellByChunk.append(',');
+            cellByChunk.append(chunkVisible.get(i)).append(':').append(nCell);
             pbInit.addChunks(chunkData.toProtoAdd());
             Set<Long> aCharInChunk = chunkCharacter.get(chunkVisible.get(i));
             for (Long charId : aCharInChunk) {
@@ -767,12 +833,15 @@ public abstract class BaseRoom extends MonoRoom {
         }
 
         Logs.info(String.format(
-                "[JoinRoom] playerId=%d userId=%d chunk=%d addChunks=%d chunkIds=%s",
+                "[JoinRoom] playerId=%d userId=%d pos=%s chunk=%d addChunks=%d cells=%d byChunk=%s mapId=%d",
                 player.getId(),
                 player.getMUser().getUserId(),
+                player.getPos(),
                 curChunk,
                 chunkVisible.size(),
-                chunkVisible));
+                cellSum,
+                cellByChunk,
+                getRoomTypeId()));
 
         handler.addResponse(IAction.JOIN_MAP, pbInit.build());
         TreasureEventService.syncOnJoin(player);
@@ -781,7 +850,7 @@ public abstract class BaseRoom extends MonoRoom {
     public void sendDataAllUser(int service, AbstractMessage data) {
         for (int i = 0; i < aPlayerIds.size(); i++) {
             Player p = mUnit.get(aPlayerIds.get(i)).getPlayer();
-            if (p != null) {
+            if (p != null && p.getMUser() != null && p.getMUser().getChannel() != null) {
                 Util.sendProtoData(p.getMUser().getChannel(), data, service);
             }
         }

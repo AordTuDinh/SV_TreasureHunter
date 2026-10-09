@@ -114,14 +114,21 @@ public class ResMapEntity extends BaseEntity implements Serializable {
         buildZoneCache();
 
         // parse map object
-        if (mapData.cells == null) return;
+        if (mapData.cells == null) {
+            System.out.println("[MapLoad] mapId=" + id + " cells=null layout="
+                    + cellsPerChunkX + "x" + cellsPerChunkY + " chunks=" + widthChunk + "x" + heightChunk);
+            return;
+        }
         Set<Integer> skippedTypes = new HashSet<>();
+        int loaded = 0;
+        int skipped = 0;
         for (MapData.CellDto c : mapData.cells) {
             if (!MapService.isKnownCellType(c.type) || ResMap.getResObject(c.type) == null) {
                 if (skippedTypes.add(c.type)) {
                     System.out.println("[MapLoad] skip cell type=" + c.type + " mapId=" + id
                             + " (chưa có trong CellObjectType hoặc res_object)");
                 }
+                skipped++;
                 continue;
             }
             // c.x, c.y là tọa độ world trực tiếp (không còn x100)
@@ -130,6 +137,7 @@ public class ResMapEntity extends BaseEntity implements Serializable {
 
             if (!isInsideWorld(worldX, worldY)) {
                 System.out.println("[MapLoad] skip out-of-world cell: x=" + worldX + ", y=" + worldY);
+                skipped++;
                 continue;
             }
 
@@ -147,6 +155,7 @@ public class ResMapEntity extends BaseEntity implements Serializable {
                     || chunkY < minChunkY || chunkY > maxChunkY) {
                 System.out.println("[MapLoad] skip out-of-bound cell: x=" + worldX + ", y=" + worldY
                         + ", chunkX=" + chunkX + ", chunkY=" + chunkY);
+                skipped++;
                 continue;
             }
 
@@ -154,10 +163,19 @@ public class ResMapEntity extends BaseEntity implements Serializable {
             if (targetChunk == null) {
                 System.out.println("[MapLoad] skip missing chunk bucket: chunkId=" + chunkId
                         + ", chunkX=" + chunkX + ", chunkY=" + chunkY);
+                skipped++;
                 continue;
             }
             targetChunk.getMCells().put(cell.getId(), cell);
+            loaded++;
         }
+        System.out.println("[MapLoad] mapId=" + id
+                + " layout=" + cellsPerChunkX + "x" + cellsPerChunkY
+                + " chunks=" + widthChunk + "x" + heightChunk
+                + " botLeft=" + botLeftP.x + "," + botLeftP.y
+                + " jsonCells=" + mapData.cells.size()
+                + " loaded=" + loaded
+                + " skipped=" + skipped);
     }
 
     public List<Integer> getChunkNoAttack() {

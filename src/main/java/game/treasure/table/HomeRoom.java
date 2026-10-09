@@ -61,6 +61,21 @@ public class HomeRoom extends BaseBattleRoom {
     }
 
     @Override
+    public void Update() {
+        if (getRoomType() == game.config.aEnum.MapType.NEWBIE) {
+            NewbieGatherBots.tick(this, game.config.CfgBattle.periodUpdate / 1000f);
+        }
+        super.Update();
+    }
+
+    @Override
+    protected void onRealPlayerEntered(Player player) {
+        if (getRoomType() == game.config.aEnum.MapType.NEWBIE) {
+            NewbieGatherBots.sync(this);
+        }
+    }
+
+    @Override
     public void Update1s() {
         super.Update1s();
         processHealZoneTick();
@@ -122,8 +137,13 @@ public class HomeRoom extends BaseBattleRoom {
 
     @Override
     public void removeUnit(long idInMap) {
+        Unit leaving = getPlayerId(idInMap);
+        boolean realPlayer = leaving instanceof Player && ((Player) leaving).getMUser() != null;
         healZonePlayers.remove(idInMap);
         super.removeUnit(idInMap);
+        if (realPlayer && getRoomType() == game.config.aEnum.MapType.NEWBIE) {
+            NewbieGatherBots.sync(this);
+        }
     }
 
     @Override
